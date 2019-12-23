@@ -51,7 +51,6 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
-    private ConcurrentHashMap<String, PlotObjectGroup> plotGroups = new ConcurrentHashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -367,19 +366,79 @@ public class TownyUniverse {
         nations.clear();
         towns.clear();
         residents.clear();
-        plotGroups.clear();
     }
 
 	public boolean hasGroup(String townName, UUID groupID) {
-		return plotGroups.containsKey(townName + groupID);
+		Town t = towns.get(townName);
+		
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID) != null;
+		}
+		
+		return false;
 	}
 
+	public boolean hasGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.hasObjectGroupName(groupName);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get all the plot object groups from all towns
+	 * Returns a collection that does not reflect any group additions/removals
+	 * 
+	 * @return collection of PlotObjectGroup
+	 */
 	public Collection<PlotObjectGroup> getGroups() {
-		return plotGroups.values();
+    	List<PlotObjectGroup> groups = new ArrayList<>();
+    	
+		for (Town town : towns.values()) {
+			if (town.hasObjectGroups()) {
+				groups.addAll(town.getPlotObjectGroups());
+			}
+		}
+		
+		return groups;
 	}
 
+
+	/**
+	 * Gets the plot group from the town name and the plot group UUID 
+	 * 
+	 * @param townName Town name
+	 * @param groupID UUID of the plot group
+	 * @return PlotGroup if found, null if none found.
+	 */
 	public PlotObjectGroup getGroup(String townName, UUID groupID) {
-		return plotGroups.get(townName + groupID);
+		Town t = towns.get(townName);
+		
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID);
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Gets the plot group from the town name and the plot group name
+	 * 
+	 * @param townName Town Name
+	 * @param groupName Plot Group Name
+	 * @return the plot group if found, otherwise null
+	 */
+	public PlotObjectGroup getGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.getPlotObjectGroupFromName(groupName);
+		}
+
+		return null;
 	}
 
 	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
@@ -391,17 +450,16 @@ public class TownyUniverse {
     	// Create new plot group.
 		PlotObjectGroup newGroup = new PlotObjectGroup(id, name, town);
 		
-		// Check if there is a duplicate. (Should never happen)
-		if (hasGroup(town.getName(), id)) {
-			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists");
+		// Check if there is a duplicate
+		if (town.hasObjectGroupName(newGroup.getGroupName())) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
 			throw new AlreadyRegisteredException();
 		}
 		
 		// Create key and store group globally.
-		String key = town.getName() + id;
-		plotGroups.put(key, newGroup);
-
-		return plotGroups.get(key);
+		town.addPlotGroup(newGroup);
+		
+		return newGroup;
 	}
 
 	public UUID generatePlotGroupID() {
@@ -410,17 +468,11 @@ public class TownyUniverse {
 
 
 	public void removeGroup(PlotObjectGroup group) {
-		if (hasGroup(group.getTown().toString(), group.getID())) {
-			String key = group.getTown().toString() + group.getID().toString();
-			plotGroups.remove(key);
-		}
+		group.getTown().removePlotGroup(group);
+		
 	}
 	
 	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
-	}
-
-	public ConcurrentHashMap<String, PlotObjectGroup> getPlotGroupsMap() {
-		return plotGroups;
 	}
 }

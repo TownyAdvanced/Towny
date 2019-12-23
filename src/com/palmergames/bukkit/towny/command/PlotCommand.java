@@ -1200,9 +1200,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Set the plot group.
 				townBlock.setPlotObjectGroup(newGroup);
 
-				// Add the global list.
-				townyUniverse.newGroup(town, newGroup.getGroupName(), newGroup.getID());
-
 				// Save changes.
 				townyUniverse.getDataSource().saveTown(town);
 				townyUniverse.getDataSource().saveGroupList();
@@ -1236,10 +1233,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			// Set the resident mode.
 			resident.setPlotGroupMode(newGroup, true);
-
-			if (!townyUniverse.hasGroup(newGroup.getTown().getName(), newGroup.getID())) {
-				townyUniverse.newGroup(town, newGroup.getGroupName(), newGroup.getID());
-			}
 
 			townyUniverse.getDataSource().saveGroupList();
 

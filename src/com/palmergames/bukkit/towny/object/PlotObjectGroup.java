@@ -59,6 +59,22 @@ public class PlotObjectGroup extends ObjectGroup {
 	public String toString() {
 		return super.toString() + "," + getTown().toString() + "," + getPrice();
 	}
+
+	/**
+	 * Override the name change method to internally rehash the plot group map.
+	 * @param name
+	 */
+	@Override
+	public void setGroupName(String name) {
+		if (getGroupName() == null) {
+			super.setGroupName(name);
+		}
+		else {
+			String oldName = getGroupName();
+			super.setGroupName(name);
+			town.renamePlotGroup(oldName, this);
+		}
+	}
 	
 	public void setTown(Town town) {
 		this.town = town;

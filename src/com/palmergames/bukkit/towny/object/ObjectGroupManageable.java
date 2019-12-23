@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +16,7 @@ interface ObjectGroupManageable<T extends ObjectGroup> {
 	 * Get the set of group objects associated with the subclass.
 	 * @return The {@link java.util.Set} associated with the subclass.
 	 */
-	Set<T> getObjectGroups();
+	Collection<T> getObjectGroups();
 	T getObjectGroupFromID(UUID ID);
 
 	/**

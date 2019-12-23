@@ -56,4 +56,15 @@ public abstract class ObjectGroup {
 	public String toString() {
 		return name + "," + id;
 	}
+
+	/**
+	 * Get hashcode for object group name.
+	 * The reason we hash the name and not the UUID is for quicker common
+	 * access from commands.
+	 * @return name hashcode
+	 */
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 }

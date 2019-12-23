@@ -27,7 +27,9 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
@@ -40,7 +42,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private HashSet<PlotObjectGroup> plotGroups = null;
+	private HashMap<String, PlotObjectGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1332,18 +1334,23 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return retVal;
 	}
 	
+	public void renamePlotGroup(String oldName, PlotObjectGroup group) {
+		plotGroups.remove(oldName);
+		plotGroups.put(group.getGroupName(), group);
+	}
+	
 	public void addPlotGroup(PlotObjectGroup group) {
 		if (!hasObjectGroups()) 
-			this.plotGroups = new HashSet<>();
+			this.plotGroups = new HashMap<>();
 		
-		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName());
+		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName()); //FIXME Debug message
 		
-		this.plotGroups.add(group);
+		this.plotGroups.put(group.getGroupName(), group);
 		
 	}
 	
 	public void removePlotGroup(PlotObjectGroup plotGroup) {
-		if (hasObjectGroups() && hasObjectGroup(plotGroup)) {
+		if (hasObjectGroups() && plotGroups.remove(plotGroup.getGroupName()) != null) {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1356,7 +1363,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setPlotGroups(String str) {
 		
 		if (plotGroups == null)
-			plotGroups = new HashSet<>();
+			plotGroups = new HashMap<>();
 		
 		String[] groups = str.split(";");
 		
@@ -1369,11 +1376,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
 	}
 
+	// Abstract to collection in case we want to change structure in the future
 	@Override
-	public HashSet<PlotObjectGroup> getObjectGroups() {
-		return plotGroups;
+	public Collection<PlotObjectGroup> getObjectGroups() {
+		return plotGroups.values();
 	}
 
+	// Method is inefficient compared to getting the group from name.
 	@Override
 	public PlotObjectGroup getObjectGroupFromID(UUID ID) {
 		if (hasObjectGroups()) {
@@ -1385,13 +1394,16 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		
 		return null;
 	}
-	
+
+	// Override default method for efficient access
+	@Override
+	public boolean hasObjectGroupName(String name) {
+		return hasObjectGroups() && plotGroups.containsKey(name);
+	}
+
 	public PlotObjectGroup getPlotObjectGroupFromName(String name) {
 		if (hasObjectGroups()) {
-			for (PlotObjectGroup pg : getObjectGroups()) {
-				if (pg.getGroupName().equals(name))
-					return pg;
-			}
+			return plotGroups.get(name);
 		}
 		
 		return null;
@@ -1402,7 +1414,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return getObjectGroupFromID(ID);
 	}
 	
-	public HashSet<PlotObjectGroup> getPlotObjectGroups() {
+	public Collection<PlotObjectGroup> getPlotObjectGroups() {
 		return getObjectGroups();
 	}
 }
