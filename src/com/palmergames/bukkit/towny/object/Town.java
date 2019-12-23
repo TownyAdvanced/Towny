@@ -1379,6 +1379,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	// Abstract to collection in case we want to change structure in the future
 	@Override
 	public Collection<PlotObjectGroup> getObjectGroups() {
+		
+		if (plotGroups == null)
+			return null;
+		
 		return plotGroups.values();
 	}
 
@@ -1393,6 +1397,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 		
 		return null;
+	}
+
+	@Override
+	public boolean hasObjectGroups() {
+		return plotGroups != null;
 	}
 
 	// Override default method for efficient access

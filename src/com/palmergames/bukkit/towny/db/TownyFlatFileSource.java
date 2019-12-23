@@ -225,7 +225,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public String getGroupFilename(PlotObjectGroup group) {
-		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getTown().getName() + File.separator + group.getGroupName() + ".data";
+		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getID() + ".data";
 	}
 
 	/*
@@ -1940,8 +1940,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean savePlotGroup(PlotObjectGroup group) {
-		
-		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plotgroups" + File.separator + group.getTown().getName());
 		
 		List<String> list = new ArrayList<>();
 		

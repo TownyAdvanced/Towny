@@ -23,9 +23,7 @@ interface ObjectGroupManageable<T extends ObjectGroup> {
 	 * Indicates whether the subclass has groups present.
 	 * @return A boolean indicating membership.
 	 */
-	default boolean hasObjectGroups() {
-		return getObjectGroups() != null;
-	}
+	boolean hasObjectGroups();
 	
 	default boolean hasObjectGroup(T group) {
 		if (hasObjectGroups())
