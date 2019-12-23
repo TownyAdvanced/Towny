@@ -51,7 +51,10 @@ public class AttackTown {
             if(!townOfAttackingResident.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
-            Town defendingTown = nearbyTownBlocks.get(0).getTown();
+			if (nearbyTownBlocks.size() > 1)
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_incorrect_town_block_facing"));
+
+			Town defendingTown = nearbyTownBlocks.get(0).getTown();
             if(townOfAttackingResident == defendingTown)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_own_town"));
 
@@ -68,9 +71,6 @@ public class AttackTown {
             
             if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            if (nearbyTownBlocks.size() > 1)
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_incorrect_town_block_facing"));
 
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_already_attacking_town"));
