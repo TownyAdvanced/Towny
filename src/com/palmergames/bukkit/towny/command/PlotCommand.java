@@ -598,7 +598,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
+	/**
+	 * 
+	 * @param player Player initiator
+	 * @param townBlockOwner Resident/Town with the targeted permissions change
+	 * @param townBlock Targeted town block
+	 * @param split Permission arguments
+	 * @return whether town block permissions have changed.
+	 */
+	public static boolean setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -608,13 +616,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
 			if (townBlockOwner instanceof Resident)
 				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
+			
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
-
+			return false;
+			
 		} else {
 
 			TownyPermission perm = townBlock.getPermissions();
@@ -635,7 +645,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Reset all caches as this can affect everyone.
 					plugin.resetCache();
 
-					return;
+					return true;
 
 				} else {
 
@@ -654,7 +664,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							perm.set(element, b);
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
-						return;
+						return false;
 					}
 
 				}
@@ -671,7 +681,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						&& !split[0].equalsIgnoreCase("switch")
 						&& !split[0].equalsIgnoreCase("itemuse")) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
-					return;
+					return false;
 				}
 
 				try {
@@ -727,7 +737,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
-					return;
+					return false;
 				}
 
 			} else if (split.length == 3) {
@@ -742,7 +752,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						&& !split[1].equalsIgnoreCase("switch")
 						&& !split[1].equalsIgnoreCase("itemuse"))) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
-					return;
+					return false;
 				}
 				
 				// reset the friend to resident so the perm settings don't fail
@@ -750,7 +760,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					split[0] = "resident";
 				
 				// reset the town to nation so the perm settings don't fail
-				if (split[0].equalsIgnoreCase("town"))
+				else if (split[0].equalsIgnoreCase("town"))
 					split[0] = "nation";
 
 				try {
@@ -760,7 +770,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					perm.set(s, b);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
-					return;
+					return false;
 				}
 
 			}
@@ -782,6 +792,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();
+			return true;
 		}
 	}
 

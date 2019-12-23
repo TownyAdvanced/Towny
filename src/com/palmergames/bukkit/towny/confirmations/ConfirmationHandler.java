@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
+import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotObjectGroup;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -296,16 +298,28 @@ public class ConfirmationHandler {
 			if (groupsetpermconfirmations.containsKey(r)) {
 				GroupConfirmation confirmation = groupsetpermconfirmations.get(r);
 				
-				for (TownBlock tb : confirmation.getGroup().getTownBlocks()) {
-					PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs());
-				}
+				// Test the waters
+				TownBlock tb = confirmation.getGroup().getTownBlocks().get(0);
 				
-				Player player = confirmation.getPlayer();
-				TownyPermission perm = confirmation.getGroup().getTownBlocks().get(0).getPermissions();
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				// setTownBlockPermissions returns true if the town block permissions were successfully changed
+				if (PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs())) {
+					
+					// A simple index loop starting from the second element
+					for (int i = 1; i < confirmation.getGroup().getTownBlocks().size(); ++i) {
+						tb = confirmation.getGroup().getTownBlocks().get(i);
+						
+						// TODO Redesign how townblock perms are handled to allow better caching and setting of multiple townblock perms
+						PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs());
+					}
+
+					Player player = confirmation.getPlayer();
+					
+					TownyPermission perm = confirmation.getGroup().getTownBlocks().get(0).getPermissions();
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+					TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				}
 				
 				removeConfirmation(r, type, true);
 			}
