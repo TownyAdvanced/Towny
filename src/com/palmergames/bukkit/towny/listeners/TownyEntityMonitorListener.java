@@ -58,10 +58,6 @@ public class TownyEntityMonitorListener implements Listener {
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
 
-			// Siege related death ?
-			if(TownySettings.getWarSiegeEnabled()) {
-				SiegeWarDeathController.evaluateSiegeWarDeath((Player)defenderEntity);
-			}
 			
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
@@ -99,6 +95,11 @@ public class TownyEntityMonitorListener implements Listener {
 						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
 					} catch (NotRegisteredException e) {
 					}
+				}
+
+				//Evaluate siege related aspects of kill
+				if(TownySettings.getWarSiegeEnabled() && attackerResident != null && defenderResident != null) {
+					SiegeWarDeathController.evaluateSiegePvPDeath(defenderPlayer, defenderResident, attackerResident);
 				}
 
 				/*
