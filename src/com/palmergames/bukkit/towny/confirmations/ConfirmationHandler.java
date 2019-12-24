@@ -42,6 +42,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, GroupConfirmation> groupclaimconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> groupremoveconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> groupsetpermconfirmations = new HashMap<>();
+	private static HashMap<Resident, GroupConfirmation> grouptoggleconfirmations = new HashMap<>();
 	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
 	private static Object consoleExtra = null;
 
@@ -137,6 +138,18 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
+			case GROUP_TOGGLE_ACTION:
+				r.setConfirmationType(type);
+				grouptoggleconfirmations.put(r, (GroupConfirmation) extra);
+
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(r, type, false);
+					}
+				}.runTaskLater(plugin, 400);
+				break;
+				
 		}
 	}
 
@@ -199,6 +212,13 @@ public class ConfirmationHandler {
 					sendmessage = true;
 				}
 				groupsetpermconfirmations.remove(r);
+				r.setConfirmationType(null);
+				break;
+			case GROUP_TOGGLE_ACTION:
+				if (grouptoggleconfirmations.containsKey(r) && !successful) {
+					sendmessage = true;
+				}
+				grouptoggleconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
 		}
@@ -321,6 +341,16 @@ public class ConfirmationHandler {
 				
 				removeConfirmation(r, type, true);
 			}
+		}
+		
+		if (type == ConfirmationType.GROUP_TOGGLE_ACTION) {
+			GroupConfirmation confirmation = grouptoggleconfirmations.get(r);
+			
+			// Perform the toggle.
+			new PlotCommand(Towny.getPlugin()).plotGroupToggle(confirmation.getPlayer(),
+				confirmation.getGroup(), confirmation.getArgs());
+			
+			removeConfirmation(r, type, true);
 		}
 	}
 
