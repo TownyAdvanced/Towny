@@ -479,8 +479,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							// Check we are allowed to set these perms
 							toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), ""));
-							
-							
 
 							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
 
