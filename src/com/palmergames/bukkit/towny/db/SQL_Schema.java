@@ -69,6 +69,22 @@ public class SQL_Schema {
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }
+    
+    private static String getPLOTGROUPS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "PLOTGROUPS ("
+			+ "`groupID` VARCHAR(36) NOT NULL,"
+			+ "PRIMARY KEY (`groupID`)"
+			+ ")";
+	}
+	
+	private static List<String> getPlotGroupColumns() {
+    	List<String> columns = new ArrayList<>();
+    	columns.add("`groupName` mediumtext NOT NULL");
+    	columns.add("`groupPrice` float DEFAULT NULL");
+		columns.add("`town` VARCHAR(32) NOT NULL");
+		
+		return columns;
+	}
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
@@ -187,6 +203,7 @@ public class SQL_Schema {
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
 		return columns;
 	}
 
@@ -381,6 +398,40 @@ public class SQL_Schema {
             }
         }
         TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
+        
+        /*
+         * Fetch PLOTGROUPS table schema
+         */
+
+		String plotgroups_create = SQL_Schema.getPLOTGROUPS();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(plotgroups_create);
+			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table PLOTGROUPS : " + ee.getMessage());
+
+		}
+        
+        String plotGroups_update;
+        List<String> plotGroupColumns = getPlotGroupColumns();
+        for (String column : plotGroupColumns) {
+        	try {
+				plotGroups_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "PLOTGROUPS` "
+					+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(plotGroups_update);
+				ps.executeUpdate();
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table PLOTGROUPS :" + ee.getMessage());
+			}
+			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
+		}
     }
 
     /**

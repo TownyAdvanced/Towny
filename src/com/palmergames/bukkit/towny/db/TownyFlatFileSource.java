@@ -1603,7 +1603,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					if (groupID != null) {
 						PlotObjectGroup group = getPlotObjectGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
-						TownyMessaging.sendErrorMsg("GROUP = " + group);
 						townBlock.setPlotObjectGroup(group);
 					}
 					
