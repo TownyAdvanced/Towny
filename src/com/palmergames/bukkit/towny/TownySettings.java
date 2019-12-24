@@ -3028,5 +3028,9 @@ public class TownySettings {
 	public static double getWarSiegeZoneMaximumScoringDurationMinutes() {
 		return getDouble(ConfigNodes.WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES);
 	}
+
+	public static boolean getWarSiegeAttackerSpawnIntoBesiegedTownDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED);
+	}
 }
 

@@ -1833,6 +1833,11 @@ public enum ConfigNodes {
 			"# This setting is generally considered critical,",
 			"# because it prevents mayors from avoiding sieges/occupation by ",
 		    "# deleting then quickly recreating their town."),
+	WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED(
+			"war.siege.switches.attacker.spawn.into.besieged.town.disabled",
+			"true",
+			"# If this is true, then siege attackers are prevented from spawning into towns they are attacking.",
+			"# If this setting is false, then the town spawn becomes a siege front, where attackers might be expected to appear."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
