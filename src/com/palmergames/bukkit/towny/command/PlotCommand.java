@@ -215,7 +215,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 					
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));					
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 					Town town = townBlock.getTown();										
@@ -230,6 +230,26 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_part_town"));
 							return false;							
+						}
+
+						if (townBlock.hasPlotObjectGroup()) {
+							for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+								
+								owner = tb.getResident();
+								tb.setResident(null);
+								tb.setPlotPrice(-1);
+
+								// Set the plot permissions to mirror the towns.
+								tb.setType(townBlock.getType());
+
+								townyUniverse.getDataSource().saveResident(owner);
+								// Update the townBlock data file so it's no longer using custom settings.
+								townyUniverse.getDataSource().saveTownBlock(tb);
+							}
+							
+							// TODO: Lang String translation.
+							player.sendMessage("Plot group " + townBlock.getPlotObjectGroup().getGroupName() + " has been evicted.");
+							return true;
 						}
 
 						townBlock.setResident(null);
