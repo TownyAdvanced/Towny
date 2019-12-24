@@ -62,7 +62,7 @@ public class PlotObjectGroup extends ObjectGroup {
 
 	/**
 	 * Override the name change method to internally rehash the plot group map.
-	 * @param name
+	 * @param name The name of the group.
 	 */
 	@Override
 	public void setGroupName(String name) {
