@@ -478,8 +478,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
-	
-	// TODO: - New Group
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {

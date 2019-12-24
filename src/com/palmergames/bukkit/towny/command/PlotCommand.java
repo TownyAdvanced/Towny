@@ -1050,11 +1050,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/res toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "pvp", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "explosion", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "mobs", ""));
+			player.sendMessage(ChatTools.formatTitle("/plot group toggle"));
+			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "pvp", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "explosion", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "fire", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "mobs", ""));
 		} else {
 
 			try {

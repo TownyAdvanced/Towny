@@ -83,6 +83,7 @@ public class PlotClaim extends Thread {
 					
 					worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
 					worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
+					// TODO: Lang string.
 					TownyMessaging.sendTownMessage(worldCoord.getTownBlock().getTown(), "Successfully bought group " + worldCoord.getTownBlock().getPlotObjectGroup().getGroupName());
 					
 					TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
