@@ -1343,8 +1343,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (!hasObjectGroups()) 
 			this.plotGroups = new HashMap<>();
 		
-		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName()); //FIXME Debug message
-		
 		this.plotGroups.put(group.getGroupName(), group);
 		
 	}
