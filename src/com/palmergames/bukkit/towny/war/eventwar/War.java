@@ -301,6 +301,8 @@ public class War {
 		}.runTask(plugin);
 		
 
+		warringNations.clear();
+		warringTowns.clear();
 		warZone.clear();
 		
 		double halfWinnings;
@@ -590,6 +592,12 @@ public class War {
 		}, 0);
 	}
 
+	/**
+	 * Removes a TownBlock attacked by a Town.
+	 * @param attacker attackPlot method attackerResident.getTown().
+	 * @param townBlock townBlock being attacked.
+	 * @throws NotRegisteredException
+	 */
 	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 		// Add bonus blocks
 		if (TownySettings.getWarEventCostsTownblocks() || TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()){		
@@ -652,6 +660,12 @@ public class War {
 		townyUniverse.getDataSource().saveTown(attacker);
 	}
 
+	/** 
+	 * Removes a Nation from the war, attacked by a Town. 
+	 * @param attacker Town which attacked the Nation.
+	 * @param nation Nation being removed from the war.
+	 * @throws NotRegisteredException
+	 */
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
 		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
@@ -662,6 +676,12 @@ public class War {
 		checkEnd();
 	}
 
+	/**
+	 * Removes a Town from the war, attacked by a Town.
+	 * @param attacker Town which attacked.
+	 * @param town Town which is being removed from the war.
+	 * @throws NotRegisteredException
+	 */
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
 		if (TownySettings.getWarEventWinnerTakesOwnershipOfTown()) {
@@ -687,6 +707,12 @@ public class War {
 		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
 	}
 	
+	/**
+	 * Removes a Nation from the war.
+	 * Called when a Nation voluntarily leaves a war.
+	 * Called by remove(Town town). 
+	 * @param nation Nation being removed from the war.
+	 */
 	private void remove(Nation nation) {
 
 		warringNations.remove(nation);
@@ -697,6 +723,13 @@ public class War {
 		checkEnd();
 	}
 
+	/**
+	 * Removes a Town from the war.
+	 * Called when a player is killed and their Town Bank cannot pay the war penalty.
+	 * Called when a Town voluntarily leaves a War.
+	 * Called by remove(Nation nation).
+	 * @param town
+	 */
 	public void remove(Town town) {
 
 		// If a town is removed, is a capital, and the nation has not been removed, call remove(nation) instead.
@@ -717,7 +750,11 @@ public class War {
 		StringBuilder sb = new StringBuilder(town.getFormattedName()).append(" (").append(fallenTownBlocks).append(TownySettings.getLangString("msg_war_append_townblocks_fallen"));
 		sendEliminateMessage(sb.toString());
 	}
-	
+
+	/**
+	 * Removes one WorldCoord from the warZone hashtable.
+	 * @param worldCoord WorldCoord being removed from the war.
+	 */
 	private void remove(WorldCoord worldCoord) {	
 		warZone.remove(worldCoord);
 	}

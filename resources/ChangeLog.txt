@@ -3977,4 +3977,5 @@ v0.92.0.11:
 0.95.2.3:
   - Fix WARZONE status being given to townblocks when war is not active.
   - Fix WARZONE status overriding the allow_block_griefing: false setting.
-    - Closes #3577. 
+    - Closes #3577.
+  - Clear out warringNations & warringTowns on war end.
