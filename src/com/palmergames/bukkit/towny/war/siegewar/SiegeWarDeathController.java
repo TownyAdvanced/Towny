@@ -92,16 +92,18 @@ public class SiegeWarDeathController {
 		}
 	}
 	
-	private static void awardSiegeDeathPoints(boolean negativePoints,
+	private static void awardSiegeDeathPoints(boolean attackerDeath,
 									   TownyObject pointsRecipient, 
 									   Resident deadResident,
 									   SiegeZone siegeZone) throws NotRegisteredException {
 		
 		//Give siege points to opposing side
-		int siegePoints = TownySettings.getWarSiegePointsForAttackerDeath();
-		if (negativePoints) {
+		int siegePoints;
+		if (attackerDeath) {
+			siegePoints = TownySettings.getWarSiegePointsForAttackerDeath();
 			siegeZone.adjustSiegePoints(-siegePoints);
 		} else {
+			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
 			siegeZone.adjustSiegePoints(siegePoints);
 		}
 
