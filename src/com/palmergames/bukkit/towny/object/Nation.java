@@ -384,7 +384,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			town.setNation(null);
 		} catch (AlreadyRegisteredException ignored) {
 		}
-		
+
+		//Reset occupation to false
+		town.setOccupied(false);
+
 		/*
 		 * Remove all resident titles/nationRanks before saving the town itself.
 		 */

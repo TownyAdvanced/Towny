@@ -1088,6 +1088,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 
                 }
+				town.setOccupied(rs.getBoolean("occupied"));
 
                 s.close();
                 return true;
@@ -1822,6 +1823,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("siegeActualEndTime", 0);
 				twn_hm.put("siegeZones", "");
 			}
+			twn_hm.put("occupied", town.isOccupied());
 
             UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
             return true;

@@ -113,7 +113,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				resident = universe.getDataSource().getResident(player.getName());
 
 				if (resident.hasTown()) {
-					if (resident.getTown() == siegeZone.getDefendingTown()) {
+					Town residentTown= resident.getTown();
+
+					//Residents of occupied towns cannot affect siege points
+					if(resident.getTown().isOccupied())
+						continue;
+
+					if (residentTown == siegeZone.getDefendingTown()) {
 
 						//Resident of defending town
 						siegeZoneChanged =
@@ -125,11 +131,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 												-TownySettings.getWarSiegePointsForDefenderOccupation());
 
 					
-					} else if (resident.getTown().hasNation()) {
+					} else if (residentTown.hasNation()) {
 
 						if (siegeZone.getDefendingTown().hasNation()
 								&& siegeZone.getDefendingTown().getNation()
-								== resident.getTown().getNation()) {
+								== residentTown.getNation()) {
 
 							//Nation member of defending town
 							siegeZoneChanged =
@@ -141,7 +147,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													-TownySettings.getWarSiegePointsForDefenderOccupation());
 						
 						} else if (siegeZone.getAttackingNation() 
-							== resident.getTown().getNation()) {
+							== residentTown.getNation()) {
 
 							//Nation member of attacking nation
 							siegeZoneChanged =

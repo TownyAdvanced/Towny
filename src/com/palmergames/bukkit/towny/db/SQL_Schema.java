@@ -163,6 +163,7 @@ public class SQL_Schema {
 		columns.add("`siegeScheduledEndTime` BIGINT");
 		columns.add("`siegeActualEndTime` BIGINT");
 		columns.add("`siegeZones` mediumtext");
+		columns.add("`occupied` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 

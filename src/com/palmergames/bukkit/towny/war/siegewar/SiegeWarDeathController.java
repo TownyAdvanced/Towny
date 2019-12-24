@@ -57,6 +57,10 @@ public class SiegeWarDeathController {
 
 				Town residentTown = deadResident.getTown();
 
+				//Residents of occupied towns cannot affect siege points.
+				if(residentTown.isOccupied())
+					continue;
+
 				//Is resident a defender ?
 				if (residentTown == siegeZone.getDefendingTown()) {
 					awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone);

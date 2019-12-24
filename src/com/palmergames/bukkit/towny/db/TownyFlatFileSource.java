@@ -1083,6 +1083,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 					}
 				}
+				line = keys.get("occupied");
+				if (line != null)
+					try {
+						town.setOccupied(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -2071,6 +2077,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames(), ","));
 		}
 		
+		list.add("occupied=" + town.isOccupied());
+
 		/*
 		 *  Make sure we only save in async
 		 */

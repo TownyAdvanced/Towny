@@ -76,6 +76,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
 	private Siege siege;
+	private boolean occupied;
 	
 	public Town(String name) {
 		super(name);
@@ -85,6 +86,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		siegeImmunityEndTime = System.currentTimeMillis()
 			+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
 		siege = null;
+		occupied = false;
 	}
 
 	@Override
@@ -1412,5 +1414,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public long getRecentlyRuinedEndTime() {
 		return recentlyRuinedEndTime;
 	}
-	
+
+	public void setOccupied(boolean occupied) {
+		this.occupied = occupied;
+	}
+
+	public boolean isOccupied() {
+		return this.occupied;
+	}
+
 }
