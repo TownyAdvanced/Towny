@@ -164,7 +164,6 @@ public class PlotClaim extends Thread {
 		
 		for (int i = 0; i < worldCoords.size(); ++i) {
 			
-			TownyMessaging.sendErrorMsg(worldCoords.size() + "");
 			WorldCoord worldCoord = worldCoords.get(i);
 			
 			try {
@@ -175,7 +174,6 @@ public class PlotClaim extends Thread {
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 				TownyUniverse townyUniverse = TownyUniverse.getInstance();
-				TownyMessaging.sendErrorMsg("woop");
 				try {
 					Resident owner = townBlock.getPlotObjectGroup().getResident();
 

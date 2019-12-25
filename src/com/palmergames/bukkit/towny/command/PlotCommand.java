@@ -286,8 +286,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							for (WorldCoord coord : selection) {
 								TownBlock block = coord.getTownBlock();
-								Town town = block.getTown();
-								double price = block.getPlotPrice();
 
 								if (!block.hasPlotObjectGroup()) {
 									// Start the unclaim task
@@ -299,6 +297,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_UNCLAIM_ACTION, new GroupConfirmation(block.getPlotObjectGroup(), player));
 								String firstLine = "This plot is part a group of " + block.getPlotObjectGroup().getTownBlocks().size() + " plot(s) by unclaiming you will lose them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
+								return true;
 
 							}
 
