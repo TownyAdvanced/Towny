@@ -130,7 +130,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 												siegeZone.getDefenderPlayerScoreTimeMap(),
 												-TownySettings.getWarSiegePointsForDefenderOccupation());
 
-					
 					} else if (residentTown.hasNation()) {
 
 						if (siegeZone.getDefendingTown().hasNation()
@@ -145,7 +144,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone,
 													siegeZone.getDefenderPlayerScoreTimeMap(),
 													-TownySettings.getWarSiegePointsForDefenderOccupation());
-						
+
 						} else if (siegeZone.getAttackingNation() 
 							== residentTown.getNation()) {
 
@@ -355,15 +354,15 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					continue;
 				}
 
-				//If town filter is used, remove player if they are not in the right town
-				if(townFilter != null && resident.getTown() != townFilter) {
+				//If only town filter is used, remove player if they are not in the right town
+				if(townFilter != null && nationFilter == null && resident.getTown() != townFilter) {
 					it.remove();
 					siegeZoneChanged = true;
 					continue;
 				}
 
 				//If nation filter is used, remove player if they are not in the right nation
-				if(nationFilter != null && resident.getTown().getNation() != nationFilter) {
+				if(nationFilter != null && (!resident.hasNation() || resident.getTown().getNation() != nationFilter)) {
 					it.remove();
 					siegeZoneChanged = true;
 					continue;

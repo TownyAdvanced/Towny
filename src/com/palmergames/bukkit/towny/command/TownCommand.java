@@ -2198,7 +2198,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// TODO: Allow leaving town during war.
 			if (TownyAPI.getInstance().isWarTime())
 				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			

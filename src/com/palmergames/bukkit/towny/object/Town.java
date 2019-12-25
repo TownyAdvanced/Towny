@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarLeaveController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -611,6 +612,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			throw new NotRegisteredException();
 		} else {
 
+			if(TownySettings.getWarSiegeEnabled())
+				SiegeWarLeaveController.evaluateTownRemoveResident(this, resident);
+
 			remove(resident);
 
 			if (getNumResidents() == 0) {
@@ -626,7 +630,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	private void remove(Resident resident) {
-
 		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
 			
 			// Do not remove Embassy plots

@@ -65,7 +65,7 @@ public class SiegeWarDeathController {
 
 				//Did the death occur in the siege death point zone?
 				if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-					awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone);
+					awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
 				}
 			}
 
@@ -81,7 +81,7 @@ public class SiegeWarDeathController {
 
 					//Did the death occur in the siege death point zone?
 					if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-						awardSiegeDeathPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone);
+						awardSiegeDeathPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
 					}
 				}
 
@@ -95,7 +95,7 @@ public class SiegeWarDeathController {
 
 							//Did the death occur in the siege death point zone?
 							if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-								awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone);
+								awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
 							}
 						}
 					}
@@ -108,10 +108,11 @@ public class SiegeWarDeathController {
 		}
 	}
 	
-	private static void awardSiegeDeathPoints(boolean attackerDeath,
+	public static void awardSiegeDeathPoints(boolean attackerDeath,
 									   TownyObject pointsRecipient, 
 									   Resident deadResident,
-									   SiegeZone siegeZone) throws NotRegisteredException {
+									   SiegeZone siegeZone,
+									   String unformattedMessage) throws NotRegisteredException {
 		
 		//Give siege points to opposing side
 		int siegePoints;
@@ -123,9 +124,11 @@ public class SiegeWarDeathController {
 			siegeZone.adjustSiegePoints(siegePoints);
 		}
 
+		TownyUniverse.getInstance().getDataSource().saveSiegeZone(siegeZone);
+
 		//Send messages to siege participants
 		String message = String.format(
-			TownySettings.getLangString("msg_siege_war_participant_death"),
+			unformattedMessage,
 			TownyFormatter.getFormattedName(deadResident),
 			TownyFormatter.getFormattedName(siegeZone.getDefendingTown()),
 			siegePoints,
