@@ -1421,8 +1421,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = "";
 		String path;
 		
-		TownyMessaging.sendErrorMsg("" + getAllGroups().size());
-		
 		for (PlotObjectGroup group : getAllGroups()) {
 			path = getGroupFilename(group);
 			
@@ -1460,10 +1458,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("groupPrice");
 					if (line != null && !line.isEmpty())
 						group.setPrice(Double.parseDouble(line.trim()));
-					
-					line = keys.get("resident");
-					if (line != null && !line.isEmpty())
-						group.setResident(getResident(line.trim()));
 						
 					
 				} catch (Exception e) {
@@ -1953,15 +1947,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Town
 		list.add("town=" + group.getTown().toString());
-		
-		// Owner
-		if (group.hasResident())
-			try {
-				list.add("resident=" + group.getResident().toString());
-			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(e.getMessage());
-			}
-		
 		
 		// Save file
 		this.queryQueue.add(new FlatFile_Task(list, getGroupFilename(group)));
@@ -2640,7 +2625,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public void deleteGroup(PlotObjectGroup group) {
     	File file = new File(getGroupFilename(group));
-    	TownyMessaging.sendErrorMsg("Attempting to delete" + file.getPath());
     	if (file.exists())
     		file.deleteOnExit();
     	else
