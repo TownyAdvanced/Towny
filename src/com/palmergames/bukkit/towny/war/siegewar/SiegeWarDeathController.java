@@ -69,17 +69,36 @@ public class SiegeWarDeathController {
 				}
 			}
 
-			//Was the dead player a member of a besieging nation, killed by a siege defender, in the siege death point zone ?
-			if (killerResidentTown.hasSiege()
-				&& deadResidentTown.hasNation()
-				&& killerResidentTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-				&& killerResidentTown.getSiege().getSiegeZones().containsKey(deadResidentTown.getNation())) {
+			if(deadResidentTown.hasNation()) {
+				Nation deadResidentNation = deadResidentTown.getNation();
 
-				SiegeZone siegeZone = killerResidentTown.getSiege().getSiegeZones().get(deadResidentTown.getNation());
+				//Was the dead player a member of a besieging nation, killed by a siege defender, in the siege death point zone ?
+				if (killerResidentTown.hasSiege()
+					&& killerResidentTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+					&& killerResidentTown.getSiege().getSiegeZones().containsKey(deadResidentNation)) {
 
-				//Did the death occur in the siege death point zone?
-				if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-					awardSiegeDeathPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone);
+					SiegeZone siegeZone = killerResidentTown.getSiege().getSiegeZones().get(deadResidentNation);
+
+					//Did the death occur in the siege death point zone?
+					if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+						awardSiegeDeathPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone);
+					}
+				}
+
+				//Was the dead player a member of a nation under attack, killed by a siege attacker, in the death points zone ?
+				if(killerResidentTown.hasNation()) {
+					for (SiegeZone siegeZone : killerResidentTown.getNation().getSiegeZones()) {
+						if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+							&& siegeZone.getDefendingTown() != deadResidentTown	//already evaluated above
+							&& siegeZone.getDefendingTown().hasNation()
+							&& siegeZone.getDefendingTown().getNation() == deadResidentNation) {
+
+							//Did the death occur in the siege death point zone?
+							if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+								awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone);
+							}
+						}
+					}
 				}
 			}
 
