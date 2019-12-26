@@ -98,7 +98,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 				} catch (NullPointerException ex) {
 					
-					TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
+					if (query != null)
+						TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
 					
 				}
 				
