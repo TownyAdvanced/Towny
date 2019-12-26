@@ -1127,5 +1127,5 @@ status_nation_siege_defences: '&2Siege Defences &a[%s]&2: &f'
 #General
 msg_days: ' days'
 status_no_green: '&aNO'
-msg_occupier: '[Occupier]'
+msg_occupier: '&4*Occupier*'
 
