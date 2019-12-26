@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -27,46 +28,52 @@ public class PlunderTown {
 	 * This method does some final checks and if they pass, the plunder is executed.
 	 *
 	 * @param player the player who placed the plunder chest
-	 * @param resident the resident associated with the player object
-	 * @param town the town where the chest was placed
-	 * @param siege the siege on the town
+	 * @param siegeZone the siegezone to check                 
 	 * @param event the place block event
 	 */
     public static void processPlunderTownRequest(Player player,
-												 Resident resident,
-												 Town town,
-												 Siege siege,
+												 SiegeZone siegeZone,
 												 BlockPlaceEvent event) {
         try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			
 			if(!TownySettings.isUsingEconomy())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_economy"));
+			
+			TownyUniverse universe = TownyUniverse.getInstance();
+			Resident resident = universe.getDataSource().getResident(player.getName());
+			if(!resident.hasTown())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
+			Town townOfPlunderingResident = resident.getTown();
+			if(!townOfPlunderingResident.hasNation())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
+			
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if(resident.getTown() == siege.getDefendingTown())
+			Town townToBePlundered = siegeZone.getDefendingTown();
+			if(townOfPlunderingResident == townToBePlundered)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_own_town"));
-			
+
+			Siege siege = siegeZone.getSiege();
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
 			
-			if(resident.getTown().getNation() != siege.getAttackerWinner())
+			if(townOfPlunderingResident.getNation() != siege.getAttackerWinner())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
 			
             if(siege.isTownPlundered())
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), town));
+                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townToBePlundered.getName()));
 
-            plunderTown(siege, town, siege.getAttackerWinner());
+            plunderTown(siege, townToBePlundered, siege.getAttackerWinner(), event);
             
         } catch (TownyException x) {
-            event.setCancelled(true);
+            event.setBuild(false);
+        	event.setCancelled(true);
             TownyMessaging.sendErrorMsg(player, x.getMessage());
         }
     }
 
-    private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
+    private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation, BlockPlaceEvent event) {
         siege.setTownPlundered(true);
 
         double fullPlunderAmount =
@@ -91,6 +98,8 @@ public class PlunderTown {
 				universe.getDataSource().removeTown(defendingTown);
             }
         } catch (EconomyException x) {
+			event.setBuild(false);
+			event.setCancelled(true);
             TownyMessaging.sendErrorMsg(x.getMessage());
         }
     }

@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -142,44 +143,7 @@ public class SiegeWarBlockUtil {
 		return false;
 	}
 
-	/**
-	 * This method determines if the difference in elevation between a (attack banner) block, 
-	 * and the average height of a town block,
-	 * is acceptable,
-	 * 
-	 * The allowed limit is configurable.
-	 * 
-	 * @param block the attack banner
-	 * @param townBlock the town block
-	 * @return true if the difference in elevation is acceptable
-	 */
-	public static boolean isBannerToTownElevationDifferenceOk(Block block, TownBlock townBlock) {
-		int allowedDownwardElevationDifference = TownySettings.getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference();
-		int averageDownwardElevationDifference = getAverageBlockToTownDownwardElevationDistance(block, townBlock);
-		return averageDownwardElevationDifference <= allowedDownwardElevationDifference;
-	}
-	
-	private static int getAverageBlockToTownDownwardElevationDistance(Block block, TownBlock townBlock) {
-		int blockElevation = block.getY();
-		
-		Location topNorthWestCornerLocation = townBlock.getCoord().getTopNorthWestCornerLocation(block.getWorld());
-		int townBlockSize = TownySettings.getTownBlockSize();
-		Location[] surfaceCornerLocations = new Location[4];
-		surfaceCornerLocations[0] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation);
-		surfaceCornerLocations[1] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,0));
-		surfaceCornerLocations[2] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(0,0,townBlockSize));
-		surfaceCornerLocations[3] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,townBlockSize));
-		
-		int totalElevation = 0;
-		for(Location surfaceCornerLocation: surfaceCornerLocations) {
-			totalElevation += surfaceCornerLocation.getBlockY();
-		}
-		int averageTownElevation = totalElevation / 4;
-		
-		return blockElevation - averageTownElevation;
-	}
-	
-	private static Location getSurfaceLocation(Location topLocation) {
+	static Location getSurfaceLocation(Location topLocation) {
 		topLocation.add(0,-1,0);
 
 		while(topLocation.getY() < 256)

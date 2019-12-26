@@ -71,7 +71,8 @@ public class SurrenderTown {
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            event.setCancelled(true);
+			event.setBuild(false);
+			event.setCancelled(true);
         }
     }
 

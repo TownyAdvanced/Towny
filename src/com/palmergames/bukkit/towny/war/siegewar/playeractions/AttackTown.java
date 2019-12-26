@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -47,18 +48,21 @@ public class AttackTown {
             if(!attackingResident.hasTown())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
-            Town townOfAttackingResident = attackingResident.getTown();
-            if(!townOfAttackingResident.hasNation())
+            Town townOfAttackingPlayer = attackingResident.getTown();
+            if(!townOfAttackingPlayer.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
+
+			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if (nearbyTownBlocks.size() > 1)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_incorrect_town_block_facing"));
 
 			Town defendingTown = nearbyTownBlocks.get(0).getTown();
-            if(townOfAttackingResident == defendingTown)
+            if(townOfAttackingPlayer == defendingTown)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_own_town"));
 
-            Nation nationOfAttackingPlayer= townOfAttackingResident.getNation();
+            Nation nationOfAttackingPlayer= townOfAttackingPlayer.getNation();
             if (defendingTown.hasNation()) {
                 Nation nationOfDefendingTown = defendingTown.getNation();
 
@@ -69,9 +73,6 @@ public class AttackTown {
                     throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));
             }
             
-            if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_already_attacking_town"));
 
@@ -98,7 +99,7 @@ public class AttackTown {
             if(defendingTown.isRuined())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
 
-            if(!SiegeWarBlockUtil.isBannerToTownElevationDifferenceOk(block, nearbyTownBlocks.get(0))) {
+            if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, nearbyTownBlocks.get(0))) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
             
@@ -106,9 +107,11 @@ public class AttackTown {
             attackTown(player, block, nationOfAttackingPlayer, defendingTown);
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            event.setCancelled(true);
+			event.setBuild(false);
+			event.setCancelled(true);
         } catch (EconomyException x) {
-            event.setCancelled(true);
+			event.setBuild(false);
+			event.setCancelled(true);
             TownyMessaging.sendErrorMsg(player, x.getMessage());
         }
     }

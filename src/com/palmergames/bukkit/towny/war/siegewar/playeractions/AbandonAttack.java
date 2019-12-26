@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
@@ -28,11 +29,11 @@ public class AbandonAttack {
 	 * This method does some final checks and if they pass, the abandon is executed
 	 *
 	 * @param player the player who placed the abandon banner
-	 * @param nearestSiegeZone the nearest siege zone
+	 * @param siegeZone the siege zone
 	 * @param event the place block event
 	 */
     public static void processAbandonSiegeRequest(Player player, 
-												  SiegeZone nearestSiegeZone,
+												  SiegeZone siegeZone,
 												  BlockPlaceEvent event)  {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
@@ -48,15 +49,20 @@ public class AbandonAttack {
             if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
             
-			//If the player's nation is not the attacker, send error
-            Nation nationOfResident = townOfResident.getNation();
-            if(nearestSiegeZone.getAttackingNation() != nationOfResident)
+            //If the siege is not in progress, send error
+			Siege siege = siegeZone.getSiege();
+			if (siege.getStatus() != SiegeStatus.IN_PROGRESS)
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_siege_over"));
+			
+			//If the player's nation does not own the nearby siegezone, send error
+            if(siegeZone.getAttackingNation() != townOfResident.getNation())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
             
-            attackerAbandon(nearestSiegeZone);
+            attackerAbandon(siegeZone);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
+			event.setBuild(false);
             event.setCancelled(true);
         }
     }

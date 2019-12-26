@@ -1081,7 +1081,8 @@ msg_err_siege_war_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruin
 msg_err_siege_war_cannot_place_banner_far_above_town: 'The siege banner cannot be placed on a much higher elevation than the town. Try placing the banner at a lower elevation'
 #Abandon
 msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks: '&6[War]&c You cannot abandon because there are no active siege banners nearby.'
-msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon because the nearby siege banner does not belong to your nation.'
+msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon because your nation is not attacking in this area.'
+msg_err_siege_war_cannot_abandon_siege_over: '&6[War]&c You cannot abandon because the siege is over.'
 #Invade
 msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot invade your own town.'
 msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot invade unless your nation is victorious in the siege."

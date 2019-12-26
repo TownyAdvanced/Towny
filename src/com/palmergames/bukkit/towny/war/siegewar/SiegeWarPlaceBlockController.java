@@ -7,10 +7,11 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -23,11 +24,11 @@ import java.util.List;
  * This class intercepts 'place block' events coming from the towny block listener class
  *
  * The class evaluates the event, and determines if it is siege related e.g.:
- * 1. An attack request  (place coloured banner outside town)
+ * 1. A siege attack request  (place coloured banner outside town)
  * 2. A siege abandon request  (place white banner near attack banner)
  * 3. A town surrender request  (place white banner in town)
- * 4. A town invasion request (place chest in town)
- * 5. A town plunder request (place coloured banner in town)
+ * 4. A town invasion request (place chest near attack banner)
+ * 5. A town plunder request (place coloured banner near attack banner)
  * 6. None of the above
  * 
  * If the place block event is determined to be a siege action,
@@ -100,40 +101,17 @@ public class SiegeWarPlaceBlockController {
 
 		if(!townyWorld.hasTownBlock(blockCoord)) {
 			//Wilderness found
-			
 			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
 				return evaluatePlaceWhiteBannerInWilderness(block, player, event);
 			} else {
-				return evaluatePlaceColouredBannerInWilderness(block, player, event);
+				return evaluatePlaceColouredBannerInWilderness(block, player, event, plugin);
 			}
-			
 		} else {
-			//Town block found
-			
-			TownBlock townBlock = null;
-			if(townyWorld.hasTownBlock(blockCoord)) {
-				townBlock = townyWorld.getTownBlock(blockCoord);
-			}
-
-			if (townBlock == null) {
-				return false;
-			}
-			
-			Town town;
-			if(townBlock.hasTown()) {
-				town = townBlock.getTown();
-			} else {
-				return false;
-			}
-			
-			//If there is no siege, do normal block placement
-			if (!town.hasSiege())
-				return false;
-
+			//Town block found 
 			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
-				return evaluatePlaceWhiteBannerInTown(player, town, event);
+				return evaluatePlaceWhiteBannerInTown(player, blockCoord, event, townyWorld);
 			} else {
-				return evaluatePlaceColouredBannerInTown(plugin, player, town, event);
+				return false;
 			}
 		}
 	}
@@ -146,36 +124,15 @@ public class SiegeWarPlaceBlockController {
 		if (!TownySettings.getWarSiegeAbandonEnabled())
 			return false;
 
-		//Find the nearest siege zone to the player,from IN_PROGRESS sieges
-		SiegeZone nearestSiegeZone = null;
-		double distanceToNearestSiegeZone = -1;
-		for(SiegeZone siegeZone: com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
-
-			if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
-				continue;
-
-			if (nearestSiegeZone == null) {
-				nearestSiegeZone = siegeZone;
-				distanceToNearestSiegeZone = block.getLocation().distance(nearestSiegeZone.getFlagLocation());
-			} else {
-				double distanceToNewTarget = block.getLocation().distance(siegeZone.getFlagLocation());
-				if(distanceToNewTarget < distanceToNearestSiegeZone) {
-					nearestSiegeZone = siegeZone;
-					distanceToNearestSiegeZone = distanceToNewTarget;
-				}
-			}
-		}
-
-		//If there are no in-progress sieges at all,then regular block request
-		if(nearestSiegeZone == null)
+		//Find the nearest siege zone to the player
+		SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+		
+		//If there are no nearby siege zones,then regular block request
+		if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize())
 			return false;
-
-		//If the player is too far from the nearest zone, then regular block request
-		if(distanceToNearestSiegeZone > TownySettings.getTownBlockSize())
-			return false;
-
+		
 		AbandonAttack.processAbandonSiegeRequest(player,
-			nearestSiegeZone,
+			nearestSiegeZoneDistance.getSiegeZone(),
 			event);
 
 		return true;
@@ -183,22 +140,37 @@ public class SiegeWarPlaceBlockController {
 
 	/**
 	 * Evaluates placing a coloured banner in the wilderness.
-	 * Determines if the event will be considered as an attack request.
+	 * Determines if the event will be considered as an attack or invade request.
 	 */
-	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event) {
+	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
 		if (!TownySettings.getWarSiegeAttackEnabled())
 			return false;
 
-		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
-		if (nearbyTownBlocks.size() == 0)
-			return false;   //No town blocks are nearby. Normal block placement
+		//Find the nearest siege zone to the player
+		SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+		
+		//If there is no nearby siege zone, consider attack, else consider invasion
+		if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize()) {
+			if (!TownySettings.getWarSiegeAttackEnabled())
+				return false;
 
-		AttackTown.processAttackTownRequest(
-			player,
-			block,
-			nearbyTownBlocks,
-			event);
+			List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
+			if (nearbyTownBlocks.size() == 0)
+				return false;   //No town blocks are nearby. Normal block placement
 
+			AttackTown.processAttackTownRequest(
+				player,
+				block,
+				nearbyTownBlocks,
+				event);
+
+		} else {
+			if (!TownySettings.getWarSiegeInvadeEnabled())
+				return false;
+			
+			InvadeTown.processInvadeTownRequest(plugin, player, nearestSiegeZoneDistance.getSiegeZone(), event);
+		}
+		
 		return true;
 	}
 
@@ -206,88 +178,66 @@ public class SiegeWarPlaceBlockController {
 	 * Evaluates placing a white banner inside a town.
 	 * Determines if the event will be considered as a surrender request.
 	 */
-    private static boolean evaluatePlaceWhiteBannerInTown(Player player, Town town, BlockPlaceEvent event) {
+    private static boolean evaluatePlaceWhiteBannerInTown(Player player, Coord blockCoord, BlockPlaceEvent event, TownyWorld townyWorld) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegeSurrenderEnabled())
 			return false;
+		
+		TownBlock townBlock = null;
+		if(townyWorld.hasTownBlock(blockCoord)) {
+			townBlock = townyWorld.getTownBlock(blockCoord);
+		}
 
+		if (townBlock == null) {
+			return false;
+		}
+
+		Town town;
+		if(townBlock.hasTown()) {
+			town = townBlock.getTown();
+		} else {
+			return false;
+		}
+
+		//If there is no siege, do normal block placement
+		if (!town.hasSiege())
+			return false;
+		
 		SurrenderTown.processTownSurrenderRequest(
 			player,
 			town,
 			event);
 		return true;
 	}
-
-	/**
-	 * Evaluates placing a coloured banner inside a town.
-	 * Determines if the event will be considered as an invade request.
-	 * 
-	 * The main verifications here are that a siege exists in the town (already checked) and
-	 * the placer is a member of an attacking nation
-	 */
-	private static boolean evaluatePlaceColouredBannerInTown(Towny plugin, Player player, Town town, BlockPlaceEvent event) throws NotRegisteredException {
-		if (!TownySettings.getWarSiegeInvadeEnabled())
-			return false;
-
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-		Siege siege = town.getSiege();
-
-		if(resident.hasTown()
-			&& resident.hasNation()
-			&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
-
-			InvadeTown.processInvadeTownRequest(plugin, player, resident, town, siege, event);
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 	/**
 	 * Evaluates placing a chest.
 	 * Determines if the event will be considered as a plunder request.
-	 * 
-	 * The main verifications here are that the block is in a town, 
-	 * a siege exists in the town, and
-	 * the placer is a member of an attacking nation
 	 */
 	private static boolean evaluatePlaceChest(Player player,
 											  Block block,
 											  BlockPlaceEvent event) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
-
-		Town town;
+		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-		Coord coord = Coord.parseCoord(block);
-		
-		if (!world.hasTownBlock(coord)) 
-			return false;
-		
-		TownBlock townBlock = world.getTownBlock(coord);
-		
-		if(townBlock.hasTown()) {
-			town = townBlock.getTown();
-		} else {
-			return false;
-		}
-		
-		if (town.hasSiege()) {
-			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-			Siege siege = town.getSiege();
-	
-			if(resident.hasTown()
-				&& resident.hasNation()
-				&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
+		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
+		Coord blockCoord = Coord.parseCoord(block);
 
-				PlunderTown.processPlunderTownRequest(player, resident, town, siege, event);
-				return true;
-			} else {
-				return false;
-			}
+		if(townyWorld.hasTownBlock(blockCoord)) {
+			return false;   //cannot place in town
 		} else {
-			return false;
+			//Find the nearest siege zone to the player
+			SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+
+			//If there is a nearby siege, process plunder request
+			if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize()) {
+				return false;
+			} else {
+				PlunderTown.processPlunderTownRequest(player, nearestSiegeZoneDistance.getSiegeZone(), event);
+			}
+
+			return true;	
 		}
 	}
 }
+
