@@ -1035,6 +1035,6 @@ msg_err_rename_cancelled: '重命名被其他插件取消了.'
 msg_war_defender_keeps_claims: '已禁用俘获. 防御城镇仍有土地所有权.'
 
 # Added in 0.67
-msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
-msg_conquered: '[Conquered]'
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: '城镇 %s 已被征服并加入了 %s ，持续 %s 天.'
+msg_conquered: '[已被征服]'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你的城镇无法离开国家因为你的城镇处于被征服状态.'
