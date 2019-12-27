@@ -143,32 +143,51 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as an attack or invade request.
 	 */
 	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
-		if (!TownySettings.getWarSiegeAttackEnabled())
-			return false;
 
-		//Find the nearest siege zone to the player
-		SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
+		if (nearbyTownBlocks.size() == 0)
+			return false;   //No town blocks are nearby. Normal block placement
+
+		if(nearbyTownBlocks.size() > 1) {
+			//More than one town block nearby. Error
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_town_blocks_nearby"));
+			event.setBuild(false);
+			event.setCancelled(true);
+			return true;
+		}
 		
-		//If there is no nearby siege zone, consider attack, else consider invasion
-		if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize()) {
-			if (!TownySettings.getWarSiegeAttackEnabled())
+		//Get nearby town
+		Town town = null;
+		if(nearbyTownBlocks.get(0).hasTown()) {
+			try {
+				town = nearbyTownBlocks.get(0).getTown();
+			} catch (NotRegisteredException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+
+		//If the town has a siege, attempt invasion, otherwise attempt attack
+		if(town.hasSiege()) {
+			if (!TownySettings.getWarSiegeInvadeEnabled())
 				return false;
 
-			List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
-			if (nearbyTownBlocks.size() == 0)
-				return false;   //No town blocks are nearby. Normal block placement
+			InvadeTown.processInvadeTownRequest(
+				plugin, 
+				player, 
+				town, 
+				event);
+		} else {
+			if (!TownySettings.getWarSiegeAttackEnabled())
+				return false;
 
 			AttackTown.processAttackTownRequest(
 				player,
 				block,
-				nearbyTownBlocks,
+				nearbyTownBlocks.get(0),
+				town,
 				event);
-
-		} else {
-			if (!TownySettings.getWarSiegeInvadeEnabled())
-				return false;
-			
-			InvadeTown.processInvadeTownRequest(plugin, player, nearestSiegeZoneDistance.getSiegeZone(), event);
 		}
 		
 		return true;
@@ -218,26 +237,44 @@ public class SiegeWarPlaceBlockController {
 											  BlockPlaceEvent event) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
-		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-		Coord blockCoord = Coord.parseCoord(block);
 
-		if(townyWorld.hasTownBlock(blockCoord)) {
-			return false;   //cannot place in town
-		} else {
-			//Find the nearest siege zone to the player
-			SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
+		if (nearbyTownBlocks.size() == 0)
+			return false;   //No town blocks are nearby. Normal block placement
 
-			//If there is a nearby siege, process plunder request
-			if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize()) {
-				return false;
-			} else {
-				PlunderTown.processPlunderTownRequest(player, nearestSiegeZoneDistance.getSiegeZone(), event);
-			}
-
-			return true;	
+		if(nearbyTownBlocks.size() > 1) {
+			//More than one town block nearby. Error
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_town_blocks_nearby"));
+			event.setBuild(false);
+			event.setCancelled(true);
+			return true;
 		}
+
+		//Get nearby town
+		Town town = null;
+		if(nearbyTownBlocks.get(0).hasTown()) {
+
+			try {
+				town = nearbyTownBlocks.get(0).getTown();
+			} catch (NotRegisteredException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+
+		//If the town has a siege, attempt plunder, otherwise return false
+		if(town.hasSiege()) {
+			PlunderTown.processPlunderTownRequest(
+				player,
+				town,
+				event);
+		} else {
+			return false;
+		}
+
+		return true;
+
 	}
 }
 

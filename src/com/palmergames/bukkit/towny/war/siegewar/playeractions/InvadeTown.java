@@ -10,16 +10,11 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is responsible for processing requests to invade towns
@@ -35,12 +30,12 @@ public class InvadeTown {
 	 *
 	 * @param plugin the town plugin object
 	 * @param player the player who placed the invade banner
-	 * @param siegeZone the siegezone to be checked                 
+	 * @param townToBeInvaded the town to be invaded
 	 * @param event the place block event
 	 */
     public static void processInvadeTownRequest(Towny plugin,
                                                 Player player,
-                                                SiegeZone siegeZone,
+                                                Town townToBeInvaded,
                                                 BlockPlaceEvent event) {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
@@ -56,11 +51,10 @@ public class InvadeTown {
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			Siege siege = siegeZone.getSiege();
-			Town townToBeInvaded = siegeZone.getDefendingTown();
 			if(townOfInvadingResident == townToBeInvaded)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_own_town"));
 
+			Siege siege = townToBeInvaded.getSiege();
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 

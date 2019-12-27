@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -10,8 +9,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
-import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -28,11 +25,11 @@ public class PlunderTown {
 	 * This method does some final checks and if they pass, the plunder is executed.
 	 *
 	 * @param player the player who placed the plunder chest
-	 * @param siegeZone the siegezone to check                 
+	 * @param townToBePlundered the town to be plundered
 	 * @param event the place block event
 	 */
     public static void processPlunderTownRequest(Player player,
-												 SiegeZone siegeZone,
+												 Town townToBePlundered,
 												 BlockPlaceEvent event) {
         try {
 			if(!TownySettings.isUsingEconomy())
@@ -50,11 +47,10 @@ public class PlunderTown {
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			Town townToBePlundered = siegeZone.getDefendingTown();
 			if(townOfPlunderingResident == townToBePlundered)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_own_town"));
 
-			Siege siege = siegeZone.getSiege();
+			Siege siege = townToBePlundered.getSiege();
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
 			

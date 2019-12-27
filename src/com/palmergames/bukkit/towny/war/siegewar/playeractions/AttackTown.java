@@ -18,8 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import java.util.List;
-
 /**
  * This class is responsible for processing requests to start siege attacks
  *
@@ -34,12 +32,13 @@ public class AttackTown {
 	 *
 	 * @param player the player who placed the attack banner
 	 * @param block the attack banner 
-	 * @param nearbyTownBlocks any nearby town block (n,s,e, or w)
+	 * @param defendingTown the town about to be attacked
 	 * @param event the place block event
 	 */
     public static void processAttackTownRequest(Player player,
                                                 Block block,
-                                                List<TownBlock> nearbyTownBlocks,
+                                                TownBlock townBlock,
+                                                Town defendingTown,
                                                 BlockPlaceEvent event) {
 
         try {
@@ -55,11 +54,7 @@ public class AttackTown {
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if (nearbyTownBlocks.size() > 1)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_incorrect_town_block_facing"));
-
-			Town defendingTown = nearbyTownBlocks.get(0).getTown();
-            if(townOfAttackingPlayer == defendingTown)
+		    if(townOfAttackingPlayer == defendingTown)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_own_town"));
 
             Nation nationOfAttackingPlayer= townOfAttackingPlayer.getNation();
@@ -99,7 +94,7 @@ public class AttackTown {
             if(defendingTown.isRuined())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
 
-            if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, nearbyTownBlocks.get(0))) {
+            if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, townBlock)) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
             

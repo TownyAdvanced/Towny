@@ -1074,7 +1074,7 @@ msg_err_siege_war_action_not_a_nation_member: '&6[War]&c You must be a member of
 msg_err_siege_war_cannot_attack_own_town: '&6[War]&c You cannot attack your own town.'
 msg_err_siege_war_cannot_attack_town_in_own_nation: '&6[War]&c You cannot attack a town in your own nation.'
 msg_err_siege_war_cannot_attack_non_enemy_nation: '&6[War]&c You cannot attack a town unless the nation of that town is an enemy of your nation.'
-msg_err_siege_war_incorrect_town_block_facing: '&6[War]&c To start a siege attack, the wilderness block containing the banner must be facing just one town block. Try placing the siege banner in a different area.'
+msg_err_siege_war_too_many_town_blocks_nearby: '&6[War]&c You cannot perform this action because the area is facing more than one town block. Try placing the item in a different area. '
 msg_err_siege_war_nation_already_attacking_town: '&6[War]&c Your nation is already attacking this town.'
 msg_err_siege_war_cannot_attack_siege_immunity: '&6[War]&c The target town has siege immunity. It cannot be attacked until the siege immunity expires.'
 msg_err_siege_war_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
