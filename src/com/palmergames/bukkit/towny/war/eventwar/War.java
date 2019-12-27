@@ -596,7 +596,7 @@ public class War {
 	 * Removes a TownBlock attacked by a Town.
 	 * @param attacker attackPlot method attackerResident.getTown().
 	 * @param townBlock townBlock being attacked.
-	 * @throws NotRegisteredException
+	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
 	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 		// Add bonus blocks
@@ -664,7 +664,7 @@ public class War {
 	 * Removes a Nation from the war, attacked by a Town. 
 	 * @param attacker Town which attacked the Nation.
 	 * @param nation Nation being removed from the war.
-	 * @throws NotRegisteredException
+	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
@@ -680,7 +680,7 @@ public class War {
 	 * Removes a Town from the war, attacked by a Town.
 	 * @param attacker Town which attacked.
 	 * @param town Town which is being removed from the war.
-	 * @throws NotRegisteredException
+	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
@@ -728,7 +728,7 @@ public class War {
 	 * Called when a player is killed and their Town Bank cannot pay the war penalty.
 	 * Called when a Town voluntarily leaves a War.
 	 * Called by remove(Nation nation).
-	 * @param town
+	 * @param town The Town being removed from the war.
 	 */
 	public void remove(Town town) {
 
