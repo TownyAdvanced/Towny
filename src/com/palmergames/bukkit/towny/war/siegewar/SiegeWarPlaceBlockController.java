@@ -5,7 +5,10 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
@@ -237,6 +240,12 @@ public class SiegeWarPlaceBlockController {
 											  BlockPlaceEvent event) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
+
+		TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(block.getWorld().getName());
+		Coord blockCoord = Coord.parseCoord(block);
+
+		if(townyWorld.hasTownBlock(blockCoord))
+			return false;   //The chest is being placed in a town. Normal block placement
 
 		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
 		if (nearbyTownBlocks.size() == 0)
