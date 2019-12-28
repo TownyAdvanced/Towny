@@ -48,7 +48,7 @@ public class InvadeTown {
 			if(!townOfInvadingResident.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 			
-			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if(townOfInvadingResident == townToBeInvaded)

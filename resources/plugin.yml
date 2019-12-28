@@ -169,7 +169,6 @@ permissions:
             towny.command.nation.allylist: true
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
-            towny.command.nation.siege.*: true
 
     towny.command.nation.deposit.other:
         description: User can deposit money into the town bank of a nation member.
@@ -263,14 +262,16 @@ permissions:
             towny.command.nation.toggle.public: true
             towny.command.nation.toggle.open: true
 
-    towny.command.nation.siege.*:
-        description: User can access all nation siege related commands
+    towny.nation.siege.*:
+        description: User can access all aspects of nation sieges.
         default: false
         children:
-            towny.command.nation.siege.attack: true
-            towny.command.nation.siege.abandon: true
-            towny.command.nation.siege.invade: true
-            towny.command.nation.siege.plunder: true
+            towny.nation.siege.points: true # Affect siege points in all nation siege attacks/defences.
+            towny.nation.siege.attack: true
+            towny.nation.siege.abandon: true
+            towny.nation.siege.invade: true
+            towny.nation.siege.plunder: true
+
 
     # Town command permissions
     towny.command.town.*:
@@ -300,7 +301,6 @@ permissions:
             towny.command.town.toggle.*: true
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
-            towny.command.town.siege.*: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
@@ -390,12 +390,12 @@ permissions:
             towny.command.town.unclaim: true
             towny.command.town.unclaim.all: true
 
-    towny.command.town.siege.*:
-        description: User can access all town siege related commands
+    towny.town.siege.*:
+        description: User can access all aspects of town sieges.
         default: false
         children:
-            towny.command.town.siege.surrender: true
-            towny.command.town.siege.revolt: true
+            towny.town.siege.points: true # Affect siege points in town defence.
+            towny.town.siege.surrender: true
 
       # Plot command permissions
     towny.command.plot.*:

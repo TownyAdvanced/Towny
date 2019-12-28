@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.entity.Player;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 /**
  * This class intercepts 'leave' requests, where a resident leaves a town or a town leaves a nation.
@@ -39,18 +41,23 @@ public class SiegeWarLeaveController {
 			if(town.isOccupied() )
 				return;
 
+			TownyUniverse universe = TownyUniverse.getInstance(); 
+			
 			//Is the resident a member of a town under siege, and in the death zone ?
 			if(town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())) {
 
-				for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
+					for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
 					if (player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
 						SiegeWarDeathController.awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), resident, siegeZone, TownySettings.getLangString("msg_siege_war_resident_leave_town"));
 					}	
 				}
 			}
 			
-			if(town.hasNation()) {
+			if(town.hasNation()
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())) {
+				
 				Nation nation = town.getNation();
 				
 				//Is the resident a member of a nation which is attacking a town, and in the death zone?
@@ -107,6 +114,9 @@ public class SiegeWarLeaveController {
 
 				if(player == null)
 					return;  //Player not online, or npc
+
+				if(TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode()))
+					return;  //Player does not have nation siege point permissions
 
 				//Is the player in the death zone of any siege attacks ?
 				for(SiegeZone siegeZone: nation.getSiegeZones()) {

@@ -99,7 +99,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 				//Evaluate siege related aspects of kill
 				if(TownySettings.getWarSiegeEnabled() && attackerResident != null && defenderResident != null) {
-					SiegeWarDeathController.evaluateSiegePvPDeath(defenderPlayer, defenderResident, attackerResident);
+					SiegeWarDeathController.evaluateSiegePvPDeath(defenderPlayer, attackerPlayer, defenderResident, attackerResident);
 				}
 
 				/*

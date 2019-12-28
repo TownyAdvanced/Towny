@@ -70,14 +70,6 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_ALLY_LIST_SENT("towny.command.nation.ally.sent"),
 	TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED("towny.command.nation.ally.received"),
 
-	//Siege Related
-	TOWNY_COMMAND_NATION_SIEGE_ATTACK("towny.command.nation.siege.attack"),
-	TOWNY_COMMAND_NATION_SIEGE_ABANDON("towny.command.nation.siege.abandon"),
-	TOWNY_COMMAND_NATION_SIEGE_INVADE("towny.command.nation.siege.invade"),
-	TOWNY_COMMAND_NATION_SIEGE_PLUNDER("towny.command.nation.siege.plunder"),
-	TOWNY_COMMAND_TOWN_SIEGE_SURRENDER("towny.command.town.siege.surrender"),
-	TOWNY_COMMAND_TOWN_SIEGE_REVOLT("towny.command.town.siege.revolt"),
-
 	TOWNY_COMMAND_TOWN_INVITE_SEE_HOME("towny.command.town.invite"),
 	TOWNY_COMMAND_TOWN_INVITE_ADD("towny.command.town.invite.add"),
 	TOWNY_COMMAND_TOWN_INVITE_LIST_SENT("towny.command.town.invite.sent"),
@@ -86,7 +78,11 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN_INVITE_ACCEPT("towny.command.town.invite.accept"),
 	TOWNY_COMMAND_TOWN_INVITE_DENY("towny.command.town.invite.deny"),
 
-
+	TOWNY_NATION_SIEGE_POINTS("towny.nation.siege.points"),
+	TOWNY_NATION_SIEGE_ATTACK("towny.nation.siege.attack"),
+	TOWNY_NATION_SIEGE_ABANDON("towny.nation.siege.abandon"),
+	TOWNY_NATION_SIEGE_INVADE("towny.nation.siege.invade"),
+	TOWNY_NATION_SIEGE_PLUNDER("towny.nation.siege.plunder"),
 	
 	/*
 	 * Town command permissions
@@ -156,6 +152,9 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
 		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 		TOWNY_COMMAND_TOWN_OUTLAWLIST("towny.command.town.outlawlist"),
+
+		TOWNY_TOWN_SIEGE_POINTS("towny.town.siege.points"),
+		TOWNY_TOWN_SIEGE_SURRENDER("towny.town.siege.surrender"),
 	
 	/*
 	 * Plot command permissions

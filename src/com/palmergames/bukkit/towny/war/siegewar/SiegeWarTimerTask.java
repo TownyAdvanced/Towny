@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
@@ -119,7 +120,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					if(resident.getTown().isOccupied())
 						continue;
 
-					if (residentTown == siegeZone.getDefendingTown()) {
+					if (residentTown == siegeZone.getDefendingTown()
+						&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())) {
 
 						//Resident of defending town
 						siegeZoneChanged =
@@ -130,7 +132,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 												siegeZone.getDefenderPlayerScoreTimeMap(),
 												-TownySettings.getWarSiegePointsForDefenderOccupation());
 
-					} else if (residentTown.hasNation()) {
+					} else if (residentTown.hasNation()
+						&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())) {
 
 						if (siegeZone.getDefendingTown().hasNation()
 								&& siegeZone.getDefendingTown().getNation()
