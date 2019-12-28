@@ -163,34 +163,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 		}
 		
-		//Remove garbage from player time maps
-		Town defendingTown =siegeZone.getDefendingTown();
-		Nation defendingNation= null;
-		if(defendingTown.hasNation()) {
-			try {
-				defendingNation = defendingTown.getNation();
-			} catch (NotRegisteredException e) {
-			}
-		}
-
-		siegeZoneChanged =
-				siegeZoneChanged ||
-						removeGarbageFromPlayerTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
-								defendingTown,
-								defendingNation);
-
-		siegeZoneChanged =
-				siegeZoneChanged ||
-						removeGarbageFromPlayerTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
-								null,
-								siegeZone.getAttackingNation());
-
-		siegeZoneChanged =
-				siegeZoneChanged ||
-						removeGarbageFromPlayerTimeMap(siegeZone.getPlayerAfkTimeMap(),
-								null,
-								null);
-		
 		//Save siege zone to db if it was changed
 		if(siegeZoneChanged) {
 			universe.getDataSource().saveSiegeZone(siegeZone);
@@ -314,65 +286,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			
 			return true; //Player added to zone
 		}
-	}
-
-	/**
-	 * This method removes 'garbage' from a player time map.
-	 * 
-	 * For example, if a player has left the area, or logged off,
-	 * then although they will no longer affect the siege, the entry remains in the time map as 'garbage'
-	 * 
-	 * @param map the map recording player to time
-	 * @param townFilter the town which players must be in to avoid being removed from the map
-	 * @param nationFilter the nation which players must be in to avoid being removed from the map
-	 * @return true if the siegezone has been updated
-	 */
-	private static boolean removeGarbageFromPlayerTimeMap(Map<Player, Long> map,
-														  Town townFilter,
-														  Nation nationFilter) {
-
-		boolean siegeZoneChanged = false;
-
-		try {
-			Iterator it = map.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<Player,Long> pair = (Map.Entry)it.next();
-
-				//Remove player if offline
-				if(!pair.getKey().isOnline()) {
-					it.remove();
-					siegeZoneChanged = true;
-					continue;
-				}
-
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(pair.getKey().getName());
-
-				//Remove player if they have no town
-				if(!resident.hasTown()) {
-					it.remove();
-					siegeZoneChanged = true;
-					continue;
-				}
-
-				//If only town filter is used, remove player if they are not in the right town
-				if(townFilter != null && nationFilter == null && resident.getTown() != townFilter) {
-					it.remove();
-					siegeZoneChanged = true;
-					continue;
-				}
-
-				//If nation filter is used, remove player if they are not in the right nation
-				if(nationFilter != null && (!resident.hasNation() || resident.getTown().getNation() != nationFilter)) {
-					it.remove();
-					siegeZoneChanged = true;
-					continue;
-				}
-			}
-
-		} catch (Exception e) {
-		}
-
-		return siegeZoneChanged;
 	}
 	
 	/**
