@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarLeaveController;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -358,7 +358,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			boolean isCapital = town.isCapital();
 
 			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarLeaveController.evaluateNationRemoveTown(this, town);
+				SiegeWarMembershipController.evaluateNationRemoveTown(town);
 
 			remove(town);
 

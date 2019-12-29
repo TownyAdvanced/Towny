@@ -1,19 +1,16 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
  * This class intercepts 'player death' events coming from the towny entity monitor listener class.
@@ -72,7 +69,8 @@ public class SiegeWarDeathController {
 
 				//Did the death occur in the siege death point zone?
 				if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-					awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+					SiegeWarPointsUtil.awardSiegePenaltyPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+					return;
 				}
 
 			} else if (deadResidentTown.hasNation()
@@ -91,7 +89,8 @@ public class SiegeWarDeathController {
 
 					//Did the death occur in the siege death point zone?
 					if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-						awardSiegeDeathPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+						SiegeWarPointsUtil.awardSiegePenaltyPoints(true, siegeZone.getDefendingTown(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+						return;
 					}
 
 				//Was the dead player a member of a nation under attack, killed by a siege attacker, in the death points zone ?
@@ -106,7 +105,8 @@ public class SiegeWarDeathController {
 
 							//Did the death occur in the siege death point zone?
 							if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-								awardSiegeDeathPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+								SiegeWarPointsUtil.awardSiegePenaltyPoints(false, siegeZone.getAttackingNation(), deadResident, siegeZone, TownySettings.getLangString("msg_siege_war_participant_death"));
+								return;
 							}
 						}
 					}
@@ -116,40 +116,6 @@ public class SiegeWarDeathController {
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			System.out.println("Error evaluating siege pvp death");
-		}
-	}
-	
-	public static void awardSiegeDeathPoints(boolean attackerDeath,
-									   TownyObject pointsRecipient, 
-									   Resident deadResident,
-									   SiegeZone siegeZone,
-									   String unformattedMessage) throws NotRegisteredException {
-		
-		//Give siege points to opposing side
-		int siegePoints;
-		if (attackerDeath) {
-			siegePoints = TownySettings.getWarSiegePointsForAttackerDeath();
-			siegeZone.adjustSiegePoints(-siegePoints);
-		} else {
-			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
-			siegeZone.adjustSiegePoints(siegePoints);
-		}
-
-		TownyUniverse.getInstance().getDataSource().saveSiegeZone(siegeZone);
-
-		//Send messages to siege participants
-		String message = String.format(
-			unformattedMessage,
-			TownyFormatter.getFormattedName(deadResident),
-			TownyFormatter.getFormattedName(siegeZone.getDefendingTown()),
-			siegePoints,
-			TownyFormatter.getFormattedName(pointsRecipient));
-
-		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
-		if (siegeZone.getDefendingTown().hasNation()) {
-			TownyMessaging.sendPrefixedNationMessage(siegeZone.getDefendingTown().getNation(), message);
-		} else {
-			TownyMessaging.sendPrefixedTownMessage(siegeZone.getDefendingTown(), message);
 		}
 	}
 	

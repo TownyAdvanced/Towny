@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarRankController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -570,6 +571,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	public boolean removeTownRank(String rank) throws NotRegisteredException {
 
+		if(TownySettings.getWarSiegeEnabled())
+			SiegeWarRankController.evaluateTownRemoveRank(this, rank);
+
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
 			if (BukkitTools.isOnline(this.getName())) {
@@ -610,6 +614,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public boolean removeNationRank(String rank) throws NotRegisteredException {
+
+		if(TownySettings.getWarSiegeEnabled())
+			SiegeWarRankController.evaluateNationRemoveRank(this, rank);
 
 		if (nationRanks.contains(rank)) {
 			nationRanks.remove(rank);

@@ -19,7 +19,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarLeaveController;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -613,7 +613,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		} else {
 
 			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarLeaveController.evaluateTownRemoveResident(this, resident);
+				SiegeWarMembershipController.evaluateTownRemoveResident(resident);
 
 			remove(resident);
 
