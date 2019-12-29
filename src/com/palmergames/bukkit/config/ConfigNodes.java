@@ -1933,19 +1933,19 @@ public enum ConfigNodes {
 	//Siege points
 	WAR_SIEGE_POINTS_FOR_ATTACKER_OCCUPATION(
 			"war.siege.scoring.points_for_attacker_occupation",
-			"1",
+			"10",
 			"# This setting determines the number of siege points awarded to an occupying attacker.",
 			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
 			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS "),
 	WAR_SIEGE_POINTS_FOR_DEFENDER_OCCUPATION(
 			"war.siege.scoring.points_for_defender_occupation",
-			"1",
+			"10",
 			"# This setting determines the number of siege points awarded to an occupying defender.",
 			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
 			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS "),
 	WAR_SIEGE_POINTS_FOR_ATTACKER_DEATH(
 			"war.siege.scoring.points_for_attacker_death",
-			"10",
+			"100",
 			"# This setting determines the number of siege points awarded if an attacker dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to the defending town.",
@@ -1953,7 +1953,7 @@ public enum ConfigNodes {
 		    "# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be."),
 	WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH(
 			"war.siege.scoring.points_for_defender_death",
-			"10",
+			"100",
 			"# This setting determines the number of siege points awarded if a defender dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to all attacking nations.",
