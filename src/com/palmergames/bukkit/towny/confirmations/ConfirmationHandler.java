@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -318,25 +319,26 @@ public class ConfirmationHandler {
 				
 				// Test the waters
 				TownBlock tb = confirmation.getGroup().getTownBlocks().get(0);
+				TownBlockOwner townBlockOwner = confirmation.getTownBlockOwner();				
 				
 				// setTownBlockPermissions returns true if the town block permissions were successfully changed
-				if (PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs())) {
+				if (PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), townBlockOwner, tb, confirmation.getArgs())) {
 					
 					// A simple index loop starting from the second element
 					for (int i = 1; i < confirmation.getGroup().getTownBlocks().size(); ++i) {
 						tb = confirmation.getGroup().getTownBlocks().get(i);
 						
 						// TODO Redesign how townblock perms are handled to allow better caching and setting of multiple townblock perms
-						PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs());
+						PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), townBlockOwner, tb, confirmation.getArgs());
 					}
 
 					Player player = confirmation.getPlayer();
 					
 					TownyPermission perm = confirmation.getGroup().getTownBlocks().get(0).getPermissions();
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-					TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+					TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+					TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((!perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 				}
 				
 				removeConfirmation(r, type, true);
