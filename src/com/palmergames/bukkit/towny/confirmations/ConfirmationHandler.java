@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConfirmationHandler {
@@ -320,12 +319,7 @@ public class ConfirmationHandler {
 				
 				// Test the waters
 				TownBlock tb = confirmation.getGroup().getTownBlocks().get(0);
-				// Test we are allowed to work on this plot				
-				System.out.println("confirmation.getArgs in ConfirmationHandler " + Arrays.toString(confirmation.getArgs()));
-
-				// Test we are allowed to work on this plot
-				TownBlockOwner townBlockOwner = confirmation.getTownBlockOwner();
-				
+				TownBlockOwner townBlockOwner = confirmation.getTownBlockOwner();				
 				
 				// setTownBlockPermissions returns true if the town block permissions were successfully changed
 				if (PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), townBlockOwner, tb, confirmation.getArgs())) {

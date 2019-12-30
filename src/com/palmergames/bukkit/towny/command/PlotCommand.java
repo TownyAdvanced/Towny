@@ -46,7 +46,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -616,7 +615,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static boolean setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		System.out.println("Split in setTownBlockPermission " + Arrays.toString(split));
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
@@ -785,7 +783,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			townBlock.setChanged(true);
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
-			System.out.println("townblocksaved in plotsetperm");
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
