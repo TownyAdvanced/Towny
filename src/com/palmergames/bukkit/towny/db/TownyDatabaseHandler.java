@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -191,6 +192,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		return universe.getTownsMap().get(name);
+	}
+	
+	public PlotObjectGroup getPlotObjectGroup(String worldName, String townName, UUID groupID) {
+		return universe.getGroup(townName, groupID);
 	}
 
 	@Override
@@ -421,6 +426,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (TownyWorld world : getWorlds())
 			townBlocks.addAll(world.getTownBlocks());
 		return townBlocks;
+	}
+	
+	public List<PlotObjectGroup> getAllGroups() {
+		List<PlotObjectGroup> groups = new ArrayList<>();
+		groups.addAll(universe.getGroups());
+		
+		return groups;
+	}
+	
+	public void newPlotGroup(PlotObjectGroup group) {
+		universe.getGroups().add(group);
 	}
 
 	@Override
@@ -828,9 +844,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//townBlock.setTown(town);
 				saveTownBlock(townBlock);
 			}
+			
+			for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
+				pg.setTown(town);
+				savePlotGroup(pg);
+			}
 
 			saveTown(town);
 			saveTownList();
+			saveGroupList();
 			saveWorld(town.getWorld());
 
 			if (nation != null) {
@@ -944,6 +966,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
+	}
+
+	@Override
+	public void renameGroup(PlotObjectGroup group, String newName) throws AlreadyRegisteredException {
+		// Create new one
+		group.setGroupName(newName);
+		
+		// Save
+		savePlotGroup(group);
+		saveGroupList();
+
+		// Delete the old group file.
+		deleteGroup(group);
 	}
 
 	@Override

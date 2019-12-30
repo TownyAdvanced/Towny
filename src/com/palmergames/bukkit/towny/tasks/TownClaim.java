@@ -137,7 +137,7 @@ public class TownClaim extends Thread {
 			int townSize = town.getTownBlocks().size();
 			// Send confirmation message,
 			try {
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL, null);
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIM_ALL, null);
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException e) {
 				e.printStackTrace();

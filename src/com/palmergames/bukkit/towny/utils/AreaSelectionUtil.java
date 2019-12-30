@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -14,6 +15,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AreaSelectionUtil {
@@ -232,6 +234,49 @@ public class AreaSelectionUtil {
 			} catch (NotRegisteredException ignored) {
 			}
 		return out;
+	}
+
+	/**
+	 * Gives a list of townblocks that have membership to the specified group.
+	 * @param group The plot group to filter against.
+	 * @param selection The selection of townblocks.
+	 * @return A List of {@link WorldCoord} that contains the coordinates of townblocks part of the specified group.
+	 * @author Suneet Tipirneni (Siris)
+	 */
+	public static List<WorldCoord> filterPlotsByGroup(PlotObjectGroup group, List<WorldCoord> selection) {
+		List<WorldCoord> out =  new ArrayList<>();
+		
+		for (WorldCoord worldCoord : selection) {
+			
+			try {
+				TownBlock townBlock = worldCoord.getTownBlock();
+				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group)) {
+					out.add(worldCoord);
+				}
+			} catch (NotRegisteredException ignored) {}
+		}
+		
+		return out;
+	}
+	
+	public static HashSet<PlotObjectGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
+		HashSet<PlotObjectGroup> seenGroups = new HashSet<>();
+		
+		for (WorldCoord coord : selection) {
+			
+			PlotObjectGroup group = null;
+			try {
+				group = coord.getTownBlock().getPlotObjectGroup();
+			} catch (NotRegisteredException ignored) {}
+			
+			if (seenGroups.contains(group))
+				continue;
+			
+			seenGroups.add(group);
+			
+		}
+		
+		return seenGroups;
 	}
 
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
