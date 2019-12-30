@@ -3979,3 +3979,28 @@ v0.92.0.11:
   - Fix WARZONE status overriding the allow_block_griefing: false setting.
     - Closes #3577. 
   - Clear out warringNations & warringTowns on war end.
+  - New Feature: Plot Groups, courtesy of Siris with PR #3578.
+    - Group plots together, which can be named, sold, set with a uniform plot type, a uniform perm line.
+    - Plot Groups which are claimed or unclaimed will have confirmation messages showing number of plots in a group, as well as cost.
+    - Groups appear in the Chunk Notifications in white. 
+    - Already priced plots which are added to a group will increase the group price by the plot.
+    - Closes ticket #472.
+  - New Commands:
+    - /plot group [add|new|create] [groupname]
+      - Creates a plot group where a player is standing.
+      - Also adds plots to existing an existing group.
+    - /plot group remove
+      - Removes the plot you're standing in from its group.
+    - /plot group rename [newname]
+      - Renames a plot group.
+    - /plot group set perm ....
+      - Used to set the perm line of a group you are standing in.
+    - /plot group set [townblocktype]
+      - Used to set a group of plots to a shop, farm, embassy, etc.
+    - /plot group toggle [fire|mobs|pvp|explosions]
+      - Set the toggleable settings for townblocks across the entire group.
+    - /plot group [forsale|fs] [price]
+      - Sets the group for sale at the set price.
+    - /plot group [notforsale|nfs]
+      - Sets the group not for sale.
+  - Language files bumped to 0.68.

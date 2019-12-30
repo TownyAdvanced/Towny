@@ -83,8 +83,7 @@ public class PlotClaim extends Thread {
 					
 					worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
 					worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
-					// TODO: Lang string.
-					TownyMessaging.sendTownMessage(worldCoord.getTownBlock().getTown(), "Successfully bought group " + worldCoord.getTownBlock().getPlotObjectGroup().getGroupName());
+					TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getGroupName()));
 					
 					TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
 					
@@ -194,7 +193,7 @@ public class PlotClaim extends Thread {
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + group.getTownBlocks().size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
-						TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotObjectGroup().getPrice()));
+						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotObjectGroup().getPrice()));
 						
 						townBlock.setResident(resident);
 
@@ -207,7 +206,7 @@ public class PlotClaim extends Thread {
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						if (i >= worldCoords.size() - 2) {
-							TownyMessaging.sendTownMessage(town, "Successfully bought group " + group.getGroupName());
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"),resident.getName(), group.getGroupName()));
 						}
 
 						// Update any caches for this WorldCoord
@@ -218,7 +217,7 @@ public class PlotClaim extends Thread {
 						if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, "Plot - Buy Back"))
 							throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
 
-						TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
+						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
 						townBlock.setResident(resident);
 
 						// Set the plot permissions to mirror the towns.

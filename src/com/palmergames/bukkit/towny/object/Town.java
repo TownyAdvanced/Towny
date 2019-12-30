@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.HashSet;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
 

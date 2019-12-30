@@ -32,6 +32,8 @@ public class PlotObjectGroup extends ObjectGroup {
 
 	public static PlotObjectGroup fromString(String str) {
 		
+		//TODO: Figure out if the unused variables are needed - LlmDl.
+		
 		// Get the fields
 		String[] fields = str.split(",");
 		String name = fields[0];

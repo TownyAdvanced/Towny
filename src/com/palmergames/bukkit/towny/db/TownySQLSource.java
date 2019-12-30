@@ -2010,7 +2010,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadPlotGroups() {
 		String line = "";
-		boolean result;
 		TownyMessaging.sendDebugMsg("Loading plot groups.");
 
 		// Load town blocks
