@@ -1430,7 +1430,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			confirmation.setArgs(StringMgmt.remArgs(split, 1));
 			ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_TOGGLE_ACTION, confirmation);
 
-			String firstLine = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			String firstLine = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 			TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
@@ -1454,7 +1454,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				confirmation.setArgs(StringMgmt.remArgs(split, 2));
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_SET_PERM_ACTION, confirmation);
 
-				String firstLine = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+				String firstLine = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 				TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 				return true;
 			}
