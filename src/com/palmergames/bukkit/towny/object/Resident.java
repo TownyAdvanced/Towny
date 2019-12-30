@@ -534,7 +534,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	 * @see PlotObjectGroup#toString()
 	 */
 	public PlotObjectGroup getPlotObjectGroupFromMode() {
-		
+		//TODO: Figure out if we're going to end up using this - LlmDl.
+		// Below two variables are unused. Doesn't seem like this is doing much yet.
 		PlotObjectGroup pg = null;
 		Town town = null;
 

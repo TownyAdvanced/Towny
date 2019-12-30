@@ -316,7 +316,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
 					String[] tokens = line.split(",");
-					String worldName = tokens[0];
 					String townName = tokens[1];
 					UUID groupID = UUID.fromString(tokens[2]);
 					String groupName = tokens[3];
