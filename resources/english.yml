@@ -1071,6 +1071,8 @@ msg_siege_war_participant_death: '&6[War]&b Due to the death of %s during the si
 msg_siege_war_resident_leave_town: '&6[War]&b Because %s left their town while near to the siege on %s, %d siege points have been awarded to %s.'
 msg_siege_war_resident_town_rank_removed: '&6[War]&b Because %s had their town siege rank removed while near to the siege on %s, %d siege points have been awarded to %s.'
 msg_siege_war_resident_nation_rank_removed: '&6[War]&b Because %s had their nation siege rank removed while near to the siege on %s, %d siege points have been awarded to %s.'
+msg_siege_war_ally_removed: '&6[War]&b Because an alliance was cancelled while %s was near to the siege on %s, %d siege points have been awarded to %s.'
+msg_siege_war_new_alliance_formed: '&6[War]&b Because a new alliance was formed while %s was near to the siege on %s, %d siege points have been awarded to %s.'
 msg_siege_war_town_leave_nation: '&6[War]&b Because %s was near to the siege on %s while their town left the nation, %d siege points have been awarded to %s.'
 msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully driven off all attacking armies. The siege has failed!'
 msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s. The siege is over!'

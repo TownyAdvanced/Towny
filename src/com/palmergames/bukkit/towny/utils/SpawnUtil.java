@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -169,10 +170,14 @@ public class SpawnUtil {
 							&& TownySettings.getWarSiegeAttackerSpawnIntoBesiegedTownDisabled()
 							&& resident.hasNation() 
 							&& town.hasSiege() 
-							&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-							&& town.getSiege().getSiegeZones().containsKey(resident.getTown().getNation())) {
-					//Prevent siege attackers from using spawn travel
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_besieged_town"), town.getName()));
+							&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+
+					for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
+						if(resident.getTown().getNation() == siegeZone.getAttackingNation() || resident.getTown().getNation().hasMutualAlly(siegeZone.getAttackingNation())) {
+							//Prevent siege attackers & allies from using spawn travel
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_besieged_town"), town.getName()));
+						}
+					}
 
 				} else if (resident.hasNation() && town.hasNation()) {
 					Nation playerNation = resident.getTown().getNation();

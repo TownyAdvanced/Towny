@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
@@ -70,79 +71,80 @@ public class SiegeWarPointsUtil {
 	/**
 	 * This method determines if a siege point penalty should be applied
 	 *
-	 * This method is used in all cases where a resident leaves a siege point zone unexpectedly
+	 * This method is used in all cases where a siege-ranked resident leaves a siege point zone unexpectedly
 	 * 
 	 * e.g.
 	 * - if the resident dies
 	 * - if the resident leaves the town
 	 * - if the resident's soldier rank is removed
+	 * - if an attacking nation removes the resident's nation from its ally list. 
+	 *
+	 * IMPORTANT NOTE!
+	 * - This method is designed to be simplistic and brutal, to reduce the changes of complex exploits being found by players.
+	 * - Thus for example you may see points being deducted twice in some scenarios when once would be preferred.
+	 * - It is advised to avoid complicating this method for usability,
+	 *   but rather to ensure that players are simply advised: 
+	 *   "do not modify armed forces or alliances while armed force members are close to sieges."
 	 * 
 	 * @param resident the player leaving the zone
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
-	 * @param possibleTownPenalty true if the town might get a siege point penalty
-	 * @param possibleNationPenalty true if the nation might get a siege point penalty
-	 * @return true if penalty points were awarded                                
 	 */
-	public static boolean evaluateSiegePenaltyPoints(Resident resident,
-												 String unformattedErrorMessage,
-												 boolean possibleTownPenalty,
-												 boolean possibleNationPenalty) {
+	public static void evaluateSiegePenaltyPoints(Resident resident,
+												 String unformattedErrorMessage) {
 		try {
 			Player player = TownyAPI.getInstance().getPlayer(resident);
 
 			if(player == null)
-				return false;  //Player not online, or npc
+				return;  //Player not online, or npc
 
 			if(!resident.hasTown())
-				return false;
+				return;
 
 			Town town;
 			try {
 				town = resident.getTown();
 			} catch (NotRegisteredException e) {
-				return false;
+				return;
 			}
 
 			if(town.isOccupied() )
-				return false;  ///Residents of occupied towns cannot affect siege points.
+				return;  ///Residents of occupied towns cannot affect siege points.
 
-			//Is the resident a member of a town under siege, and in the death zone ?
-			if(possibleTownPenalty
-				&& town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+			//Is the resident a guard of a town under siege, and in the death zone ?
+			TownyUniverse universe = TownyUniverse.getInstance();
+			if(town.hasSiege() 
+				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS 
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())) {
 
 				for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
 					if (player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
 						awardSiegePenaltyPoints(false, siegeZone.getAttackingNation(), resident, siegeZone, unformattedErrorMessage);
-						return true;
 					}
 				}
+			} 
 
-			} else if (possibleNationPenalty
-				&& town.hasNation()) {
+			if (town.hasNation()
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())) {
 
+				//Is the resident a soldier attacking a town, and in the death zone?
 				Nation nation = town.getNation();
-
-				//Is the resident a member of a nation which is attacking a town, and in the death zone?
-				for(SiegeZone siegeZone: nation.getSiegeZones()) {
-					if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
+					if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+						&& (nation == siegeZone.getAttackingNation() || nation.hasMutualAlly(siegeZone.getAttackingNation()))
 						&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
 
 						awardSiegePenaltyPoints(true, siegeZone.getDefendingTown(), resident, siegeZone, unformattedErrorMessage);
-						return true;
 					}
 				}
 
-				//Is the resident a member of a nation which is defending a town, and in the death zone
-				for(Town townBeingDefended: nation.getTownsUnderSiegeDefence()) {
+				//Is the resident a soldier defending a town, and in the death zone?
+				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
+					if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+						&& siegeZone.getDefendingTown().hasNation()
+						&& (nation == siegeZone.getDefendingTown().getNation() || nation.hasMutualAlly(siegeZone.getDefendingTown().getNation()))
+						&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
 
-					for (SiegeZone siegeZone : townBeingDefended.getSiege().getSiegeZones().values()) {
-						if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-							&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
-
-							awardSiegePenaltyPoints(false, siegeZone.getAttackingNation(), resident, siegeZone, unformattedErrorMessage);
-							return true;
-						}
+						awardSiegePenaltyPoints(false, siegeZone.getAttackingNation(), resident, siegeZone, unformattedErrorMessage);
 					}
 				}
 			}
@@ -150,8 +152,6 @@ public class SiegeWarPointsUtil {
 			e.printStackTrace();
 			System.out.println("Error evaluating siege point penalty");
 		}
-
-		return false;
 	}
 
 	public static void awardSiegePenaltyPoints(boolean attackerDeath,
@@ -181,10 +181,18 @@ public class SiegeWarPointsUtil {
 			TownyFormatter.getFormattedName(pointsRecipient));
 
 		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
+		for(Nation alliedNation: siegeZone.getAttackingNation().getMutualAllies()) {
+			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
+		}
+
 		if (siegeZone.getDefendingTown().hasNation()) {
 			TownyMessaging.sendPrefixedNationMessage(siegeZone.getDefendingTown().getNation(), message);
+			for(Nation alliedNation: siegeZone.getDefendingTown().getNation().getMutualAllies()) {
+				TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
+			}
 		} else {
 			TownyMessaging.sendPrefixedTownMessage(siegeZone.getDefendingTown(), message);
 		}
+
 	}
 }

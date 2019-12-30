@@ -148,10 +148,33 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone.getDefenderPlayerScoreTimeMap(),
 													-TownySettings.getWarSiegePointsForDefenderOccupation());
 
-						} else if (siegeZone.getAttackingNation() 
+						} else if (siegeZone.getAttackingNation()
 							== residentTown.getNation()) {
 
 							//Nation member of attacking nation
+							siegeZoneChanged =
+									siegeZoneChanged ||
+											evaluateSiegeZoneOccupant(
+													player,
+													siegeZone,
+													siegeZone.getAttackerPlayerScoreTimeMap(),
+													TownySettings.getWarSiegePointsForAttackerOccupation());
+
+						} else if (siegeZone.getDefendingTown().hasNation()
+							&& siegeZone.getDefendingTown().getNation().hasMutualAlly(residentTown.getNation())) {
+
+							//Nation member of ally of defending nation
+							siegeZoneChanged =
+									siegeZoneChanged ||
+											evaluateSiegeZoneOccupant(
+													player,
+													siegeZone,
+													siegeZone.getDefenderPlayerScoreTimeMap(),
+													-TownySettings.getWarSiegePointsForDefenderOccupation());
+
+						} else if (siegeZone.getAttackingNation().hasMutualAlly(residentTown.getNation())) {
+
+							//Nation member of ally of attacking nation
 							siegeZoneChanged =
 									siegeZoneChanged ||
 											evaluateSiegeZoneOccupant(

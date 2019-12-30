@@ -91,6 +91,11 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 				removeEnemy(nation);
 			} catch (NotRegisteredException e) {
 			}
+
+			if(TownySettings.getWarSiegeEnabled() && nation.hasAlly(this)) {
+				SiegeWarMembershipController.evaluateNationsFormNewAlliance(this, nation);
+			}
+
 			getAllies().add(nation);
 		}
 	}
@@ -99,8 +104,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		if (!hasAlly(nation))
 			throw new NotRegisteredException();
-		else
+		else {
+			if(TownySettings.getWarSiegeEnabled())
+				SiegeWarMembershipController.evaluateNationRemoveAlly(this, nation);
+
 			return getAllies().remove(nation);
+		}
 	}
 
 	public boolean removeAllAllies() {
@@ -117,6 +126,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public boolean hasAlly(Nation nation) {
 
 		return getAllies().contains(nation);
+	}
+
+	public boolean hasMutualAlly(Nation nation) {
+		return (getAllies().contains(nation) && nation.getAllies().contains(this));
 	}
 
 	public boolean IsAlliedWith(Nation nation) {
@@ -336,6 +349,16 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		return allies;
 	}
+
+	public List<Nation> getMutualAllies() {
+		List<Nation> result = new ArrayList<>();
+		for(Nation ally: getAllies()) {
+			if(ally.hasAlly(this))
+				result.add(ally);
+		}
+		return result;
+	}
+
 
 	public int getNumTowns() {
 
