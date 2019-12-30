@@ -163,7 +163,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 									// Add the confirmation for claiming a plot group.
 									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_CLAIM_ACTION, new GroupConfirmation(group, player));
-									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 									
 									return true;
@@ -290,7 +290,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 
 								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_UNCLAIM_ACTION, new GroupConfirmation(block.getPlotObjectGroup(), player));
-								String firstLine = String.format(TownySettings.getLangString("msg_plot_group_unclaim_confirmation"), block.getPlotObjectGroup().getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+								String firstLine = String.format(TownySettings.getLangString("msg_plot_group_unclaim_confirmation"), block.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 								return true;
 
@@ -1362,7 +1362,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			// Save
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_was_removed_from_group_x"), townBlock.getX(), townBlock.getZ(), name));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_removed_from_group_x"), townBlock.getX(), townBlock.getZ(), name));
 
 		} else if (split[0].equalsIgnoreCase("rename")) {
 
@@ -1376,7 +1376,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			String oldName = townBlock.getPlotObjectGroup().getGroupName();
 			// Change name;
 			TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotObjectGroup(), newName);
-			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_renamed_from_x_to_y"), oldName, newName));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_renamed_from_x_to_y"), oldName, newName));
 
 		} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
 			// This means the player wants to fs the plot group they are in.
@@ -1430,7 +1430,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			confirmation.setArgs(StringMgmt.remArgs(split, 1));
 			ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_TOGGLE_ACTION, confirmation);
 
-			String firstLine = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			String firstLine = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 			TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
@@ -1454,7 +1454,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				confirmation.setArgs(StringMgmt.remArgs(split, 2));
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_SET_PERM_ACTION, confirmation);
 
-				String firstLine = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+				String firstLine = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 				TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 				return true;
 			}
