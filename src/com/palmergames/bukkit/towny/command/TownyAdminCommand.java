@@ -326,7 +326,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
 
 			if (resident != null) {
-				new PlotClaim(plugin, player, resident, selection, true, true).start();
+				new PlotClaim(plugin, player, resident, selection, true, true, false).start();
 			}
 		}
 		
@@ -609,7 +609,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town, false);
 				} else { //isConsole
-					ConfirmationHandler.addConfirmation(ConfirmationType.TOWNDELETE, town); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+					ConfirmationHandler.addConfirmation(ConfirmationType.TOWN_DELETE, town); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
 				}
 
@@ -796,7 +796,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					ConfirmationHandler.addConfirmation(ConfirmationType.NATIONDELETE, nation); // It takes the nation, an admin deleting another town has no confirmation.
+					ConfirmationHandler.addConfirmation(ConfirmationType.NATION_DELETE, nation); // It takes the nation, an admin deleting another town has no confirmation.
 					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
 				}
 
@@ -1132,8 +1132,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
-		
-		
 
 		if (!isConsole) {
 

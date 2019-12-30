@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -561,7 +562,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					parseTownOutlawCommand(player, newSplit);
-
 				} else {
 					try {
 						final Town town = townyUniverse.getDataSource().getTown(split[0]);
@@ -2322,15 +2322,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
 					long durationMillis = (long)(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 					String durationFormatted = TimeMgmt.getFormattedTimeValue(durationMillis);
 					TownyMessaging.sendErrorMsg(player, String.format(
 						TownySettings.getLangString("msg_err_siege_war_delete_town_warning"),
 						durationFormatted));
-
 				}
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
 			} catch (TownyException x) {

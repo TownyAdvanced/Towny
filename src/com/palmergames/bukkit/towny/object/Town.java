@@ -31,13 +31,16 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashSet;
 
 import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -45,6 +48,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
+	private HashMap<String, PlotObjectGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1344,7 +1348,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public int getConqueredDays() {
 		return this.conqueredDays;
 	}
-	
+
 	public Siege getSiege() {
 		return siege;
 	}
@@ -1425,5 +1429,110 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public boolean isOccupied() {
 		return this.occupied;
 	}
+	
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotObjectGroup group) {
+		
+		ArrayList<TownBlock> retVal = new ArrayList<>();
+		
+		TownyMessaging.sendErrorMsg(group.toString());
+		
+		for (TownBlock townBlock : getTownBlocks()) {
+			if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group))
+				retVal.add(townBlock);
+		}
+		
+		return retVal;
+	}
+	
+	public void renamePlotGroup(String oldName, PlotObjectGroup group) {
+		plotGroups.remove(oldName);
+		plotGroups.put(group.getGroupName(), group);
+	}
+	
+	public void addPlotGroup(PlotObjectGroup group) {
+		if (!hasObjectGroups()) 
+			this.plotGroups = new HashMap<>();
+		
+		this.plotGroups.put(group.getGroupName(), group);
+		
+	}
+	
+	public void removePlotGroup(PlotObjectGroup plotGroup) {
+		if (hasObjectGroups() && plotGroups.remove(plotGroup.getGroupName()) != null) {
+			for (TownBlock tb : getTownBlocks()) {
+				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
+					tb.getPlotObjectGroup().setID(null);
+					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
+				}
+			}
+		}
+	}
+	
+	public void setPlotGroups(String str) {
+		
+		if (plotGroups == null)
+			plotGroups = new HashMap<>();
+		
+		String[] groups = str.split(";");
+		
+		for (String groupStr : groups) {
+			addPlotGroup(PlotObjectGroup.fromString(groupStr));
+		}
+	}
+	
+	public int generatePlotGroupID() {
+		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
+	}
 
+	// Abstract to collection in case we want to change structure in the future
+	@Override
+	public Collection<PlotObjectGroup> getObjectGroups() {
+		
+		if (plotGroups == null)
+			return null;
+		
+		return plotGroups.values();
+	}
+
+	// Method is inefficient compared to getting the group from name.
+	@Override
+	public PlotObjectGroup getObjectGroupFromID(UUID ID) {
+		if (hasObjectGroups()) {
+			for (PlotObjectGroup pg : getObjectGroups()) {
+				if (pg.getID().equals(ID)) 
+					return pg;
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public boolean hasObjectGroups() {
+		return plotGroups != null;
+	}
+
+	// Override default method for efficient access
+	@Override
+	public boolean hasObjectGroupName(String name) {
+		return hasObjectGroups() && plotGroups.containsKey(name);
+	}
+
+	public PlotObjectGroup getPlotObjectGroupFromName(String name) {
+		if (hasObjectGroups()) {
+			return plotGroups.get(name);
+		}
+		
+		return null;
+	}
+	
+	// Wraps other functions to provide a better naming scheme for the end developer.
+	public PlotObjectGroup getPlotObjectGroupFromID(UUID ID) {
+		return getObjectGroupFromID(ID);
+	}
+	
+	public Collection<PlotObjectGroup> getPlotObjectGroups() {
+		return getObjectGroups();
+	}
+	
 }

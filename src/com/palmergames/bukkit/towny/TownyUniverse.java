@@ -3,10 +3,12 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -29,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.HashMap;
@@ -370,7 +373,111 @@ public class TownyUniverse {
         residents.clear();
     }
 
+	public boolean hasGroup(String townName, UUID groupID) {
+		Town t = towns.get(townName);
+		
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID) != null;
+		}
+		
+		return false;
+	}
+
+	public boolean hasGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.hasObjectGroupName(groupName);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get all the plot object groups from all towns
+	 * Returns a collection that does not reflect any group additions/removals
+	 * 
+	 * @return collection of PlotObjectGroup
+	 */
+	public Collection<PlotObjectGroup> getGroups() {
+    	List<PlotObjectGroup> groups = new ArrayList<>();
+    	
+		for (Town town : towns.values()) {
+			if (town.hasObjectGroups()) {
+				groups.addAll(town.getPlotObjectGroups());
+			}
+		}
+		
+		return groups;
+	}
+
+
+	/**
+	 * Gets the plot group from the town name and the plot group UUID 
+	 * 
+	 * @param townName Town name
+	 * @param groupID UUID of the plot group
+	 * @return PlotGroup if found, null if none found.
+	 */
+	public PlotObjectGroup getGroup(String townName, UUID groupID) {
+		Town t = towns.get(townName);
+		
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID);
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Gets the plot group from the town name and the plot group name
+	 * 
+	 * @param townName Town Name
+	 * @param groupName Plot Group Name
+	 * @return the plot group if found, otherwise null
+	 */
+	public PlotObjectGroup getGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.getPlotObjectGroupFromName(groupName);
+		}
+
+		return null;
+	}
+
 	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+		return getRegisteredMetadata();
+	}
+
+	public PlotObjectGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
+    	
+    	// Create new plot group.
+		PlotObjectGroup newGroup = new PlotObjectGroup(id, name, town);
+		
+		// Check if there is a duplicate
+		if (town.hasObjectGroupName(newGroup.getGroupName())) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
+			throw new AlreadyRegisteredException();
+		}
+		
+		// Create key and store group globally.
+		town.addPlotGroup(newGroup);
+		
+		return newGroup;
+	}
+
+	public UUID generatePlotGroupID() {
+		return UUID.randomUUID();
+	}
+
+
+	public void removeGroup(PlotObjectGroup group) {
+		group.getTown().removePlotGroup(group);
+		
+	}
+	
+	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
 }
