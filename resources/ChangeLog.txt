@@ -4007,3 +4007,7 @@ v0.92.0.11:
 0.95.2.4:
   - Fix for plot groups sometimes throwing a CommandException, courtesy of Siris with PR #3597.
     - Closes #3601.
+0.95.2.5:
+  - Clean up unused methods left over from PlotGroup commits.
+  - API: PreNewTownEvent, courtesy of Siris with PR #3606.
+    - Cancellable event.
