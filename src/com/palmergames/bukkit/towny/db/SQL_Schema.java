@@ -125,7 +125,7 @@ public class SQL_Schema {
 		return columns;
 	}
 	
-	private static String getTOWNS() {
+    private static String getTOWNS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
                 + "`name` VARCHAR(32) NOT NULL,"

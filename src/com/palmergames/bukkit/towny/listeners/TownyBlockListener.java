@@ -179,8 +179,8 @@ public class TownyBlockListener implements Listener {
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
-			
 		}
+
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

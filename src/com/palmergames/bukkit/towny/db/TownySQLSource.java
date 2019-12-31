@@ -1039,14 +1039,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
 				try {
-						line = rs.getString("metadata");
-						if (line != null && !line.isEmpty()) {
-							town.setMetadata(line);
-						}
-					} catch (SQLException ignored) {
-
-
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						town.setMetadata(line);
 					}
+				} catch (SQLException ignored) {
+					
+				}
 
                 town.setRecentlyRuinedEndTime(rs.getLong("recentlyRuinedEndTime"));
                 town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));

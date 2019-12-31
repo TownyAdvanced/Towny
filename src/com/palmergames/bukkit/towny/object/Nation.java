@@ -372,12 +372,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			numResidents += town.getNumResidents();
 		return numResidents;
 	}
-	
+
 	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
 
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
+
 			boolean isCapital = town.isCapital();
 
 			if(TownySettings.getWarSiegeEnabled())

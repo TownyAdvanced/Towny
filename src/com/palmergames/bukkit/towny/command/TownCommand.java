@@ -1855,7 +1855,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						
 						if (TownyAPI.getInstance().isWarTime())
 							throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
 						world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));

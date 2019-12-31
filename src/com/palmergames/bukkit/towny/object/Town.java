@@ -634,7 +634,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	private void remove(Resident resident) {
 		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-			
 			// Do not remove Embassy plots
 			if (townBlock.getType() != TownBlockType.EMBASSY) {
 				townBlock.setResident(null);
@@ -756,7 +755,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		jailSpawns.clear();
 		revoltImmunityEndTime = 0;
 		siegeImmunityEndTime = 0;
-
 
 //		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
 //			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
@@ -1335,15 +1333,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setConquered(boolean conquered) {
 		this.isConquered = conquered;
 	}
-
+	
 	public boolean isConquered() {
 		return this.isConquered;
 	}
-
+	
 	public void setConqueredDays(int conqueredDays) {
 		this.conqueredDays = conqueredDays;
 	}
-
+	
 	public int getConqueredDays() {
 		return this.conqueredDays;
 	}
