@@ -1280,36 +1280,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 
-			if (split.length == 1) {
-				// The player wants to add to group using their stored mode.
-
-				// Get the plot group from the resident mode.
-				newGroup = resident.getPlotObjectGroupFromMode();
-
-				if (newGroup == null) {
-
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_you_must_specify_a_group_name"));
-
-					return false;
-				}
-
-				// Check if a plot price is available.
-				if (!(townBlock.getPlotPrice() < 0)) {
-					newGroup.addPlotPrice(townBlock.getPlotPrice());
-				}
-
-				// Set the plot group.
-				townBlock.setPlotObjectGroup(newGroup);
-
-				// Save changes.
-				townyUniverse.getDataSource().saveTown(town);
-				townyUniverse.getDataSource().saveGroupList();
-				townyUniverse.getDataSource().savePlotGroup(newGroup);
-
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_put_into_group_x"), townBlock.getX(), townBlock.getZ(), newGroup.getGroupName()));
-
-				return true;
-			} else if (split.length == 2) {
+			if (split.length == 2) {
 				// Create a brand new plot group.
 				UUID plotGroupID = townyUniverse.generatePlotGroupID();
 				String plotGroupName = split[1];
@@ -1331,9 +1302,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Add the plot group to the town set.
 				town.addPlotGroup(newGroup);
 			}
-
-			// Set the resident mode.
-			resident.setPlotGroupMode(newGroup, true);
 
 			townyUniverse.getDataSource().saveGroupList();
 
