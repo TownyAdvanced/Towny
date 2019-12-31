@@ -1357,6 +1357,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 	
+	
+	@Deprecated
 	public void setPlotGroups(String str) {
 		
 		if (plotGroups == null)
