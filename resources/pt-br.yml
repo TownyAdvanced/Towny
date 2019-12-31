@@ -710,32 +710,32 @@ msg_err_over_outposts_limit: 'Você não pode se teleportar para o seu posto ava
 # These are translated because we may (or may not) be handling longer words in a smart way.
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
+outlaws: '&2Foragidos: &f'                    # Used on /t outlawlist
 online: '&a(Online)'
-registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
-status_perm: '&2Perm: '                     # Used on /plot perm, /res
-status_permissions: '&2Permissions: '       # Used on /town
-status_on: '&4ON'
-status_off: '&aOFF'
-status_on_good: '&aON'
-status_off_bad: '&4OFF'
-status_forced: '&cForced'
-status_adjustable: '&aAdjustable'
-status_pvp: '&2PVP: '
-explosions: '  &2Explosions: '              # Used on /plot perm, /res
-explosions2: '&2Explosions: '               # Used on /town and /tw
-firespread: '  &2Firespread: '
-mobspawns: '  &2Mob Spawns: '
-owner_of_x_plots: '&2Owner of &a%s plots'
-status_bank: '&2Bank: &a%s'
-status_town: '&2Town: &a'
-status_no_town: 'None'
-status_town_ranks: '&2Town Ranks: &a'
-status_nation_ranks: '&2Nation Ranks: &a'
-jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
-status_friends: 'Friends'
-rank_list_title: ' &3Rank List'
-rank_list_mayor: '&2Mayor: &a%s'
+registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s'
+status_perm: '&2Permissão: '                     # Used on /plot perm, /res
+status_permissions: '&2Permissiões: '       # Used on /town
+status_on: '&4ATIVADO'
+status_off: '&aDESATIVADO'
+status_on_good: '&aATIVADO'
+status_off_bad: '&4DESATIVADO'
+status_forced: '&cForçado'
+status_adjustable: '&aAjustável'
+status_pvp: '&2PvP: '
+explosions: '  &2Explosões: '              # Used on /plot perm, /res
+explosions2: '&2Explosões: '               # Used on /town and /tw
+firespread: '  &2Propagação do Fogo: '
+mobspawns: '  &2Geração de Mobs: '
+owner_of_x_plots: '&2Dono de &a%s terrenos'
+status_bank: '&2Banco: &a%s'
+status_town: '&2Cidade: &a'
+status_no_town: 'Nenhum'
+status_town_ranks: '&2Cargos da Cidade: &a'
+status_nation_ranks: '&2Cargos da Nação: &a'
+jailed_in_town: '&2Preso: &aSim &2na cidade: &a%s'
+status_friends: 'Amigos'
+rank_list_title: ' &3Lista de Cargos'
+rank_list_mayor: '&2Prefeito: &a%s'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Open)'
 status_town_board: '&2Board: &a%s'
