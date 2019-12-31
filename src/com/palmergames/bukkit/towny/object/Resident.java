@@ -524,76 +524,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
 	}
-
-	/**
-	 * @author Suneet Tipirneni (Siris)
-	 * Returns the group mode that is enabled.
-	 * @return The mode as a {@link PlotObjectGroup},
-	 * where the substring between the curly braces is the qualified
-	 * string representation. If there is not group mode, then null is returned.
-	 * @see PlotObjectGroup#toString()
-	 */
-	public PlotObjectGroup getPlotObjectGroupFromMode() {
-		//TODO: Figure out if we're going to end up using this - LlmDl.
-		// Below two variables are unused. Doesn't seem like this is doing much yet.
-		PlotObjectGroup pg = null;
-		Town town = null;
-
-		try {
-			town = getTown();
-		} catch (NotRegisteredException e) {
-			return null;
-		}
-		
-		for (String mode : getModes()) {
-			if (mode.contains("Group")) {
-				return PlotObjectGroup.fromModeString(mode);
-			}
-		}
-		
-		return null;
-	}
-
-	/**
-	 * @author Suneet Tipirneni (Siris)
-	 * @param group Indicates whether the given group mode is enabled.
-	 * @return A boolean, true if the given group mode is present and false if the group isn't present.
-	 */
-	public boolean hasPlotGroupMode(PlotObjectGroup group) {
-		PlotObjectGroup rGroup = getPlotObjectGroupFromMode();
-		
-		if (rGroup != null && rGroup.equals(group)) {
-			return true;
-		}
-		
-		return false;
-	}
-
-	public void setPlotGroupMode(PlotObjectGroup group, boolean notify) {
-		
-		PlotObjectGroup pGroup = getPlotObjectGroupFromMode();
-		
-		// Remove and replace.
-		if (pGroup != null && !pGroup.equals(group)) {
-			this.getModes().remove(pGroup.toModeString());
-			this.getModes().add(group.toModeString());
-			if (notify)
-				TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
-			return;
-		}
-
-		// Group mode is missing add it.
-		if (pGroup == null) {
-			this.getModes().add(group.toModeString());
-			if (notify)
-				TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
-			return;
-		}
-
-		// If we get down here that means the desired group is already added,
-		// so we're done.
-	}
-
+	
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *
