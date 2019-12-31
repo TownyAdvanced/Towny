@@ -1357,20 +1357,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 	
-	
-	@Deprecated
-	public void setPlotGroups(String str) {
-		
-		if (plotGroups == null)
-			plotGroups = new HashMap<>();
-		
-		String[] groups = str.split(";");
-		
-		for (String groupStr : groups) {
-			addPlotGroup(PlotObjectGroup.fromString(groupStr));
-		}
-	}
-	
 	public int generatePlotGroupID() {
 		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
 	}
