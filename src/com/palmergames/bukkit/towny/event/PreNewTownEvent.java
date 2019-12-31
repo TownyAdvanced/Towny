@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,6 +16,7 @@ public class PreNewTownEvent extends Event implements Cancellable {
 	private String cancelMessage = "Sorry this event was cancelled";
 	
 	public PreNewTownEvent(Player player, String townName) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.townName = townName;
 	}
