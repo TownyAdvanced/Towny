@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
+import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
@@ -226,7 +227,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_specify_name"));
 				} else if (split.length >= 2) {
 					String[] newSplit = StringMgmt.remFirstArg(split);
-					String townName = String.join("_", newSplit);					
+					String townName = String.join("_", newSplit);
 					newTown(player, townName, player.getName(), false);			
 				}
 
@@ -2051,6 +2052,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void newTown(Player player, String name, String mayorName, boolean noCharge) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		PreNewTownEvent preEvent = new PreNewTownEvent(player, name);
+		Bukkit.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(preEvent.getCancelMessage());
+			return;
+		}
 
 		try {
 			if (TownyAPI.getInstance().isWarTime())
