@@ -4004,3 +4004,6 @@ v0.92.0.11:
     - /plot group [notforsale|nfs]
       - Sets the group not for sale.
   - Language files bumped to 0.68.
+0.95.2.4:
+  - Fix for plot groups sometimes throwing a CommandException, courtesy of Siris with PR #3597.
+    - Closes #3601.
