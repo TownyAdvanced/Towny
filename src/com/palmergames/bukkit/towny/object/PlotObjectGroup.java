@@ -30,29 +30,6 @@ public class PlotObjectGroup extends ObjectGroup {
 		this.town = town;
 	}
 
-	public static PlotObjectGroup fromString(String str) {
-		
-		//TODO: Figure out if the unused variables are needed - LlmDl.
-		
-		// Get the fields
-		String[] fields = str.split(",");
-		String name = fields[0];
-		UUID id = UUID.fromString(fields[1]);
-		String townName = fields[2];
-		double price = Double.parseDouble(fields[3]);
-		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		// Fetch the global town reference.
-		Town town = townyUniverse.getTownsMap().get(townName);
-		
-		// Fetch the global plot group reference.
-		PlotObjectGroup newGroup = townyUniverse.getGroup(townName, id);
-		newGroup.setPrice(price);
-		
-		return newGroup;
-	}
-
 	/**
 	 * Store plot group in format "name,id,town,price"
 	 * @return The string in the format described.
@@ -98,15 +75,6 @@ public class PlotObjectGroup extends ObjectGroup {
 	 */
 	public String toModeString() {
 		return "Group{" + this.toString() + "}";
-	}
-
-	/**
-	 * @param modeStr The string in the resident mode format.
-	 * @return The plot group given from the mode string.
-	 */
-	public static PlotObjectGroup fromModeString(String modeStr) {
-		String objString = StringUtils.substringBetween(modeStr, "{", "}");
-		return PlotObjectGroup.fromString(objString);
 	}
 
 	public double getPrice() {
