@@ -30,6 +30,7 @@ public class PlotObjectGroup extends ObjectGroup {
 		this.town = town;
 	}
 
+	@Deprecated
 	public static PlotObjectGroup fromString(String str) {
 		
 		//TODO: Figure out if the unused variables are needed - LlmDl.
@@ -104,6 +105,7 @@ public class PlotObjectGroup extends ObjectGroup {
 	 * @param modeStr The string in the resident mode format.
 	 * @return The plot group given from the mode string.
 	 */
+	@Deprecated
 	public static PlotObjectGroup fromModeString(String modeStr) {
 		String objString = StringUtils.substringBetween(modeStr, "{", "}");
 		return PlotObjectGroup.fromString(objString);
