@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotObjectGroup;
@@ -275,6 +276,16 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.NATION_DELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
+					if(TownySettings.getWarSiegeEnabled()
+						&& TownySettings.isUsingEconomy()
+						&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+						//Refund the king with the initial nation cost
+						try {
+							r.collect(TownySettings.getNewNationPrice(), "Refund of Initial Nation Cost");
+						} catch (EconomyException e) {
+							e.printStackTrace();
+						}
+					}
 					townyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);

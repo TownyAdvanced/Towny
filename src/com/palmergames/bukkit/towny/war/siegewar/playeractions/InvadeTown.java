@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -145,6 +146,7 @@ public class InvadeTown {
 
     private static void removeTownFromNation(Towny plugin, Town town, Nation nation) {
         boolean removeNation = false;
+        Resident king = nation.getKing();
 
         try {
             nation.removeTown(town);
@@ -156,8 +158,21 @@ public class InvadeTown {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 
-		//FYI We use the same sequence of saving here as found in NationCommand.nationLeave()
 		if(removeNation) {
+			if(TownySettings.isUsingEconomy()
+				&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+				try {
+					//Refund the king with the initial nation cost
+					king.collect(TownySettings.getNewNationPrice(), "Refund of Initial Nation Cost");
+					Player player = TownyAPI.getInstance().getPlayer(king);
+					if (player != null)
+						TownyMessaging.sendMsg(
+							player, String.format(TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
+			}
+
 			universe.getDataSource().removeNation(nation);
 			universe.getDataSource().saveNationList();
         } else {

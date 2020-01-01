@@ -3032,5 +3032,9 @@ public class TownySettings {
 	public static boolean getWarSiegeAttackerSpawnIntoBesiegedTownDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED);
 	}
+
+	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
+	}
 }
 

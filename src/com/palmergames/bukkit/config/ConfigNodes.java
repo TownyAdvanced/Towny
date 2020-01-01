@@ -1839,6 +1839,12 @@ public enum ConfigNodes {
 			"true",
 			"# If this is true, then siege attackers are prevented from spawning into towns they are attacking.",
 			"# If this setting is false, then the town spawn becomes a siege front, where attackers might be expected to appear."),
+	WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE(
+			"war.siege.switches.refund_initial_nation_cost_on_delete",
+			"true",
+			"# If this is true, then when a king deletes the nation,",
+			"# they will be refunded the initial new nation cost.",
+			"# This prevents the new nation cost becoming a sunken cost due to invasion."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
