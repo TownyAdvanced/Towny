@@ -4013,3 +4013,7 @@ v0.92.0.11:
     - Cancellable event.
   - New language: Portuguese (Brazilian) Translation, courtesy of BannerGames with PR #3603.
     - use pt-br.yml as your language in the config to enable.
+  - Fix Mysql databases not creating plotblocksnapshot files.
+    - Closes #3589.
+  - Fix Mysql databases not purging fallen towns.
+    - Closes #3610.

@@ -606,6 +606,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	private void remove(Resident resident) {
+		
+		resident.setTitle("");
+		resident.setSurname("");
+		resident.updatePerms();
 
 		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
 			
@@ -725,6 +729,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		removeAllResidents();
 		mayor = null;
 		residents.clear();
+		outlaws.clear();
 		homeBlock = null;
 		outpostSpawns.clear();
 		jailSpawns.clear();

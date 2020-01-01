@@ -111,7 +111,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}, 5L, 5L);
 	}
 	
-	private enum elements {
+	public enum elements {
 		VER, novalue;
 
 		public static elements fromString(String Str) {
