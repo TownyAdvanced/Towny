@@ -1878,10 +1878,13 @@ public enum ConfigNodes {
 			"# - which could leave the attacker with no 'aftermath' time in which to execute invade or plunder actions."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
-			"72",
+			"240",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
-			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
+			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster.",
+			"# This value is also important for nation survival.",
+			"# If it is too low, then a nation with its last remaining town about to be defeated and captured,",
+			"# will have difficulty in effectively escaping to a new 'bolt-hole' town."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
 			"3.0",
