@@ -2045,7 +2045,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Bukkit.getPluginManager().callEvent(preEvent);
 		
 		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(preEvent.getCancelMessage());
+			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 			return;
 		}
 
