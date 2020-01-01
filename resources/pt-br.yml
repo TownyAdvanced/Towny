@@ -900,18 +900,18 @@ no_open_towns: 'Não há cidades abertas para listar.'
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'A nação não tem quaisquer aliados para listar.'
 msg_error_nation_has_no_enemies: 'A nação não tem quaisquer inimigos para listar.'
-msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
-msg_error_no_player_with_that_name: 'No player found with name %s'
-msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
-msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
-msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
-msg_err_already_in_a_nation: 'Your town is already in a nation.'
-msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the king or an assistant to join.'
-msg_err_nation_homeblock_in_another_world: '&cYour town''s homeblock is not in the same world as the nation capital''s homeblock.'
-status_bank_town_penalty_upkeep: ' &7| &2Overclaim upkeep: &4%s'
+msg_error_ta_plot_claim: 'Falta o nome do jogador, exemplo: /ta plot claim NomeDoJogadorAqui'
+msg_error_no_player_with_that_name: 'Não foi encontrado nenhnum jogador com o nome %s'
+msg_admin_has_given_you_a_plot: 'Um administrador reivindicou um terreno por si em: %s'
+msg_town_forcepvp_setting_set_to: 'A cidade %s teve a sua configuração de PvP forçada a ser %s'
+msg_nation_changed_open: '&cO estado de entrada na nação agora é %s.'
+msg_err_already_in_a_nation: 'A sua cidade já pertence a uma nação.'
+msg_err_nation_not_open: '&cA nação %s não tem as suas portas abertas a todos. Peça ao rei ou a um assistente para entrar.'
+msg_err_nation_homeblock_in_another_world: '&cO terreno inicial da sua cidade não é o mesmo que o terreno da capital da nação.'
+status_bank_town_penalty_upkeep: ' &7| &2Manunteção de reivindicação excessiva: &4%s'
 
 # Added in 0.53:
-msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, you''re marked as an outlaw there.'
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Você não consegue ir para o spawn de %s, você está marcado como um foragido lá.'
 
 # Added in 0.54:
 war_hud_homeblock: 'Terreno Inicial'
@@ -936,10 +936,10 @@ war_stats_spoils_of_war: '  Espólios de Guerra: '
 war_starts_in_x: 'A guerra começa em %s'
 
 # Added in 0.55:
-msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
+msg_you_cannot_use_that_command_while_jailed: '&4Você não pode usar esse comando enquanto estiver preso.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
+msg_cache_block_error_town_nation: '&cMembros da nação não podem %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
