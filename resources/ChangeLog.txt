@@ -4011,3 +4011,5 @@ v0.92.0.11:
   - Clean up unused methods left over from PlotGroup commits.
   - API: PreNewTownEvent, courtesy of Siris with PR #3606.
     - Cancellable event.
+  - New language: Portuguese (Brazilian) Translation, courtesy of BannerGames with PR #3603.
+    - use pt-br.yml as your language in the config to enable.
