@@ -665,8 +665,8 @@ you_have_been_requested_to_ally2: 'Você recebeu um pedido de aliança de %s'
 town_help_11: 'Criar uma nova cidade. Use ''_'' e não espaços.'
 changed_plot_town: '&bVocê alterou o nome do terreno da cidade para %s!'
 not_standing_in_plot: 'Você não está num terreno válido!'
-msg_err_homeblock_has_not_been_set: 'O terreno inicial ainda não foi definido, use ''/town set homeblock'' primeiro.'
-msg_err_spawn_not_within_homeblock: 'O spawn não está dentro do terreno inicial, use ''/town set homeblock'' primeiro.'
+msg_err_homeblock_has_not_been_set: 'O terreno de casa ainda não foi definido, use ''/town set homeblock'' primeiro.'
+msg_err_spawn_not_within_homeblock: 'O spawn não está dentro do terreno de casa, use ''/town set homeblock'' primeiro.'
 
 # Added in 0.44
 # TownyChat language strings
@@ -914,7 +914,7 @@ status_bank_town_penalty_upkeep: ' &7| &2Manunteção de reivindicação excessi
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Você não consegue ir para o spawn de %s, você está marcado como um foragido lá.'
 
 # Added in 0.54:
-war_hud_homeblock: 'Terreno Inicial'
+war_hud_homeblock: 'Terreno de Casa'
 war_hud_wilderness: 'Zona Selvagem'
 war_hud_true: 'Verdade'
 war_hud_false: 'Falso'
@@ -969,7 +969,7 @@ msg_save_success: 'Base de dados salva.'
 msg_load_success: 'Base de dados carregada.'
 msg_err_cannot_afford_to_set_outpost: 'A sua cidade não tem fundos suficientes para definir este terreno como um posto avançado.'
 msg_too_close2: 'Esta área está demasiado perto de outra cidade %s.'
-homeblock: 'terreno inicial'
+homeblock: 'terreno de casa'
 townblock: 'terreno da cidade'
 outpost: 'posto avançado'
 msg_err_not_same_town: '&b%s não pertence à sua cidade.'
