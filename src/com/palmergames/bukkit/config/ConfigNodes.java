@@ -1882,6 +1882,11 @@ public enum ConfigNodes {
 			"# The minimum duration of a siege before a town can surrender.",
 			"# This setting is important because it prevents a 'quick surrender' by the defender",
 			"# - which could leave the attacker with no 'aftermath' time in which to execute invade or plunder actions."),
+	WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_ABANDON_HOURS(
+			"war.siege.times.min_siege_duration_before_abandon_hours",
+			"24",
+			"# The minimum duration of a siege before an attacking nation can abandon.",
+			"# This setting is important to prevent an attacker and defender colluding to establish a suitable siege immunity time."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
 			"240",

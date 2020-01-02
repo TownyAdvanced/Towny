@@ -3001,6 +3001,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_SURRENDER_HOURS);
 	}
 
+	public static double getWarSiegeMinSiegeDurationBeforeAbandonHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_ABANDON_HOURS);
+	}
+
 	public static int getWarSiegePointsForAttackerOccupation() {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_ATTACKER_OCCUPATION);
 	}

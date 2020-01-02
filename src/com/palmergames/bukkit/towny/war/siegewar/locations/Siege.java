@@ -148,4 +148,8 @@ public class Siege {
 	public long getTimeUntilSurrenderIsAllowedMillis() {
 		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
+
+	public long getTimeUntilAbandonIsAllowedMillis() {
+		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
+	}
 }

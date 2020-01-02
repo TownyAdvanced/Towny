@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -57,8 +58,15 @@ public class AbandonAttack {
 			//If the player's nation does not own the nearby siegezone, send error
             if(siegeZone.getAttackingNation() != townOfResident.getNation())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
-            
-            attackerAbandon(siegeZone);
+
+			long timeUntilAbandonIsAllowedMillis = siege.getTimeUntilAbandonIsAllowedMillis();
+			if(timeUntilAbandonIsAllowedMillis > 0) {
+				String message = String.format(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_yet"),
+					TimeMgmt.getFormattedTimeValue(timeUntilAbandonIsAllowedMillis));
+				throw new TownyException(message);
+			}
+
+			attackerAbandon(siegeZone);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
