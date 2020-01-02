@@ -4017,3 +4017,8 @@ v0.92.0.11:
     - Closes #3589.
   - Fix Mysql databases not purging fallen towns.
     - Closes #3610.
+  - REQUIRED CONFIG CHANGE:
+    - Villager should be added to the protection.mob_types list.
+  - Fixed: Villagers protected from damage by other Entities when not configured to be protected.
+    - Pillagers were unable to harm villagers, even when villagers were not in the protected list.
+    - Closes #3580. 

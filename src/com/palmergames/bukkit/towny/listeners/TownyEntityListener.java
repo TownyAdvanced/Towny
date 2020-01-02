@@ -308,7 +308,10 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
 		
 		// Entities requiring special protection.
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal || entity instanceof Villager) {
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof EnderCrystal 
+				|| (TownySettings.getEntityTypes().contains("Animals") && entity instanceof Animals) // Only protect these entities if servers specifically add them to the protections.
+				|| (TownySettings.getEntityTypes().contains("Villager") && entity instanceof Villager) // Only protect these entities if servers specifically add them to the protections.
+				){
 			
 			// Handle exploding causes of damage.
 		    if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
