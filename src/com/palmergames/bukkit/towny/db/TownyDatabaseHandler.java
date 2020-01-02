@@ -598,6 +598,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			resident.clearModes();
+			try {
+				town.removeResident(resident);
+			} catch (NotRegisteredException | EmptyTownException ignored) {
+			}
 			saveResident(resident);
 		}
 		
