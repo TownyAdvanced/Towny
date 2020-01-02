@@ -25,8 +25,9 @@ description: >
 # Rose = &c, LightPurple = &d, Yellow = &e, White = &f
 
 #Cette traduction est faite par TheCalypso du serveur Gaspézia.
+# Améliorer par Cidalex de Énéstia
 
-default_towny_prefix: '&6[Gaspézia] &b'
+default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 
@@ -707,7 +708,7 @@ msg_err_over_outposts_limit: 'Vous ne pouvez pas vous téléporter vers votre av
 # These are translated because we may (or may not) be handling longer words in a smart way.
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2HorsLaLois: &f'                    # Used on /t outlawlist
+outlaws: '&2Hors-La-Lois: &f'                    # Used on /t outlawlist
 online: '&a(En ligne)'
 registered_last_online: '&2Enregistré: &a%s &8| &2Dernière co: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
@@ -769,10 +770,10 @@ status_world_forcetownmobs: '&2Force TownMobs: '
 status_world_unclaimrevert: '&2Unclaim Revert: '
 status_world_explrevert: '&2Explosion Revert: '
 status_world_ignoredblocks: '&2Ignored Blocks:'
-status_res_taxexempt: '&2Le staff des villes ne pay pas les taxes.'
+status_res_taxexempt: '&2Le staff des villes ne paye pas les taxes.'
 status_res_tax: '&2Town Tax: &a'
-status_res_plottax: '&2Total Plot Taxes: &a'
-status_res_totaltax: '&2Total Tax to pay: &a'
+status_res_plottax: '&2Total Parcelle Taxes: &a'
+status_res_totaltax: '&2Total Tax a payer: &a'
 
 # Added in 0.45
 msg_err_enemy_war_your_town_has_no_claims: 'Vous ne pouvez pas attaquer pendant que votre ville a 0 blocs de ville réclamés.'
@@ -802,41 +803,41 @@ status_yes: '&aOUI'
 status_no: '&cNON'
 status_public: '&2Publique: '
 msg_err_unable_to_use_bank_outside_bank_plot: 'Vous ne pouvez pas utiliser cette commande en dehors d''une banque ou d''une zone principale.'
-msg_err_nation_spawn_forbidden: '&cNation spawn travel is forbidden.'
-msg_err_nation_spawn_forbidden_war: '&cNation spawn travel is only allowed during war.'
-msg_err_nation_spawn_forbidden_peace: '&cNation spawn travel is forbidden during war.'
-msg_err_nation_spawn_ally_forbidden: '&cNation spawn travel to allied nations is forbidden.'
-msg_err_nation_spawn_nation_forbidden_war: '&cNation spawn travel to other allied nations is only allowed during war.'
-msg_err_nation_spawn_nation_forbidden_peace: '&Nation spawn travel to other allied nations is forbidden during war.'
-msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations is forbidden.'
-msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
-msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
-msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
-msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
+msg_err_nation_spawn_forbidden: '&cLe voyage vers le spawn de la nation est interdit.'
+msg_err_nation_spawn_forbidden_war: '&cLe voyage vers le spawn de la ville est autorisé que durant la guerre.'
+msg_err_nation_spawn_forbidden_peace: '&cLe voyage vers le spawn de la ville est autorisé que durant la paix.'
+msg_err_nation_spawn_ally_forbidden: '&cLe voyage vers le spawn de la ville est interdit aux alliés.'
+msg_err_nation_spawn_nation_forbidden_war: '&cLe voyage vers le spawn de la ville est autorisé que durant la guerre.'
+msg_err_nation_spawn_nation_forbidden_peace: '&c Le Spawn de nation vers une autre ville allié et interdit durant la guerre'
+msg_err_public_nation_spawn_forbidden: '&cLe voyage entre spawn publique est interdit.'
+msg_err_public_nation_spawn_forbidden_war: '&cLe voyage vers le spawn de la ville est autorisé que durant la guerre.'
+msg_err_public_nation_spawn_forbidden_peace: '&cLe Spawn de nation vers une autre ville et interdit durant la guerrer.'
+msg_spawn_cost_set_to: '&b%s a défini le prix du spawn à /%s pour spawn %s'
+msg_err_cannot_set_spawn_cost_more_than: '&cVous ne pouvez pas mettre ce prix, le maximum étant %s'
 msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
-msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
-status_public2: '&2Public'
+msg_nation_changed_public: '&cLa nation est désormais publique %s.'
+status_public2: '&2Publique'
 
 # Added in 0.47:
-status_plot_type: '&2Plot Type: &a'
-msg_no_self_jailing: 'You cannot jail yourself.'
-online2: ' &a(Online)'
-build: 'Build'
-destroy: 'Destroy'
-switch: 'Switch'
-item_use: 'Item_Use'
+status_plot_type: '&2Type de parcelle : &a'
+msg_no_self_jailing: 'Vous ne pouvez pas vous emprisonnez vous-même.'
+online2: ' &a(En-ligne)'
+build: 'Construire'
+destroy: 'Destruire'
+switch: 'Ouvrir/fermer'
+item_use: 'Utilisation Item'
 towny_map_header: 'Towny Map '
-towny_map_unclaimed: 'Unclaimed'
-towny_map_claimed: 'Claimed'
-towny_map_forsale: 'For Sale'
-towny_map_yourtown: 'Your Town'
-towny_map_yourplot: 'Your Plot'
-towny_map_ally: 'Ally'
-towny_map_enemy: 'Enemy'
-enabled: 'Enabled'
-disabled: 'Disabled'
-forced: 'Forced'
-adjustable: 'Adjustable'
+towny_map_unclaimed: 'Non-revendiqué'
+towny_map_claimed: 'Revendiqué'
+towny_map_forsale: 'A vendre'
+towny_map_yourtown: 'Votre ville'
+towny_map_yourplot: 'Votre parcelle'
+towny_map_ally: 'Allié'
+towny_map_enemy: 'Ennemie'
+enabled: 'Activée'
+disabled: 'Désactivée'
+forced: 'Forcée'
+adjustable: 'Ajustable'
 
 # Added in 0.48:
 msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which costs %s.'
@@ -848,23 +849,23 @@ nation_rechecked_by_admin: '&bNation %s town distances have been successfully re
 msg_err_nation_over_town_limit: '&cYour nation has reached the maximum number of allowed towns-per-nation: %s.'
 
 # Added in 0.49
-msg_process_claim: 'Processing Plot Claim...'
-msg_process_unclaim: 'Processing Plot Unclaim...'
-msg_total_townblocks: 'Total TownBlocks: '
+msg_process_claim: 'Revendication des parcelles en cour...'
+msg_process_unclaim: 'Processus pour ne plus revendiquer ces parcelles en cours...'
+msg_total_townblocks: 'Total des parcelles: '
 
 # Added in 0.50
-friend_list: 'Friends List'
+friend_list: 'Liste des amis'
                          # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
                          # nationranks lists on the /nation screen; and probably more lists of residents.
 res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
 res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
 res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
-res_friend_added: 'Added '
+res_friend_added: 'Ajouté '
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
 nationboard_message_colour_1: '&6'
 nationboard_message_colour_2: '&e'
-not_registered: 'Not registered.'
+not_registered: 'Non enregistré.'
 msg_error_missing_comparator: '&bMust specify what to sort by.'
 msg_error_invalid_comparator: '&bInvalid comparator.'
 msg_error_multiple_comparators: '&bToo many comparators. Only specify one.'
@@ -882,7 +883,7 @@ msg_couldnt_pay_town_tax_multiple: '&bThe following residents could not afford t
 msg_couldnt_pay_plot_taxes_multiple: '&bThe following residents could not afford the plot tax on some or all of their plots: '
 msg_bankrupt_town2: '&b%s couldn''t afford to remain a town.'
 msg_bankrupt_nation2: '&b%s couldn''t afford to remain a nation.'
-status_embassy_town: '&2Embassies in'
+status_embassy_town: '&2Ambassade en'
 
 # Added in 0.51:
 msg_error_invalid_comparator_nation: '&bInvalid comparator. Try resident, balance, towns, name, townblocks, online.'
