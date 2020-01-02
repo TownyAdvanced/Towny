@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -35,10 +36,16 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -2086,23 +2093,177 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean savePlotData(PlotBlockData plotChunk) {
-        return false;
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+		        
+		        String path = getPlotFilename(plotChunk);
+		        try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
+		            
+		            switch (plotChunk.getVersion()) {
+		                
+		                case 1:
+		                case 2:
+		                case 3:
+		                case 4:
+		                    /*
+		                     * New system requires pushing
+		                     * version data first
+		                     */
+		                    fout.write("VER".getBytes(StandardCharsets.UTF_8));
+		                    fout.write(plotChunk.getVersion());
+		                    
+		                    break;
+		                
+		                default:
+		                
+		            }
+		            
+		            // Push the plot height, then the plot block data types.
+		            fout.writeInt(plotChunk.getHeight());
+		            for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+		                fout.writeUTF(block);
+		            }
+		            
+		        } catch (Exception e) {
+		            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
+		            e.printStackTrace();
+		            return false;
+		        }
+				return true;
     }
     
-    @Override
-    public PlotBlockData loadPlotData(String worldName, int x, int z) {
-        return null;
-    }
-    
+	/**
+	 * Load PlotBlockData
+	 *
+	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param x - Coordinate for X.
+	 * @param z - Coordinate for Z.
+	 * @return PlotBlockData or null
+	 */
+	@Override
+	public PlotBlockData loadPlotData(String worldName, int x, int z) {
+
+		try {
+			TownyWorld world = getWorld(worldName);
+			TownBlock townBlock = new TownBlock(x, z, world);
+
+			return loadPlotData(townBlock);
+		} catch (NotRegisteredException e) {
+			// Failed to get world
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Load PlotBlockData for regen at unclaim
+	 *
+	 * @param townBlock - townBlock being reverted
+	 * @return PlotBlockData or null
+	 */
     @Override
     public PlotBlockData loadPlotData(TownBlock townBlock) {
+        
+        String fileName = getPlotFilename(townBlock);
+        
+        String value;
+        
+        if (isFile(fileName)) {
+            PlotBlockData plotBlockData = new PlotBlockData(townBlock);
+            List<String> blockArr = new ArrayList<>();
+            int version = 0;
+            
+            try (DataInputStream fin = new DataInputStream(new FileInputStream(fileName))) {
+                
+                //read the first 3 characters to test for version info
+                fin.mark(3);
+                byte[] key = new byte[3];
+                fin.read(key, 0, 3);
+                String test = new String(key);
+                
+                if (elements.fromString(test) == elements.VER) {// Read the file version
+                    version = fin.read();
+                    plotBlockData.setVersion(version);
+                    
+                    // next entry is the plot height
+                    plotBlockData.setHeight(fin.readInt());
+                } else {
+                    /*
+                     * no version field so set height
+                     * and push rest to queue
+                     */
+                    plotBlockData.setVersion(version);
+                    // First entry is the plot height
+                    fin.reset();
+                    plotBlockData.setHeight(fin.readInt());
+                    blockArr.add(fin.readUTF());
+                    blockArr.add(fin.readUTF());
+                }
+                
+                /*
+                 * Load plot block data based upon the stored version number.
+                 */
+                switch (version) {
+                    
+                    default:
+                    case 4:
+                    case 3:
+                    case 1:
+                        
+                        // load remainder of file
+                        while ((value = fin.readUTF()) != null) {
+                            blockArr.add(value);
+                        }
+                        
+                        break;
+                    
+                    case 2: {
+                        
+                        // load remainder of file
+                        int temp = 0;
+                        while ((temp = fin.readInt()) >= 0) {
+                            blockArr.add(temp + "");
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                
+            } catch (EOFException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            plotBlockData.setBlockList(blockArr);
+            plotBlockData.resetBlockListRestored();
+            return plotBlockData;
+        }
         return null;
     }
     
     @Override
-    public void deletePlotData(PlotBlockData plotChunk) {
+	public void deletePlotData(PlotBlockData plotChunk) {
+
+		File file = new File(getPlotFilename(plotChunk));
+		if (file.exists())
+			file.delete();
+	}
     
-    }
+	private boolean isFile(String fileName) {
+
+		File file = new File(fileName);
+		return file.exists() && file.isFile();
+
+	}
+
+	@Override
+	public void deleteFile(String fileName) {
+
+		File file = new File(fileName);
+		if (file.exists())
+			file.delete();
+	}
+
     
     @Override
     public void deleteResident(Resident resident) {
@@ -2149,11 +2310,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         twn_hm.put("z", townBlock.getZ());
         DeleteDB("TOWNBLOCKS", twn_hm);
 
-    }
-    
-    @Override
-    public void deleteFile(String file) {
-    
     }
 
 	@Override
@@ -2403,6 +2559,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             town.setOutpostSpawns(validoutpostspawns);
         }
     }
+
+    public String getPlotFilename(PlotBlockData plotChunk) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".data";
+	}
+	
+	public String getPlotFilename(TownBlock townBlock) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
+	}
     
     /**
      * Load townblocks according to the given line Townblock: x,y,forSale Eg:
@@ -2516,3 +2682,4 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return out.toString();
     }
 }
+
