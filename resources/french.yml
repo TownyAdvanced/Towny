@@ -1026,7 +1026,7 @@ msg_neutral_towns: 'Ville neutre'
 
 # Added in 0.64
 msg_err_no_nation_with_that_name: 'Aucune nation trouvé avec le nom %s'
-msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
+msg_err_cannot_unclaim_homeblock: 'Tu ne peux pas désannexer ton centre-ville, change le de localisation avec /t set homeblock.'
 
 # Added in 0.65
 msg_err_rename_cancelled: 'Le changement de nom a été bloquer par un autre plugin.'
