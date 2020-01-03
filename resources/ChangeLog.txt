@@ -4022,3 +4022,5 @@ v0.92.0.11:
   - Fixed: Villagers protected from damage by other Entities when not configured to be protected.
     - Pillagers were unable to harm villagers, even when villagers were not in the protected list.
     - Closes #3580. 
+  - Fix town_plotbased_upkeep_minimum_amount not working when town_plotbased_upkeep_affected_by_town_level_modifier is set to false.
+    - Closes #3616.
