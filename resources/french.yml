@@ -25,7 +25,7 @@ description: >
 # Rose = &c, LightPurple = &d, Yellow = &e, White = &f
 
 #Cette traduction est faite par TheCalypso du serveur Gaspézia.
-#Améliorer par Cidalex du serveur Énéstia
+#Améliorer et reprise par Cidalex du serveur Énéstia
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
