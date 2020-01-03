@@ -65,7 +65,7 @@ mayor_help_7: 'Tente de désannexer autour de vous.'
 mayor_help_8: 'Tente désannexer tout les chunk de ville.'
 
 nation_help_1: 'Statut de votre nation'
-nation_help_2: '[nation]'
+nation_help_2: '[Nation]'
 nation_help_3: 'Statut de la nation cible'
 nation_help_4: 'Liste toutes les nations'
 nation_help_5: 'Quitte votre nation'
@@ -826,9 +826,9 @@ build: 'Construire'
 destroy: 'Destruire'
 switch: 'Ouvrir/fermer'
 item_use: 'Utilisation Item'
-towny_map_header: 'Towny Map '
-towny_map_unclaimed: 'Non-revendiqué'
-towny_map_claimed: 'Revendiqué'
+towny_map_header: 'Carte Towny '
+towny_map_unclaimed: 'Libre'
+towny_map_claimed: 'Annexé'
 towny_map_forsale: 'A vendre'
 towny_map_yourtown: 'Votre ville'
 towny_map_yourplot: 'Votre parcelle'
@@ -849,8 +849,8 @@ nation_rechecked_by_admin: '&bNation %s town distances have been successfully re
 msg_err_nation_over_town_limit: '&cYour nation has reached the maximum number of allowed towns-per-nation: %s.'
 
 # Added in 0.49
-msg_process_claim: 'Revendication des parcelles en cour...'
-msg_process_unclaim: 'Processus pour ne plus revendiquer ces parcelles en cours...'
+msg_process_claim: 'Annexion des parcelles en cour...'
+msg_process_unclaim: 'Abandon des parcelles en cours...'
 msg_total_townblocks: 'Total des parcelles: '
 
 # Added in 0.50
@@ -905,10 +905,10 @@ msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
 msg_err_already_in_a_nation: 'Votre ville est déjà dans une nation.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the king or an assistant to join.'
 msg_err_nation_homeblock_in_another_world: '&cYour town''s homeblock is not in the same world as the nation capital''s homeblock.'
-status_bank_town_penalty_upkeep: ' &7| &2Overclaim upkeep: &4%s'
+status_bank_town_penalty_upkeep: ' &7| &2Cout des surannexion : &4%s'
 
 # Added in 0.53:
-msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, you''re marked as an outlaw there.'
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Tu ne peux pas aller à %s, Tu es un hors-la-lois là-bas.'
 
 # Added in 0.54:
 war_hud_homeblock: 'Centre'
@@ -942,7 +942,7 @@ msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 msg_err_already_res2: '&c%s appartient déjà a une ville.'
 msg_err_cannot_afford_plot_set_type_cost: '&cYou cannot afford to set the plot to a %s type costing %s'
 msg_plot_set_cost: '&bYou have been charged %s for setting plot to type: %s'
-msg_err_townspawn_has_not_been_set: '&cTown spawn has not been set.'
+msg_err_townspawn_has_not_been_set: '&cLe spawn de la ville n''a pas était défini.'
 msg_err_player_too_far_from_town_spawn: '&c%s is too far away from your town spawn to receive an invite to town. Max distance: %s blocks.'
 
 # Added in 0.58:
