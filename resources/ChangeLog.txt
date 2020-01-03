@@ -4024,3 +4024,4 @@ v0.92.0.11:
     - Closes #3580. 
   - Fix town_plotbased_upkeep_minimum_amount not working when town_plotbased_upkeep_affected_by_town_level_modifier is set to false.
     - Closes #3616.
+  - French translation updated by Mitsu13Ion with PR #3614.
