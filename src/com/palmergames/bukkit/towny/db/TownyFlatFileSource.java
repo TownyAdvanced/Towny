@@ -1493,7 +1493,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			path = getTownBlockFilename(townBlock);
-			//boolean set = false;
 			
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
@@ -1506,7 +1505,24 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						String value = properties.getProperty(key);
 						keys.put(key, String.valueOf(value));
 					}
-					
+
+					test = "town";
+					line = keys.get("town");
+					if (line != null)
+						if (line.isEmpty()) {
+							TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);							
+							TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+							TownyWorld world = townBlock.getWorld();
+							world.removeTownBlock(townBlock);
+							deleteTownBlock(townBlock);
+							continue;
+						}
+						try {
+							Town town = getTown(line.trim());
+							townBlock.setTown(town);
+						} catch (Exception ignored) {
+						}
+
 					line = keys.get("name");
 					if (line != null)
 						try {
@@ -1520,15 +1536,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
 						} catch (Exception ignored) {
 						}
-					
-					line = keys.get("town");
-					if (line != null)
-						try {
-							Town town = getTown(line.trim());
-							townBlock.setTown(town);
-						} catch (Exception ignored) {
-						}
-					
+
 					line = keys.get("resident");
 					if (line != null && !line.isEmpty())
 						try {
@@ -1555,7 +1563,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if ((line != null) && !line.isEmpty())
 						try {
 							townBlock.setPermissions(line.trim());
-							//set = true;
 						} catch (Exception ignored) {
 						}
 					
@@ -1572,16 +1579,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-
-					test = "town";
-					line = keys.get("town");
-					if (line.isEmpty()) {
-						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
-						deleteTownBlock(townBlock);
-						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
-						TownyWorld world = townBlock.getWorld();
-						world.removeTownBlock(townBlock);
-					}
 					
 					test = "metadata";
 					line = keys.get("metadata");
@@ -1599,15 +1596,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						PlotObjectGroup group = getPlotObjectGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
 						townBlock.setPlotObjectGroup(group);
 					}
-					
-					
+
 				} catch (Exception e) {
 					if (test == "town") {
-						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
-						deleteTownBlock(townBlock);
+						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);						
 						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 						TownyWorld world = townBlock.getWorld();
 						world.removeTownBlock(townBlock);
+						deleteTownBlock(townBlock);
 						continue;
 					}
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
@@ -1618,6 +1614,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 				TownyWorld world = townBlock.getWorld();
 				world.removeTownBlock(townBlock);
+				deleteTownBlock(townBlock);
 			}
 		}
 		saveTownBlockList();
