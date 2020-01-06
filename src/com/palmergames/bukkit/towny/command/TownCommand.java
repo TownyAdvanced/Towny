@@ -2097,7 +2097,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
-			newTown(world, name, resident, key, player.getLocation());
+			newTown(world, name, resident, key, player.getLocation(), player);
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2107,40 +2107,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
+	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		world.newTownBlock(key);
 		townyUniverse.getDataSource().newTown(name);
 		Town town = townyUniverse.getDataSource().getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
-		TownBlock townBlock = world.getTownBlock(key);
-		townBlock.setTown(town);
-		town.setHomeBlock(townBlock);
-		// Set the plot permissions to mirror the towns.
-		townBlock.setType(townBlock.getType());
-
-		town.setSpawn(spawn);
 		town.setUuid(UUID.randomUUID());
 		town.setRegistered(System.currentTimeMillis());
-		// world.addTown(town);
 
-		if (world.isUsingPlotManagementRevert()) {
-			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
-			if (plotChunk != null) {
-
-				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-
-			} else {
-
-				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
-				plotChunk.initialize();
-
-			}
-			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
-			plotChunk = null;
-		}
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
 			try {
@@ -2149,17 +2125,48 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-		
+
+		TownBlock townBlock = null;
+		TownPreClaimEvent preEvent = new TownPreClaimEvent(townyUniverse.getDataSource().getTown(name), world.getTownBlock(key), player);
+		Bukkit.getPluginManager().callEvent(preEvent);
+		if (!preEvent.isCancelled()) {
+			world.newTownBlock(key);
+			townBlock = world.getTownBlock(key);		
+			town.setHomeBlock(townBlock);
+			town.setSpawn(spawn);
+			townBlock.setTown(town);
+			// Set the plot permissions to mirror the towns.
+			townBlock.setType(townBlock.getType());
+	
+			if (world.isUsingPlotManagementRevert()) {
+				PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
+				if (plotChunk != null) {
+	
+					TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
+	
+				} else {
+	
+					plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
+					plotChunk.initialize();
+	
+				}
+				TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
+				plotChunk = null;
+			}
+		} else {
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_claim_error"), 1, 1));
+		}
 		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTownBlock(townBlock);
 		townyUniverse.getDataSource().saveTown(town);
 		townyUniverse.getDataSource().saveWorld(world);
-		
 		townyUniverse.getDataSource().saveTownList();
-		townyUniverse.getDataSource().saveTownBlockList();
 
 		// Reset cache permissions for anyone in this TownBlock
-		plugin.updateCache(townBlock.getWorldCoord());
+		if (townBlock != null) {
+			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townyUniverse.getDataSource().saveTownBlockList();
+			plugin.updateCache(townBlock.getWorldCoord());
+		}
 
 		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
 
