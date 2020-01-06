@@ -4032,3 +4032,4 @@ v0.92.0.11:
   - REQUIRED TOWNYPERMS.YML CHANGE:
     - towny.town.spawn.ally should be added to the default nation rank.
     - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
+  - Update Reserve API, courtesy of thecreatorfromhell, with PR #3612.
