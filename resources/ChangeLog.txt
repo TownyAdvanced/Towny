@@ -4029,3 +4029,6 @@ v0.92.0.11:
   - Placeholder added: %townyadvanced_nation_tag_town_formatted%
     - Shows the nation tag and the full town name.
     - If nation tag is not set, only the town name is shown.
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - towny.town.spawn.ally should be added to the default nation rank.
+    - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
