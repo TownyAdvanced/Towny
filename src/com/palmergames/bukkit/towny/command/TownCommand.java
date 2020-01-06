@@ -2097,7 +2097,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
-			newTown(world, name, resident, key, player.getLocation());
+			newTown(world, name, resident, key, player.getLocation(), player);
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2107,8 +2107,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
+	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		TownPreClaimEvent preEvent = new TownPreClaimEvent(townyUniverse.getDataSource().getTown(name), world.getTownBlock(key), player);
+		Bukkit.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled()) {
+			return null;
+		}
 
 		world.newTownBlock(key);
 		townyUniverse.getDataSource().newTown(name);
