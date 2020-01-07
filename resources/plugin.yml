@@ -459,6 +459,7 @@ permissions:
         description: User can access the admin commands.
         default: false
         children:
+            towny.command.townyadmin: true
             towny.command.townyadmin.backup: true
             towny.command.townyadmin.checkperm: true
             towny.command.townyadmin.givebonus: true

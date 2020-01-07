@@ -4036,3 +4036,10 @@ v0.92.0.11:
   - Make sure world is properly handled when a town renames itself.
   - Fix renaming towns which have 0 plot groups.
     - Closes #3626.
+0.95.2.7:
+  - Changed required permission node for using /ta from towny.admin to towny.command.townyadmin
+    - Fixes scenario where an admin has other /townyadmin permission nodes but not towny.admin.
+  - New Permission Node: towny.command.townyadmin
+    - Used to view the /townyadmin screen.
+    - Gateway permission node to all other townyadmin sub-commands
+    - Child node of towny.command.townyadmin.*
