@@ -4025,3 +4025,14 @@ v0.92.0.11:
   - Fix town_plotbased_upkeep_minimum_amount not working when town_plotbased_upkeep_affected_by_town_level_modifier is set to false.
     - Closes #3616.
   - French translation updated by Mitsu13Ion with PR #3614.
+0.95.2.6:
+  - Placeholder added: %townyadvanced_nation_tag_town_formatted%
+    - Shows the nation tag and the full town name.
+    - If nation tag is not set, only the town name is shown.
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - towny.town.spawn.ally should be added to the default nation rank.
+    - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
+  - Update Reserve API, courtesy of thecreatorfromhell, with PR #3612.
+  - Make sure world is properly handled when a town renames itself.
+  - Fix renaming towns which have 0 plot groups.
+    - Closes #3626.
