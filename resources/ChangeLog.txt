@@ -4033,3 +4033,6 @@ v0.92.0.11:
     - towny.town.spawn.ally should be added to the default nation rank.
     - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
   - Update Reserve API, courtesy of thecreatorfromhell, with PR #3612.
+  - Make sure world is properly handled when a town renames itself.
+  - Fix renaming towns which have 0 plot groups.
+    - Closes #3626.
