@@ -1303,7 +1303,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				town.addPlotGroup(newGroup);
 			}
 
-			townyUniverse.getDataSource().saveGroupList();
+			townyUniverse.getDataSource().savePlotGroupList();
 
 			// Save changes.
 			townyUniverse.getDataSource().savePlotGroup(newGroup);
@@ -1363,7 +1363,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Save
 			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().saveGroupList();
+			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_put_group_up_for_sale"), player.getName(), group.getGroupName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 			
@@ -1380,7 +1380,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			// Save
 			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().saveGroupList();
+			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_made_group_not_for_sale"), player.getName(), group.getGroupName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {

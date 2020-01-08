@@ -1421,7 +1421,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = "";
 		String path;
 		
-		for (PlotObjectGroup group : getAllGroups()) {
+		for (PlotObjectGroup group : getAllPlotGroups()) {
 			path = getGroupFilename(group);
 			
 			File groupFile = new File(path);
@@ -1479,7 +1479,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 		}
 		
-		saveGroupList();
+		savePlotGroupList();
 		
 		return true;
 	}
@@ -1593,7 +1593,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotObjectGroup group = getPlotObjectGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
+						PlotObjectGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
 						townBlock.setPlotObjectGroup(group);
 					}
 
@@ -1645,10 +1645,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public boolean saveGroupList() {
+	public boolean savePlotGroupList() {
 		List<String> list = new ArrayList<>();
 		
-		for (PlotObjectGroup group : getAllGroups()) {
+		for (PlotObjectGroup group : getAllPlotGroups()) {
 			list.add(group.getTown().getWorld().getName() + "," + group.getTown().getName() + "," + group.getID() + "," + group.getGroupName());
 		}
 		

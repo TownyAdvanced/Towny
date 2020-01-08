@@ -4046,3 +4046,4 @@ v0.92.0.11:
   - Fix bug with /plot group set {plottype}
   - Disallowed the use of /plot group set jail, jails can only be set before grouping. 
   - Language files bumped to 0.69.
+  - Fix plot groups not loading after server stop and start.
