@@ -1439,17 +1439,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 				return true;
 			}
-			
+			// Stop setting plot groups to Jail plot, because that would set a spawn point for each plot in the location of the player.			
+			if (split[1].equalsIgnoreCase("jail")) {
+				throw new TownyException(TownySettings.getLangString(TownySettings.getLangString("msg_err_cannot_set_group_to_jail")));
+			}
+				
 			for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 				try {
-					setPlotType(resident, tb.getWorldCoord(), split[2]);
+					setPlotType(resident, tb.getWorldCoord(), split[1]);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_could_not_set_group_type") + e.getMessage());
 					return false;
 				}
 			}
 
-			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_group_type_to_x"), split[2]));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_group_type_to_x"), split[1]));
 			
 		}
 		

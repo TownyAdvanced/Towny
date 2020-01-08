@@ -4043,3 +4043,6 @@ v0.92.0.11:
     - Used to view the /townyadmin screen.
     - Gateway permission node to all other townyadmin sub-commands
     - Child node of towny.command.townyadmin.*
+  - Fix bug with /plot group set {plottype}
+  - Disallowed the use of /plot group set jail, jails can only be set before grouping. 
+  - Language files bumped to 0.69.
