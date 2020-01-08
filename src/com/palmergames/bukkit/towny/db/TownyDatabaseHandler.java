@@ -194,7 +194,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotObjectGroup getPlotObjectGroup(String worldName, String townName, UUID groupID) {
+	public PlotObjectGroup getPlotObjectGroup(String townName, UUID groupID) {
 		return universe.getGroup(townName, groupID);
 	}
 
@@ -426,7 +426,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return townBlocks;
 	}
 	
-	public List<PlotObjectGroup> getAllGroups() {
+	public List<PlotObjectGroup> getAllPlotGroups() {
 		List<PlotObjectGroup> groups = new ArrayList<>();
 		groups.addAll(universe.getGroups());
 		
@@ -856,7 +856,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			saveTown(town);
 			saveTownList();
-			saveGroupList();
+			savePlotGroupList();
 			saveWorld(town.getWorld());
 
 			if (nation != null) {
@@ -979,7 +979,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
-		saveGroupList();
+		savePlotGroupList();
 
 		// Delete the old group file.
 		deleteGroup(group);
