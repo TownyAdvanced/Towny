@@ -206,6 +206,7 @@ public enum PermissionNodes {
 	 * TownyAdmin command permissions
 	 */
 	TOWNY_COMMAND_TOWNYADMIN("towny.command.townyadmin.*"),
+	TOWNY_COMMAND_TOWNYADMIN_SCREEN("towny.command.townyadmin"),
 	TOWNY_COMMAND_TOWNYADMIN_SET("towny.command.townyadmin.set.*"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR("towny.command.townyadmin.set.mayor"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_PLOT("towny.command.townyadmin.set.plot"),

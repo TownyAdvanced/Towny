@@ -96,6 +96,7 @@ nations:
         - towny.nation.spawn.nation
         - towny.nation.spawn.ally
         - towny.town.spawn.nation
+        - towny.town.spawn.ally
         - towny.chat.nation
         - towny.chat.alliance
 

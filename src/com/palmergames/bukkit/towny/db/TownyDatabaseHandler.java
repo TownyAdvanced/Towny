@@ -598,6 +598,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			resident.clearModes();
+			try {
+				town.removeResident(resident);
+			} catch (NotRegisteredException | EmptyTownException ignored) {
+			}
 			saveResident(resident);
 		}
 		
@@ -791,6 +795,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				isCapital = town.isCapital();
 			}
 
+			TownyWorld world = town.getWorld();
+			world.removeTown(town);
 			/*
 			 * Tidy up old files.
 			 * Has to be done here else the town no longer exists
@@ -805,6 +811,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 			town.setName(filteredName);
 			universe.getTownsMap().put(filteredName.toLowerCase(), town);
+			world.addTown(town);
 
 			// If this was a nation capitol
 			if (isCapital) {
@@ -841,10 +848,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTownBlock(townBlock);
 			}
 			
-			for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
-				pg.setTown(town);
-				savePlotGroup(pg);
-			}
+			if (town.hasObjectGroups())
+				for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
+					pg.setTown(town);
+					savePlotGroup(pg);
+				}
 
 			saveTown(town);
 			saveTownList();

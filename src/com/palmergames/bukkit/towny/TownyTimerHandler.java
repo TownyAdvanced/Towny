@@ -80,7 +80,7 @@ public class TownyTimerHandler{
 
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
-			System.out.println("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
+			System.out.println("[Towny] Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
