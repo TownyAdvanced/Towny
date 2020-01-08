@@ -870,6 +870,20 @@ public class Towny extends JavaPlugin {
 			public String call() throws Exception {
 				return TownySettings.getSaveDatabase();
 			}
+		}));		
+
+		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return String.valueOf(TownySettings.getNationZonesEnabled());
+			}
+		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return TownySettings.getSaveDatabase();
+			}
 		}));
 		
 		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", new Callable<String>() {

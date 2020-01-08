@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -37,7 +36,6 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -60,7 +58,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
@@ -259,20 +256,16 @@ public class TownyPlayerListener implements Listener {
 
 						block = event.getClickedBlock();
 						
-						if (Tag.SIGNS.isTagged(block.getType())) {
-							BlockFace facing = null;
-							if (block.getBlockData() instanceof Sign) {
-								org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
-								facing = sign.getRotation();
-							}
-							if (block.getBlockData() instanceof WallSign)  { 
-								org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
-								facing = sign.getFacing();	
-							}
+						if (block.getState().getData() instanceof Sign) {
+							org.bukkit.material.Sign sign = (org.bukkit.material.Sign) block.getState().getData();
+							BlockFace facing = sign.getFacing();
+							BlockFace attachedFace = sign.getAttachedFace();
+							
 							TownyMessaging.sendMessage(player, Arrays.asList(
 									ChatTools.formatTitle("Sign Info"),
 									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "Facing", "", facing.toString())
+									ChatTools.formatCommand("", "Facing", "", facing.toString()),
+									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
 									));
 						} else if (Tag.DOORS.isTagged(block.getType())) {
 							org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
@@ -982,29 +975,6 @@ public class TownyPlayerListener implements Listener {
 			resident.freeFromJail(player, resident.getJailSpawn(), true);
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
-	}
-	
-	/**
-	 * Any player that can break the lectern will be able to get the book anyways.
-	 * @param event - PlayerTakeLecternBookEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
-		
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getLectern().getWorld()))
-			return;
-		
-		Player player = event.getPlayer();
-		org.bukkit.block.Lectern lectern = event.getLectern();
-		Location location = lectern.getLocation();
-		
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
-		event.setCancelled(!bDestroy);
 	}
 
 	/**
