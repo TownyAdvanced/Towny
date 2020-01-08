@@ -4049,5 +4049,3 @@ v0.92.0.11:
   - Fix plot groups not loading after server stop and start.
   - Fix for spawners not reverting properly courtesy of Siris with PR #3629.
     - Closes #3627.
-  - Added PreTownClaimEvent to be thrown when a town is started and their initial townblock is claimed, courtesy of Siris with PR #3629.
-    - Closes #3620.

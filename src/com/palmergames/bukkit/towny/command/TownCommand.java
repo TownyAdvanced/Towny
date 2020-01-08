@@ -2109,13 +2109,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		TownPreClaimEvent preEvent = new TownPreClaimEvent(townyUniverse.getDataSource().getTown(name), world.getTownBlock(key), player);
-		Bukkit.getPluginManager().callEvent(preEvent);
-
-		if (preEvent.isCancelled()) {
-			return null;
-		}
 		
 		world.newTownBlock(key);
 		townyUniverse.getDataSource().newTown(name);
