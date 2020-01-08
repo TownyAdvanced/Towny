@@ -83,7 +83,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			state.update();
 		}
 		
-		// Add inventory back to the block if it conforms to BlockInventoryHolder.
+		/* Add inventory back to the block if it conforms to BlockInventoryHolder.
+		*
+		* Unusable on 1.13
+		* 
 		if (state instanceof BlockInventoryHolder) {
 			// Up cast to interface.
 			BlockInventoryHolder container = (BlockInventoryHolder) state;
@@ -98,6 +101,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			// update blocks.
 			state.update();
 		}
+		 */
 	}
 
 	/**
