@@ -8,42 +8,45 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
+	@SuppressWarnings("unused")
+	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
-	private ItemStack[] contents;
+	private List<ItemStack> contents = new ArrayList<ItemStack>();
+
+	//Tekkit - InventoryView
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 
 		super(plugin);
 		this.state = block.getState();
+		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
-		
-		// If the block has an inventory it implements the BlockInventoryHolder interface.
-		if (state instanceof BlockInventoryHolder) {
-			
-			// Cast the block to the interface representation.
-			BlockInventoryHolder container = (BlockInventoryHolder) state;
-			
-			// Capture inventory.
-			Inventory inventory = container.getInventory();
-			
-			// Chests are special.
+
+		if (state instanceof InventoryHolder) {
+			Inventory inven;
+
 			if (state instanceof Chest) {
-				inventory = ((Chest) state).getBlockInventory();
+				inven = ((Chest) state).getBlockInventory();
+			} else {
+				// Contents we are respawning.
+				inven = ((InventoryHolder) state).getInventory();
 			}
 
-			// Copy the contents over.
-			contents = inventory.getContents().clone();
-			
-			// Clear the inventory so no items drops and causes dupes.
-			inventory.clear();
+			for (ItemStack item : inven.getContents()) {
+				contents.add((item != null) ? item.clone() : null);
+			}
+
+			inven.clear();
 		}
 	}
 
@@ -55,32 +58,14 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	}
 
 	public void replaceProtections() {
-		
+
 		Block block = state.getBlock();
-		
-		// Replace physical block.
 		try {
-			BlockData blockData = state.getBlockData().clone();			
+			BlockData blockData = state.getBlockData().clone();
 			block.setType(state.getType(), false);
 			block.setBlockData(blockData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		
-		// Add inventory back to the block if it conforms to BlockInventoryHolder.
-		if (state instanceof BlockInventoryHolder) {
-			// Up cast to interface.
-			BlockInventoryHolder container = (BlockInventoryHolder) state;
-			
-			// Check for chest.
-			if (container instanceof Chest) {
-				((Chest) state).getBlockInventory().setContents(contents);
-			} else {
-				((BlockInventoryHolder) state).getInventory().setContents(contents);
-			}
-			
-			// update blocks.
-			state.update();
 		}
 	}
 
