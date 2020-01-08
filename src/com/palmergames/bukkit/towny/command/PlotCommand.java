@@ -1301,6 +1301,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				// Add the plot group to the town set.
 				town.addPlotGroup(newGroup);
+			} else {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_plot_group_name_required"));
+				return false;
 			}
 
 			townyUniverse.getDataSource().savePlotGroupList();
