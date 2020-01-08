@@ -4049,6 +4049,9 @@ v0.92.0.11:
   - Fix plot groups not loading after server stop and start.
   - Fix for spawners not reverting properly courtesy of Siris with PR #3629.
     - Closes #3627.
+0.95.2.8:
+  - Fix NPE when '/plot group add' was used without any name, courtesy of Siris with PR #3630.
+  - Language files bumped to 0.70. 
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
