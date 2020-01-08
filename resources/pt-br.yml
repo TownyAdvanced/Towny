@@ -6,7 +6,7 @@ website: 'http://townyadvanced.github.io/'
 description: >
     Arquivo de língua para todas as mensagens do jogo. Não altere este arquivo.
     Se desejar modificar alguma das entradas, faça uma cópia com outro nome.
-    Arquivos de linguagem alternativos podem ser ativados ao alterar a 
+    Arquivos de linguagem alternativos podem ser ativados ao alterar a
     entrada [language] na config.yml
 
 #
@@ -22,7 +22,7 @@ description: >
 # Preto = &0             Azul Escuro = &1
 # Verde Escuro = &2      Aqua Escuro = &3
 # Vermelho Escuro = &4   Roxo Escuro = &5
-# Dourado = &6           Cinza = &7 
+# Dourado = &6           Cinza = &7
 # Cinza Escuro = &8      Azul = &9
 # Verde = &a             Aqua = &b
 # Vermelho = &c          Roxo Claro = &d
@@ -1067,3 +1067,4 @@ msg_player_made_group_not_for_sale: '%s tirou o grupo %s do estado de venda.'
 
 # Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'

@@ -1064,3 +1064,4 @@ msg_player_made_group_not_for_sale: '%s made group %s n''est pas a vendre.'
 
 # Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
