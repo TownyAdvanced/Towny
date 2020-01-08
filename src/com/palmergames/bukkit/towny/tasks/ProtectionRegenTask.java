@@ -69,6 +69,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			ex.printStackTrace();
 		}
 		
+		// If the state is a creature spawner, then replace properly.
 		if (state instanceof CreatureSpawner) {
 			// Up cast to interface.
 			CreatureSpawner spawner = (CreatureSpawner) state;
