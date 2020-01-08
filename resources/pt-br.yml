@@ -1,5 +1,5 @@
 name: Towny
-version: 0.68
+version: 0.69
 language: português (Brasil)
 author: BannerGames
 website: 'http://townyadvanced.github.io/'
@@ -1064,3 +1064,6 @@ msg_set_group_type_to_x: 'O tipo do grupo de terrenos foi deefinido para %s'
 msg_player_successfully_bought_group_x: '%s comprou o grupo de terrenos %s'
 status_plot_group_name_and_size: '&2O terreno da cidade faz parte de um grupo: %s. O grupo tem %s terrenos de cidade no total.'
 msg_player_made_group_not_for_sale: '%s tirou o grupo %s do estado de venda.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'

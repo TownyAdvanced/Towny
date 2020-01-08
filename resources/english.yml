@@ -1,5 +1,5 @@
 name: Towny
-version: 0.68
+version: 0.69
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1060,3 +1060,6 @@ msg_set_group_type_to_x: 'Changed plot group''s type to %s'
 msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
 status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
