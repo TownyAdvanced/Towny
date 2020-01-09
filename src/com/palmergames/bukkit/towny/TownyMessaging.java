@@ -659,8 +659,6 @@ public class TownyMessaging {
 
 	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
 		((Player)player).spigot().sendMessage();
-		TextComponent confirmComponent = null;
-		TextComponent cancelComponent = null;
 		
 		if (firstline == null) {
 			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
@@ -668,18 +666,9 @@ public class TownyMessaging {
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
-			if (Towny.isSpigot){
-				confirmComponent = new TextComponent(confirmline + "\n");
-				confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to accept" ).create()));
-			}
-			
 		}
 		if (cancelline == null) {
 			cancelline = ChatColor.GREEN + "          /" + TownySettings.getCancelCommand();
-			if (Towny.isSpigot){
-				cancelComponent = new TextComponent(cancelline + "\n");
-				cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to cancel" ).create()));
-			}
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
@@ -718,12 +707,13 @@ public class TownyMessaging {
 		
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = new TextComponent(confirmline + "\n");
-		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to accept" ).create()));
+		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_accept")).create()));
 		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getConfirmCommand()));
 
 		// Create cancel button based on given params.
 		TextComponent cancelComponent = new TextComponent(cancelline + "\n");
-		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to cancel" ).create()));
+		TownyMessaging.sendErrorMsg("msg = " + TownySettings.getLangString("msg_confirmation_spigot_hover_cancel"));
+		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel")).create()));
 		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getCancelCommand()));
 
 		// Use spigot to send the message.
