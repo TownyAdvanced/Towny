@@ -38,7 +38,7 @@
     <!-- https://help.github.com/en/articles/about-github-package-registry -->
     <distributionManagement>
         <repository>
-            <id>github</id>
+            <id>github-towny</id>
             <name>GitHub TownyAdvanced Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
@@ -59,7 +59,7 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>github</id>
+            <id>github-tne</id>
             <url>https://maven.pkg.github.com/TheNewEconomy/packages/</url>
         </repository>
         <repository>
@@ -85,13 +85,13 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.3.2</version>
+            <version>0.1.4.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
