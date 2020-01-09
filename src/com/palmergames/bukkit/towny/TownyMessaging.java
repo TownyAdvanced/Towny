@@ -10,12 +10,17 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -653,25 +658,80 @@ public class TownyMessaging {
 	}
 
 	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
+		((Player)player).spigot().sendMessage();
+		TextComponent confirmComponent = null;
+		TextComponent cancelComponent = null;
+		
 		if (firstline == null) {
 			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
+			if (Towny.isSpigot){
+				confirmComponent = new TextComponent(confirmline + "\n");
+				confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to accept" ).create()));
+			}
+			
 		}
 		if (cancelline == null) {
 			cancelline = ChatColor.GREEN + "          /" + TownySettings.getCancelCommand();
+			if (Towny.isSpigot){
+				cancelComponent = new TextComponent(cancelline + "\n");
+				cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to cancel" ).create()));
+			}
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
-			sendMessage(player, message);
+			
+			// Check for spigot or not.
+			if (Towny.isSpigot) {
+				sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
+			} else {
+				sendMessage(player, message);
+			}
+			
 			return;
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			sendMessage(player, message);
+
+			// Check for spigot or not.
+			if (Towny.isSpigot) {
+				sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
+			} else {
+				sendMessage(player, message);
+			}
 		}
+	}
+
+	/**
+	 * Sends player confirm message that is clickable
+	 * @author Suneet Tipirneni (Siris)
+	 */
+	public static void sendSpigotConfirmMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
+		// Spigot doesn't allow null params in the text component.
+		if (lastline == null) {
+			lastline = "";
+		}
+		
+		// Create confirm button based on given params.
+		TextComponent confirmComponent = new TextComponent(confirmline + "\n");
+		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to accept" ).create()));
+		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getConfirmCommand()));
+
+		// Create cancel button based on given params.
+		TextComponent cancelComponent = new TextComponent(cancelline + "\n");
+		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Click to cancel" ).create()));
+		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getCancelCommand()));
+
+		// Use spigot to send the message.
+		((Player) player).spigot().sendMessage(new ComponentBuilder(firstline + "\n")
+			.append(confirmComponent)
+			.append(cancelComponent)
+			.append(lastline)
+			.create());
 	}
 
 	public static void sendRequestMessage(Object player, Invite invite) {
