@@ -154,7 +154,7 @@ public abstract class TownyDataSource {
 
 	abstract public void deleteFile(String file);
 	
-	abstract public void deleteGroup(PlotObjectGroup group);
+	abstract public void deletePlotGroup(PlotObjectGroup group);
 
 	public boolean cleanup() {
 

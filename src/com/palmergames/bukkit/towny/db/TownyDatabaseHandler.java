@@ -982,7 +982,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		savePlotGroupList();
 
 		// Delete the old group file.
-		deleteGroup(group);
+		deletePlotGroup(group);
 	}
 
 	@Override
