@@ -313,8 +313,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						groupID = UUID.fromString(tokens[1]);
 						groupName = tokens[2];
 					}
-					
-					universe.newGroup(getTown(townName), groupName, groupID);
+					Town town = null;
+					try {
+						town = getTown(townName);
+					} catch (NotRegisteredException e) {
+						continue;
+					}
+					if (town != null)
+						universe.newGroup(town, groupName, groupID);
 				}
 			}
 			
