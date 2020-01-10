@@ -707,18 +707,23 @@ public class TownyMessaging {
 			lastline = "";
 		}
 		
+		String cancelLineCopy = cancelline;
+		
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = new TextComponent(ChatColor.GREEN + confirmline.replace('/', '[').concat("]") + " - " +
 			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_accept"), confirmline.replace('/', '[').replace("[",""), confirmline) + "\n");
 		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_accept")).create()));
-		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + confirmline));
+		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, confirmline));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = new TextComponent(cancelline.replace('/', '[').concat("]") + " - " +
+		TextComponent cancelComponent = new TextComponent(ChatColor.GREEN + cancelline.replace('/', '[').concat("]") + " - " +
 			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_cancel"), cancelline.replace('/', '['), cancelline).replace("[","") + "\n");
 		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel")).create()));
-		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + cancelline));
-
+		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cancelline));
+		
+		
+		
+		TownyMessaging.sendErrorMsg(cancelline);
 		// Use spigot to send the message.
 		player.spigot().sendMessage(new ComponentBuilder(firstline + "\n")
 			.append(confirmComponent)
@@ -759,8 +764,8 @@ public class TownyMessaging {
 	private static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
 			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
-			String secondline = ChatColor.GREEN + "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
-			String thirdline = ChatColor.GREEN +  "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
+			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
+			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
