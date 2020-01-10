@@ -1343,7 +1343,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				town.newReceivedInvite(invite);
 				nation.newSentInvite(invite);
 				InviteHandler.addInvite(invite); 
-				TownyMessaging.sendRequestMessage(town.getMayor(),invite);
+				Player mayor = TownyAPI.getInstance().getPlayer(town.getMayor());
+				TownyMessaging.sendRequestMessage(mayor,invite);
 				Bukkit.getPluginManager().callEvent(new NationInviteTownEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_already_invited"), town.getName()));
@@ -1712,7 +1713,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				receiver.newReceivedInvite(invite);
 				nation.newSentAllyInvite(invite);
 				InviteHandler.addInvite(invite);
-				TownyMessaging.sendRequestMessage(receiver.getCapital().getMayor(),invite);
+				Player mayor = TownyAPI.getInstance().getPlayer(receiver.getCapital().getMayor());
+				TownyMessaging.sendRequestMessage(mayor,invite);
 				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), receiver.getName()));

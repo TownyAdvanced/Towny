@@ -17,6 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -657,11 +658,15 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
+	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+		
+		if (Towny.isSpigot) {
+			sendSpigotConfirmMessage(player, firstline, confirmline, cancelline, lastline);
+			return;
+		}
 		
 		if (firstline == null) {
 			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
-			
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
@@ -671,62 +676,64 @@ public class TownyMessaging {
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
-			
-			// Check for spigot or not.
-			if (Towny.isSpigot) {
-				sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
-			} else {
-				sendMessage(player, message);
-			}
-			
+			sendMessage(player, message);
 			return;
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-
-			// Check for spigot or not.
-			if (Towny.isSpigot) {
-				sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
-			} else {
-				sendMessage(player, message);
-			}
+			
+			sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
 		}
 	}
 
 	/**
 	 * Sends player confirm message that is clickable
 	 */
-	public static void sendSpigotConfirmMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
-		
-		// Spigot doesn't allow null params in the text component.
+	public static void sendSpigotConfirmMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+
+		if (firstline == null) {
+			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+		}
+		if (confirmline == null) {
+			confirmline = "/" + TownySettings.getConfirmCommand();
+		}
+		if (cancelline == null) {
+			cancelline = "/" + TownySettings.getCancelCommand();
+		}
 		if (lastline == null) {
+			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
+		} else {
 			lastline = "";
 		}
 		
 		// Create confirm button based on given params.
-		TextComponent confirmComponent = new TextComponent(confirmline.replace('/', '[').concat("]") +
-			ChatColor.GRAY + " - " +
-			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_accept"), TownySettings.getConfirmCommand(), "/" + TownySettings.getConfirmCommand()) + "\n");
+		TextComponent confirmComponent = new TextComponent(ChatColor.GREEN + confirmline.replace('/', '[').concat("]") + " - " +
+			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_accept"), confirmline.replace('/', '[').replace("[",""), confirmline) + "\n");
 		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_accept")).create()));
-		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getConfirmCommand()));
+		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + confirmline));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = new TextComponent(cancelline.replace('/', '[').concat("]") +
-			ChatColor.GRAY + " - " + 
-			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_cancel"), TownySettings.getCancelCommand(), "/" + TownySettings.getCancelCommand()) + "\n");
+		TextComponent cancelComponent = new TextComponent(cancelline.replace('/', '[').concat("]") + " - " +
+			String.format(TownySettings.getLangString("msg_confirmation_spigot_click_cancel"), cancelline.replace('/', '['), cancelline).replace("[","") + "\n");
 		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel")).create()));
-		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + TownySettings.getCancelCommand()));
+		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + cancelline));
 
 		// Use spigot to send the message.
-		((Player) player).spigot().sendMessage(new ComponentBuilder(firstline + "\n")
+		player.spigot().sendMessage(new ComponentBuilder(firstline + "\n")
 			.append(confirmComponent)
 			.append(cancelComponent)
 			.append(lastline)
 			.create());
 	}
 
-	public static void sendRequestMessage(Object player, Invite invite) {
+	public static void sendRequestMessage(CommandSender player, Invite invite) {
+		
+		if (Towny.isSpigot) {
+			sendSpigotRequestMessage(player, invite);
+			return;
+		}
+		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
 			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
@@ -744,6 +751,29 @@ public class TownyMessaging {
 				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
+				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+			}
+		}
+	}
+	
+	private static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
+		if (invite.getSender() instanceof Town) { // Town invited Resident
+			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String secondline = ChatColor.GREEN + "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
+			String thirdline = ChatColor.GREEN +  "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
+			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+		}
+		if (invite.getSender() instanceof Nation) {
+			if (invite.getReceiver() instanceof Town) { // Nation invited Town
+				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String secondline = ChatColor.GREEN + "/t invite accept " + invite.getSender().getName();
+				String thirdline = ChatColor.GREEN +  "/t invite deny " + invite.getSender().getName();
+				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+			}
+			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
+				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String secondline = ChatColor.GREEN + "/n ally accept " + invite.getSender().getName();
+				String thirdline = ChatColor.GREEN +  "/n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 		}
