@@ -546,6 +546,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
 		if (fileResident.exists() && fileResident.isFile()) {
+			TownyMessaging.sendDebugMsg("Loading Resident: " + resident.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
@@ -646,9 +647,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
-		File fileTown = new File(path);
-		
+		File fileTown = new File(path);		
 		if (fileTown.exists() && fileTown.isFile()) {
+			TownyMessaging.sendDebugMsg("Loading Town: " + town.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
@@ -663,7 +664,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
+							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
 							try {
 								Resident resident = getResident(token);
 								if (resident != null) {
@@ -984,6 +985,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File fileNation = new File(path);
 		
 		if (fileNation.exists() && fileNation.isFile()) {
+			TownyMessaging.sendDebugMsg("Loading Nation: " + nation.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
@@ -1160,6 +1162,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		File fileWorld = new File(path);
 		if (fileWorld.exists() && fileWorld.isFile()) {
+			TownyMessaging.sendDebugMsg("Loading World: " + world.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
