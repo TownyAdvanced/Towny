@@ -4052,6 +4052,11 @@ v0.92.0.11:
 0.95.2.8:
   - Fix NPE when '/plot group add' was used without any name, courtesy of Siris with PR #3630.
   - Language files bumped to 0.70. 
+  - Pom and pom_deb updates by TheFlagCourier with PR #3632.
+    - Javadocs should only build on the install phase.
+    - Github actions should again function properly.
+  - Change to saving for plotgroups on flatfile, removing now-redundant world.
+    - Already-made plot groups should load properly and save without a world. 
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.

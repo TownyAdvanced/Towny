@@ -2083,7 +2083,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public void deleteGroup(PlotObjectGroup group) {
+	public void deletePlotGroup(PlotObjectGroup group) {
 		
 	}
 

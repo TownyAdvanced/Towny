@@ -225,7 +225,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
 	}
 	
-	public String getGroupFilename(PlotObjectGroup group) {
+	public String getPlotGroupFilename(PlotObjectGroup group) {
 		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getID() + ".data";
 	}
 
@@ -299,9 +299,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
 					String[] tokens = line.split(",");
-					String townName = tokens[1];
-					UUID groupID = UUID.fromString(tokens[2]);
-					String groupName = tokens[3];
+					String townName = null;
+					UUID groupID;
+					String groupName;
+					
+					// While in development the PlotGroupList stored a 4th element, a worldname. This was scrapped pre-release. 
+					if (tokens.length == 4) {
+						townName = tokens[1];
+						groupID = UUID.fromString(tokens[2]);
+						groupName = tokens[3];
+					} else {
+						townName = tokens[0];
+						groupID = UUID.fromString(tokens[1]);
+						groupName = tokens[2];
+					}
 					
 					universe.newGroup(getTown(townName), groupName, groupID);
 				}
@@ -1422,7 +1433,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path;
 		
 		for (PlotObjectGroup group : getAllPlotGroups()) {
-			path = getGroupFilename(group);
+			path = getPlotGroupFilename(group);
 			
 			File groupFile = new File(path);
 			if (groupFile.exists() && groupFile.isFile()) {
@@ -1452,7 +1463,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					else {
 						TownyMessaging.sendErrorMsg("Could not add to town!");
-						deleteGroup(group);
+						deletePlotGroup(group);
 					}
 					
 					line = keys.get("groupPrice");
@@ -1463,10 +1474,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				} catch (Exception e) {
 					if (test.equals("town")) {
 						TownyMessaging.sendDebugMsg("Group file missing Town, deleting " + path);
-						deleteGroup(group);
+						deletePlotGroup(group);
 						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in group.txt");
-						//TownyWorld world = townBlock.getWorld();
-						//world.removeTownBlock(townBlock);
 						continue;
 					}
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading Group file " + path + " at line: " + line);
@@ -1474,8 +1483,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 			} else {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in groups.txt");
-				//TownyWorld world = townBlock.getWorld();
-				//world.removeTownBlock(townBlock);
 			}
 		}
 		
@@ -1649,7 +1656,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 		
 		for (PlotObjectGroup group : getAllPlotGroups()) {
-			list.add(group.getTown().getWorld().getName() + "," + group.getTown().getName() + "," + group.getID() + "," + group.getGroupName());
+			list.add(group.getTown().getName() + "," + group.getID() + "," + group.getGroupName());
 		}
 		
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "plotgroups.txt"));
@@ -1946,7 +1953,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("town=" + group.getTown().toString());
 		
 		// Save file
-		this.queryQueue.add(new FlatFile_Task(list, getGroupFilename(group)));
+		this.queryQueue.add(new FlatFile_Task(list, getPlotGroupFilename(group)));
 		
 		return true;
 	}
@@ -2620,8 +2627,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public void deleteGroup(PlotObjectGroup group) {
-    	File file = new File(getGroupFilename(group));
+	public void deletePlotGroup(PlotObjectGroup group) {
+    	File file = new File(getPlotGroupFilename(group));
     	if (file.exists())
     		file.deleteOnExit();
     	else
