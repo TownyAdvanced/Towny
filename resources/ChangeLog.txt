@@ -4058,6 +4058,7 @@ v0.92.0.11:
   - Change to saving for plotgroups on flatfile, removing now-redundant world.
     - Already-made plot groups should load properly and save without a world. 
   - Improve debug messaging on flatfile database load.
+  - Fix plot groups whose town doesn't exist anymore causing safe mode.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.

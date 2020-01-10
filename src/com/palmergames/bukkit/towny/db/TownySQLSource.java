@@ -2143,8 +2143,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			while (rs.next()) {
 				
 				UUID id = UUID.fromString(rs.getString("groupID"));
-				Town town = getTown(rs.getString("town"));
-				String groupName = rs.getString("groupName");
+				String groupName = rs.getString("groupName");				
+				Town town = null;
+				try {
+					town = getTown(rs.getString("town"));
+				} catch (NotRegisteredException e) {
+					continue;
+				}
 				
 				try {
 					TownyUniverse.getInstance().newGroup(town,groupName,id);
