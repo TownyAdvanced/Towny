@@ -4,10 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
+    <!-- NOTE: This pom file is meant for the GitHub Actions deployment workflow, and for MacOS and Debian derivatives.
+            Javadocs will only run on GitHub Actions by specifying the path to the Javadoc executable.
+            The same goes for the OS that the workflow is currently based on, Ubuntu. -->
+
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.0.0 for 1.13.2</version>
+    <version>0.95.2.7</version>
 
     <licenses>
         <license>
@@ -24,7 +29,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <project.bukkitAPIVersion>1.13</project.bukkitAPIVersion>
+        <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -80,7 +85,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -119,7 +124,7 @@
             <version>2.0.25-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Included in vanilla Minecraft's JAR -->
+        <!-- Included in vanilla minecraft's JAR -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -160,6 +165,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                     <failOnError>false</failOnError>
                     <failOnWarnings>false</failOnWarnings>
                     <source>8</source>
