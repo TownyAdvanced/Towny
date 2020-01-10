@@ -4059,3 +4059,5 @@ v0.92.0.11:
     - Already-made plot groups should load properly and save without a world. 
   - Improve debug messaging on flatfile database load.
   - Fix plot groups whose town doesn't exist anymore causing safe mode.
+  - Fix edge-case scenario where revoking invites couldn't be done because we were matching the wrong player.
+    - Closes #3635.

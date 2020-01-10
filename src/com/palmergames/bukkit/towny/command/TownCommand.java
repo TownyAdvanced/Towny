@@ -2740,19 +2740,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// The list of valid invites is above, there are currently none
 		List<String> removeinvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String townname : reslist) {
-			if (townname.startsWith("-")) {
-				removeinvites.add(townname.substring(1));
+		for (String residents : reslist) {
+			if (residents.startsWith("-")) {
+				removeinvites.add(residents.substring(1));
 				// Add to removing them, remove the "-"
 			} else {
-				newreslist.add(townname);
+				newreslist.add(residents);
 				// add to adding them,
 			}
 		}
 		names = newreslist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length != 0) {
-			townRevokeInviteResident(sender,town, getValidatedResidents(sender, namestoremove));
+			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namestoremove, town);
+			if (toRevoke.isEmpty())
+				townRevokeInviteResident(sender,town, toRevoke);
 		}
 
 		if (names.length != 0) {
@@ -3323,6 +3325,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		return invited;
+	}
+	
+	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		List<Resident> toRevoke = new ArrayList<>();
+		for (Invite invite : town.getSentInvites()) {
+			for (String name : names) {
+				if (invite.getReceiver().getName().equalsIgnoreCase(name)) {
+					try {
+						toRevoke.add(townyUniverse.getDataSource().getResident(name));
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+			}
+			
+		}
+		return toRevoke;		
 	}
 	
 	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
