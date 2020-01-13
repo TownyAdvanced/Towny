@@ -2463,7 +2463,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				newMember.newReceivedInvite(invite);
 				town.newSentInvite(invite);
 				InviteHandler.addInvite(invite);
-				TownyMessaging.sendRequestMessage(newMember,invite);
+				TownyMessaging.sendRequestMessage(TownyAPI.getInstance().getPlayer(newMember),invite);
 				Bukkit.getPluginManager().callEvent(new TownInvitePlayerEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
