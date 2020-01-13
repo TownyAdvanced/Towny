@@ -679,8 +679,6 @@ public class TownyMessaging {
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
-			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			
 			sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
 		}
 	}

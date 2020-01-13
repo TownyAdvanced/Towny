@@ -4062,3 +4062,7 @@ v0.92.0.11:
   - Fix edge-case scenario where revoking invites couldn't be done because we were matching the wrong player.
     - Closes #3635.
   - Fix french.yml not parsing.
+  - Confirmations can now be accepted/declined/confirmed/cancelled by clicking on the text if you use Spigot.
+    - Courtesy of Siris with PRs #3631 + #3639
+    - Closes #3534. 
+    - Commands can still be used, clicking only for spigot servers, not craftbukkit servers.
