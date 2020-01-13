@@ -679,7 +679,7 @@ public class TownyMessaging {
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
-			sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
+			sendMessage(player, lastline);
 		}
 	}
 
