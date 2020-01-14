@@ -36,6 +36,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.Transaction;
@@ -2833,14 +2834,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					try {
 						boolean b = plugin.parseOnOff(split[0]);
-						for (String element : new String[] { "residentBuild",
-								"residentDestroy", "residentSwitch",
-								"residentItemUse", "outsiderBuild",
-								"outsiderDestroy", "outsiderSwitch",
-								"outsiderItemUse", "allyBuild", "allyDestroy",
-								"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
-								"nationSwitch", "nationItemUse"  })
-							perm.set(element, b);
+						
+						perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
 						return;
@@ -2848,88 +2843,67 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split.length == 2) {
-				if ((!split[0].equalsIgnoreCase("resident")
-						&& !split[0].equalsIgnoreCase("friend")
-						&& !split[0].equalsIgnoreCase("town") 
-						&& !split[0].equalsIgnoreCase("nation")
-						&& !split[0].equalsIgnoreCase("ally")
-						&& !split[0].equalsIgnoreCase("outsider"))
-						&& !split[0].equalsIgnoreCase("build")
-						&& !split[0].equalsIgnoreCase("destroy")
-						&& !split[0].equalsIgnoreCase("switch")
-						&& !split[0].equalsIgnoreCase("itemuse")) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
-					return;
-				}
+				boolean b;
 
 				try {
-
-					boolean b = plugin.parseOnOff(split[1]);
-
-					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
-						perm.residentBuild = b;
-						perm.residentDestroy = b;
-						perm.residentSwitch = b;
-						perm.residentItemUse = b;
-					} else if (split[0].equalsIgnoreCase("town") || split[0].equalsIgnoreCase("nation")) {
-						perm.nationBuild = b;
-						perm.nationDestroy = b;
-						perm.nationSwitch = b;
-						perm.nationItemUse = b;
-					} else if (split[0].equalsIgnoreCase("outsider")) {
-						perm.outsiderBuild = b;
-						perm.outsiderDestroy = b;
-						perm.outsiderSwitch = b;
-						perm.outsiderItemUse = b;
-					} else if (split[0].equalsIgnoreCase("ally")) {
-						perm.allyBuild = b;
-						perm.allyDestroy = b;
-						perm.allySwitch = b;
-						perm.allyItemUse = b;
-					} else if (split[0].equalsIgnoreCase("build")) {
-						perm.residentBuild = b;
-						perm.outsiderBuild = b;
-						perm.allyBuild = b;
-					} else if (split[0].equalsIgnoreCase("destroy")) {
-						perm.residentDestroy = b;
-						perm.outsiderDestroy = b;
-						perm.allyDestroy = b;
-					} else if (split[0].equalsIgnoreCase("switch")) {
-						perm.residentSwitch = b;
-						perm.outsiderSwitch = b;
-						perm.allySwitch = b;
-					} else if (split[0].equalsIgnoreCase("itemuse")) {
-						perm.residentItemUse = b;
-						perm.outsiderItemUse = b;
-						perm.allyItemUse = b;
-					}
-
+					b = plugin.parseOnOff(split[1]);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
 					return;
 				}
 
-			} else if (split.length == 3) {
+				if (split[0].equalsIgnoreCase("friend"))
+					split[0] = "resident";
+				else if (split[0].equalsIgnoreCase("town"))
+					split[0] = "nation";
+				else if (split[0].equalsIgnoreCase("itemuse"))
+					split[0] = "item_use";
 
-				if ((!split[0].equalsIgnoreCase("resident")
-						&& !split[0].equalsIgnoreCase("friend")
-						&& !split[0].equalsIgnoreCase("town")
-						&& !split[0].equalsIgnoreCase("nation")
-						&& !split[0].equalsIgnoreCase("ally")
-						&& !split[0].equalsIgnoreCase("outsider"))
-						|| (!split[1].equalsIgnoreCase("build")
-								&& !split[1].equalsIgnoreCase("destroy")
-								&& !split[1].equalsIgnoreCase("switch")
-								&& !split[1].equalsIgnoreCase("itemuse"))) {
+				// Check if it is a perm level first
+				try {
+					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
+
+					perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
+				}
+				catch (IllegalArgumentException permLevelException) {
+					// If it is not a perm level, then check if it is a action type
+					try {
+						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase());
+
+						perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
+					} catch (IllegalArgumentException actionTypeException) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
+						return;
+					}
+				}
+
+			} else if (split.length == 3) {
+				// Reset the friend to resident so the perm settings don't fail
+				if (split[0].equalsIgnoreCase("friend"))
+					split[0] = "resident";
+
+					// reset the town to nation so the perm settings don't fail
+				else if (split[0].equalsIgnoreCase("town"))
+					split[0] = "nation";
+
+				if (split[1].equalsIgnoreCase("itemuse"))
+					split[1] = "item_use";
+
+				TownyPermission.PermLevel permLevel;
+				TownyPermission.ActionType actionType;
+
+				try {
+					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
+					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase());
+				} catch (IllegalArgumentException ignore) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
 					return;
 				}
-
+				
 				try {
 					boolean b = plugin.parseOnOff(split[2]);
-					String s = "";
-					s = split[0] + split[1];
-					perm.set(s, b);
+
+					perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
