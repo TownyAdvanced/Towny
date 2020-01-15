@@ -679,7 +679,8 @@ public class TownyMessaging {
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
-			sendMessage(player, lastline);
+			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
+			sendMessage(player, message);
 		}
 	}
 
