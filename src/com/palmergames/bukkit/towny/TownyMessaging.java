@@ -10,6 +10,10 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
@@ -675,7 +679,7 @@ public class TownyMessaging {
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
-			TownySpigotMessaging.sendSpigotConfirmMessage(player, firstline, confirmline,cancelline, lastline);
+			sendMessage(player, lastline);
 		}
 	}
 
