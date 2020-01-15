@@ -241,11 +241,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void setNationSpawn(Location spawn) throws TownyException {
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		TownBlock townBlock = null;
-		try {
-			townBlock = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
-		} catch (NotRegisteredException e) {
+		TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()); 
+		if (world.hasTownBlock(spawnBlock))
+			townBlock = world.getTownBlock(spawnBlock);
+		else 
 			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
-		}
+
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
 				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
