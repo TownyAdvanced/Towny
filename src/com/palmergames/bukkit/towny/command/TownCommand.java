@@ -30,7 +30,6 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -51,6 +50,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -910,7 +910,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length > 0) {
 			try {
 				Town town = townyUniverse.getDataSource().getTown(split[0]);
-				List<Resident> onlineResidents = getOnlineResidentsViewable(player, town);
+				List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 				if (onlineResidents.size() > 0) {
 					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 				} else {
@@ -2362,21 +2362,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		townKickResidents(player, resident, town, getValidatedResidents(player, names));
+		townKickResidents(player, resident, town, ResidentUtil.getValidatedResidents(player, names));
 
 		// Reset everyones cache permissions as this player leaving can affect
 		// multiple areas.
 		plugin.resetCache();
 	}
 
-	/*
-	 * private static List<Resident> getResidentMap(Player player, String[] names)
-	 * { List<Resident> invited = new ArrayList<Resident>(); for (String name :
-	 * names) try { Resident target =
-	 * plugin.getTownyUniverse().getResident(name); invited.add(target); } catch
-	 * (TownyException x) { TownyMessaging.sendErrorMsg(player, x.getMessage());
-	 * } return invited; }
-	 */
 	public static void townAddResidents(Object sender, Town town, List<Resident> invited) {
 		String name;
 		if (sender instanceof Player) {
@@ -2770,7 +2762,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (names.length != 0) {
-			townAddResidents(sender, town, getValidatedResidents(sender, names));
+			townAddResidents(sender, town, ResidentUtil.getValidatedResidents(sender, names));
 		}
 
 		// Reset this players cached permissions
@@ -3306,38 +3298,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
-		
-	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Resident> invited = new ArrayList<>();
-		for (String name : names) {
-			List<Player> matches = BukkitTools.matchPlayer(name);
-			if (matches.size() > 1) {
-				StringBuilder line = new StringBuilder("Multiple players selected: ");
-				for (Player p : matches)
-					line.append(", ").append(p.getName());
-				TownyMessaging.sendErrorMsg(sender, line.toString());
-			} else if (matches.size() == 1) {
-				// Match found online
-				try {
-					Resident target = townyUniverse.getDataSource().getResident(matches.get(0).getName());
-					invited.add(target);
-				} catch (TownyException x) {
-					TownyMessaging.sendErrorMsg(sender, x.getMessage());
-				}
-			} else {
-				// No online matches so test for offline.
-				Resident target;
-				try {
-					target = townyUniverse.getDataSource().getResident(name);
-					invited.add(target);
-				} catch (NotRegisteredException x) {
-					TownyMessaging.sendErrorMsg(sender, x.getMessage());
-				}
-			}
-		}
-		return invited;
-	}
 	
 	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -3355,24 +3315,5 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		return toRevoke;		
 	}
-	
-	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
-		
-		List<Resident> onlineResidents = new ArrayList<>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
-				/*
-				 * Loop town/nation resident list
-				 */
-				for (Resident resident : residentList.getResidents()) {
-					if (resident.getName().equalsIgnoreCase(player.getName()))
-						if ((viewer == null) || (viewer.canSee(BukkitTools.getPlayerExact(resident.getName())))) {
-							onlineResidents.add(resident);
-						}
-				}
-			}
-		}
-		
-		return onlineResidents;
-	}
+
 }

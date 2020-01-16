@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -698,7 +699,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length > 0) {
 			try {
 				Nation nation = townyUniverse.getDataSource().getNation(split[0]);
-				List<Resident> onlineResidents = TownCommand.getOnlineResidentsViewable(player, nation);
+				List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 				if (onlineResidents.size() > 0 ) {
 					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
