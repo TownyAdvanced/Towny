@@ -62,7 +62,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
