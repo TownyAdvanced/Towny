@@ -95,7 +95,7 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
-	private final TownyWorldListener worldListener = new TownyWorldListener();
+	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
