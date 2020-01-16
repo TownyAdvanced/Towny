@@ -2344,11 +2344,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Confirm player is a mayor or assistant, then get list of filter names
-	 * with online players and kick them from town. Command: /town kick
-	 * [resident] .. [resident]
+	 * Transforms a list of names into a list of residents to be kicked.
+	 * Command: /town kick [resident] .. [resident]
 	 *
-	 * @param player - Player.
+	 * @param player - Player who initiated the kick command.
 	 * @param names - List of names to kick.
 	 */
 	public static void townKick(Player player, String[] names) {
@@ -2503,6 +2502,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		townyUniverse.getDataSource().saveTown(town);
 	}
 
+	
+	/**
+	 * Method for kicking residents from a town.
+	 * 
+	 * @param sender - CommandSender who initiated the kick.
+	 * @param resident - Resident who initiated the kick.
+	 * @param town - Town the list of Residents are being kicked from.
+	 * @param kicking - List of Residents being kicked from Towny.
+	 */
 	public static void townKickResidents(Object sender, Resident resident, Town town, List<Resident> kicking) {
 
 		Player player = null;
@@ -2511,8 +2519,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 
 		for (Resident member : new ArrayList<>(kicking)) {
-			if (resident == member || member.isMayor() || town.hasAssistant(member)) {
-				TownyMessaging.sendMessage(sender, "You cannot kick yourself, the mayor, or an assistant.");
+			if (resident == member) {
+				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_you_cannot_kick_yourself"));
+				kicking.remove(member);				
+			}
+			if (member.isMayor() || town.hasAssistant(member)) {
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_you_cannot_kick_this_resident"), member));
 				kicking.remove(member);
 			} else {
 				try {

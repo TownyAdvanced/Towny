@@ -4072,6 +4072,7 @@ v0.92.0.11:
     - On servers using craftbukkit.jar the notifications will always appear in the chat.
     - When set to false the notifications will appear in the chat rather than the action bar.
     - Closes #3636.
+  - Translated cannot-kick-that-resident strings.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
