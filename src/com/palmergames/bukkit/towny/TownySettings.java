@@ -1236,6 +1236,10 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
 	}
+	
+	public static boolean isNotificationsAppearingInActionBar() {
+		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_IN_ACTION_BAR);
+	}
 
 	public static boolean getShowTownBoardOnLogin() {
 

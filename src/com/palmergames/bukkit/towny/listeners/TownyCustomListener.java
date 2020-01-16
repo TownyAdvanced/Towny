@@ -58,10 +58,10 @@ public class TownyCustomListener implements Listener {
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				String msg = chunkNotifier.getNotificationString(resident);
 				if (msg != null)
-					if (!Towny.isSpigot)
-						player.sendMessage(msg);
-					else {
+					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar())
 						player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+					else {						
+						player.sendMessage(msg);
 					}
 			}
 		} catch (NotRegisteredException e) {

@@ -4066,6 +4066,13 @@ v0.92.0.11:
     - Courtesy of Siris with PRs #3631 + #3639
     - Closes #3534. 
     - Commands can still be used, clicking only for spigot servers, not craftbukkit servers.
+  - New Config Option: notification.notifications_appear_in_action_bar
+    - default: true
+    - This setting only applies to servers running spigot, paper or bungeecord.
+    - On servers using craftbukkit.jar the notifications will always appear in the chat.
+    - When set to false the notifications will appear in the chat rather than the action bar.
+    - Closes #3636.
+  
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
