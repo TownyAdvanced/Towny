@@ -4075,6 +4075,9 @@ v0.92.0.11:
   - Translated cannot-kick-that-resident strings.
   - Create ResidentUtil for resident-related methods.
   - TownyPermission data rewritten to a 2d boolean array, courtesy of Silverwolfg11 with PR #3600.
+0.95.2.9:
+  - Fix message shown when a player tries to set their nation spawn in the wilderness.
+    - Closes #3640.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
