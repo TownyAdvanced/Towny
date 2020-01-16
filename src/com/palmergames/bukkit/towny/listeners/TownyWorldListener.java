@@ -179,7 +179,8 @@ public class TownyWorldListener implements Listener {
 				continue;
 			}	
 		}
-		event.getBlocks().removeAll(removed);
+		if (!removed.isEmpty())
+			event.getBlocks().removeAll(removed);
 	}
 	
 // Below is an attempt at blocking portals being made by people who could not build the 2nd side of the portal.
