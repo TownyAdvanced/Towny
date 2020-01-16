@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
+import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -61,6 +62,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
@@ -3062,6 +3064,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				
+				// Create event.
+				TownUnclaimEvent event;
 
 				if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown())
 					throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
@@ -3073,7 +3078,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					List<TownBlock> townBlocks = town.getTownBlocks();
 					new TownClaim(plugin, player, town, null, false, false, false).start();
+
+					// Fire events
+					for (TownBlock tb : townBlocks) {
+						event = new TownUnclaimEvent(town, tb.getWorldCoord());
+						Bukkit.getServer().getPluginManager().callEvent(event);
+					}
+
 					// townUnclaimAll(town);
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
 					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
@@ -3089,6 +3102,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
 
+					// Fire event for each unclaim.
+					for (WorldCoord wc : selection) {
+						event = new TownUnclaimEvent(town, wc);
+						Bukkit.getServer().getPluginManager().callEvent(event);
+					}
+					
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_abandoned_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				}
 
