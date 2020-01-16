@@ -895,8 +895,8 @@ msg_would_you_merge_your_nation_into_other_nation: '&6Would you agree to dissolv
 no_open_towns: 'No open towns to list.'
 
 # Added in 0.52:
-msg_error_nation_has_no_allies: 'La Nation n''a pas d'alliés.'
-msg_error_nation_has_no_enemies: 'La Nation n''a pas d'ennemis.'
+msg_error_nation_has_no_allies: 'La Nation n''a pas d''alliés.'
+msg_error_nation_has_no_enemies: 'La Nation n''a pas d''ennemis.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'Aucun joueur trouvé avec le nom %s'
 msg_admin_has_given_you_a_plot: 'Un admin a revendiqué une parcelle pour vous en %s'
@@ -1018,8 +1018,8 @@ msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Vous ne pouvez pas basculer le p
 msg_err_cannot_spawn_x_seconds_remaining: 'Vous ne pouvez pas /spawn pendant %s secondes.'
 
 # Added in 0.63
-msg_plot_set_to_nfs: 'Cette parcelle n'est plus en vente.'
-msg_err_x_spawn_disallowed_from_x: '&c%s spawn n'est pas autorisé depuis %s.'
+msg_plot_set_to_nfs: 'Cette parcelle n''est plus en vente.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn n''est pas autorisé depuis %s.'
 msg_the_wilderness: 'Les Terres-Sauvages'
 msg_enemy_areas: 'Zone ennemis'
 msg_neutral_towns: 'Ville neutre'
