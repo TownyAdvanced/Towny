@@ -189,7 +189,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Towns");
 		for (Town town : getTowns())
 			if (!loadTown(town)) {
-				System.out.println("[Towny] Loading Error: Could not read town data " + town.getName() + "'.");
+				System.out.println("[Towny] Loading Error: Could not read town data '" + town.getName() + "'.");
 				return false;
 			}
 		return true;
