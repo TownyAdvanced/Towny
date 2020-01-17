@@ -4086,3 +4086,4 @@ v0.92.0.11:
   - API: Added TownPreUnclaimEvent
     - Useful for getting the TownBlock object that will be unclaimed.
     - Cancellable but probably not a good idea.
+  - Missing apostrophe in error message fixed by Deuphic with PR #3645.
