@@ -312,6 +312,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 						for (WorldCoord worldCoord : selection) {
+							if (worldCoord.getTownBlock().hasPlotObjectGroup()) {
+								TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_plot_belongs_to_group_plot_nfs"), worldCoord));
+								return false;
+							}
 							setPlotForSale(resident, worldCoord, -1);
 						}
 						return true;
@@ -374,7 +378,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Check if a group is present in a townblock
 							if (townBlock.hasPlotObjectGroup()) {
-								TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_plot_belongs_to_group_plot_fs"), worldCoord));
+								TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_plot_belongs_to_group_plot_fs2"), worldCoord));
 								continue;
 							}
 							
@@ -385,7 +389,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// basic 'plot fs' command
 
 						if (pos.getTownBlock().hasPlotObjectGroup()) {
-							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_plot_belongs_to_group_plot_fs"), pos));
+							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_plot_belongs_to_group_plot_fs2"), pos));
 							return false;
 						}
 						

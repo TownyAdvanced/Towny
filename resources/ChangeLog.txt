@@ -4087,3 +4087,8 @@ v0.92.0.11:
     - Useful for getting the TownBlock object that will be unclaimed.
     - Cancellable but probably not a good idea.
   - Missing apostrophe in error message fixed by Deuphic with PR #3645.
+  - Fix Null message when plots were claimed/unclaimed.
+  - Bump language files to 0.71
+  - Fix error message for the /plot fs when used on a plot group.
+  - Fix being false-positive shown when using /plot nfs on a plot group.
+  - Fix error shown in console when entering a plot that is for sale but is not part of a plot group.

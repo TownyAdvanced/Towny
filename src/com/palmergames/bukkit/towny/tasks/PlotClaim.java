@@ -79,15 +79,16 @@ public class PlotClaim extends Thread {
 				try {
 					if (worldCoord.getTownBlock().hasPlotObjectGroup() && residentGroupClaim(selection)) {
 						claimed++;
+					
+					
+						worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
+						worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
+						TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getGroupName()));
+						
+						TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
+						
+						break;
 					}
-					
-					worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
-					worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
-					TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getGroupName()));
-					
-					TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
-					
-					break;
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
