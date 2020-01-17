@@ -4082,3 +4082,7 @@ v0.92.0.11:
     - Courtesy of Siris with PR #3642. 
   - Fix for trees and mushrooms growing into plots they shouldn't.
     - Closes #3641.
+0.95.2.10:
+  - API: Added TownPreUnclaimEvent
+    - Useful for getting the TownBlock object that will be unclaimed.
+    - Cancellable but probably not a good idea.

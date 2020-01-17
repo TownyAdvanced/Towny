@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
-import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -224,6 +223,7 @@ public class TownClaim extends Thread {
 		}
 	}
 
+	// Unclaim event comes later in removeTownBlock().
 	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
@@ -243,9 +243,6 @@ public class TownClaim extends Thread {
 				
 				townyUniverse.getDataSource().removeTownBlock(townBlock);
 				
-				// Raise an event to signal the unclaim
-				// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
-				//BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
 			}, 1);
 			
 
@@ -254,15 +251,14 @@ public class TownClaim extends Thread {
 		}
 	}
 
+	// Unclaim event comes later in removeTownBlock().
 	public static void townUnclaimAll(Towny plugin, final Town town) {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
 			TownyUniverse.getInstance().getDataSource().removeTownBlocks(town);
 			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
-			
-			// Raise an event to signal the unclaim
-			BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, null));
+
 		}, 1);
 
 	}
