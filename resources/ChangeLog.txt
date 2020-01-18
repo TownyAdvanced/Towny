@@ -4082,6 +4082,10 @@ v0.92.0.11:
     - Courtesy of Siris with PR #3642. 
   - Fix for trees and mushrooms growing into plots they shouldn't.
     - Closes #3641.
+0.95.2.10:
+  - API: Added TownPreUnclaimEvent
+    - Useful for getting the TownBlock object that will be unclaimed.
+    - Cancellable but probably not a good idea.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
@@ -4089,4 +4093,3 @@ v0.92.0.11:
     - Reverted ProtectionRegenTask class to previous version found in 1.13 branch (API Incompatibility)
       - This may result in run-time bugs! I am not familiar with this class, or the methods that call it.
     - Changed to full-path import for ActionType in TownyPlayerListener.
-    - Removed pom_deb.xml file. (It was mal-maintained, and does not serve a purpose, since JavaDocs can't be build with GitHub Actions at this time.)
