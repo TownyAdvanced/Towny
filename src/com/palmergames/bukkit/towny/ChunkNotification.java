@@ -106,18 +106,13 @@ public class ChunkNotification {
 			} catch (NotRegisteredException e) {
 			}
 
-			
-			
-			
+			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
 			toPlotGroupBlock = toTownBlock.hasPlotObjectGroup();
 
-			if (toTownBlock.hasPlotObjectGroup()) {
+			if (toPlotGroupBlock)
 				toForSale = toTownBlock.getPlotObjectGroup().getPrice() != -1;
-			} else {
-				toForSale = toTownBlock.getPlotPrice() != -1;
-			}
 			
 		} catch (NotRegisteredException e) {
 			toWild = true;
@@ -337,7 +332,7 @@ public class ChunkNotification {
 	public String getForSaleNotification() {
 
 		// Were heading to a plot group do some things differently
-		if (toForSale && (fromPlotGroup != toPlotGroup))
+		if (toForSale && toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotObjectGroup().getPrice()));
 		
 		if (toForSale && !toPlotGroupBlock)
