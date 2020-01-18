@@ -1066,17 +1066,17 @@ status_plot_group_name_and_size: '&2O terreno da cidade faz parte de um grupo: %
 msg_player_made_group_not_for_sale: '%s tirou o grupo %s do estado de venda.'
 
 # Added in 0.69
-msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_cannot_set_group_to_jail: 'Grupos de terrenos não podem ser defimidos como uma prisão.'
 
 # Added in 0.70
-msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Click to accept'
-msg_confirmation_spigot_hover_cancel: 'Click to cancel'
-msg_confirmation_spigot_click_accept: 'Click %s or type %s'
-msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
-msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
-msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+msg_err_plot_group_name_required: 'Você deve especificar o nome do grupo de terrenos. Ex.: /plot group add {nome}'
+msg_confirmation_spigot_hover_accept: 'Clique para aceitar'
+msg_confirmation_spigot_hover_cancel: 'Clique para negar'
+msg_confirmation_spigot_click_accept: 'Clique %s ou digite %s'
+msg_confirmation_spigot_click_cancel: 'Clique %s ou digite %s'
+msg_you_cannot_kick_yourself: 'Você não pode se expulsar a si próprio.'
+msg_you_cannot_kick_this_resident: 'Você não pode expulsar %s, ele(a) é prefeito ou assistente.'
 
 # Added in 0.71
-msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
-msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
+msg_err_plot_belongs_to_group_plot_fs2: 'Terreno: %s pertence a um grupo, use /plot group fs [quantidade]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Terreno: %s pertence a um grupo, use /plot group nfs'
