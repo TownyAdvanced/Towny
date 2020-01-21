@@ -4094,3 +4094,5 @@ v0.92.0.11:
   - Fix error shown in console when entering a plot that is for sale but is not part of a plot group.
 0.95.2.11:
   - PT-BR.yml updated by BannerGames with PR #3647.
+  - Fix successful message when economy.new_expand.price_claim_townblock_refund is set to a negative value. 
+  - Korean.yml updated by wolfwork with PR #3651.

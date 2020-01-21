@@ -108,7 +108,7 @@ public class TownClaim extends Thread {
 
 			}
 		
-			if (!claim && TownySettings.getClaimRefundPrice() != 0.0) {
+			if (!claim && TownySettings.getClaimRefundPrice() > 0.0) {
 				try {
 					town.collect(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
@@ -142,7 +142,7 @@ public class TownClaim extends Thread {
 				e.printStackTrace();
 				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
 			}
-			if (TownySettings.getClaimRefundPrice() != 0.0) {
+			if (TownySettings.getClaimRefundPrice() > 0.0) {
 				try {
 					town.collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
