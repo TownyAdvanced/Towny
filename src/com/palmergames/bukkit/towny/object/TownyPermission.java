@@ -282,7 +282,7 @@ public class TownyPermission {
 		return getColoredPermLevel(ActionType.SWITCH) + getColoredPermLevel(ActionType.ITEM_USE, " Item");
 	}
 
-	public void loadDefault(TownBlockOwner owner) {
+	public void loadDefault(Permissible owner) {
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			for (ActionType actionType : ActionType.values) {

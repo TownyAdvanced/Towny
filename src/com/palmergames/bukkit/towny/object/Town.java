@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable, Permissible {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -70,6 +70,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
+	private TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
 		super(name);
@@ -1415,5 +1416,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public Collection<PlotObjectGroup> getPlotObjectGroups() {
 		return getObjectGroups();
+	}
+
+	@Override
+	public TownyPermission getPermissions() {
+		return permissions;
+	}
+
+	@Override
+	public void setPermissions(TownyPermission permissions) {
+		this.permissions = permissions;
 	}
 }
