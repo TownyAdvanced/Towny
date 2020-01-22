@@ -4092,6 +4092,8 @@ v0.92.0.11:
   - Fix error message for the /plot fs when used on a plot group.
   - Fix being false-positive shown when using /plot nfs on a plot group.
   - Fix error shown in console when entering a plot that is for sale but is not part of a plot group.
+0.95.2.11:
+  - PT-BR.yml updated by BannerGames with PR #3647.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
