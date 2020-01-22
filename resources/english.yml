@@ -1102,14 +1102,14 @@ msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered of %s by 
 msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered of %s by %s!'
 msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins by %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!!!'
-msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded the initial nation cost of %s'
+msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded %s'
 
 #Siege war error messages
 #Claiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 #Deleting
 msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
-msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded the initial nation cost of %s."
+msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
 
 #Revolt
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."

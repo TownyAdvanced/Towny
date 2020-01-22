@@ -282,9 +282,10 @@ public class ConfirmationHandler {
 					if(TownySettings.getWarSiegeEnabled()
 						&& TownySettings.isUsingEconomy()
 						&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-						//Refund the king with the initial nation cost
 						try {
-							r.collect(TownySettings.getNewNationPrice(), "Refund of Initial Nation Cost");
+							//Refund the king with some of the initial nation cost
+							double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+							r.collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
 						} catch (EconomyException e) {
 							e.printStackTrace();
 						}

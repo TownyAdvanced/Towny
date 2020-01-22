@@ -1865,7 +1865,11 @@ public enum ConfigNodes {
 			"# If this value is lower than the upfront cost, then sieges will not be profitable.",
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture.",
 			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture."),
-
+	WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE(
+			"war.siege.money.nation_cost_refund_percentage_on_delete",
+			"90.0",
+			"# The value specifies what proportion of the initial nation cost is refunded," +
+			"# When the nation is deleted or defeated."),
 	//Times
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.times.timer_interval_seconds",

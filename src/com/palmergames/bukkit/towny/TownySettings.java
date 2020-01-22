@@ -3051,5 +3051,9 @@ public class TownySettings {
 	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
 	}
+
+	public static double getWarSiegeNationCostRefundPercentageOnDelete() {
+		return getDouble(ConfigNodes.WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE);
+	}
 }
 
