@@ -1,12 +1,12 @@
 name: Towny
-version: 0.68
+version: 0.71
 language: português (Brasil)
 author: BannerGames
 website: 'http://townyadvanced.github.io/'
 description: >
     Arquivo de língua para todas as mensagens do jogo. Não altere este arquivo.
     Se desejar modificar alguma das entradas, faça uma cópia com outro nome.
-    Arquivos de linguagem alternativos podem ser ativados ao alterar a 
+    Arquivos de linguagem alternativos podem ser ativados ao alterar a
     entrada [language] na config.yml
 
 #
@@ -22,7 +22,7 @@ description: >
 # Preto = &0             Azul Escuro = &1
 # Verde Escuro = &2      Aqua Escuro = &3
 # Vermelho Escuro = &4   Roxo Escuro = &5
-# Dourado = &6           Cinza = &7 
+# Dourado = &6           Cinza = &7
 # Cinza Escuro = &8      Azul = &9
 # Verde = &a             Aqua = &b
 # Vermelho = &c          Roxo Claro = &d
@@ -1064,3 +1064,19 @@ msg_set_group_type_to_x: 'O tipo do grupo de terrenos foi deefinido para %s'
 msg_player_successfully_bought_group_x: '%s comprou o grupo de terrenos %s'
 status_plot_group_name_and_size: '&2O terreno da cidade faz parte de um grupo: %s. O grupo tem %s terrenos de cidade no total.'
 msg_player_made_group_not_for_sale: '%s tirou o grupo %s do estado de venda.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Grupos de terrenos não podem ser defimidos como uma prisão.'
+
+# Added in 0.70
+msg_err_plot_group_name_required: 'Você deve especificar o nome do grupo de terrenos. Ex.: /plot group add {nome}'
+msg_confirmation_spigot_hover_accept: 'Clique para aceitar'
+msg_confirmation_spigot_hover_cancel: 'Clique para negar'
+msg_confirmation_spigot_click_accept: 'Clique %s ou digite %s'
+msg_confirmation_spigot_click_cancel: 'Clique %s ou digite %s'
+msg_you_cannot_kick_yourself: 'Você não pode se expulsar a si próprio.'
+msg_you_cannot_kick_this_resident: 'Você não pode expulsar %s, ele(a) é prefeito ou assistente.'
+
+# Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Terreno: %s pertence a um grupo, use /plot group fs [quantidade]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Terreno: %s pertence a um grupo, use /plot group nfs'

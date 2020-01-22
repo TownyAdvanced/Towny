@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
+import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -199,7 +200,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotObjectGroup getPlotObjectGroup(String worldName, String townName, UUID groupID) {
+	public PlotObjectGroup getPlotObjectGroup(String townName, UUID groupID) {
 		return universe.getGroup(townName, groupID);
 	}
 
@@ -335,6 +336,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public void removeOneOfManyTownBlocks(TownBlock townBlock, Town town) {
+		
+		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
+		BukkitTools.getPluginManager().callEvent(event);
+		
+		if (event.isCancelled())
+			return;
 
 		Resident resident = null;
 		try {
@@ -369,6 +376,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
 
+		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
+		BukkitTools.getPluginManager().callEvent(event);
+		
+		if (event.isCancelled())
+			return;
+		
 		Town town = null;
 //		Resident resident = null;                   - Removed in 0.95.2.5
 //		try {
@@ -431,7 +444,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return townBlocks;
 	}
 	
-	public List<PlotObjectGroup> getAllGroups() {
+	public List<PlotObjectGroup> getAllPlotGroups() {
 		List<PlotObjectGroup> groups = new ArrayList<>();
 		groups.addAll(universe.getGroups());
 		
@@ -859,6 +872,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				isCapital = town.isCapital();
 			}
 
+			TownyWorld world = town.getWorld();
+			world.removeTown(town);
 			/*
 			 * Tidy up old files.
 			 * Has to be done here else the town no longer exists
@@ -879,6 +894,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 			town.setName(filteredName);
 			universe.getTownsMap().put(filteredName.toLowerCase(), town);
+			world.addTown(town);
 
 			//Similarly move/rename siegezones
 			if(town.hasSiege()) {
@@ -927,10 +943,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTownBlock(townBlock);
 			}
 			
-			for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
-				pg.setTown(town);
-				savePlotGroup(pg);
-			}
+			if (town.hasObjectGroups())
+				for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
+					pg.setTown(town);
+					savePlotGroup(pg);
+				}
 
 			saveTown(town);
 			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
@@ -940,7 +957,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			saveTownList();
 			saveSiegeZoneList();
-			saveGroupList();
+			savePlotGroupList();
 			saveWorld(town.getWorld());
 
 			if (nation != null) {
@@ -1082,10 +1099,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
-		saveGroupList();
+		savePlotGroupList();
 
 		// Delete the old group file.
-		deleteGroup(group);
+		deletePlotGroup(group);
 	}
 
 	@Override

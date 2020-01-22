@@ -1,5 +1,5 @@
 name: Towny
-version: 0.68
+version: 0.71
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu
 website: 'http://townyadvanced.github.io/'
@@ -895,8 +895,8 @@ msg_would_you_merge_your_nation_into_other_nation: '&6Would you agree to dissolv
 no_open_towns: 'No open towns to list.'
 
 # Added in 0.52:
-msg_error_nation_has_no_allies: 'La Nation n''a pas d'alliés.'
-msg_error_nation_has_no_enemies: 'La Nation n''a pas d'ennemis.'
+msg_error_nation_has_no_allies: 'La Nation n''a pas d''alliés.'
+msg_error_nation_has_no_enemies: 'La Nation n''a pas d''ennemis.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'Aucun joueur trouvé avec le nom %s'
 msg_admin_has_given_you_a_plot: 'Un admin a revendiqué une parcelle pour vous en %s'
@@ -1018,8 +1018,8 @@ msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Vous ne pouvez pas basculer le p
 msg_err_cannot_spawn_x_seconds_remaining: 'Vous ne pouvez pas /spawn pendant %s secondes.'
 
 # Added in 0.63
-msg_plot_set_to_nfs: 'Cette parcelle n'est plus en vente.'
-msg_err_x_spawn_disallowed_from_x: '&c%s spawn n'est pas autorisé depuis %s.'
+msg_plot_set_to_nfs: 'Cette parcelle n''est plus en vente.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn n''est pas autorisé depuis %s.'
 msg_the_wilderness: 'Les Terres-Sauvages'
 msg_enemy_areas: 'Zone ennemis'
 msg_neutral_towns: 'Ville neutre'
@@ -1061,3 +1061,19 @@ msg_set_group_type_to_x: 'Changed plot group''s type to %s'
 msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
 status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s made group %s n''est pas a vendre.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+
+# Added in 0.70
+msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
+msg_confirmation_spigot_hover_accept: 'Click to accept'
+msg_confirmation_spigot_hover_cancel: 'Click to cancel'
+msg_confirmation_spigot_click_accept: 'Click %s or type %s'
+msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
+msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
+msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+
+# Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'

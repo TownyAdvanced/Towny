@@ -4026,3 +4026,75 @@ v0.92.0.11:
     - Closes #3616.
   - French translation updated by Mitsu13Ion with PR #3614.
 0.95.2.6:
+  - Placeholder added: %townyadvanced_nation_tag_town_formatted%
+    - Shows the nation tag and the full town name.
+    - If nation tag is not set, only the town name is shown.
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - towny.town.spawn.ally should be added to the default nation rank.
+    - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
+  - Update Reserve API, courtesy of thecreatorfromhell, with PR #3612.
+  - Make sure world is properly handled when a town renames itself.
+  - Fix renaming towns which have 0 plot groups.
+    - Closes #3626.
+0.95.2.7:
+  - Changed required permission node for using /ta from towny.admin to towny.command.townyadmin
+    - Fixes scenario where an admin has other /townyadmin permission nodes but not towny.admin.
+  - New Permission Node: towny.command.townyadmin
+    - Used to view the /townyadmin screen.
+    - Gateway permission node to all other townyadmin sub-commands
+    - Child node of towny.command.townyadmin.*
+  - Fix bug with /plot group set {plottype}
+  - Disallowed the use of /plot group set jail, jails can only be set before grouping. 
+  - Language files bumped to 0.69.
+  - Fix plot groups not loading after server stop and start.
+  - Fix for spawners not reverting properly courtesy of Siris with PR #3629.
+    - Closes #3627.
+0.95.2.8:
+  - Fix NPE when '/plot group add' was used without any name, courtesy of Siris with PR #3630.
+  - Language files bumped to 0.70. 
+  - Pom and pom_deb updates by TheFlagCourier with PR #3632.
+    - Javadocs should only build on the install phase.
+    - Github actions should again function properly.
+  - Change to saving for plotgroups on flatfile, removing now-redundant world.
+    - Already-made plot groups should load properly and save without a world. 
+  - Improve debug messaging on flatfile database load.
+  - Fix plot groups whose town doesn't exist anymore causing safe mode.
+  - Fix edge-case scenario where revoking invites couldn't be done because we were matching the wrong player.
+    - Closes #3635.
+  - Fix french.yml not parsing.
+  - Confirmations can now be accepted/declined/confirmed/cancelled by clicking on the text if you use Spigot.
+    - Courtesy of Siris with PRs #3631 + #3639
+    - Closes #3534. 
+    - Commands can still be used, clicking only for spigot servers, not craftbukkit servers.
+  - New Config Option: notification.notifications_appear_in_action_bar
+    - default: true
+    - This setting only applies to servers running spigot, paper or bungeecord.
+    - On servers using craftbukkit.jar the notifications will always appear in the chat.
+    - When set to false the notifications will appear in the chat rather than the action bar.
+    - Closes #3636.
+  - Translated cannot-kick-that-resident strings.
+  - Create ResidentUtil for resident-related methods.
+  - TownyPermission data rewritten to a 2d boolean array, courtesy of Silverwolfg11 with PR #3600.
+0.95.2.9:
+  - Fix message shown when a player tries to set their nation spawn in the wilderness.
+    - Closes #3640.
+  - Fix for 0.95.2.8 not running on Craftbukkit servers.
+    - Courtesy of Siris with PR #3642. 
+  - Fix for trees and mushrooms growing into plots they shouldn't.
+    - Closes #3641.
+0.95.2.10:
+  - API: Added TownPreUnclaimEvent
+    - Useful for getting the TownBlock object that will be unclaimed.
+    - Cancellable but probably not a good idea.
+  - Missing apostrophe in error message fixed by Deuphic with PR #3645.
+  - Fix Null message when plots were claimed/unclaimed.
+  - Bump language files to 0.71
+  - Fix error message for the /plot fs when used on a plot group.
+  - Fix being false-positive shown when using /plot nfs on a plot group.
+  - Fix error shown in console when entering a plot that is for sale but is not part of a plot group.
+0.95.2.11:
+  - PT-BR.yml updated by BannerGames with PR #3647.
+  - Fix successful message when economy.new_expand.price_claim_townblock_refund is set to a negative value. 
+  - Korean.yml updated by wolfwork with PR #3651.
+  - Fix for town invites from nation, courtesy of Siris with PR #3653.
+  - Fix no message being shown when an invalid subcommand of "/plot group" is used.

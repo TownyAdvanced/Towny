@@ -966,6 +966,13 @@ public enum ConfigNodes {
 			"false", 
 			"# If the notification.owner option should show name or {title} name.", 
 			"# Titles are the ones granted by nation kings."),
+	NOTIFICATION_NOTIFICATIONS_APPEAR_IN_ACTION_BAR("notification.notifications_appear_in_action_bar",
+			"true",
+			"# This setting only applies to servers running spigot, paper or bungeecord.",
+			"# On servers using craftbukkit.jar the notifications will always appear in the chat.",
+			"# When set to false the notifications will appear in the chat rather than the action bar."),
+
+
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",

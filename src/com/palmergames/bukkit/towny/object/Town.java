@@ -1454,9 +1454,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public void addPlotGroup(PlotObjectGroup group) {
 		if (!hasObjectGroups()) 
-			this.plotGroups = new HashMap<>();
+			plotGroups = new HashMap<>();
 		
-		this.plotGroups.put(group.getGroupName(), group);
+		plotGroups.put(group.getGroupName(), group);
 		
 	}
 	

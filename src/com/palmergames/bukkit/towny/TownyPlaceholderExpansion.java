@@ -439,7 +439,20 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return String.valueOf(resident.hasTown());
 		case "has_nation": // %townyadvanced_has_nation%
 			return String.valueOf(resident.hasNation());
-
+		case "nation_tag_town_formatted": // %townyadvanced_nation_tag_town_formatted%
+			try {
+				if (resident.hasTown()) {
+					town = resident.getTown().getFormattedName();
+					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag())
+						nation = resident.getTown().getNation().getTag();
+				}
+				if (!nation.isEmpty())
+					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+				else if (!town.isEmpty())
+					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			} catch (NotRegisteredException ignored) {
+			}
+			return tag;
 		default:
 			return null;
 		}

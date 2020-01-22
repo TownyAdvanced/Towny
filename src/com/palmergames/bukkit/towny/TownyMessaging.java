@@ -652,7 +652,13 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
+	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+		
+		if (Towny.isSpigot) {
+			TownySpigotMessaging.sendSpigotConfirmMessage(player, firstline, confirmline, cancelline, lastline);
+			return;
+		}
+		
 		if (firstline == null) {
 			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 		}
@@ -674,7 +680,15 @@ public class TownyMessaging {
 		}
 	}
 
-	public static void sendRequestMessage(Object player, Invite invite) {
+	
+
+	public static void sendRequestMessage(CommandSender player, Invite invite) {
+		
+		if (Towny.isSpigot) {
+			TownySpigotMessaging.sendSpigotRequestMessage(player, invite);
+			return;
+		}
+		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
 			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();

@@ -1692,7 +1692,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						if (line != null && !line.isEmpty()) {
 							try {
 								UUID groupID = UUID.fromString(line.trim());
-								PlotObjectGroup group = getPlotObjectGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
+								PlotObjectGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
 								townBlock.setPlotObjectGroup(group);
 							} catch (Exception ignored) {}
 							
@@ -2313,7 +2313,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public void deleteGroup(PlotObjectGroup group) {
+	public void deletePlotGroup(PlotObjectGroup group) {
 		
 	}
 
@@ -2373,8 +2373,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			while (rs.next()) {
 				
 				UUID id = UUID.fromString(rs.getString("groupID"));
-				Town town = getTown(rs.getString("town"));
-				String groupName = rs.getString("groupName");
+				String groupName = rs.getString("groupName");				
+				Town town = null;
+				try {
+					town = getTown(rs.getString("town"));
+				} catch (NotRegisteredException e) {
+					continue;
+				}
 				
 				try {
 					TownyUniverse.getInstance().newGroup(town,groupName,id);
@@ -2404,7 +2409,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		ResultSet rs;
 
-		for (PlotObjectGroup plotGroup : getAllGroups()) {
+		for (PlotObjectGroup plotGroup : getAllPlotGroups()) {
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='" + plotGroup.getID().toString() + "'");
@@ -2487,7 +2492,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public boolean saveGroupList() {
+	public boolean savePlotGroupList() {
 		return true;
 	}
 

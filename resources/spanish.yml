@@ -1,5 +1,5 @@
 name: Towny
-version: 0.68
+version: 0.71
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://townyadvanced.github.io/'
@@ -1060,3 +1060,19 @@ msg_set_group_type_to_x: 'Changed plot group''s type to %s'
 msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
 status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+
+# Added in 0.70
+msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
+msg_confirmation_spigot_hover_accept: 'Click to accept'
+msg_confirmation_spigot_hover_cancel: 'Click to cancel'
+msg_confirmation_spigot_click_accept: 'Click %s or type %s'
+msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
+msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
+msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+
+# Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
