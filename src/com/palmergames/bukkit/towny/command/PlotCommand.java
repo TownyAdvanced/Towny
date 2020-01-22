@@ -1430,6 +1430,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_group_type_to_x"), split[1]));
 			
+		} else {
+
+			player.sendMessage(ChatTools.formatTitle("/plot group"));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "add | new | create", "[name]", "Ex: /plot group new ExpensivePlots"));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "remove", "", "Removes a plot from the specified group."));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "rename", "[newName]", "Renames the group you are standing in."));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "set", "...", "Ex: /plot group set perm resident on."));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]"));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "forsale | fs", "[price]", "Ex: /plot group forsale 50"));
+			player.sendMessage(ChatTools.formatCommand("/plot group", "notforsale | nfs", "", "Ex: /plot group notforsale"));
+
+			if (townBlock.hasPlotObjectGroup())
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getGroupName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+			
+			return true;
 		}
 		
 		return false;
