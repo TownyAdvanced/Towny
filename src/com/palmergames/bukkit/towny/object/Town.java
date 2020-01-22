@@ -81,6 +81,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long siegeImmunityEndTime;
 	private Siege siege;
 	private boolean occupied;
+	private boolean neutral;
+    private int neutralityChangeConfirmationCounterDays;  
 	
 	public Town(String name) {
 		super(name);
@@ -91,6 +93,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
 		siege = null;
 		occupied = false;
+		neutral = false;
+		neutralityChangeConfirmationCounterDays = 0;
 	}
 
 	@Override
@@ -309,6 +313,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+			&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && isNeutral())
 			&& siege != null
 			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 			return true;
@@ -1525,5 +1530,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public Collection<PlotObjectGroup> getPlotObjectGroups() {
 		return getObjectGroups();
 	}
-	
+
+	public boolean isNeutral() {
+		return neutral;
+	}
+
+	public int getNeutralityChangeConfirmationCounterDays() {
+		return neutralityChangeConfirmationCounterDays;
+	}
 }

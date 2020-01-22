@@ -314,7 +314,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
+					
 					newNation(player, split[1], split[2]);
 				}
 			} else if (split[0].equalsIgnoreCase("join")) {
@@ -595,6 +595,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// Check if town is town is free to join.
 			if (!nation.isOpen())
 				throw new Exception(String.format(TownySettings.getLangString("msg_err_nation_not_open"), nation.getFormattedName()));
+
+			//Check that town is not neutral
+			if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegeTownNeutralityEnabled()
+				&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_join_nation"));
+			}
 			
 			if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation()))
 				throw new Exception(String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
@@ -1033,6 +1040,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_already_nation"));
 
+			//Check that town is not neutral
+			if(TownySettings.getWarSiegeEnabled() 
+				&& TownySettings.getWarSiegeTownNeutralityEnabled()
+				&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_create_nation"));
+			}
+			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
 			try {

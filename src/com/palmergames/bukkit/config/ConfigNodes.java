@@ -1852,6 +1852,11 @@ public enum ConfigNodes {
 			"# If this is true, then when a king deletes the nation,",
 			"# they will be refunded the initial new nation cost.",
 			"# This prevents the new nation cost becoming a sunken cost due to invasion."),
+	WAR_SIEGE_TOWN_NEUTRALITY_ENABLED(
+			"war.siege.switches.town_neutrality_enabled",
+			"true",
+			"# If this is true, then a town can forsake allegiance to any nation,",
+			"# in return for added protections from negative war effects"),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
