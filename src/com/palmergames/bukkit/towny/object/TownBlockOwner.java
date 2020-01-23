@@ -6,18 +6,14 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TownBlockOwner extends TownyObject {
+public class TownBlockOwner extends TownyEconomyObject {
 
 	protected List<TownBlock> townBlocks = new ArrayList<>();
 	protected TownyPermission permissions = new TownyPermission();
-
+	
 	protected TownBlockOwner(String name) {
 		super(name);
 	}
-
-	//protected TownBlockOwner(String name) {
-	//	super(name);
-	//}
 	
 	public void setTownblocks(List<TownBlock> townblocks) {
 
@@ -48,5 +44,16 @@ public class TownBlockOwner extends TownyObject {
 			throw new NotRegisteredException();
 		else
 			townBlocks.remove(townBlock);
+	}
+
+	public void setPermissions(String line) {
+
+		//permissions.reset(); not needed, already done in permissions.load()
+		permissions.load(line);
+	}
+
+	public TownyPermission getPermissions() {
+
+		return permissions;
 	}
 }

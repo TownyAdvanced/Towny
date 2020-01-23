@@ -90,4 +90,5 @@ public abstract class TownyObject {
 			metadata.add(CustomDataField.load(objects[i]));
 		}
 	}
+	
 }

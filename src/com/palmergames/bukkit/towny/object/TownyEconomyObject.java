@@ -35,7 +35,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return true if successful
 	 * @throws EconomyException if the transaction fails
 	 */
-	public static boolean pay(double amount, String reason) throws EconomyException {
+	public boolean pay(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
@@ -46,7 +46,7 @@ public class TownyEconomyObject extends TownyObject {
 		}
 	}
 
-	private static boolean _pay(double amount) throws EconomyException {
+	private boolean _pay(double amount) throws EconomyException {
 		if (canPayFromHoldings(amount)) {
 			if (TownyEconomyHandler.isActive())
 				if (amount > 0) {
@@ -66,20 +66,19 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return collected or pay to server account   
 	 * @throws EconomyException if transaction fails
 	 */
-	public static boolean collect(Economical receiver, double amount, String reason) throws EconomyException {
+	public boolean collect(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return SERVER_ACCOUNT.payTo(amount, receiver, reason);
+			return SERVER_ACCOUNT.payTo(amount, this, reason);
 		} else {
-			boolean collected = _collect(receiver, amount);
-			if (collected) {
-				//TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
-			}
+			boolean collected = _collect(amount);
+			if (collected)
+				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
 			return collected;
 		}
 	}
 
-	private static boolean _collect(Economical receiver,  double amount) throws EconomyException {
-		return TownyEconomyHandler.add(receiver.getEconomyName(), amount, receiver.getBukkitWorld());
+	private boolean _collect(double amount) throws EconomyException {
+		return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
 	}
 
 	/**
@@ -91,18 +90,16 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return true if successfully payed amount to collector.
 	 * @throws EconomyException if transaction fails
 	 */
-	public boolean payTo(double amount, Economical collector, String reason) throws EconomyException {
+	public boolean payTo(double amount, TownyEconomyObject collector, String reason) throws EconomyException {
 		boolean payed = _payTo(amount, collector);
-		if (payed) {
-			//TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
-		}
-			
+		if (payed)
+			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
 		return payed;
 	}
 
-	private boolean _payTo(double amount, Economical collector) throws EconomyException {
+	private boolean _payTo(double amount, TownyEconomyObject collector) throws EconomyException {
 		if (_pay(amount)) {
-			if (_collect(collector,amount)) {
+			if (!collector._collect(amount)) {
 				_collect(amount); //Transaction failed. Refunding amount.
 				return false;
 			} else {
