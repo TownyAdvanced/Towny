@@ -35,7 +35,12 @@ public class TownySpigotMessaging {
 	}
 
 	/**
-	 * Sends player confirm message that is clickable
+	 * Sends a player click-able confirmation messages if the server is running on Spigot \(or a fork, like Paper.\)
+	 * @param player - The player (CommandSender) to send the confirmation
+	 * @param firstline - The question regarding the confirmation.
+	 * @param confirmline - Line for sending the confirmation.
+	 * @param cancelline - Line for sending the cancellation.
+	 * @param lastline - If null, announces that the message will expire. Otherwise, ignored.
 	 */
 	public static void sendSpigotConfirmMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
 
