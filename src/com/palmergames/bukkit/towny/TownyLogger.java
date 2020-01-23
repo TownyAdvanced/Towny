@@ -1,9 +1,10 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.Economy;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -164,7 +165,7 @@ public class TownyLogger {
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
 	}
 	
-	public void logMoneyTransaction(TownyEconomyObject a, double amount, TownyEconomyObject b, String reason) {
+	public void logMoneyTransaction(Economy a, double amount, Economy b, String reason) {
 		if (reason == null) {
 			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", getObjectName(a), amount, getObjectName(b)));
 		} else {
@@ -172,7 +173,7 @@ public class TownyLogger {
 		}
 	}
 	
-	private String getObjectName(TownyEconomyObject obj) {
+	private String getObjectName(Economy obj) {
 		String type;
 		if (obj == null) {
 			type = "Server";
@@ -185,7 +186,7 @@ public class TownyLogger {
 		} else {
 			type = "?";
 		}
-		return String.format("[%s] %s", type, obj != null ? obj.getName() : "");
+		return String.format("[%s] %s", type, obj != null ? obj.getAccount().getName() : "");
 	}
 	
 	public void updateLoggers() {

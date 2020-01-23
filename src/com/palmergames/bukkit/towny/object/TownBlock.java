@@ -332,7 +332,7 @@ public class TownBlock {
 			cost = 0;
 		}
 		
-		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.payTo(cost, TownyEconomyObject.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().payTo(cost, EconomyAccount.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
 			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		if (cost > 0)

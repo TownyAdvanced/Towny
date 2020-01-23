@@ -146,7 +146,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return nation;
 		case "town_balance": // %townyadvanced_town_balance%
 			try {
-				balance = resident.getTown().getHoldingFormattedBalance();
+				balance = resident.getTown().getAccount().getHoldingFormattedBalance();
 			} catch (NotRegisteredException ignored) {
 			}
 			return balance;

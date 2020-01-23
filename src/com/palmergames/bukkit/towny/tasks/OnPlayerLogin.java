@@ -143,7 +143,7 @@ public class OnPlayerLogin implements Runnable {
 					if (town.hasUpkeep()) {
 						double upkeep = TownySettings.getTownUpkeepCost(town);
 						try {
-							if ((upkeep > 0) && (!town.canPayFromHoldings(upkeep))) {
+							if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
 								/*
 								 *  Warn that the town is due to be deleted.
 								 */

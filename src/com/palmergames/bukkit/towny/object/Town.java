@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable, Economy {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -70,6 +70,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
+	private EconomyAccount account;
 
 	public Town(String name) {
 		super(name);
@@ -993,13 +994,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (TownySettings.isUsingEconomy()) {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
-				if (amount + this.getHoldingBalance() > bankcap) {
+				if (amount + getAccount().getHoldingBalance() > bankcap) {
 					TownyMessaging.sendPrefixedTownMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
 			
-			this.collect(amount, null);
+			getAccount().collect(amount, null);
 		}
 
 	}
@@ -1010,7 +1011,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
-			if (!payTo(amount, resident, "Town Withdraw"))
+			if (!getAccount().payTo(amount, resident, "Town Withdraw"))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 		} else
 			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
@@ -1051,21 +1052,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		return isPublic;
 	}
-
-    @Override
-    protected World getBukkitWorld() {
-        if (hasWorld()) {
-            return BukkitTools.getWorld(getWorld().getName());
-        } else {
-            return super.getBukkitWorld();
-        }
-    }
-
-	@Override
-	public String getEconomyName() {
-		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-	}
-
+	
 	public List<Location> getJailSpawns() {
 
 		return jailSpawns;
@@ -1415,5 +1402,24 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public Collection<PlotObjectGroup> getPlotObjectGroups() {
 		return getObjectGroups();
+	}
+
+	@Override
+	public EconomyAccount getAccount() {
+		if (account == null) {
+			
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+			World world;
+
+			if (hasWorld()) {
+				world = BukkitTools.getWorld(getWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+			
+			account = new EconomyAccount(accountName, world);
+		}
+		
+		return account;
 	}
 }

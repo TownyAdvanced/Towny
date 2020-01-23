@@ -567,7 +567,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Clear accounts
 		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
-			resident.removeAccount();
+			resident.getAccount().removeAccount();
 
 		plugin.deleteCache(name);
 		saveResidentList();
@@ -628,8 +628,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (TownyEconomyHandler.isActive())
 			try {
-				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
-				town.removeAccount();
+				town.getAccount().payTo(town.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
 
@@ -791,11 +791,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownySettings.isUsingEconomy())
 				try {
-					townBalance = town.getHoldingBalance();					
+					townBalance = town.getAccount().getHoldingBalance();					
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.pay(townBalance, "Town Rename");
+						town.getAccount().pay(townBalance, "Town Rename");
 					} 
-					town.removeAccount();
+					town.getAccount().removeAccount();
 					
 				} catch (EconomyException ignored) {
 				}
@@ -834,7 +834,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {
-					town.setBalance(townBalance, "Rename Town - Transfer to new account");
+					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -1018,8 +1018,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
 				try {
-					balance = resident.getHoldingBalance();
-					resident.removeAccount();
+					balance = resident.getAccount().getHoldingBalance();
+					resident.getAccount().removeAccount();
 				} catch (EconomyException ignored) {
 				}				
 			}
@@ -1062,7 +1062,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//add everything back to the resident
 			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
-					resident.setBalance(balance, "Rename Player - Transfer to new account");
+					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}				

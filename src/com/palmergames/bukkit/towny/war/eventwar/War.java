@@ -614,7 +614,7 @@ public class War {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
 			// Check for money loss in the defending town
-			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
+			if (!townBlock.getTown().getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
 				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
 				if (townBlock.getTown().isCapital())

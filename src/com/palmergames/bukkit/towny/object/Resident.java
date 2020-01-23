@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver, Economy {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -47,6 +47,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private transient EconomyAccount account;
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
@@ -622,16 +623,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	}
 
-	@Override
-	protected World getBukkitWorld() {
-		Player player = BukkitTools.getPlayer(getName());
-		if (player != null) {
-			return player.getWorld();
-		} else {
-			return super.getBukkitWorld();
-		}
-	}
-
 	public boolean isAlliedWith(Resident otherresident) {
 		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
 			try {
@@ -691,5 +682,24 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	@Override
+	public EconomyAccount getAccount() {
+		if (account == null) {
+
+			String accountName = StringMgmt.trimMaxLength(getName(), 32);
+			World world;
+
+			Player player = BukkitTools.getPlayer(getName());
+			if (player != null) {
+				world = player.getWorld();
+			} else {
+				world = BukkitTools.getWorlds().get(0);;
+			}
+
+			account = new EconomyAccount(accountName, world);
+		}
+		
+		return null;
+	}
 }
 
