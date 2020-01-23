@@ -4098,3 +4098,7 @@ v0.92.0.11:
   - Korean.yml updated by wolfwork with PR #3651.
   - Fix for town invites from nation, courtesy of Siris with PR #3653.
   - Fix no message being shown when an invalid subcommand of "/plot group" is used.
+0.95.2.12:
+  - Javadocs fixed courtesy of TheFlagCourier with PR #3655.
+  - Github Actions workflow adjustment courtesy of TheFlagCourier with PR #3654.
+  - Fix /ta rename not passing on NPC status to residents.
