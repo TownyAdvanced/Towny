@@ -276,7 +276,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "map", ""));			
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "spy", ""));
 
-			TownyMessaging.sendMsg(resident, ("Modes set: " + StringMgmt.join(resident.getModes(), ",")));
+			TownyMessaging.sendMsg(resident, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(resident.getModes(), ",")));
 			return;
 
 		}
