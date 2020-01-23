@@ -1538,4 +1538,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public int getNeutralityChangeConfirmationCounterDays() {
 		return neutralityChangeConfirmationCounterDays;
 	}
+
+	public void decrementNeutralityChangeConfirmationCounterDays() {
+		neutralityChangeConfirmationCounterDays--;
+	}
+
+	public void flipNeutralityFlag() {
+		neutral = !neutral;
+	}
 }

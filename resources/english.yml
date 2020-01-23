@@ -1103,6 +1103,8 @@ msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered of %s by %
 msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins by %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!!!'
 msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded the initial nation cost of %s'
+msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no longer join a nation or (officially) take sides in wars, and is immune to siege-pvp-changes, plunder, and taxes.'
+msg_siege_war_town_became_non_neutral: '&b%s has declared itself not neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to siege-pvp-changes, plunder, and taxes.'
 
 #Siege war error messages
 #Claiming

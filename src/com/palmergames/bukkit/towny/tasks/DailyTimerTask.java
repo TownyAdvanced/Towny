@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -105,6 +106,10 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 		}
 
+		//Update town neutrality counters
+		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled()) 
+			UpdateTownNeutralityCounters.updateTownNeutralityCounters();	
+		
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
 
