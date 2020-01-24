@@ -5,12 +5,13 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
@@ -171,28 +172,50 @@ public class SiegeWarPlaceBlockController {
 			return false;
 		}
 
-		//If the town has a siege, attempt invasion, otherwise attempt attack
-		if(town.hasSiege()) {
-			if (!TownySettings.getWarSiegeInvadeEnabled())
-				return false;
+		//If the town has a siege where the player's nation is already attacking, 
+		//attempt invasion, otherwise attempt attack
+		TownyUniverse universe = TownyUniverse.getInstance();
+		try {
+			Resident resident = universe.getDataSource().getResident(player.getName());
+			if(!resident.hasTown())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
-			InvadeTown.processInvadeTownRequest(
-				plugin, 
-				player, 
-				town, 
-				event);
-		} else {
-			if (!TownySettings.getWarSiegeAttackEnabled())
-				return false;
+			Town townOfResident = resident.getTown();
+			if(!townOfResident.hasNation())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
-			AttackTown.processAttackTownRequest(
-				player,
-				block,
-				nearbyTownBlocks.get(0),
-				town,
-				event);
+			Nation nationOfResident = townOfResident.getNation();
+			if(town.hasSiege() && town.getSiege().getSiegeZones().containsKey(nationOfResident)) {
+
+				if (!TownySettings.getWarSiegeInvadeEnabled())
+					return false;
+
+				InvadeTown.processInvadeTownRequest(
+					plugin,
+					player,
+					town,
+					event);
+
+			} else {
+
+				if (!TownySettings.getWarSiegeAttackEnabled())
+					return false;
+
+				AttackTown.processAttackTownRequest(
+					player,
+					block,
+					nearbyTownBlocks.get(0),
+					town,
+					event);
+			}
+
+		} catch (TownyException x) {
+			event.setBuild(false);
+			event.setCancelled(true);
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			return true;
 		}
-		
+
 		return true;
 	}
 

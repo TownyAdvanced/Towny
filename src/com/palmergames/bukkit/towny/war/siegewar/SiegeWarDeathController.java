@@ -167,11 +167,28 @@ public class SiegeWarDeathController {
 											   TownyObject pointsRecipient,
 											   Resident deadResident,
 											   SiegeZone siegeZone) throws NotRegisteredException {
-		SiegeWarPointsUtil.awardSiegePenaltyPoints(
-			attackerDeath,
-			pointsRecipient, 
-			deadResident, 
-			siegeZone, 
-			TownySettings.getLangString("msg_siege_war_participant_death"));
+		/*
+		 * If a defender was killed, reward all attackers.
+		 * This prevents the exploit of a siege being joined by a 'pretend enemy' nation,
+		 * and the defenders repeatedly dying to these soldiers,
+		 * something which could be used if a siege is going badly, so that the town would fall to an actually friendly nation.
+		 */
+		if(attackerDeath) {
+			SiegeWarPointsUtil.awardSiegePenaltyPoints(
+				attackerDeath,
+				pointsRecipient,
+				deadResident,
+				siegeZone,
+				TownySettings.getLangString("msg_siege_war_participant_death"));
+		} else {
+			for(SiegeZone siegeZoneInCollection: siegeZone.getSiege().getSiegeZones().values()) {
+				SiegeWarPointsUtil.awardSiegePenaltyPoints(
+					attackerDeath,
+					siegeZoneInCollection.getAttackingNation(),
+					deadResident,
+					siegeZoneInCollection,
+					TownySettings.getLangString("msg_siege_war_participant_death"));
+			}
+		}
 	}
 }

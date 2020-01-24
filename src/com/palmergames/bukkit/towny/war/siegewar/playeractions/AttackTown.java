@@ -44,12 +44,7 @@ public class AttackTown {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
             Resident attackingResident = universe.getDataSource().getResident(player.getName());
-            if(!attackingResident.hasTown())
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
-
             Town townOfAttackingPlayer = attackingResident.getTown();
-            if(!townOfAttackingPlayer.hasNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));

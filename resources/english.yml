@@ -1102,20 +1102,24 @@ msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered of %s by 
 msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered of %s by %s!'
 msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins by %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!!!'
-msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded the initial nation cost of %s'
-msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no longer join a nation or (officially) take sides in wars, and is immune to siege-pvp-changes, plunder, and taxes.'
-msg_siege_war_town_became_non_neutral: '&b%s has declared itself not neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to siege-pvp-changes, plunder, and taxes.'
+msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded %s'
+msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no longer join a nation or (officially) take sides in wars, and is immune to material siege costs (e.g. pvp, plunder & taxes).'
+msg_siege_war_town_became_non_neutral: '&b%s has declared itself not neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to material siege costs (e.g. pvp, plunder & taxes).'
 
 #Siege war error messages
 #Claiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 #Deleting
 msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
+<<<<<<< HEAD
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded the initial nation cost of %s."
 #Neutrality
 msg_err_siege_war_neutral_town_cannot_create_nation: "&6[War]&c As a neutral town, you cannot create a nation."
 msg_err_siege_war_neutral_town_cannot_join_nation: "&6[War]&c As a neutral town, you cannot join a nation."
 msg_err_siege_war_neutral_town_cannot_plunder: "&6[War]&c You cannot plunder a neutral town."
+=======
+msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
+>>>>>>> siegewar
 
 #Revolt
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."

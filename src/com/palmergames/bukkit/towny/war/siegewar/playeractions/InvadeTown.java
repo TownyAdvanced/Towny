@@ -40,15 +40,9 @@ public class InvadeTown {
                                                 BlockPlaceEvent event) {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-			
 			Resident resident = universe.getDataSource().getResident(player.getName());
-			if(!resident.hasTown())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
-			
 			Town townOfInvadingResident = resident.getTown();
-			if(!townOfInvadingResident.hasNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
-			
+
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
@@ -162,12 +156,13 @@ public class InvadeTown {
 			if(TownySettings.isUsingEconomy()
 				&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
 				try {
-					//Refund the king with the initial nation cost
-					king.collect(TownySettings.getNewNationPrice(), "Refund of Initial Nation Cost");
+					//Refund the king with some of the initial nation cost
+					double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+					king.collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
 					Player player = TownyAPI.getInstance().getPlayer(king);
 					if (player != null)
 						TownyMessaging.sendMsg(
-							player, String.format(TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
+							player, String.format(TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}

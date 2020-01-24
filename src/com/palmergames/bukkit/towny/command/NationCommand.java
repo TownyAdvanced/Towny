@@ -1184,7 +1184,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_delete_nation_warning"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
+				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_delete_nation_warning"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATION_DELETE, null); // It takes the resident's town & nation, done finished
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException x) {

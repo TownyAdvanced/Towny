@@ -3047,13 +3047,17 @@ public class TownySettings {
 	public static boolean getWarSiegeAttackerSpawnIntoBesiegedTownDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED);
 	}
-
-	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
+	
+	public static double getWarSiegeNationCostRefundPercentageOnDelete() {
+		return getDouble(ConfigNodes.WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE);
 	}
 
 	public static boolean getWarSiegeTownNeutralityEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_ENABLED);
+	}
+
+	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
 	}
 }
 
