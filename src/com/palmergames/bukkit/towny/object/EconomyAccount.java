@@ -52,7 +52,7 @@ public class EconomyAccount extends TownyObject {
 		} else {
 			boolean payed = _pay(amount);
 			if (payed) {
-				TownyLogger.getInstance().logMoneyTransaction(this.getName(), amount, null, reason);
+				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
 			}
 				
 			return payed;
@@ -85,7 +85,7 @@ public class EconomyAccount extends TownyObject {
 		} else {
 			boolean collected = _collect(amount);
 			if (collected) {
-				TownyLogger.getInstance().logMoneyTransaction(null, amount, getName(), reason);
+				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
 			}
 				
 			return collected;
@@ -112,7 +112,7 @@ public class EconomyAccount extends TownyObject {
 	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
 		boolean payed = _payTo(amount, collector);
 		if (payed) {
-			TownyLogger.getInstance().logMoneyTransaction(getName(), amount, collector.getName(), reason);
+			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
 		}
 		return payed;
 	} 
