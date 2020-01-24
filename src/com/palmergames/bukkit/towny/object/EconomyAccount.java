@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -105,7 +104,7 @@ public class EconomyAccount extends TownyObject {
 	 * @return true if successfully payed amount to collector.
 	 * @throws EconomyException if transaction fails
 	 */
-	public boolean payTo(double amount, Economy collector, String reason) throws EconomyException {
+	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	

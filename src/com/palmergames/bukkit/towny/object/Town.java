@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -34,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownyObject implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable, Economy, TownBlockOwner {
+public class Town extends TownyObject implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable, EconomyHandler, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
