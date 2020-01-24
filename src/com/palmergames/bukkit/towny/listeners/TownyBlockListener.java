@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.common.WarConfig;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
@@ -74,7 +73,7 @@ public class TownyBlockListener implements Listener {
 		 */
 		PlayerCache cache = plugin.getCache(player);
 
-		if ((cache.getStatus() == TownBlockStatus.WARZONE && WarConfig.isAllowingAttacks()) // Flag War
+		if ((cache.getStatus() == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
 				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 				event.setCancelled(true);
@@ -126,7 +125,7 @@ public class TownyBlockListener implements Listener {
 			/*
 			 * Flag war
 			 */
-			if (((status == TownBlockStatus.ENEMY) && WarConfig.isAllowingAttacks()) && (event.getBlock().getType() == FlagWarConfig.getFlagBaseMaterial())) {
+			if (((status == TownBlockStatus.ENEMY) && FlagWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == FlagWarConfig.getFlagBaseMaterial())) {
 
 				try {
 					if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
@@ -139,7 +138,7 @@ public class TownyBlockListener implements Listener {
 				event.setCancelled(true);
 
 			// Event War piggy backing on flag war's EditableMaterialInWarZone 
-			} else if ((status == TownBlockStatus.WARZONE && WarConfig.isAllowingAttacks()) // Flag War 
+			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
 					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
