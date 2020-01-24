@@ -1939,6 +1939,12 @@ public enum ConfigNodes {
 			"# This setting determines the maximum duration a player can continue to score siege points, while remaining in the siege zone.",
 			"# After this time, to resume scoring points, the player will need to exit then re-enter the siege zone.",
 			"# The setting is an important anti-afk'ing feature."),
+	WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS(
+			"war.siege.switches.town_neutrality_confirmation_requirement_days",
+			"14",
+			"# This value determines how long it takes to confirm a town neutrality status change.",
+			"# It is recommended to be relatively high, ",
+		    "# for use by genuinely neutral towns, not just towns which wish to reduce war costs."),
 	
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(

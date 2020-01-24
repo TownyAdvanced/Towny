@@ -3052,12 +3052,16 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE);
 	}
 
+	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
+	}
+
 	public static boolean getWarSiegeTownNeutralityEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_ENABLED);
 	}
 
-	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
+	public static int getWarSiegeTownNeutralityConfirmationRequirementDays() {
+		return getInt(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS);
 	}
 }
 

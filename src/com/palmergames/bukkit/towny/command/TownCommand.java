@@ -1133,6 +1133,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "taxpercent", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "open", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "jail [number] [resident]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "neutral", ""));
 		} else {
 			Resident resident;
 
@@ -1299,6 +1300,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 				}
+				
+			} else if (split[0].equalsIgnoreCase("neutral")) {
+
+				if(!(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				//Set target neutrality value and calculate counter value
+				int counterValue;
+				if(town.getNeutralityChangeConfirmationCounterDays() == 0) {
+					//Here, no status change countdown is in progress, and the town wishes to change neutrality status
+					town.setDesiredNeutralityValue(!town.isNeutral());
+					counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays();
+				} else {
+					//Here, a status change countdown is in progress, and the town wishes to reverse the direction of the progress,
+					town.flipDesiredNeutralityValue();
+					counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays() - town.getNeutralityChangeConfirmationCounterDays();
+				}
+				
+				//Cannot switch to neutral if you are in a nation
+				if(town.hasNation() && town.getDesiredNeutralityValue())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_go_neutral_while_in_nation"));
+				
+				//Set counter value
+				town.setNeutralityChangeConfirmationCounterDays(counterValue);
+				
+				//Send message to town
+				if(town.getDesiredNeutralityValue())
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_neutral"), counterValue));
+				else
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_non_neutral"), counterValue));
 
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));

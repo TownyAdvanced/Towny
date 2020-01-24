@@ -82,6 +82,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private Siege siege;
 	private boolean occupied;
 	private boolean neutral;
+	private boolean desiredNeutralityValue;
     private int neutralityChangeConfirmationCounterDays;  
 	
 	public Town(String name) {
@@ -94,6 +95,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		siege = null;
 		occupied = false;
 		neutral = false;
+		desiredNeutralityValue = false;
 		neutralityChangeConfirmationCounterDays = 0;
 	}
 
@@ -1543,7 +1545,23 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		neutralityChangeConfirmationCounterDays--;
 	}
 
-	public void flipNeutralityFlag() {
+	public void flipNeutral() {
 		neutral = !neutral;
+	}
+
+	public void flipDesiredNeutralityValue() {
+		desiredNeutralityValue = !desiredNeutralityValue;
+	}
+
+	public void setNeutralityChangeConfirmationCounterDays(int counterValueDays) {
+		neutralityChangeConfirmationCounterDays = counterValueDays;
+	}
+
+	public void setDesiredNeutralityValue(boolean value) {
+		desiredNeutralityValue = value;
+	}
+
+	public boolean getDesiredNeutralityValue() {
+		return desiredNeutralityValue;
 	}
 }

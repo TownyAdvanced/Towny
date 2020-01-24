@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.util.ChatTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class UpdateTownNeutralityCounters {
 			town.decrementNeutralityChangeConfirmationCounterDays();
 			
 			if(town.getNeutralityChangeConfirmationCounterDays() == 0) {
-				town.flipNeutralityFlag();
+				town.flipNeutral();
 			
 				if(town.isNeutral()) {
 					TownyMessaging.sendGlobalMessage(
