@@ -15,7 +15,7 @@ import org.bukkit.World;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public class EconomyAccount extends TownyObject {
+public class EconomyAccount extends TownyObject implements EconomyHandler {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private World world;
 	
@@ -30,6 +30,11 @@ public class EconomyAccount extends TownyObject {
 
 	public World getWorld() {
 		return world;
+	}
+
+	@Override
+	public EconomyAccount getAccount() {
+		return SERVER_ACCOUNT;
 	}
 
 	private static final class TownyServerAccount extends EconomyAccount {
@@ -52,7 +57,7 @@ public class EconomyAccount extends TownyObject {
 		} else {
 			boolean payed = _pay(amount);
 			if (payed) {
-				TownyLogger.getInstance().logMoneyTransaction(this.getName(), amount, null, reason);
+				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
 			}
 				
 			return payed;
@@ -85,7 +90,7 @@ public class EconomyAccount extends TownyObject {
 		} else {
 			boolean collected = _collect(amount);
 			if (collected) {
-				TownyLogger.getInstance().logMoneyTransaction(null, amount, getName(), reason);
+				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
 			}
 				
 			return collected;
@@ -106,16 +111,12 @@ public class EconomyAccount extends TownyObject {
 	 * @throws EconomyException if transaction fails
 	 */
 	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
-		return payTo(amount, collector.getAccount(), reason);
-	}
-	
-	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
-		boolean payed = _payTo(amount, collector);
+		boolean payed = _payTo(amount, collector.getAccount());
 		if (payed) {
-			TownyLogger.getInstance().logMoneyTransaction(getName(), amount, collector.getName(), reason);
+			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
 		}
 		return payed;
-	} 
+	}
 
 	private boolean _payTo(double amount, EconomyAccount collector) throws EconomyException {
 		if (_pay(amount)) {
