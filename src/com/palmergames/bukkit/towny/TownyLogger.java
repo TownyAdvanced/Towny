@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -164,7 +165,7 @@ public class TownyLogger {
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
 	}
 	
-	public void logMoneyTransaction(EconomyHandler a, double amount, EconomyHandler b, String reason) {
+	public void logMoneyTransaction(EconomyAccount a, double amount, EconomyAccount b, String reason) {
 		if (reason == null) {
 			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", getObjectName(a), amount, getObjectName(b)));
 		} else {
