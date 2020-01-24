@@ -47,12 +47,12 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
-	private transient EconomyAccount account;
+	private transient EconomyAccount account = new EconomyAccount(getName());
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
-	private List<TownBlock> townBlocks;
-	private TownyPermission permissions;
+	private List<TownBlock> townBlocks = new ArrayList<>();
+	private TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
 		super(name);
@@ -701,7 +701,7 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 			account = new EconomyAccount(accountName, world);
 		}
 		
-		return null;
+		return account;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -71,8 +72,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviteReceiv
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private EconomyAccount account;
-	private List<TownBlock> townBlocks;
-	private TownyPermission permissions;
+	private List<TownBlock> townBlocks = new ArrayList<>();
+	private TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
 		super(name);
