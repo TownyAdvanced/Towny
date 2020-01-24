@@ -62,9 +62,9 @@ public class EconomyAccount extends TownyObject {
 		if (canPayFromHoldings(amount)) {
 			if (TownyEconomyHandler.isActive())
 				if (amount > 0) {
-					return TownyEconomyHandler.subtract(getEconomyName(), amount, getBukkitWorld());
+					return TownyEconomyHandler.subtract(getName(), amount, getBukkitWorld());
 				} else {
-					return TownyEconomyHandler.add(getEconomyName(), Math.abs(amount), getBukkitWorld());
+					return TownyEconomyHandler.add(getName(), Math.abs(amount), getBukkitWorld());
 				}
 		}
 		return false;
@@ -92,7 +92,7 @@ public class EconomyAccount extends TownyObject {
 	}
 
 	private boolean _collect(double amount) throws EconomyException {
-		return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
+		return TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
 	}
 
 	/**
@@ -127,15 +127,6 @@ public class EconomyAccount extends TownyObject {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * Get a valid economy account name for this object.
-	 *
-	 * @return account name
-	 */
-	public String getEconomyName() {
-		return getName();
 	}
 
 	/**
@@ -179,10 +170,10 @@ public class EconomyAccount extends TownyObject {
 
 	public double getHoldingBalance() throws EconomyException {
 		try {
-			return TownyEconomyHandler.getBalance(getEconomyName(), getBukkitWorld());
+			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getEconomyName());
+			throw new EconomyException("Economy error getting holdings for " + getName());
 		}
 	}
 
@@ -194,7 +185,7 @@ public class EconomyAccount extends TownyObject {
 	 * @throws EconomyException if failure
 	 */
 	public boolean canPayFromHoldings(double amount) throws EconomyException {
-		return TownyEconomyHandler.hasEnough(getEconomyName(), amount, getBukkitWorld());
+		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
 	}
 
 	/**
@@ -214,7 +205,7 @@ public class EconomyAccount extends TownyObject {
 	 * Attempt to delete the economy account.
 	 */
 	public void removeAccount() {
-		TownyEconomyHandler.removeAccount(getEconomyName());
+		TownyEconomyHandler.removeAccount(getName());
 	}
 
 }
