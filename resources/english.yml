@@ -1104,7 +1104,7 @@ msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins 
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!!!'
 msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded %s'
 
-#Siege war error messages
+#Siege war error message
 #Claiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 #Deleting
@@ -1150,6 +1150,7 @@ msg_err_siege_war_cannot_surrender_yet: '&6[War]&c You cannot surrender for anot
 #Block change
 msg_err_siege_war_cannot_destroy_siege_banner: "&6[War]&c While the siege is in progress you cannot destroy the siege banner or the block it is attached to."
 msg_err_siege_war_nation_zone_this_area_protected_but_besieged: '&6[War]&c This part of the %s is under the protection of %s, and also cannot be altered while the nearby town is under siege.'
+msg_err_siege_war_banner_support_block_not_stable: "&6[War]&c You cannot place the banner on unstable ground e.g. sand or gravel."
 # Spawn
 msg_err_siege_war_cannot_spawn_into_besieged_town: '&6[War]&c You cannot spawn into %s while your nation, or an ally, is besieging it.'
 

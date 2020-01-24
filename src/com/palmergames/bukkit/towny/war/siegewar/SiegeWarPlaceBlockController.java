@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -200,6 +201,13 @@ public class SiegeWarPlaceBlockController {
 
 				if (!TownySettings.getWarSiegeAttackEnabled())
 					return false;
+
+				if(SiegeWarBlockUtil.isSupportBlockUnstable(block)) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_banner_support_block_not_stable"));
+					event.setBuild(false);
+					event.setCancelled(true);
+					return true;
+				}
 
 				AttackTown.processAttackTownRequest(
 					player,
