@@ -1449,4 +1449,18 @@ public class Town extends TownyObject implements ResidentList, TownyInviteReceiv
 		
 		return account;
 	}
+
+	@Deprecated
+	protected World getBukkitWorld() {
+		if (hasWorld()) {
+			return BukkitTools.getWorld(getWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
+
+	@Deprecated
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+	}
 }

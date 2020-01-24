@@ -744,5 +744,15 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 	public TownyPermission getPermissions() {
 		return permissions;
 	}
+
+	@Deprecated
+	protected World getBukkitWorld() {
+		Player player = BukkitTools.getPlayer(getName());
+		if (player != null) {
+			return player.getWorld();
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
 }
 

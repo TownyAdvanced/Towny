@@ -735,4 +735,19 @@ public class Nation extends TownyObject implements ResidentList, TownyInviteSend
 		
 		return account;
 	}
+	
+	@Deprecated
+	protected World getBukkitWorld() {
+		if (hasCapital() && getCapital().hasWorld()) {
+			return BukkitTools.getWorld(getCapital().getWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
+
+
+	@Deprecated
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+	}
 }
