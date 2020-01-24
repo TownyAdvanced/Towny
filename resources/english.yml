@@ -1111,16 +1111,11 @@ msg_siege_war_town_became_non_neutral: '&b%s has declared itself not neutral. It
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 #Deleting
 msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
-<<<<<<< HEAD
-msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded the initial nation cost of %s."
+msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
 #Neutrality
 msg_err_siege_war_neutral_town_cannot_create_nation: "&6[War]&c As a neutral town, you cannot create a nation."
 msg_err_siege_war_neutral_town_cannot_join_nation: "&6[War]&c As a neutral town, you cannot join a nation."
 msg_err_siege_war_neutral_town_cannot_plunder: "&6[War]&c You cannot plunder a neutral town."
-=======
-msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
->>>>>>> siegewar
-
 #Revolt
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."
 msg_err_siege_war_revolt_immunity_active: "&6[War]&c Your town has revolt immunity. It cannot revolt until the revolt immunity expires."
