@@ -25,11 +25,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class TownyWarCustomListener implements Listener {
+public class FlagWarCustomListener implements Listener {
 
 	private final Towny plugin;
 
-	public TownyWarCustomListener(Towny instance) {
+	public FlagWarCustomListener(Towny instance) {
 
 		plugin = instance;
 	}

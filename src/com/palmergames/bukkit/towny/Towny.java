@@ -43,9 +43,9 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
@@ -97,9 +97,9 @@ public class Towny extends JavaPlugin {
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
-	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
-	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
-	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
+	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener(this);
+	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
+	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -373,8 +373,8 @@ public class Towny extends JavaPlugin {
 
 		if (!isError()) {
 			// Have War Events get launched before regular events.
-			pluginManager.registerEvents(townyWarBlockListener, this);
-			pluginManager.registerEvents(townyWarEntityListener, this);
+			pluginManager.registerEvents(flagWarBlockListener, this);
+			pluginManager.registerEvents(flagWarEntityListener, this);
 			
 			// Huds
 			pluginManager.registerEvents(HUDManager, this);
@@ -383,7 +383,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(vehicleListener, this);
 			pluginManager.registerEvents(weatherListener, this);
-			pluginManager.registerEvents(townyWarCustomListener, this);
+			pluginManager.registerEvents(flagWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
@@ -768,27 +768,27 @@ public class Towny extends JavaPlugin {
 	/**
 	 * @return the townyWarBlockListener
 	 */
-	public TownyWarBlockListener getTownyWarBlockListener() {
+	public FlagWarBlockListener getFlagWarBlockListener() {
 	
-		return townyWarBlockListener;
+		return flagWarBlockListener;
 	}
 
 	
 	/**
 	 * @return the townyWarCustomListener
 	 */
-	public TownyWarCustomListener getTownyWarCustomListener() {
+	public FlagWarCustomListener getFlagWarCustomListener() {
 	
-		return townyWarCustomListener;
+		return flagWarCustomListener;
 	}
 
 	
 	/**
 	 * @return the townyWarEntityListener
 	 */
-	public TownyWarEntityListener getTownyWarEntityListener() {
+	public FlagWarEntityListener getFlagWarEntityListener() {
 	
-		return townyWarEntityListener;
+		return flagWarEntityListener;
 	}
 	
 	/**
