@@ -1014,6 +1014,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			long lastOnline;
 			boolean isMayor;
 			boolean isJailed;
+			boolean isNPC;
 			int JailSpawn;
 			
 			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
@@ -1038,6 +1039,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
 			isMayor = resident.isMayor();
+			isNPC = resident.isNPC();
 			isJailed = resident.isJailed();			
 			JailSpawn = resident.getJailSpawn();
 			
@@ -1083,6 +1085,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (TownyException ignored) {
 				}
 			}
+			if (isNPC)
+				resident.setNPC(true);
 			resident.setJailed(isJailed);
 			resident.setJailSpawn(JailSpawn);
 			
