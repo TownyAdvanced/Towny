@@ -113,7 +113,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		try {
-			TownBlockOwner owner;
+			TownyObject owner;
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 
@@ -122,7 +122,6 @@ public class TownyFormatter {
 			} else {
 				owner = townBlock.getTown();
 			}
-			
 			
 
 			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));

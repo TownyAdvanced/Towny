@@ -11,8 +11,9 @@ import org.bukkit.World;
 /**
  * Economy object which provides an interface with the Economy Handler.
  *
- * @author ElgarL, Shade
- *
+ * @author ElgarL
+ * @author Shade
+ * @author Suneet Tipirneni (Siris)
  */
 public class EconomyAccount extends TownyObject {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
@@ -50,8 +51,10 @@ public class EconomyAccount extends TownyObject {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
 			boolean payed = _pay(amount);
-			if (payed)
-				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+			if (payed) {
+				
+			}
+				//TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
 			return payed;
 		}
 	}
@@ -81,8 +84,10 @@ public class EconomyAccount extends TownyObject {
 			return SERVER_ACCOUNT.payTo(amount, this, reason);
 		} else {
 			boolean collected = _collect(amount);
-			if (collected)
-				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
+			if (collected) {
+				// TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
+			}
+				
 			return collected;
 		}
 	}
@@ -106,8 +111,9 @@ public class EconomyAccount extends TownyObject {
 	
 	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
 		boolean payed = _payTo(amount, collector);
-		if (payed)
-			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
+		if (payed) {
+			//TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
+		}
 		return payed;
 	} 
 

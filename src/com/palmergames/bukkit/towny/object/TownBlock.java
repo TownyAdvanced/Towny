@@ -201,83 +201,42 @@ public class TownBlock {
 		switch (type) {
 		
 		case RESIDENTIAL:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
+
+			case COMMERCIAL:
+
+			case EMBASSY:
+
+			case WILDS:
+
+			case FARM:
+
+			case BANK:
+
+				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+
+				if (this.hasResident()) {
+				setPermissions(this.resident.getPermissions().toString());
 			} else {
-				setPermissions(this.town.permissions.toString());
+				setPermissions(this.town.getPermissions().toString());
 			}
 			
 			break;
-			
-		case COMMERCIAL:
-			
-			//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case ARENA:
+
+			case ARENA:
 			
 			setPermissions("pvp");
 			break;
-			
-		case EMBASSY:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case WILDS:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case SPLEEF:
-			
-			setPermissions("denyAll");
+
+			case SPLEEF:
+
+			case JAIL:
+
+				setPermissions("denyAll");
 			break;
 
 		case INN:
 			
 			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			break;
-			
-		case JAIL:
-			
-			setPermissions("denyAll");
-			break;
-		
-		case FARM:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case BANK:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
 			break;
 		}
 			

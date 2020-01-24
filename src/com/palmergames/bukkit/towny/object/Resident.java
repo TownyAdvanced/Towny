@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver, Economy {
+public class Resident extends TownyObject implements ResidentModes, TownyInviteReceiver, Economy, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -51,6 +51,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
+	private List<TownBlock> townBlocks;
+	private TownyPermission permissions;
 
 	public Resident(String name) {
 		super(name);
@@ -700,6 +702,47 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		}
 		
 		return null;
+	}
+
+	@Override
+	public void setTownblocks(List<TownBlock> townBlocks) {
+		this.townBlocks = townBlocks;
+	}
+
+	@Override
+	public List<TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		return townBlocks.contains(townBlock);
+	}
+
+	@Override
+	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
+		if (hasTownBlock(townBlock))
+			throw new AlreadyRegisteredException();
+		else
+			townBlocks.add(townBlock);
+	}
+
+	@Override
+	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
+		if (!hasTownBlock(townBlock))
+			throw new NotRegisteredException();
+		else
+			townBlocks.remove(townBlock);
+	}
+
+	@Override
+	public void setPermissions(String line) {
+		this.permissions.load(line);
+	}
+
+	@Override
+	public TownyPermission getPermissions() {
+		return permissions;
 	}
 }
 
