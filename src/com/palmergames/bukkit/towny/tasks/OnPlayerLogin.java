@@ -159,7 +159,7 @@ public class OnPlayerLogin implements Runnable {
 						
 						double upkeep = TownySettings.getNationUpkeepCost(nation);
 						try {
-							if ((upkeep > 0) && (!nation.canPayFromHoldings(upkeep))) {
+							if ((upkeep > 0) && (!nation.getAccount().canPayFromHoldings(upkeep))) {
 								/*
 								 *  Warn that the nation is due to be deleted.
 								 */

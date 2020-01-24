@@ -475,7 +475,7 @@ public class TownyFormatter {
 		String line = "";
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
-				line = String.format(TownySettings.getLangString("status_bank"), nation.getHoldingFormattedBalance());
+				line = String.format(TownySettings.getLangString("status_bank"), nation.getAccount().getHoldingFormattedBalance());
 
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
 					line += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getNationUpkeepCost(nation));

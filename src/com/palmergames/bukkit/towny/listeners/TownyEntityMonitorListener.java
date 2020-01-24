@@ -239,16 +239,16 @@ public class TownyEntityMonitorListener implements Listener {
 				double price = TownySettings.getDeathPriceNation();
 
 				if (!TownySettings.isDeathPriceType()) {
-					price = defenderResident.getTown().getNation().getHoldingBalance() * price;
+					price = defenderResident.getTown().getNation().getAccount().getHoldingBalance() * price;
 				}
 
-				if (!defenderResident.getTown().getNation().canPayFromHoldings(price))
-					price = defenderResident.getTown().getNation().getHoldingBalance();
+				if (!defenderResident.getTown().getNation().getAccount().canPayFromHoldings(price))
+					price = defenderResident.getTown().getNation().getAccount().getHoldingBalance();
 
 				if (!TownySettings.isEcoClosedEconomyEnabled())
-					defenderResident.getTown().getNation().payTo(price, new WarSpoils(), "Death Payment Nation");
+					defenderResident.getTown().getNation().getAccount().payTo(price, new WarSpoils(), "Death Payment Nation");
 				else 
-					defenderResident.getTown().getNation().pay(price, "Death Payment Nation");
+					defenderResident.getTown().getNation().getAccount().pay(price, "Death Payment Nation");
 
 				total = total + price;
 
@@ -397,22 +397,22 @@ public class TownyEntityMonitorListener implements Listener {
 					double price = TownySettings.getDeathPriceNation();
 
 					if (!TownySettings.isDeathPriceType()) {
-						price = defenderResident.getTown().getNation().getHoldingBalance() * price;
+						price = defenderResident.getTown().getNation().getAccount().getHoldingBalance() * price;
 					}
 
-					if (!defenderResident.getTown().getNation().canPayFromHoldings(price))
-						price = defenderResident.getTown().getNation().getHoldingBalance();
+					if (!defenderResident.getTown().getNation().getAccount().canPayFromHoldings(price))
+						price = defenderResident.getTown().getNation().getAccount().getHoldingBalance();
 
 					if (attackerResident == null) {
 						if (!TownySettings.isEcoClosedEconomyEnabled())
-							defenderResident.getTown().getNation().payTo(price, new WarSpoils(), "Death Payment Nation");
+							defenderResident.getTown().getNation().getAccount().payTo(price, new WarSpoils(), "Death Payment Nation");
 						else 
-							defenderResident.getTown().getNation().pay(price, "Death Payment Nation");
+							defenderResident.getTown().getNation().getAccount().pay(price, "Death Payment Nation");
 					} else {
 						if (!TownySettings.isEcoClosedEconomyEnabled())
-							defenderResident.getTown().getNation().payTo(price, attackerResident, "Death Payment Nation");
+							defenderResident.getTown().getNation().getAccount().payTo(price, attackerResident, "Death Payment Nation");
 						else 
-							defenderResident.getTown().getNation().pay(price, "Death Payment Nation");
+							defenderResident.getTown().getNation().getAccount().pay(price, "Death Payment Nation");
 					}
 					total = total + price;
 

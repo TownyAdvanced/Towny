@@ -296,7 +296,7 @@ public class SpawnUtil {
 			// spawncost to.)
 			travelCost = Math.min(nationSpawnPermission.getCost(nation), nationSpawnPermission.getCost());
 			spawnPermission = String.format(spawnType.getTypeName() + " (%s)", nationSpawnPermission);
-			payee = nation;
+			payee = nation.getAccount();
 			break;
 		}
 
