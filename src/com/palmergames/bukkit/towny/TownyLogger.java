@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.database.TownyDatabase;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -114,7 +113,6 @@ public class TownyLogger {
 		// Database
 		LoggerConfig townyDatabaseConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Database", null, new AppenderRef[0], null, config, null);
 		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
-		config.addLogger(TownyDatabase.class.getName(), townyDatabaseConfig);
 		
 		ctx.updateLoggers();
 	}
