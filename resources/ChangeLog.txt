@@ -4103,3 +4103,4 @@ v0.92.0.11:
   - Github Actions workflow adjustment courtesy of TheFlagCourier with PR #3654.
   - Fix /ta rename not passing on NPC status to residents.
   - Fix /plot set perm showing the opposite PVP setting in its final output.
+  - Update logger, courtesy of ArticDive/Siris with PR #3664.
