@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 
 public class TownyWarEntityListener implements Listener {
 
@@ -14,6 +14,6 @@ public class TownyWarEntityListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event) {
 
 		for (Block block : event.blockList())
-			TownyWar.checkBlock(null, block, event);
+			FlagWar.checkBlock(null, block, event);
 	}
 }

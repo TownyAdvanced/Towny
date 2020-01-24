@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 //import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 
 public class TownyWarBlockListener implements Listener {
 
@@ -53,20 +53,20 @@ public class TownyWarBlockListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 
-		TownyWar.checkBlock(event.getPlayer(), event.getBlock(), event);
+		FlagWar.checkBlock(event.getPlayer(), event.getBlock(), event);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBurn(BlockBurnEvent event) {
 
-		TownyWar.checkBlock(null, event.getBlock(), event);
+		FlagWar.checkBlock(null, event.getBlock(), event);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 
 		for (Block block : event.getBlocks())
-			TownyWar.checkBlock(null, block, event);
+			FlagWar.checkBlock(null, block, event);
 	}
 
 	

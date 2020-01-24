@@ -17,7 +17,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -459,7 +459,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		else {
 			if (neutral) {
 				for (Resident resident : getResidents()) {
-					TownyWar.removeAttackerFlags(resident.getName());
+					FlagWar.removeAttackerFlags(resident.getName());
 				}
 			}
 			this.neutral = neutral;

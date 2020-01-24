@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -301,7 +301,7 @@ public class TownyEntityListener implements Listener {
 		}
 		
 		// Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.  
-		if (TownyAPI.getInstance().isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
+		if (TownyAPI.getInstance().isWarTime() && !FlagWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
 			event.setCancelled(true);			
 		
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
@@ -747,7 +747,7 @@ public class TownyEntityListener implements Listener {
 
 		Coord coord = Coord.parseCoord(target);
 
-		if (world.isWarZone(coord) && !TownyWarConfig.isAllowingExplosionsInWarZone()) {
+		if (world.isWarZone(coord) && !FlagWarConfig.isAllowingExplosionsInWarZone()) {
 			return false;
 		}
 
@@ -823,19 +823,19 @@ public class TownyEntityListener implements Listener {
 				}
 				
 				if (!isNeutralTownBlock) {
-					if (!TownyWarConfig.isAllowingExplosionsInWarZone()) {
+					if (!FlagWarConfig.isAllowingExplosionsInWarZone()) {
 						if (event.getEntity() != null)
 							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + Coord.parseCoord(block.getLocation()).toString() + ".");
 						event.setCancelled(true);
 						return;
 					} else {
 						event.setCancelled(false);
-						if (TownyWarConfig.explosionsBreakBlocksInWarZone()) {
-							if (TownyWarConfig.getExplosionsIgnoreList().contains(block.getType().toString()) || TownyWarConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())){
+						if (FlagWarConfig.explosionsBreakBlocksInWarZone()) {
+							if (FlagWarConfig.getExplosionsIgnoreList().contains(block.getType().toString()) || FlagWarConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())){
 								it.remove();
 								continue;
 							}
-							if (TownyWarConfig.regenBlocksAfterExplosionInWarZone()) {
+							if (FlagWarConfig.regenBlocksAfterExplosionInWarZone()) {
 								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
