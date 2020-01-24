@@ -15,7 +15,7 @@ import org.bukkit.World;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public class EconomyAccount extends TownyObject implements EconomyHandler {
+public class EconomyAccount extends TownyObject {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private World world;
 	
@@ -30,11 +30,6 @@ public class EconomyAccount extends TownyObject implements EconomyHandler {
 
 	public World getWorld() {
 		return world;
-	}
-
-	@Override
-	public EconomyAccount getAccount() {
-		return SERVER_ACCOUNT;
 	}
 
 	private static final class TownyServerAccount extends EconomyAccount {
@@ -57,7 +52,7 @@ public class EconomyAccount extends TownyObject implements EconomyHandler {
 		} else {
 			boolean payed = _pay(amount);
 			if (payed) {
-				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+				TownyLogger.getInstance().logMoneyTransaction(this.getName(), amount, null, reason);
 			}
 				
 			return payed;
@@ -90,7 +85,7 @@ public class EconomyAccount extends TownyObject implements EconomyHandler {
 		} else {
 			boolean collected = _collect(amount);
 			if (collected) {
-				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
+				TownyLogger.getInstance().logMoneyTransaction(null, amount, getName(), reason);
 			}
 				
 			return collected;
@@ -111,12 +106,16 @@ public class EconomyAccount extends TownyObject implements EconomyHandler {
 	 * @throws EconomyException if transaction fails
 	 */
 	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
-		boolean payed = _payTo(amount, collector.getAccount());
+		return payTo(amount, collector.getAccount(), reason);
+	}
+	
+	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
+		boolean payed = _payTo(amount, collector);
 		if (payed) {
-			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
+			TownyLogger.getInstance().logMoneyTransaction(getName(), amount, collector.getName(), reason);
 		}
 		return payed;
-	}
+	} 
 
 	private boolean _payTo(double amount, EconomyAccount collector) throws EconomyException {
 		if (_pay(amount)) {

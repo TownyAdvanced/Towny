@@ -166,9 +166,17 @@ public class TownyLogger {
 	
 	public void logMoneyTransaction(EconomyHandler a, double amount, EconomyHandler b, String reason) {
 		if (reason == null) {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a.getAccount().getName(), amount, b.getAccount().getName()));
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", getObjectName(a), amount, getObjectName(b)));
 		} else {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a.getAccount().getAccount().getName(), amount, b.getAccount().getName()));
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, getObjectName(a), amount, getObjectName(b)));
+		}
+	}
+	
+	public void logMoneyTransaction(String a, double amount, String b, String reason) {
+		if (reason == null) {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b));
+		} else {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
 		}
 	}
 	
@@ -186,10 +194,6 @@ public class TownyLogger {
 			type = "?";
 		}
 		return String.format("[%s] %s", type, obj != null ? obj.getAccount().getName() : "");
-	}
-	
-	private String getObjectName(Object obj) {
-		return obj.getClass().getName();
 	}
 	
 	public void updateLoggers() {
