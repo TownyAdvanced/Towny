@@ -184,7 +184,7 @@ public class SiegeWarDeathController {
 			for(SiegeZone siegeZoneInCollection: siegeZone.getSiege().getSiegeZones().values()) {
 				SiegeWarPointsUtil.awardSiegePenaltyPoints(
 					attackerDeath,
-					pointsRecipient,
+					siegeZoneInCollection.getAttackingNation(),
 					deadResident,
 					siegeZoneInCollection,
 					TownySettings.getLangString("msg_siege_war_participant_death"));
