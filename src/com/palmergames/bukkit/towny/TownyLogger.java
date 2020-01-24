@@ -169,7 +169,15 @@ public class TownyLogger {
 		if (reason == null) {
 			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a.getName(), amount, b.getName()));
 		} else {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a.getName(), amount, b.getName()));
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, getObjectName(a), amount, getObjectName(b)));
+		}
+	}
+	
+	public void logMoneyTransaction(String a, double amount, String b, String reason) {
+		if (reason == null) {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b));
+		} else {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
 		}
 	}
 	
