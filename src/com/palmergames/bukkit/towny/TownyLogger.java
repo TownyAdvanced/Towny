@@ -172,6 +172,14 @@ public class TownyLogger {
 		}
 	}
 	
+	public void logMoneyTransaction(String a, double amount, String b, String reason) {
+		if (reason == null) {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b));
+		} else {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
+		}
+	}
+	
 	private String getObjectName(EconomyHandler obj) {
 		String type;
 		if (obj == null) {
