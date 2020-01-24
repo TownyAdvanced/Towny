@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.common.WarConfig;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -733,7 +734,7 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 				
 				// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
-				if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
+				if ((status == TownBlockStatus.WARZONE && WarConfig.isAllowingAttacks()) // Flag War
 						|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 					if (!WarZoneConfig.isAllowingItemUseInWarZone()) {
 						cancelState = true;
@@ -800,7 +801,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Flag war & now Event War
 		 */
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
+		if ((status == TownBlockStatus.WARZONE && WarConfig.isAllowingAttacks()) // Flag War
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));

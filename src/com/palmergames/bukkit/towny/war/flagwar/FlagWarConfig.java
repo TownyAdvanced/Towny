@@ -28,11 +28,6 @@ public class FlagWarConfig {
 		return woolColors;
 	}
 
-	public static boolean isAllowingAttacks() {
-
-		return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_ALLOW_ATTACKS);
-	}
-
 	public static long getFlagWaitingTime() {
 
 		return TimeTools.convertToTicks(TownySettings.getSeconds(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
