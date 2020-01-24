@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class TownyMessaging {
-	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
+	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
 	/**
