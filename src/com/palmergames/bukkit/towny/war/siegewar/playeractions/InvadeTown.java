@@ -153,21 +153,6 @@ public class InvadeTown {
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		if(removeNation) {
-			if(TownySettings.isUsingEconomy()
-				&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-				try {
-					//Refund the king with some of the initial nation cost
-					double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-					king.collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
-					Player player = TownyAPI.getInstance().getPlayer(king);
-					if (player != null)
-						TownyMessaging.sendMsg(
-							player, String.format(TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
-			}
-
 			universe.getDataSource().removeNation(nation);
 			universe.getDataSource().saveNationList();
         } else {

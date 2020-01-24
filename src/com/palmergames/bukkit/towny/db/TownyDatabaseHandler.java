@@ -727,6 +727,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
+		//Refund some of the initial setup cost to the king
+		if(TownySettings.getWarSiegeEnabled()
+			&& TownySettings.isUsingEconomy()
+			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+			try {
+				//Refund the king with some of the initial nation setup cost
+				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+				nation.getKing().collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
+			} catch (EconomyException e) {
+				e.printStackTrace();
+			}
+		}
+
 		//Delete nation and save towns
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
