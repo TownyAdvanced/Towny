@@ -745,8 +745,13 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 		return permissions;
 	}
 
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
 	@Deprecated
-	protected World getBukkitWorld() {
+	public World getBukkitWorld() {
 		Player player = BukkitTools.getPlayer(getName());
 		if (player != null) {
 			return player.getWorld();

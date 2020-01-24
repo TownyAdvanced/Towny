@@ -735,9 +735,14 @@ public class Nation extends TownyObject implements ResidentList, TownyInviteSend
 		
 		return account;
 	}
-	
+
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
 	@Deprecated
-	protected World getBukkitWorld() {
+	public World getBukkitWorld() {
 		if (hasCapital() && getCapital().hasWorld()) {
 			return BukkitTools.getWorld(getCapital().getWorld().getName());
 		} else {
@@ -745,7 +750,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviteSend
 		}
 	}
 
-
+	/**
+	 * @deprecated As of As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 *
+	 * @return The name of the economy account.
+	 */
 	@Deprecated
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
