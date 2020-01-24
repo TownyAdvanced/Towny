@@ -40,15 +40,9 @@ public class InvadeTown {
                                                 BlockPlaceEvent event) {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-			
 			Resident resident = universe.getDataSource().getResident(player.getName());
-			if(!resident.hasTown())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
-			
 			Town townOfInvadingResident = resident.getTown();
-			if(!townOfInvadingResident.hasNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
-			
+
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
