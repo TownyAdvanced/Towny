@@ -1145,7 +1145,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setOccupied(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				
+
+				line = keys.get("neutral");
+				if (line != null)
+					try {
+						town.setNeutral(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
+				line = keys.get("desiredNeutralityValue");
+				if (line != null)
+					try {
+						town.setDesiredNeutralityValue(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
+				line = keys.get("neutralityChangeConfirmationCounterDays");
+				if (line != null)
+					try {
+						town.setNeutralityChangeConfirmationCounterDays(Integer.parseInt(line));
+					} catch (Exception ignored) {
+					}
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -2220,6 +2241,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		
 		list.add("occupied=" + town.isOccupied());
+
+		//Neutrality
+		list.add("neutral=" + town.isNeutral());
+		list.add("desiredNeutralityValue=" + town.getDesiredNeutralityValue());
+		list.add("neutralityChangeConfirmationCounterDays=" + town.getNeutralityChangeConfirmationCounterDays());
 
 		/*
 		 *  Make sure we only save in async

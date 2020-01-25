@@ -1096,8 +1096,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
                 }
 				town.setOccupied(rs.getBoolean("occupied"));
+				town.setNeutral(rs.getBoolean("neutral"));
+				town.setDesiredNeutralityValue(rs.getBoolean("desiredNeutralityValue"));
+				town.setNeutralityChangeConfirmationCounterDays(rs.getInt("neutralityChangeConfirmationCounterDays"));
 
-                s.close();
+				s.close();
                 return true;
             }
             s.close();
@@ -1844,6 +1847,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("siegeZones", "");
 			}
 			twn_hm.put("occupied", town.isOccupied());
+			twn_hm.put("neutral=", town.isNeutral());
+			twn_hm.put("desiredNeutralityValue", town.getDesiredNeutralityValue());
+			twn_hm.put("neutralityChangeConfirmationCounterDays", town.getNeutralityChangeConfirmationCounterDays());
 
             UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
             return true;

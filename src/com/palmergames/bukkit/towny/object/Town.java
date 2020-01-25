@@ -1564,4 +1564,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public boolean getDesiredNeutralityValue() {
 		return desiredNeutralityValue;
 	}
+
+	public void setNeutral(boolean value) {
+		neutral = value;
+	}
 }

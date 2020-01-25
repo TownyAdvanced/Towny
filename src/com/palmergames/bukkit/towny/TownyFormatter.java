@@ -22,6 +22,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -332,11 +333,12 @@ public class TownyFormatter {
 			// without moving it first so this should not occur too often.
 			world = TownyUniverse.getInstance().getDataSource().getWorlds().get(0);
 		}
-
+		
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = getFormattedName(town);
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		title += (town.isNeutral() ? TownySettings.getLangString("status_town_title_neutral") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby
@@ -391,9 +393,10 @@ public class TownyFormatter {
 		// Permissions: B=rao D=--- S=ra-
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
-		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+
+		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
+			TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
+			TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
 		// | Bank: 534 coins
 		if(!town.isRuined()) {
@@ -454,7 +457,14 @@ public class TownyFormatter {
 
 		//Siege  Info
 		if(TownySettings.getWarSiegeEnabled() && !town.isRuined()) {
-
+							
+			//Countdown To Neutrality Status Change: 3 days
+			if(TownySettings.getWarSiegeTownNeutralityEnabled() 
+				&& town.getNeutralityChangeConfirmationCounterDays() > 0
+				&& town.isNeutral() != town.getDesiredNeutralityValue()) {
+				out.add(String.format(TownySettings.getLangString("status_town_neutrality_status_change_timer"), town.getNeutralityChangeConfirmationCounterDays()));
+			}
+			
 			//Revolt Immunity Timer: 71.8 hours
 			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
 				out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));

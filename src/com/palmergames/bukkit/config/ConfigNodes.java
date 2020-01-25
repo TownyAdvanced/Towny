@@ -1941,7 +1941,7 @@ public enum ConfigNodes {
 			"# The setting is an important anti-afk'ing feature."),
 	WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS(
 			"war.siege.switches.town_neutrality_confirmation_requirement_days",
-			"14",
+			"7",
 			"# This value determines how long it takes to confirm a town neutrality status change.",
 			"# It is recommended to be relatively high, ",
 		    "# for use by genuinely neutral towns, not just towns which wish to reduce war costs."),

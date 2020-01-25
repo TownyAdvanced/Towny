@@ -1103,10 +1103,11 @@ msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered of %s by %
 msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins by %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!!!'
 msg_siege_war_refund_initial_cost_on_nation_delete: '&b You have been refunded %s'
-msg_siege_war_town_declared_neutral: '&cThe town will be confirmed as neutral in %d day(s).'
-msg_siege_war_town_declared_non_neutral: '&cThe town will be confirmed as non-neutral in %d day(s).'
-msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no longer join a nation or (officially) take sides in wars, and is immune to material siege costs (e.g. pvp, plunder & taxes).'
-msg_siege_war_town_became_non_neutral: '&b%s has declared itself not neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to material siege costs (e.g. pvp, plunder & taxes).'
+msg_siege_war_town_declared_neutral: '&bNeutrality Declared!. The town will be confirmed as neutral in %d day(s).'
+msg_siege_war_town_declared_non_neutral: '&bNon-Neutrality Declared!. The town will be confirmed as non-neutral in %d day(s).'
+msg_siege_war_town_neutrality_countdown_cancelled: '&bThe neutrality status change countdown was cancelled.'
+msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no longer join a nation or (officially) take sides in wars, and is immune to material siege costs (e.g. pvp, plunder, and taxes).'
+msg_siege_war_town_became_non_neutral: '&b%s has declared itself not-neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to material siege costs.'
 
 #Siege war error message
 #Claiming
@@ -1117,7 +1118,7 @@ msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation 
 #Neutrality
 msg_err_siege_war_neutral_town_cannot_create_nation: "&6[War]&c As a neutral town, you cannot create a nation."
 msg_err_siege_war_neutral_town_cannot_join_nation: "&6[War]&c As a neutral town, you cannot join a nation."
-msg_err_siege_war_cannot_go_neutral_while_in_nation: "&6[War]&c You cannot declare neutrality while in a nation."
+msg_err_siege_war_cannot_change_neutrality_while_in_nation: "&6[War]&c You cannot change neutrality status while in a nation."
 #Plunder
 msg_err_siege_war_neutral_town_cannot_plunder: "&6[War]&c You cannot plunder a neutral town."
 #Revolt
@@ -1167,6 +1168,8 @@ msg_err_siege_war_cannot_spawn_into_besieged_town: '&6[War]&c You cannot spawn i
 msg_err_siege_war_cannot_occupy_zone_for_too_long: "&6[War]&c You have achieved maximum siege points for your current siege-zone occupation session. To resume scoring points, exit the siege zone for a few minutes, then re-enter."
 
 #Town Info Siege Section
+status_town_title_neutral: '&b (NEUTRAL)'
+status_town_neutrality_status_change_timer: '&2Countdown To Neutrality Status Change: &a%d days'
 status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
 status_town_siege_status: '&2Siege: &a%s'
 status_town_siege_status_in_progress: 'In Progress'

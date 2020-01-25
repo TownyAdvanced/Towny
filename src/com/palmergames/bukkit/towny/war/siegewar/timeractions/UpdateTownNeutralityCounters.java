@@ -38,7 +38,7 @@ public class UpdateTownNeutralityCounters {
 		}
     }
 
-	private static void updateTownNeutralityCounter(Town town) {
+	public static void updateTownNeutralityCounter(Town town) {
 		if(town.getNeutralityChangeConfirmationCounterDays() != 0) {
 			town.decrementNeutralityChangeConfirmationCounterDays();
 			

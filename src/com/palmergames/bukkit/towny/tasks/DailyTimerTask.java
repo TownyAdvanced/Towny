@@ -189,8 +189,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital() 
-						|| !town.hasUpkeep() 
+					if (town.isCapital()
+						|| !town.hasUpkeep()
 						|| town.isRuined()
 						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral()))
 						continue;

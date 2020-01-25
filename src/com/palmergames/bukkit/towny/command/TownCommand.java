@@ -56,6 +56,7 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1308,32 +1309,34 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-				
-				//Set target neutrality value and calculate counter value
-				int counterValue;
-				if(town.getNeutralityChangeConfirmationCounterDays() == 0) {
-					//Here, no status change countdown is in progress, and the town wishes to change neutrality status
-					town.setDesiredNeutralityValue(!town.isNeutral());
-					counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays();
-				} else {
-					//Here, a status change countdown is in progress, and the town wishes to reverse the direction of the progress,
-					town.flipDesiredNeutralityValue();
-					counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays() - town.getNeutralityChangeConfirmationCounterDays();
-				}
-				
-				//Cannot switch to neutral if you are in a nation
-				if(town.hasNation() && town.getDesiredNeutralityValue())
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_go_neutral_while_in_nation"));
-				
-				//Set counter value
-				town.setNeutralityChangeConfirmationCounterDays(counterValue);
-				
-				//Send message to town
-				if(town.getDesiredNeutralityValue())
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_neutral"), counterValue));
-				else
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_non_neutral"), counterValue));
 
+				//Cannot change neutrality status while in a nation
+				if(town.hasNation())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_change_neutrality_while_in_nation"));
+
+				if(admin) {
+					town.setNeutralityChangeConfirmationCounterDays(1);
+					UpdateTownNeutralityCounters.updateTownNeutralityCounter(town);
+				} else {
+					if (town.getNeutralityChangeConfirmationCounterDays() == 0) {
+						//Here, no countdown is in progress, and the town wishes to change neutrality status
+						town.setDesiredNeutralityValue(!town.isNeutral());
+						int counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays();
+						town.setNeutralityChangeConfirmationCounterDays(counterValue);
+						//Send message to town
+						if (town.getDesiredNeutralityValue())
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_neutral"), counterValue));
+						else
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_non_neutral"), counterValue));
+
+					} else {
+						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
+						town.setDesiredNeutralityValue(town.isNeutral());
+						town.setNeutralityChangeConfirmationCounterDays(0);
+						//Send message to town
+						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_neutrality_countdown_cancelled")));
+					}
+				}
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 			}

@@ -180,6 +180,10 @@ public class SQL_Schema {
 		columns.add("`siegeActualEndTime` BIGINT");
 		columns.add("`siegeZones` mediumtext");
 		columns.add("`occupied` bool NOT NULL DEFAULT '0'");
+		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
+		columns.add("`desiredNeutralityValue` bool NOT NULL DEFAULT '0'");
+		columns.add("`neutralityChangeConfirmationCounterDays` int(11) DEFAULT 0");
+
 		return columns;
 	}
 
