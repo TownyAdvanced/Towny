@@ -1,10 +1,6 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.EconomyAccount;
-import com.palmergames.bukkit.towny.object.EconomyHandler;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -157,23 +153,7 @@ public class TownyLogger {
 			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
 		}
 	}
-	
-	private String getObjectName(EconomyHandler obj) {
-		String type;
-		if (obj == null) {
-			type = "Server";
-		} else if (obj instanceof Resident) {
-			type = "Resident";
-		} else if (obj instanceof Town) {
-			type = "Town";
-		} else if (obj instanceof Nation) {
-			type = "Nation";
-		} else {
-			type = "?";
-		}
-		return String.format("[%s] %s", type, obj != null ? obj.getAccount().getName() : "");
-	}
-	
+
 	public static TownyLogger getInstance() {
 		return instance;
 	}
