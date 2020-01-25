@@ -279,17 +279,6 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.NATION_DELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
-					if(TownySettings.getWarSiegeEnabled()
-						&& TownySettings.isUsingEconomy()
-						&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-						try {
-							//Refund the king with some of the initial nation cost
-							double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-							r.collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
-						} catch (EconomyException e) {
-							e.printStackTrace();
-						}
-					}
 					townyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);

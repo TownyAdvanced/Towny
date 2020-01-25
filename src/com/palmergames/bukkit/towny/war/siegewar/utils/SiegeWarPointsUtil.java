@@ -16,7 +16,10 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class contains utility functions related to siege points
@@ -180,19 +183,22 @@ public class SiegeWarPointsUtil {
 			siegePoints,
 			TownyFormatter.getFormattedName(pointsRecipient));
 
+		//Inform attacker nation
 		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
-		for(Nation alliedNation: siegeZone.getAttackingNation().getMutualAllies()) {
-			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
-		}
+		Set<Nation> alliesToInform = new HashSet<>();
+		alliesToInform.addAll(siegeZone.getAttackingNation().getMutualAllies());
 
+		//Inform defending town, and nation if there is one
 		if (siegeZone.getDefendingTown().hasNation()) {
 			TownyMessaging.sendPrefixedNationMessage(siegeZone.getDefendingTown().getNation(), message);
-			for(Nation alliedNation: siegeZone.getDefendingTown().getNation().getMutualAllies()) {
-				TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
-			}
+			alliesToInform.addAll(siegeZone.getDefendingTown().getNation().getMutualAllies());
 		} else {
 			TownyMessaging.sendPrefixedTownMessage(siegeZone.getDefendingTown(), message);
 		}
 
+		//Inform allies
+		for(Nation alliedNation: alliesToInform) {
+			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
+		}
 	}
 }

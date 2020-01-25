@@ -183,4 +183,26 @@ public class SiegeWarBlockUtil {
 				return false;
 		}
 	}
+
+	/**
+	 * This method determines if the supporting block is unstable (e.g. sand,gravel)
+	 *
+	 * @param block the block
+	 * @return true if support block is unstable
+	 */
+	public static boolean isSupportBlockUnstable(Block block) {
+		Block blockBelowBanner = block.getRelative(BlockFace.DOWN);
+		switch(blockBelowBanner.getType()){
+			case AIR:
+			case CAVE_AIR:
+			case VOID_AIR:
+			case GRAVEL:
+			case SAND:
+			case SOUL_SAND:
+			case RED_SAND:
+				return true;
+			default:
+				return false;
+		}
+	}
 }
