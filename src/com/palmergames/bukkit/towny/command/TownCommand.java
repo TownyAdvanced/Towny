@@ -2065,8 +2065,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			TownyMessaging.sendErrorMsg("Point 1");
-
 			if ((filteredName == null) || townyUniverse.getDataSource().hasTown(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
@@ -2099,8 +2097,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
-
-			TownyMessaging.sendErrorMsg("Point 2");
 			
 			newTown(world, name, resident, key, player.getLocation(), player);
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
