@@ -4104,3 +4104,5 @@ v0.92.0.11:
   - Fix /ta rename not passing on NPC status to residents.
   - Fix /plot set perm showing the opposite PVP setting in its final output.
   - Update logger, courtesy of ArticDive/Siris with PR #3664.
+  - Fix /ta town {townname} {command} not showing anything helpful when the {command} used is not a valid command.
+    - Closes #3667.
