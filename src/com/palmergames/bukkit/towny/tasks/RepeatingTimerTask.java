@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 public class RepeatingTimerTask extends TownyTimerTask {
-	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
+	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	
 	public RepeatingTimerTask(Towny plugin) {
 

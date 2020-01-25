@@ -85,7 +85,7 @@ import java.util.concurrent.Callable;
  */
 
 public class Towny extends JavaPlugin {
-	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
+	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private String version = "2.0.0";
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
