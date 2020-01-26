@@ -4109,3 +4109,4 @@ v0.92.0.11:
   - Fix ranks not being capitalized on /res, /town and /nation screens.
     - Closes #3669.
   - Added StringMgmt.capitalize();
+  - Fix 'msg_modes_set' in ResidentCommand not being used for translation, courtesy of TheFlagCourier with PR #3658.
