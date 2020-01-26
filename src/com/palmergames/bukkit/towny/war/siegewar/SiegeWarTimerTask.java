@@ -125,7 +125,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 						//Resident of defending town
 						siegeZoneChanged =
-								siegeZoneChanged ||
+								siegeZoneChanged |
 										evaluateSiegeZoneOccupant(
 												player,
 												siegeZone,
@@ -141,7 +141,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							//Nation member of defending town
 							siegeZoneChanged =
-									siegeZoneChanged ||
+									siegeZoneChanged |
 											evaluateSiegeZoneOccupant(
 													player,
 													siegeZone,
@@ -153,7 +153,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							//Nation member of attacking nation
 							siegeZoneChanged =
-									siegeZoneChanged ||
+									siegeZoneChanged |
 											evaluateSiegeZoneOccupant(
 													player,
 													siegeZone,
@@ -165,7 +165,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							//Nation member of ally of defending nation
 							siegeZoneChanged =
-									siegeZoneChanged ||
+									siegeZoneChanged |
 											evaluateSiegeZoneOccupant(
 													player,
 													siegeZone,
@@ -176,7 +176,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							//Nation member of ally of attacking nation
 							siegeZoneChanged =
-									siegeZoneChanged ||
+									siegeZoneChanged |
 											evaluateSiegeZoneOccupant(
 													player,
 													siegeZone,
