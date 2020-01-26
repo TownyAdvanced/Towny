@@ -122,6 +122,7 @@ public class SQL_Schema {
 		columns.add("`attackingNation` mediumtext NOT NULL");
 		columns.add("`defendingTown` mediumtext NOT NULL");
 		columns.add("`siegePoints` mediumtext NOT NULL");
+		columns.add("`warChestAmount` float NOT NULL");
 		return columns;
 	}
 	

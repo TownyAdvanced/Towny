@@ -5,9 +5,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +35,7 @@ public class SiegeZone {
     private Map<Player, Long> attackerPlayerScoreTimeMap; //player, time when they will score
     private Map<Player, Long> defenderPlayerScoreTimeMap; //player, time when they will score
 	private Map<Player, Long> playerAfkTimeMap;  //player, time they will be considered afk
+	private double warChestAmount;
 	
     public SiegeZone() {
         attackingNation = null;
@@ -46,6 +45,7 @@ public class SiegeZone {
         attackerPlayerScoreTimeMap = new HashMap<>();
         defenderPlayerScoreTimeMap = new HashMap<>();
 		playerAfkTimeMap = new HashMap<>();
+		warChestAmount = 0;
     }
 
     public SiegeZone(Nation attackingNation, Town defendingTown) {
@@ -56,6 +56,7 @@ public class SiegeZone {
         attackerPlayerScoreTimeMap = new HashMap<>();
         defenderPlayerScoreTimeMap = new HashMap<>();
 		playerAfkTimeMap = new HashMap<>();
+		warChestAmount = 0;
     }
 
     public String getName() {
@@ -124,5 +125,24 @@ public class SiegeZone {
 
 	public void setPlayerAfkTimeMap(Map<Player, Long> playerAfkTimeMap) {
 		this.playerAfkTimeMap = playerAfkTimeMap;
+	}
+
+	public double getWarChestAmount() {
+    	if(warChestAmount == 0) {
+    		//This logic is only possible after initial deployment of warchest to a server with running sieges.
+			//3 days after this, it can removed
+			//Todo
+			try {
+				return defendingTown.getSiegeCost();
+			} catch (Exception e) {
+				return 100;  //just in case
+			}
+		} else {
+			return warChestAmount;
+		}
+	}
+
+	public void setWarChestAmount(double warChestAmount) {
+		this.warChestAmount = warChestAmount;
 	}
 }

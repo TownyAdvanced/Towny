@@ -1,9 +1,13 @@
 package com.palmergames.bukkit.towny.war.siegewar.timeractions;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -25,9 +29,11 @@ public class DefenderWin
     public static void defenderWin(Siege siege, Town winnerTown) {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_WIN, null);
 
-        TownyMessaging.sendGlobalMessage(String.format(
-                TownySettings.getLangString("msg_siege_war_defender_win"),
-                TownyFormatter.getFormattedTownName(winnerTown)));
+		TownyMessaging.sendGlobalMessage(String.format(
+			TownySettings.getLangString("msg_siege_war_defender_win"),
+			TownyFormatter.getFormattedTownName(winnerTown)));
+
+		SiegeWarMoneyUtil.giveWarChestsToWinnerTown(siege, winnerTown);
     }
 
 }

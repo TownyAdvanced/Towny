@@ -1407,6 +1407,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("siegePoints");
 				siegeZone.setSiegePoints(Integer.parseInt(line));
 
+				line = keys.get("warChestAmount");
+				if (line != null && !line.isEmpty())
+					siegeZone.setWarChestAmount(Double.parseDouble(line));
+				
+
 				//Player-scoretime maps are not saved/loaded
 				//As it is tricky but with no significant benefit
 
@@ -2356,6 +2361,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
+		list.add("warChestAmount=" + siegeZone.getWarChestAmount());
+
 		//Player-scoretime maps are not saved/loaded
 		//As it is tricky but with no significant benefit
 
