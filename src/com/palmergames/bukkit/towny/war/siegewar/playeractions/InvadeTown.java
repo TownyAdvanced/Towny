@@ -94,7 +94,6 @@ public class InvadeTown {
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
-		defendingTown.setOccupied(true);
 		
         //Reset revolt immunity, to prevent immediate revolt after invasion 
         SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown);
@@ -133,6 +132,8 @@ public class InvadeTown {
                     TownyFormatter.getFormattedNationName(attackingNation)
             ));
         }
+
+		defendingTown.setOccupied(true);
 
 		//Save the town to ensure data is saved even if only town/siege was updated
 		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
