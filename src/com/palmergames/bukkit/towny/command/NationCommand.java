@@ -305,17 +305,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length == 1)
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_nation_name"));
-				else if (split.length == 2) {
+				else if (split.length >= 2) {
 
 					if (!resident.isMayor() && !resident.getTown().hasAssistant(resident))
 						throw new TownyException(TownySettings.getLangString("msg_peasant_right"));
-					newNation(player, split[1], resident.getTown().getName());
 
-				} else {
-					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
-					newNation(player, split[1], split[2]);
+					String[] newSplit = StringMgmt.remFirstArg(split);
+					String nationName = String.join("_", newSplit);
+					newNation(player, nationName, resident.getTown().getName(), false);
+
 				}
 			} else if (split[0].equalsIgnoreCase("join")) {
 
@@ -1030,8 +1028,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param player - Player creating the new nation.
 	 * @param name - Nation name.
 	 * @param capitalName - Capital city name.
+	 * @param noCharge - charging for creation - /ta nation new NAME CAPITAL has no charge.
 	 */
-	public void newNation(Player player, String name, String capitalName) {
+	public static void newNation(Player player, String name, String capitalName, boolean noCharge) {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
@@ -1058,7 +1057,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
+			if (!noCharge && TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
 			newNation(name, town);
@@ -1069,7 +1068,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);

@@ -4110,3 +4110,15 @@ v0.92.0.11:
     - Closes #3669.
   - Added StringMgmt.capitalize();
   - Fix 'msg_modes_set' in ResidentCommand not being used for translation, courtesy of TheFlagCourier with PR #3658.
+0.95.2.13:
+  - Fix towny.admin players being limited by pvp cooldown timer.
+  - Fix town/nation permissions missing on the /plot perm hud scoreboard.
+  - Fix NPE shown when player is using /plot perm hud, but has another plugin's scoreboard show up.
+  - Fix missing town/nation key values on /plot perm hud.
+  - Fix missing townblock type on /plot perm hud.
+  - Fix /n new name with out underscores not parsing spaces into underscores.
+  - New Command: /townyadmin nation new {name} {capital}
+    - Creates a nation for the specified town.
+    - Does not charge the town money.
+  - New Permission Node: towny.command.townyadmin.nation.new
+    - Allows the use of the /ta nation new {name} {capital} command.
