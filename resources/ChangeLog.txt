@@ -4110,3 +4110,7 @@ v0.92.0.11:
     - Closes #3669.
   - Added StringMgmt.capitalize();
   - Fix 'msg_modes_set' in ResidentCommand not being used for translation, courtesy of TheFlagCourier with PR #3658.
+0.95.2.13:
+  - Fix towny.admin players being limited by pvp cooldown timer.
+  - Fix town/nation permissions missing on the /plot perm hud scoreboard.
+  - Fix NPE shown when player is using /plot perm hud, but has another plugin's scoreboard show up.
