@@ -523,6 +523,7 @@ permissions:
         description: User can access the admin nation commands.
         default: false
         children:
+            towny.command.townyadmin.nation.new: true
             towny.command.townyadmin.nation.add: true
             towny.command.townyadmin.nation.delete: true
             towny.command.townyadmin.nation.rename: true
