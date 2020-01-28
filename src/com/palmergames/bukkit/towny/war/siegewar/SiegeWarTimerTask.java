@@ -254,20 +254,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				playerScoreTimeMap.remove(player);
 				siegeZone.getPlayerAfkTimeMap().remove(player);
-				return true;
-			}
-
-			//Player must have been in zone long enough
-			if (System.currentTimeMillis() < playerScoreTimeMap.get(player)) {
 				return false;
 			}
-			
-			//Player must not have been in zone too long (anti-afk feature)
-			if (System.currentTimeMillis() > siegeZone.getPlayerAfkTimeMap().get(player)) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_cannot_occupy_zone_for_too_long"));
-				playerScoreTimeMap.put(player,
-					System.currentTimeMillis()
-						+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+
+			//Player must not be flying or invisible
+			if(player.isFlying() || player.getPotionEffect(PotionEffectType.INVISIBILITY) != null) {
+				playerScoreTimeMap.remove(player);
+				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return false;
 			}
 
@@ -275,14 +268,18 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				playerScoreTimeMap.remove(player);
 				siegeZone.getPlayerAfkTimeMap().remove(player);
-				return true;
+				return false;
 			}
-			
-			//Player has been in zone long enough. Points awarded
+
+			//Player must not have been in zone too long (anti-afk feature)
+			if (System.currentTimeMillis() > siegeZone.getPlayerAfkTimeMap().get(player)) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_cannot_occupy_zone_for_too_long"));
+				playerScoreTimeMap.remove(player);
+				return false;
+			}
+
+			//Points awarded
 			siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
-			playerScoreTimeMap.put(player,
-					System.currentTimeMillis()
-							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
 			return true;
 
 		} else {
@@ -302,15 +299,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				return false;
 			}
 
-			playerScoreTimeMap.put(player,
-					System.currentTimeMillis()
-							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
-			
+			playerScoreTimeMap.put(player, 0L);
+
 			siegeZone.getPlayerAfkTimeMap().put(player,
 					System.currentTimeMillis()
 							+ (long)(TownySettings.getWarSiegeZoneMaximumScoringDurationMinutes() * ONE_MINUTE_IN_MILLIS));
-			
-			return true; //Player added to zone
+
+			return false; //Player added to zone
 		}
 	}
 	

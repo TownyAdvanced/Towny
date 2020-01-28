@@ -1878,9 +1878,9 @@ public enum ConfigNodes {
 	//Times
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.times.timer_interval_seconds",
-			"12",
+			"23",
 			"# The time in seconds for each siegewar timer tick.",
-			"# It is recommended to put this between 5-12, to avoid the perception that nothing is happening in a siege."),
+			"# It is recommended to put this between 10-30, not too low to cause lag, not too high that players have to wait unacceptably long for siege points."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
 			"war.siege.times.ruins_removal_interval_minutes",
 			"60",
@@ -1926,13 +1926,6 @@ public enum ConfigNodes {
 			"war.siege.times.ruins_removal_delay_minutes",
 			"1440",
 			"# This setting determines the delay between a town being ruined, and final deletion."),
-	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
-			"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
-			"23",
-			"# This setting determines how long a player must remain in a siege zone,",
-			"# before siege points are awarded.",
-			"# If it is too high, points may appear to players to accumulate too slowly",
-			"# If it is too low, you will have a high number of DB operations on the server."),
 	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
 			"war.siege.times.zone_maximum_scoring_duration_minutes",
 			"15",

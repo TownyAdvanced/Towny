@@ -3036,10 +3036,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS);
 	}
 
-	public static int getWarSiegeZoneOccupationScoringTimeRequirementSeconds() {
-		return getInt(ConfigNodes.WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS);
-	}
-
 	public static double getWarSiegeZoneMaximumScoringDurationMinutes() {
 		return getDouble(ConfigNodes.WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES);
 	}
