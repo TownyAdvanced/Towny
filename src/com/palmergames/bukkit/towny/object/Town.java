@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotObjectGroup>, EconomyHandler, TownBlockOwner {
+public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, EconomyHandler, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -39,7 +39,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private HashMap<String, PlotObjectGroup> plotGroups = null;
+	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1336,7 +1336,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return this.conqueredDays;
 	}
 	
-	public List<TownBlock> getTownBlocksForPlotGroup(PlotObjectGroup group) {
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
 		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
@@ -1350,21 +1350,21 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return retVal;
 	}
 	
-	public void renamePlotGroup(String oldName, PlotObjectGroup group) {
+	public void renamePlotGroup(String oldName, PlotGroup group) {
 		plotGroups.remove(oldName);
-		plotGroups.put(group.getGroupName(), group);
+		plotGroups.put(group.getName(), group);
 	}
 	
-	public void addPlotGroup(PlotObjectGroup group) {
+	public void addPlotGroup(PlotGroup group) {
 		if (!hasObjectGroups()) 
 			plotGroups = new HashMap<>();
 		
-		plotGroups.put(group.getGroupName(), group);
+		plotGroups.put(group.getName(), group);
 		
 	}
 	
-	public void removePlotGroup(PlotObjectGroup plotGroup) {
-		if (hasObjectGroups() && plotGroups.remove(plotGroup.getGroupName()) != null) {
+	public void removePlotGroup(PlotGroup plotGroup) {
+		if (hasObjectGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1380,7 +1380,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	// Abstract to collection in case we want to change structure in the future
 	@Override
-	public Collection<PlotObjectGroup> getObjectGroups() {
+	public Collection<PlotGroup> getObjectGroups() {
 		
 		if (plotGroups == null)
 			return null;
@@ -1390,9 +1390,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	// Method is inefficient compared to getting the group from name.
 	@Override
-	public PlotObjectGroup getObjectGroupFromID(UUID ID) {
+	public PlotGroup getObjectGroupFromID(UUID ID) {
 		if (hasObjectGroups()) {
-			for (PlotObjectGroup pg : getObjectGroups()) {
+			for (PlotGroup pg : getObjectGroups()) {
 				if (pg.getID().equals(ID)) 
 					return pg;
 			}
@@ -1412,7 +1412,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return hasObjectGroups() && plotGroups.containsKey(name);
 	}
 
-	public PlotObjectGroup getPlotObjectGroupFromName(String name) {
+	public PlotGroup getPlotObjectGroupFromName(String name) {
 		if (hasObjectGroups()) {
 			return plotGroups.get(name);
 		}
@@ -1421,11 +1421,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	// Wraps other functions to provide a better naming scheme for the end developer.
-	public PlotObjectGroup getPlotObjectGroupFromID(UUID ID) {
+	public PlotGroup getPlotObjectGroupFromID(UUID ID) {
 		return getObjectGroupFromID(ID);
 	}
 	
-	public Collection<PlotObjectGroup> getPlotObjectGroups() {
+	public Collection<PlotGroup> getPlotObjectGroups() {
 		return getObjectGroups();
 	}
 

@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
 import java.util.HashSet;
 
-public class TownBlock {
+public class TownBlock extends TownyObject {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -22,19 +22,19 @@ public class TownBlock {
 	private Town town;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
-	private String name = "";
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private PlotObjectGroup plotGroup;
+	private PlotGroup plotGroup;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
 	protected boolean isChanged = false;
 	
 	public TownBlock(int x, int z, TownyWorld world) {
+		super("");
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
@@ -313,14 +313,9 @@ public class TownBlock {
 		}
 	}
 	
+	@Override
 	public void setName(String newName) {
-
-		this.name = newName.replace("_", " ");
-	}
-
-	public String getName() {
-
-		return this.name;
+		super.setName(newName.replace("_", " ")); 
 	}
 
 	public void setX(int x) {
@@ -457,7 +452,7 @@ public class TownBlock {
 	
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }
 	
-	public PlotObjectGroup getPlotObjectGroup() {
+	public PlotGroup getPlotObjectGroup() {
 		return plotGroup;
 	}
 	
@@ -465,7 +460,7 @@ public class TownBlock {
 		this.plotGroup = null;
 	}
 
-	public void setPlotObjectGroup(PlotObjectGroup group) {
+	public void setPlotObjectGroup(PlotGroup group) {
 		this.plotGroup = group;
 
 		try {

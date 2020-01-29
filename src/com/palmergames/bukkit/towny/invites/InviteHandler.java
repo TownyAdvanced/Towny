@@ -79,14 +79,14 @@ public class InviteHandler {
 		return invites.size();
 	}
 
-	public static int getSentAllyRequestsAmount(TownyAllySender sender) {
+	public static int getSentAllyRequestsAmount(Nation sender) {
 		List<Invite> invites = sender.getSentAllyInvites();
 		return invites.size();
 	}
 
-	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender) {
+	public static int getSentAllyRequestsMaxAmount(Nation sender) {
 		int amount = 0;
-		if (sender instanceof Nation) {
+		if (sender != null) {
 			if (TownySettings.getMaximumRequestsSentNation() == 0){
 				amount = 100;
 			} else {

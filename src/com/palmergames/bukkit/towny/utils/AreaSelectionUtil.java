@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -243,7 +243,7 @@ public class AreaSelectionUtil {
 	 * @return A List of {@link WorldCoord} that contains the coordinates of townblocks part of the specified group.
 	 * @author Suneet Tipirneni (Siris)
 	 */
-	public static List<WorldCoord> filterPlotsByGroup(PlotObjectGroup group, List<WorldCoord> selection) {
+	public static List<WorldCoord> filterPlotsByGroup(PlotGroup group, List<WorldCoord> selection) {
 		List<WorldCoord> out =  new ArrayList<>();
 		
 		for (WorldCoord worldCoord : selection) {
@@ -259,12 +259,12 @@ public class AreaSelectionUtil {
 		return out;
 	}
 	
-	public static HashSet<PlotObjectGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
-		HashSet<PlotObjectGroup> seenGroups = new HashSet<>();
+	public static HashSet<PlotGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
+		HashSet<PlotGroup> seenGroups = new HashSet<>();
 		
 		for (WorldCoord coord : selection) {
 			
-			PlotObjectGroup group = null;
+			PlotGroup group = null;
 			try {
 				group = coord.getTownBlock().getPlotObjectGroup();
 			} catch (NotRegisteredException ignored) {}

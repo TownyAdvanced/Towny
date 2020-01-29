@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -390,8 +390,8 @@ public class TownyUniverse {
 	 * 
 	 * @return collection of PlotObjectGroup
 	 */
-	public Collection<PlotObjectGroup> getGroups() {
-    	List<PlotObjectGroup> groups = new ArrayList<>();
+	public Collection<PlotGroup> getGroups() {
+    	List<PlotGroup> groups = new ArrayList<>();
     	
 		for (Town town : towns.values()) {
 			if (town.hasObjectGroups()) {
@@ -410,7 +410,7 @@ public class TownyUniverse {
 	 * @param groupID UUID of the plot group
 	 * @return PlotGroup if found, null if none found.
 	 */
-	public PlotObjectGroup getGroup(String townName, UUID groupID) {
+	public PlotGroup getGroup(String townName, UUID groupID) {
 		Town t = null;
 		try {
 			t = TownyUniverse.getInstance().getDataSource().getTown(townName);
@@ -431,7 +431,7 @@ public class TownyUniverse {
 	 * @param groupName Plot Group Name
 	 * @return the plot group if found, otherwise null
 	 */
-	public PlotObjectGroup getGroup(String townName, String groupName) {
+	public PlotGroup getGroup(String townName, String groupName) {
 		Town t = towns.get(townName);
 
 		if (t != null) {
@@ -445,13 +445,13 @@ public class TownyUniverse {
 		return getRegisteredMetadata();
 	}
 
-	public PlotObjectGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
+	public PlotGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
     	
     	// Create new plot group.
-		PlotObjectGroup newGroup = new PlotObjectGroup(id, name, town);
+		PlotGroup newGroup = new PlotGroup(id, name, town);
 		
 		// Check if there is a duplicate
-		if (town.hasObjectGroupName(newGroup.getGroupName())) {
+		if (town.hasObjectGroupName(newGroup.getName())) {
 			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
 			throw new AlreadyRegisteredException();
 		}
@@ -467,7 +467,7 @@ public class TownyUniverse {
 	}
 
 
-	public void removeGroup(PlotObjectGroup group) {
+	public void removeGroup(PlotGroup group) {
 		group.getTown().removePlotGroup(group);
 		
 	}

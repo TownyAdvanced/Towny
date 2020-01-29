@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -72,7 +72,7 @@ public class ChunkNotification {
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
 	TownBlockType fromPlotType = null, toPlotType = null;
-	PlotObjectGroup fromPlotGroup = null, toPlotGroup = null;
+	PlotGroup fromPlotGroup = null, toPlotGroup = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -342,7 +342,7 @@ public class ChunkNotification {
 	
 	public String getGroupNotification() {
 		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(groupNotificationFormat, toTownBlock.getPlotObjectGroup().getGroupName());
+			return String.format(groupNotificationFormat, toTownBlock.getPlotObjectGroup().getName());
 		return null;
 	}
 

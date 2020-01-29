@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public abstract class TownyObject {
+public abstract class TownyObject implements Nameable {
 	private String name;
 
 	private HashSet<CustomDataField> metadata = null;
@@ -20,7 +20,8 @@ public abstract class TownyObject {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@Override
 	public String getName() {
 		return name;
 	}

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownyObject implements ResidentModes, TownyInviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -465,20 +465,17 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 //
 //		}
 //	}	
-
-	@Override
+	
 	public List<String> getModes() {
 
 		return this.modes;
 	}
-
-	@Override
+	
 	public boolean hasMode(String mode) {
 
 		return this.modes.contains(mode.toLowerCase());
 	}
-
-	@Override
+	
 	public void toggleMode(String newModes[], boolean notify) {
 
 		/*
@@ -504,8 +501,7 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 		if (notify)
 			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
-
-	@Override
+	
 	public void setModes(String[] modes, boolean notify) {
 
 		this.modes.clear();
@@ -516,8 +512,7 @@ public class Resident extends TownyObject implements ResidentModes, TownyInviteR
 
 
 	}
-
-	@Override
+	
 	public void clearModes() {
 
 		this.modes.clear();

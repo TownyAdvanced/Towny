@@ -4,9 +4,10 @@ import java.util.UUID;
 
 /**
  * An abstract class which defines the mechanics of groups in towny.
+ * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class ObjectGroup {
+public abstract class ObjectGroup implements Nameable {
 	private UUID id;
 	private String name;
 
@@ -28,11 +29,12 @@ public abstract class ObjectGroup {
 		this.id = ID;
 	}
 	
-	public String getGroupName() {
+	@Override
+	public String getName() {
 		return name;
 	}
 	
-	public void setGroupName(String name) { this.name = name; }
+	public void setName(String name) { this.name = name; }
 
 	/**
 	 * Determines whether a group is equivalent or not.

@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyAllySender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -31,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviter, TownyAllySender, EconomyHandler {
+public class Nation extends TownyObject implements ResidentList, TownyInviter, EconomyHandler {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -630,8 +629,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 	public void deleteSentInvite(Invite invite) {
 		sentinvites.remove(invite);
 	}
-
-	@Override
+	
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
 		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
 			sentallyinvites.add(invite);
@@ -639,13 +637,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
 		}
 	}
-
-	@Override
+	
 	public void deleteSentAllyInvite(Invite invite) {
 		sentallyinvites.remove(invite);
 	}
-
-	@Override
+	
 	public List<Invite> getSentAllyInvites() {
 		return sentallyinvites;
 	}
