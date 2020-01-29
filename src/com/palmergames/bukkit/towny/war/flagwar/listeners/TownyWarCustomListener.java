@@ -102,13 +102,13 @@ public class TownyWarCustomListener implements Listener {
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(TownyWarConfig.getDefendedAttackReward());
 				if (defendingPlayer == null) {
-					if (attackingPlayer.pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
+					if (attackingPlayer.getAccount().pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_greater_forces"), formattedMoney));
 						} catch (TownyException ignored) {
 						}
 				} else {
-					if (attackingPlayer.payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
+					if (attackingPlayer.getAccount().payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_attacker"), defendingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
@@ -164,8 +164,8 @@ public class TownyWarCustomListener implements Listener {
 					if (amount > 0) {
 						// Defending Town -> Attacker (Pillage)
 						String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
-						amount = Math.min(amount, defendingTown.getHoldingBalance());
-						defendingTown.payTo(amount, attackingResident, reason);
+						amount = Math.min(amount, defendingTown.getAccount().getHoldingBalance());
+						defendingTown.getAccount().payTo(amount, attackingResident, reason);
 
 						// Message
 						moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_pillage"), attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
@@ -173,7 +173,7 @@ public class TownyWarCustomListener implements Listener {
 						// Attacker -> Defending Town (Rebuild cost)
 						amount = -amount; // Inverse the amount so it's positive.
 						String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
-						if (!attackingResident.payTo(amount, defendingTown, reason)) {
+						if (!attackingResident.getAccount().payTo(amount, defendingTown, reason)) {
 							// Could Not Pay Defending Town the Rebuilding Cost.
 							TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"), attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 						}

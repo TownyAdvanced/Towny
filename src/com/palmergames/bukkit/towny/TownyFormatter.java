@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -113,7 +112,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		try {
-			TownBlockOwner owner;
+			TownyObject owner;
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 
@@ -122,7 +121,6 @@ public class TownyFormatter {
 			} else {
 				owner = townBlock.getTown();
 			}
-			
 			
 
 			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
@@ -187,7 +185,7 @@ public class TownyFormatter {
 		// Bank: 534 coins
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
-				out.add(String.format(TownySettings.getLangString("status_bank"), resident.getHoldingFormattedBalance()));
+				out.add(String.format(TownySettings.getLangString("status_bank"), resident.getAccount().getHoldingFormattedBalance()));
 
 		// Town: Camelot
 		String line = TownySettings.getLangString("status_town");
@@ -397,7 +395,7 @@ public class TownyFormatter {
 		String bankString = "";
 		if (TownySettings.isUsingEconomy()) {
 			if (TownyEconomyHandler.isActive()) {
-				bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
+				bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
 				if (town.hasUpkeep())
 					bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
@@ -476,7 +474,7 @@ public class TownyFormatter {
 		String line = "";
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
-				line = String.format(TownySettings.getLangString("status_bank"), nation.getHoldingFormattedBalance());
+				line = String.format(TownySettings.getLangString("status_bank"), nation.getAccount().getHoldingFormattedBalance());
 
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
 					line += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getNationUpkeepCost(nation));
@@ -642,7 +640,7 @@ public class TownyFormatter {
 					out.add(TownySettings.getLangString("status_res_taxexempt"));
 				} else {
 					if (town.isTaxPercentage()) {
-						out.add(String.format(TownySettings.getLangString("status_res_tax"), resident.getHoldingBalance() * town.getTaxes() / 100));
+						out.add(String.format(TownySettings.getLangString("status_res_tax"), resident.getAccount().getHoldingBalance() * town.getTaxes() / 100));
 					} else {
 						out.add(String.format(TownySettings.getLangString("status_res_tax"), town.getTaxes()));
 
