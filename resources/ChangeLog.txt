@@ -4122,6 +4122,8 @@ v0.92.0.11:
     - Does not charge the town money.
   - New Permission Node: towny.command.townyadmin.nation.new
     - Allows the use of the /ta nation new {name} {capital} command.
+  - Pom updates for javadocs courtesy of FlagCourier with PR #3672.
+  - Eco backend refactor courtesy of Siris with PR #3663.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
