@@ -192,8 +192,10 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital()
 						|| !town.hasUpkeep()
 						|| town.isRuined()
-						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral()))
+						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())) {
 						continue;
+					}
+
 					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
 						try {
 							/*
@@ -247,7 +249,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()))
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined())
 				collectTownTaxes(town);
 		}
 	}
