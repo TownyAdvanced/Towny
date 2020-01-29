@@ -4116,6 +4116,12 @@ v0.92.0.11:
   - Fix NPE shown when player is using /plot perm hud, but has another plugin's scoreboard show up.
   - Fix missing town/nation key values on /plot perm hud.
   - Fix missing townblock type on /plot perm hud.
+  - Fix /n new name with out underscores not parsing spaces into underscores.
+  - New Command: /townyadmin nation new {name} {capital}
+    - Creates a nation for the specified town.
+    - Does not charge the town money.
+  - New Permission Node: towny.command.townyadmin.nation.new
+    - Allows the use of the /ta nation new {name} {capital} command.
   
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
