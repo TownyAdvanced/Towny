@@ -1143,10 +1143,10 @@ msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You canno
 msg_err_siege_war_cannot_abandon_siege_over: '&6[War]&c You cannot abandon because the siege is over.'
 msg_err_siege_war_cannot_abandon_yet: '&6[War]&c You cannot abandon for another %s.'
 #Invade
-msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot invade your own town.'
-msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot invade unless your nation is victorious in the siege."
+msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot capture your own town.'
+msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot capture the town unless your nation is victorious in the siege."
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s.'
-msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
+msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been captured'
 msg_err_siege_war_town_already_belongs_to_your_nation: '&6[War]&c This town already belongs to your nation'
 #Plunder
 msg_err_siege_war_cannot_plunder_own_town: '&6[War]&c You cannot plunder your own town.'
@@ -1182,7 +1182,7 @@ status_town_siege_attacks_list: '&2 > Attackers &a[%s]&2: &f'
 status_town_siege_attacks_list_overlength: 'and more...'
 status_town_siege_immunity_timer: '&2 > Immunity Timer: &a%s'
 status_town_siege_victory_timer: '&2 > Victory Timer: &a%s'
-status_town_siege_invaded_plundered_status: '&2 > Town Invaded: %s  &2Town Plundered: %s'
+status_town_siege_invaded_plundered_status: '&2 > Town Captured: %s  &2Town Plundered: %s'
 
 #Nation Info Siege Section
 status_nation_siege_attacks: '&2Siege Attacks &a[%s]&2: &f'
