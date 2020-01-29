@@ -3010,7 +3010,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if(TownySettings.getWarSiegeClaimingDisabledNearSiegeZones()) {
 					int claimDisableDistance = TownySettings.getWarSiegeClaimDisableDistanceBlocks();
 					for(SiegeZone siegeZone: townyUniverse.getDataSource().getSiegeZones()) {
-						if(siegeZone.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
+						if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
 							throw new TownyException(TownySettings.getLangString("msg_err_siege_claim_too_near_siege_zone"));
 						}
 					}
