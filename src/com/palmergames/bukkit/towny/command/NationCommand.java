@@ -76,7 +76,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
 	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
 		try {
-			return Double.compare(n2.getHoldingBalance(), n1.getHoldingBalance());
+			return Double.compare(n2.getAccount().getHoldingBalance(), n1.getAccount().getHoldingBalance());
 		} catch (EconomyException e) {
 			throw new RuntimeException("Failed to get balance. Aborting.");
 		}
@@ -874,7 +874,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
-				if (amount + nation.getHoldingBalance() > bankcap)
+				if (amount + nation.getAccount().getHoldingBalance() > bankcap)
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 			}
 
@@ -891,7 +891,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			if (!resident.payTo(amount, nation, "Nation Deposit"))
+			if (!resident.getAccount().payTo(amount, nation, "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
 			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
@@ -1042,7 +1042,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-			if (!noCharge && TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
+			if (!noCharge && TownySettings.isUsingEconomy() && !town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
 			newNation(name, town);
@@ -1063,7 +1063,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			try {
-				nation.setBalance(0, "Deleting Nation");
+				nation.getAccount().setBalance(0, "Deleting Nation");
 			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
@@ -2100,7 +2100,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				    if(TownySettings.getNationRenameCost() > 0) {
                         try {
-                            if (TownySettings.isUsingEconomy() && !nation.pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", split[1])))
+                            if (TownySettings.isUsingEconomy() && !nation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", split[1])))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
                         } catch (EconomyException e) {
                             throw new TownyException("Economy Error");
@@ -2264,7 +2264,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					boolean choice = !nation.isNeutral();
 					double cost = TownySettings.getNationNeutralityCost();
 
-					if (choice && TownySettings.isUsingEconomy() && !nation.pay(cost, "Peaceful Nation Cost"))
+					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().pay(cost, "Peaceful Nation Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_peaceful"));
 
 					nation.setNeutral(choice);

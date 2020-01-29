@@ -17,7 +17,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -429,21 +429,21 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getTopBankBalance(List<TownyEconomyObject> list, int maxListing) throws EconomyException {
+	public List<String> getTopBankBalance(List<EconomyAccount> list, int maxListing) throws EconomyException {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<TownyEconomyObject, Double> kvTable = new KeyValueTable<>();
-		for (TownyEconomyObject obj : list) {
+		KeyValueTable<EconomyAccount, Double> kvTable = new KeyValueTable<>();
+		for (EconomyAccount obj : list) {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<TownyEconomyObject, Double> kv : kvTable.getKeyValues()) {
+		for (KeyValue<EconomyAccount, Double> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownyEconomyObject town = kv.key;
+			EconomyAccount town = kv.key;
 			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", TownyFormatter.getFormattedName(town), TownyEconomyHandler.getFormattedBalance(kv.value)));
 		}
 		return output;
@@ -481,7 +481,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownBlockOwner town = kv.key;
+			Town town = (Town) kv.key;
 			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName(town), kv.value));
 		}
 		return output;

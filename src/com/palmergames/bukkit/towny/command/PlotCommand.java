@@ -195,7 +195,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
-						if (TownySettings.isUsingEconomy() && (!resident.canPayFromHoldings(cost)))
+						if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(cost)))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
 						// Start the claim task
@@ -519,7 +519,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 								
 								 if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin, true)) {
-									 if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getOutpostCost(), String.format("Plot Set Outpost"))) 
+									 if (TownySettings.isUsingEconomy() && !town.getAccount().pay(TownySettings.getOutpostCost(), String.format("Plot Set Outpost"))) 
 										 throw new TownyException(TownySettings.getLangString("msg_err_cannot_afford_to_set_outpost"));
 
 									 TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
