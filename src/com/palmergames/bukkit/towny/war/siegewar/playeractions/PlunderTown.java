@@ -81,13 +81,13 @@ public class PlunderTown {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
 			
-			if (defendingTown.canPayFromHoldings(fullPlunderAmount)) {
-                defendingTown.payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
+			if (defendingTown.getAccount().canPayFromHoldings(fullPlunderAmount)) {
+                defendingTown.getAccount().payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation, fullPlunderAmount);
 				universe.getDataSource().saveTown(defendingTown);
             } else {
-                double actualPlunderAmount = defendingTown.getHoldingBalance();
-                defendingTown.payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
+                double actualPlunderAmount = defendingTown.getAccount().getHoldingBalance();
+                defendingTown.getAccount().payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation, actualPlunderAmount);
                 TownyMessaging.sendGlobalMessage(
                 	String.format(

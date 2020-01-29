@@ -69,7 +69,7 @@ public class AttackTown {
             if (defendingTown.isSiegeImmunityActive())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_siege_immunity"));
 
-            if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.canPayFromHoldings(defendingTown.getSiegeCost()))
+            if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.getAccount().canPayFromHoldings(defendingTown.getSiegeCost()))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 
             if (SiegeWarBlockUtil.doesBlockHaveANonAirBlockAboveIt(block))
@@ -171,7 +171,7 @@ public class AttackTown {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				//Pay upfront cost into warchest now
-				attackingNation.pay(siegeZone.getWarChestAmount(), "Cost of starting a siege.");
+				attackingNation.getAccount().pay(siegeZone.getWarChestAmount(), "Cost of starting a siege.");
 
 				String moneyMessage =
 					String.format(

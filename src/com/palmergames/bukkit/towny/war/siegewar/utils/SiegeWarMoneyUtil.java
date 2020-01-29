@@ -22,7 +22,7 @@ public class SiegeWarMoneyUtil {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				for (SiegeZone siegeZone : siege.getSiegeZones().values()) {
-					winnerNation.collect(siegeZone.getWarChestAmount(), "War Chest Captured/Returned");
+					winnerNation.getAccount().collect(siegeZone.getWarChestAmount(), "War Chest Captured/Returned");
 					String message =
 						String.format(
 							TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
@@ -64,7 +64,7 @@ public class SiegeWarMoneyUtil {
 	public static void giveOneWarChestToWinnerTown(SiegeZone siegeZone, Town winnerTown) {
 		if(TownySettings.isUsingEconomy()) {
 			try {
-				winnerTown.collect(siegeZone.getWarChestAmount(), "War Chest Captured");
+				winnerTown.getAccount().collect(siegeZone.getWarChestAmount(), "War Chest Captured");
 				String message =
 					String.format(
 						TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
