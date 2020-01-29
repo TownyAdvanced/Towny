@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
+public class Resident extends TownyObject implements ResidentModes, TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -47,9 +47,12 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private transient EconomyAccount account = new EconomyAccount(getName());
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
+	private List<TownBlock> townBlocks = new ArrayList<>();
+	private TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
 		super(name);
@@ -622,16 +625,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	}
 
-	@Override
-	protected World getBukkitWorld() {
-		Player player = BukkitTools.getPlayer(getName());
-		if (player != null) {
-			return player.getWorld();
-		} else {
-			return super.getBukkitWorld();
-		}
-	}
-
 	public boolean isAlliedWith(Resident otherresident) {
 		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
 			try {
@@ -691,5 +684,80 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	@Override
+	public EconomyAccount getAccount() {
+		if (account == null) {
+
+			String accountName = StringMgmt.trimMaxLength(getName(), 32);
+			World world;
+
+			Player player = BukkitTools.getPlayer(getName());
+			if (player != null) {
+				world = player.getWorld();
+			} else {
+				world = BukkitTools.getWorlds().get(0);;
+			}
+
+			account = new EconomyAccount(accountName, world);
+		}
+		
+		return account;
+	}
+
+	@Override
+	public void setTownblocks(List<TownBlock> townBlocks) {
+		this.townBlocks = townBlocks;
+	}
+
+	@Override
+	public List<TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		return townBlocks.contains(townBlock);
+	}
+
+	@Override
+	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
+		if (hasTownBlock(townBlock))
+			throw new AlreadyRegisteredException();
+		else
+			townBlocks.add(townBlock);
+	}
+
+	@Override
+	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
+		if (!hasTownBlock(townBlock))
+			throw new NotRegisteredException();
+		else
+			townBlocks.remove(townBlock);
+	}
+
+	@Override
+	public void setPermissions(String line) {
+		this.permissions.load(line);
+	}
+
+	@Override
+	public TownyPermission getPermissions() {
+		return permissions;
+	}
+
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
+	@Deprecated
+	public World getBukkitWorld() {
+		Player player = BukkitTools.getPlayer(getName());
+		if (player != null) {
+			return player.getWorld();
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
 }
 

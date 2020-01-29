@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -125,30 +122,38 @@ public class TownyLogger {
 		ctx.updateLoggers();
 	}
 	
-	public void logMoneyTransaction(TownyEconomyObject a, double amount, TownyEconomyObject b, String reason) {
+	public void logMoneyTransaction(EconomyAccount a, double amount, EconomyAccount b, String reason) {
+		
+		String sender;
+		String receiver;
+		
+		if (a == null) {
+			sender = "None";
+		} else {
+			sender = a.getName();
+		}
+		
+		if (b == null) {
+			receiver = "None";
+		} else {
+			receiver = b.getName();
+		}
+		
 		if (reason == null) {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", getObjectName(a), amount, getObjectName(b)));
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", sender, amount, receiver));
 		} else {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, getObjectName(a), amount, getObjectName(b)));
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, sender, amount, receiver));
 		}
 	}
 	
-	private String getObjectName(TownyEconomyObject obj) {
-		String type;
-		if (obj == null) {
-			type = "Server";
-		} else if (obj instanceof Resident) {
-			type = "Resident";
-		} else if (obj instanceof Town) {
-			type = "Town";
-		} else if (obj instanceof Nation) {
-			type = "Nation";
+	public void logMoneyTransaction(String a, double amount, String b, String reason) {
+		if (reason == null) {
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b));
 		} else {
-			type = "?";
+			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
 		}
-		return String.format("[%s] %s", type, obj != null ? obj.getName() : "");
 	}
-	
+
 	public static TownyLogger getInstance() {
 		return instance;
 	}

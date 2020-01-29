@@ -201,83 +201,42 @@ public class TownBlock {
 		switch (type) {
 		
 		case RESIDENTIAL:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
+
+			case COMMERCIAL:
+
+			case EMBASSY:
+
+			case WILDS:
+
+			case FARM:
+
+			case BANK:
+
+				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+
+				if (this.hasResident()) {
+				setPermissions(this.resident.getPermissions().toString());
 			} else {
-				setPermissions(this.town.permissions.toString());
+				setPermissions(this.town.getPermissions().toString());
 			}
 			
 			break;
-			
-		case COMMERCIAL:
-			
-			//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case ARENA:
+
+			case ARENA:
 			
 			setPermissions("pvp");
 			break;
-			
-		case EMBASSY:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case WILDS:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case SPLEEF:
-			
-			setPermissions("denyAll");
+
+			case SPLEEF:
+
+			case JAIL:
+
+				setPermissions("denyAll");
 			break;
 
 		case INN:
 			
 			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			break;
-			
-		case JAIL:
-			
-			setPermissions("denyAll");
-			break;
-		
-		case FARM:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case BANK:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
 			break;
 		}
 			
@@ -332,7 +291,7 @@ public class TownBlock {
 			cost = 0;
 		}
 		
-		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.payTo(cost, TownyEconomyObject.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().payTo(cost, EconomyAccount.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
 			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		if (cost > 0)

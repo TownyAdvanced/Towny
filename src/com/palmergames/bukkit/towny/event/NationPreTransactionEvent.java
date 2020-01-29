@@ -62,9 +62,9 @@ public class NationPreTransactionEvent extends Event implements Cancellable {
 		try {
 			switch (transaction.getType()) {
 				case DEPOSIT:
-					return (int) (nation.getHoldingBalance() + transaction.getAmount());
+					return (int) (nation.getAccount().getHoldingBalance() + transaction.getAmount());
 				case WITHDRAW:
-					return (int) (nation.getHoldingBalance() - transaction.getAmount());
+					return (int) (nation.getAccount().getHoldingBalance() - transaction.getAmount());
 				default:
 					break;
 			}
