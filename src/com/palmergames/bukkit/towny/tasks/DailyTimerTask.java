@@ -194,7 +194,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						|| town.isRuined()
 						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral()))
 						continue;
-					if (!town.payTo(nation.getTaxes(), nation, "Nation Tax")) {
+					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
 						try {
 							/*
 							If involuntary town occupation is enabled,
@@ -286,9 +286,9 @@ public class DailyTimerTask extends TownyTimerTask {
 						}
 						continue;
 					} else if (town.isTaxPercentage()) {
-						double cost = resident.getHoldingBalance() * town.getTaxes() / 100;
-						resident.payTo(cost, town, "Town Tax (Percentage)");
-					} else if (!resident.payTo(town.getTaxes(), town, "Town Tax")) {
+						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
+					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
 						removedResidents.add(resident.getName());
 						try {
 							
@@ -343,7 +343,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 									continue;
 							
-						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+						if (!resident.getAccount().payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 							if (!lostPlots.contains(resident.getName()))
 									lostPlots.add(resident.getName());
 
@@ -400,7 +400,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
-						if (!town.pay(upkeep, "Town Upkeep")) {
+						if (!town.getAccount().pay(upkeep, "Town Upkeep")) {
 							townyUniverse.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 						}
@@ -413,14 +413,14 @@ public class DailyTimerTask extends TownyTimerTask {
 
 							for (TownBlock townBlock : plots) {
 								if (townBlock.hasResident())
-									townBlock.getResident().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									townBlock.getResident().getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 								else
-									town.pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									town.getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 							}
 
 						} else {
 							// Not paying plot owners so just pay the town
-							town.pay(upkeep, "Negative Town Upkeep");
+							town.getAccount().pay(upkeep, "Negative Town Upkeep");
 						}
 
 					}
@@ -461,12 +461,12 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (upkeep > 0) {
 					// Town is paying upkeep
 
-					if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+					if (!nation.getAccount().pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 						townyUniverse.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {
-						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
+						if (!nation.getAccount().pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							try {
 								nation.setNeutral(false);
 							} catch (TownyException e) {
@@ -478,7 +478,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					
 				} else if (upkeep < 0) {
-					nation.pay(upkeep, "Negative Nation Upkeep");
+					nation.getAccount().pay(upkeep, "Negative Nation Upkeep");
 				}
 			}
 		}

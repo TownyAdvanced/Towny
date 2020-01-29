@@ -14,8 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -39,7 +37,7 @@ import java.util.UUID;
 
 import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
+public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotObjectGroup>, EconomyHandler, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -76,6 +74,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
+	private EconomyAccount account;
+	private List<TownBlock> townBlocks = new ArrayList<>();
+	private TownyPermission permissions = new TownyPermission();
 	private long recentlyRuinedEndTime;
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
@@ -83,7 +84,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean occupied;
 	private boolean neutral;
 	private boolean desiredNeutralityValue;
-    private int neutralityChangeConfirmationCounterDays;  
+	private int neutralityChangeConfirmationCounterDays;
 	
 	public Town(String name) {
 		super(name);
@@ -97,6 +98,21 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		neutral = false;
 		desiredNeutralityValue = false;
 		neutralityChangeConfirmationCounterDays = 0;
+	}
+
+	@Override
+	public void setTownblocks(List<TownBlock> townblocks) {
+		this.townBlocks = townblocks;
+	}
+
+	@Override
+	public List<TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		return townBlocks.contains(townBlock);
 	}
 
 	@Override
@@ -811,6 +827,16 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 
+	@Override
+	public void setPermissions(String line) {
+		permissions.load(line);
+	}
+
+	@Override
+	public TownyPermission getPermissions() {
+		return permissions;
+	}
+
 	/**
 	 * Add or update an outpost spawn
 	 * 
@@ -1028,13 +1054,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (TownySettings.isUsingEconomy()) {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
-				if (amount + this.getHoldingBalance() > bankcap) {
+				if (amount + getAccount().getHoldingBalance() > bankcap) {
 					TownyMessaging.sendPrefixedTownMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
 			
-			this.collect(amount, null);
+			getAccount().collect(amount, null);
 		}
 
 	}
@@ -1045,7 +1071,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
-			if (!payTo(amount, resident, "Town Withdraw"))
+			if (!getAccount().payTo(amount, resident, "Town Withdraw"))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 		} else
 			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
@@ -1086,21 +1112,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		return isPublic;
 	}
-
-    @Override
-    protected World getBukkitWorld() {
-        if (hasWorld()) {
-            return BukkitTools.getWorld(getWorld().getName());
-        } else {
-            return super.getBukkitWorld();
-        }
-    }
-
-	@Override
-	public String getEconomyName() {
-		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-	}
-
+	
 	public List<Location> getJailSpawns() {
 
 		return jailSpawns;
@@ -1531,6 +1543,49 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public Collection<PlotObjectGroup> getPlotObjectGroups() {
 		return getObjectGroups();
+	}
+
+	@Override
+	public EconomyAccount getAccount() {
+		if (account == null) {
+			
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+			World world;
+
+			if (hasWorld()) {
+				world = BukkitTools.getWorld(getWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+			
+			account = new EconomyAccount(accountName, world);
+		}
+		
+		return account;
+	}
+
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 * 
+	 * @return The world this resides in.
+	 */
+	@Deprecated
+	public World getBukkitWorld() {
+		if (hasWorld()) {
+			return BukkitTools.getWorld(getWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
+
+	/**
+	 * @deprecated As of As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 * 
+	 * @return The name of the economy account.
+	 */
+	@Deprecated
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 
 	public boolean isNeutral() {

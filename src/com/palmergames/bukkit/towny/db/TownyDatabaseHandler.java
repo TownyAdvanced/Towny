@@ -572,7 +572,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Clear accounts
 		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
-			resident.removeAccount();
+			resident.getAccount().removeAccount();
 
 		plugin.deleteCache(name);
 		saveResidentList();
@@ -666,8 +666,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (TownyEconomyHandler.isActive())
 			try {
-				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
-				town.removeAccount();
+				town.getAccount().payTo(town.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
 
@@ -722,8 +722,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			try {
-				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
-				nation.removeAccount();
+				nation.getAccount().payTo(nation.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Nation");
+				nation.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
 
@@ -868,11 +868,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownySettings.isUsingEconomy())
 				try {
-					townBalance = town.getHoldingBalance();					
+					townBalance = town.getAccount().getHoldingBalance();					
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.pay(townBalance, "Town Rename");
+						town.getAccount().pay(townBalance, "Town Rename");
 					} 
-					town.removeAccount();
+					town.getAccount().removeAccount();
 					
 				} catch (EconomyException ignored) {
 				}
@@ -929,7 +929,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {
-					town.setBalance(townBalance, "Rename Town - Transfer to new account");
+					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -1015,11 +1015,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownySettings.isUsingEconomy())
 				try {
-					nationBalance = nation.getHoldingBalance();
+					nationBalance = nation.getAccount().getHoldingBalance();
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.pay(nationBalance, "Nation Rename");
+						nation.getAccount().pay(nationBalance, "Nation Rename");
 					}
-					nation.removeAccount();
+					nation.getAccount().removeAccount();
 					
 				} catch (EconomyException ignored) {
 				}
@@ -1054,7 +1054,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (TownyEconomyHandler.isActive()) {
 				try {
-					nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
+					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -1139,8 +1139,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
 				try {
-					balance = resident.getHoldingBalance();
-					resident.removeAccount();
+					balance = resident.getAccount().getHoldingBalance();
+					resident.getAccount().removeAccount();
 				} catch (EconomyException ignored) {
 				}				
 			}
@@ -1184,7 +1184,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//add everything back to the resident
 			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
-					resident.setBalance(balance, "Rename Player - Transfer to new account");
+					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}				
@@ -1274,7 +1274,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
 		Town lastTown = null;
 		try {
-			succumbingNation.payTo(succumbingNation.getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+			succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 			for (Town town : towns) {			
 				lastTown = town;
 				for (Resident res : town.getResidents()) {

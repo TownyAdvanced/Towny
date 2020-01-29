@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyAllySender;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -36,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender {
+public class Nation extends TownyObject implements ResidentList, TownyInviter, TownyAllySender, EconomyHandler {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -58,6 +56,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private transient List<Invite> sentallyinvites = new ArrayList<>();
+	private transient EconomyAccount account;
 
 	public Nation(String name) {
 		super(name);
@@ -548,13 +547,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if (TownySettings.isUsingEconomy()) {
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
-				if (amount + this.getHoldingBalance() > bankcap) {
+				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
 					TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
 			
-			this.collect(amount, null);
+			this.getAccount().collect(amount, null);
 		}
 
 	}
@@ -565,7 +564,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		//	throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
 
 		if (TownySettings.isUsingEconomy()) {
-			if (!payTo(amount, resident, "Nation Withdraw"))
+			if (!getAccount().payTo(amount, resident, "Nation Withdraw"))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 		} else
 			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
@@ -608,21 +607,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			if (town.hasResident(name))
 				return true;
 		return false;
-	}
-
-    @Override
-    protected World getBukkitWorld() {
-        if (hasCapital() && getCapital().hasWorld()) {
-            return BukkitTools.getWorld(getCapital().getWorld().getName());
-        } else {
-            return super.getBukkitWorld();
-        }
-    }
-
-
-	@Override
-	public String getEconomyName() {
-		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 
 	@Override
@@ -823,5 +807,50 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
+
+	@Override
+	public EconomyAccount getAccount() {
+
+		if (account == null) {
+
+			String accountName = StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+			World world;
+
+			if (hasCapital() && getCapital().hasWorld()) {
+				world = BukkitTools.getWorld(getCapital().getWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);;
+			}
+
+			account = new EconomyAccount(accountName, world);
+		}
+
+		
+		return account;
+	}
+
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
+	@Deprecated
+	public World getBukkitWorld() {
+		if (hasCapital() && getCapital().hasWorld()) {
+			return BukkitTools.getWorld(getCapital().getWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
+
+	/**
+	 * @deprecated As of As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 *
+	 * @return The name of the economy account.
+	 */
+	@Deprecated
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 }
