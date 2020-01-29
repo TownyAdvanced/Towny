@@ -85,7 +85,7 @@ public class HUDManager implements Listener{
 			WarHUD.updateLocation(p, event.getTo());
 			WarHUD.updateAttackable(p, event.getTo(), TownyUniverse.getInstance().getWarEvent());
 			WarHUD.updateHealth(p, event.getTo(), TownyUniverse.getInstance().getWarEvent());
-		} else if (permUsers.contains(p)) {
+		} else if (permUsers.contains(p) && p.getScoreboard().getTeam("plot") != null) {
 			if (event.getTo().getTownyWorld().isUsingTowny())
 				PermHUD.updatePerms(p, event.getTo());
 			else

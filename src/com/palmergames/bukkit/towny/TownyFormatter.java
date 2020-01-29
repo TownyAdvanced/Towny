@@ -222,13 +222,13 @@ public class TownyFormatter {
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_town_ranks") + StringMgmt.join(resident.getTownRanks(), ","));
+				out.add(TownySettings.getLangString("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ",")));
 		}
 		
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_nation_ranks") + StringMgmt.join(resident.getNationRanks(), ","));
+				out.add(TownySettings.getLangString("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ",")));
 		}
 		
 		// Jailed: yes if they are jailed.
@@ -272,7 +272,7 @@ public class TownyFormatter {
 					residentwithrank.add(r);
 				}
 			}
-			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
 			residentwithrank.clear();
 		}
 		return ranklist;
@@ -421,7 +421,7 @@ public class TownyFormatter {
 					residentwithrank.add(r);
 				}
 			}
-			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
 			residentwithrank.clear();
 		}
 
@@ -523,7 +523,7 @@ public class TownyFormatter {
 					residentwithrank.add(r);
 				}
 			}
-			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
 			residentwithrank.clear();
 		}
 		if (ranklist != null)
