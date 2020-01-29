@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyAllySender;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -33,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender, EconomyHandler {
+public class Nation extends TownyObject implements ResidentList, TownyInviter, TownyAllySender, EconomyHandler {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
