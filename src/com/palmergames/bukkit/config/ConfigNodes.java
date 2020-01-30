@@ -1917,7 +1917,7 @@ public enum ConfigNodes {
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
-			"3.0",
+			"2.0",
 			"# This value determines how long a town is safe from sieges, after a siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
 			"# A high value makes sieges less frequent. Suitable for moderately-aggressive servers",
