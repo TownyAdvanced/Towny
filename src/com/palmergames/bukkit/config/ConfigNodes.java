@@ -1855,8 +1855,14 @@ public enum ConfigNodes {
 	WAR_SIEGE_TOWN_NEUTRALITY_ENABLED(
 			"war.siege.switches.town_neutrality_enabled",
 			"true",
-			"# If this is true, then a town can forsake allegiance to any nation,",
-			"# in return for added protections from negative war effects"),
+			"# If this is true, then a town can toggle neutrality,",
+			"# After a countdown (usually in days), the new town status is confirmed.",
+			"# A neutral town is protected from siege-forced-pvp, plunder, and occupation taxes.",
+		    "# It can be captured, adding to an invading nation's town count, but the occupation is in-name only.",
+			"# This option may improve the server-play experience for: ",
+		     " - Towns who are (currently) in an otherwise-hopeless strategic position e.g. completely surrounded by much more powerful enemies,",
+			 " - Towns who are building strength and preparing for war, but not yet ready to handle plunder costs",
+			 " - Towns who prefer to influence world events and wars via subtle diplomatic methods rather than military strength"),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
