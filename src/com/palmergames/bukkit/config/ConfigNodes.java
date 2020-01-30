@@ -1884,7 +1884,7 @@ public enum ConfigNodes {
 	//Times
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.times.timer_interval_seconds",
-			"23",
+			"20",
 			"# The time in seconds for each siegewar timer tick.",
 			"# It is recommended to put this between 10-30, not too low to cause lag, not too high that players have to wait unacceptably long for siege points."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
