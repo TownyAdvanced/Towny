@@ -1911,7 +1911,7 @@ public enum ConfigNodes {
 			"# This setting is important to prevent an attacker and defender colluding to establish a suitable siege immunity time."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
-			"240",
+			"72",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
@@ -1924,8 +1924,8 @@ public enum ConfigNodes {
 			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS(
 			"war.siege.times.revolt_immunity_time_hours",
-			"240",
-			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
+			"168",
+			"# This value determines how long a town must wait before it can revolt against an occupying nation nation. The immunity time gets set to the given value if a town is captured, or if it revolts.",
 			"# If the value is too high, towns will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
 	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
