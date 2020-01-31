@@ -4124,7 +4124,9 @@ v0.92.0.11:
     - Allows the use of the /ta nation new {name} {capital} command.
   - Pom updates for javadocs courtesy of FlagCourier with PR #3672.
   - Eco backend refactor courtesy of Siris with PR #3663.
-  
+0.95.2.14:
+  - Fix for revoking town invites on a player not actually revoking the invite.
+
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
