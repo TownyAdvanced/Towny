@@ -2760,7 +2760,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length != 0) {
 			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namestoremove, town);
-			if (!toRevoke.isEmpty())
+			if (toRevoke.isEmpty())
 				townRevokeInviteResident(sender,town, toRevoke);
 		}
 
