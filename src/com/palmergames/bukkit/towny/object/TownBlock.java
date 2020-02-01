@@ -45,14 +45,11 @@ public class TownBlock extends TownyObject {
 		try {
 			if (hasTown())
 				this.town.removeTownBlock(this);
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 		this.town = town;
 		try {
 			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException e) {
-		} catch (NullPointerException e) {
-		}
+		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}
 
 	public Town getTown() throws NotRegisteredException {
@@ -72,8 +69,7 @@ public class TownBlock extends TownyObject {
 		try {
 			if (hasResident())
 				this.resident.removeTownBlock(this);
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
@@ -81,7 +77,7 @@ public class TownBlock extends TownyObject {
 		} catch (AlreadyRegisteredException | NullPointerException e) {
 			successful = false;
 		}
-		if (successful && resident != null) { //Should not cause a NPE, is checkingg if resident is null and
+		if (successful) { //Should not cause a NPE, is checkingg if resident is null and
 			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
 			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
 		}
@@ -105,14 +101,12 @@ public class TownBlock extends TownyObject {
 		try {
 			if (owner == getTown())
 				return true;
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 
 		try {
 			if (owner == getResident())
 				return true;
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 
 		return false;
 	}
@@ -261,7 +255,7 @@ public class TownBlock extends TownyObject {
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
 
-		double cost = 0;
+		double cost;
 		switch (type) {
 		case COMMERCIAL:
 			cost = TownySettings.getPlotSetCommercialCost();
@@ -466,7 +460,7 @@ public class TownBlock extends TownyObject {
 		try {
 			group.addTownBlock(this);
 		} catch (NullPointerException e) {
-			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + String.valueOf(group));
+			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
 		}
 	}
 }

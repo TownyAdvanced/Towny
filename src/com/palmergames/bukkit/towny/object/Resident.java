@@ -349,8 +349,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		for (Resident resident : new ArrayList<>(friends))
 			try {
 				removeFriend(resident);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void clear() throws EmptyTownException {
@@ -364,8 +363,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				setTitle("");
 				setSurname("");
 				updatePerms();
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void updatePerms() {
@@ -476,7 +474,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return this.modes.contains(mode.toLowerCase());
 	}
 	
-	public void toggleMode(String newModes[], boolean notify) {
+	public void toggleMode(String[] newModes, boolean notify) {
 
 		/*
 		 * Toggle any modes passed to us on/off.
@@ -690,7 +688,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			if (player != null) {
 				world = player.getWorld();
 			} else {
-				world = BukkitTools.getWorlds().get(0);;
+				world = BukkitTools.getWorlds().get(0);
 			}
 
 			account = new EconomyAccount(accountName, world);

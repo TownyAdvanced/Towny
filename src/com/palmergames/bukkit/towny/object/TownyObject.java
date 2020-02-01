@@ -87,8 +87,8 @@ public abstract class TownyObject implements Nameable {
 			metadata = new HashSet<>();
 
 		String[] objects = str.split(";");
-		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
 		}
 	}
 	
