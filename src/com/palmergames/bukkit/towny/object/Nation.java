@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviter, EconomyHandler {
+public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -512,6 +512,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, E
 
 	}
 
+	@Override
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
 		//if (!isKing(resident))// && !hasAssistant(resident))

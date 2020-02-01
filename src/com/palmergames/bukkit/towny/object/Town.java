@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, EconomyHandler, TownBlockOwner {
+public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -134,15 +134,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public void setTaxes(double taxes) {
 
-		if (isTaxPercentage)
-			if (taxes > TownySettings.getMaxTaxPercent())
-				this.taxes = TownySettings.getMaxTaxPercent();
-			else
-				this.taxes = taxes;
-		else if (taxes > TownySettings.getMaxTax())
-			this.taxes = TownySettings.getMaxTax();
-		else
-			this.taxes = taxes;
+		if (isTaxPercentage) {
+			this.taxes = Math.min(taxes, TownySettings.getMaxTaxPercent());
+		} else {
+			this.taxes = Math.min(taxes, TownySettings.getMaxTax());
+		}
 	}
 
 	public double getTaxes() {
@@ -393,14 +389,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (inputN < 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
 
-		int n = inputN;
-		if (n == 0)
-			return n;
+		if (inputN == 0)
+			return inputN;
 		
 		double nextprice = getTownBlockCost();
 		int i = 1;
 		double cost = nextprice;
-		while (i < n){
+		while (i < inputN){
 			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());			
 			cost += nextprice;
 			i++;
@@ -1030,6 +1025,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	}
 
+	@Override
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
 		//if (!isMayor(resident))// && !hasAssistant(resident))
