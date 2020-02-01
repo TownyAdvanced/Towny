@@ -473,21 +473,31 @@ public class TownyFormatter {
 
 				switch (siege.getStatus()){
 					case IN_PROGRESS:
-						//Siege Status: In Progress
+						//Siege:
 						String siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
 						out.add(siegeStatus);
+
+						// > Banners XYZ: {2223,82,9877}, {3983,32323,4344}
+						String[] bannerLocations = getBannerLocations(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
+						if (bannerLocations.length > 10) {
+							String[] entire = bannerLocations;
+							bannerLocations = new String[10];
+							System.arraycopy(entire, 0, bannerLocations, 0, 10);
+							bannerLocations[10] = TownySettings.getLangString("status_town_siege_status_banners_xyz_list_overlength");
+						}
+						out.addAll(ChatTools.listArr(bannerLocations, String.format(TownySettings.getLangString("status_town_siege_status_banners_xyz_list"), bannerLocations.length)));
 						
-						//Siege Attacks: Land of Empire (Nation) {+30}, Land of Killers (Nation) {-8}
+						// > Attackers: Land of Empire (Nation) {+30}, Land of Killers (Nation) {-8}
 						String[] siegeAttacks = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
 						if (siegeAttacks.length > 10) {
 							String[] entire = siegeAttacks;
 							siegeAttacks = new String[10];
 							System.arraycopy(entire, 0, siegeAttacks, 0, 10);
-							residents[10] = TownySettings.getLangString("status_town_siege_attacks_list_overlength");
+							siegeAttacks[10] = TownySettings.getLangString("status_town_siege_attacks_list_overlength");
 						}
 						out.addAll(ChatTools.listArr(siegeAttacks, String.format(TownySettings.getLangString("status_town_siege_attacks_list"), siegeAttacks.length)));
-						
-						//Siege Victory Timer: 5.3 hours
+
+						// >  Victory Timer: 5.3 hours
 						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
 						out.add(victoryTimer);
 					break;
@@ -867,6 +877,12 @@ public class TownyFormatter {
 		for (SiegeZone siegeZone : siegeZones)
 			names.add(getFormattedName(siegeZone));
 		return names.toArray(new String[0]);
+	}
+	public static String[] getBannerLocations(SiegeZone[] siegeZones) {
+		List<String> locations = new ArrayList<String>();
+		for (SiegeZone siegeZone : siegeZones)
+			locations.add("{" + siegeZone.getFlagLocation().getBlockX() + "," + siegeZone.getFlagLocation().getBlockY() + ","+ siegeZone.getFlagLocation().getBlockZ() + "}");
+		return locations.toArray(new String[0]);
 	}
 	
 	public static String getFormattedName(SiegeZone siegeZone) {
