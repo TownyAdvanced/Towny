@@ -5,5 +5,10 @@ package com.palmergames.bukkit.towny.object;
  * if its a {@link TownyObject} or not.
  */
 public interface Nameable {
+	/**
+	 * Get the name of the specified object
+	 * 
+	 * @return A String representing the name of the object.
+	 */
 	String getName();
 }
