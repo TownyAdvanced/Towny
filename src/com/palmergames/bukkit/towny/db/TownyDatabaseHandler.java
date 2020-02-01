@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
@@ -741,6 +742,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
+			TownyMessaging.sendGlobalMessage(
+				String.format(
+				TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"),
+				TownyFormatter.getFormattedResidentName(nation.getKing()),
+				TownySettings.getWarSiegeNationCostRefundPercentageOnDelete() + "%"));
 		}
 
 		//Delete nation and save towns
