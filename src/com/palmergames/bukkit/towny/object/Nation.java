@@ -83,8 +83,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		else {
 			try {
 				removeEnemy(nation);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 			getAllies().add(nation);
 		}
 	}
@@ -103,8 +102,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			try {
 				removeAlly(ally);
 				ally.removeAlly(this);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 		return getAllies().size() == 0;
 	}
 
@@ -125,8 +123,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		else {
 			try {
 				removeAlly(nation);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 			getEnemies().add(nation);
 		}
 
@@ -146,8 +143,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			try {
 				removeEnemy(enemy);
 				enemy.removeEnemy(this);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 		return getAllies().size() == 0;
 	}
 
@@ -238,7 +234,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setNationSpawn(Location spawn) throws TownyException {
 		Coord spawnBlock = Coord.parseCoord(spawn);
-		TownBlock townBlock = null;
+		TownBlock townBlock;
 		TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()); 
 		if (world.hasTownBlock(spawnBlock))
 			townBlock = world.getTownBlock(spawnBlock);
@@ -411,11 +407,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setTaxes(double taxes) {
-
-		if (taxes > TownySettings.getMaxTax())
-			this.taxes = TownySettings.getMaxTax();
-		else
-			this.taxes = taxes;
+		this.taxes = Math.min(taxes, TownySettings.getMaxTax());
 	}
 
 	public double getTaxes() {
@@ -443,7 +435,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 				final Coord capitalCoord = capital.getHomeBlock().getCoord();
 				Iterator<Town> it = towns.iterator();
 				while(it.hasNext()) {
-					Town town = (Town) it.next();
+					Town town = it.next();
 					Coord townCoord = town.getHomeBlock().getCoord();
 					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						it.remove();
@@ -721,7 +713,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			if (hasCapital() && getCapital().hasWorld()) {
 				world = BukkitTools.getWorld(getCapital().getWorld().getName());
 			} else {
-				world = BukkitTools.getWorlds().get(0);;
+				world = BukkitTools.getWorlds().get(0);
 			}
 
 			account = new EconomyAccount(accountName, world);

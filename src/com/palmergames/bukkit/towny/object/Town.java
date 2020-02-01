@@ -102,8 +102,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			if (townBlocks.size() == 1 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
-				} catch (TownyException e) {
-				}
+				} catch (TownyException ignored) {}
 		}
 	}
 
@@ -375,13 +374,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public double getBonusBlockCost() {
-		double nextprice = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
-		return nextprice;
+		return (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 	}
 	
 	public double getTownBlockCost() {
-		double nextprice = (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
-		return nextprice;
+		return (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 	}
 
 	public double getTownBlockCostN(int inputN) throws TownyException {
@@ -646,7 +643,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
 						try {
 							setMayor(assistant);
-							continue;
 						} catch (TownyException e) {
 							// Error setting mayor.
 							e.printStackTrace();
@@ -658,7 +654,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 						if (newMayor != resident) {
 							try {
 								setMayor(newMayor);
-								continue;
 							} catch (TownyException e) {
 								// Error setting mayor.
 								e.printStackTrace();
@@ -780,8 +775,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			try {
 				if (getHomeBlock() == townBlock)
 					setHomeBlock(null);
-			} catch (TownyException e) {
-			}
+			} catch (TownyException ignored) {}
 			townBlocks.remove(townBlock);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
@@ -882,11 +876,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setPlotPrice(double plotPrice) {
-
-		if (plotPrice > TownySettings.getMaxPlotPrice())
-			this.plotPrice = TownySettings.getMaxPlotPrice();
-		else 
-			this.plotPrice = plotPrice;
+		this.plotPrice = Math.min(plotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getPlotPrice() {
@@ -896,12 +886,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public double getPlotTypePrice(TownBlockType type) {
 
-		double plotPrice = 0;
+		double plotPrice;
 		switch (type.ordinal()) {
-
-		case 0:
-			plotPrice = getPlotPrice();
-			break;
 		case 1:
 			plotPrice = getCommercialPlotPrice();
 			break;
@@ -920,11 +906,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
-		
-		if (commercialPlotPrice > TownySettings.getMaxPlotPrice())
-			this.commercialPlotPrice = TownySettings.getMaxPlotPrice();
-		else
-			this.commercialPlotPrice = commercialPlotPrice;
+		this.commercialPlotPrice = Math.min(commercialPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getCommercialPlotPrice() {
@@ -933,11 +915,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
-
-		if (embassyPlotPrice > TownySettings.getMaxPlotPrice())
-			this.embassyPlotPrice = TownySettings.getMaxPlotPrice();
-		else
-			this.embassyPlotPrice = embassyPlotPrice;
+		this.embassyPlotPrice = Math.min(embassyPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getEmbassyPlotPrice() {
@@ -961,11 +939,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setPlotTax(double plotTax) {
-		
-		if (plotTax > TownySettings.getMaxTax())
-			this.plotTax = TownySettings.getMaxTax();
-		else
-			this.plotTax = plotTax;
+		this.plotTax = Math.min(plotTax, TownySettings.getMaxTax());
 	}
 
 	public double getPlotTax() {
@@ -974,11 +948,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setCommercialPlotTax(double commercialTax) {
-
-		if (commercialTax > TownySettings.getMaxTax())
-			this.commercialPlotTax = TownySettings.getMaxTax();
-		else
-			this.commercialPlotTax = commercialTax;
+		this.commercialPlotTax = Math.min(commercialTax, TownySettings.getMaxTax());
 	}
 
 	public double getCommercialPlotTax() {
@@ -987,11 +957,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setEmbassyPlotTax(double embassyPlotTax) {
-
-		if (embassyPlotTax > TownySettings.getMaxTax())
-			this.embassyPlotTax = TownySettings.getMaxTax();
-		else
-			this.embassyPlotTax = embassyPlotTax;
+		this.embassyPlotTax = Math.min(embassyPlotTax, TownySettings.getMaxTax());
 	}
 
 	public double getEmbassyPlotTax() {
@@ -1211,11 +1177,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasValidUUID() {
-		if (uuid != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return uuid != null;
 	}
 
 	public void setRegistered(long registered) {
@@ -1236,11 +1198,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				if (this.getNation().hasAlly(othertown.getNation())) {
 					return true;
 				} else {
-					if (this.getNation().equals(othertown.getNation())) {
-						return true;
-					} else {
-						return false;
-					}
+					return this.getNation().equals(othertown.getNation());
 				}
 			} catch (NotRegisteredException e) {
 				return false;
@@ -1368,10 +1326,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				}
 			}
 		}
-	}
-	
-	public int generatePlotGroupID() {
-		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
 	}
 
 	// Abstract to collection in case we want to change structure in the future
