@@ -4126,3 +4126,8 @@ v0.92.0.11:
   - Eco backend refactor courtesy of Siris with PR #3663.
 0.95.2.14:
   - Fix for revoking town invites on a player not actually revoking the invite.
+  - Fix for single-town nations when the winner_takes_ownership_of_town is true.
+    - Closes #3678.
+  - Fix for eventwar war participants message using two lines when it ought to only use one.
+  - Added TownyMessaging.sendPlainGlobalMessage() which doesn't use the [Towny] prefix.
+  - Fix eventwar wars that don't start properly leaving remainders in the warringsTowns and warringNations.
