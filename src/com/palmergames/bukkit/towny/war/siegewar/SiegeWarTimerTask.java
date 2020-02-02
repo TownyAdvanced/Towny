@@ -46,15 +46,6 @@ import static com.palmergames.util.TimeMgmt.ONE_SECOND_IN_MILLIS;
  */
 public class SiegeWarTimerTask extends TownyTimerTask {
 
-	private static long nextTimeToRemoveRuinedTowns;
-
-	static
-	{
-		nextTimeToRemoveRuinedTowns =
-				System.currentTimeMillis() +
-					(long)(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
-	}
-
 	public SiegeWarTimerTask(Towny plugin) {
 		super(plugin);
 	}
@@ -66,13 +57,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateSiegeZones();
 
 			evaluateSieges();
-
-			if (System.currentTimeMillis() > nextTimeToRemoveRuinedTowns) {
-				nextTimeToRemoveRuinedTowns =
-						System.currentTimeMillis() +
-							(long)(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
-				RemoveRuinedTowns.removeRuinedTowns();
-			}
 		}
 	}
 

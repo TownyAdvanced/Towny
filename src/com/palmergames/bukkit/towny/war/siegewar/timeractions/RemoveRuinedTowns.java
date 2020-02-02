@@ -19,8 +19,14 @@ public class RemoveRuinedTowns {
     public static void removeRuinedTowns() {
 		TownyUniverse universe = TownyUniverse.getInstance();
         for (Town town : new ArrayList<>(universe.getDataSource().getTowns())) {
-            if(town.isRuined() && System.currentTimeMillis() > town.getRecentlyRuinedEndTime()) {
-				universe.getDataSource().removeRuinedTown(town);
+            if(town.isRuined()) {
+            	if(town.getRecentlyRuinedEndTime() != 999) {
+            		//Prepare to delete in next cycle. 999 is just an arbitrary number to signify delete
+					town.setRecentlyRuinedEndTime(999);
+					universe.getDataSource().saveTown(town);
+				} else {
+					universe.getDataSource().removeRuinedTown(town);
+				}
             }
         }
     }

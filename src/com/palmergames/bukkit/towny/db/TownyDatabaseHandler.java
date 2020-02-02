@@ -583,10 +583,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town) {
 		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval();
-
-		if(delayFullRemoval && town.isRuined())
-			return; //If we are using sw delayed removal, AND town is already in ruins, do attempt re-removal. The SiegeWar timer task will complete the job
-
 		removeTown(town, delayFullRemoval);
 	}
 
@@ -599,8 +595,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return;
 		
 		if(delayFullRemoval) {
-			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
-				(long)(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
 			for (String element : new String[] { "residentBuild",

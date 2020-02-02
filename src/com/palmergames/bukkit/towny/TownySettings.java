@@ -2985,10 +2985,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 
-	public static double getWarSiegeTownRuinsRemovalTimerIntervalMinutes() {
-		return getDouble(ConfigNodes.WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES);
-	}
-
 	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS);
 	}
