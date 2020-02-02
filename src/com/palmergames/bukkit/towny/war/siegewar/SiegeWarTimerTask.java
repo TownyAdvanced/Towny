@@ -241,6 +241,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				return false;
 			}
 
+			//Player must be alive
+			if(player.isDead()) {
+				return false;
+			}
+
 			//Player must not be flying or invisible
 			if(player.isFlying() || player.getPotionEffect(PotionEffectType.INVISIBILITY) != null) {
 				playerScoreTimeMap.remove(player);
@@ -270,6 +275,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			//Player must be in zone
 			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
+				return false;
+			}
+
+			//Player must be alive
+			if(player.isDead()) {
 				return false;
 			}
 
