@@ -243,6 +243,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			//Player must be alive
 			if(player.isDead()) {
+				playerScoreTimeMap.remove(player);
+				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return false;
 			}
 
