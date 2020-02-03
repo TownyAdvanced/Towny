@@ -266,7 +266,7 @@ permissions:
         description: User can access all aspects of nation sieges.
         default: false
         children:
-            towny.nation.siege.points: true # Affect siege points in all nation siege attacks/defences.
+            towny.nation.siege.points: true
             towny.nation.siege.attack: true
             towny.nation.siege.abandon: true
             towny.nation.siege.invade: true
@@ -394,7 +394,7 @@ permissions:
         description: User can access all aspects of town sieges.
         default: false
         children:
-            towny.town.siege.points: true # Affect siege points in town defence.
+            towny.town.siege.points: true
             towny.town.siege.surrender: true
 
       # Plot command permissions
