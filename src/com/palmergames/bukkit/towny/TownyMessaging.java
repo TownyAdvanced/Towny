@@ -330,6 +330,26 @@ public class TownyMessaging {
 				}
 		}
 	}
+	
+
+	/**
+	 * Send a message to All online players and the log.
+	 * Does not use the default_towny_prefix.
+	 * 
+	 * @param line the message to send.
+	 */
+	public static void sendPlainGlobalMessage(String line) {
+		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			if (player != null)
+				try {
+					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+						player.sendMessage(line);
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+		}		
+	}
 
 	/**
 	 * Send a message to a specific resident
@@ -710,4 +730,5 @@ public class TownyMessaging {
 			}
 		}
 	}
+
 }
