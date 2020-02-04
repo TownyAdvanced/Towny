@@ -69,9 +69,10 @@ public class InvadeTown {
 				Coord capitalCoord = attackerWinner.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = townToBeInvaded.getHomeBlock().getCoord();
 				if (!attackerWinner.getCapital().getHomeBlock().getWorld().getName().equals(townToBeInvaded.getHomeBlock().getWorld().getName())) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), townToBeInvaded.getName()));
+					throw new TownyException(TownySettings.getLangString("msg_err_nation_homeblock_in_another_world"));
 				}
-				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				double distance;
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), townToBeInvaded.getName()));
 				}
