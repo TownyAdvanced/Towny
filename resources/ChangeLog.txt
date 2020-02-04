@@ -4132,3 +4132,4 @@ v0.92.0.11:
   - Added TownyMessaging.sendPlainGlobalMessage() which doesn't use the [Towny] prefix.
   - Fix eventwar wars that don't start properly leaving remainders in the warringsTowns and warringNations.
   - French.yml updated by Mitsu13Ion with PR #3680.
+  - Fix null response when sending an invite to an offline player.
