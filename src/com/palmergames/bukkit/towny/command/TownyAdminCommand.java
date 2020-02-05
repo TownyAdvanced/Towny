@@ -207,7 +207,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("removeruins")) {
 
-				RemoveRuinedTowns.removeRuinedTowns();
+				RemoveRuinedTowns.removeRuinedTowns(true);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
