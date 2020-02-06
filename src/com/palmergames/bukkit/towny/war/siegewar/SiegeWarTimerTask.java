@@ -83,8 +83,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate just 1 siege zone
 	 */
 	private static void evaluateSiegeZone(SiegeZone siegeZone) {
-		boolean attackPointsAwarded = false;
-		boolean defencePointsAwarded = false;
+		boolean attackPointsAwarded;
+		boolean defencePointsAwarded;
+
+		int attackPointInstancesAwarded = 0;
+		int defencePointInstancesAwarded = 0;
 
 		//Evaluate the siege zone only if the siege is 'in progress'.
 		if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) 
@@ -106,7 +109,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					if(resident.getTown().isOccupied())
 						continue;
 
-					if (!defencePointsAwarded
+					if (defencePointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
 						&& residentTown == siegeZone.getDefendingTown()
 						&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())) {
 
@@ -117,10 +120,14 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 												siegeZone.getDefenderPlayerScoreTimeMap(),
 												-TownySettings.getWarSiegePointsForDefenderOccupation());
 
+						if(defencePointsAwarded) {
+							defencePointInstancesAwarded++;
+						}
+
 					} else if (residentTown.hasNation()
 						&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())) {
 
-						if (!defencePointsAwarded
+						if (defencePointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
 							    && siegeZone.getDefendingTown().hasNation()
 								&& siegeZone.getDefendingTown().getNation() == residentTown.getNation()) {
 
@@ -132,7 +139,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone.getDefenderPlayerScoreTimeMap(),
 													-TownySettings.getWarSiegePointsForDefenderOccupation());
 
-						} else if (!attackPointsAwarded
+							if(defencePointsAwarded) {
+								defencePointInstancesAwarded++;
+							}
+
+						} else if (attackPointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
 							&& siegeZone.getAttackingNation() 
 							== residentTown.getNation()) {
 
@@ -143,7 +154,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone.getAttackerPlayerScoreTimeMap(),
 													TownySettings.getWarSiegePointsForAttackerOccupation());
 
-						} else if (!defencePointsAwarded
+							if(attackPointsAwarded) {
+								attackPointInstancesAwarded++;
+							}
+
+						} else if (defencePointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
 							&& siegeZone.getDefendingTown().hasNation()
 							&& siegeZone.getDefendingTown().getNation().hasMutualAlly(residentTown.getNation())) {
 
@@ -155,7 +170,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone.getDefenderPlayerScoreTimeMap(),
 													-TownySettings.getWarSiegePointsForDefenderOccupation());
 
-						} else if (!attackPointsAwarded
+							if(defencePointsAwarded) {
+								defencePointInstancesAwarded++;
+							}
+
+						} else if (attackPointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
 							&& siegeZone.getAttackingNation().hasMutualAlly(residentTown.getNation())) {
 
 							//Nation member of ally of attacking nation
@@ -165,6 +184,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone,
 													siegeZone.getAttackerPlayerScoreTimeMap(),
 													TownySettings.getWarSiegePointsForAttackerOccupation());
+
+							if(attackPointsAwarded) {
+								attackPointInstancesAwarded++;
+							}
 						}
 					}
 				}
@@ -173,7 +196,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 		
 		//Save siege zone to db if it was changed
-		if(attackPointsAwarded || defencePointsAwarded) {
+		if(attackPointInstancesAwarded > 0 || defencePointInstancesAwarded > 0) {
 			universe.getDataSource().saveSiegeZone(siegeZone);
 		}
 	}

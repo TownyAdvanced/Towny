@@ -1987,7 +1987,16 @@ public enum ConfigNodes {
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to all attacking nations.",
 			"# The higher this value is, compared to the occupation value, the more cautious and tactical your battles will be.",
-			"# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be.");
+			"# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be."),
+	WAR_SIEGE_MAX_PLAYERS_PER_SIDE_FOR_TIMED_POINTS(
+			"war.siege.scoring.max_players_per_side_for_timed_points",
+				"1",
+				"# This setting determines the maximum number of players at a time, per side, who can score timed siege points.",
+				"# If the value is too high, then too many players may be drawn into siege zone banner occupation.",
+		        "# - This takes time from other activities e.g. building, trading.",
+				"# - Also siege-zone occupation can sometimes be boring if one side is avoiding meeting the other in direct combat.",
+				"# If the value is too low, then too few players can be involved in siege zone banner occupation.",
+				"# - Thus, some players in a town, nation, or allies may not be able to contribute as much to wars as they might wish.");
 
 	private final String Root;
 	private final String Default;
