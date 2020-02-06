@@ -51,7 +51,6 @@ public class TownJoinNationInvite implements Invite {
 			&& TownySettings.getWarSiegeTownNeutralityEnabled()
 			&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
 			//Player can only get here in some edge-case scenario/attempted exploit. So no attempted exception or messaging.
-			return;
 		} else {
 			NationCommand.nationAdd(nation, towns);
 		}
