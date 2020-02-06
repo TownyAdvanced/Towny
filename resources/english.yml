@@ -1117,9 +1117,10 @@ msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a 
 msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
 #Neutrality
-msg_err_siege_war_neutral_town_cannot_create_nation: "&6[War]&c As a neutral town, you cannot create a nation."
-msg_err_siege_war_neutral_town_cannot_join_nation: "&6[War]&c As a neutral town, you cannot join a nation."
-msg_err_siege_war_cannot_change_neutrality_while_in_nation: "&6[War]&c You cannot change neutrality status while in a nation."
+msg_err_siege_war_neutral_town_cannot_create_nation: "&cAs a neutral or declared-neutral town, you cannot create a nation."
+msg_err_siege_war_neutral_town_cannot_join_nation: "&cAs a neutral or declared-neutral town, you cannot join a nation."
+msg_err_siege_war_neutral_town_cannot_invite_to_nation: "&cYou cannot invite %s to the nation while it is neutral or declared-neutral."
+msg_err_siege_war_cannot_change_neutrality_while_in_nation: "&cYou cannot change neutrality status while in a nation."
 #Plunder
 msg_err_siege_war_neutral_town_cannot_plunder: "&6[War]&c You cannot plunder a neutral town."
 #Revolt

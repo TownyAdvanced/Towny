@@ -46,7 +46,15 @@ public class TownJoinNationInvite implements Invite {
 		List<Town> towns = new ArrayList<>();
 		towns.add(town);
 		Nation nation = (Nation) getSender();
-		NationCommand.nationAdd(nation, towns);
+
+		if(TownySettings.getWarSiegeEnabled()
+			&& TownySettings.getWarSiegeTownNeutralityEnabled()
+			&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+			//Player can only get here in some edge-case scenario/attempted exploit. So no attempted exception or messaging.
+			return;
+		} else {
+			NationCommand.nationAdd(nation, towns);
+		}
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);

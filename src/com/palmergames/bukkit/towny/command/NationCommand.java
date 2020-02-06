@@ -1317,6 +1317,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
 		        	continue;
 		        }
+
+				//Check that town is not neutral
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeTownNeutralityEnabled()
+					&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+					TownyMessaging.sendErrorMsg(player,String.format(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_invite_to_nation"), town.getName()));
+					continue;
+				}
 		        
 				if (TownySettings.getNationRequiresProximity() > 0) {
 					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
