@@ -1351,10 +1351,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//removeTownBlocks(town);
 
 		TownyWorld townyWorld = town.getWorld();
-		try {
-			townyWorld.removeTown(town);
-		} catch (NotRegisteredException e) {
-			// Must already be removed
+
+		if(townyWorld != null) {
+			try {
+				townyWorld.removeTown(town);
+			} catch (NotRegisteredException e) {
+				// Must already be removed
+			}
 		}
 		saveWorld(townyWorld);
 
