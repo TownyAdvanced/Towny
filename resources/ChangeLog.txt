@@ -4150,3 +4150,4 @@ v0.92.0.11:
     - towny.command.town.list.name
     - towny.command.town.list.townblocks
     - towny.command.town.list.online
+  - Fix lag caused by /t list and /n list.
