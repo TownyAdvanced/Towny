@@ -4133,6 +4133,23 @@ v0.92.0.11:
   - Fix eventwar wars that don't start properly leaving remainders in the warringsTowns and warringNations.
   - French.yml updated by Mitsu13Ion with PR #3680.
   - Fix null response when sending an invite to an offline player.
+  - Add permission nodes to /t list by x and /n list by x commands.
+    - You can negate the new child nodes to limit which ways players are allowed to sort towns.
+  - New Permission Nodes: Child nodes of towny.command.nation.list, no townyperms.yml update required.
+    - towny.command.nation.list.residents
+    - towny.command.nation.list.towns
+    - towny.command.nation.list.open
+    - towny.command.nation.list.balance
+    - towny.command.nation.list.name
+    - towny.command.nation.list.townblocks
+    - towny.command.nation.list.online
+  - New Permission Nodes: Child nodes of towny.command.town.list, no townyperms.yml update required.
+    - towny.command.town.list.residents
+    - towny.command.town.list.open
+    - towny.command.town.list.balance
+    - towny.command.town.list.name
+    - towny.command.town.list.townblocks
+    - towny.command.town.list.online
 
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
