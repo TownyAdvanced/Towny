@@ -1057,24 +1057,37 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
+		final List<Town> towns = townsToSort;
+		final Comparator comp = comparator;
+		final int pageNumber = page;
+		final int totalNumber = total; 
 		try {
-			if (!TownySettings.isTownListRandom())
-				Collections.sort(townsToSort, comparator);
-			else 
-				Collections.shuffle(townsToSort);
+			if (!TownySettings.isTownListRandom()) {
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+					Collections.sort(towns, comp);
+					sendList(sender, towns, pageNumber, totalNumber);
+					return;
+				});
+			} else { 
+				Collections.shuffle(towns);
+				sendList(sender, towns, pageNumber, totalNumber);
+			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
 			return;
 		}
-		
+	}
+	
+	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
+
 		int iMax = page * 10;
-		if ((page * 10) > townsToSort.size()) {
-			iMax = townsToSort.size();
+		if ((page * 10) > towns.size()) {
+			iMax = towns.size();
 		}
 
 		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Town town = townsToSort.get(i);
+			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
 					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
 			if (town.isOpen())
