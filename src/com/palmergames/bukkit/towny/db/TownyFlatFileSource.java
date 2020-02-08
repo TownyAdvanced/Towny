@@ -24,6 +24,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -1056,7 +1057,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setSiegeImmunityEndTime(0);
 					}
 				} else {
-					town.setSiegeImmunityEndTime(0);
+					/*
+					 * On first load of system, give each town a random immunity cooldown
+					 * This should help prevent everyone killing each other 5 mins after system deployment
+					 */
+					long siegeImmunityDurationMillis = (long)(Math.random() * (TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() + 1) * TimeMgmt.ONE_HOUR_IN_MILLIS);
+					town.setSiegeImmunityEndTime(System.currentTimeMillis() + siegeImmunityDurationMillis);
 				}
 
 				//Load Siege values
