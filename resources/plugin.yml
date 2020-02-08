@@ -170,6 +170,18 @@ permissions:
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
 
+    towny.command.nation.list:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children: 
+            towny.command.nation.list.residents: true
+            towny.command.nation.list.towns: true
+            towny.command.nation.list.open: true
+            towny.command.nation.list.balance: true
+            towny.command.nation.list.name: true
+            towny.command.nation.list.townblocks: true
+            towny.command.nation.list.online: true
+
     towny.command.nation.deposit.other:
         description: User can deposit money into the town bank of a nation member.
         default: false
@@ -301,6 +313,17 @@ permissions:
             towny.command.town.toggle.*: true
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
+
+    towny.command.town.list:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children: 
+            towny.command.town.list.residents: true
+            towny.command.town.list.open: true
+            towny.command.town.list.balance: true
+            towny.command.town.list.name: true
+            towny.command.town.list.townblocks: true
+            towny.command.town.list.online: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
