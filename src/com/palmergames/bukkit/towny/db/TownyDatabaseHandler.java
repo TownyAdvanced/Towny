@@ -588,13 +588,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
-		BukkitTools.getPluginManager().callEvent(preEvent);
-		
-		if (preEvent.isCancelled())
-			return;
-		
+		/*
+		 * If removal is delayed:
+		 * 1. Town will be set into a special 'ruined' state
+		 * 2. All perms will be enabled
+		 * 3. All plots will be unowned
+		 * 4. The town leadership cannot run /t commands
+		 * 5. Town will be deleted after 2 upkeep cycles
+		 */
 		if(delayFullRemoval) {
+			town.setRecentlyRuinedEndTime(888);
 			town.setPublic(false);
 			town.setOpen(false);
 			for (String element : new String[] { "residentBuild",
@@ -608,20 +611,29 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			{
 				town.getPermissions().set(element, true);
 			}
-
 			//Reset and save town blocks
 			for(TownBlock townBlock: town.getTownBlocks()) {
 				townBlock.setType(townBlock.getType());
+				townBlock.setResident(null);
 				saveTownBlock(townBlock);
 			}
-		} else {
-			removeManyTownBlocks(town);
-			//removeTownBlocks(town);
+			saveTown(town);
+			plugin.resetCache();
+			return;
 		}
+
+		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
+
+		BukkitTools.getPluginManager().callEvent(preEvent);
+		if (preEvent.isCancelled())
+			return;
+
+		removeManyTownBlocks(town);
+		//removeTownBlocks(town);	
 
 		if(town.hasSiege())
 			removeSiege(town.getSiege());
-		
+
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
 
@@ -653,13 +665,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			saveResident(resident);
 		}
-		
+
 		// Look for residents inside of this town's jail and free them
 		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
-                jailedRes.setJailed(jailedRes, 0, town);
-                saveResident(jailedRes);
-            }
+				jailedRes.setJailed(jailedRes, 0, town);
+				saveResident(jailedRes);
+			}
 		}
 
 		if (TownyEconomyHandler.isActive())
@@ -669,23 +681,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
-		if(delayFullRemoval) {
-			saveTown(town);
-			plugin.resetCache();
-		} else {
-			try {
-				townyWorld.removeTown(town);
-			} catch (NotRegisteredException e) {
-				// Must already be removed
-			}
-			saveWorld(townyWorld);
-
-			universe.getTownsMap().remove(town.getName().toLowerCase());
-			plugin.resetCache();
-			deleteTown(town);
-			saveTownList();
+		try {
+			townyWorld.removeTown(town);
+		} catch (NotRegisteredException e) {
+			// Must already be removed
 		}
-			
+		saveWorld(townyWorld);
+
+		universe.getTownsMap().remove(town.getName().toLowerCase());
+		plugin.resetCache();
+		deleteTown(town);
+		saveTownList();
+
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 	}
 
@@ -1345,28 +1352,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		return universe.getSiegeZonesMap().get(siegeZoneName.toLowerCase());
 	}
-
-	public void removeRuinedTown(Town town) {
-		removeManyTownBlocks(town);
-		//removeTownBlocks(town);
-
-		TownyWorld townyWorld = town.getWorld();
-
-		if(townyWorld != null) {
-			try {
-				townyWorld.removeTown(town);
-			} catch (NotRegisteredException e) {
-				// Must already be removed
-			}
-		}
-		saveWorld(townyWorld);
-
-		universe.getTownsMap().remove(town.getName().toLowerCase());
-		plugin.resetCache();
-		deleteTown(town);
-		saveTownList();
-	}
-
+	
 	//Remove a particular siege, and all associated data
 	@Override
 	public void removeSiege(Siege siege) {

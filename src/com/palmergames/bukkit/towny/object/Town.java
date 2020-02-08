@@ -1433,9 +1433,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isRuined() {
-		return residents.size() == 0;
+		return (residents.size() == 0 || recentlyRuinedEndTime > 0);
 	}
 
+	/*
+	888 = just ruined.
+	999 = 1 upkeep cycle completed since being ruined.
+	 */
 	public void setRecentlyRuinedEndTime(long recentlyRuinedEndTime) {
 		this.recentlyRuinedEndTime = recentlyRuinedEndTime;
 	}

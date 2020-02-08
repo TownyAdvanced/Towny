@@ -34,14 +34,18 @@ public class RemoveRuinedTowns {
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName())) {
-				if(town.isRuined()) {
-					if(!immediateRemoval && town.getRecentlyRuinedEndTime() != 999) {
-						//Prepare to delete in next cycle. 999 is just an arbitrary number to signify delete
-						town.setRecentlyRuinedEndTime(999);
-						townyUniverse.getDataSource().saveTown(town);
-					} else {
-						townyUniverse.getDataSource().removeRuinedTown(town);
-					}
+
+				if(immediateRemoval || town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
+					//Immediate remove request from admin, phase 2 ruins, or legacy ruins. Remove now.
+					townyUniverse.getDataSource().removeTown(town, false);
+					continue;
+				}
+
+				if(town.getRecentlyRuinedEndTime() == 888) {
+					//Town is in phase 1 ruined state. Wait
+					town.setRecentlyRuinedEndTime(999);
+					townyUniverse.getDataSource().saveTown(town);
+					continue;
 				}
 			} 
 		}

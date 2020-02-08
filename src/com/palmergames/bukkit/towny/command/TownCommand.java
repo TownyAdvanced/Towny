@@ -242,6 +242,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
+				if (isPlayerTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				}
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				
@@ -279,6 +283,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town withdraw"));
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
+
+				if (isPlayerTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -319,6 +327,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town deposit"));
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
+				if (isPlayerTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				}
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTS.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
@@ -339,6 +351,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				townPlots(player, town);
 
 			} else {
+				if (isPlayerTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				}
+
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
 				if (split[0].equalsIgnoreCase("rank")) {
@@ -3360,4 +3376,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return toRevoke;		
 	}
 
+	private static boolean isPlayerTownRuined(Player player) {
+		try {
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+
+			if(resident.hasTown()) {
+				return resident.getTown().isRuined();
+			} else {
+				return false;
+			}
+		} catch (NotRegisteredException x) {
+			return false;
+		}
+	}
 }
