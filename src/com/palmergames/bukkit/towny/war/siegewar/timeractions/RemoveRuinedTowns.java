@@ -35,8 +35,14 @@ public class RemoveRuinedTowns {
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName())) {
 
-				if(immediateRemoval || town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
-					//Immediate remove request from admin, phase 2 ruins, or legacy ruins. Remove now.
+				if(town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
+					//phase 2 ruins, or legacy ruins. Remove now.
+					townyUniverse.getDataSource().removeTown(town, false);
+					continue;
+				}
+
+				if(town.getRecentlyRuinedEndTime() > 0 && immediateRemoval) {
+					//Any non-legacy ruin type & immediate removal requested. Remove now
 					townyUniverse.getDataSource().removeTown(town, false);
 					continue;
 				}
