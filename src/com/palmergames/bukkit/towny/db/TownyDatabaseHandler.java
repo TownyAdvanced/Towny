@@ -35,10 +35,10 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarRuinsUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
@@ -588,30 +588,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-		/*
-		 * If removal is delayed:
-		 * 1. Town will be set into a special 'ruined' state
-		 * 2. All perms will be enabled
-		 * 3. The residents cannot run /plot commands, and some /t commands
-		 * 4. Town will be deleted after 2 upkeep cycles
-		 */
 		if(delayFullRemoval) {
-			town.setRecentlyRuinedEndTime(888);
-			town.setPublic(false);
-			town.setOpen(false);
-			for (String element : new String[] { "residentBuild",
-				"residentDestroy", "residentSwitch",
-				"residentItemUse", "outsiderBuild",
-				"outsiderDestroy", "outsiderSwitch",
-				"outsiderItemUse", "allyBuild", "allyDestroy",
-				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
-				"nationSwitch", "nationItemUse",
-				"pvp", "fire", "explosion", "mobs"})
-			{
-				town.getPermissions().set(element, true);
-			}
-			saveTown(town);
-			plugin.resetCache();
+			SiegeWarRuinsUtil.putTownIntoRuinedState(town, plugin);
 			return;
 		}
 
