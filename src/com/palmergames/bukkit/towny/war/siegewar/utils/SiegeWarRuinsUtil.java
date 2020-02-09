@@ -51,6 +51,9 @@ public class SiegeWarRuinsUtil {
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
+		if(town.isRuined())
+			return; //Town already ruined. Do not run code as it would reset ruin status to 888 (ie phase 1)
+
 		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
 		try {
 			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
