@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
+import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -49,6 +50,14 @@ public class SiegeWarRuinsUtil {
 	 */
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
+		try {
+			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
+			adminCommand.adminSet(new String[]{"mayor", town.getName(), "npc"});
+		} catch (TownyException e) {
+			e.printStackTrace();
+		}
 
 		town.setRecentlyRuinedEndTime(888);
 		town.setPublic(false);
