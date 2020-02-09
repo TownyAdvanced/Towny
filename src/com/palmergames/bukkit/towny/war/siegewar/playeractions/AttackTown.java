@@ -84,7 +84,10 @@ public class AttackTown {
             if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, townBlock)) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
-            
+
+            if(nationOfAttackingPlayer.getNumActiveSiegeAttacks() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
+
             //Setup attack
             attackTown(block, nationOfAttackingPlayer, defendingTown);
         } catch (TownyException x) {

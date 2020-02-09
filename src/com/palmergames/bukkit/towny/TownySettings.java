@@ -3051,6 +3051,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE);
 	}
 
+	public static int getWarSiegeMaxActiveSiegeAttacksPerNation() {
+		return getInt(ConfigNodes.WAR_SIEGE_MAX_ACTIVE_SIEGE_ATTACKS_PER_NATION);
+	}
+
 	public static boolean getWarSiegeRefundInitialNationCostOnDelete() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
 	}

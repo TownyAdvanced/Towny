@@ -767,6 +767,15 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 		return result;
 	}
 
+	public int getNumActiveSiegeAttacks() {
+		int result = 0;
+		for(SiegeZone siegeZone: siegeZones) {
+			if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) 
+				result++;
+		}
+		return result;
+	}
+
 	public boolean isNationAttackingTown(Town town) {
 		return town.hasSiege()
 				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
