@@ -1019,20 +1019,30 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        return;
 	    }
 
+	    final List<Nation> nations = nationsToSort;
+	    final Comparator comp = comparator;
+	    final int pageNumber = page;
 		try {
-			Collections.sort(nationsToSort, comparator);
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				Collections.sort(nations, comp);
+				sendList(sender, nations, pageNumber, total);
+			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
 			return;
 		}
 
+	}
+	
+	public void sendList(CommandSender sender, List<Nation> nations, int page, int total) {
+
 		int iMax = page * 10;
-		if ((page * 10) > nationsToSort.size()) {
-			iMax = nationsToSort.size();
+		if ((page * 10) > nations.size()) {
+			iMax = nations.size();
 		}
 		List<String> nationsordered = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Nation nation = nationsToSort.get(i);
+			Nation nation = nations.get(i);
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
 			nationsordered.add(output);
 		}
@@ -1042,8 +1052,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						Colors.Gold + TownySettings.getLangString("nation_name") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_towns"),
 						nationsordered,
 						TownySettings.getListPageMsg(page, total)
-				));
-
+				));		
 	}
 
 	/**
