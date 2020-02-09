@@ -440,7 +440,7 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.TOWN_DELETE) {
 			Town town = (Town) consoleExtra;
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-			townyUniverse.getDataSource().removeTown(town);
+			townyUniverse.getDataSource().removeTown(town, false);
 			removeConfirmation(type, true);
 			consoleExtra = null;
 			return;
