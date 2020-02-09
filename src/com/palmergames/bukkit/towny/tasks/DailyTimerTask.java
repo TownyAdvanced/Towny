@@ -50,7 +50,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				collectNationCosts();
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
 					TownyMessaging.sendDebugMsg("Deleting old ruins");
-					RemoveRuinedTowns.removeRuinedTowns(false);
+					RemoveRuinedTowns.removeRuinedTowns();
 				}
 				
 				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));

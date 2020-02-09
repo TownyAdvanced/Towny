@@ -17,10 +17,8 @@ public class RemoveRuinedTowns {
 	/**
 	 * This method cycles through all towns
 	 * It determines which towns have lain in ruins for long enough, and deletes them.
-	 *
-	 * @param immediateRemoval If true, the ruins are removed immediately. If false, they get removed on the 2nd execution of this method.
 	 */
-    public static void removeRuinedTowns(boolean immediateRemoval) {
+    public static void removeRuinedTowns() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
@@ -37,12 +35,6 @@ public class RemoveRuinedTowns {
 
 				if(town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
 					//phase 2 ruins, or legacy ruins. Remove now.
-					townyUniverse.getDataSource().removeTown(town, false);
-					continue;
-				}
-
-				if(town.getRecentlyRuinedEndTime() > 0 && immediateRemoval) {
-					//Any non-legacy ruin type & immediate removal requested. Remove now
 					townyUniverse.getDataSource().removeTown(town, false);
 					continue;
 				}
