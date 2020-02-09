@@ -592,9 +592,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		 * If removal is delayed:
 		 * 1. Town will be set into a special 'ruined' state
 		 * 2. All perms will be enabled
-		 * 3. All plots will be unowned
-		 * 4. The town leadership cannot run /t commands
-		 * 5. Town will be deleted after 2 upkeep cycles
+		 * 3. The residents cannot run /plot commands, and some /t commands
+		 * 4. Town will be deleted after 2 upkeep cycles
 		 */
 		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(888);
@@ -610,12 +609,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				"pvp", "fire", "explosion", "mobs"})
 			{
 				town.getPermissions().set(element, true);
-			}
-			//Reset and save town blocks
-			for(TownBlock townBlock: town.getTownBlocks()) {
-				townBlock.setType(townBlock.getType());
-				townBlock.setResident(null);
-				saveTownBlock(townBlock);
 			}
 			saveTown(town);
 			plugin.resetCache();
