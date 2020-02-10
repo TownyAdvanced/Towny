@@ -643,6 +643,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
 						try {
 							setMayor(assistant);
+							break;
 						} catch (TownyException e) {
 							// Error setting mayor.
 							e.printStackTrace();
@@ -654,6 +655,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 						if (newMayor != resident) {
 							try {
 								setMayor(newMayor);
+								break;
 							} catch (TownyException e) {
 								// Error setting mayor.
 								e.printStackTrace();

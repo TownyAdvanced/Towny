@@ -4124,3 +4124,37 @@ v0.92.0.11:
     - Allows the use of the /ta nation new {name} {capital} command.
   - Pom updates for javadocs courtesy of FlagCourier with PR #3672.
   - Eco backend refactor courtesy of Siris with PR #3663.
+0.95.2.14:
+  - Fix for revoking town invites on a player not actually revoking the invite.
+  - Fix for single-town nations when the winner_takes_ownership_of_town is true.
+    - Closes #3678.
+  - Fix for eventwar war participants message using two lines when it ought to only use one.
+  - Added TownyMessaging.sendPlainGlobalMessage() which doesn't use the [Towny] prefix.
+  - Fix eventwar wars that don't start properly leaving remainders in the warringsTowns and warringNations.
+  - French.yml updated by Mitsu13Ion with PR #3680.
+  - Fix null response when sending an invite to an offline player.
+  - Add permission nodes to /t list by x and /n list by x commands.
+    - You can negate the new child nodes to limit which ways players are allowed to sort towns.
+  - New Permission Nodes: Child nodes of towny.command.nation.list, no townyperms.yml update required.
+    - towny.command.nation.list.residents
+    - towny.command.nation.list.towns
+    - towny.command.nation.list.open
+    - towny.command.nation.list.balance
+    - towny.command.nation.list.name
+    - towny.command.nation.list.townblocks
+    - towny.command.nation.list.online
+  - New Permission Nodes: Child nodes of towny.command.town.list, no townyperms.yml update required.
+    - towny.command.town.list.residents
+    - towny.command.town.list.open
+    - towny.command.town.list.balance
+    - towny.command.town.list.name
+    - towny.command.town.list.townblocks
+    - towny.command.town.list.online
+  - Fix lag caused by /t list and /n list.
+0.95.2.15:
+  - Continue != break, courtesy of creatorfromhell with PR #3690.
+  - Changed message shown at the end of the new day to print in the log regardless of debug mode being true.
+  - REQUIRED CONFIG CHANGE:
+    - Remove LECTERN from the protections.switch_ids list in the config.
+    - This will make it possible for players to read books on lecterns without having switch perms.
+    - Players will still be unable to take the book (unless they have destroy permissions in the plot.)
