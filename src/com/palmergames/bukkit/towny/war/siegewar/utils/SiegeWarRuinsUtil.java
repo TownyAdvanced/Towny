@@ -1,15 +1,19 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.war.siegewar.playeractions.InvadeTown;
+import com.palmergames.bukkit.towny.war.siegewar.playeractions.PlunderTown;
+import com.palmergames.util.StringMgmt;
 import org.bukkit.entity.Player;
 
 
@@ -43,16 +47,28 @@ public class SiegeWarRuinsUtil {
 
 	/**
 	 * Put town into ruined state:
-	 * 1. The mayor will be set to an NPC
-	 * 2. All perms will be enabled
-	 * 3. The residents cannot run /plot commands, and some /t commands
-	 * 4. Town will be deleted after 2 upkeep cycles
+	 * 1. Remove town from nation
+	 * 2. Set mayor to NPC
+	 * 3. Enable all perms
+	 * 4. Now, the residents cannot run /plot commands, and some /t commands
+	 * 5. Later, Town will be deleted after 2 upkeep cycles
 	 */
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if(town.isRuined())
 			return; //Town already ruined. Do not run code as it would reset ruin status to 888 (ie phase 1)
+
+		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
+		try {
+			if (town.hasNation()) {
+				Nation nation = town.getNation();
+				townyUniverse.getDataSource().removeTownFromNation(plugin, town, nation);
+				if(nation.getTowns().size() == 0) {
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation));
+				}
+			}
+		} catch (NotRegisteredException e) {}
 
 		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
 		try {

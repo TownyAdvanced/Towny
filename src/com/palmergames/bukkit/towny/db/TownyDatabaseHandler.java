@@ -1392,4 +1392,40 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return universe.getSiegeZonesMap().keySet();
 	}
+
+	@Override
+	public void removeTownFromNation(Towny plugin, Town town, Nation nation) {
+		boolean removeNation = false;
+
+		try {
+			nation.removeTown(town);
+		} catch(NotRegisteredException x) {
+			return;  //Town was already removed
+		} catch(EmptyNationException x) {
+			removeNation = true;  //Set flag to remove nation at end of this method
+		}
+
+		if(removeNation) {
+			removeNation(nation);
+			saveNationList();
+		} else {
+			saveNation(nation);
+			saveNationList();
+			plugin.resetCache();
+		}
+
+		saveTown(town);
+	}
+
+	@Override
+	public void addTownToNation(Towny plugin, Town town,Nation nation) {
+		try {
+			nation.addTown(town);
+			saveTown(town);
+			plugin.resetCache();
+			saveNation(nation);
+		} catch (AlreadyRegisteredException x) {
+			return;   //Town already in nation
+		}
+	}
 }

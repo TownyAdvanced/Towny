@@ -94,8 +94,10 @@ public class InvadeTown {
     }
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
-        siege.setTownInvaded(true);
-		
+		TownyUniverse universe = TownyUniverse.getInstance();
+
+		siege.setTownInvaded(true);
+
         //Reset revolt immunity, to prevent immediate revolt after invasion 
         SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown);
 		
@@ -106,10 +108,10 @@ public class InvadeTown {
             } catch (NotRegisteredException x) {
             }
 
-            //Remove town from nation (and nation itself if empty)
-            removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
+			//Remove town from nation (and nation itself if empty)
+			universe.getDataSource().removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
 
-            addTownToNation(plugin, defendingTown, attackingNation);
+            universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
 
             TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_nation_town_captured"),
@@ -125,7 +127,7 @@ public class InvadeTown {
                 ));
             }
         } else {
-            addTownToNation(plugin, defendingTown, attackingNation);
+            universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
 
             TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
@@ -138,43 +140,5 @@ public class InvadeTown {
 
 		//Save the town to ensure data is saved even if only town/siege was updated
 		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
-    }
-
-    private static void removeTownFromNation(Towny plugin, Town town, Nation nation) {
-        boolean removeNation = false;
-        Resident king = nation.getKing();
-
-        try {
-            nation.removeTown(town);
-        } catch(NotRegisteredException x) {
-            return;  //Town was already removed
-        } catch(EmptyNationException x) {
-            removeNation = true;  //Set flag to remove nation at end of this method
-        }
-
-		TownyUniverse universe = TownyUniverse.getInstance();
-
-		if(removeNation) {
-			universe.getDataSource().removeNation(nation);
-			universe.getDataSource().saveNationList();
-        } else {
-			universe.getDataSource().saveNation(nation);
-			universe.getDataSource().saveNationList();
-			plugin.resetCache();
-		}
-
-		universe.getDataSource().saveTown(town);
-    }
-
-    private static void addTownToNation(Towny plugin, Town town,Nation nation) {
-        try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			nation.addTown(town);
-			universe.getDataSource().saveTown(town);
-            plugin.resetCache();
-			universe.getDataSource().saveNation(nation);
-        } catch (AlreadyRegisteredException x) {
-            return;   //Town already in nation
-        }
     }
 }
