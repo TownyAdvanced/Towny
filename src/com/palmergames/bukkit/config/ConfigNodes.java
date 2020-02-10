@@ -1863,19 +1863,35 @@ public enum ConfigNodes {
 			"# - Towns who are (currently) in an otherwise-hopeless strategic position e.g. completely surrounded by much more powerful enemies,",
 			"# - Towns who are building strength and preparing for war, but not yet ready to handle plunder costs",
 			"# - Towns who prefer to influence world events and wars via subtle diplomatic methods rather than military strength"),
+	WAR_SIEGE_PILLAGING_ENABLED(
+			"war.siege.switches.pillaging_enabled",
+			"true",
+			"# If this is true, then pillaging is enabled,",
+			"# Pillaging represents an attacker raiding the countryside around a besieged town.",
+			"# If this is enabled, then With each siege point gain, an attacking soldier also steals a small amount from the town bank.",
+			"# This setting is recommended, however it may not be possible to use on some servers which use integers for money."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.money.attacker_cost_upfront_per_plot",
-			"10.0",
-			"#. This value controls the upfront cost of the siege for the attacker."),
+			"20.0",
+			"# This value represents the siege deposit paid by the attacker (aka warchest).",
+			"# This value is recovered by the siege winner, whether attack or defender."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.money.attacker_plunder_amount_per_plot",
-			"20.0",
+			"10.0",
 			"# This is the amount plundered by the attacker is a siege is successful.",
 			"# If this value is lower than the upfront cost, then sieges will not be profitable.",
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture.",
 			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture."),
+	WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT(
+			"war.siege.money.pillage_amount_per_plot",
+			"0.01",
+			"# This value specifies how much an attacking soldier in the timed-point-zone pillages.",
+			"# The value depends on size of defending town, is stolen from the town bank with each siege-timer tick, and is stolen by the individual soldier (not the nation)",
+			"# If the town bank runs out of money, the town falls.",
+			"# This value should be calculated carefully, as the final amount stolen is not as well-controlled as for plunder.",
+			"# Example: Value 0.01. A nation attacks a size 100 town. A relay team of individual soldiers standing at the banner will pillage 1 gold per 20 seconds, 3 per minute. 180 per hour. and 1800 total from the town, assuming 10 team hours of pillaging during a 3 day siege."),
 	WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE(
 			"war.siege.money.nation_cost_refund_percentage_on_delete",
 			"90.0",

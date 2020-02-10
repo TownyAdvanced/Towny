@@ -4,11 +4,15 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import org.bukkit.entity.Player;
 
 public class SiegeWarMoneyUtil {
 
@@ -79,6 +83,45 @@ public class SiegeWarMoneyUtil {
 				System.out.println("Problem paying war chest(s) to winner town");
 				e.printStackTrace();
 			}
+		}
+	}
+
+	/**
+	 * This method steals money from the defending town and gives it to an attacking player
+	 *
+	 * @param player the attacking player
+	 * @param attackingNation the attacking nation
+	 * @param defendingTown the defending town
+	 */
+	public static void pillageTown(Player player, Nation attackingNation, Town defendingTown) {
+
+		try {
+			double fullPillageAmount = TownySettings.getWarSiegePillageAmountPerPlot() * defendingTown.getTownBlocks().size();
+
+			TownyUniverse universe = TownyUniverse.getInstance();
+			Resident pillagingResident = universe.getDataSource().getResident(player.getName());
+
+			if (defendingTown.getAccount().canPayFromHoldings(fullPillageAmount)) {
+				defendingTown.getAccount().payTo(fullPillageAmount, pillagingResident, "Town pillaged by attacker");
+				universe.getDataSource().saveResident(pillagingResident);
+				universe.getDataSource().saveTown(defendingTown);
+			} else {
+				double actualPillageAmount = defendingTown.getAccount().getHoldingBalance();
+				defendingTown.getAccount().payTo(actualPillageAmount, pillagingResident, "Towny pillaged by attacker");
+
+				TownyMessaging.sendGlobalMessage(
+					String.format(
+						TownySettings.getLangString("msg_siege_war_town_ruined_from_pillage"),
+						TownyFormatter.getFormattedTownName(defendingTown),
+						TownyFormatter.getFormattedNationName(attackingNation)));
+
+				universe.getDataSource().saveResident(pillagingResident);
+				universe.getDataSource().removeTown(defendingTown);
+			}
+		} catch (EconomyException x) {
+			x.printStackTrace();
+		} catch (NotRegisteredException x) {
+			x.printStackTrace();
 		}
 	}
 }

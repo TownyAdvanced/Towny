@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
@@ -159,6 +160,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
+								//Pillage
+								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy()) {
+									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
+								}
 							}
 
 						} else if (defencePointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
@@ -190,6 +195,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
+								//Pillage
+								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy()) {
+									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
+								}
 							}
 						}
 					}
@@ -296,6 +305,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			//Points awarded
 			siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
+
 			return true;
 
 		} else {

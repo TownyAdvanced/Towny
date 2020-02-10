@@ -3066,5 +3066,13 @@ public class TownySettings {
 	public static int getWarSiegeTownNeutralityConfirmationRequirementDays() {
 		return getInt(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS);
 	}
+
+	public static boolean getWarSiegePillagingEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_PILLAGING_ENABLED);
+	}
+
+	public static double getWarSiegePillageAmountPerPlot() {
+		return getDouble(ConfigNodes.WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT);
+	}
 }
 

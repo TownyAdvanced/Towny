@@ -78,6 +78,10 @@ public class SiegeWarRuinsUtil {
 			e.printStackTrace();
 		}
 
+		//Remove siege if any
+		if(town.hasSiege())
+			townyUniverse.getDataSource().removeSiege(town.getSiege());
+
 		town.setRecentlyRuinedEndTime(888);
 		town.setPublic(false);
 		town.setOpen(false);
