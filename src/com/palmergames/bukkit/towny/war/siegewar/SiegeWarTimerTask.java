@@ -161,7 +161,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
 								//Pillage
-								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy()) {
+								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy() && !siegeZone.getDefendingTown().isNeutral()) {
 									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
 								}
 							}
@@ -196,7 +196,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
 								//Pillage
-								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy()) {
+								if(TownySettings.getWarSiegePillagingEnabled() && TownySettings.isUsingEconomy() && !siegeZone.getDefendingTown().isNeutral()) {
 									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
 								}
 							}
