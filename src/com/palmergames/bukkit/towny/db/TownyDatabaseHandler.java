@@ -711,7 +711,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//Refund the king with some of the initial nation setup cost
 				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
 				nation.getKing().getAccount().collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
-			} catch (EconomyException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			TownyMessaging.sendGlobalMessage(

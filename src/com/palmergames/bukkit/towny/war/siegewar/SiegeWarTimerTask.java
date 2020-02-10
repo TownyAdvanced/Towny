@@ -66,7 +66,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	private void evaluateSiegeZones() {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for(SiegeZone siegeZone: universe.getDataSource().getSiegeZones()) {
-			evaluateSiegeZone(siegeZone);
+			try {
+				evaluateSiegeZone(siegeZone);
+			} catch (Exception e) {
+			}
 		}
 	}
 
