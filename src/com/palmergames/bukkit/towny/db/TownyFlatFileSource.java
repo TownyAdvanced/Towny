@@ -1414,6 +1414,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("defendingTown");
 				siegeZone.setDefendingTown(getTown(line));
 
+				//If the defending town has no siege, this is data corruption
+				if(!siegeZone.getDefendingTown().hasSiege()) {
+					System.out.println("[Towny] Loading Error: The defending town has no siege");
+					return false;
+				}
+
 				line = keys.get("siegePoints");
 				siegeZone.setSiegePoints(Integer.parseInt(line));
 
