@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyAllySender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -31,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviter, TownyAllySender, EconomyHandler {
+public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -84,8 +83,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 		else {
 			try {
 				removeEnemy(nation);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 			getAllies().add(nation);
 		}
 	}
@@ -104,8 +102,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 			try {
 				removeAlly(ally);
 				ally.removeAlly(this);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 		return getAllies().size() == 0;
 	}
 
@@ -126,8 +123,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 		else {
 			try {
 				removeAlly(nation);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 			getEnemies().add(nation);
 		}
 
@@ -147,8 +143,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 			try {
 				removeEnemy(enemy);
 				enemy.removeEnemy(this);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 		return getAllies().size() == 0;
 	}
 
@@ -239,7 +234,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 
 	public void setNationSpawn(Location spawn) throws TownyException {
 		Coord spawnBlock = Coord.parseCoord(spawn);
-		TownBlock townBlock = null;
+		TownBlock townBlock;
 		TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()); 
 		if (world.hasTownBlock(spawnBlock))
 			townBlock = world.getTownBlock(spawnBlock);
@@ -412,11 +407,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 	}
 
 	public void setTaxes(double taxes) {
-
-		if (taxes > TownySettings.getMaxTax())
-			this.taxes = TownySettings.getMaxTax();
-		else
-			this.taxes = taxes;
+		this.taxes = Math.min(taxes, TownySettings.getMaxTax());
 	}
 
 	public double getTaxes() {
@@ -444,7 +435,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 				final Coord capitalCoord = capital.getHomeBlock().getCoord();
 				Iterator<Town> it = towns.iterator();
 				while(it.hasNext()) {
-					Town town = (Town) it.next();
+					Town town = it.next();
 					Coord townCoord = town.getHomeBlock().getCoord();
 					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						it.remove();
@@ -513,6 +504,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 
 	}
 
+	@Override
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
 		//if (!isKing(resident))// && !hasAssistant(resident))
@@ -630,8 +622,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 	public void deleteSentInvite(Invite invite) {
 		sentinvites.remove(invite);
 	}
-
-	@Override
+	
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
 		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
 			sentallyinvites.add(invite);
@@ -639,13 +630,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
 		}
 	}
-
-	@Override
+	
 	public void deleteSentAllyInvite(Invite invite) {
 		sentallyinvites.remove(invite);
 	}
-
-	@Override
+	
 	public List<Invite> getSentAllyInvites() {
 		return sentallyinvites;
 	}
@@ -724,7 +713,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, T
 			if (hasCapital() && getCapital().hasWorld()) {
 				world = BukkitTools.getWorld(getCapital().getWorld().getName());
 			} else {
-				world = BukkitTools.getWorlds().get(0);;
+				world = BukkitTools.getWorlds().get(0);
 			}
 
 			account = new EconomyAccount(accountName, world);

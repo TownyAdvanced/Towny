@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -83,7 +83,7 @@ public class PlotClaim extends Thread {
 					
 						worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
 						worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
-						TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getGroupName()));
+						TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 						
 						TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
 						
@@ -169,7 +169,7 @@ public class PlotClaim extends Thread {
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
 				Town town = townBlock.getTown();
-				PlotObjectGroup group = townBlock.getPlotObjectGroup();
+				PlotGroup group = townBlock.getPlotObjectGroup();
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -207,7 +207,7 @@ public class PlotClaim extends Thread {
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						if (i >= worldCoords.size() - 2) {
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"),resident.getName(), group.getGroupName()));
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"),resident.getName(), group.getName()));
 						}
 
 						// Update any caches for this WorldCoord
