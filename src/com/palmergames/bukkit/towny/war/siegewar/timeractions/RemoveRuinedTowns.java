@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar.timeractions;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
 
@@ -33,17 +35,22 @@ public class RemoveRuinedTowns {
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName())) {
 
-				if(town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
-					//phase 2 ruins, or legacy ruins. Remove now.
-					townyUniverse.getDataSource().removeTown(town, false);
-					continue;
-				}
+				try {
+					if (town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
+						//phase 2 ruins, or legacy ruins. Remove now.
+						townyUniverse.getDataSource().removeTown(town, false);
+						continue;
+					}
 
-				if(town.getRecentlyRuinedEndTime() == 888) {
-					//Town is in phase 1 ruined state. Wait
-					town.setRecentlyRuinedEndTime(999);
-					townyUniverse.getDataSource().saveTown(town);
-					continue;
+					if (town.getRecentlyRuinedEndTime() == 888) {
+						//Town is in phase 1 ruined state. Wait
+						town.setRecentlyRuinedEndTime(999);
+						townyUniverse.getDataSource().saveTown(town);
+						continue;
+					}
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg("Problem removing ruined town " + town.getName());
+					e.printStackTrace();
 				}
 			} 
 		}
