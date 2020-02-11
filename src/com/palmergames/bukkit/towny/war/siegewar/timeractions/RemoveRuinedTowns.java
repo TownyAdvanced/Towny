@@ -20,7 +20,7 @@ public class RemoveRuinedTowns {
 	 * This method cycles through all towns
 	 * It determines which towns have lain in ruins for long enough, and deletes them.
 	 */
-    public static void removeRuinedTowns() {
+    public static void deleteRuinedTowns() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
@@ -29,28 +29,20 @@ public class RemoveRuinedTowns {
 		while (townItr.hasNext()) {
 			town = townItr.next();
 			/*
-			 * Only remove ruined town if it really still
+			 * Only delete ruined town if it really still
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName())) {
 
-				try {
-					if (town.getRecentlyRuinedEndTime() == 999 || town.getNumResidents() == 0) {
-						//phase 2 ruins, or legacy ruins. Remove now.
+				if(town.isRuined() && System.currentTimeMillis() > town.getRecentlyRuinedEndTime()) {
+					try {
+						//Ruin found & recently ruined end time reached. Delete town now.
 						townyUniverse.getDataSource().removeTown(town, false);
-						continue;
+					} catch (Exception e){
+						TownyMessaging.sendErrorMsg("Problem deleting ruined town " + town.getName());
+						e.printStackTrace();
 					}
-
-					if (town.getRecentlyRuinedEndTime() == 888) {
-						//Town is in phase 1 ruined state. Wait
-						town.setRecentlyRuinedEndTime(999);
-						townyUniverse.getDataSource().saveTown(town);
-						continue;
-					}
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg("Problem removing ruined town " + town.getName());
-					e.printStackTrace();
 				}
 			} 
 		}

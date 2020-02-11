@@ -2976,8 +2976,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE);
 	}
 
-	public static double getWarSiegeRuinsRemovalDelayMinutes() {
-		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES);
+	public static double getWarSiegeRuinsRemovalDelayHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_HOURS);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
@@ -3074,5 +3074,10 @@ public class TownySettings {
 	public static double getWarSiegePillageAmountPerPlot() {
 		return getDouble(ConfigNodes.WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT);
 	}
+
+	public static double getWarSiegeRuinsRemovalsTickIntervalMinutes() {
+		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVALS_TICK_INTERVAL_MINUTES);
+	}
+
 }
 

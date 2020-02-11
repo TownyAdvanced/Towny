@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -11,9 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.war.siegewar.playeractions.InvadeTown;
-import com.palmergames.bukkit.towny.war.siegewar.playeractions.PlunderTown;
-import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 
 
@@ -82,7 +79,7 @@ public class SiegeWarRuinsUtil {
 		if(town.hasSiege())
 			townyUniverse.getDataSource().removeSiege(town.getSiege());
 
-		town.setRecentlyRuinedEndTime(888);
+		town.setRecentlyRuinedEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalDelayHours() * TimeMgmt.ONE_HOUR_IN_MILLIS));
 		town.setPublic(false);
 		town.setOpen(false);
 

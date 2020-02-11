@@ -1950,9 +1950,9 @@ public enum ConfigNodes {
 			"# This value determines how long a town must wait before it can revolt against an occupying nation nation. The immunity time gets set to the given value if a town is captured, or if it revolts.",
 			"# If the value is too high, towns will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
-	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
-			"war.siege.times.ruins_removal_delay_minutes",
-			"1440",
+	WAR_SIEGE_RUINS_REMOVAL_DELAY_HOURS(
+			"war.siege.times.ruins_removal_delay_hours",
+			"24",
 			"# This setting determines the delay between a town being ruined, and final deletion."),
 	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
 			"war.siege.times.zone_maximum_scoring_duration_minutes",
@@ -1961,12 +1961,16 @@ public enum ConfigNodes {
 			"# After this time, to resume scoring points, the player will need to exit then re-enter the siege zone.",
 			"# The setting is an important anti-afk'ing feature."),
 	WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS(
-			"war.siege.switches.town_neutrality_confirmation_requirement_days",
+			"war.siege.times.town_neutrality_confirmation_requirement_days",
 			"7",
 			"# This value determines how long it takes to confirm a town neutrality status change.",
 			"# It is recommended to be relatively high, ",
-		    "# for use by genuinely neutral towns, not just towns which wish to reduce war costs."),
-	
+		    "# for use by genuinely neutral towns, not just towns which wish to quickly toggle on/off to reduce war costs."),
+	WAR_SIEGE_RUINS_REMOVALS_TICK_INTERVAL_MINUTES(
+			"war.siege.times.ruins_removals_tick_interval_minutes",
+			"30",
+			"# This value determines the interval between ruins removals ticks, in which ruins are checked for deletion."),
+
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
 			"war.siege.distances.claim_disable_distance_blocks",

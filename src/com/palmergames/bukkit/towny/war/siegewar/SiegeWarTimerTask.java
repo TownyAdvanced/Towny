@@ -25,12 +25,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
-import static com.palmergames.util.TimeMgmt.ONE_SECOND_IN_MILLIS;
 
 /**
  * This class represents the siegewar timer task
@@ -46,9 +44,11 @@ import static com.palmergames.util.TimeMgmt.ONE_SECOND_IN_MILLIS;
  * @author Goosius
  */
 public class SiegeWarTimerTask extends TownyTimerTask {
+	private long nextRuinsRemovalsTick;
 
 	public SiegeWarTimerTask(Towny plugin) {
 		super(plugin);
+		nextRuinsRemovalsTick = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 	}
 
 	@Override
@@ -58,6 +58,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateSiegeZones();
 
 			evaluateSieges();
+
+			evaluateRuinsRemovals();
 		}
 	}
 
@@ -82,6 +84,18 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateSiege(siege);
 		}
 	}
+
+	/**
+	 * Evaluate ruins removals
+	 */
+	public void evaluateRuinsRemovals() {
+		if(TownySettings.getWarSiegeDelayFullTownRemoval() && System.currentTimeMillis() > nextRuinsRemovalsTick) {
+			TownyMessaging.sendDebugMsg("Checking ruined towns now for deletion.");
+			RemoveRuinedTowns.deleteRuinedTowns();
+			nextRuinsRemovalsTick = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+		}
+	}
+
 
 	/**
 	 * Evaluate just 1 siege zone
