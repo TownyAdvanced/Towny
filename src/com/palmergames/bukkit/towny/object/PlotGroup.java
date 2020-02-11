@@ -10,7 +10,7 @@ import java.util.UUID;
  * @author Suneet Tipirneni (Siris)
  * A simple class which encapsulates the grouping of townblocks.
  */
-public class PlotObjectGroup extends ObjectGroup {
+public class PlotGroup extends ObjectGroup implements TownBlockOwner {
 	private Resident resident = null;
 	private List<TownBlock> townBlocks;
 	private double price = -1;
@@ -22,7 +22,7 @@ public class PlotObjectGroup extends ObjectGroup {
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 * @param town The town that this group is owned by.   
 	 */
-	public PlotObjectGroup(UUID id, String name, Town town) {
+	public PlotGroup(UUID id, String name, Town town) {
 		super(id, name);
 		this.town = town;
 	}
@@ -41,13 +41,13 @@ public class PlotObjectGroup extends ObjectGroup {
 	 * @param name The name of the group.
 	 */
 	@Override
-	public void setGroupName(String name) {
-		if (getGroupName() == null) {
-			super.setGroupName(name);
+	public void setName(String name) {
+		if (getName() == null) {
+			super.setName(name);
 		}
 		else {
-			String oldName = getGroupName();
-			super.setGroupName(name);
+			String oldName = getName();
+			super.setName(name);
 			town.renamePlotGroup(oldName, this);
 		}
 	}
@@ -102,11 +102,21 @@ public class PlotObjectGroup extends ObjectGroup {
 		if (townBlocks != null)
 			townBlocks.remove(townBlock);
 	}
-	
+
+	@Override
+	public void setTownblocks(List<TownBlock> townBlocks) {
+		this.townBlocks = townBlocks;
+	}
+
 	public List<TownBlock> getTownBlocks() {
 		return townBlocks;
 	}
-	
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		return townBlocks.contains(townBlock);
+	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
@@ -118,6 +128,11 @@ public class PlotObjectGroup extends ObjectGroup {
 		}
 		
 		this.price += pPrice;
+	}
+
+	@Override
+	public void setPermissions(String line) {
+		this.permissions.load(line);
 	}
 
 	public TownyPermission getPermissions() {
