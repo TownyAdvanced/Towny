@@ -53,18 +53,4 @@ public class SiegeWarMembershipController {
 		}
 	}
 
-	/**
-	 * Evaluates two nations forming a new alliance, and determines if any siege penalty points apply
-	 *
-	 * @param ally The ally being added
-	 *
-	 */
-	public static void evaluateNationsFormNewAlliance(Nation nation, Nation ally) {
-		for (Resident resident : nation.getResidents()) {
-			SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_new_alliance_formed"));
-		}
-		for (Resident resident : ally.getResidents()) {
-			SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_new_alliance_formed"));
-		}
-	}
 }

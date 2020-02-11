@@ -37,7 +37,7 @@ import java.util.UUID;
 
 import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
-public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotObjectGroup>, EconomyHandler, TownBlockOwner {
+public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -45,7 +45,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private HashMap<String, PlotObjectGroup> plotGroups = null;
+	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -125,8 +125,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			if (townBlocks.size() == 1 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
-				} catch (TownyException e) {
-				}
+				} catch (TownyException ignored) {}
 		}
 	}
 
@@ -157,15 +156,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public void setTaxes(double taxes) {
 
-		if (isTaxPercentage)
-			if (taxes > TownySettings.getMaxTaxPercent())
-				this.taxes = TownySettings.getMaxTaxPercent();
-			else
-				this.taxes = taxes;
-		else if (taxes > TownySettings.getMaxTax())
-			this.taxes = TownySettings.getMaxTax();
-		else
-			this.taxes = taxes;
+		if (isTaxPercentage) {
+			this.taxes = Math.min(taxes, TownySettings.getMaxTaxPercent());
+		} else {
+			this.taxes = Math.min(taxes, TownySettings.getMaxTax());
+		}
 	}
 
 	public double getTaxes() {
@@ -410,13 +405,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public double getBonusBlockCost() {
-		double nextprice = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
-		return nextprice;
+		return (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 	}
 	
 	public double getTownBlockCost() {
-		double nextprice = (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
-		return nextprice;
+		return (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 	}
 
 	public double getTownBlockCostN(int inputN) throws TownyException {
@@ -424,14 +417,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (inputN < 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
 
-		int n = inputN;
-		if (n == 0)
-			return n;
+		if (inputN == 0)
+			return inputN;
 		
 		double nextprice = getTownBlockCost();
 		int i = 1;
 		double cost = nextprice;
-		while (i < n){
+		while (i < inputN){
 			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());			
 			cost += nextprice;
 			i++;
@@ -820,8 +812,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			try {
 				if (getHomeBlock() == townBlock)
 					setHomeBlock(null);
-			} catch (TownyException e) {
-			}
+			} catch (TownyException ignored) {}
 			townBlocks.remove(townBlock);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
@@ -922,11 +913,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setPlotPrice(double plotPrice) {
-
-		if (plotPrice > TownySettings.getMaxPlotPrice())
-			this.plotPrice = TownySettings.getMaxPlotPrice();
-		else 
-			this.plotPrice = plotPrice;
+		this.plotPrice = Math.min(plotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getPlotPrice() {
@@ -936,12 +923,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public double getPlotTypePrice(TownBlockType type) {
 
-		double plotPrice = 0;
+		double plotPrice;
 		switch (type.ordinal()) {
-
-		case 0:
-			plotPrice = getPlotPrice();
-			break;
 		case 1:
 			plotPrice = getCommercialPlotPrice();
 			break;
@@ -960,11 +943,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
-		
-		if (commercialPlotPrice > TownySettings.getMaxPlotPrice())
-			this.commercialPlotPrice = TownySettings.getMaxPlotPrice();
-		else
-			this.commercialPlotPrice = commercialPlotPrice;
+		this.commercialPlotPrice = Math.min(commercialPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getCommercialPlotPrice() {
@@ -973,11 +952,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
-
-		if (embassyPlotPrice > TownySettings.getMaxPlotPrice())
-			this.embassyPlotPrice = TownySettings.getMaxPlotPrice();
-		else
-			this.embassyPlotPrice = embassyPlotPrice;
+		this.embassyPlotPrice = Math.min(embassyPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getEmbassyPlotPrice() {
@@ -1001,11 +976,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setPlotTax(double plotTax) {
-		
-		if (plotTax > TownySettings.getMaxTax())
-			this.plotTax = TownySettings.getMaxTax();
-		else
-			this.plotTax = plotTax;
+		this.plotTax = Math.min(plotTax, TownySettings.getMaxTax());
 	}
 
 	public double getPlotTax() {
@@ -1014,11 +985,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setCommercialPlotTax(double commercialTax) {
-
-		if (commercialTax > TownySettings.getMaxTax())
-			this.commercialPlotTax = TownySettings.getMaxTax();
-		else
-			this.commercialPlotTax = commercialTax;
+		this.commercialPlotTax = Math.min(commercialTax, TownySettings.getMaxTax());
 	}
 
 	public double getCommercialPlotTax() {
@@ -1027,11 +994,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setEmbassyPlotTax(double embassyPlotTax) {
-
-		if (embassyPlotTax > TownySettings.getMaxTax())
-			this.embassyPlotTax = TownySettings.getMaxTax();
-		else
-			this.embassyPlotTax = embassyPlotTax;
+		this.embassyPlotTax = Math.min(embassyPlotTax, TownySettings.getMaxTax());
 	}
 
 	public double getEmbassyPlotTax() {
@@ -1065,6 +1028,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	}
 
+	@Override
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
 		//if (!isMayor(resident))// && !hasAssistant(resident))
@@ -1250,11 +1214,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasValidUUID() {
-		if (uuid != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return uuid != null;
 	}
 
 	public void setRegistered(long registered) {
@@ -1275,11 +1235,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				if (this.getNation().hasAlly(othertown.getNation())) {
 					return true;
 				} else {
-					if (this.getNation().equals(othertown.getNation())) {
-						return true;
-					} else {
-						return false;
-					}
+					return this.getNation().equals(othertown.getNation());
 				}
 			} catch (NotRegisteredException e) {
 				return false;
@@ -1456,7 +1412,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return this.occupied;
 	}
 	
-	public List<TownBlock> getTownBlocksForPlotGroup(PlotObjectGroup group) {
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
 		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
@@ -1470,21 +1426,21 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return retVal;
 	}
 	
-	public void renamePlotGroup(String oldName, PlotObjectGroup group) {
+	public void renamePlotGroup(String oldName, PlotGroup group) {
 		plotGroups.remove(oldName);
-		plotGroups.put(group.getGroupName(), group);
+		plotGroups.put(group.getName(), group);
 	}
 	
-	public void addPlotGroup(PlotObjectGroup group) {
+	public void addPlotGroup(PlotGroup group) {
 		if (!hasObjectGroups()) 
 			plotGroups = new HashMap<>();
 		
-		plotGroups.put(group.getGroupName(), group);
+		plotGroups.put(group.getName(), group);
 		
 	}
 	
-	public void removePlotGroup(PlotObjectGroup plotGroup) {
-		if (hasObjectGroups() && plotGroups.remove(plotGroup.getGroupName()) != null) {
+	public void removePlotGroup(PlotGroup plotGroup) {
+		if (hasObjectGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1493,14 +1449,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			}
 		}
 	}
-	
-	public int generatePlotGroupID() {
-		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
-	}
 
 	// Abstract to collection in case we want to change structure in the future
 	@Override
-	public Collection<PlotObjectGroup> getObjectGroups() {
+	public Collection<PlotGroup> getObjectGroups() {
 		
 		if (plotGroups == null)
 			return null;
@@ -1510,9 +1462,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	// Method is inefficient compared to getting the group from name.
 	@Override
-	public PlotObjectGroup getObjectGroupFromID(UUID ID) {
+	public PlotGroup getObjectGroupFromID(UUID ID) {
 		if (hasObjectGroups()) {
-			for (PlotObjectGroup pg : getObjectGroups()) {
+			for (PlotGroup pg : getObjectGroups()) {
 				if (pg.getID().equals(ID)) 
 					return pg;
 			}
@@ -1532,7 +1484,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return hasObjectGroups() && plotGroups.containsKey(name);
 	}
 
-	public PlotObjectGroup getPlotObjectGroupFromName(String name) {
+	public PlotGroup getPlotObjectGroupFromName(String name) {
 		if (hasObjectGroups()) {
 			return plotGroups.get(name);
 		}
@@ -1541,11 +1493,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	// Wraps other functions to provide a better naming scheme for the end developer.
-	public PlotObjectGroup getPlotObjectGroupFromID(UUID ID) {
+	public PlotGroup getPlotObjectGroupFromID(UUID ID) {
 		return getObjectGroupFromID(ID);
 	}
 	
-	public Collection<PlotObjectGroup> getPlotObjectGroups() {
+	public Collection<PlotGroup> getPlotObjectGroups() {
 		return getObjectGroups();
 	}
 

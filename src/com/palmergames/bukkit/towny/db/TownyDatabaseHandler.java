@@ -23,7 +23,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -201,7 +201,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotObjectGroup getPlotObjectGroup(String townName, UUID groupID) {
+	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
 		return universe.getGroup(townName, groupID);
 	}
 
@@ -438,21 +438,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<TownBlock> getAllTownBlocks() {
-
 		List<TownBlock> townBlocks = new ArrayList<>();
 		for (TownyWorld world : getWorlds())
 			townBlocks.addAll(world.getTownBlocks());
 		return townBlocks;
 	}
 	
-	public List<PlotObjectGroup> getAllPlotGroups() {
-		List<PlotObjectGroup> groups = new ArrayList<>();
-		groups.addAll(universe.getGroups());
-		
-		return groups;
+	public List<PlotGroup> getAllPlotGroups() {
+		return new ArrayList<>(universe.getGroups());
 	}
 	
-	public void newPlotGroup(PlotObjectGroup group) {
+	public void newPlotGroup(PlotGroup group) {
 		universe.getGroups().add(group);
 	}
 
@@ -938,7 +934,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			
 			if (town.hasObjectGroups())
-				for (PlotObjectGroup pg : town.getPlotObjectGroups()) {
+				for (PlotGroup pg : town.getPlotObjectGroups()) {
 					pg.setTown(town);
 					savePlotGroup(pg);
 				}
@@ -1087,9 +1083,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void renameGroup(PlotObjectGroup group, String newName) throws AlreadyRegisteredException {
+	public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException {
 		// Create new one
-		group.setGroupName(newName);
+		group.setName(newName);
 		
 		// Save
 		savePlotGroup(group);

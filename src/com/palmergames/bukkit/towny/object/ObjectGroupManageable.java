@@ -38,7 +38,7 @@ interface ObjectGroupManageable<T extends ObjectGroup> {
 	default boolean hasObjectGroupName(String name) {
 		if (hasObjectGroups()) {
 			for (T group : getObjectGroups()) {
-				if (group.getGroupName().equalsIgnoreCase(name)) {
+				if (group.getName().equalsIgnoreCase(name)) {
 					return true;
 				}
 			}

@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotObjectGroup;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -1696,7 +1696,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						if (line != null && !line.isEmpty()) {
 							try {
 								UUID groupID = UUID.fromString(line.trim());
-								PlotObjectGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
+								PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
 								townBlock.setPlotObjectGroup(group);
 							} catch (Exception ignored) {}
 							
@@ -1863,11 +1863,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public synchronized boolean savePlotGroup(PlotObjectGroup group) {
-		TownyMessaging.sendDebugMsg("Saving group " + group.getGroupName());
+	public synchronized boolean savePlotGroup(PlotGroup group) {
+		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
 			HashMap<String, Object> nat_hm = new HashMap<>();
-			nat_hm.put("groupName", group.getGroupName());
+			nat_hm.put("groupName", group.getName());
 			nat_hm.put("groupID", group.getID());
 			nat_hm.put("groupPrice", group.getPrice());
 			nat_hm.put("town", group.getTown().toString());
@@ -2321,7 +2321,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public void deletePlotGroup(PlotObjectGroup group) {
+	public void deletePlotGroup(PlotGroup group) {
 		
 	}
 
@@ -2417,7 +2417,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		ResultSet rs;
 
-		for (PlotObjectGroup plotGroup : getAllPlotGroups()) {
+		for (PlotGroup plotGroup : getAllPlotGroups()) {
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='" + plotGroup.getID().toString() + "'");
@@ -2426,7 +2426,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					line = rs.getString("groupName");
 					if (line != null)
 						try {
-							plotGroup.setGroupName(line.trim());
+							plotGroup.setName(line.trim());
 						} catch (Exception ignored) {}
 					
 					line = rs.getString("groupID");
@@ -2453,7 +2453,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				
 				s.close();
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + plotGroup.getGroupName() + " at line: " + line + " in the sql database");
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + plotGroup.getName() + " at line: " + line + " in the sql database");
 				e.printStackTrace();
 				return false;
 			}
