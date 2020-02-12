@@ -179,7 +179,7 @@ public class SiegeWarDeathController {
 				pointsRecipient,
 				deadResident,
 				siegeZone,
-				TownySettings.getLangString("msg_siege_war_participant_death"));
+				TownySettings.getLangString("msg_siege_war_attacker_death"));
 		} else {
 			for(SiegeZone siegeZoneInCollection: siegeZone.getSiege().getSiegeZones().values()) {
 				SiegeWarPointsUtil.awardSiegePenaltyPoints(
@@ -187,7 +187,7 @@ public class SiegeWarDeathController {
 					siegeZoneInCollection.getAttackingNation(),
 					deadResident,
 					siegeZoneInCollection,
-					TownySettings.getLangString("msg_siege_war_participant_death"));
+					TownySettings.getLangString("msg_siege_war_defender_death"));
 			}
 		}
 	}

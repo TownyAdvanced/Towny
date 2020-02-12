@@ -178,10 +178,8 @@ public class SiegeWarPointsUtil {
 		//Send messages to siege participants
 		String message = String.format(
 			unformattedErrorMessage,
-			TownyFormatter.getFormattedName(deadResident),
 			TownyFormatter.getFormattedName(siegeZone.getDefendingTown()),
-			siegePoints,
-			TownyFormatter.getFormattedName(pointsRecipient));
+			siegePoints);
 
 		//Inform attacker nation
 		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
