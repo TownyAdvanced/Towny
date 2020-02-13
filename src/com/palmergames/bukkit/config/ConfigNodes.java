@@ -1870,6 +1870,12 @@ public enum ConfigNodes {
 			"# Pillaging represents an attacker raiding the countryside around a besieged town.",
 			"# If this is enabled, then With each siege point gain, an attacking soldier also steals a small amount from the town bank.",
 			"# This setting is recommended, however it may not be possible to use on some servers which use integers for money."),
+	WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_ENABLED(
+			"war.siege.switches.post_spawn_damage_immunity_enabled",
+			"true",
+			"# If this value is true, then spawn camping is prevented/reduced by the following automatic measure: ",
+			"# - After spawning, a player will be immune to damage (and cannot damage entities) for a short time (typically less than a minute).",
+			"# - Thus, during a siege, even if the enemy has breached the town walls, a spawning player has time to get to (or create) a safe location."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -1970,6 +1976,12 @@ public enum ConfigNodes {
 			"war.siege.times.ruins_removals_tick_interval_minutes",
 			"30",
 			"# This value determines the interval between ruins removals ticks, in which ruins are checked for deletion."),
+	WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS(
+			"war.siege.times.post_spawn_damage_immunity_minimum_duration_seconds",
+			"30",
+			"# This value determines the minimum duration after spawning in which a player is immune to damage (and cannot damage entities).",
+			"# The actual value may be larger for each individual respawn - the max additional time is approximately equal to the siege war timer tick interval.",
+			"# Thus by default the actual value will be 30-60 seconds"),
 
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(

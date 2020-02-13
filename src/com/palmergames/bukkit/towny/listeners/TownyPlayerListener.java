@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -124,7 +125,18 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		Player player = event.getPlayer();
-		
+
+		//Set post-spawn damage immunity
+		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
+			try {
+				player.setInvulnerable(true);
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				resident.setDamageImmunityEndTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
+			} catch(Exception e) {
+				TownyMessaging.sendErrorMsg(e.getMessage());
+			}
+		}
+
 		if (!TownySettings.isTownRespawning())
 			return;
 		

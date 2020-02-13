@@ -3079,5 +3079,13 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVALS_TICK_INTERVAL_MINUTES);
 	}
 
+	public static boolean getWarSiegePostSpawnDamageImmunityEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_ENABLED);
+	}
+
+	public static int getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() {
+		return getInt(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS);
+	}
+
 }
 
