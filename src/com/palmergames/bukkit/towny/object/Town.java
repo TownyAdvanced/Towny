@@ -1424,6 +1424,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 	
+	/**
+	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} isntead.
+	 * 
+	 * @return the holding balance of the economy account.
+	 * @throws EconomyException
+	 */
 	@Deprecated
 	public double getHoldingBalance() throws EconomyException {
 		try {
