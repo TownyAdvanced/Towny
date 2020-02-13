@@ -4160,3 +4160,4 @@ v0.92.0.11:
     - Players will still be unable to take the book (unless they have destroy permissions in the plot.)
   - QOL interface changes/redundancy removal, courtesy of Siris with PR #3677.
   - Readd economy lookups for town and nation banks, deprecated.
+  - Readd pay() and collect() to Towns and Nations, deprecated, courtesy of Siris with PR #3697.
