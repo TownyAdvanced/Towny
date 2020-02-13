@@ -1415,7 +1415,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	/**
-	 * @deprecated As of As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
 	 * 
 	 * @return The name of the economy account.
 	 */
@@ -1425,7 +1425,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	/**
-	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} isntead.
+	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
 	 * 
 	 * @return the holding balance of the economy account.
 	 * @throws EconomyException
