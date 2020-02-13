@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -29,6 +31,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
@@ -724,7 +728,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	/**
-	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *
 	 * @return The world this resides in.
 	 */
@@ -738,7 +742,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	/**
-	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getName()} instead.
 	 *
 	 * @return The name of the economy account.
 	 */
@@ -752,7 +756,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
 	 * 
 	 * @return the holding balance of the economy account.
-	 * @throws EconomyException
+	 * @throws EconomyException When an economy error occurs
 	 */
 	@Deprecated
 	public double getHoldingBalance() throws EconomyException {
@@ -762,5 +766,31 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			e.printStackTrace();
 			throw new EconomyException("Economy error getting holdings for " + getEconomyName());
 		}
+	}
+
+	/**
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#pay(double, String)} instead.
+	 *
+	 * @param amount value to deduct from the player's account
+	 * @param reason leger memo stating why amount is deducted
+	 * @return true if successful
+	 * @throws EconomyException if the transaction fails
+	 */
+	@Deprecated
+	public boolean pay(double amount, String reason) throws EconomyException {
+		return getAccount().pay(amount, reason);
+	}
+
+	/**
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#collect(double, String)} instead.
+	 *
+	 * @param amount currency to collect
+	 * @param reason memo regarding transaction
+	 * @return collected or pay to server account   
+	 * @throws EconomyException if transaction fails
+	 */
+	@Deprecated
+	public boolean collect(double amount, String reason) throws EconomyException {
+		return getAccount().collect(amount, reason);
 	}
 }

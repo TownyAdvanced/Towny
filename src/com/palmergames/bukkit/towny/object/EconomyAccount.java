@@ -59,7 +59,7 @@ public class EconomyAccount extends TownyObject {
 		}
 	}
 
-	private boolean _pay(double amount) throws EconomyException {
+	boolean _pay(double amount) throws EconomyException {
 		if (canPayFromHoldings(amount)) {
 			if (TownyEconomyHandler.isActive())
 				if (amount > 0) {
