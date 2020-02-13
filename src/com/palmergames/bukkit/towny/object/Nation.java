@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -31,8 +29,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
-import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
