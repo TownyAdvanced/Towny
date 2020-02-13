@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
+import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
@@ -1535,7 +1537,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	/**
-	 * @deprecated As of As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
 	 * 
 	 * @return The name of the economy account.
 	 */
@@ -1578,5 +1580,51 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public void setNeutral(boolean value) {
 		neutral = value;
+	}
+
+	/**
+	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
+	 * 
+	 * @return the holding balance of the economy account.
+	 * @throws EconomyException
+	 */
+	@Deprecated
+	public double getHoldingBalance() throws EconomyException {
+		try {
+			return getAccount().getHoldingBalance();
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+			throw new EconomyException("Economy error getting holdings for " + getEconomyName());
+		}
+	}
+
+	/**
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#pay(double, String)} instead.
+	 *
+	 * @param amount value to deduct from the player's account
+	 * @param reason leger memo stating why amount is deducted
+	 * @return true if successful
+	 * @throws EconomyException if the transaction fails
+	 */
+	@Deprecated
+	public boolean pay(double amount, String reason) throws EconomyException {
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
+		} else {
+			return getAccount()._pay(amount);
+		}
+	}
+
+	/**
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#collect(double, String)} instead.
+	 *
+	 * @param amount currency to collect
+	 * @param reason memo regarding transaction
+	 * @return collected or pay to server account   
+	 * @throws EconomyException if transaction fails
+	 */
+	@Deprecated
+	public boolean collect(double amount, String reason) throws EconomyException {
+		return getAccount().collect(amount, reason);
 	}
 }
