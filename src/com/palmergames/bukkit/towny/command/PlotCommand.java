@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -47,6 +48,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -76,6 +78,43 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/plot group", "?", ""));
 		output.add(TownySettings.getLangString("msg_nfs_abr"));
 	}
+	
+	private static final List<String> plotTabCompletes = new ArrayList<>(Arrays.asList(
+		"claim",
+		"unclaim",
+		"forsale",
+		"fs",
+		"notforsale",
+		"nfs",
+		"evict",
+		"perm",
+		"set",
+		"toggle",
+		"clear"
+	));
+
+	private static final List<String> plotSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"reset",
+		"shop",
+		"embassy",
+		"arena",
+		"wilds",
+		"inn",
+		"jail",
+		"farm",
+		"bank",
+		"outpost",
+		"name",
+		"perm"
+	));
+
+	private static final List<String> plotToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"fire",
+		"pvp",
+		"explosion",
+		"mob"
+	));
+	
 
 	public PlotCommand(Towny instance) {
 
@@ -1186,27 +1225,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		LinkedList<String> output = new LinkedList<>();
-		String lastArg = "";
-
-		// Get the last argument
-		if (args.length > 0) {
-			lastArg = args[args.length - 1].toLowerCase();
+		if (args.length == 1) {
+			return NameUtil.filterByStart(plotTabCompletes, args[0]);
 		}
-
-		if (!lastArg.equalsIgnoreCase("")) {
-
-			// Match residents
-			for (Resident resident : TownyUniverse.getInstance().getDataSource().getResidents()) {
-				if (resident.getName().toLowerCase().startsWith(lastArg)) {
-					output.add(resident.getName());
-				}
-
+		
+		if (args.length == 2) {
+			switch (args[0]) {
+				case "set":
+					return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+				case "toggle":
+					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
 			}
-
 		}
-
-		return output;
+		
+		return null;
 	}
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
