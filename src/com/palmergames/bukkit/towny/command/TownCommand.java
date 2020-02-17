@@ -115,7 +115,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"toggle",
 		"join"
 		));
-	private static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
+	public static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"board",
 		"mayor",
 		"homeblock",
@@ -137,7 +137,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"surname"
 	));
 	
-	private static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	public static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
 		"explosion",
 		"fire",
 		"mobs",

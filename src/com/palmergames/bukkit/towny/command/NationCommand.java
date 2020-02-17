@@ -97,7 +97,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"spawn"
 	));
 
-	private static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	public static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -110,7 +110,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"tag"
 	));
 	
-	private static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	public static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
 		"neutral",
 		"open"
 	));
