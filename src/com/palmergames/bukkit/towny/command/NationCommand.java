@@ -215,7 +215,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
 		}
-		
+
 		if (args.length == 3) {
 			switch (args[1].toLowerCase()) {
 				case "remove":
