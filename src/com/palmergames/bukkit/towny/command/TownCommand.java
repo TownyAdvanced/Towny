@@ -214,7 +214,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "spawn":
 					return NameUtil.getTownNamesStartingWith(args[1]);
 				case "set":

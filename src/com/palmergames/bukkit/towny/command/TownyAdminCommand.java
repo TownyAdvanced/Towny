@@ -204,7 +204,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "plot":
 					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
 						"claim",
@@ -234,7 +234,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 3) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "resident":
 					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
 						"rename",
@@ -246,7 +246,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
 			}
 
-			switch (args[1]) {
+			switch (args[1].toLowerCase()) {
 				case "capital":
 				case "mayor":
 				case "plot":
@@ -259,7 +259,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 		
 		if (args.length == 4) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "town":
 					switch (args[2]) {
 						case "set":
@@ -268,7 +268,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
 					}
 				case "nation":
-					switch (args[2]) {
+					switch (args[2].toLowerCase()) {
 						case "set":
 							return NameUtil.filterByStart(NationCommand.nationSetTabCompletes, args[3]);
 						case "toggle":

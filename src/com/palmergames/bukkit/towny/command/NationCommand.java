@@ -195,7 +195,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "set":
 					return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
 				case "rank":
@@ -217,7 +217,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 3) {
-			switch (args[1]) {
+			switch (args[1].toLowerCase()) {
 				case "remove":
 				case "add":
 					return NameUtil.getNationNamesStartingWith(args[2]);
