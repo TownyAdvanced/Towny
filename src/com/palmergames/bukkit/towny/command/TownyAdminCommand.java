@@ -261,7 +261,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (args.length == 4) {
 			switch (args[0].toLowerCase()) {
 				case "town":
-					switch (args[2]) {
+					switch (args[2].toLowerCase()) {
 						case "set":
 							return NameUtil.filterByStart(TownCommand.townSetTabCompletes, args[3]);
 						case "toggle":
