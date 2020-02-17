@@ -220,7 +220,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			switch (args[1]) {
 				case "remove":
 				case "add":
-					NameUtil.getTownNamesStartingWith(args[2]);
+					return NameUtil.getNationNamesStartingWith(args[2]);
 			}
 		}
 		
