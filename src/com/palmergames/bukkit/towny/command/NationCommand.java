@@ -142,6 +142,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		TownyMessaging.sendErrorMsg("test");
+		
+		return null;
+	}
+
 	public NationCommand(Towny instance) {
 
 		plugin = instance;

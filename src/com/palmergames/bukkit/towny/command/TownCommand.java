@@ -50,6 +50,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -66,12 +67,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -81,11 +84,57 @@ import java.util.UUID;
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand extends BaseCommand implements CommandExecutor {
+public class TownCommand extends BaseCommand implements CommandExecutor, TabCompleter {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
 	private static final List<String> invite = new ArrayList<>();
+	private static final List<String> townTabCompletes = new ArrayList<>(Arrays.asList(
+		"here",
+		"leave",
+		"list",
+		"online",
+		"new",
+		"plots",
+		"add",
+		"kick",
+		"spawn",
+		"claim",
+		"unclaim",
+		"withdraw",
+		"delete",
+		"outlawlist",
+		"outlaw",
+		"outpost",
+		"ranklist",
+		"rank",
+		"reslist",
+		"say",
+		"set",
+		"toggle",
+		"join"
+		));
+	private static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"board",
+		"mayor",
+		"homeblock",
+		"spawn",
+		"spawncost",
+		"name",
+		"outpost",
+		"jail",
+		"perm",
+		"tag",
+		"taxes",
+		"plottax",
+		"plotprice",
+		"shopprice",
+		"shoptax",
+		"embassyprice",
+		"embassyTax",
+		"title",
+		"surname"
+	));
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -136,6 +185,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public TownCommand(Towny instance) {
 
 		plugin = instance;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		if (args.length == 1) {
+			return NameUtil.filterByStart(townTabCompletes, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0]) {
+				case "spawn":
+					return NameUtil.getTownNamesStartingWith(args[1]);
+				case "set":
+					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+			}
+		}
+			
+		
+		return null;
 	}
 
 	@Override
