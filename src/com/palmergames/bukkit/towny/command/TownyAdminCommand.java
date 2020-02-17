@@ -245,7 +245,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				case "nation":
 					return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
 			}
+
+			switch (args[1]) {
+				case "capital":
+				case "mayor":
+				case "plot":
+				case "surname":
+				case "title":
+					return NameUtil.getTownNamesStartingWith(args[2]);
+			}
 		}
+
+		
 		
 		if (args.length == 4) {
 			switch (args[0]) {
@@ -264,6 +275,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
 					}
 			}
+			
+			
 		}
 		
 		return null;
