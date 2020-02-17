@@ -191,7 +191,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		if (args.length == 1) {
-			return NameUtil.filterByStart(townTabCompletes, args[0]);
+			List<String> townNames = NameUtil.getTownNames();
+			townNames.addAll(townTabCompletes);
+			return NameUtil.filterByStart(townNames, args[0]);
 		}
 		
 		if (args.length == 2) {
