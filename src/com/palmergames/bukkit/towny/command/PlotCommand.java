@@ -90,7 +90,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"perm",
 		"set",
 		"toggle",
-		"clear"
+		"clear",
+		"group"
 	));
 
 	private static final List<String> plotSetTabCompletes = new ArrayList<>(Arrays.asList(
@@ -113,6 +114,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"pvp",
 		"explosion",
 		"mob"
+	));
+	
+	private static final List<String> plotGroupTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove",
+		"set",
+		"toggle",
+		"fs",
+		"notforsale",
+		"forsale",
+		"perm"
 	));
 	
 
@@ -1235,6 +1247,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
 				case "toggle":
 					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+				case "group":
+					return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
 			}
 		}
 		
