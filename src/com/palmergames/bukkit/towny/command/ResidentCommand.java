@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -40,6 +41,35 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
+	private static final List<String> residentTabCompletes = new ArrayList<>(Arrays.asList(
+		"friend",
+		"list",
+		"jail",
+		"spawn",
+		"toggle",
+		"set",
+		"tax"
+	));
+	
+	private static final List<String> residentFriendTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"add+",
+		"remove",
+		"remove+",
+		"clearlist",
+		"list"
+	));
+
+	private static final List<String> residentToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"map",
+		"townclaim",
+		"plotborder",
+		"constantplotborder",
+		"spy",
+		"ignoreplots",
+		"reset"
+	));
+	
 
 	static {
 		output.add(ChatTools.formatTitle("/resident"));
@@ -627,27 +657,21 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		LinkedList<String> output = new LinkedList<>();
-		String lastArg = "";
-
-		// Get the last argument
-		if (args.length > 0) {
-			lastArg = args[args.length - 1].toLowerCase();
+		if (args.length == 1) {
+			return NameUtil.filterByStart(residentTabCompletes, args[0]);
 		}
 
-		if (!lastArg.equalsIgnoreCase("")) {
-
-			// Match residents
-			for (Resident resident : TownyUniverse.getInstance().getDataSource().getResidents()) {
-				if (resident.getName().toLowerCase().startsWith(lastArg)) {
-					output.add(resident.getName());
-				}
+		if (args.length == 2) {
+			switch (args[0]) {
+				case "friend":
+					return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
+				case "toggle":
+					return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
 
 			}
-
 		}
-
-		return output;
+		
+		return null;
 	}
 
 }
