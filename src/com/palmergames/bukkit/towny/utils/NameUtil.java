@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -62,6 +63,15 @@ public class NameUtil {
 	
 	public static List<String> getNationNamesStartingWith(String str) {
 		return filterByStart(getNationNames(), str);
+	}
+	
+	public static List<String> getWorldNames() {
+		Collection<TownyWorld> worlds = TownyUniverse.getInstance().getWorldMap().values();
+		return getNames(worlds);
+	}
+	
+	public static List<String> getWorldNamesStartingWith(String str) {
+		return filterByStart(getWorldNames(), str);
 	}
 		
 }
