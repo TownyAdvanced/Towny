@@ -93,7 +93,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"townlist",
 		"allylist",
 		"enemylist",
-		"ally"
+		"ally",
+		"spawn"
 	));
 
 	private static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
