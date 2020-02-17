@@ -1893,11 +1893,15 @@ public enum ConfigNodes {
 	WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT(
 			"war.siege.money.pillage_amount_per_plot",
 			"0.01",
-			"# This value specifies how much an attacking soldier in the timed-point-zone pillages.",
-			"# The value depends on size of defending town, is stolen from the town bank with each siege-timer tick, and is stolen by the individual soldier (not the nation)",
+			"# This value specifies how much an attacking soldier in the timed-point-zone pillages with each siege-war-tick.",
+			"# The amount is taken from the town bank,and stolen by the individual soldier (not the nation)",
 			"# If the town bank runs out of money, the town falls.",
 			"# This value should be calculated carefully, as the final amount stolen is not as well-controlled as for plunder.",
-			"# Example: Value 0.01. A nation attacks a size 100 town. A relay team of individual soldiers standing at the banner will pillage 1 gold per 20 seconds, 3 per minute. 180 per hour. and 1800 total from the town, assuming 10 team hours of pillaging during a 3 day siege."),
+			"# Example:",
+			"# Value 0.01. A nation attacks a size 100 town.",
+			"# Assume 5 hours of pillaging during a 3 day siege.",
+			"# Assume the attacking nation soldiers work in a relay, with 2 soldiers on the banner for every hour of pillaging.",
+		    "# These soldiers will pillage 2 gold per 20 seconds, 6 per minute. 360 per hour, and 1800 total from the town."),
 	WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE(
 			"war.siege.money.nation_cost_refund_percentage_on_delete",
 			"90.0",
@@ -2032,7 +2036,7 @@ public enum ConfigNodes {
 			"# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be."),
 	WAR_SIEGE_MAX_PLAYERS_PER_SIDE_FOR_TIMED_POINTS(
 			"war.siege.scoring.max_players_per_side_for_timed_points",
-				"1",
+				"2",
 				"# This setting determines the maximum number of players at a time, per side, who can score timed siege points.",
 				"# If the value is too high, then too many players may be drawn into siege zone banner occupation.",
 		        "# - This takes time from other activities e.g. building, trading.",
