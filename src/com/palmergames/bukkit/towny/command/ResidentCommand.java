@@ -662,7 +662,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "friend":
 					return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
 				case "toggle":

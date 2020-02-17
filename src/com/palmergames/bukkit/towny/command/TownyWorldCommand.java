@@ -124,7 +124,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "toggle":
 					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
 				case "set":

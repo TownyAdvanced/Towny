@@ -149,7 +149,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "war":
 					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
 				case "top":
@@ -161,7 +161,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 3) {
-			switch (args[1]) {
+			switch (args[1].toLowerCase()) {
 				case "residents":
 					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
 						"all",
