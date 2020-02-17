@@ -60,7 +60,7 @@ public class NameUtil {
 		return getNames(nations);
 	}
 	
-	public List<String> getNationNamesStartingWith(String str) {
+	public static List<String> getNationNamesStartingWith(String str) {
 		return filterByStart(getNationNames(), str);
 	}
 		

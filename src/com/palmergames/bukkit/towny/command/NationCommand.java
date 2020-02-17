@@ -210,6 +210,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.getTownNamesStartingWith(args[1]);
 				case "toggle":
 					return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+				case "join":
+					return NameUtil.getNationNamesStartingWith(args[1]);
 
 			}
 		}
