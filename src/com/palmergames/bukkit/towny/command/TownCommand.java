@@ -104,6 +104,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"withdraw",
 		"delete",
 		"outlawlist",
+		"deposit",
 		"outlaw",
 		"outpost",
 		"ranklist",
@@ -134,6 +135,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"embassyTax",
 		"title",
 		"surname"
+	));
+	
+	private static final List<String> townRankTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove"
 	));
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -202,6 +208,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return NameUtil.getTownNamesStartingWith(args[1]);
 				case "set":
 					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+				case "rank":
+				case "outlaw":
+					return NameUtil.filterByStart(townRankTabCompletes, args[1]);
+				case "outpost":
+					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList("list")), args[1]);
+				case "unclaim":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"all",
+						"outpost"
+					)), args[1]);
+				case "claim":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"auto",
+						"outpost"
+					)), args[1]);
+				case "buy":
+					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList(
+						"bonus"
+					)), args[1]);
+					
 			}
 		}
 			
