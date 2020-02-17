@@ -137,6 +137,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"surname"
 	));
 	
+	private static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"explosion",
+		"fire",
+		"mobs",
+		"public",
+		"pvp",
+		"taxpercent",
+		"open",
+		"jail"
+	));
+	
 	private static final List<String> townRankTabCompletes = new ArrayList<>(Arrays.asList(
 		"add",
 		"remove"
@@ -227,7 +238,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList(
 						"bonus"
 					)), args[1]);
-					
+				case "toggle":
+					return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
 			}
 		}
 			

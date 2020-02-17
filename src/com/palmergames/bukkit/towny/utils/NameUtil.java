@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nameable;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,7 +28,7 @@ public class NameUtil {
 	 * @param objs The Nameable objects to get the names from.
 	 * @return A list of the names of the objects.
 	 */
-	public static List<String> getNames(Collection<Town> objs) {
+	public static <T extends Nameable> List<String> getNames(Collection<T> objs) {
 
 		ArrayList<String> names = new ArrayList<>();
 		
@@ -47,12 +48,20 @@ public class NameUtil {
 	}
 	
 	public static List<String> getTownNamesStartingWith(String str) {
-
-		return getTownNames().stream().filter(name -> name.startsWith(str)).collect(Collectors.toList());
+		return filterByStart(getTownNames(), str);
 	}
 	
 	public static List<String> filterByStart(List<String> list, String startingWith) {
 		return list.stream().filter(name -> name.startsWith(startingWith)).collect(Collectors.toList());
+	}
+	
+	public static List<String> getNationNames() {
+		Collection<Nation> nations = TownyUniverse.getInstance().getNationsMap().values();
+		return getNames(nations);
+	}
+	
+	public List<String> getNationNamesStartingWith(String str) {
+		return filterByStart(getNationNames(), str);
 	}
 		
 }
