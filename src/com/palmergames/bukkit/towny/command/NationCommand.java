@@ -216,14 +216,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		
-		if (args.length == 3) {
-			switch (args[1].toLowerCase()) {
-				case "remove":
-				case "add":
-					return NameUtil.getNationNamesStartingWith(args[2]);
-			}
-		}
-		
 		return null;
 	}
 

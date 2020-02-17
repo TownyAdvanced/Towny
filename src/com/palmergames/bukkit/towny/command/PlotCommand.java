@@ -127,6 +127,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"perm"
 	));
 	
+	private static final List<String> plotPermTabCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off",
+		"resident",
+		"ally",
+		"outsider",
+		"build",
+		"destroy",
+		"switch",
+		"itemuse",
+		"reset"
+	));
+	
 
 	public PlotCommand(Towny instance) {
 
@@ -1249,6 +1262,49 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
 				case "group":
 					return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
+			}
+		}
+		
+		if (args.length == 3) {
+			if ("perm".equals(args[1].toLowerCase())) {
+				return NameUtil.filterByStart(plotPermTabCompletes, args[2]);
+			}
+		}
+		
+		if (args.length == 4) {
+			switch (args[2].toLowerCase()) {
+				case "resident":
+				case "ally":
+				case "outsider":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off",
+						"build",
+						"destroy",
+						"switch",
+						"itemuse"
+					)), args[3]);
+				case "build":
+				case "destroy":
+				case "switch":
+				case "itemuse":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[3]);
+			}
+		}
+		
+		if (args.length == 5) {
+			switch (args[3].toLowerCase()) {
+				case "build":
+				case "destroy":
+				case "itemuse":
+				case "switch":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[4]);
 			}
 		}
 		

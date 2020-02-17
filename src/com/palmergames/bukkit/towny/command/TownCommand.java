@@ -153,6 +153,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"remove"
 	));
 
+	public static final List<String> townPermTabCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off",
+		"resident",
+		"ally",
+		"outsider",
+		"build",
+		"destroy",
+		"switch",
+		"itemuse",
+		"reset"
+	));
+
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_NAME = (t1, t2) -> t1.getName().compareTo(t2.getName());
@@ -240,6 +253,53 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					)), args[1]);
 				case "toggle":
 					return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+			}
+		}
+
+		if (args.length == 3) {
+			switch (args[1].toLowerCase()) {
+				case "remove":
+				case "add":
+					return NameUtil.getNationNamesStartingWith(args[2]);
+				case "perm":
+					return NameUtil.filterByStart(townPermTabCompletes, args[2]);
+			}
+		}
+
+		if (args.length == 4) {
+			switch (args[2].toLowerCase()) {
+				case "resident":
+				case "ally":
+				case "outsider":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off",
+						"build",
+						"destroy",
+						"switch",
+						"itemuse"
+					)), args[3]);
+				case "build":
+				case "destroy":
+				case "switch":
+				case "itemuse":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[3]);
+			}
+		}
+
+		if (args.length == 5) {
+			switch (args[3].toLowerCase()) {
+				case "build":
+				case "destroy":
+				case "itemuse":
+				case "switch":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[4]);
 			}
 		}
 			
