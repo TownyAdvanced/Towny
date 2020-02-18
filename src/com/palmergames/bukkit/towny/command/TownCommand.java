@@ -50,6 +50,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -66,12 +67,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -81,11 +84,87 @@ import java.util.UUID;
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand extends BaseCommand implements CommandExecutor {
+public class TownCommand extends BaseCommand implements CommandExecutor, TabCompleter {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
 	private static final List<String> invite = new ArrayList<>();
+	private static final List<String> townTabCompletes = new ArrayList<>(Arrays.asList(
+		"here",
+		"leave",
+		"list",
+		"online",
+		"new",
+		"plots",
+		"add",
+		"kick",
+		"spawn",
+		"claim",
+		"unclaim",
+		"withdraw",
+		"delete",
+		"outlawlist",
+		"deposit",
+		"outlaw",
+		"outpost",
+		"ranklist",
+		"rank",
+		"reslist",
+		"say",
+		"set",
+		"toggle",
+		"join"
+		));
+	public static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"board",
+		"mayor",
+		"homeblock",
+		"spawn",
+		"spawncost",
+		"name",
+		"outpost",
+		"jail",
+		"perm",
+		"tag",
+		"taxes",
+		"plottax",
+		"plotprice",
+		"shopprice",
+		"shoptax",
+		"embassyprice",
+		"embassyTax",
+		"title",
+		"surname"
+	));
+	
+	public static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"explosion",
+		"fire",
+		"mobs",
+		"public",
+		"pvp",
+		"taxpercent",
+		"open",
+		"jail"
+	));
+	
+	private static final List<String> townRankTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove"
+	));
+
+	public static final List<String> townPermTabCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off",
+		"resident",
+		"ally",
+		"outsider",
+		"build",
+		"destroy",
+		"switch",
+		"itemuse",
+		"reset"
+	));
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -136,6 +215,96 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public TownCommand(Towny instance) {
 
 		plugin = instance;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		if (args.length == 1) {
+			List<String> townNames = NameUtil.getTownNames();
+			townNames.addAll(townTabCompletes);
+			return NameUtil.filterByStart(townNames, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+				case "spawn":
+					return NameUtil.getTownNamesStartingWith(args[1]);
+				case "set":
+					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+				case "rank":
+				case "outlaw":
+					return NameUtil.filterByStart(townRankTabCompletes, args[1]);
+				case "outpost":
+					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList("list")), args[1]);
+				case "unclaim":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"all",
+						"outpost"
+					)), args[1]);
+				case "claim":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"auto",
+						"outpost"
+					)), args[1]);
+				case "buy":
+					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList(
+						"bonus"
+					)), args[1]);
+				case "toggle":
+					return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+			}
+		}
+
+		if (args.length == 3) {
+			switch (args[1].toLowerCase()) {
+				case "remove":
+				case "add":
+					return NameUtil.getNationNamesStartingWith(args[2]);
+				case "perm":
+					return NameUtil.filterByStart(townPermTabCompletes, args[2]);
+			}
+		}
+
+		if (args.length == 4) {
+			switch (args[2].toLowerCase()) {
+				case "resident":
+				case "ally":
+				case "outsider":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off",
+						"build",
+						"destroy",
+						"switch",
+						"itemuse"
+					)), args[3]);
+				case "build":
+				case "destroy":
+				case "switch":
+				case "itemuse":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[3]);
+			}
+		}
+
+		if (args.length == 5) {
+			switch (args[3].toLowerCase()) {
+				case "build":
+				case "destroy":
+				case "itemuse":
+				case "switch":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"on",
+						"off"
+					)), args[4]);
+			}
+		}
+			
+		
+		return null;
 	}
 
 	@Override
