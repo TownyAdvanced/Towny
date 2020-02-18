@@ -1,15 +1,10 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +17,8 @@ import java.util.stream.Collectors;
  * @author Suneet Tipirneni (Siris)
  */
 public class NameUtil {
+	
+	private static final int MAX_RETURNS = 50;
 
 	/**
 	 * A helper function that extracts names from objects.
@@ -53,7 +50,7 @@ public class NameUtil {
 	}
 	
 	public static List<String> filterByStart(List<String> list, String startingWith) {
-		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).limit(100).collect(Collectors.toList());
+		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).limit(MAX_RETURNS).collect(Collectors.toList());
 	}
 	
 	public static List<String> getNationNames() {
