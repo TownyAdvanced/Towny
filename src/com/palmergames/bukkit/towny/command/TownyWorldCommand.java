@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -39,6 +40,33 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townyworld_set = new ArrayList<>();
 	private static final List<String> townyworld_set_console = new ArrayList<>();
 	private static TownyWorld Globalworld;
+	
+	private static final List<String> townyWorldTabCompletes = new ArrayList<>(Arrays.asList(
+		"list",
+		"toggle",
+		"set",
+		"regen",
+		"undo"
+	));
+
+	private static final List<String> townyWorldToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"claimable",
+		"usingtowny",
+		"pvp",
+		"forcepvp",
+		"explosion",
+		"forceexplosion",
+		"fire",
+		"townmobs",
+		"worldmobs",
+		"revertunclaim",
+		"revertexpl",
+		"warallowed"
+	));
+	
+	private static final List<String> townyWorldSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"wildregen"
+	));
 	
 	private boolean isConsole = false;
 
@@ -85,6 +113,26 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_help.clear();
 		Globalworld = null;
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (args.length == 1) {
+			List<String> worldNames = NameUtil.getWorldNames();
+			worldNames.addAll(townyWorldTabCompletes);
+			return NameUtil.filterByStart(worldNames, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+				case "toggle":
+					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
+				case "set":
+					return NameUtil.filterByStart(townyWorldSetTabCompletes, args[1]);
+			}
+		}
+		
+		return null;
 	}
 
 	private void parseWorldFromConsole(CommandSender sender, String[] split) {
