@@ -557,8 +557,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						String value = properties.getProperty(key);
 						keys.put(key, String.valueOf(value));
 					}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}		
