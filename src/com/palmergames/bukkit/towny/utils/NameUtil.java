@@ -53,7 +53,7 @@ public class NameUtil {
 	}
 	
 	public static List<String> filterByStart(List<String> list, String startingWith) {
-		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
+		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).limit(100).collect(Collectors.toList());
 	}
 	
 	public static List<String> getNationNames() {
