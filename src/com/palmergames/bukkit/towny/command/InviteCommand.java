@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -25,12 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
-		"neutral",
-		"open"
+		"accept",
+		"deny"
 	));
 	
 	@SuppressWarnings("unused")
@@ -62,16 +64,12 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				case "accept":
 				case "deny":
 					try {
-						List<Invite> invites = TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites();
-						List<String> inviteNames = new ArrayList<>();
-						for (Invite invite : invites) {
-							inviteNames.add(invite.getSender().getName());
-						}
-						System.out.println();
-						return NameUtil.filterByStart(inviteNames, args[1]);
-					} catch (TownyException e) {
-						return Collections.emptyList();
-					}
+						return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
+							.stream()
+							.map(Invite::getSender)
+							.map(TownyInviteSender::getName)
+							.collect(Collectors.toList()), args[1]);
+					} catch (TownyException ignored) {}
 			}
 		}
 		
