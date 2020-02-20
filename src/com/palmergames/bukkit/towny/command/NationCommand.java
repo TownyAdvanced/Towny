@@ -63,6 +63,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class NationCommand extends BaseCommand implements CommandExecutor {
@@ -111,7 +112,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	));
 	
 	public static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
-		"neutral",
+		"peaceful",
+		"public",
 		"open"
 	));
 
@@ -188,43 +190,120 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (args.length == 1) {
-			List<String> nationNames = NameUtil.getNationNames();
-			nationNames.addAll(nationTabCompletes);
-			return NameUtil.filterByStart(nationNames, args[0]);
-		}
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			switch (args.length) {
+				case 1:
+					// Only suggest nation names in tab complete if the player is not typing a valid sub command. This reduces clutter and the unnecessary checking of all nation names for tab completion
+					List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
+					if (nationNames.size() > 0) {
+						return nationNames;
+					} else {
+						return NameUtil.getNationNamesStartingWith(args[0]);
+					}
+				case 2:
+					switch (args[0].toLowerCase()) {
+						case "set":
+							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+						case "rank":
+						case "enemy":
+							return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(//todo make these static?
+								"add",
+								"remove"
+							)), args[1]);
+						case "ally":
+							return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+								"add",
+								"remove",
+								"sent",
+								"recieved",
+								"accept",
+								"deny"
+							)), args[1]);
+						case "toggle":
+							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+						case "king":
+							return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList("?")), args[1]);
+					}
+			}
 
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "set":
-					return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
-				case "rank":
-				case "ally":
-				case "enemy":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"add",
-						"remove"
-					)), args[1]);
-				case "kick":
-				case "add":
-					return NameUtil.getTownNamesStartingWith(args[1]);
-				case "toggle":
-					return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
-				case "join":
-					return NameUtil.getNationNamesStartingWith(args[1]);
-
+			if (args.length > 1) {
+				switch (args[0].toLowerCase()) {
+					case "townlist":
+					case "allylist":
+					case "enemylist":
+					case "join":
+					case "delete":
+					case "spawn":
+						return NameUtil.getNationNamesStartingWith(args[1]);
+					case "new":
+						if (args.length == 3) {
+							return NameUtil.getTownNamesStartingWith(args[2]);
+						}
+						break;
+					case "add":
+					case "kick":
+						return NameUtil.getTownNamesStartingWith(args[args.length - 1]);
+					case "ally":
+						switch (args[1].toLowerCase()) {
+							case "add":
+								if (args[args.length - 1].startsWith("-")) {
+									return NameUtil.getNationNamesStartingWith(args[args.length - 1].substring(1))
+										.stream()
+										.map(e -> "-" + e)
+										.collect(Collectors.toList());
+								}
+							case "remove":
+							case "accept":
+							case "deny":
+								return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+						}
+					case "rank":
+						switch (args[1].toLowerCase()) {
+							case "add":
+							case "remove":
+								if (args.length == 3) {
+									return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+								} else if (args.length == 4) {
+									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+								} else {
+									return Collections.emptyList();
+								}
+						}
+					case "enemy":
+						switch (args[1].toLowerCase()) {
+							case "add":
+							case "remove":
+								return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+						}
+					case "set":
+						switch (args[1].toLowerCase()) {
+							case "king":
+							case "title":
+							case "surname":
+								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+							case "capital":
+								return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+						}
+				}
+			}
+		} else {
+			// Console
+			if (args.length == 1) {
+				List<String> returnValue = NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+					"?",
+					"help",
+					"list"
+				)), args[0]);
+				if (returnValue.size() > 0) {
+					return returnValue;
+				} else {
+					return NameUtil.getNationNamesStartingWith(args[0]);
+				}
 			}
 		}
 
-		if (args.length == 3) {
-			switch (args[1].toLowerCase()) {
-				case "remove":
-				case "add":
-					return NameUtil.getNationNamesStartingWith(args[2]);
-			}
-		}
-		
-		return null;
+		return Collections.emptyList();
 	}
 
 	public NationCommand(Towny instance) {
