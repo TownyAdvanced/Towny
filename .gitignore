@@ -16,3 +16,6 @@
 
 # Javadoc
 /doc
+
+# macOS specific
+.DS_Store
