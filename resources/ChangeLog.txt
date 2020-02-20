@@ -4174,3 +4174,5 @@ v0.92.0.11:
   - Updated chinese.yml, courtesy of qsefthuopq with PR #3703.
   - Added tab completion for /invite commands, courtesy of stzups with PR #3705.
   - Fix bug where renamed towns and nations would lose their bank balances, introduced in 0.95.2.13.
+  - zh-TW.yml updated by shou692199 with PR #3708.
+  - Flesh out .gitignore with OS specific (usually hidden) files, courtesy of Siris with PR #3706.
