@@ -112,6 +112,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	));
 	
 	static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"neutral",
 		"peaceful",
 		"public",
 		"open"
@@ -240,11 +241,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case "delete":
 					case "spawn":
 						return NameUtil.getNationNamesStartingWith(args[1]);
-					case "new":
-						if (args.length == 3) {
-							return NameUtil.getTownNamesStartingWith(args[2]);
-						}
-						break;
 					case "add":
 					case "kick":
 						return NameUtil.getTownNamesStartingWith(args[args.length - 1]);
@@ -2437,7 +2433,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful/neutral", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
 		} else {
