@@ -8,9 +8,11 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -21,10 +23,18 @@ import org.bukkit.entity.Player;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
+	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
+		"accept",
+		"deny"
+	));
+	
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	private static final List<String> invite_help = new ArrayList<>();
@@ -41,7 +51,31 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public InviteCommand(Towny instance) {
 		plugin = instance;
 	}
-
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		if (args.length == 1) {
+			return NameUtil.filterByStart(inviteTabCompletes, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+				case "accept":
+				case "deny":
+					try {
+						return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
+							.stream()
+							.map(Invite::getSender)
+							.map(TownyInviteSender::getName)
+							.collect(Collectors.toList()), args[1]);
+					} catch (TownyException ignored) {}
+			}
+		}
+		
+		return Collections.emptyList();
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
