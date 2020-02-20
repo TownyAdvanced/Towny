@@ -1909,7 +1909,7 @@ public enum ConfigNodes {
 		    "# These soldiers will pillage 2 gold per 20 seconds, 6 per minute. 360 per hour, and 1800 total from the town."),
 	WAR_SIEGE_NATION_COST_REFUND_PERCENTAGE_ON_DELETE(
 			"war.siege.money.nation_cost_refund_percentage_on_delete",
-			"90.0",
+			"80.0",
 			"# The value specifies what proportion of the initial nation cost is refunded," +
 			"# When the nation is deleted or defeated."),
 
