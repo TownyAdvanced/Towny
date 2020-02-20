@@ -830,6 +830,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {
+					town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
 					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
@@ -936,6 +937,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (TownyEconomyHandler.isActive()) {
 				try {
+					nation.getAccount().setName(TownySettings.getNationAccountPrefix() + nation.getName());
 					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();
@@ -1060,6 +1062,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//add everything back to the resident
 			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
+					resident.getAccount().setName(resident.getName());
 					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {
 					e.printStackTrace();

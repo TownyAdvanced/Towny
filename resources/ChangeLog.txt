@@ -4173,3 +4173,4 @@ v0.92.0.11:
 0.95.2.17:
   - Updated chinese.yml, courtesy of qsefthuopq with PR #3703.
   - Added tab completion for /invite commands, courtesy of stzups with PR #3705.
+  - Fix bug where renamed towns and nations would lose their bank balances, introduced in 0.95.2.13.
