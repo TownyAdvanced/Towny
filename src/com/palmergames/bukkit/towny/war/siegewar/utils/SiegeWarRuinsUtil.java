@@ -83,9 +83,12 @@ public class SiegeWarRuinsUtil {
 		town.setPublic(false);
 		town.setOpen(false);
 
-		//Remove owners from all town blocks
+		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
+			townBlock.setType(0);
+			townBlock.setPlotPrice(-1);
 			townBlock.setResident(null);
+			townBlock.setPlotObjectGroup(null);
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 		}
 
