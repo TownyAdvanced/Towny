@@ -98,7 +98,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"spawn"
 	));
 
-	public static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -111,10 +111,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"tag"
 	));
 	
-	public static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
 		"peaceful",
 		"public",
 		"open"
+	));
+	
+	private static final List<String> nationEnemyTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove"
+	));
+	
+	private static final List<String> nationAllyTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove",
+		"sent",
+		"received",
+		"accept",
+		"deny"
 	));
 
 	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
@@ -207,19 +221,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
 						case "rank":
 						case "enemy":
-							return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(//todo make these static?
-								"add",
-								"remove"
-							)), args[1]);
+							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
 						case "ally":
-							return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-								"add",
-								"remove",
-								"sent",
-								"recieved",
-								"accept",
-								"deny"
-							)), args[1]);
+							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
 						case "toggle":
 							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
 						case "king":
