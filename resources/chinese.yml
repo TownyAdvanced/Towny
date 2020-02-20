@@ -9,7 +9,7 @@ description: >
     Alternate language files can be enabled by altering the
     [language] entry in config.yml
 #
-#        本配置基于Howar提供的汉化由qsefthuopq进行校正 适用于0.93版本
+#        本配置基于Howar提供的汉化由qsefthuopq进行校正
 #        请在config.yml中将language改为Chinese.yml(文件名)
 #        本翻译未进行测试,,因变量相同无法颠倒
 #        所以可能存在语序颠倒,内容不当等问题
@@ -855,11 +855,11 @@ msg_total_townblocks: '共有城镇区块: '
 
 # Added in 0.50
 friend_list: '朋友列表'
-                         # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-                         # nationranks lists on the /nation screen; and probably more lists of residents.
-res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
-res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
-res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+                         # 以下颜色代码用于 /res screen 内的好友列表;  /town screen 内的城镇排行;
+                         # /nation screen 内的国家排行等列表.
+res_format_list_1: '&2'  #居民列表首选颜色代码, 比如:  /res 内的好友列表.
+res_format_list_2: '&a'  #居民列表次等颜色代码, 比如:  /res, the friend list's [1] section.
+res_format_list_3: '&f'  #居民列表备选颜色代码, 比如:  /res, the friend list's list of friends' names section.
 res_friend_added: '已添加 '
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
@@ -1035,46 +1035,46 @@ msg_err_rename_cancelled: '重命名被其他插件取消了.'
 msg_war_defender_keeps_claims: '已禁用俘获. 防御城镇仍有土地所有权.'
 
 # Added in 0.67
-msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: '城镇%s已被%s征服%s天.'
 msg_conquered: '[Conquered]'
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你的城镇无法离开国家的怀抱，因为你的国家仍处于被征服的状态.'
 
 # Added in 0.68
-msg_plot_group_claim_confirmation: 'This plot is part a group of %s plot(s) by confirming your claim you will purchase them all.'
-msg_plot_group_unclaim_confirmation: 'This plot is part a group of %s plot(s) by confirming you will unclaim them all.'
-msg_plot_group_toggle_confirmation: 'This plot is part a group of %s plot(s) by confirming you will toggle a property on them all.'
-msg_plot_group_set_perm_confirmation: 'This plot is part a group of %s plot(s) by confirming you will set the perm line on them all.'
-msg_plot_evict_group: 'You have successfully evicted the player of this grouped plot, %s.'
-msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s belongs to a group, use /plot group [group name] fs [amount]'
-msg_err_plot_belongs_to_group_set: 'Plot belongs to a group, use /plot group set'
-msg_plot_group_set_for_sale: 'Group %s was put up for sale!'
-msg_err_plot_already_belongs_to_a_group: 'This plot already belongs to a group: %s, please remove the townblock from that group before adding it to another.'
-msg_err_you_must_specify_a_group_name: 'You must specify a plot group name.'
-msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2was put into group %s'
-msg_err_plot_not_associated_with_a_group: 'This plot is not associated with a group.'
-msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
-msg_plot_renamed_from_x_to_y: 'Plot %s has been renamed to %s.'
-msg_err_plot_group_specify_price: 'Please specify the price, ex: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
-msg_err_could_not_set_group_type: 'Could not set group type - '
-msg_set_group_type_to_x: 'Changed plot group''s type to %s'
-msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
-status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
-msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
+msg_plot_group_claim_confirmation: '这块土地是 %s 组内的一部分，如果你声明这块土地，你将购买一整组土地.'
+msg_plot_group_unclaim_confirmation: '这块土地是 %s 组内的一部分，如果你放弃声明这块土地，你将失去一整组土地.'
+msg_plot_group_toggle_confirmation: '这块土地是 %s 组内的一部分，你将修改这一整组土地的属性.'
+msg_plot_group_set_perm_confirmation: '这块土地是 %s 组内的一部分，你将设置这一整组土地的权限.'
+msg_plot_evict_group: '你已成功驱逐 %s 这组土地内的玩家.'
+msg_err_plot_belongs_to_group_plot_fs: '土地: %s属于一个土地组, 请使用 /plot group [组名] fs [土地价格]'
+msg_err_plot_belongs_to_group_set: '这片属于一个土地组，请使用/plot group set'
+msg_plot_group_set_for_sale: '土地组 %s 出售中!'
+msg_err_plot_already_belongs_to_a_group: '这片土地已属于一个土地组: %s, 请先移除组内的城镇区块再进行操作.'
+msg_err_you_must_specify_a_group_name: '你必须指定一个土地组名.'
+msg_plot_was_put_into_group_x: '土地 &9(%s,%s) &2被放入了土地组 %s 内'
+msg_err_plot_not_associated_with_a_group: '这片土地不属于任何一个土地组.'
+msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组'
+msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
+msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
+msg_player_put_group_up_for_sale: '%s 将土地组 %s 以 %s 的价格出售'
+msg_err_could_not_set_group_type: '无法设置土地组类型 - '
+msg_set_group_type_to_x: '已将土地组类型更改为 %s'
+msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
+status_plot_group_name_and_size: '&2组内有城镇区块: %s. 组内共有 %s 个城镇区块.'
+msg_player_made_group_not_for_sale: '%s 停止出售 %s .'
 
 # Added in 0.69
-msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
 
 # Added in 0.70
-msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Click to accept'
-msg_confirmation_spigot_hover_cancel: 'Click to cancel'
-msg_confirmation_spigot_click_accept: 'Click %s or type %s'
-msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
-msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
-msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+msg_err_plot_group_name_required: '你必须设置土地组名, 指令为/plot group add {名称}'
+msg_confirmation_spigot_hover_accept: '点击接受'
+msg_confirmation_spigot_hover_cancel: '点击'
+msg_confirmation_spigot_click_accept: '点击 %s 或输入 %s'
+msg_confirmation_spigot_click_cancel: '点击 %s 或输入 %s'
+msg_you_cannot_kick_yourself: '你不能踢出自己.'
+msg_you_cannot_kick_this_resident: '你不能踢出 %s, 他是城主或助手.'
 
 # Added in 0.71
-msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
-msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
+msg_err_plot_belongs_to_group_plot_fs2: '土地: %s 属于土地组, 请使用 /plot group fs [价格] 设置土地价格'
+msg_err_plot_belongs_to_group_plot_nfs: '土地: %s 属于土地组, 请使用 /plot group nfs 停售'
 

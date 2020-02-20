@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -37,6 +38,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -49,6 +51,25 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> towny_top = new ArrayList<>();
 	private static final List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
+	private static final List<String> townyTabCompletes = new ArrayList<>(Arrays.asList(
+		"map",
+		"prices",
+		"time",
+		"top",
+		"spy",
+		"tree",
+		"universe",
+		"v",
+		"war"
+	));
+
+	private static final List<String> townyWarTabCompletes = new ArrayList<>(Arrays.asList(
+		"stats",
+		"scores",
+		"hud",
+		"participants"
+	));
+	
 
 	static {
 		towny_general_help.add(ChatTools.formatTitle(TownySettings.getLangString("help_0")));
@@ -118,6 +139,44 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (args.length == 1) {
+			return NameUtil.filterByStart(townyTabCompletes, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+				case "war":
+					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
+				case "top":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"residents",
+						"land"
+					)), args[1]);
+			}
+		}
+		
+		if (args.length == 3) {
+			switch (args[1].toLowerCase()) {
+				case "residents":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"all",
+						"town",
+						"nation"
+					)), args[1]);
+				case "land":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"all",
+						"resident",
+						"town"
+					)), args[1]);
+			}
+		}
+		
+		return null;
 	}
 
 	private void parseTownyCommand(Player player, String[] split) {

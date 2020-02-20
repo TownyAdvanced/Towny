@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -55,6 +56,7 @@ import javax.naming.InvalidNameException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,6 +70,68 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> ta_help = new ArrayList<>();
 	private static final List<String> ta_panel = new ArrayList<>();
 	private static final List<String> ta_unclaim = new ArrayList<>();
+	private static final List<String> adminTabCompletes = new ArrayList<>(Arrays.asList(
+		"delete",
+		"plot",
+		"resident",
+		"town",
+		"nation",
+		"reset",
+		"toggle",
+		"set",
+		"givebonus",
+		"reload",
+		"backup",
+		"checkperm",
+		"newday",
+		"unclaim",
+		"purge",
+		"mysqldump",
+		"database"
+	));
+
+	private static final List<String> adminTownTabCompletes = new ArrayList<>(Arrays.asList(
+		"new",
+		"add",
+		"remove",
+		"kick",
+		"rename",
+		"spawn",
+		"tpplot",
+		"outpost",
+		"delete",
+		"rank",
+		"toggle",
+		"set",
+		"meta"
+	));
+
+	private static final List<String> adminNationTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"rename",
+		"delete",
+		"toggle",
+		"set",
+		"meta"
+	));
+
+	private static final List<String> adminToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"war",
+		"neutral",
+		"npc",
+		"debug",
+		"devmode",
+		"withdraw"
+	));
+
+	private static final List<String> adminSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"plot",
+		"title",
+		"surname",
+		"capital",
+		"mayor"
+	));
+	
 
 	private boolean isConsole;
 	private Player player;
@@ -131,6 +195,91 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (args.length == 1) {
+			return NameUtil.filterByStart(adminTabCompletes, args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+				case "plot":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"claim",
+						"meta"
+					)), args[1]);
+				case "town":
+				case "givebonus":
+					return NameUtil.getTownNamesStartingWith(args[1]);
+				case "resident":
+					return null;
+				case "nation":
+					return NameUtil.getNationNamesStartingWith(args[1]); 
+				case "toggle":
+					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
+				case "set":
+					return NameUtil.filterByStart(adminSetTabCompletes, args[1]);
+				case "unclaim":
+					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList(
+						"rect"
+					)), args[1]);
+				case "database":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"save",
+						"load"
+					)), args[1]);
+			}
+		}
+		
+		if (args.length == 3) {
+			switch (args[0].toLowerCase()) {
+				case "resident":
+					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
+						"rename",
+						"friend"
+					)), args[2]);
+				case "town":
+					return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
+				case "nation":
+					return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
+			}
+
+			switch (args[1].toLowerCase()) {
+				case "capital":
+				case "mayor":
+				case "plot":
+				case "surname":
+				case "title":
+					return NameUtil.getTownNamesStartingWith(args[2]);
+			}
+		}
+
+		
+		
+		if (args.length == 4) {
+			switch (args[0].toLowerCase()) {
+				case "town":
+					switch (args[2].toLowerCase()) {
+						case "set":
+							return NameUtil.filterByStart(TownCommand.townSetTabCompletes, args[3]);
+						case "toggle":
+							return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+					}
+				case "nation":
+					switch (args[2].toLowerCase()) {
+						case "set":
+							return NameUtil.filterByStart(NationCommand.nationSetTabCompletes, args[3]);
+						case "toggle":
+							return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
+					}
+			}
+			
+			
+		}
+		
+		return null;
 	}
 
 	private Object getSender() {
