@@ -1841,6 +1841,11 @@ public enum ConfigNodes {
 			"# This setting is generally considered critical,",
 			"# because it prevents mayors from avoiding sieges/occupation by ",
 		    "# deleting then quickly recreating their town."),
+	WAR_SIEGE_RUINS_RECLAIM_ENABLED(
+			"war.siege.switches.ruins_reclaim_enabled",
+			"true",
+			"# If this is true, then after a town has been ruined for a certain (configurable) duration,",
+			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required cost (same as for new town)"),
 	WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED(
 			"war.siege.switches.attacker_spawn_into_besieged_town_disabled",
 			"true",
@@ -1962,8 +1967,13 @@ public enum ConfigNodes {
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
 	WAR_SIEGE_RUINS_REMOVAL_DELAY_HOURS(
 			"war.siege.times.ruins_removal_delay_hours",
+			"72",
+			"# This setting determines the maximum delay between a town being ruined, and final deletion."),
+	WAR_SIEGE_MINIMUM_RUINS_DURATION_HOURS(
+			"war.siege.times.minimum_ruins_duration_hours",
 			"24",
-			"# This setting determines the delay between a town being ruined, and final deletion."),
+			"# This value determines the minimum duration for which a town must lie in ruins,",
+			"# before it can be reclaimed by a resident."),
 	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
 			"war.siege.times.zone_maximum_scoring_duration_minutes",
 			"15",

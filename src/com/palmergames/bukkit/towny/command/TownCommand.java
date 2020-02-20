@@ -190,6 +190,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		output.add(ChatTools.formatCommand("", "/town", "", TownySettings.getLangString("town_help_1")));
 		output.add(ChatTools.formatCommand("", "/town", "[town]", TownySettings.getLangString("town_help_3")));
 		output.add(ChatTools.formatCommand("", "/town", "new [name]", TownySettings.getLangString("town_help_11")));
+		output.add(ChatTools.formatCommand("", "/town", "reclaim", TownySettings.getLangString("town_help_12")));
 		output.add(ChatTools.formatCommand("", "/town", "here", TownySettings.getLangString("town_help_4")));
 		output.add(ChatTools.formatCommand("", "/town", "list", ""));
 		output.add(ChatTools.formatCommand("", "/town", "online", TownySettings.getLangString("town_help_10")));
@@ -400,6 +401,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String townName = String.join("_", newSplit);
 					newTown(player, townName, player.getName(), false);			
+				}
+
+			} else if (split[0].equalsIgnoreCase("reclaim")) {
+
+				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeRuinsReclaimEnabled()) {
+					SiegeWarRuinsUtil.processRuinedTownReclaimRequest(player, plugin);
+				} else {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {

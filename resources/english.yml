@@ -1201,3 +1201,9 @@ status_nation_siege_defences: '&2Siege Defences &a[%s]&2: &f'
 msg_days: ' days'
 status_no_green: '&aNO'
 msg_occupier: '&4*Occupier*'
+
+#Town Ruins recovery
+town_help_12: 'Reclaim your town from a ruined state.'
+msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
+msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %s.'
+msg_town_reclaimed: '&b%s has reclaimed the town of %s.'

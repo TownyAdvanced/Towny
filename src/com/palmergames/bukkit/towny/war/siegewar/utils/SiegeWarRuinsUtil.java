@@ -93,16 +93,20 @@ public class SiegeWarRuinsUtil {
 		}
 
 		//Set town level perms
-		for (String element : new String[] { "residentBuild",
-			"residentDestroy", "residentSwitch",
-			"residentItemUse", "outsiderBuild",
-			"outsiderDestroy", "outsiderSwitch",
-			"outsiderItemUse", "allyBuild", "allyDestroy",
-			"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
-			"nationSwitch", "nationItemUse",
-			"pvp", "fire", "explosion", "mobs"})
-		{
-			town.getPermissions().set(element, true);
+		try {
+			for (String element : new String[] { "residentBuild",
+				"residentDestroy", "residentSwitch",
+				"residentItemUse", "outsiderBuild",
+				"outsiderDestroy", "outsiderSwitch",
+				"outsiderItemUse", "allyBuild", "allyDestroy",
+				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
+				"nationSwitch", "nationItemUse",
+				"pvp", "fire", "explosion", "mobs"})
+			{
+				town.getPermissions().set(element, true);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		//Propogate perm changes to individual plots
@@ -114,5 +118,84 @@ public class SiegeWarRuinsUtil {
 
 		townyUniverse.getDataSource().saveTown(town);
 		plugin.resetCache();
+	}
+
+	/**
+	 * Processes a player request to reclaim a ruined town
+	 *
+	 * @param player the player
+	 */
+	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
+		try {
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+
+			if(!resident.hasTown())
+				throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
+
+			//Ensure town is in a standard ruined state (not active, or a zero-resident-ruin)
+			Town town = resident.getTown();
+			if(town.getRecentlyRuinedEndTime() < 1)
+				throw new TownyException(TownySettings.getLangString("msg_err_cannot_reclaim_town_unless_ruined"));
+
+			//Validate if player can pay
+			double townRecoveryCost = TownySettings.getNewTownPrice();
+			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townRecoveryCost))
+				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+
+			//Validate if player can remove at this time
+			long timeUntilDeletionMillis = town.getRecentlyRuinedEndTime() - System.currentTimeMillis();
+			long maximumRuinDurationMillis = (long)(TownySettings.getWarSiegeRuinsRemovalDelayHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
+			long estimatedRuinsDurationMillis = maximumRuinDurationMillis - timeUntilDeletionMillis;
+			long minimumRuinsDurationMillis = (long)(TownySettings.getWarSiegeMinimumRuinsDurationHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
+			if(estimatedRuinsDurationMillis < minimumRuinsDurationMillis) {
+				long remainingRuinsDurationMillis = minimumRuinsDurationMillis - estimatedRuinsDurationMillis;
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_reclaim_town_yet"), TimeMgmt.getFormattedTimeValue(remainingRuinsDurationMillis)));
+			}
+
+			//Recover Town now
+			resident.getAccount().pay(townRecoveryCost, "Cost of town reclaim.");
+			town.setRecentlyRuinedEndTime(0);
+			
+			//Set player as mayor (and remove npc)
+			//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
+			try {
+				TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
+				adminCommand.adminSet(new String[]{"mayor", town.getName(), resident.getName()});
+			} catch (TownyException e) {
+				e.printStackTrace();
+			}
+		
+			//Set town level perms
+			try {
+				for (String element : new String[] { "residentBuild",
+					"residentDestroy", "residentSwitch",
+					"residentItemUse", "outsiderBuild",
+					"outsiderDestroy", "outsiderSwitch",
+					"outsiderItemUse", "allyBuild", "allyDestroy",
+					"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
+					"nationSwitch", "nationItemUse",
+					"pvp", "fire", "explosion", "mobs"})
+				{
+					town.getPermissions().set(element, false);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			//Propogate perm changes to individual plots
+			try {
+				TownCommand.townSet(null, new String[]{"perm", "reset"}, true, town);
+			} catch (TownyException e) {
+				e.printStackTrace();
+			}
+
+			townyUniverse.getDataSource().saveTown(town);
+			plugin.resetCache();
+
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_reclaimed"), resident.getName(), town.getName()));
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(player,e.getMessage());
+		}
 	}
 }
