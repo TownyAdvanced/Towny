@@ -16,3 +16,6 @@
 
 # Javadoc
 /doc
+
+# Unix
+.DS_Store
