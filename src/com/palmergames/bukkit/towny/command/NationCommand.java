@@ -252,8 +252,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							switch (args[1].toLowerCase()) {
 								case "add":
 									if (args[args.length - 1].startsWith("-")) {
+										// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
 										try {
-											// Return only sent invites to be revoked
 											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
 												// Get names of sent invites
 												.stream()
@@ -267,14 +267,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 												.collect(Collectors.toList());
 										} catch (TownyException ignored) {}
 									} else {
+										// Otherwise return possible nations to send invites to
 										return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
 									}
 								case "remove":
+									// Return current allies to remove
 									try {
 										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
 									} catch (TownyException ignore) {}
 								case "accept":
 								case "deny":
+									// Return sent ally invites to accept or deny
 									try {
 										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
 										.stream()
@@ -308,6 +311,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								case "add":
 									return NameUtil.getNationNamesStartingWith(args[2]);
 								case "remove":
+									// Return enemies of nation
 									try {
 										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
 									} catch (TownyException ignored) {}
