@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -30,10 +31,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.List;
-import java.util.HashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -47,8 +49,14 @@ public class TownyUniverse {
     private final Towny towny;
     
     private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
+    private final Map<Trie.TrieNode, String> residentsTrieNode = new HashMap<>();
+    private final Trie residentsTrie = new Trie();
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
+    private final Trie townsTrie = new Trie();
+    private final Map<Trie.TrieNode, String> townsTrieNode = new HashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
+    private final Trie nationsTrie = new Trie();
+    private final Map<Trie.TrieNode, String> nationsTrieNode = new HashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
@@ -145,6 +153,27 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
+        new Thread(() -> {
+        	System.out.println("[Towny] Building trie structures...");
+			long start = System.nanoTime();
+			
+			for (String string:residents.keySet()) {
+				residentsTrieNode.put(residentsTrie.addKey(string), string);
+			}
+			System.out.println("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
+			start = System.nanoTime();
+			
+			for (String string:towns.keySet()) {
+				townsTrieNode.put(townsTrie.addKey(string), string);
+			}
+			System.out.println("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
+			start = System.nanoTime();
+			
+			for (String string:nations.keySet()) {
+				nationsTrieNode.put(nationsTrie.addKey(string), string);
+			}
+			System.out.println("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
+		}).start();
         return true;
     }
     
@@ -255,10 +284,26 @@ public class TownyUniverse {
         return nations;
     }
     
+    public Trie getNationsTrie() {
+    	return nationsTrie;
+	}
+	
+	public Map<Trie.TrieNode, String> getNationsTrieNode() {
+    	return nationsTrieNode;
+	}
+	
     public ConcurrentHashMap<String, Resident> getResidentMap() {
         return residents;
     }
-    
+
+	public Trie getResidentsTrie() {
+		return residentsTrie;
+	}
+	
+	public Map<Trie.TrieNode, String> getResidentsTrieNode() {
+    	return residentsTrieNode;
+	}
+	
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
     }
@@ -267,6 +312,14 @@ public class TownyUniverse {
         return towns;
     }
     
+    public Trie getTownsTrie() {
+    	return townsTrie;
+	}
+	
+	public Map<Trie.TrieNode, String> getTownsTrieNode() {
+    	return townsTrieNode;
+	}
+	
     public ConcurrentHashMap<String, TownyWorld> getWorldMap() {
         return worlds;
     }

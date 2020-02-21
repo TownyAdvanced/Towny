@@ -4,14 +4,17 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.util.Trie;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -109,5 +112,39 @@ public class NameUtil {
 	public static List<String> getWorldNamesStartingWith(String str) {
 		return filterByStart(getWorldNames(), str);
 	}
+
+	/**
+	 * Returns a List<String> containing strings of resident, town, and/or nation names that match with str
+	 * @param str String to match, usually a command argument
+	 * @param type  Can be r, t, n, or any combination of those to check. For example, passing "rt" to type would check residents and towns but not nations
+	 * @return The matches for the str with the chosen type
+	 */
+	public static List<String> getTownyStartingWith(String str, String type) {
+		long start = System.nanoTime();
+		List<String> matches = new ArrayList<>();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
+		if (type.contains("r")) {
+			Map<Trie.TrieNode, String> residentsTrieNode = townyUniverse.getResidentsTrieNode();
+			for (Trie.TrieNode trieNode:townyUniverse.getResidentsTrie().getTrieNodeLeavesFromKey(str)) {
+				matches.add(residentsTrieNode.get(trieNode));
+			}
+		}
+		
+		if (type.contains("t")) {
+			Map<Trie.TrieNode, String> townsTrieNode = townyUniverse.getTownsTrieNode();
+			for (Trie.TrieNode trieNode:townyUniverse.getTownsTrie().getTrieNodeLeavesFromKey(str)) {
+				matches.add(townsTrieNode.get(trieNode));
+			}
+		}
+		
+		if (type.contains("n")) {
+			Map<Trie.TrieNode, String> nationsTrieNode = townyUniverse.getNationsTrieNode();
+			for (Trie.TrieNode trieNode:townyUniverse.getNationsTrie().getTrieNodeLeavesFromKey(str)) {
+				matches.add(nationsTrieNode.get(trieNode));
+			}
+		}
+		System.out.println("Found "+matches.size()+" for "+type+" in "+(System.nanoTime()-start)/1000000+"ms");
+		return matches;
+	}
 }
