@@ -306,8 +306,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						} else if (args.length == 3){
 							switch (args[1].toLowerCase()) {
 								case "add":
-								case "remove":
 									return NameUtil.getNationNamesStartingWith(args[2]);
+								case "remove":
+									try {
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
+									} catch (TownyException ignored) {}
 							}
 						}
 						break;
