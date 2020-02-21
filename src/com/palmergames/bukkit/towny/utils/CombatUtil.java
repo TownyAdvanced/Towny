@@ -113,18 +113,6 @@ public class CombatUtil {
 		if (!world.isUsingTowny())
 			return false;
 
-		// If attacking player has post-spawn immunity, that player cannot damage entities.
-		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
-			try {
-				if(attackingPlayer.isInvulnerable()) {
-					return true;
-				}
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
 		Coord coord = Coord.parseCoord(defendingEntity);
 		TownBlock defenderTB = null;
 		TownBlock attackerTB = null;
@@ -138,11 +126,23 @@ public class CombatUtil {
 			defenderTB = world.getTownBlock(coord);
 		} catch (NotRegisteredException ex) {
 		}
-		
+
 		/*
 		 * We have an attacking player
 		 */
 		if (attackingPlayer != null) {
+
+			// If attacking player has post-spawn immunity, that player cannot damage entities.
+			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
+				try {
+					if(attackingPlayer.isInvulnerable()) {
+						return true;
+					}
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(e.getMessage());
+					e.printStackTrace();
+				}
+			}
 
 			/*
 			 * If another player is the target
