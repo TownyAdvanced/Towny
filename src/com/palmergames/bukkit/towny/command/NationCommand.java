@@ -27,6 +27,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -95,7 +97,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"allylist",
 		"enemylist",
 		"ally",
-		"spawn"
+		"spawn",
+		"king"
 	));
 
 	static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
@@ -132,6 +135,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"deny"
 	));
 
+	private static final List<String> nationKingTabCompletes = new ArrayList<>(Collections.singletonList("?"));
+	
+	private static final List<String> nationConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+		"?",
+		"help",
+		"list"
+	));
+	
 	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
 	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
 	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
@@ -207,94 +218,128 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			switch (args.length) {
-				case 1:
-					// Only suggest nation names in tab complete if the player is not typing a valid sub command. This reduces clutter and the unnecessary checking of all nation names for tab completion
-					List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
-					if (nationNames.size() > 0) {
-						return nationNames;
-					} else {
-						return NameUtil.getNationNamesStartingWith(args[0]);
-					}
-				case 2:
-					switch (args[0].toLowerCase()) {
-						case "set":
-							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
-						case "rank":
-						case "enemy":
-							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
-						case "ally":
-							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
-						case "toggle":
-							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
-						case "king":
-							return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList("?")), args[1]);
-					}
-			}
-
-			if (args.length > 1) {
+			
+			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
+					case "toggle":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+						}
+						break;
+					case "king":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
+						}
+						break;
 					case "townlist":
 					case "allylist":
 					case "enemylist":
 					case "join":
 					case "delete":
 					case "spawn":
-						return NameUtil.getNationNamesStartingWith(args[1]);
+					case "merge":
+						if (args.length == 2) {
+							return NameUtil.getNationNamesStartingWith(args[1]);
+						}
+						break;
 					case "add":
 					case "kick":
 						return NameUtil.getTownNamesStartingWith(args[args.length - 1]);
 					case "ally":
-						switch (args[1].toLowerCase()) {
-							case "add":
-								if (args[args.length - 1].startsWith("-")) {
-									return NameUtil.getNationNamesStartingWith(args[args.length - 1].substring(1))
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
+						} else if (args.length > 2){
+							switch (args[1].toLowerCase()) {
+								case "add":
+									if (args[args.length - 1].startsWith("-")) {
+										try {
+											// Return only sent invites to be revoked
+											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
+												// Get names of sent invites
+												.stream()
+												.map(Invite::getReceiver)
+												.map(TownyInviteReceiver::getName)
+												// Collect sent invite names and check with the last arg without the hyphen
+												.collect(Collectors.toList()), args[args.length - 1].substring(1))
+												// Add the hyphen back to the beginning
+												.stream()
+												.map(e -> "-" + e)
+												.collect(Collectors.toList());
+										} catch (TownyException ignored) {}
+									} else {
+										return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+									}
+								case "remove":
+									try {
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
+									} catch (TownyException ignore) {}
+								case "accept":
+								case "deny":
+									try {
+										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
 										.stream()
-										.map(e -> "-" + e)
-										.collect(Collectors.toList());
-								}
-							case "remove":
-							case "accept":
-							case "deny":
-								return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+										.map(Invite::getSender)
+										.map(TownyInviteSender::getName)
+										.collect(Collectors.toList()), args[args.length - 1]);
+									} catch (TownyException ignore) {}
+							}
 						}
+						break;
 					case "rank":
-						switch (args[1].toLowerCase()) {
-							case "add":
-							case "remove":
-								if (args.length == 3) {
-									return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
-								} else if (args.length == 4) {
-									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
-								} else {
-									return Collections.emptyList();
-								}
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						} else if (args.length > 2){
+							switch (args[1].toLowerCase()) {
+								case "add":
+								case "remove":
+									if (args.length == 3) {
+										return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+									} else if (args.length == 4) {
+										return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+									}
+							}
 						}
+						break;
 					case "enemy":
-						switch (args[1].toLowerCase()) {
-							case "add":
-							case "remove":
-								return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						} else if (args.length == 3){
+							switch (args[1].toLowerCase()) {
+								case "add":
+								case "remove":
+									return NameUtil.getNationNamesStartingWith(args[2]);
+							}
 						}
+						break;
 					case "set":
-						switch (args[1].toLowerCase()) {
-							case "king":
-							case "title":
-							case "surname":
-								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-							case "capital":
-								return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+						} else if (args.length == 3){
+							switch (args[1].toLowerCase()) {
+								case "king":
+								case "title":
+								case "surname":
+									return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+								case "capital":
+									return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+							}
+						}
+						break;
+					default:
+						if (args.length == 1) {
+							List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
+							if (nationNames.size() > 0) {
+								return nationNames;
+							} else {
+								return NameUtil.getNationNamesStartingWith(args[0]);
+							}
 						}
 				}
 			}
 		} else {
 			// Console
 			if (args.length == 1) {
-				List<String> returnValue = NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-					"?",
-					"help",
-					"list"
-				)), args[0]);
+				List<String> returnValue = NameUtil.filterByStart(nationConsoleTabCompletes, args[0]);
 				if (returnValue.size() > 0) {
 					return returnValue;
 				} else {
