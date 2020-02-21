@@ -114,37 +114,67 @@ public class NameUtil {
 	}
 
 	/**
-	 * Returns a List<String> containing strings of resident, town, and/or nation names that match with str
-	 * @param str String to match, usually a command argument
-	 * @param type  Can be r, t, n, or any combination of those to check. For example, passing "rt" to type would check residents and towns but not nations
-	 * @return The matches for the str with the chosen type
+	 * Returns a List<String> containing strings of resident, town, and/or nation names that match with arg.
+	 * Can check for multiple types, for example "rt" would check for residents and towns but not nations or worlds.
+	 * 
+	 * @param arg the string to match with the chosen type
+	 * @param type the type of Towny object to check for, can be r(esident), t(own), n(ation), w(orld), or any combination of those to check
+	 * @return Matches for the arg with the chosen type
 	 */
-	public static List<String> getTownyStartingWith(String str, String type) {
+	public static List<String> getTownyStartingWith(String arg, String type) {
 		long start = System.nanoTime();
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (type.contains("r")) {
 			Map<Trie.TrieNode, String> residentsTrieNode = townyUniverse.getResidentsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getResidentsTrie().getTrieNodeLeavesFromKey(str)) {
+			for (Trie.TrieNode trieNode:townyUniverse.getResidentsTrie().getTrieNodeLeavesFromKey(arg)) {
 				matches.add(residentsTrieNode.get(trieNode));
 			}
 		}
 		
 		if (type.contains("t")) {
 			Map<Trie.TrieNode, String> townsTrieNode = townyUniverse.getTownsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getTownsTrie().getTrieNodeLeavesFromKey(str)) {
+			for (Trie.TrieNode trieNode:townyUniverse.getTownsTrie().getTrieNodeLeavesFromKey(arg)) {
 				matches.add(townsTrieNode.get(trieNode));
 			}
 		}
 		
 		if (type.contains("n")) {
 			Map<Trie.TrieNode, String> nationsTrieNode = townyUniverse.getNationsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getNationsTrie().getTrieNodeLeavesFromKey(str)) {
+			for (Trie.TrieNode trieNode:townyUniverse.getNationsTrie().getTrieNodeLeavesFromKey(arg)) {
 				matches.add(nationsTrieNode.get(trieNode));
 			}
 		}
+		
+		if (type.contains("w")) {
+			matches.addAll(filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
+		}
+		
 		System.out.println("Found "+matches.size()+" for "+type+" in "+(System.nanoTime()-start)/1000000+"ms");
 		return matches;
+	}
+
+	/**
+	 * Checks if arg starts with filters, if not return matches from {@link #getTownyStartingWith(String, String)}. 
+	 * Add a "+" to the type to return both cases
+	 * 
+	 * @param filters the strings to filter arg with
+	 * @param arg the string to check with filters and possibly match with Towny objects if no filters are found
+	 * @param type the type of check to use, see {@link #getTownyStartingWith(String, String)} for possible types. Add "+" to check for both filters and {@link #getTownyStartingWith(String, String)}
+	 * @return Matches for the arg filtered by filters or checked with type
+	 */
+	public static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
+		List<String> filtered = filterByStart(filters, arg);
+		if (type.contains("+")) {
+			filtered.addAll(getTownyStartingWith(arg, type));
+			return filtered;
+		} else {
+			if (filtered.size() > 0) {
+				return filtered;
+			} else {
+				return getTownyStartingWith(arg, type);
+			}
+		}
 	}
 }

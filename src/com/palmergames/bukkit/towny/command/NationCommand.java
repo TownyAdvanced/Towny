@@ -365,12 +365,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console
 			if (args.length == 1) {
-				List<String> returnValue = NameUtil.filterByStart(nationConsoleTabCompletes, args[0]);
-				if (returnValue.size() > 0) {
-					return returnValue;
-				} else {
-					return NameUtil.getTownyStartingWith(args[0], "n");
-				}
+				return NameUtil.filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 			}
 		}
 
