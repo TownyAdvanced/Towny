@@ -1,13 +1,16 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +41,42 @@ public class NameUtil {
 		}
 		
 		return names;
+	}
+	
+	public static List<String> getTownResidentNamesOfPlayer(Player player) {
+		try {
+			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents());
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
+	}
+	
+	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		return filterByStart(getTownResidentNamesOfPlayer(player), str);
+	}
+	
+	public static List<String> getNationResidentNamesOfPlayer(Player player) {
+		try {
+			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents());
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
+	}
+	
+	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
+		return filterByStart(getNationResidentNamesOfPlayer(player), str);
+	}
+	
+	public static List<String> getTownNamesOfPlayerNation(Player player) {
+		try {
+			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns());
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
+	}
+	
+	public static List<String> getTownNamesOfPlayerNationStartingWith(Player player, String str) {
+		return filterByStart(getTownNamesOfPlayerNation(player), str);
 	}
 	
 	public static List<String> getTownNames() {
