@@ -27,6 +27,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -64,6 +66,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class NationCommand extends BaseCommand implements CommandExecutor {
@@ -95,10 +98,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"allylist",
 		"enemylist",
 		"ally",
-		"spawn"
+		"spawn",
+		"king"
 	));
 
-	public static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -111,11 +115,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"tag"
 	));
 	
-	public static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
 		"neutral",
+		"peaceful",
+		"public",
 		"open"
 	));
+	
+	private static final List<String> nationEnemyTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove"
+	));
+	
+	private static final List<String> nationAllyTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove",
+		"sent",
+		"received",
+		"accept",
+		"deny"
+	));
 
+	private static final List<String> nationKingTabCompletes = new ArrayList<>(Collections.singletonList("?"));
+	
+	private static final List<String> nationConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+		"?",
+		"help",
+		"list"
+	));
+	
 	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
 	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
 	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
@@ -189,43 +217,146 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (args.length == 1) {
-			List<String> nationNames = NameUtil.getNationNames();
-			nationNames.addAll(nationTabCompletes);
-			return NameUtil.filterByStart(nationNames, args[0]);
-		}
-
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "set":
-					return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
-				case "rank":
-				case "ally":
-				case "enemy":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"add",
-						"remove"
-					)), args[1]);
-				case "kick":
-				case "add":
-					return NameUtil.getTownNamesStartingWith(args[1]);
-				case "toggle":
-					return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
-				case "join":
-					return NameUtil.getNationNamesStartingWith(args[1]);
-
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			
+			if (args.length > 0) {
+				switch (args[0].toLowerCase()) {
+					case "toggle":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+						}
+						break;
+					case "king":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
+						}
+						break;
+					case "townlist":
+					case "allylist":
+					case "enemylist":
+					case "join":
+					case "delete":
+					case "spawn":
+					case "merge":
+						if (args.length == 2) {
+							return NameUtil.getNationNamesStartingWith(args[1]);
+						}
+						break;
+					case "add":
+					case "kick":
+						return NameUtil.getTownNamesStartingWith(args[args.length - 1]);
+					case "ally":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
+						} else if (args.length > 2){
+							switch (args[1].toLowerCase()) {
+								case "add":
+									if (args[args.length - 1].startsWith("-")) {
+										// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
+										try {
+											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
+												// Get names of sent invites
+												.stream()
+												.map(Invite::getReceiver)
+												.map(TownyInviteReceiver::getName)
+												// Collect sent invite names and check with the last arg without the hyphen
+												.collect(Collectors.toList()), args[args.length - 1].substring(1))
+												// Add the hyphen back to the beginning
+												.stream()
+												.map(e -> "-" + e)
+												.collect(Collectors.toList());
+										} catch (TownyException ignored) {}
+									} else {
+										// Otherwise return possible nations to send invites to
+										return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+									}
+								case "remove":
+									// Return current allies to remove
+									try {
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
+									} catch (TownyException ignore) {}
+								case "accept":
+								case "deny":
+									// Return sent ally invites to accept or deny
+									try {
+										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
+										.stream()
+										.map(Invite::getSender)
+										.map(TownyInviteSender::getName)
+										.collect(Collectors.toList()), args[args.length - 1]);
+									} catch (TownyException ignore) {}
+							}
+						}
+						break;
+					case "rank":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						} else if (args.length > 2){
+							switch (args[1].toLowerCase()) {
+								case "add":
+								case "remove":
+									if (args.length == 3) {
+										return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+									} else if (args.length == 4) {
+										return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+									}
+							}
+						}
+						break;
+					case "enemy":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						} else if (args.length == 3){
+							switch (args[1].toLowerCase()) {
+								case "add":
+									return NameUtil.getNationNamesStartingWith(args[2]);
+								case "remove":
+									// Return enemies of nation
+									try {
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
+									} catch (TownyException ignored) {}
+							}
+						}
+						break;
+					case "set":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+						} else if (args.length == 3){
+							switch (args[1].toLowerCase()) {
+								case "king":
+								case "title":
+								case "surname":
+									return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+								case "capital":
+									return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+							}
+						}
+						break;
+					default:
+						if (args.length == 1) {
+							List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
+							if (nationNames.size() > 0) {
+								return nationNames;
+							} else {
+								return NameUtil.getNationNamesStartingWith(args[0]);
+							}
+						}
+				}
+			}
+		} else {
+			// Console
+			if (args.length == 1) {
+				List<String> returnValue = NameUtil.filterByStart(nationConsoleTabCompletes, args[0]);
+				if (returnValue.size() > 0) {
+					return returnValue;
+				} else {
+					return NameUtil.getNationNamesStartingWith(args[0]);
+				}
 			}
 		}
 
-		if (args.length == 3) {
-			switch (args[1].toLowerCase()) {
-				case "remove":
-				case "add":
-					return NameUtil.getNationNamesStartingWith(args[2]);
-			}
-		}
-		
-		return null;
+		return Collections.emptyList();
 	}
 
 	public NationCommand(Towny instance) {
@@ -2398,7 +2529,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful/neutral", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
 		} else {
