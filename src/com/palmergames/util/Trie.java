@@ -1,11 +1,9 @@
 package com.palmergames.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author stzups
@@ -28,7 +26,7 @@ public class Trie {
 		root = new TrieNode(Character.MIN_VALUE);
 	}
 	
-	public TrieNode addKey(String key) {
+	public void addKey(String key) {
 		
 		TrieNode trieNode = root;
 		
@@ -42,11 +40,10 @@ public class Trie {
 			}
 			if (i == key.length()-1) {
 				trieNode.endOfWord = true;
-				return trieNode;
+				return;
 			}
 		}
-		
-		return null;
+
 	}
 	
 	public List<TrieNode> getTrieNodeLeavesFromKey(String key) {
