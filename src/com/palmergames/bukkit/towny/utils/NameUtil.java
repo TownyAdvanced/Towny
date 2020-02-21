@@ -127,23 +127,20 @@ public class NameUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (type.contains("r")) {
-			Map<Trie.TrieNode, String> residentsTrieNode = townyUniverse.getResidentsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getResidentsTrie().getTrieNodeLeavesFromKey(arg)) {
-				matches.add(residentsTrieNode.get(trieNode));
+			for (String string:townyUniverse.getResidentsTrie().getStringsFromKey(arg)) {
+				matches.add(string);
 			}
 		}
 		
 		if (type.contains("t")) {
-			Map<Trie.TrieNode, String> townsTrieNode = townyUniverse.getTownsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getTownsTrie().getTrieNodeLeavesFromKey(arg)) {
-				matches.add(townsTrieNode.get(trieNode));
+			for (String string:townyUniverse.getTownsTrie().getStringsFromKey(arg)) {
+				matches.add(string);
 			}
 		}
 		
 		if (type.contains("n")) {
-			Map<Trie.TrieNode, String> nationsTrieNode = townyUniverse.getNationsTrieNode();
-			for (Trie.TrieNode trieNode:townyUniverse.getNationsTrie().getTrieNodeLeavesFromKey(arg)) {
-				matches.add(nationsTrieNode.get(trieNode));
+			for (String string:townyUniverse.getNationsTrie().getStringsFromKey(arg)) {
+				matches.add(string);
 			}
 		}
 		

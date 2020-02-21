@@ -49,14 +49,11 @@ public class TownyUniverse {
     private final Towny towny;
     
     private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
-    private final Map<Trie.TrieNode, String> residentsTrieNode = new HashMap<>();
     private final Trie residentsTrie = new Trie();
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
-    private final Map<Trie.TrieNode, String> townsTrieNode = new HashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
-    private final Map<Trie.TrieNode, String> nationsTrieNode = new HashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
@@ -157,20 +154,20 @@ public class TownyUniverse {
         	System.out.println("[Towny] Building trie structures...");
 			long start = System.nanoTime();
 			
-			for (String string:residents.keySet()) {
-				residentsTrieNode.put(residentsTrie.addKey(string), string);
+			for (Map.Entry<String, Resident> entry:residents.entrySet()) {
+				residentsTrie.addKey(entry.getKey());
 			}
 			System.out.println("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
 			start = System.nanoTime();
 			
-			for (String string:towns.keySet()) {
-				townsTrieNode.put(townsTrie.addKey(string), string);
+			for (Map.Entry<String, Town> entry:towns.entrySet()) {
+				townsTrie.addKey(entry.getKey());
 			}
 			System.out.println("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
 			start = System.nanoTime();
 			
-			for (String string:nations.keySet()) {
-				nationsTrieNode.put(nationsTrie.addKey(string), string);
+			for (Map.Entry<String, Nation> entry:nations.entrySet()) {
+				nationsTrie.addKey(entry.getKey());
 			}
 			System.out.println("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
 		}).start();
@@ -288,20 +285,12 @@ public class TownyUniverse {
     	return nationsTrie;
 	}
 	
-	public Map<Trie.TrieNode, String> getNationsTrieNode() {
-    	return nationsTrieNode;
-	}
-	
     public ConcurrentHashMap<String, Resident> getResidentMap() {
         return residents;
     }
 
 	public Trie getResidentsTrie() {
 		return residentsTrie;
-	}
-	
-	public Map<Trie.TrieNode, String> getResidentsTrieNode() {
-    	return residentsTrieNode;
 	}
 	
     public List<Resident> getJailedResidentMap() {
@@ -314,10 +303,6 @@ public class TownyUniverse {
     
     public Trie getTownsTrie() {
     	return townsTrie;
-	}
-	
-	public Map<Trie.TrieNode, String> getTownsTrieNode() {
-    	return townsTrieNode;
 	}
 	
     public ConcurrentHashMap<String, TownyWorld> getWorldMap() {

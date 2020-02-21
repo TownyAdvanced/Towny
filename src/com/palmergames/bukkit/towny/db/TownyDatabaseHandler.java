@@ -460,7 +460,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
 
 		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
-		universe.getResidentsTrieNode().put(universe.getResidentsTrie().addKey(filteredName), filteredName);
+		universe.getResidentsTrie().addKey(filteredName);
 	}
 
 	@Override
@@ -481,7 +481,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
 			universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
-			universe.getTownsTrieNode().put(universe.getTownsTrie().addKey(filteredName), filteredName);
+			universe.getTownsTrie().addKey(filteredName);
 
 		} finally {
 			lock.unlock();
@@ -506,7 +506,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
 			universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
-			universe.getNationsTrieNode().put(universe.getNationsTrie().addKey(filteredName), filteredName);
+			universe.getNationsTrie().addKey(filteredName);
 
 		} finally {
 			lock.unlock();
