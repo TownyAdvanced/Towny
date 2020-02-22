@@ -30,19 +30,21 @@ public class BaseCommand implements TabCompleter{
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if (type.contains("r")) {
-			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
-		}
+		if (arg.length() > 0) { // An empty arg means checking all entries which can be very slow
+			if (type.contains("r")) {
+				matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
+			}
 
-		if (type.contains("t")) {
-			matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
-		}
+			if (type.contains("t")) {
+				matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
+			}
 
-		if (type.contains("n")) {
-			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+			if (type.contains("n")) {
+				matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+			}
 		}
-
-		if (type.contains("w")) {
+		
+		if (type.contains("w")) { // Worlds are short and should be checked even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
@@ -59,7 +61,7 @@ public class BaseCommand implements TabCompleter{
 	 * @param type the type of check to use, see {@link #getTownyStartingWith(String, String)} for possible types. Add "+" to check for both filters and {@link #getTownyStartingWith(String, String)}
 	 * @return Matches for the arg filtered by filters or checked with type
 	 */
-	public static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
+	static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
 		List<String> filtered = NameUtil.filterByStart(filters, arg);
 		if (type.contains("+")) {
 			filtered.addAll(getTownyStartingWith(arg, type));
