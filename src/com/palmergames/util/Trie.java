@@ -13,7 +13,7 @@ import java.util.Map;
 public class Trie {
 
 	/**
-	 * TrieNode implementation that can handle any character and keep track of it's children and its own character
+	 * TrieNode implementation that handles any character and keeps track of its own children and character
 	 */
 	public static class TrieNode {
 		Map<Character, TrieNode> children = new HashMap<>();
