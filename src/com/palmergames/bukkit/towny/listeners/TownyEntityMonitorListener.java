@@ -85,7 +85,6 @@ public class TownyEntityMonitorListener implements Listener {
 						try {
 							attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
 						} catch (Exception e) { // This would be a dispenser kill, should count as environmental death.
-							deathPayment(defenderPlayer, defenderResident);
 						}
 					}
 
