@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TrieUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -212,11 +213,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					)), args[1]);
 				case "town":
 				case "givebonus":
-					return NameUtil.getTownyStartingWith(args[1], "t");
+					return TrieUtil.getTownyStartingWith(args[1], "t");
 				case "resident":
 					return null;
 				case "nation":
-					return NameUtil.getTownyStartingWith(args[1], "n"); 
+					return TrieUtil.getTownyStartingWith(args[1], "n"); 
 				case "toggle":
 					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
 				case "set":
@@ -252,7 +253,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				case "plot":
 				case "surname":
 				case "title":
-					return NameUtil.getTownyStartingWith(args[2], "t");
+					return TrieUtil.getTownyStartingWith(args[2], "t");
 			}
 		}
 

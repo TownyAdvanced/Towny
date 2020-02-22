@@ -46,6 +46,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TrieUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -223,7 +224,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
-					/*case "asdf":
+					case "asdf":
 						final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 						for (int i = 0; i <10000; i++){
 							String str = "";
@@ -239,7 +240,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							}
 						}
 						System.out.println(TownyUniverse.getInstance().getNationsMap().size());
-						break;*/
+						break;
 					case "toggle":
 						if (args.length == 2) {
 							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
@@ -258,12 +259,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case "spawn":
 					case "merge":
 						if (args.length == 2) {
-							return NameUtil.getTownyStartingWith(args[1], "n");
+							return TrieUtil.getTownyStartingWith(args[1], "n");
 						}
 						break;
 					case "add":
 					case "kick":
-						return NameUtil.getTownyStartingWith(args[args.length - 1], "t");
+						return TrieUtil.getTownyStartingWith(args[args.length - 1], "t");
 					case "ally":
 						if (args.length == 2) {
 							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
@@ -287,7 +288,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										} catch (TownyException ignored) {}
 									} else {
 										// Otherwise return possible nations to send invites to
-										return NameUtil.getTownyStartingWith(args[args.length - 1], "n");
+										return TrieUtil.getTownyStartingWith(args[args.length - 1], "n");
 									}
 								case "remove":
 									// Return current allies to remove
@@ -328,7 +329,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						} else if (args.length == 3){
 							switch (args[1].toLowerCase()) {
 								case "add":
-									return NameUtil.getTownyStartingWith(args[2], "n");
+									return TrieUtil.getTownyStartingWith(args[2], "n");
 								case "remove":
 									// Return enemies of nation
 									try {
@@ -357,7 +358,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							if (nationNames.size() > 0) {
 								return nationNames;
 							} else {
-								return NameUtil.getTownyStartingWith(args[0], "n");
+								return TrieUtil.getTownyStartingWith(args[0], "n");
 							}
 						}
 				}
@@ -365,7 +366,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console
 			if (args.length == 1) {
-				return NameUtil.filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
+				return TrieUtil.filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 			}
 		}
 

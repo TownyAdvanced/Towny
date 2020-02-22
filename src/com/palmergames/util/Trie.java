@@ -6,129 +6,114 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Dynamic trie structure that can add new keys and recursively get matching strings for a key 
+ * 
  * @author stzups
  */
 public class Trie {
-	
+
+	/**
+	 * TrieNode implementation that can handle any character and keep track of it's children and its own character
+	 */
 	public static class TrieNode {
 		Map<Character, TrieNode> children = new HashMap<>();
 		char character;
 		boolean endOfWord = false;
-		
+
 		TrieNode(char character) {
 			this.character = character;
 		}
 	}
-	
+
 	private final TrieNode root;
-	
+
+	/**
+	 * Constructor that creates a new trie with a null root
+	 */
 	public Trie() {
 		root = new TrieNode(Character.MIN_VALUE);
 	}
-	
+
+	/**
+	 * Adds and links new TrieNodes to the trie for each character in the string
+	 * 
+	 * @param key key to add to trie, can be longer than one character
+	 */
 	public void addKey(String key) {
-		
+
+		// Current trieNode to crawl through
 		TrieNode trieNode = root;
-		
+
+		// Loop through each character of key
 		for (int i = 0; i < key.length(); i++) {
-			char index = Character.toLowerCase(key.charAt(i));
+			char index = Character.toLowerCase(key.charAt(i)); // Case insensitive
+
 			TrieNode lastNode = trieNode;
 			trieNode = lastNode.children.get(index);
-			if (trieNode == null)  {
-				lastNode.children.put(index, new TrieNode(index));
-				trieNode = lastNode.children.get(index);
+
+			if (trieNode == null) { // No existing TrieNode here, so make a new one
+				trieNode = new TrieNode(index);
+				lastNode.children.put(index, trieNode); // Put this node as one of lastNode's children
 			}
-			if (i == key.length()-1) {
+
+			if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
 				trieNode.endOfWord = true;
-				return;
 			}
 		}
-
-	}
-	
-	public List<TrieNode> getTrieNodeLeavesFromKey(String key) {
-		
-		List<TrieNode> trieNodeLeaves = new ArrayList<>();//todo linkedlist?
-		
-		if (key.length() == 0){
-			return getChildren(root, new ArrayList<>());
-		} else {
-			TrieNode trieNode = root;
-			for (int i = 0; i < key.length(); i++) {
-				TrieNode lastNode = trieNode;
-				trieNode = lastNode.children.get(Character.toLowerCase(key.charAt(i)));
-				//System.out.println(trieNode);
-				if (trieNode == null) {
-					break;
-				}
-				if (trieNode.endOfWord) {
-					trieNodeLeaves.add(trieNode);
-				} else if (i == key.length() - 1) {
-					trieNodeLeaves.addAll(getChildren(trieNode, new ArrayList<>()));
-				}
-			}
-		}
-		//System.out.println(trieNodeLeaves.size());
-		return trieNodeLeaves;
-	}
-	
-	private static List<TrieNode> getChildren(TrieNode find, List<TrieNode> found) {
-		//System.out.println("Searching for children from "+find+", found "+found);
-		for (TrieNode trieNode:find.children.values()) {
-			if (!trieNode.endOfWord && trieNode.children.size() > 0) {
-				//System.out.println("not the end of the word, searching "+trieNode+", found is "+found.size());
-				found = getChildren(trieNode, found);
-				//System.out.println("now found is "+found.size());
-			} else {
-				//System.out.println("end of word, adding "+trieNode);
-				found.add(trieNode);
-			}
-		}
-		//System.out.println("retuing "+found.size());
-		return found;
 	}
 
-
+	/**
+	 * Gets all matching strings and their children for a key
+	 * 
+	 * @param key string to search for in tree
+	 * @return matching strings and their children
+	 */
 	public List<String> getStringsFromKey(String key) {
 
-		List<String> strings = new ArrayList<>();//todo linkedlist?
+		List<String> strings = new ArrayList<>();
 
-		if (key.length() == 0){
+		if (key.length() == 0){ // Find all nodes starting from the root node
 			strings.addAll(getChildrenStrings(root, new ArrayList<>()));
 		} else {
 			TrieNode trieNode = root;
+
 			for (int i = 0; i < key.length(); i++) {
-				TrieNode lastNode = trieNode;
-				char index = key.charAt(i);
-				trieNode = lastNode.children.get(Character.toLowerCase(index));
-				//System.out.println(trieNode);
-				if (trieNode == null) {
+				trieNode = trieNode.children.get(Character.toLowerCase(key.charAt(i))); // Case insensitive
+
+				if (trieNode == null) { // No existing TrieNode here, stop searching
 					break;
 				}
-				if (i == key.length() - 1) {
-					for (String string:getChildrenStrings(trieNode, new ArrayList<>())){
-						strings.add(key+string);
+
+				if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
+					for (String string : getChildrenStrings(trieNode, new ArrayList<>())){ // Recursively find all children
+						strings.add(key+string); // Add the key to the front of each child string
 					}
 				}
 			}
 		}
-		//System.out.println(trieNodeLeaves.size());
+
 		return strings;
 	}
-	
-	private List<String> getChildrenStrings(TrieNode find, List<String> found) {
-		//System.out.println("find: "+find.character+", found: "+ String.join("", found));
-		for (TrieNode trieNode:find.children.values()) {
-			if(!trieNode.endOfWord) {
-				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) {
-					//System.out.println("adding " + trieNode.character + "::" + string);
-					found.add(trieNode.character + string);
+
+	/**
+	 * Recursively find all children of a TrieNode, and add to a list of strings
+	 * 
+	 * @param find the current TrieNode to search through its own children
+	 * @param found strings that have already been found
+	 * @return strings of all children found, with this TrieNode's character in front of each string
+	 */
+	private static List<String> getChildrenStrings(TrieNode find, List<String> found) {
+
+		for (TrieNode trieNode:find.children.values()) { // Loop through each child
+			if(!trieNode.endOfWord) { // Not the end of the word, so loop through all children
+				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
+					found.add(trieNode.character + string); // Add this TrieNode's character to the front of each string
 				}
-			} else {
+			} else { // End of word, so just add this TrieNode's character
 				found.add(String.valueOf(trieNode.character));
 			}
 		}
-		//System.out.println("returning "+String.join("", found));
+
 		return found;
 	}
 }
