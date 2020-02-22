@@ -49,6 +49,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -139,6 +140,37 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"reset"
 	));
 	
+	private static final List<String> plotLevelCompletes = new ArrayList<>(Arrays.asList(
+		"resident",
+		"ally",
+		"outsider"
+	));
+	
+	private static final List<String> plotTypeCompletes = new ArrayList<>(Arrays.asList(
+		"build",
+		"destroy",
+		"switch",
+		"itemuse"
+	));
+	
+	private static final List<String> plotOnOffCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off"
+	));
+	
+	private static final List<String> plotTypeOnOffCompletes = new ArrayList<>(Arrays.asList(
+		"build",
+		"destory",
+		"switch",
+		"itemuse",
+		"on",
+		"off"
+	));
+	
+	private static final List<String> plotRectCircleCompletes = new ArrayList<>(Arrays.asList(
+		"rect",
+		"circle"
+	));
 
 	public PlotCommand(Towny instance) {
 
@@ -176,6 +208,76 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			for (String line : output)
 				sender.sendMessage(Colors.strip(line));
 		return true;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (sender instanceof Player) {
+			if (args.length > 0) {
+				switch (args[0].toLowerCase()) {
+					case "set":
+					case "toggle":
+						return commonTabComplete(args);
+					case "claim":
+					case "notforsale":
+					case "nfs":
+						if (args.length == 2)
+							return NameUtil.filterByStart(plotRectCircleCompletes, args[1]);
+						break;
+					case "forsale":
+					case "fs":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(Collections.singletonList("within"), args[1]);
+							case 3:
+								return NameUtil.filterByStart(plotRectCircleCompletes, args[2]);
+						}
+						break;
+					case "group":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
+						} else if (args.length > 2) {
+							return commonTabComplete(StringMgmt.remFirstArg(args));
+						}
+						break;
+					default:
+						if (args.length == 1)
+							return NameUtil.filterByStart(plotTabCompletes, args[0]);
+						break;
+				}
+			}
+		}
+
+		return Collections.emptyList();
+	}
+	
+	private List<String> commonTabComplete(String[] args) {
+		switch (args[0].toLowerCase()) {
+			case "set":
+				if (args.length == 2) {
+					return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+				} else if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
+					switch (args.length) {
+						case 3:
+							return NameUtil.filterByStart(plotPermTabCompletes, args[2]);
+						case 4:
+							if (plotTypeCompletes.contains(args[2].toLowerCase()))
+								return NameUtil.filterByStart(plotOnOffCompletes, args[3]);
+
+							if (plotLevelCompletes.contains(args[2].toLowerCase()))
+								return NameUtil.filterByStart(plotTypeOnOffCompletes, args[3]);
+						case 5:
+							return NameUtil.filterByStart(plotOnOffCompletes, args[4]);
+					}
+				}
+				break;
+			case "toggle":
+				if (args.length == 2)
+					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+				break;
+		}
+		
+		return Collections.emptyList();
 	}
 
 	public boolean parsePlotCommand(Player player, String[] split) throws TownyException {
@@ -1244,74 +1346,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			return owner;
 		}
 
-	}
-
-	/**
-	 * Overridden method custom for this command set.
-	 * 
-	 */
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
-		if (args.length == 1) {
-			return NameUtil.filterByStart(plotTabCompletes, args[0]);
-		}
-		
-		if (args.length == 2) {
-			switch (args[0]) {
-				case "set":
-					return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
-				case "toggle":
-					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
-				case "group":
-					return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
-			}
-		}
-		
-		if (args.length == 3) {
-			if ("perm".equals(args[1].toLowerCase())) {
-				return NameUtil.filterByStart(plotPermTabCompletes, args[2]);
-			}
-		}
-		
-		if (args.length == 4) {
-			switch (args[2].toLowerCase()) {
-				case "resident":
-				case "ally":
-				case "outsider":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off",
-						"build",
-						"destroy",
-						"switch",
-						"itemuse"
-					)), args[3]);
-				case "build":
-				case "destroy":
-				case "switch":
-				case "itemuse":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off"
-					)), args[3]);
-			}
-		}
-		
-		if (args.length == 5) {
-			switch (args[3].toLowerCase()) {
-				case "build":
-				case "destroy":
-				case "itemuse":
-				case "switch":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off"
-					)), args[4]);
-			}
-		}
-		
-		return null;
 	}
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
