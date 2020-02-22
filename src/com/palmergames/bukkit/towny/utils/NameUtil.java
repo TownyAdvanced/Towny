@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
  * @author stzups
  */
 public class NameUtil {
-	
-	private static final int MAX_RETURNS = 50;
-
 	/**
 	 * A helper function that extracts names from objects.
 	 * 
@@ -42,14 +39,14 @@ public class NameUtil {
 	}
 
 	/**
-	 * This returns strings that start with a string
+	 * Returns strings that start with a string
 	 * 
 	 * @param list strings to check
 	 * @param startingWith string to check with list
 	 * @return strings from list that start with startingWith
 	 */
 	public static List<String> filterByStart(List<String> list, String startingWith) {
-		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).limit(MAX_RETURNS).collect(Collectors.toList());
+		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
 	}
 
 	/**
