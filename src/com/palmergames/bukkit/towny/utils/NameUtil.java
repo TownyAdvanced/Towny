@@ -3,9 +3,6 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nameable;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -15,14 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A helper class to extract name data from classes.
+ * A helper class to extract name data from classes and filter matching strings.
  * 
  * @author Suneet Tipirneni (Siris)
+ * @author stzups
  */
 public class NameUtil {
-	
-	private static final int MAX_RETURNS = 50;
-
 	/**
 	 * A helper function that extracts names from objects.
 	 * 
@@ -42,72 +37,60 @@ public class NameUtil {
 		
 		return names;
 	}
-	
-	public static List<String> getTownResidentNamesOfPlayer(Player player) {
-		try {
-			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents());
-		} catch (TownyException e) {
-			return Collections.emptyList();
-		}
-	}
-	
-	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
-		return filterByStart(getTownResidentNamesOfPlayer(player), str);
-	}
-	
-	public static List<String> getNationResidentNamesOfPlayer(Player player) {
-		try {
-			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents());
-		} catch (TownyException e) {
-			return Collections.emptyList();
-		}
-	}
-	
-	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
-		return filterByStart(getNationResidentNamesOfPlayer(player), str);
-	}
-	
-	public static List<String> getTownNamesOfPlayerNation(Player player) {
-		try {
-			return getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns());
-		} catch (TownyException e) {
-			return Collections.emptyList();
-		}
-	}
-	
-	public static List<String> getTownNamesOfPlayerNationStartingWith(Player player, String str) {
-		return filterByStart(getTownNamesOfPlayerNation(player), str);
-	}
-	
-	public static List<String> getTownNames() {
-		Collection<Town> towns = TownyUniverse.getInstance().getTownsMap().values();
-		return getNames(towns);
-	}
-	
-	public static List<String> getTownNamesStartingWith(String str) {
-		return filterByStart(getTownNames(), str);
-	}
-	
+
+	/**
+	 * Returns strings that start with a string
+	 * 
+	 * @param list strings to check
+	 * @param startingWith string to check with list
+	 * @return strings from list that start with startingWith
+	 */
 	public static List<String> filterByStart(List<String> list, String startingWith) {
-		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).limit(MAX_RETURNS).collect(Collectors.toList());
+		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
 	}
-	
-	public static List<String> getNationNames() {
-		Collection<Nation> nations = TownyUniverse.getInstance().getNationsMap().values();
-		return getNames(nations);
+
+	/**
+	 * Returns the names a player's town's residents that start with a string
+	 *
+	 * @param player the player to get the town's residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		try {
+			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
 	}
-	
-	public static List<String> getNationNamesStartingWith(String str) {
-		return filterByStart(getNationNames(), str);
+
+	/**
+	 * Returns the names a player's nation's residents that start with a string
+	 *
+	 * @param player the player to get the nation's residents of
+	 * @param str the string to check if the nation's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
+		try {
+			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), str);
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
 	}
-	
-	public static List<String> getWorldNames() {
-		Collection<TownyWorld> worlds = TownyUniverse.getInstance().getWorldMap().values();
-		return getNames(worlds);
+
+	/**
+	 * Returns the names of towns of a player that start with a string
+	 *
+	 * @param player the player to get the towns of
+	 * @param str the string to check if the town names start with
+	 * @return the town names that match str
+	 */
+	public static List<String> getTownNamesOfPlayerNationStartingWith(Player player, String str) {
+		try {
+			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns()), str);
+		} catch (TownyException e) {
+			return Collections.emptyList();
+		}
 	}
-	
-	public static List<String> getWorldNamesStartingWith(String str) {
-		return filterByStart(getWorldNames(), str);
-	}
-		
 }

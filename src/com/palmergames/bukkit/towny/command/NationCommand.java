@@ -65,6 +65,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -239,12 +240,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case "spawn":
 					case "merge":
 						if (args.length == 2) {
-							return NameUtil.getNationNamesStartingWith(args[1]);
+							return getTownyStartingWith(args[1], "n");
 						}
 						break;
 					case "add":
 					case "kick":
-						return NameUtil.getTownNamesStartingWith(args[args.length - 1]);
+						return getTownyStartingWith(args[args.length - 1], "t");
 					case "ally":
 						if (args.length == 2) {
 							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
@@ -268,7 +269,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										} catch (TownyException ignored) {}
 									} else {
 										// Otherwise return possible nations to send invites to
-										return NameUtil.getNationNamesStartingWith(args[args.length - 1]);
+										return getTownyStartingWith(args[args.length - 1], "n");
 									}
 								case "remove":
 									// Return current allies to remove
@@ -309,7 +310,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						} else if (args.length == 3){
 							switch (args[1].toLowerCase()) {
 								case "add":
-									return NameUtil.getNationNamesStartingWith(args[2]);
+									return getTownyStartingWith(args[2], "n");
 								case "remove":
 									// Return enemies of nation
 									try {
@@ -338,7 +339,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							if (nationNames.size() > 0) {
 								return nationNames;
 							} else {
-								return NameUtil.getNationNamesStartingWith(args[0]);
+								return getTownyStartingWith(args[0], "n");
 							}
 						}
 				}
@@ -346,12 +347,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console
 			if (args.length == 1) {
-				List<String> returnValue = NameUtil.filterByStart(nationConsoleTabCompletes, args[0]);
-				if (returnValue.size() > 0) {
-					return returnValue;
-				} else {
-					return NameUtil.getNationNamesStartingWith(args[0]);
-				}
+				return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 			}
 		}
 
