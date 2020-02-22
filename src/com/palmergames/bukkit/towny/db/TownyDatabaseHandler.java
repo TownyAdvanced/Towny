@@ -640,6 +640,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		saveWorld(townyWorld);
 		
+		universe.getTownsTrie().removeKey(town.getName().toLowerCase());
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);
@@ -689,6 +690,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
 		nation.clear();
 
+		universe.getNationsTrie().removeKey(nation.getName().toLowerCase());
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 
 		for (Town town : toSave) {
