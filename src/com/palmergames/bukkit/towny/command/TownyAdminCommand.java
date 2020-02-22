@@ -212,11 +212,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					)), args[1]);
 				case "town":
 				case "givebonus":
-					return NameUtil.getTownNamesStartingWith(args[1]);
+					return getTownyStartingWith(args[1], "t");
 				case "resident":
 					return null;
 				case "nation":
-					return NameUtil.getNationNamesStartingWith(args[1]); 
+					return getTownyStartingWith(args[1], "n"); 
 				case "toggle":
 					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
 				case "set":
@@ -252,7 +252,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				case "plot":
 				case "surname":
 				case "title":
-					return NameUtil.getTownNamesStartingWith(args[2]);
+					return getTownyStartingWith(args[2], "t");
 			}
 		}
 
