@@ -251,6 +251,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 	
+	// For /plot set/toggle and /plot group set/toggle
 	private List<String> commonTabComplete(String[] args) {
 		switch (args[0].toLowerCase()) {
 			case "set":
