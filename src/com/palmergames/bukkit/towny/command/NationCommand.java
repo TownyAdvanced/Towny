@@ -65,6 +65,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -220,7 +221,37 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			
 			if (args.length > 0) {
+				if (args.length == 2 && args[1].startsWith("-")) {
+					TownyUniverse.getInstance().getNationsTrie().removeKey(args[0]);
+					System.out.println("removed "+args[0]);
+				}
+				if (args.length == 2 && args[1].startsWith("+")) {
+					TownyUniverse.getInstance().getNationsTrie().addKey(args[0]);
+					TownyUniverse.getInstance().getResidentsTrie().addKey(args[0]);
+					System.out.println("added "+args[0]);
+				}
+				if (args.length == 2 && args[1].startsWith("=")) {
+					System.out.println(TownyUniverse.getInstance().getNationsTrie().getStringsFromKey(args[0]));
+				}
 				switch (args[0].toLowerCase()) {
+					case "asdf":
+						new Thread(() -> {
+							long start = System.nanoTime();
+							String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+							int repeat = 200000;
+							for (int i = 0; i <repeat; i++){
+								String str = "";
+								for (int x = 0; x<10; x++){
+									str += upper.charAt(ThreadLocalRandom.current().nextInt(0,26));
+								}
+								try {
+									TownyUniverse.getInstance().getDataSource().newNation(str);
+								} catch (AlreadyRegisteredException | NotRegisteredException e) {
+									System.out.println("already registered");
+								}
+							}
+							System.out.println("built trie for "+repeat+" towns, nations, and residents in "+(System.nanoTime()-start)/1000000+"ms, now "+TownyUniverse.getInstance().getNationsMap().size()+" nations, "+TownyUniverse.getInstance().getTownsMap().size()+" towns, and "+TownyUniverse.getInstance().getResidentMap().size()+" residents");
+						}).start();
 					case "toggle":
 						if (args.length == 2) {
 							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);

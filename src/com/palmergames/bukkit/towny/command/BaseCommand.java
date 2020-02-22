@@ -8,9 +8,12 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class BaseCommand implements TabCompleter{
+	
+	private static final int MAX_RETURNS = 10000;
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -26,11 +29,11 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-		//long start = System.nanoTime();
+		long start = System.nanoTime();
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if (arg.length() > 0) { // An empty arg means checking all entries which can be very slow
+		//if (arg.length() > 0) { // An empty arg means checking all entries which can be very slow todo remove comment
 			if (type.contains("r")) {
 				matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
 			}
@@ -40,16 +43,17 @@ public class BaseCommand implements TabCompleter{
 			}
 
 			if (type.contains("n")) {
+				//matches.addAll(townyUniverse.getNationsMap().keySet().stream().filter(e -> e.startsWith(arg)).limit(20).collect(Collectors.toList()));
 				matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 			}
-		}
+		//}todo remove comment
 		
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
-		//System.out.println("Found "+matches.size()+" for "+type+" in "+(float)(System.nanoTime()-start)/1000000+"ms");
-		return matches;
+		System.out.println("Found "+matches.size()+" for "+type+" in "+(float)(System.nanoTime()-start)/1000000+"ms");
+		return matches.stream().limit(MAX_RETURNS).collect(Collectors.toList());
 	}
 
 	/**
