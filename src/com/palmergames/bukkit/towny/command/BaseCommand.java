@@ -44,7 +44,7 @@ public class BaseCommand implements TabCompleter{
 			}
 		}
 		
-		if (type.contains("w")) { // Worlds are short and should be checked even if arg is empty
+		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
