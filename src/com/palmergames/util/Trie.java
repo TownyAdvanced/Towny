@@ -44,7 +44,6 @@ public class Trie {
 	 * @param key key to add to trie, can be longer than one character
 	 */
 	public void addKey(String key) {
-
 		// Current trieNode to crawl through
 		TrieNode trieNode = root;
 
@@ -118,14 +117,12 @@ public class Trie {
 	 * @return matching strings and their children
 	 */
 	public List<String> getStringsFromKey(String key) {
-
-		List<String> strings = new ArrayList<>();
-		
+		// Empty key means find all nodes, starting from the root node
 		if (key.length() == 0) {
-			strings.addAll(getChildrenStrings(root, new ArrayList<>()));
-			return strings;
+			return getChildrenStrings(root, new ArrayList<>());
 		}
-
+		
+		List<String> strings = new ArrayList<>();
 		TrieNode trieNode = root;
 
 		for (int i = 0; i < key.length(); i++) {
