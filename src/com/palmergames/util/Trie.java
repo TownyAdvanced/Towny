@@ -53,7 +53,7 @@ public class Trie {
 
 			TrieNode lastNode = trieNode;
 			Optional<TrieNode> optional = lastNode.children.stream()
-				        .filter(e -> e.character==index).findFirst();
+				        .filter(e -> e.character == index).findFirst();
 
 			if (!optional.isPresent()) { // No existing TrieNode here, so make a new one
 				trieNode = new TrieNode(index);
@@ -85,7 +85,7 @@ public class Trie {
 			TrieNode lastNode = trieNode;
 			//found.add(lastNode); // Adds to list of TrieNodes to remove
 			Optional<TrieNode> optional = lastNode.children.stream()
-				        .filter(e -> e.character==index).findFirst();
+				        .filter(e -> e.character == index).findFirst();
 			
 			if (optional.isPresent()) {
 				trieNode = optional.get();
@@ -128,7 +128,7 @@ public class Trie {
 		for (int i = 0; i < key.length(); i++) {
 			int finalI = i;
 			Optional<TrieNode> optional = trieNode.children.stream()
-				.filter(e -> e.character==Character.toLowerCase(key.charAt(finalI))).findFirst();
+				.filter(e -> e.character == Character.toLowerCase(key.charAt(finalI))).findFirst();
 
 			if (!optional.isPresent()) { // No existing TrieNode here, stop searching
 				break;
