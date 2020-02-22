@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
-import com.palmergames.bukkit.towny.utils.TrieUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -119,7 +118,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (args.length == 1) {
-			return TrieUtil.filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
+			return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
 		}
 		
 		if (args.length == 2) {

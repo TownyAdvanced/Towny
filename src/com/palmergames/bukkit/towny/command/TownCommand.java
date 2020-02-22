@@ -54,7 +54,6 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TrieUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -221,13 +220,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		if (args.length == 1) {
-			return TrieUtil.filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
+			return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
 		}
 		
 		if (args.length == 2) {
 			switch (args[0].toLowerCase()) {
 				case "spawn":
-					return TrieUtil.getTownyStartingWith(args[1], "t");
+					return getTownyStartingWith(args[1], "t");
 				case "set":
 					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
 				case "rank":
@@ -258,7 +257,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			switch (args[1].toLowerCase()) {
 				case "remove":
 				case "add":
-					return TrieUtil.getTownyStartingWith(args[2], "r"); // Not sure why this was set to nation previously, it should only be residents of player's town
+					return getTownyStartingWith(args[2], "r"); // Not sure why this was set to nation previously, it should only be residents of player's town
 				case "perm":
 					return NameUtil.filterByStart(townPermTabCompletes, args[2]);
 			}
