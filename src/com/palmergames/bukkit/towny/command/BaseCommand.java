@@ -8,12 +8,9 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 public class BaseCommand implements TabCompleter{
 	
-	private static final int MAX_RETURNS = 10000;
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -32,28 +29,26 @@ public class BaseCommand implements TabCompleter{
 		long start = System.nanoTime();
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		if (type.contains("r")) {
+			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
+		}
 
-		//if (arg.length() > 0) { // An empty arg means checking all entries which can be very slow todo remove comment
-			if (type.contains("r")) {
-				matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
-			}
+		if (type.contains("t")) {
+			matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
+		}
 
-			if (type.contains("t")) {
-				matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
-			}
-
-			if (type.contains("n")) {
-				//matches.addAll(townyUniverse.getNationsMap().keySet().stream().filter(e -> e.startsWith(arg)).limit(20).collect(Collectors.toList()));
-				matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
-			}
-		//}todo remove comment
+		if (type.contains("n")) {
+			//matches.addAll(townyUniverse.getNationsMap().keySet().stream().filter(e -> e.startsWith(arg)).limit(20).collect(Collectors.toList()));
+			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+		}
 		
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
 		System.out.println("Found "+matches.size()+" for "+type+" in "+(float)(System.nanoTime()-start)/1000000+"ms");
-		return matches.stream().limit(MAX_RETURNS).collect(Collectors.toList());
+		return matches;
 	}
 
 	/**

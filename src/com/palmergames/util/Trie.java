@@ -120,7 +120,7 @@ public class Trie {
 		List<String> strings = new ArrayList<>();
 
 		if (key.length() == 0){ // Find all nodes starting from the root node
-			strings.addAll(getChildrenStrings(root, new ArrayList<>(), 0));
+			strings.addAll(getChildrenStrings(root, new ArrayList<>()));
 		} else {
 			TrieNode trieNode = root;
 
@@ -133,7 +133,7 @@ public class Trie {
 				} else {
 					trieNode = optional.get();
 					if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
-						for (String string : getChildrenStrings(trieNode, new ArrayList<>(), 0)) { // Recursively find all children
+						for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
 							strings.add(key + string); // Add the key to the front of each child string
 						}
 					}
@@ -151,18 +151,22 @@ public class Trie {
 	 * @param found strings that have already been found
 	 * @return strings of all children found, with this TrieNode's character in front of each string
 	 */
-	private static List<String> getChildrenStrings(TrieNode find, List<String> found, int amtFound) {
-
-		if (amtFound > MAX_RETURNS) {
-			return found;
-		}
+	private static List<String> getChildrenStrings(TrieNode find, List<String> found) {
 		for (TrieNode trieNode : find.children) { // Loop through each child
-			if (!trieNode.endOfWord) { // Not the end of the word, so loop through all children
-				for (String string : getChildrenStrings(trieNode, new ArrayList<>(), trieNode.children.size()+amtFound+find.children.size())) { // Recursively find all children
-					found.add(trieNode.character + string); // Add this TrieNode's character to the front of each string
+			if (found.size() + 1 > MAX_RETURNS) {
+				return found;
+			} else {
+				if (!trieNode.endOfWord) { // Not the end of the word, so loop through all children
+					for (String string : getChildrenStrings(trieNode, new ArrayList<>())) {
+						if (found.size() + 1 > MAX_RETURNS) {
+							return found;
+						} else {
+							found.add(trieNode.character + string);
+						}
+					}
+				} else { // End of word, so just add this TrieNode's character
+					found.add(String.valueOf(trieNode.character));
 				}
-			} else { // End of word, so just add this TrieNode's character
-				found.add(String.valueOf(trieNode.character));
 			}
 		}
 
