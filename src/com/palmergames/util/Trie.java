@@ -83,10 +83,9 @@ public class Trie {
 			char index = Character.toLowerCase(key.charAt(i)); // Case insensitive
 
 			TrieNode lastNode = trieNode;
-			//found.add(lastNode); // Adds to list of TrieNodes to remove
 			Optional<TrieNode> optional = lastNode.children.stream()
 				        .filter(e -> e.character == index).findFirst();
-			
+
 			if (optional.isPresent()) {
 				trieNode = optional.get();
 				found.add(trieNode);
@@ -121,7 +120,7 @@ public class Trie {
 		if (key.length() == 0) {
 			return getChildrenStrings(root, new ArrayList<>());
 		}
-		
+
 		List<String> strings = new ArrayList<>();
 		TrieNode trieNode = root;
 

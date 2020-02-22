@@ -26,7 +26,7 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-		//long start = System.nanoTime();
+
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
@@ -46,7 +46,6 @@ public class BaseCommand implements TabCompleter{
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
-		//System.out.println("Found "+matches.size()+" for "+type+" in "+(float)(System.nanoTime()-start)/1000000+"ms");
 		return matches;
 	}
 
