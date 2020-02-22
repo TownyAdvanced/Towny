@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -150,27 +151,33 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
-        new Thread(() -> {
-        	TownyMessaging.sendDebugMsg("[Towny] Building trie structures...");
-			long start = System.nanoTime();
-			
-			for (Map.Entry<String, Resident> entry:residents.entrySet()) {
-				residentsTrie.addKey(entry.getKey());
+
+        // Run the trie generation task
+		Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), new Thread() {
+			@Override
+			public void run() {
+				TownyMessaging.sendDebugMsg("[Towny] Building trie structures...");
+				long start = System.nanoTime();
+
+				for (Map.Entry<String, Resident> entry:residents.entrySet()) {
+					residentsTrie.addKey(entry.getKey());
+				}
+				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
+				start = System.nanoTime();
+
+				for (Map.Entry<String, Town> entry:towns.entrySet()) {
+					townsTrie.addKey(entry.getKey());
+				}
+				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
+				start = System.nanoTime();
+
+				for (Map.Entry<String, Nation> entry:nations.entrySet()) {
+					nationsTrie.addKey(entry.getKey());
+				}
+				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
 			}
-			TownyMessaging.sendDebugMsg("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
-			start = System.nanoTime();
-			
-			for (Map.Entry<String, Town> entry:towns.entrySet()) {
-				townsTrie.addKey(entry.getKey());
-			}
-			TownyMessaging.sendDebugMsg("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
-			start = System.nanoTime();
-			
-			for (Map.Entry<String, Nation> entry:nations.entrySet()) {
-				nationsTrie.addKey(entry.getKey());
-			}
-			TownyMessaging.sendDebugMsg("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
-		}).start();
+		});
+        
         return true;
     }
     
