@@ -657,9 +657,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
 		if (args.length == 1) {
-			List<String> completions = getTownyStartingWith(args[0], "r");
-			completions.addAll(residentTabCompletes);
-			return NameUtil.filterByStart(completions, args[0]);
+			return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
 		}
 
 		if (args.length == 2) {
