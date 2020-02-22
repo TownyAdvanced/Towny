@@ -222,14 +222,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
 					case "toggle":
-						if (args.length == 2) {
+						if (args.length == 2)
 							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
-						}
 						break;
 					case "king":
-						if (args.length == 2) {
+						if (args.length == 2)
 							return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
-						}
 						break;
 					case "townlist":
 					case "allylist":
@@ -238,9 +236,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case "delete":
 					case "spawn":
 					case "merge":
-						if (args.length == 2) {
+						if (args.length == 2)
 							return getTownyStartingWith(args[1], "n");
-						}
 						break;
 					case "add":
 					case "kick":
