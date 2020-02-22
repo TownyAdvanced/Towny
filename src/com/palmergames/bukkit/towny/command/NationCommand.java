@@ -224,23 +224,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
-					case "asdf":
-						final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-						for (int i = 0; i <10000; i++){
-							String str = "";
-							for (int x = 0; x<10; x++){
-								str += upper.charAt(ThreadLocalRandom.current().nextInt(0,26));
-							}
-							try {
-								TownyUniverse.getInstance().getDataSource().newNation(str);
-								TownyUniverse.getInstance().getDataSource().newResident(str);
-								TownyUniverse.getInstance().getDataSource().newTown(str);
-							} catch (AlreadyRegisteredException | NotRegisteredException e) {
-								System.out.println("already registered");
-							}
-						}
-						System.out.println(TownyUniverse.getInstance().getNationsMap().size());
-						break;
 					case "toggle":
 						if (args.length == 2) {
 							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
