@@ -52,6 +52,7 @@ public abstract class TownyObject implements Nameable {
 
 	/**
 	 * Get the formatted name, usually replacing the "_" with a space.
+	 * For example: <code>"Object_Name"</code> would be <code>"Object Name"</code>
 	 * 
 	 * @return The formatted name.
 	 */

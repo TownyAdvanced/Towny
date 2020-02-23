@@ -125,7 +125,7 @@ public class TownyFormatter {
 			}
 			
 
-			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
+			out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
 			if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
 				out.add(TownySettings.getLangString("status_plot_type") + townBlock.getType().toString());							
 			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
@@ -157,7 +157,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		// ___[ King Harlus ]___
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
+		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
 
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
@@ -195,7 +195,7 @@ public class TownyFormatter {
 			line += TownySettings.getLangString("status_no_town");
 		else
 			try {
-				line += getFormattedName(resident.getTown());
+				line += resident.getTown().getFormattedName();
 			} catch (TownyException e) {
 				line += "Error: " + e.getMessage();
 			}
@@ -258,10 +258,10 @@ public class TownyFormatter {
 
 		List<String> ranklist = new ArrayList<String>();
 
-		String towntitle = getFormattedName(town);
+		String towntitle = town.getFormattedName();
 		towntitle += TownySettings.getLangString("rank_list_title");
 		ranklist.add(ChatTools.formatTitle(towntitle));
-		ranklist.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
+		ranklist.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
 
 		List<Resident> residents = town.getResidents();
 		List<String> townranks = TownyPerms.getTownRanks();
@@ -332,7 +332,7 @@ public class TownyFormatter {
 		}
 
 		// ___[ Raccoon City (PvP) (Open) ]___
-		String title = getFormattedName(town);
+		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
@@ -408,7 +408,7 @@ public class TownyFormatter {
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
+		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
 
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<String>();
@@ -431,7 +431,7 @@ public class TownyFormatter {
 
 		// Nation: Azur Empire
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
+			out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
 		} catch (TownyException e) {
 		}
 
@@ -463,12 +463,12 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		// ___[ Azur Empire (Open)]___
-		String title = getFormattedName(nation);
+		String title = nation.getFormattedName();
 		title += (nation.isOpen() ? TownySettings.getLangString("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Created Date
-		Long registered = nation.getRegistered();
+		long registered = nation.getRegistered();
 		if (registered != 0) {
 			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
 		}
@@ -504,7 +504,7 @@ public class TownyFormatter {
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
-			out.add(String.format(TownySettings.getLangString("status_nation_king"), getFormattedName(nation.getCapital().getMayor())) + 
+			out.add(String.format(TownySettings.getLangString("status_nation_king"), nation.getCapital().getMayor().getFormattedName()) + 
 					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
@@ -577,7 +577,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		// ___[ World (PvP) ]___
-		String title = getFormattedName(world);
+		String title = world.getFormattedName();
 		title += ((world.isPVP() || world.isForcePVP()) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (world.isClaimable() ? TownySettings.getLangString("status_world_claimable") : TownySettings.getLangString("status_world_noclaims"));
 		out.add(ChatTools.formatTitle(title));
@@ -631,7 +631,7 @@ public class TownyFormatter {
 
 		double plotTax = 0.0;
 
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
+		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
 
 		if (resident.hasTown()) {
 			try {
@@ -668,28 +668,13 @@ public class TownyFormatter {
 		return out;
 	}
 
-	public static String getNamePrefix(Resident resident) {
-
-		if (resident == null)
-			return "";
-		if (resident.isKing())
-			return TownySettings.getKingPrefix(resident);
-		else if (resident.isMayor())
-			return TownySettings.getMayorPrefix(resident);
-		return "";
-	}
-
-	public static String getNamePostfix(Resident resident) {
-
-		if (resident == null)
-			return "";
-		if (resident.isKing())
-			return TownySettings.getKingPostfix(resident);
-		else if (resident.isMayor())
-			return TownySettings.getMayorPostfix(resident);
-		return "";
-	}
-
+	/**
+	 * @deprecated Since 0.96.1.0 use {@link TownyObject#getFormattedName()} instead.
+	 * 
+	 * @param obj The {@link TownyObject} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedName(TownyObject obj) {
 
 		if (obj == null)
@@ -704,6 +689,13 @@ public class TownyFormatter {
 		return obj.getName().replaceAll("_", " ");
 	}
 
+	/**
+	 * @deprecated Since 0.96.1.0 use {@link Resident#getFormattedName()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedResidentName(Resident resident) {
 
 		if (resident == null)
@@ -715,6 +707,13 @@ public class TownyFormatter {
 		return (resident.hasTitle() ? resident.getTitle() + " " : "") + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : "");
 	}
 
+	/**
+	 * @deprecated Since 0.96.1.0 use {@link Town#getFormattedName()} instead.
+	 *
+	 * @param town The {@link Town} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedTownName(Town town) {
 
 		if (town.isCapital())
@@ -722,40 +721,39 @@ public class TownyFormatter {
 		return TownySettings.getTownPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(town);
 	}
 
+	/**
+	 * @deprecated Since 0.96.1.0 use {@link Nation#getFormattedName()} instead.
+	 *
+	 * @param nation The {@link Nation} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedNationName(Nation nation) {
 
 		return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
 	}
-	
+
+	/**
+	 * @deprecated Since 0.96.1.0 use {@link Resident#getFormattedTitleName()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the formatted title name from.
+	 * @return The formatted title name of the resident.
+	 */
+	@Deprecated
 	public static String getFormattedResidentTitleName(Resident resident) {
 		if (!resident.hasTitle())
-			return getFormattedName(resident);
+			return resident.getFormattedName();
 		else 
 			return resident.getTitle() + " " + resident.getName();		
 		
 	}
-
-	public static String[] getFormattedNames(Resident[] residents) {
-
-		List<String> names = new ArrayList<String>();
-		for (Resident resident : residents)
-			names.add(getFormattedName(resident));
-		return names.toArray(new String[0]);
-	}
-
-	public static String[] getFormattedNames(Town[] towns) {
-
-		List<String> names = new ArrayList<String>();
-		for (Town town : towns)
-			names.add(getFormattedName(town));
-		return names.toArray(new String[0]);
-	}
-
-	public static String[] getFormattedNames(Nation[] nations) {
-
-		List<String> names = new ArrayList<String>();
-		for (Nation nation : nations)
-			names.add(getFormattedName(nation));
+	
+	public static String[] getFormattedNames(TownyObject[] objs) {
+		List<String> names = new ArrayList<>();
+		for (TownyObject obj : objs) {
+			names.add(obj.getFormattedName());
+		}
+		
 		return names.toArray(new String[0]);
 	}
 	

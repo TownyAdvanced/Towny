@@ -200,7 +200,7 @@ public class ChunkNotification {
 				}
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
-				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
+				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
 			else 
 				return String.format(areaTownNotificationFormat, toTown);
 			
@@ -245,9 +245,9 @@ public class ChunkNotification {
 			
 			if (toResident != null)
 				if (TownySettings.isNotificationOwnerShowingNationTitles()) {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedResidentTitleName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedTitleName() : toTownBlock.getName());
 				} else {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedName() : toTownBlock.getName());
 				}
 			else
 				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownySettings.getUnclaimedPlotName() : toTownBlock.getName());

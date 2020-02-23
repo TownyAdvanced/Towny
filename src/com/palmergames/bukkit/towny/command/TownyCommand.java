@@ -469,7 +469,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(Colors.Gray + "Overclaimed upkeep is based on " + Colors.LightGreen + (TownySettings.isUpkeepPenaltyByPlot() ? "the number of plots overclaimed * " + TownySettings.getUpkeepPenalty() : "a flat cost of " + TownySettings.getUpkeepPenalty()));
 
 		if (town != null) {
-			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");
+			output.add(Colors.Yellow + "Town [" + town.getFormattedName() + "]");
 			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
 			output.add(Colors.Rose + "             " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice()));
 
@@ -481,7 +481,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(Colors.Rose + "                      " + Colors.Green + "Bank: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost()));
 			
 			if (nation != null) {
-				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
+				output.add(Colors.Yellow + "Nation [" + nation.getFormattedName() + "]");
 				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + nation.getTaxes() + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
@@ -503,7 +503,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			EconomyAccount town = kv.key;
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", TownyFormatter.getFormattedName(town), TownyEconomyHandler.getFormattedBalance(kv.value)));
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", town.getFormattedName(), TownyEconomyHandler.getFormattedBalance(kv.value)));
 		}
 		return output;
 	}
@@ -522,7 +522,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			ResidentList residentList = kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName((TownyObject) residentList), kv.value));
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) residentList).getFormattedName(), kv.value));
 		}
 		return output;
 	}
@@ -541,7 +541,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName(town), kv.value));
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d",town.getFormattedName(), kv.value));
 		}
 		return output;
 	}

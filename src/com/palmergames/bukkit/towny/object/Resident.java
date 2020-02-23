@@ -709,6 +709,13 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			
 		return (hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
 	}
+	
+	public String getFormattedTitleName() {
+		if (!hasTitle())
+			return getFormattedName();
+		else
+			return getTitle() + " " + getName();
+	}
 
 	@Override
 	public void setTownblocks(List<TownBlock> townBlocks) {
