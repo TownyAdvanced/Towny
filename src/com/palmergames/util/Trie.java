@@ -49,7 +49,7 @@ public class Trie {
 
 		// Loop through each character of key
 		for (int i = 0; i < key.length(); i++) {
-			char index = key.charAt(i); // Case insensitive
+			char index = key.charAt(i);
 
 			TrieNode lastNode = trieNode;
 			Optional<TrieNode> optional = lastNode.children.stream()
@@ -80,7 +80,7 @@ public class Trie {
 
 		// Loop through each character of key
 		for (int i = 0; i < key.length(); i++) {
-			char index = Character.toLowerCase(key.charAt(i)); // Case insensitive
+			char index = key.charAt(i);
 
 			TrieNode lastNode = trieNode;
 			Optional<TrieNode> optional = lastNode.children.stream()
@@ -128,7 +128,7 @@ public class Trie {
 		for (int i = 0; i < key.length(); i++) {
 			int finalI = i;
 			Optional<TrieNode> optional = trieNode.children.stream()
-				.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst();
+				.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst(); // Find matches for lower and upper case
 
 			if (!optional.isPresent()) { // No existing TrieNode here, stop searching
 				break;
