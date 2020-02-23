@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -150,32 +149,6 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
-
-        // Run the trie generation task
-		Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), new Thread() {
-			@Override
-			public void run() {
-				TownyMessaging.sendDebugMsg("[Towny] Building trie structures...");
-				long start = System.nanoTime();
-
-				for (Resident resident : residents.values()) {
-					residentsTrie.addKey(resident.getName());
-				}
-				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
-				start = System.nanoTime();
-
-				for (Town town : towns.values()) {
-					townsTrie.addKey(town.getName());
-				}
-				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
-				start = System.nanoTime();
-
-				for (Nation nation : nations.values()) {
-					nationsTrie.addKey(nation.getName());
-				}
-				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
-			}
-		});
         
         return true;
     }
