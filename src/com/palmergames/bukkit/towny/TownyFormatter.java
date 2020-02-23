@@ -662,7 +662,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.1.0 use {@link TownyObject#getFormattedName()} instead.
+	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
 	 * 
 	 * @param obj The {@link TownyObject} to get the formatted name from.
 	 * @return The formatted name of the object.
@@ -673,7 +673,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.1.0 use {@link Resident#getFormattedName()} instead.
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
 	 *
 	 * @param resident The {@link Resident} to get the formatted name from.
 	 * @return The formatted name of the object.
@@ -684,7 +684,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.1.0 use {@link Town#getFormattedName()} instead.
+	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
 	 *
 	 * @param town The {@link Town} to get the formatted name from.
 	 * @return The formatted name of the object.
@@ -695,7 +695,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.1.0 use {@link Nation#getFormattedName()} instead.
+	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
 	 *
 	 * @param nation The {@link Nation} to get the formatted name from.
 	 * @return The formatted name of the object.
@@ -706,7 +706,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.1.0 use {@link Resident#getFormattedTitleName()} instead.
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
 	 *
 	 * @param resident The {@link Resident} to get the formatted title name from.
 	 * @return The formatted title name of the resident.
