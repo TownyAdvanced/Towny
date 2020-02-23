@@ -64,7 +64,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	));
 	
 	private static final List<String> townyConsoleTabCompletes = new ArrayList<>(Arrays.asList(
-		"map",
 		"prices",
 		"time",
 		"top",
