@@ -4186,3 +4186,4 @@ v0.92.0.11:
   - Fix /plot perm hud not displaying PVP setting for plots correctly.
   - Implementation of a trie data structure for residents, towns, and nations; courtesy of stzups & Siris with PR #3712.
   - Fix death_payments feature not working on mob-kills of players.
+  - Fix PlayerCommandPreprocessEvent error seen in log when players chat while Towny is in safe mode.

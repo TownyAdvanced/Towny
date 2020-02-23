@@ -1014,6 +1014,9 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+		if (plugin.isError()) {
+			return;
+		}
 		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
 			return;
 				
