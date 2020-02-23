@@ -57,25 +57,18 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-		List<String> out = new ArrayList<>();
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
-
-		return out;
+		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 	}
 
 	public static List<String> getFormattedOutlaws(Town town) {
 
-		List<String> out = new ArrayList<String>();
-
 		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, TownySettings.getLangString("outlaws") +  " "));
-
-		return out;
+		return new ArrayList<String>(ChatTools.listArr(residents, TownySettings.getLangString("outlaws") + " "));
 
 	}
 	
@@ -676,17 +669,7 @@ public class TownyFormatter {
 	 */
 	@Deprecated
 	public static String getFormattedName(TownyObject obj) {
-
-		if (obj == null)
-			return "Null";
-		else if (obj instanceof Resident)
-			return getFormattedResidentName((Resident) obj);
-		else if (obj instanceof Town)
-			return getFormattedTownName((Town) obj);
-		else if (obj instanceof Nation)
-			return getFormattedNationName((Nation) obj);
-		// System.out.println("just name: " + obj.getName());
-		return obj.getName().replaceAll("_", " ");
+		return obj.getFormattedName();
 	}
 
 	/**
@@ -697,14 +680,7 @@ public class TownyFormatter {
 	 */
 	@Deprecated
 	public static String getFormattedResidentName(Resident resident) {
-
-		if (resident == null)
-			return "null";
-		if (resident.isKing())
-			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getKingPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getKingPostfix(resident));
-		else if (resident.isMayor())
-			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getMayorPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getMayorPostfix(resident));
-		return (resident.hasTitle() ? resident.getTitle() + " " : "") + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : "");
+		return resident.getFormattedName();
 	}
 
 	/**
@@ -715,10 +691,7 @@ public class TownyFormatter {
 	 */
 	@Deprecated
 	public static String getFormattedTownName(Town town) {
-
-		if (town.isCapital())
-			return TownySettings.getCapitalPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(town);
-		return TownySettings.getTownPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(town);
+		return town.getFormattedName();
 	}
 
 	/**
@@ -729,8 +702,7 @@ public class TownyFormatter {
 	 */
 	@Deprecated
 	public static String getFormattedNationName(Nation nation) {
-
-		return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
+		return nation.getFormattedName();
 	}
 
 	/**
@@ -741,11 +713,7 @@ public class TownyFormatter {
 	 */
 	@Deprecated
 	public static String getFormattedResidentTitleName(Resident resident) {
-		if (!resident.hasTitle())
-			return resident.getFormattedName();
-		else 
-			return resident.getTitle() + " " + resident.getName();		
-		
+		return resident.getFormattedTitleName();
 	}
 	
 	public static String[] getFormattedNames(TownyObject[] objs) {
