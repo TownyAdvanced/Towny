@@ -84,11 +84,11 @@ public class BaseCommand implements TabCompleter{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (type.contains("r")) {
-			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
 		}
 
 		if (type.contains("t")) {
-			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+			matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
 		}
 
 		if (type.contains("n")) {
