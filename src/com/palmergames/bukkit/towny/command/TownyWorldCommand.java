@@ -118,9 +118,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (args.length == 1) {
-			List<String> worldNames = NameUtil.getWorldNames();
-			worldNames.addAll(townyWorldTabCompletes);
-			return NameUtil.filterByStart(worldNames, args[0]);
+			return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
 		}
 		
 		if (args.length == 2) {

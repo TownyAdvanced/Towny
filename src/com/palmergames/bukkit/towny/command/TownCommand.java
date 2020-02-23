@@ -226,15 +226,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		if (args.length == 1) {
-			List<String> townNames = NameUtil.getTownNames();
-			townNames.addAll(townTabCompletes);
-			return NameUtil.filterByStart(townNames, args[0]);
+			return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
 		}
 		
 		if (args.length == 2) {
 			switch (args[0].toLowerCase()) {
 				case "spawn":
-					return NameUtil.getTownNamesStartingWith(args[1]);
+					return getTownyStartingWith(args[1], "t");
 				case "set":
 					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
 				case "rank":
@@ -265,7 +263,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			switch (args[1].toLowerCase()) {
 				case "remove":
 				case "add":
-					return NameUtil.getNationNamesStartingWith(args[2]);
+					return getTownyStartingWith(args[2], "r"); // Not sure why this was set to nation previously, it should only be residents of player's town
 				case "perm":
 					return NameUtil.filterByStart(townPermTabCompletes, args[2]);
 			}

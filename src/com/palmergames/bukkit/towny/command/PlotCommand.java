@@ -481,8 +481,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						plugin.getHUDManager().togglePermHUD(player);
 						
 					} else {
-						TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
+						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName())));
+						} else {
+							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
+						}
 					}
 
 				} else if (split[0].equalsIgnoreCase("toggle")) {
