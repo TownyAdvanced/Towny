@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
-		"accept",
-		"deny"
+		TownySettings.getAcceptCommand(),
+		TownySettings.getDenyCommand()
 	));
 	
 	@SuppressWarnings("unused")
