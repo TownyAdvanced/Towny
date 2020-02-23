@@ -158,20 +158,20 @@ public class TownyUniverse {
 				TownyMessaging.sendDebugMsg("[Towny] Building trie structures...");
 				long start = System.nanoTime();
 
-				for (String string : residents.keySet()) {
-					residentsTrie.addKey(string);
+				for (Resident resident : residents.values()) {
+					residentsTrie.addKey(resident.getName());
 				}
 				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+residents.size()+" residents in "+(System.nanoTime()-start)/1000000+"ms");
 				start = System.nanoTime();
 
-				for (String string : towns.keySet()) {
-					townsTrie.addKey(string);
+				for (Town town : towns.values()) {
+					townsTrie.addKey(town.getName());
 				}
 				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+towns.size()+" towns in "+(System.nanoTime()-start)/1000000+"ms");
 				start = System.nanoTime();
 
-				for (String string : nations.keySet()) {
-					nationsTrie.addKey(string);
+				for (Nation nation : nations.values()) {
+					nationsTrie.addKey(nation.getName());
 				}
 				TownyMessaging.sendDebugMsg("[Towny] Built trie for "+nations.size()+" nations in "+(System.nanoTime()-start)/1000000+"ms");
 			}

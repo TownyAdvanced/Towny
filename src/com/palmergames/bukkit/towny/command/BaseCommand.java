@@ -84,24 +84,15 @@ public class BaseCommand implements TabCompleter{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (type.contains("r")) {
-			Map<String, Resident> residentsMap = townyUniverse.getResidentMap();
-			for (String string : townyUniverse.getResidentsTrie().getStringsFromKey(arg)) {
-				matches.add(residentsMap.get(string).getName());
-			}
+			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 		}
 
 		if (type.contains("t")) {
-			Map<String, Town> townsMap = townyUniverse.getTownsMap();
-			for (String string : townyUniverse.getTownsTrie().getStringsFromKey(arg)) {
-				matches.add(townsMap.get(string).getName());
-			}
+			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 		}
 
 		if (type.contains("n")) {
-			Map<String, Nation> nationsMap = townyUniverse.getNationsMap();
-			for (String string : townyUniverse.getNationsTrie().getStringsFromKey(arg)) {
-				matches.add(nationsMap.get(string).getName());
-			}
+			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 		}
 		
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty

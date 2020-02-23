@@ -49,7 +49,7 @@ public class Trie {
 
 		// Loop through each character of key
 		for (int i = 0; i < key.length(); i++) {
-			char index = Character.toLowerCase(key.charAt(i)); // Case insensitive
+			char index = key.charAt(i); // Case insensitive
 
 			TrieNode lastNode = trieNode;
 			Optional<TrieNode> optional = lastNode.children.stream()
@@ -123,20 +123,22 @@ public class Trie {
 
 		List<String> strings = new ArrayList<>();
 		TrieNode trieNode = root;
+		StringBuilder realKey = new StringBuilder(); // Used if the key is not the correct case
 
 		for (int i = 0; i < key.length(); i++) {
 			int finalI = i;
 			Optional<TrieNode> optional = trieNode.children.stream()
-				.filter(e -> e.character == Character.toLowerCase(key.charAt(finalI))).findFirst();
+				.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst();
 
 			if (!optional.isPresent()) { // No existing TrieNode here, stop searching
 				break;
 			}
 
 			trieNode = optional.get();
+			realKey.append(trieNode.character);
 			if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
 				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
-					strings.add(key + string); // Add the key to the front of each child string
+					strings.add(realKey + string); // Add the key to the front of each child string
 				}
 			}
 		}
