@@ -246,6 +246,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				case "plots":
 				case "spawn":
 				case "delete":
+				case "join":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
