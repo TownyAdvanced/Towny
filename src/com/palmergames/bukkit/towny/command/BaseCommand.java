@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -75,26 +79,35 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-
+		
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (type.contains("r")) {
-			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
+			Map<String, Resident> residentsMap = townyUniverse.getResidentMap();
+			for (String string : townyUniverse.getResidentsTrie().getStringsFromKey(arg)) {
+				matches.add(residentsMap.get(string).getName());
+			}
 		}
 
 		if (type.contains("t")) {
-			matches.addAll(townyUniverse.getTownsTrie().getStringsFromKey(arg));
+			Map<String, Town> townsMap = townyUniverse.getTownsMap();
+			for (String string : townyUniverse.getTownsTrie().getStringsFromKey(arg)) {
+				matches.add(townsMap.get(string).getName());
+			}
 		}
 
 		if (type.contains("n")) {
-			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+			Map<String, Nation> nationsMap = townyUniverse.getNationsMap();
+			for (String string : townyUniverse.getNationsTrie().getStringsFromKey(arg)) {
+				matches.add(nationsMap.get(string).getName());
+			}
 		}
 		
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
-
+		
 		return matches;
 	}
 
