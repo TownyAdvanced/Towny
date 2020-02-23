@@ -698,6 +698,19 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
+	public String getFormattedName() {
+		if (isKing()) {
+			return (hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
+		}
+			
+		if (isMayor()) {
+			return (hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
+		}
+			
+		return (hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
+	}
+
+	@Override
 	public void setTownblocks(List<TownBlock> townBlocks) {
 		this.townBlocks = townBlocks;
 	}
