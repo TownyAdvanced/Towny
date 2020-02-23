@@ -250,22 +250,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return getTownyStartingWith(args[1], "t");
 					break;
 				case "rank":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
-						case 3:
-							return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-						case 4:
-							switch (args[1].toLowerCase()) {
-								case "add":
-									return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
-								case "remove":
-									try {
-										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTownRanks(), args[3]);
-									} catch (TownyException ignored) {}
-							}
-					}
-					break;
+					return townRankTabComplete(player, args);
 				case "outlaw":
 					switch (args.length) {
 						case 2:
@@ -304,24 +289,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[1]);
 					break;
 				case "set":
-					if (args.length == 2) {
-						return NameUtil.filterByStart(townSetTabCompletes, args[1]);
-					} else if (args.length > 2) {
-						switch (args[1].toLowerCase()) {
-							case "mayor":
-								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-							case "perm":
-								return permTabComplete(StringMgmt.remArgs(args, 2));
-							case "tag":
-								if (args.length == 3)
-									return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
-							case "title":
-							case "surname":
-								if (args.length == 3)
-									return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-						}
-					}
-					break;
+					return townSetTabComplete(player, args);
 				case "invite":
 					switch (args.length) {
 						case 2:
@@ -379,6 +347,47 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
 		}
 		
+		return Collections.emptyList();
+	}
+	
+	static List<String> townSetTabComplete(Player player, String[] args) {
+		if (args.length == 2) {
+			return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+		} else if (args.length > 2) {
+			switch (args[1].toLowerCase()) {
+				case "mayor":
+					return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+				case "perm":
+					return permTabComplete(StringMgmt.remArgs(args, 2));
+				case "tag":
+					if (args.length == 3)
+						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+				case "title":
+				case "surname":
+					if (args.length == 3)
+						return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+			}
+		}
+		
+		return Collections.emptyList();
+	}
+	
+	static List<String> townRankTabComplete(Player player, String[] args) {
+		switch (args.length) {
+			case 2:
+				return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
+			case 3:
+				return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+			case 4:
+				switch (args[1].toLowerCase()) {
+					case "add":
+						return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
+					case "remove":
+						try {
+							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTownRanks(), args[3]);
+						} catch (TownyException ignored) {}
+				}
+		}
 		return Collections.emptyList();
 	}
 

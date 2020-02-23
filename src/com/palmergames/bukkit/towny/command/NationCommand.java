@@ -315,19 +315,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				case "set":
-					if (args.length == 2) {
-						return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
-					} else if (args.length == 3){
-						switch (args[1].toLowerCase()) {
-							case "king":
-							case "title":
-							case "surname":
-								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-							case "capital":
-								return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
-						}
-					}
-					break;
+					return nationSetTabComplete(player, args);
 				default:
 					if (args.length == 1) {
 						List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
@@ -342,6 +330,23 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 		}
 
+		return Collections.emptyList();
+	}
+	
+	static List<String> nationSetTabComplete(Player player, String[] args) {
+		if (args.length == 2) {
+			return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+		} else if (args.length == 3){
+			switch (args[1].toLowerCase()) {
+				case "king":
+				case "title":
+				case "surname":
+					return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+				case "capital":
+					return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+			}
+		}
+		
 		return Collections.emptyList();
 	}
 
