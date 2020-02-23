@@ -166,44 +166,42 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (sender instanceof Player) {
-			if (args.length > 0) {
-				switch (args[0].toLowerCase()) {
-					case "set":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
-						}
-						if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
-							return permTabComplete(StringMgmt.remArgs(args, 2));
-						}
-					case "toggle":
-						return toggleTabCompletes(StringMgmt.remArgs(args, 2));
-					case "claim":
-					case "notforsale":
-					case "nfs":
-						if (args.length == 2)
-							return NameUtil.filterByStart(plotRectCircleCompletes, args[1]);
-						break;
-					case "forsale":
-					case "fs":
-						switch (args.length) {
-							case 2:
-								return NameUtil.filterByStart(Collections.singletonList("within"), args[1]);
-							case 3:
-								return NameUtil.filterByStart(plotRectCircleCompletes, args[2]);
-						}
-						break;
-					case "group":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
-						} else if (args.length > 2) {
-							return permTabComplete(StringMgmt.remFirstArg(args));
-						}
-						break;
-					default:
-						if (args.length == 1)
-							return NameUtil.filterByStart(plotTabCompletes, args[0]);
-						break;
-				}
+			switch (args[0].toLowerCase()) {
+				case "set":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+					}
+					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
+						return permTabComplete(StringMgmt.remArgs(args, 2));
+					}
+				case "toggle":
+					return toggleTabCompletes(StringMgmt.remArgs(args, 2));
+				case "claim":
+				case "notforsale":
+				case "nfs":
+					if (args.length == 2)
+						return NameUtil.filterByStart(plotRectCircleCompletes, args[1]);
+					break;
+				case "forsale":
+				case "fs":
+					switch (args.length) {
+						case 2:
+							return NameUtil.filterByStart(Collections.singletonList("within"), args[1]);
+						case 3:
+							return NameUtil.filterByStart(plotRectCircleCompletes, args[2]);
+					}
+					break;
+				case "group":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
+					} else if (args.length > 2) {
+						return permTabComplete(StringMgmt.remFirstArg(args));
+					}
+					break;
+				default:
+					if (args.length == 1)
+						return NameUtil.filterByStart(plotTabCompletes, args[0]);
+					break;
 			}
 		}
 

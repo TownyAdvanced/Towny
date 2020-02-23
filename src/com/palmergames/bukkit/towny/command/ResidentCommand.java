@@ -141,46 +141,44 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
 		if (sender instanceof Player) {
-			if (args.length > 0) {
-				switch (args[0].toLowerCase()) {
-					case "toggle":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+			switch (args[0].toLowerCase()) {
+				case "toggle":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+					}
+					break;
+				case "set":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(residentSetTabCompletes, args[1]);
+					}
+					if (args.length > 2) {
+						switch (args[1].toLowerCase()) {
+							case "mode":
+								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
+							case "perm":
+								return permTabComplete(StringMgmt.remArgs(args, 2));
 						}
-						break;
-					case "set":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(residentSetTabCompletes, args[1]);
-						}
-						if (args.length > 2) {
-							switch (args[1].toLowerCase()) {
-								case "mode":
-									return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
-								case "perm":
-									return permTabComplete(StringMgmt.remArgs(args, 2));
+					}
+					break;
+				case "friend":
+					switch (args.length) {
+						case 2:
+							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
+						case 3:
+							if (args[1].equalsIgnoreCase("remove")) {
+								try {
+									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getFriends()), args[2]);
+								} catch (TownyException ignored) {}
+							} else {
+								return getTownyStartingWith(args[2], "r");
 							}
-						}
-						break;
-					case "friend":
-						switch (args.length) {
-							case 2:
-								return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
-							case 3:
-								if (args[1].equalsIgnoreCase("remove")) {
-									try {
-										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getFriends()), args[2]);
-									} catch (TownyException ignored) {}
-								} else {
-									return getTownyStartingWith(args[2], "r");
-								}
-						}
-						break;
-					default:
-						if (args.length == 1) {
-							return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
-						}
-						break;
-				}
+					}
+					break;
+				default:
+					if (args.length == 1) {
+						return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
+					}
+					break;
 			}
 		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
