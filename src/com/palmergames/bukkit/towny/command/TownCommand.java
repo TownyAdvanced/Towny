@@ -26,6 +26,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -78,6 +80,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -112,9 +115,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"say",
 		"set",
 		"toggle",
-		"join"
+		"join",
+		"invite"
 		));
-	public static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"board",
 		"mayor",
 		"homeblock",
@@ -131,12 +135,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"shopprice",
 		"shoptax",
 		"embassyprice",
-		"embassyTax",
+		"embassytax",
 		"title",
 		"surname"
 	));
-	
-	public static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
+
+	static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
 		"explosion",
 		"fire",
 		"mobs",
@@ -147,22 +151,35 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"jail"
 	));
 	
-	private static final List<String> townRankTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+		"?",
+		"help",
+		"list"
+	));
+	
+	private static final List<String> townAddRemoveTabCompletes = new ArrayList<>(Arrays.asList(
 		"add",
 		"remove"
 	));
-
-	public static final List<String> townPermTabCompletes = new ArrayList<>(Arrays.asList(
-		"on",
-		"off",
-		"resident",
-		"ally",
-		"outsider",
-		"build",
-		"destroy",
-		"switch",
-		"itemuse",
-		"reset"
+	
+	private static final List<String> townClaimTabCompletes = new ArrayList<>(Arrays.asList(
+		"outpost",
+		"circle",
+		"rect"
+	));
+	
+	private static final List<String> townUnclaimTabCompletes = new ArrayList<>(Arrays.asList(
+		"circle",
+		"rect",
+		"all",
+		"outpost"
+	));
+	
+	private static List<String> townInviteTabCompletes = new ArrayList<>(Arrays.asList(
+		"sent",
+		"received",
+		"accept",
+		"deny"
 	));
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -219,89 +236,152 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		if (args.length == 1) {
-			return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
-		}
-		
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "spawn":
-					return getTownyStartingWith(args[1], "t");
-				case "set":
-					return NameUtil.filterByStart(townSetTabCompletes, args[1]);
-				case "rank":
-				case "outlaw":
-					return NameUtil.filterByStart(townRankTabCompletes, args[1]);
-				case "outpost":
-					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList("list")), args[1]);
-				case "unclaim":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"all",
-						"outpost"
-					)), args[1]);
-				case "claim":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"auto",
-						"outpost"
-					)), args[1]);
-				case "buy":
-					return NameUtil.filterByStart(new ArrayList<>(Collections.singletonList(
-						"bonus"
-					)), args[1]);
-				case "toggle":
-					return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
-			}
-		}
-
-		if (args.length == 3) {
-			switch (args[1].toLowerCase()) {
-				case "remove":
-				case "add":
-					return getTownyStartingWith(args[2], "r"); // Not sure why this was set to nation previously, it should only be residents of player's town
-				case "perm":
-					return NameUtil.filterByStart(townPermTabCompletes, args[2]);
-			}
-		}
-
-		if (args.length == 4) {
-			switch (args[2].toLowerCase()) {
-				case "resident":
-				case "ally":
-				case "outsider":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off",
-						"build",
-						"destroy",
-						"switch",
-						"itemuse"
-					)), args[3]);
-				case "build":
-				case "destroy":
-				case "switch":
-				case "itemuse":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off"
-					)), args[3]);
-			}
-		}
-
-		if (args.length == 5) {
-			switch (args[3].toLowerCase()) {
-				case "build":
-				case "destroy":
-				case "itemuse":
-				case "switch":
-					return NameUtil.filterByStart(new ArrayList<>(Arrays.asList(
-						"on",
-						"off"
-					)), args[4]);
-			}
-		}
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
 			
+			if (args.length > 0) {
+				switch (args[0].toLowerCase()) {
+					case "online":
+					case "reslist":
+					case "outlawlist":
+					case "plots":
+					case "spawn":
+					case "delete":
+						if (args.length == 2)
+							return getTownyStartingWith(args[1], "t");
+						break;
+					case "rank":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
+							case 3:
+								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+							case 4:
+								switch (args[1].toLowerCase()) {
+									case "add":
+										return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
+									case "remove":
+										try {
+											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTownRanks(), args[3]);
+										} catch (TownyException ignored) {}
+								}
+						}
+						break;
+					case "outlaw":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
+							case 3:
+								switch (args[1].toLowerCase()) {
+									case "add":
+										return getTownyStartingWith(args[2], "r");
+									case "remove":
+										try {
+											return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getOutlaws()), args[2]);
+										} catch (TownyException ignore) {}
+								}
+						}
+						break;
+					case "claim":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
+							case 3:
+								if (!args[1].equalsIgnoreCase("outpost")) {
+									return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
+								}
+						}
+						break;
+					case "unclaim":
+						if (args.length == 2)
+							return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
+						break;
+					case "add":
+						if (args.length == 2)
+							return null;
+						break;
+					case "kick":
+						if (args.length == 2)
+							return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[1]);
+						break;
+					case "set":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+						} else if (args.length > 2) {
+							switch (args[1].toLowerCase()) {
+								case "mayor":
+									return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+								case "perm":
+									return permTabComplete(StringMgmt.remArgs(args, 2));
+								case "tag":
+									if (args.length == 3)
+										return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+								case "title":
+								case "surname":
+									if (args.length == 3)
+										return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+							}
+						}
+						break;
+					case "invite":
+						switch (args.length) {
+							case 2:
+								List<String> returnValue = NameUtil.filterByStart(townInviteTabCompletes, args[1]);
+								if (returnValue.size() > 0) {
+									return returnValue;
+								} else {
+									if (args[1].startsWith("-")) {
+										try {
+											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getSentInvites()
+												// Get all sent invites
+												.stream()
+												.map(Invite::getReceiver)
+												.map(TownyInviteReceiver::getName)
+												.collect(Collectors.toList()), args[1].substring(1))
+													// Add the hyphen back to the front
+													.stream()
+													.map(e -> "-"+e)
+													.collect(Collectors.toList());
+										} catch (TownyException ignore) {}
+									} else {
+										return null;
+									}
+								}
+							case 3:
+								switch (args[1].toLowerCase()) {
+									case "accept":
+									case "deny":
+										try {
+											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getReceivedInvites()
+												// Get the names of all received invites
+												.stream()
+												.map(Invite::getSender)
+												.map(TownyInviteSender::getName)
+												.collect(Collectors.toList()), args[2]);
+										} catch (TownyException ignore) {}
+								}
+						}
+					case "buy":
+						if (args.length == 2)
+							return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
+						break;
+					case "toggle":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+							case 4:
+								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[3]);
+						}
+					default:
+						if (args.length == 1)
+							return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
+				}
+			}
+		} else if (args.length == 1) {
+			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
+		}
 		
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
