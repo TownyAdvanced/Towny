@@ -127,7 +127,7 @@ public class BaseCommand implements TabCompleter{
 	 * @param args args, make sure to remove the first few irrelevant args
 	 * @return tab completes matching the proper arg
 	 */
-	List<String> setTabComplete(String[] args) {
+	List<String> permTabComplete(String[] args) {
 		switch (args.length) {
 			case 1:
 				return NameUtil.filterByStart(setPermTabCompletes, args[0]);

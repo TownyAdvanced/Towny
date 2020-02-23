@@ -157,7 +157,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 								case "mode":
 									return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
 								case "perm":
-									return setTabComplete(StringMgmt.remArgs(args, 2));
+									return permTabComplete(StringMgmt.remArgs(args, 2));
 							}
 						}
 						break;

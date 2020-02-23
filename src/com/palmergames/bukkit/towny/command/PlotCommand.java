@@ -173,7 +173,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
 						}
 						if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
-							return setTabComplete(StringMgmt.remArgs(args, 2));
+							return permTabComplete(StringMgmt.remArgs(args, 2));
 						}
 					case "toggle":
 						return toggleTabCompletes(StringMgmt.remArgs(args, 2));
@@ -196,7 +196,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (args.length == 2) {
 							return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
 						} else if (args.length > 2) {
-							return setTabComplete(StringMgmt.remFirstArg(args));
+							return permTabComplete(StringMgmt.remFirstArg(args));
 						}
 						break;
 					default:
