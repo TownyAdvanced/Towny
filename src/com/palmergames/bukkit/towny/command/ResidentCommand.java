@@ -182,10 +182,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						break;
 				}
 			}
-		} else {
-			if (args.length == 1) {
+		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
-			}
 		}
 
 		return Collections.emptyList();

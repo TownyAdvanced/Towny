@@ -340,11 +340,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 				}
 			}
-		} else {
-			// Console
-			if (args.length == 1) {
-				return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
-			}
+		} else if (args.length == 1) {
+			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 		}
 
 		return Collections.emptyList();
