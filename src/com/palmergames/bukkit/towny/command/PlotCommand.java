@@ -93,7 +93,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"clear",
 		"group"
 	));
-
+	
+	private static final List<String> plotGroupTabCompletes = new ArrayList<>(Arrays.asList(
+		"add",
+		"remove",
+		"set",
+		"toggle",
+		"fs",
+		"notforsale",
+		"forsale",
+		"perm"
+	));
+	
 	private static final List<String> plotSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"reset",
 		"shop",
@@ -107,64 +118,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"outpost",
 		"name",
 		"perm"
-	));
-
-	private static final List<String> plotToggleTabCompletes = new ArrayList<>(Arrays.asList(
-		"fire",
-		"pvp",
-		"explosion",
-		"mob"
-	));
-	
-	private static final List<String> plotGroupTabCompletes = new ArrayList<>(Arrays.asList(
-		"add",
-		"remove",
-		"set",
-		"toggle",
-		"fs",
-		"notforsale",
-		"forsale",
-		"perm"
-	));
-	
-	private static final List<String> plotPermTabCompletes = new ArrayList<>(Arrays.asList(
-		"on",
-		"off",
-		"resident",
-		"ally",
-		"outsider",
-		"build",
-		"destroy",
-		"switch",
-		"itemuse",
-		"reset"
-	));
-	
-	private static final List<String> plotLevelCompletes = new ArrayList<>(Arrays.asList(
-		"resident",
-		"ally",
-		"outsider"
-	));
-	
-	private static final List<String> plotTypeCompletes = new ArrayList<>(Arrays.asList(
-		"build",
-		"destroy",
-		"switch",
-		"itemuse"
-	));
-	
-	private static final List<String> plotOnOffCompletes = new ArrayList<>(Arrays.asList(
-		"on",
-		"off"
-	));
-	
-	private static final List<String> plotTypeOnOffCompletes = new ArrayList<>(Arrays.asList(
-		"build",
-		"destory",
-		"switch",
-		"itemuse",
-		"on",
-		"off"
 	));
 	
 	private static final List<String> plotRectCircleCompletes = new ArrayList<>(Arrays.asList(
@@ -216,8 +169,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
 					case "set":
+						if (args.length == 2) {
+							return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+						}
+						if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
+							return setTabComplete(StringMgmt.remArgs(args, 2));
+						}
 					case "toggle":
-						return commonTabComplete(args);
+						return toggleTabCompletes(StringMgmt.remArgs(args, 2));
 					case "claim":
 					case "notforsale":
 					case "nfs":
@@ -237,7 +196,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (args.length == 2) {
 							return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
 						} else if (args.length > 2) {
-							return commonTabComplete(StringMgmt.remFirstArg(args));
+							return setTabComplete(StringMgmt.remFirstArg(args));
 						}
 						break;
 					default:
@@ -248,36 +207,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 
-		return Collections.emptyList();
-	}
-	
-	// For /plot set/toggle and /plot group set/toggle
-	private List<String> commonTabComplete(String[] args) {
-		switch (args[0].toLowerCase()) {
-			case "set":
-				if (args.length == 2) {
-					return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
-				} else if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
-					switch (args.length) {
-						case 3:
-							return NameUtil.filterByStart(plotPermTabCompletes, args[2]);
-						case 4:
-							if (plotTypeCompletes.contains(args[2].toLowerCase()))
-								return NameUtil.filterByStart(plotOnOffCompletes, args[3]);
-
-							if (plotLevelCompletes.contains(args[2].toLowerCase()))
-								return NameUtil.filterByStart(plotTypeOnOffCompletes, args[3]);
-						case 5:
-							return NameUtil.filterByStart(plotOnOffCompletes, args[4]);
-					}
-				}
-				break;
-			case "toggle":
-				if (args.length == 2)
-					return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
-				break;
-		}
-		
 		return Collections.emptyList();
 	}
 
