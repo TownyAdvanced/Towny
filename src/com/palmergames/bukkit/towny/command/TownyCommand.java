@@ -58,8 +58,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"time",
 		"top",
 		"spy",
-		"tree",
 		"universe",
+		"v",
+		"war"
+	));
+	
+	private static final List<String> townyConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+		"map",
+		"prices",
+		"time",
+		"top",
+		"spy",
+		"universe",
+		"tree",
 		"v",
 		"war"
 	));
@@ -181,8 +192,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
 				break;
 			default:
-				if (args.length == 1)
-					return NameUtil.filterByStart(townyTabCompletes, args[0]);
+				if (args.length == 1) {
+					if (sender instanceof Player) {
+						return NameUtil.filterByStart(townyTabCompletes, args[0]);
+					} else {
+						return NameUtil.filterByStart(townyConsoleTabCompletes, args[0]);
+					}
+				}
 		}
 		
 		return Collections.emptyList();
