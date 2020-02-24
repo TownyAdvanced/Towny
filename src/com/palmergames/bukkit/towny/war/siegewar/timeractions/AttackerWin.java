@@ -31,8 +31,8 @@ public class AttackerWin {
 
 		TownyMessaging.sendGlobalMessage(String.format(
 			TownySettings.getLangString("msg_siege_war_attacker_win"),
-			TownyFormatter.getFormattedNationName(winnerNation),
-			TownyFormatter.getFormattedTownName(siege.getDefendingTown())
+			winnerNation.getFormattedName(),
+			siege.getDefendingTown().getFormattedName()
 		));
 
 		SiegeWarMoneyUtil.giveWarChestsToWinnerNation(siege, winnerNation);

@@ -30,7 +30,7 @@ public class SiegeWarMoneyUtil {
 					String message =
 						String.format(
 							TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
-							TownyFormatter.getFormattedNationName(winnerNation),
+							winnerNation.getFormattedName(),
 							TownyEconomyHandler.getFormattedBalance(siegeZone.getWarChestAmount()));
 
 					//Send message to nation(s)
@@ -72,7 +72,7 @@ public class SiegeWarMoneyUtil {
 				String message =
 					String.format(
 						TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
-						TownyFormatter.getFormattedTownName(winnerTown),
+						winnerTown.getFormattedName(),
 						TownyEconomyHandler.getFormattedBalance(siegeZone.getWarChestAmount()));
 
 				//Send message to nation
@@ -112,8 +112,8 @@ public class SiegeWarMoneyUtil {
 				TownyMessaging.sendGlobalMessage(
 					String.format(
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_pillage"),
-						TownyFormatter.getFormattedTownName(defendingTown),
-						TownyFormatter.getFormattedNationName(attackingNation)));
+						defendingTown.getFormattedName(),
+						attackingNation.getFormattedName()));
 
 				universe.getDataSource().saveResident(pillagingResident);
 				universe.getDataSource().removeTown(defendingTown);

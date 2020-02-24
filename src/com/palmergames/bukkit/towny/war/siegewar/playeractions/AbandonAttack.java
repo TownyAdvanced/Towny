@@ -83,8 +83,8 @@ public class AbandonAttack {
         
 		TownyMessaging.sendGlobalMessage(
 			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
-				TownyFormatter.getFormattedNationName(siegeZone.getAttackingNation()),
-        		TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
+				siegeZone.getAttackingNation().getFormattedName(),
+        		siegeZone.getDefendingTown().getFormattedName));
 		
         if (siegeZone.getSiege().getSiegeZones().size() == 0) {
             SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siegeZone.getSiege(),
@@ -92,7 +92,7 @@ public class AbandonAttack {
                     null);
 			TownyMessaging.sendGlobalMessage(
 				String.format(TownySettings.getLangString("msg_siege_war_siege_abandon"),
-					TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
+					siegeZone.getDefendingTown().getFormattedName()));
 		}
 
 		SiegeWarMoneyUtil.giveOneWarChestToWinnerTown(siegeZone, siegeZone.getDefendingTown());

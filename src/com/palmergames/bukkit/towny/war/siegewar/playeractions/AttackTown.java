@@ -155,22 +155,22 @@ public class AttackTown {
 			if (siege.getDefendingTown().hasNation()) {
 				TownyMessaging.sendGlobalMessage(String.format(
 					TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
-					TownyFormatter.getFormattedNationName(attackingNation),
-					TownyFormatter.getFormattedNationName(defendingTown.getNation()),
-					TownyFormatter.getFormattedTownName(defendingTown)
+					attackingNation.getFormattedName(),
+					defendingTown.getNation().getFormattedName(),
+					defendingTown.getFormattedName()
 				));
 			} else {
 				TownyMessaging.sendGlobalMessage(String.format(
 					TownySettings.getLangString("msg_siege_war_siege_started_neutral_town"),
-					TownyFormatter.getFormattedNationName(attackingNation),
-					TownyFormatter.getFormattedTownName(defendingTown)
+					attackingNation.getFormattedName(),
+					defendingTown.getFormattedName()
 				));
 			}
 		} else {
 			TownyMessaging.sendGlobalMessage(String.format(
 				TownySettings.getLangString("msg_siege_war_siege_joined"),
-				TownyFormatter.getFormattedNationName(attackingNation),
-				TownyFormatter.getFormattedTownName(defendingTown)
+				attackingNation.getFormattedName(),
+				defendingTown.getFormattedName()
 			));
 		}
 
@@ -182,7 +182,7 @@ public class AttackTown {
 				String moneyMessage =
 					String.format(
 						TownySettings.getLangString("msg_siege_war_attack_pay_war_chest"),
-						TownyFormatter.getFormattedNationName(attackingNation),
+						attackingNation.getFormattedName(),
 						TownyEconomyHandler.getFormattedBalance(siegeZone.getWarChestAmount()));
 
 				TownyMessaging.sendPrefixedNationMessage(attackingNation, moneyMessage);

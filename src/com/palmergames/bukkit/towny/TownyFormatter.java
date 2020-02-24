@@ -639,9 +639,9 @@ public class TownyFormatter {
 			case IN_PROGRESS:
 				return TownySettings.getLangString("status_town_siege_status_in_progress");
 			case ATTACKER_WIN:
-				return String.format(TownySettings.getLangString("status_town_siege_status_attacker_win"), getFormattedNationName(siege.getAttackerWinner()));
+				return String.format(TownySettings.getLangString("status_town_siege_status_attacker_win"), siege.getAttackerWinner().getFormattedName());
 			case DEFENDER_SURRENDER:
-				return String.format(TownySettings.getLangString("status_town_siege_status_defender_surrender"), getFormattedNationName(siege.getAttackerWinner()));
+				return String.format(TownySettings.getLangString("status_town_siege_status_defender_surrender"), siege.getAttackerWinner().getFormattedName());
 			case DEFENDER_WIN:
 				return TownySettings.getLangString("status_town_siege_status_defender_win");
 			case ATTACKER_ABANDON:
@@ -832,7 +832,7 @@ public class TownyFormatter {
 	
 	public static String getFormattedName(SiegeZone siegeZone) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getFormattedName(siegeZone.getAttackingNation()));
+		builder.append(siegeZone.getAttackingNation().getFormattedName());
 		builder.append(" {");
 		if(siegeZone.getSiegePoints() > 0)
 			builder.append("+");

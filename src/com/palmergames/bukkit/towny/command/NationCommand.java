@@ -1389,9 +1389,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				TownyMessaging.sendGlobalMessage(
 					String.format(TownySettings.getLangString("msg_siege_war_revolt"),
-						TownyFormatter.getFormattedTownName(town),
-						TownyFormatter.getFormattedResidentName(town.getMayor()),
-						TownyFormatter.getFormattedNationName(nation)));
+						town.getFormattedName(),
+						town.getMayor().getFormattedName(),
+						nation.getFormattedName()));
 			}
 
 

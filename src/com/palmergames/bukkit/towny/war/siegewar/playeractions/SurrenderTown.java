@@ -86,8 +86,8 @@ public class SurrenderTown {
 
         TownyMessaging.sendGlobalMessage(String.format(
         	TownySettings.getLangString("msg_siege_war_town_surrender"),
-			TownyFormatter.getFormattedTownName(siege.getDefendingTown()),
-			TownyFormatter.getFormattedNationName(siege.getAttackerWinner())));
+			siege.getDefendingTown().getFormattedName(),
+			siege.getAttackerWinner().getFormattedName()));
 
 		SiegeWarMoneyUtil.giveWarChestsToWinnerNation(siege, siege.getAttackerWinner());
     }

@@ -717,7 +717,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendGlobalMessage(
 				String.format(
 				TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"),
-				TownyFormatter.getFormattedResidentName(nation.getKing()),
+				nation.getKing().getFormattedName(),
 				TownySettings.getWarSiegeNationCostRefundPercentageOnDelete() + "%"));
 		}
 

@@ -92,8 +92,8 @@ public class PlunderTown {
                 TownyMessaging.sendGlobalMessage(
                 	String.format(
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
-						TownyFormatter.getFormattedTownName(defendingTown),
-						TownyFormatter.getFormattedNationName(winnerNation)));
+						defendingTown.getFormattedName(),
+						winnerNation.getFormattedName));
 				universe.getDataSource().removeTown(defendingTown);
             }
         } catch (EconomyException x) {
@@ -108,16 +108,16 @@ public class PlunderTown {
     	if(defendingTown.hasNation()) {
 			TownyMessaging.sendGlobalMessage(String.format(
 					TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
-					TownyFormatter.getFormattedTownName(defendingTown),
+					defendingTown.getFormattedName(),
 					TownyEconomyHandler.getFormattedBalance(plunderAmount),
-					TownyFormatter.getFormattedNationName(winnerNation)
+					winnerNation.getFormattedName()
 			));
         } else {
             TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),
-                    TownyFormatter.getFormattedTownName(defendingTown),
+                    defendingTown.getFormattedName(),
    				    TownyEconomyHandler.getFormattedBalance(plunderAmount),
-                    TownyFormatter.getFormattedNationName(winnerNation)
+                    winnerNation.getFormattedName()
 			));
         }
     }

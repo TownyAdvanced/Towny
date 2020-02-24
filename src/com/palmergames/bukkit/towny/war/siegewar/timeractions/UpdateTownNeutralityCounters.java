@@ -48,11 +48,11 @@ public class UpdateTownNeutralityCounters {
 				if(town.isNeutral()) {
 					TownyMessaging.sendGlobalMessage(
 						String.format(TownySettings.getLangString("msg_siege_war_town_became_neutral"), 
-						TownyFormatter.getFormattedTownName(town)));
+						town.getFormattedName()));
 				} else {
 					TownyMessaging.sendGlobalMessage(
 						String.format(TownySettings.getLangString("msg_siege_war_town_became_non_neutral"),
-						TownyFormatter.getFormattedTownName(town)));
+						town.getFormattedName()));
 				}
 			}
 		}

@@ -115,15 +115,15 @@ public class InvadeTown {
 
             TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_nation_town_captured"),
-                    TownyFormatter.getFormattedTownName(defendingTown),
-                    TownyFormatter.getFormattedNationName(nationOfDefendingTown),
-                    TownyFormatter.getFormattedNationName(attackingNation)
+                    defendingTown.getFormattedName(),
+                    nationOfDefendingTown.getFormattedName(),
+                    attackingNation.getFormattedName()
             ));
 
             if(nationOfDefendingTown.getTowns().size() == 0) {
                 TownyMessaging.sendGlobalMessage(String.format(
                         TownySettings.getLangString("msg_siege_war_nation_defeated"),
-                        TownyFormatter.getFormattedNationName(nationOfDefendingTown)
+                        nationOfDefendingTown.getFormattedName()
                 ));
             }
         } else {
@@ -131,8 +131,8 @@ public class InvadeTown {
 
             TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
-                    TownyFormatter.getFormattedTownName(defendingTown),
-                    TownyFormatter.getFormattedNationName(attackingNation)
+                    defendingTown.getFormattedName(),
+                    attackingNation.getFormattedName()
             ));
         }
 
