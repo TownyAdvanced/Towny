@@ -658,7 +658,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Must already be removed
 		}
 		saveWorld(townyWorld);
-		universe.getTownsTrie().removeKey(town.getName());
+		universe.getTownsTrie().removeKey(town.getName().toLowerCase());
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);

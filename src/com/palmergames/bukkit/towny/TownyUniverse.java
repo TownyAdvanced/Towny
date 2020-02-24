@@ -261,7 +261,7 @@ public class TownyUniverse {
     public ConcurrentHashMap<String, Nation> getNationsMap() {
         return nations;
     }
-    
+
     public ConcurrentHashMap<String, SiegeZone> getSiegeZonesMap() {
     	return siegeZones;
 	}
@@ -269,7 +269,7 @@ public class TownyUniverse {
     public Trie getNationsTrie() {
     	return nationsTrie;
 	}
-	
+
     public ConcurrentHashMap<String, Resident> getResidentMap() {
         return residents;
     }
