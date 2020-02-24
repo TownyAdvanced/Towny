@@ -690,6 +690,12 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return capital.getMayor();
 	}
 
+	@Override
+	public String getFormattedName() {
+		return TownySettings.getNationPrefix(this) + this.getName().replaceAll("_", " ")
+			+ TownySettings.getNationPostfix(this);
+	}
+
 	public void addMetaData(CustomDataField md) {
 		super.addMetaData(md);
 
