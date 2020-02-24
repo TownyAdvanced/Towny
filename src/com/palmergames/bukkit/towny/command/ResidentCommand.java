@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,21 +53,44 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> residentFriendTabCompletes = new ArrayList<>(Arrays.asList(
 		"add",
-		"add+",
 		"remove",
-		"remove+",
-		"clearlist",
+		"clear",
 		"list"
 	));
 
 	private static final List<String> residentToggleTabCompletes = new ArrayList<>(Arrays.asList(
-		"map",
-		"townclaim",
+		"pvp",
+		"fire",
+		"mobs",
 		"plotborder",
 		"constantplotborder",
-		"spy",
+		"ignoreplots",
+		"townclaim",
+		"map",
+		"spy"
+	));
+	
+	private static final List<String> residentModeTabCompletes = new ArrayList<>(Arrays.asList(
+		"map",
+		"townclaim",
+		"townunclaim",
+		"tc",
+		"nc",
+		"plotborder",
+		"constantplotborder",
 		"ignoreplots",
 		"reset"
+	));
+	
+	private static final List<String> residentConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+		"?",
+		"help",
+		"list"
+	));
+	
+	private static final List<String> residentSetTabCompletes = new ArrayList<>(Arrays.asList(
+		"perm",
+		"mode"
 	));
 	
 
@@ -111,6 +135,56 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+		if (sender instanceof Player) {
+			switch (args[0].toLowerCase()) {
+				case "toggle":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+					}
+					break;
+				case "set":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(residentSetTabCompletes, args[1]);
+					}
+					if (args.length > 2) {
+						switch (args[1].toLowerCase()) {
+							case "mode":
+								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
+							case "perm":
+								return permTabComplete(StringMgmt.remArgs(args, 2));
+						}
+					}
+					break;
+				case "friend":
+					switch (args.length) {
+						case 2:
+							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
+						case 3:
+							if (args[1].equalsIgnoreCase("remove")) {
+								try {
+									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getFriends()), args[2]);
+								} catch (TownyException ignored) {}
+							} else {
+								return getTownyStartingWith(args[2], "r");
+							}
+					}
+					break;
+				default:
+					if (args.length == 1) {
+						return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
+					}
+					break;
+			}
+		} else if (args.length == 1){
+				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
+		}
+
+		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("static-access")
@@ -648,29 +722,4 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 
 	}
-
-	/**
-	 * Overridden method custom for this command set.
-	 * 
-	 */
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
-		if (args.length == 1) {
-			return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
-		}
-
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "friend":
-					return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
-				case "toggle":
-					return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
-
-			}
-		}
-		
-		return null;
-	}
-
 }

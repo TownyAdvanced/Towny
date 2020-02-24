@@ -563,7 +563,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteResident(resident);
 		// Remove the residents record from memory.
 		universe.getResidentMap().remove(name.toLowerCase());
-		universe.getResidentsTrie().removeKey(name.toLowerCase());
+		universe.getResidentsTrie().removeKey(name);
 
 		// Clear accounts
 		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
@@ -640,7 +640,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		saveWorld(townyWorld);
 		
-		universe.getTownsTrie().removeKey(town.getName().toLowerCase());
+		universe.getTownsTrie().removeKey(town.getName());
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);
@@ -823,11 +823,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * Remove the old town from the townsMap
 			 * and rename to the new name
 			 */
-			universe.getTownsTrie().removeKey(town.getName().toLowerCase());
+			universe.getTownsTrie().removeKey(town.getName());
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 			town.setName(filteredName);
 			universe.getTownsMap().put(filteredName.toLowerCase(), town);
-			universe.getTownsTrie().addKey(filteredName.toLowerCase());
+			universe.getTownsTrie().addKey(filteredName);
 			world.addTown(town);
 
 			// If this was a nation capitol
@@ -940,10 +940,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 */
 			oldName = nation.getName();
 			universe.getNationsMap().remove(oldName.toLowerCase());
-			universe.getNationsTrie().removeKey(oldName.toLowerCase());
+			universe.getNationsTrie().removeKey(oldName);
 			nation.setName(filteredName);
 			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
-			universe.getNationsTrie().addKey(filteredName.toLowerCase());
+			universe.getNationsTrie().addKey(filteredName);
 
 			if (TownyEconomyHandler.isActive()) {
 				try {

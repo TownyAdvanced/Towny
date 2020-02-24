@@ -1,16 +1,69 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class BaseCommand implements TabCompleter{
 	
+	private static final List<String> setPermTabCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off",
+		"ally",
+		"outsider",
+		"build",
+		"destroy",
+		"switch",
+		"itemuse",
+		"reset"
+	));
+
+	private static final List<String> setLevelCompletes = new ArrayList<>(Arrays.asList(
+		"resident",
+		"ally",
+		"outsider",
+		"nation",
+		"friend"
+	));
+
+	private static final List<String> setTypeCompletes = new ArrayList<>(Arrays.asList(
+		"build",
+		"destroy",
+		"switch",
+		"itemuse"
+	));
+
+	private static final List<String> setOnOffCompletes = new ArrayList<>(Arrays.asList(
+		"on",
+		"off"
+	));
+
+	private static final List<String> toggleTypeOnOffCompletes = new ArrayList<>(Arrays.asList(
+		"build",
+		"destroy",
+		"switch",
+		"itemuse",
+		"on",
+		"off"
+	));
+
+	private static final List<String> toggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"fire",
+		"pvp",
+		"explosion",
+		"mob"
+	));
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -26,7 +79,7 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-
+		
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
@@ -45,7 +98,7 @@ public class BaseCommand implements TabCompleter{
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
-
+		
 		return matches;
 	}
 
@@ -70,5 +123,42 @@ public class BaseCommand implements TabCompleter{
 				return getTownyStartingWith(arg, type);
 			}
 		}
+	}
+
+	/**
+	 * Used for set tab completes which are common across several commands
+	 * 
+	 * @param args args, make sure to remove the first few irrelevant args
+	 * @return tab completes matching the proper arg
+	 */
+	static List<String> permTabComplete(String[] args) {
+		switch (args.length) {
+			case 1:
+				return NameUtil.filterByStart(setPermTabCompletes, args[0]);
+			case 2:
+				if (setTypeCompletes.contains(args[0].toLowerCase()))
+					return NameUtil.filterByStart(setOnOffCompletes, args[1]);
+				if (setLevelCompletes.contains(args[0].toLowerCase()))
+					return NameUtil.filterByStart(toggleTypeOnOffCompletes, args[1]);
+				break;
+			case 3:
+				return NameUtil.filterByStart(setOnOffCompletes, args[2]);
+		}
+		
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Used for toggle tab completes which are common across several commands
+	 * 
+	 * @param args args, make sure to remove the first few irrelevant args
+	 * @return tab completes matching the proper arg
+	 */
+	static List<String> toggleTabCompletes(String[] args) {
+		if (args.length == 1) {
+			return NameUtil.filterByStart(toggleTabCompletes, args[0]);
+		}
+		
+		return Collections.emptyList();
 	}
 }
