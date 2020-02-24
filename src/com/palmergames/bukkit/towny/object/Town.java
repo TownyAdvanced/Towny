@@ -1403,6 +1403,15 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return account;
 	}
 
+	@Override
+	public String getFormattedName() {
+		if (this.isCapital()) {
+			return TownySettings.getCapitalPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(this);
+		}
+		
+		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
+	}
+
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
