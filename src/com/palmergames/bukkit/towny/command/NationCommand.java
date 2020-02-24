@@ -219,137 +219,134 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
-			if (args.length > 0) {
-				switch (args[0].toLowerCase()) {
-					case "toggle":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
-						}
-						break;
-					case "king":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
-						}
-						break;
-					case "townlist":
-					case "allylist":
-					case "enemylist":
-					case "join":
-					case "delete":
-					case "spawn":
-					case "merge":
-						if (args.length == 2) {
-							return getTownyStartingWith(args[1], "n");
-						}
-						break;
-					case "add":
-					case "kick":
-						return getTownyStartingWith(args[args.length - 1], "t");
-					case "ally":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
-						} else if (args.length > 2){
-							switch (args[1].toLowerCase()) {
-								case "add":
-									if (args[args.length - 1].startsWith("-")) {
-										// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
-										try {
-											return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
-												// Get names of sent invites
-												.stream()
-												.map(Invite::getReceiver)
-												.map(TownyInviteReceiver::getName)
-												// Collect sent invite names and check with the last arg without the hyphen
-												.collect(Collectors.toList()), args[args.length - 1].substring(1))
-												// Add the hyphen back to the beginning
-												.stream()
-												.map(e -> "-" + e)
-												.collect(Collectors.toList());
-										} catch (TownyException ignored) {}
-									} else {
-										// Otherwise return possible nations to send invites to
-										return getTownyStartingWith(args[args.length - 1], "n");
-									}
-								case "remove":
-									// Return current allies to remove
+			switch (args[0].toLowerCase()) {
+				case "toggle":
+					if (args.length == 2)
+						return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+					break;
+				case "king":
+					if (args.length == 2)
+						return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
+					break;
+				case "townlist":
+				case "allylist":
+				case "enemylist":
+				case "join":
+				case "delete":
+				case "spawn":
+				case "merge":
+					if (args.length == 2)
+						return getTownyStartingWith(args[1], "n");
+					break;
+				case "add":
+				case "kick":
+					return getTownyStartingWith(args[args.length - 1], "t");
+				case "ally":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
+					} else if (args.length > 2){
+						switch (args[1].toLowerCase()) {
+							case "add":
+								if (args[args.length - 1].startsWith("-")) {
+									// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
 									try {
-										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
-									} catch (TownyException ignore) {}
-								case "accept":
-								case "deny":
-									// Return sent ally invites to accept or deny
-									try {
-										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
-										.stream()
-										.map(Invite::getSender)
-										.map(TownyInviteSender::getName)
-										.collect(Collectors.toList()), args[args.length - 1]);
-									} catch (TownyException ignore) {}
-							}
-						}
-						break;
-					case "rank":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
-						} else if (args.length > 2){
-							switch (args[1].toLowerCase()) {
-								case "add":
-								case "remove":
-									if (args.length == 3) {
-										return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
-									} else if (args.length == 4) {
-										return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
-									}
-							}
-						}
-						break;
-					case "enemy":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
-						} else if (args.length == 3){
-							switch (args[1].toLowerCase()) {
-								case "add":
-									return getTownyStartingWith(args[2], "n");
-								case "remove":
-									// Return enemies of nation
-									try {
-										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
+										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
+											// Get names of sent invites
+											.stream()
+											.map(Invite::getReceiver)
+											.map(TownyInviteReceiver::getName)
+											// Collect sent invite names and check with the last arg without the hyphen
+											.collect(Collectors.toList()), args[args.length - 1].substring(1))
+											// Add the hyphen back to the beginning
+											.stream()
+											.map(e -> "-" + e)
+											.collect(Collectors.toList());
 									} catch (TownyException ignored) {}
-							}
+								} else {
+									// Otherwise return possible nations to send invites to
+									return getTownyStartingWith(args[args.length - 1], "n");
+								}
+							case "remove":
+								// Return current allies to remove
+								try {
+									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
+								} catch (TownyException ignore) {}
+							case "accept":
+							case "deny":
+								// Return sent ally invites to accept or deny
+								try {
+									return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
+									.stream()
+									.map(Invite::getSender)
+									.map(TownyInviteSender::getName)
+									.collect(Collectors.toList()), args[args.length - 1]);
+								} catch (TownyException ignore) {}
 						}
-						break;
-					case "set":
-						if (args.length == 2) {
-							return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
-						} else if (args.length == 3){
-							switch (args[1].toLowerCase()) {
-								case "king":
-								case "title":
-								case "surname":
-									return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-								case "capital":
-									return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
-							}
+					}
+					break;
+				case "rank":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+					} else if (args.length > 2){
+						switch (args[1].toLowerCase()) {
+							case "add":
+							case "remove":
+								if (args.length == 3) {
+									return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+								} else if (args.length == 4) {
+									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+								}
 						}
-						break;
-					default:
-						if (args.length == 1) {
-							List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
-							if (nationNames.size() > 0) {
-								return nationNames;
-							} else {
-								return getTownyStartingWith(args[0], "n");
-							}
+					}
+					break;
+				case "enemy":
+					if (args.length == 2) {
+						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+					} else if (args.length == 3){
+						switch (args[1].toLowerCase()) {
+							case "add":
+								return getTownyStartingWith(args[2], "n");
+							case "remove":
+								// Return enemies of nation
+								try {
+									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
+								} catch (TownyException ignored) {}
 						}
-				}
+					}
+					break;
+				case "set":
+					return nationSetTabComplete(player, args);
+				default:
+					if (args.length == 1) {
+						List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
+						if (nationNames.size() > 0) {
+							return nationNames;
+						} else {
+							return getTownyStartingWith(args[0], "n");
+						}
+					}
 			}
-		} else {
-			// Console
-			if (args.length == 1) {
-				return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
-			}
+		} else if (args.length == 1) {
+			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
 		}
 
+		return Collections.emptyList();
+	}
+	
+	static List<String> nationSetTabComplete(Player player, String[] args) {
+		if (args.length == 2) {
+			return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+		} else if (args.length == 3){
+			switch (args[1].toLowerCase()) {
+				case "king":
+				case "title":
+				case "surname":
+					return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+				case "capital":
+					return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+			}
+		}
+		
 		return Collections.emptyList();
 	}
 

@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
-		"accept",
-		"deny"
+		TownySettings.getAcceptCommand(),
+		TownySettings.getDenyCommand()
 	));
 	
 	@SuppressWarnings("unused")
@@ -55,22 +55,21 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		if (args.length == 1) {
-			return NameUtil.filterByStart(inviteTabCompletes, args[0]);
-		}
-		
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "accept":
-				case "deny":
-					try {
-						return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
-							.stream()
-							.map(Invite::getSender)
-							.map(TownyInviteSender::getName)
-							.collect(Collectors.toList()), args[1]);
-					} catch (TownyException ignored) {}
-			}
+		switch (args.length) {
+			case 1:
+				return NameUtil.filterByStart(inviteTabCompletes, args[0]);
+			case 2:
+				switch (args[0].toLowerCase()) {
+					case "accept":
+					case "deny":
+						try {
+							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
+								.stream()
+								.map(Invite::getSender)
+								.map(TownyInviteSender::getName)
+								.collect(Collectors.toList()), args[1]);
+						} catch (TownyException ignored) {}
+				}
 		}
 		
 		return Collections.emptyList();
