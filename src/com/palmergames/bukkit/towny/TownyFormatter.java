@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -48,10 +49,7 @@ public class TownyFormatter {
 	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
     public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
 
-	public static void initialize(Towny plugin) {
-
-		// TownyFormatter.plugin = plugin;
-	}
+	public static void initialize() {}
 
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
@@ -59,25 +57,18 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-		List<String> out = new ArrayList<>();
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
-
-		return out;
+		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 	}
 
 	public static List<String> getFormattedOutlaws(Town town) {
 
-		List<String> out = new ArrayList<String>();
-
 		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, TownySettings.getLangString("outlaws") +  " "));
-
-		return out;
+		return new ArrayList<>(ChatTools.listArr(residents, TownySettings.getLangString("outlaws") + " "));
 
 	}
 	
@@ -112,12 +103,13 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(TownBlock townBlock) {
 
-		List<String> out = new ArrayList<String>();
-
+		List<String> out = new ArrayList<>();
+		
 		try {
 			TownyObject owner;
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
+			boolean preventPVP = CombatUtil.preventPvP(world, townBlock);
 
 			if (townBlock.hasResident()) {
 				owner = townBlock.getResident();
@@ -126,12 +118,12 @@ public class TownyFormatter {
 			}
 			
 
-			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
+			out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
 			if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
 				out.add(TownySettings.getLangString("status_plot_type") + townBlock.getType().toString());							
 			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
 			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
-			out.add(TownySettings.getLangString("status_pvp") + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
+			out.add(TownySettings.getLangString("status_pvp") + ((!preventPVP) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? TownySettings.getLangString("status_on"):TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
@@ -155,10 +147,10 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(Resident resident, Player player) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		// ___[ King Harlus ]___
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
+		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
 
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
@@ -196,14 +188,14 @@ public class TownyFormatter {
 			line += TownySettings.getLangString("status_no_town");
 		else
 			try {
-				line += getFormattedName(resident.getTown());
+				line += resident.getTown().getFormattedName();
 			} catch (TownyException e) {
 				line += "Error: " + e.getMessage();
 			}
 		out.add(line);
 		
 		// Embassies in: Camelot, London, Tokyo
-		List<Town> townEmbassies = new ArrayList<Town>();
+		List<Town> townEmbassies = new ArrayList<>();
 		try {
 			
 			String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
@@ -216,7 +208,7 @@ public class TownyFormatter {
 				}
 				
 			}
-		} catch (NotRegisteredException e) {}
+		} catch (NotRegisteredException ignored) {}
 		
 		if (townEmbassies.size() > 0) {
 			out.addAll(getFormattedTowns(TownySettings.getLangString("status_embassy_town"), townEmbassies));
@@ -257,28 +249,32 @@ public class TownyFormatter {
 	 */
 	public static List<String> getRanks(Town town) {
 
-		List<String> ranklist = new ArrayList<String>();
+		List<String> ranklist = new ArrayList<>();
 
-		String towntitle = getFormattedName(town);
+		String towntitle = town.getFormattedName();
 		towntitle += TownySettings.getLangString("rank_list_title");
 		ranklist.add(ChatTools.formatTitle(towntitle));
-		ranklist.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
+		ranklist.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
 
+		getRanks(town, ranklist);
+		return ranklist;
+	}
+
+	private static void getRanks(Town town, List<String> ranklist) {
 		List<Resident> residents = town.getResidents();
-		List<String> townranks = TownyPerms.getTownRanks();
-		List<Resident> residentwithrank = new ArrayList<Resident>();
+		List<String> townRanks = TownyPerms.getTownRanks();
+		List<Resident> residentWithRank = new ArrayList<>();
 
-		for (String rank : townranks) {
+		for (String rank : townRanks) {
 			for (Resident r : residents) {
 
 				if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank))) {
-					residentwithrank.add(r);
+					residentWithRank.add(r);
 				}
 			}
-			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
-			residentwithrank.clear();
+			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentWithRank));
+			residentWithRank.clear();
 		}
-		return ranklist;
 	}
 
 	/**
@@ -289,7 +285,7 @@ public class TownyFormatter {
 	 */
 	public static List<String> formatStatusScreens(List<String> out) {
 		
-		List<String> formattedOut = new ArrayList<String>();
+		List<String> formattedOut = new ArrayList<>();
 		for (String line: out) {
 			if (line.length() > 80) {
 				int middle = (line.length()/2);
@@ -333,7 +329,7 @@ public class TownyFormatter {
 		}
 		
 		// ___[ Raccoon City (PvP) (Open) ]___
-		String title = getFormattedName(town);
+		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
 		title += (town.isNeutral() ? TownySettings.getLangString("status_town_title_neutral") : "");
@@ -346,7 +342,7 @@ public class TownyFormatter {
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
-		Long registered= town.getRegistered();
+		long registered= town.getRegistered();
 		if (registered != 0) {
 			out.add(String.format(TownySettings.getLangString("status_founded"), registeredFormat.format(town.getRegistered())));
 		}
@@ -362,8 +358,7 @@ public class TownyFormatter {
 		            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawn()) : TownySettings.getLangString("status_no_town"))  + "]" 
 		            				: (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : TownySettings.getLangString("status_no_town")) + "]") : "")
 		           );
-		} catch (TownyException e) {
-		}
+		} catch (TownyException ignored) {}
 
 		if (TownySettings.isAllowingOutposts()) {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
@@ -374,8 +369,7 @@ public class TownyFormatter {
 						int nationBonus = 0;
 						try {
 							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-						} catch (NotRegisteredException e1) {
-						}
+						} catch (NotRegisteredException ignored) {}
 						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? String.format(TownySettings.getLangString("status_town_outposts2"), nationBonus) : "")
 							   );
@@ -392,20 +386,16 @@ public class TownyFormatter {
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
 
-		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-			TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-			TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
-
 		//Only show the following bits if the town is not ruined
 		if(!town.isRuined()) {
-
+			
 			// | Bank: 534 coins
 			String bankString = "";
 			if (TownySettings.isUsingEconomy()) {
 				if (TownyEconomyHandler.isActive()) {
 					bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
 					if (town.hasUpkeep())
-						bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+						bankString += String.format(TownySettings.getLangString("status_bank_town2"), BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 					if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
 						bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
 					bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
@@ -414,34 +404,16 @@ public class TownyFormatter {
 			}
 	
 			// Mayor: MrSand | Bank: 534 coins
-			if(town.hasMayor()) {
-				out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
-			}
+			out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
 	
 			// Assistants [2]: Sammy, Ginger
-			List<String> ranklist = new ArrayList<String>();
-			List<Resident> residentss = town.getResidents();
-			List<String> townranks = TownyPerms.getTownRanks();
-			List<Resident> residentwithrank = new ArrayList<Resident>();
-	
-			for (String rank : townranks) {
-				for (Resident r : residentss) {
-	
-					if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank))) {
-						residentwithrank.add(r);
-					}
-				}
-				ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
-				residentwithrank.clear();
-			}
-	
-			out.addAll(ranklist);
-	
+			List<String> ranklist = new ArrayList<>();
+			getRanks(town, ranklist);
+
 			// Nation: Azur Empire
 			try {
-				out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())) + (town.isConquered() ? " " + TownySettings.getLangString("msg_conquered") : "" ) + (town.isOccupied() ? " " + TownySettings.getLangString("msg_occupier") : "" ));
-			} catch (TownyException e) {
-			}
+				out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ) + (town.isOccupied() ? " " + TownySettings.getLangString("msg_occupier") : "" ));
+			} catch (TownyException ignored) {}
 
 			// Residents [12]: James, Carry, Mason
 			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
@@ -454,7 +426,7 @@ public class TownyFormatter {
 			out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
 			//Siege  Info
-			if(TownySettings.getWarSiegeEnabled() && !town.isRuined()) {
+			if(TownySettings.getWarSiegeEnabled()) {
 				
 				//Countdown To Neutrality Status Change: 3 days
 				if(TownySettings.getWarSiegeTownNeutralityEnabled() 
@@ -547,15 +519,15 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(Nation nation) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		// ___[ Azur Empire (Open)]___
-		String title = getFormattedName(nation);
+		String title = nation.getFormattedName();
 		title += (nation.isOpen() ? TownySettings.getLangString("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Created Date
-		Long registered = nation.getRegistered();
+		long registered = nation.getRegistered();
 		if (registered != 0) {
 			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
 		}
@@ -591,20 +563,20 @@ public class TownyFormatter {
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
-			out.add(String.format(TownySettings.getLangString("status_nation_king"), getFormattedName(nation.getCapital().getMayor())) + 
+			out.add(String.format(TownySettings.getLangString("status_nation_king"), nation.getCapital().getMayor().getFormattedName()) + 
 					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
-		List<String> ranklist = new ArrayList<String>();
+		List<String> ranklist = new ArrayList<>();
 		List<Town> towns = nation.getTowns();
-		List<Resident> residents = new ArrayList<Resident>();
+		List<Resident> residents = new ArrayList<>();
 		
 		for (Town town: towns) {
 			 residents.addAll(town.getResidents());
 		}
 		
 		List<String> nationranks = TownyPerms.getNationRanks();
-		List<Resident> residentwithrank = new ArrayList<Resident>();
+		List<Resident> residentwithrank = new ArrayList<>();
 
 		for (String rank : nationranks) {
 			for (Resident r : residents) {
@@ -615,8 +587,7 @@ public class TownyFormatter {
 			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentwithrank));
 			residentwithrank.clear();
 		}
-		if (ranklist != null)
-			out.addAll(ranklist);
+		out.addAll(ranklist);
 		
 		// Towns [44]: James City, Carry Grove, Mason Town
 		String[] towns2 = getFormattedNames(nation.getTowns().toArray(new Town[0]));
@@ -688,10 +659,10 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(TownyWorld world) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		// ___[ World (PvP) ]___
-		String title = getFormattedName(world);
+		String title = world.getFormattedName();
 		title += ((world.isPVP() || world.isForcePVP()) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (world.isClaimable() ? TownySettings.getLangString("status_world_claimable") : TownySettings.getLangString("status_world_noclaims"));
 		out.add(ChatTools.formatTitle(title));
@@ -740,12 +711,12 @@ public class TownyFormatter {
 	 */
 	public static List<String> getTaxStatus(Resident resident) {
 
-		List<String> out = new ArrayList<String>();
-		Town town = null;
+		List<String> out = new ArrayList<>();
+		Town town;
 
 		double plotTax = 0.0;
 
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
+		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
 
 		if (resident.hasTown()) {
 			try {
@@ -762,7 +733,7 @@ public class TownyFormatter {
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
-							for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
+							for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
 
@@ -782,94 +753,67 @@ public class TownyFormatter {
 		return out;
 	}
 
-	public static String getNamePrefix(Resident resident) {
-
-		if (resident == null)
-			return "";
-		if (resident.isKing())
-			return TownySettings.getKingPrefix(resident);
-		else if (resident.isMayor())
-			return TownySettings.getMayorPrefix(resident);
-		return "";
-	}
-
-	public static String getNamePostfix(Resident resident) {
-
-		if (resident == null)
-			return "";
-		if (resident.isKing())
-			return TownySettings.getKingPostfix(resident);
-		else if (resident.isMayor())
-			return TownySettings.getMayorPostfix(resident);
-		return "";
-	}
-
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
+	 * 
+	 * @param obj The {@link TownyObject} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedName(TownyObject obj) {
-
-		if (obj == null)
-			return "Null";
-		else if (obj instanceof Resident)
-			return getFormattedResidentName((Resident) obj);
-		else if (obj instanceof Town)
-			return getFormattedTownName((Town) obj);
-		else if (obj instanceof Nation)
-			return getFormattedNationName((Nation) obj);
-		// System.out.println("just name: " + obj.getName());
-		return obj.getName().replaceAll("_", " ");
+		return obj.getFormattedName();
 	}
 
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedResidentName(Resident resident) {
-
-		if (resident == null)
-			return "null";
-		if (resident.isKing())
-			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getKingPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getKingPostfix(resident));
-		else if (resident.isMayor())
-			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getMayorPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getMayorPostfix(resident));
-		return (resident.hasTitle() ? resident.getTitle() + " " : "") + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : "");
+		return resident.getFormattedName();
 	}
 
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
+	 *
+	 * @param town The {@link Town} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedTownName(Town town) {
-
-		if (town.isCapital())
-			return TownySettings.getCapitalPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(town);
-		return TownySettings.getTownPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(town);
+		return town.getFormattedName();
 	}
 
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
+	 *
+	 * @param nation The {@link Nation} to get the formatted name from.
+	 * @return The formatted name of the object.
+	 */
+	@Deprecated
 	public static String getFormattedNationName(Nation nation) {
+		return nation.getFormattedName();
+	}
 
-		return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the formatted title name from.
+	 * @return The formatted title name of the resident.
+	 */
+	@Deprecated
+	public static String getFormattedResidentTitleName(Resident resident) {
+		return resident.getFormattedTitleName();
 	}
 	
-	public static String getFormattedResidentTitleName(Resident resident) {
-		if (!resident.hasTitle())
-			return getFormattedName(resident);
-		else 
-			return resident.getTitle() + " " + resident.getName();		
+	public static String[] getFormattedNames(TownyObject[] objs) {
+		List<String> names = new ArrayList<>();
+		for (TownyObject obj : objs) {
+			names.add(obj.getFormattedName());
+		}
 		
-	}
-
-	public static String[] getFormattedNames(Resident[] residents) {
-
-		List<String> names = new ArrayList<String>();
-		for (Resident resident : residents)
-			names.add(getFormattedName(resident));
-		return names.toArray(new String[0]);
-	}
-
-	public static String[] getFormattedNames(Town[] towns) {
-
-		List<String> names = new ArrayList<String>();
-		for (Town town : towns)
-			names.add(getFormattedName(town));
-		return names.toArray(new String[0]);
-	}
-
-	public static String[] getFormattedNames(Nation[] nations) {
-
-		List<String> names = new ArrayList<String>();
-		for (Nation nation : nations)
-			names.add(getFormattedName(nation));
 		return names.toArray(new String[0]);
 	}
 
@@ -940,52 +884,6 @@ public class TownyFormatter {
 		
 		extraFields.add(field);
 		
-		return extraFields;
-	}
-
-	public static List<String> getExtraFields(TownBlock tb) {
-		if (!tb.hasMeta())
-			return new ArrayList<>();
-
-		List<String> extraFields = new ArrayList<>();
-
-		String field = "";
-
-		for (CustomDataField cdf : tb.getMetadata()) {
-			if (!cdf.hasLabel())
-				continue;
-
-			if (extraFields.contains(field))
-				field = Colors.Green + cdf.getLabel() + ": ";
-			else
-				field += Colors.Green + cdf.getLabel() + ": ";
-
-			switch (cdf.getType()) {
-				case IntegerField:
-					int ival = (int) cdf.getValue();
-					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
-					break;
-				case StringField:
-					field += Colors.White + cdf.getValue();
-					break;
-				case BooleanField:
-					boolean bval = (boolean) cdf.getValue();
-					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
-					break;
-				case DecimalField:
-					double dval = (double) cdf.getValue();
-					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
-					break;
-			}
-
-			field += "  ";
-
-			if (field.length() > 40)
-				extraFields.add(field);
-		}
-
-		extraFields.add(field);
-
 		return extraFields;
 	}
 }

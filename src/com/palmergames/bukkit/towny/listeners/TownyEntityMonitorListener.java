@@ -48,6 +48,14 @@ public class TownyEntityMonitorListener implements Listener {
 		plugin = instance;
 	}
 
+	/**
+	 * This handles EntityDeathEvents on MONITOR in order to handle Towny features such as:
+	 * - DeathPayments,
+	 * - Jailing Players,
+	 * - Awarding WarTimeDeathPoints.
+	 * @param event
+	 * @throws NotRegisteredException
+	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) throws NotRegisteredException {
 		Entity defenderEntity = event.getEntity();
@@ -57,33 +65,27 @@ public class TownyEntityMonitorListener implements Listener {
 
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
-
+			Player defenderPlayer = (Player) defenderEntity;
+			Resident defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
 				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderEntity.getLastDamageCause();
 
 				Entity attackerEntity = damageEvent.getDamager();
-				Player defenderPlayer = (Player) defenderEntity;
 				Player attackerPlayer = null;
 				Resident attackerResident = null;
-				Resident defenderResident = null;
 
-				try {
-					defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
-				} catch (NotRegisteredException e) {
-					return;
-				}
-
-				// Was this a missile?
-				if (attackerEntity instanceof Projectile) {
+				if (attackerEntity instanceof Projectile) { // Killed by projectile, try to narrow the true source of the kill.
 					Projectile projectile = (Projectile) attackerEntity;
-					if (projectile.getShooter() instanceof Player) {
+					if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
 						attackerPlayer = (Player) projectile.getShooter();
-
+						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+					} else { // Something else shot a projectile.
 						try {
-							attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
-						} catch (NotRegisteredException e) {
+							attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
+						} catch (Exception e) { // This would be a dispenser kill, should count as environmental death.
 						}
 					}
 
@@ -102,31 +104,29 @@ public class TownyEntityMonitorListener implements Listener {
 				}
 
 				/*
-				 * If attackerPlayer or attackerResident are null at this point
-				 * it was a natural death, not PvP.
-				 */				
-				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
-				if (attackerPlayer instanceof Player) {
+				 * Player has died by a player: 
+				 * - charge death payment,
+				 * - check for jailing attacking residents,
+				 * - award wartime death points.
+				 */
+				if (attackerPlayer != null) {
+					deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+					if (TownyAPI.getInstance().isWarTime())
+						wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 					
+				/*
+				 * Player has died from an entity but not a player & death price is not PVP only.
+				 */
+				} else if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
+					deathPayment(defenderPlayer, defenderResident);
 				}
 
-				if (TownyAPI.getInstance().isWarTime())
-					wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-
 			/*
-			 * Player has died from non-entity cause.
+			 * Player has died from non-entity cause, ie: Environmental.
 			 */
 			} else {
 				if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-					Player defenderPlayer = (Player) defenderEntity;
-					Resident defenderResident = null;
-
-					try {
-						defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
-					} catch (NotRegisteredException e) {
-						return;
-					}
 					deathPayment(defenderPlayer, defenderResident);
 				}
 			}

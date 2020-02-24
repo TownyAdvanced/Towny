@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,8 +65,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"warallowed"
 	));
 	
-	private static final List<String> townyWorldSetTabCompletes = new ArrayList<>(Arrays.asList(
-		"wildregen"
+	private static List<String> townySetTabCompletes = new ArrayList<>(Arrays.asList(
+		"usedefault",
+		"wildperm",
+		"wildignore",
+		"wildregen",
+		"wildname"
 	));
 	
 	private boolean isConsole = false;
@@ -117,22 +122,22 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (args.length == 1) {
-			List<String> worldNames = NameUtil.getWorldNames();
-			worldNames.addAll(townyWorldTabCompletes);
-			return NameUtil.filterByStart(worldNames, args[0]);
-		}
 		
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-				case "toggle":
+		switch (args[0].toLowerCase()) {
+			case "toggle":
+				if (args.length == 2)
 					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
-				case "set":
-					return NameUtil.filterByStart(townyWorldSetTabCompletes, args[1]);
-			}
+				break;
+			case "set":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townySetTabCompletes, args[1]);
+				break;
+			default:
+				if (args.length == 1)
+					return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
 		}
 		
-		return null;
+		return Collections.emptyList();
 	}
 
 	private void parseWorldFromConsole(CommandSender sender, String[] split) {

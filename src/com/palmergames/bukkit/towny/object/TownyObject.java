@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
 import java.util.ArrayList;
@@ -47,13 +46,17 @@ public abstract class TownyObject implements Nameable {
 
 	@Override
 	public String toString() {
-
 		return getName();
 	}
 
+	/**
+	 * Get the formatted name, usually replacing the "_" with a space.
+	 * For example: <code>"Object_Name"</code> would be <code>"Object Name"</code>
+	 * 
+	 * @return The formatted name.
+	 */
 	public String getFormattedName() {
-
-		return TownyFormatter.getFormattedName(this);
+		return getName().replaceAll("_", " ");
 	}
 
 	public void addMetaData(CustomDataField md) {

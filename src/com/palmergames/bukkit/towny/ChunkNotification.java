@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -199,7 +200,7 @@ public class ChunkNotification {
 				}
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
-				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
+				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
 			else 
 				return String.format(areaTownNotificationFormat, toTown);
 			
@@ -244,9 +245,9 @@ public class ChunkNotification {
 			
 			if (toResident != null)
 				if (TownySettings.isNotificationOwnerShowingNationTitles()) {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedResidentTitleName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedTitleName() : toTownBlock.getName());
 				} else {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedName() : toTownBlock.getName());
 				}
 			else
 				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownySettings.getUnclaimedPlotName() : toTownBlock.getName());
@@ -257,9 +258,9 @@ public class ChunkNotification {
 
 	public String getTownPVPNotification() {
 
-		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP()))) {
+		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
 			try {
-				return String.format(areaTownPvPNotificationFormat, ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
+				return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
 			} catch (NotRegisteredException e) {
 				// Not a Towny registered world.
 			}
