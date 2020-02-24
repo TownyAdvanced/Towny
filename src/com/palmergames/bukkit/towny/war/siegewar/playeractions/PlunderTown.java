@@ -93,7 +93,7 @@ public class PlunderTown {
                 	String.format(
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
 						defendingTown.getFormattedName(),
-						winnerNation.getFormattedName));
+						winnerNation.getFormattedName()));
 				universe.getDataSource().removeTown(defendingTown);
             }
         } catch (EconomyException x) {

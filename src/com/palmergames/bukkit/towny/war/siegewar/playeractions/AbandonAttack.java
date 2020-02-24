@@ -84,7 +84,7 @@ public class AbandonAttack {
 		TownyMessaging.sendGlobalMessage(
 			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
 				siegeZone.getAttackingNation().getFormattedName(),
-        		siegeZone.getDefendingTown().getFormattedName));
+        		siegeZone.getDefendingTown().getFormattedName()));
 		
         if (siegeZone.getSiege().getSiegeZones().size() == 0) {
             SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siegeZone.getSiege(),
