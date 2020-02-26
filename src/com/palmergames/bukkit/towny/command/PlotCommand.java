@@ -1047,6 +1047,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (CooldownTimerTask.hasCooldown(townBlock.getWorldCoord().toString(), CooldownType.PVP))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(townBlock.getWorldCoord().toString(), CooldownType.PVP)));
 					}
+					
+					// Prevent plot pvp from being enabled if admin pvp is disabled
+					if (townBlock.getTown().isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
+						throw new TownyException(TownySettings.getLangString("")); // TODO Translation string
+					
+					// Prevent plot pvp from being disabled if admin pvp is enabled
+					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
+						throw new TownyException(TownySettings.getLangString("")); // TODO Translation string
 
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					// Add a cooldown timer for this plot.
