@@ -1050,11 +1050,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					// Prevent plot pvp from being enabled if admin pvp is disabled
 					if (townBlock.getTown().isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
-						throw new TownyException(TownySettings.getLangString("")); // TODO Translation string
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp"), "adminDisabledPVP", "on"));
 					
 					// Prevent plot pvp from being disabled if admin pvp is enabled
 					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
-						throw new TownyException(TownySettings.getLangString("")); // TODO Translation string
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp"), "adminEnabledPVP", "off"));
 
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					// Add a cooldown timer for this plot.
