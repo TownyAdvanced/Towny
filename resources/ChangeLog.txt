@@ -4195,3 +4195,5 @@ v0.92.0.11:
   - Fix tw-ZH.yml courtesy of shou692199 with PR #3719.
   - Fix to the preventPVP function, allowing for towns with PVP off to set PVP true on individual plots, courtesy of silverwolfg11 with PR #3718.
   - Language files bumped to 0.72.
+  - Fix DailyTimerTask not resetting cosmetic list of removedTowns, removedNations, totalUpkeeps.
+  - Fix towns being kicked from a nation for non-payment of taxes being included in the removedTowns.
