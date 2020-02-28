@@ -59,7 +59,7 @@ public class NameUtil {
 	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
 		try {
 			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
-		} catch (TownyException e) {
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
@@ -74,7 +74,7 @@ public class NameUtil {
 	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
 		try {
 			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), str);
-		} catch (TownyException e) {
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
