@@ -4202,3 +4202,4 @@ v0.92.0.11:
   - Re-add removed TownyFormatter functions as deprecated.
     - Closes #3722.
   - Create resident.getNamePostfix() & resident.getNamePrefix() for gather pre/postfixes of kings and mayor residents.
+  - Fix possible NPE when Nation taxes were collected from towns.

@@ -183,7 +183,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		
 		if (nation.getTaxes() > 0) {
 
-			List<String> localRemovedTowns = null;
+			List<String> localRemovedTowns = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			ListIterator<Town> townItr = towns.listIterator();
 			Town town;
@@ -214,7 +214,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				} else
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 			}
-			if (!localRemovedTowns.isEmpty()) {
+			if (localRemovedTowns != null) {
 				if (localRemovedTowns.size() == 1) 
 					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(localRemovedTowns), "nation"));
 				else
