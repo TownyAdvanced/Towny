@@ -1180,13 +1180,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null) {
-								town.setWorld(world);
-								//world.addTown(town); not needed as it's handled in the Town object
+						try
+						{
+							if (!token.isEmpty()) {
+								TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
+								Town town = getTown(token);
+								if (town != null) {
+									town.setWorld(world);
+									//world.addTown(town); not needed as it's handled in the Town object
+								}
 							}
+						}
+						catch(Exception e)
+						{
+							TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town list in world file " + path + ", the listed town '" + token + "' does not exist in Towny/data/towns/. It has been skipped and will be removed from the world file on next save.");
 						}
 					}
 				}
