@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,5 +158,36 @@ public class BaseCommand implements TabCompleter{
 		}
 		
 		return Collections.emptyList();
+	}
+	
+	/**
+	 * Returns the names a player's town's residents that start with a string
+	 *
+	 * @param player the player to get the town's residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		try {
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
+		} catch (NotRegisteredException e) {
+			return Collections.emptyList();
+		}
+	}
+
+	/**
+	 * Returns the names a town's residents that start with a string
+	 *
+	 * @param town the town to get the residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+
+	public static List<String> getResidentsOfTownStartingWith(String town, String str) {
+		try {
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(town).getResidents()), str);
+		} catch (NotRegisteredException e) {
+			return Collections.emptyList();
+		}
 	}
 }
