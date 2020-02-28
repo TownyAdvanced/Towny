@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nameable;
 import org.bukkit.entity.Player;
 
@@ -46,6 +45,9 @@ public class NameUtil {
 	 * @return strings from list that start with startingWith
 	 */
 	public static List<String> filterByStart(List<String> list, String startingWith) {
+		if (list == null || startingWith == null) {
+			return Collections.emptyList();
+		}
 		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
 	}
 
@@ -59,7 +61,7 @@ public class NameUtil {
 	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
 		try {
 			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
-		} catch (TownyException e) {
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
@@ -74,7 +76,7 @@ public class NameUtil {
 	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
 		try {
 			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), str);
-		} catch (TownyException e) {
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
@@ -89,7 +91,7 @@ public class NameUtil {
 	public static List<String> getTownNamesOfPlayerNationStartingWith(Player player, String str) {
 		try {
 			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns()), str);
-		} catch (TownyException e) {
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
