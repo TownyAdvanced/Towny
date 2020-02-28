@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nameable;
 import org.bukkit.entity.Player;
 
