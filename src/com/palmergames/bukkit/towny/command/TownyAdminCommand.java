@@ -254,6 +254,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminSetCompletes, args[1]);
 					}
 				}
+				break;
 			case "plot":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(adminPlotTabCompletes, args[1]);
