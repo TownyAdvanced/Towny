@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nameable;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,50 +47,5 @@ public class NameUtil {
 			return Collections.emptyList();
 		}
 		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
-	}
-
-	/**
-	 * Returns the names a player's town's residents that start with a string
-	 *
-	 * @param player the player to get the town's residents of
-	 * @param str the string to check if the town's residents start with
-	 * @return the resident names that match str
-	 */
-	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
-		try {
-			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
-		} catch (Exception e) {
-			return Collections.emptyList();
-		}
-	}
-
-	/**
-	 * Returns the names a player's nation's residents that start with a string
-	 *
-	 * @param player the player to get the nation's residents of
-	 * @param str the string to check if the nation's residents start with
-	 * @return the resident names that match str
-	 */
-	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str) {
-		try {
-			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), str);
-		} catch (Exception e) {
-			return Collections.emptyList();
-		}
-	}
-
-	/**
-	 * Returns the names of towns of a player that start with a string
-	 *
-	 * @param player the player to get the towns of
-	 * @param str the string to check if the town names start with
-	 * @return the town names that match str
-	 */
-	public static List<String> getTownNamesOfPlayerNationStartingWith(Player player, String str) {
-		try {
-			return filterByStart(getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns()), str);
-		} catch (Exception e) {
-			return Collections.emptyList();
-		}
 	}
 }
