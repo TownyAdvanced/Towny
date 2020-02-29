@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarRuinsUtil;
@@ -730,12 +731,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Siege siege;
 		for(SiegeZone siegeZone: siegeZonesToDelete) {
 			siege = siegeZone.getSiege();
-			siege.getSiegeZones().remove(nation); //Remove nation from siege
+			siege.getSiegeZones().remove(nation); //Remove siegezone from siege
 			toSave.add(siegeZone.getDefendingTown());  //Prepare to save town
 			if(siege.getSiegeZones().size() == 0) {
+				//If this was the last siegezone in the siege, remove siege from town
 				siege.getDefendingTown().setSiege(null);
-				siege.setActualEndTime(System.currentTimeMillis());
-				SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
+				//If the siege was in progress, initiate siege immunity for the town
+				if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+					siege.setActualEndTime(System.currentTimeMillis());
+					SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
+				}
 			}
 			deleteSiegeZone(siegeZone);
 		}
