@@ -1,5 +1,5 @@
 name: Towny
-version: 0.71
+version: 0.72
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -978,7 +978,7 @@ msg_err_not_same_town: '&b%s不屬於您的城鎮。'
 #在0.59中添加:
 msg_modes_set: '模式設置：'
 msg_err_this_plot_doesnt_have_any_associated_metadata: '此圖沒有任何關聯的元數據。'
-msg_err_the_metadata_for_key_is_not_registered: '未註冊'%s'的元數據！'
+msg_err_the_metadata_for_key_is_not_registered: '未註冊''%s''的元數據！'
 msg_key_x_was_successfully_updated_to_x: '密鑰%s已成功更新為%s。'
 msg_err_key_x_is_not_part_of_this_plot: '密鑰%s不屬於此繪圖，請添加它。'
 msg_err_key_x_already_exists: '密鑰%s已存在！'
@@ -1030,7 +1030,7 @@ msg_neutral_towns: '中立城鎮'
 
 #在0.64中添加
 msg_err_no_nation_with_that_name: '未找到名為%s的國家'
-msg_err_cannot_unclaim_homeblock: '您不能取消您的主塊，請使用''/town set homeblock''移動您的主塊。'
+msg_err_cannot_unclaim_homeblock: "您不能取消您的主塊，請使用''/town set homeblock''移動您的主塊。"
 
 #新增0.65
 msg_err_rename_cancelled: '重命名被另一個挿件取消。'
@@ -1081,3 +1081,6 @@ msg_you_cannot_kick_this_resident: '你不能踢%s，他們是市長或助理。
 # Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: '領地%s屬於一個組，使用/plot group fs [數量]'
 msg_err_plot_belongs_to_group_plot_nfs: '領地%s屬於一個組，使用/plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'

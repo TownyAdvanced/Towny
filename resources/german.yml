@@ -1,5 +1,5 @@
 name: Towny
-version: 0.71
+version: 0.72
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1079,3 +1079,6 @@ msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an
 # Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'

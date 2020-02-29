@@ -888,4 +888,27 @@ public class TownyFormatter {
 		
 		return extraFields;
 	}
+	
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePrefix()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the king or mayor prefix from.
+	 * @return The king or mayor prefix of the resident.
+	 */
+	@Deprecated	
+	public static String getNamePrefix(Resident resident) {
+		return resident.getNamePrefix();	
+	}	
+
+	/**
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePostfix()} instead.
+	 *
+	 * @param resident The {@link Resident} to get the king or mayor postfix from.
+	 * @return The king or mayor postfix of the resident.
+	 */
+	@Deprecated	
+	public static String getNamePostfix(Resident resident) {
+		return resident.getNamePostfix();
+	}	
+
 }

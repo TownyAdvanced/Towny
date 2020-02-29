@@ -306,11 +306,9 @@ public class CombatUtil {
 				 */
 				if (townBlock.getTown().isAdminDisabledPVP())
 					return true;
-				
-				if (!townBlock.getPermissions().pvp && !world.isForcePVP())
-					return true;
 
-				if (!townBlock.getTown().isPVP() && !world.isForcePVP())
+				// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
+				if (!townBlock.getPermissions().pvp && !townBlock.getTown().isPVP() && !world.isForcePVP())
 					return true;
 				
 				if (townBlock.isHomeBlock() && world.isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
