@@ -42,6 +42,7 @@ public class Trie {
 	 * Adds and links new TrieNodes to the trie for each character in the string
 	 * 
 	 * @param key key to add to trie, can be longer than one character
+	 * @return true if the key was added properly, otherwise false 
 	 */
 	public boolean addKey(String key) {
 		// Current trieNode to crawl through
@@ -75,6 +76,7 @@ public class Trie {
 	 * Removes TrieNodes for a key
 	 * 
 	 * @param key key to remove
+	 * @return whether the key was found and removed    
 	 */
 	public boolean removeKey(String key) {
 		// Current trieNode to crawl through
