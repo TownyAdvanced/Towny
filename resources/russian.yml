@@ -1,5 +1,5 @@
 name: Towny
-version: 0.72
+version: 0.73
 language: russian
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1079,3 +1079,6 @@ msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot 
 
 # Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+
+# Added in 0.73
+msg_err_you_aren't currently jailed: 'You are not currently jailed.'
