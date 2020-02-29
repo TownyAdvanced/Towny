@@ -43,7 +43,7 @@ public class Trie {
 	 * 
 	 * @param key key to add to trie, can be longer than one character
 	 */
-	public void addKey(String key) {
+	public boolean addKey(String key) {
 		// Current trieNode to crawl through
 		TrieNode trieNode = root;
 
@@ -64,8 +64,11 @@ public class Trie {
 
 			if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
 				trieNode.endOfWord = true;
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 	/**
@@ -73,7 +76,7 @@ public class Trie {
 	 * 
 	 * @param key key to remove
 	 */
-	public void removeKey(String key) {
+	public boolean removeKey(String key) {
 		// Current trieNode to crawl through
 		TrieNode trieNode = root;
 		Queue<TrieNode> found = Collections.asLifoQueue(new LinkedList<>());
@@ -90,23 +93,32 @@ public class Trie {
 				trieNode = optional.get();
 				found.add(trieNode);
 				if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
+					boolean removed = false;
 					foundLoop:
 					for (TrieNode trieNode1 : found) {
 						Iterator<TrieNode> iterator = trieNode1.children.iterator();
 						while (iterator.hasNext()) {
 							TrieNode child = iterator.next();
 							if (found.contains(child) && child.children.size() < 2) { // Only remove if in found and there are one or no children
+								if (child.endOfWord) {
+									removed = true;
+								}
 								iterator.remove();
 							} else {
 								break foundLoop;
 							}
 						}
 					}
+					if (removed) {
+						return true;
+					}
 				}
 			} else {
 				break; // This shouldn't happen
 			}
 		}
+		
+		return false;
 	}
 
 	/**
@@ -128,17 +140,32 @@ public class Trie {
 		for (int i = 0; i < key.length(); i++) {
 			int finalI = i;
 			Optional<TrieNode> optional = trieNode.children.stream()
-				.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst(); // Find matches for lower and upper case
+				.filter(e -> e.character == key.charAt(finalI)).findFirst(); // Find matches for exact case first
+			
+			if (!optional.isPresent()) {
+				optional = trieNode.children.stream()
+					.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst(); // Find matches for lower and upper case if no matches for exact case
+				
+				if (optional.isPresent()) {
+					trieNode = optional.get();
+					realKey.append(trieNode.character);
 
-			if (!optional.isPresent()) { // No existing TrieNode here, stop searching
-				break;
-			}
+					if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
+						for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
+							strings.add(realKey + string); // Add the key to the front of each child string
+						}
+					}
+				} else { // No existing TrieNode here for any capitalization, so stop searching
+					break;
+				}
+			} else {
+				trieNode = optional.get();
+				realKey.append(trieNode.character);
 
-			trieNode = optional.get();
-			realKey.append(trieNode.character);
-			if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
-				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
-					strings.add(realKey + string); // Add the key to the front of each child string
+				if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
+					for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
+						strings.add(realKey + string); // Add the key to the front of each child string
+					}
 				}
 			}
 		}
