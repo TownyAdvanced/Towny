@@ -4204,3 +4204,5 @@ v0.92.0.11:
   - Create resident.getNamePostfix() & resident.getNamePrefix() for gather pre/postfixes of kings and mayor residents.
   - Fix possible NPE when Nation taxes were collected from towns.
   - Fix any *possible* NPE's in NameUtil, courtesy of Siris with PR #3724.
+0.95.2.21:
+  - Fix for root cause of issue solved with #3724, courtesy of stzups with PR #3725.
