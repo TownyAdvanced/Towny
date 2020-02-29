@@ -68,7 +68,7 @@ public class Trie {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -119,7 +119,7 @@ public class Trie {
 				break; // This shouldn't happen
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -143,11 +143,11 @@ public class Trie {
 			int finalI = i;
 			Optional<TrieNode> optional = trieNode.children.stream()
 				.filter(e -> e.character == key.charAt(finalI)).findFirst(); // Find matches for exact case first
-			
+
 			if (!optional.isPresent()) {
 				optional = trieNode.children.stream()
 					.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst(); // Find matches for lower and upper case if no matches for exact case
-				
+
 				if (optional.isPresent()) {
 					trieNode = optional.get();
 					realKey.append(trieNode.character);
