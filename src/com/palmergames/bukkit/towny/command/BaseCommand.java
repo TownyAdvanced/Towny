@@ -77,10 +77,10 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-		
+
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
+
 		if (type.contains("r")) {
 			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
 		}
@@ -92,11 +92,11 @@ public class BaseCommand implements TabCompleter{
 		if (type.contains("n")) {
 			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 		}
-		
+
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
-		
+
 		return matches;
 	}
 
