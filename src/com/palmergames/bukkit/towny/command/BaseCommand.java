@@ -18,6 +18,10 @@ public class BaseCommand implements TabCompleter{
 	private static final List<String> setPermTabCompletes = new ArrayList<>(Arrays.asList(
 		"on",
 		"off",
+		"resident",
+		"friend",
+		"town",
+		"nation",
 		"ally",
 		"outsider",
 		"build",
@@ -32,7 +36,8 @@ public class BaseCommand implements TabCompleter{
 		"ally",
 		"outsider",
 		"nation",
-		"friend"
+		"friend",
+		"town"		
 	));
 
 	private static final List<String> setTypeCompletes = new ArrayList<>(Arrays.asList(
