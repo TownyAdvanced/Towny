@@ -2,11 +2,14 @@ package com.palmergames.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 /**
  * Dynamic trie structure that can add/remove keys and recursively get matching strings for a key 
@@ -42,8 +45,9 @@ public class Trie {
 	 * Adds and links new TrieNodes to the trie for each character in the string
 	 * 
 	 * @param key key to add to trie, can be longer than one character
+	 * @return true if the key was added properly, otherwise false 
 	 */
-	public void addKey(String key) {
+	public boolean addKey(String key) {
 		// Current trieNode to crawl through
 		TrieNode trieNode = root;
 
@@ -64,16 +68,20 @@ public class Trie {
 
 			if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
 				trieNode.endOfWord = true;
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/**
 	 * Removes TrieNodes for a key
 	 * 
 	 * @param key key to remove
+	 * @return whether the key was found and removed    
 	 */
-	public void removeKey(String key) {
+	public boolean removeKey(String key) {
 		// Current trieNode to crawl through
 		TrieNode trieNode = root;
 		Queue<TrieNode> found = Collections.asLifoQueue(new LinkedList<>());
@@ -90,23 +98,32 @@ public class Trie {
 				trieNode = optional.get();
 				found.add(trieNode);
 				if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
+					boolean removed = false;
 					foundLoop:
 					for (TrieNode trieNode1 : found) {
 						Iterator<TrieNode> iterator = trieNode1.children.iterator();
 						while (iterator.hasNext()) {
 							TrieNode child = iterator.next();
 							if (found.contains(child) && child.children.size() < 2) { // Only remove if in found and there are one or no children
+								if (child.endOfWord) {
+									removed = true;
+								}
 								iterator.remove();
 							} else {
 								break foundLoop;
 							}
 						}
 					}
+					if (removed) {
+						return true;
+					}
 				}
 			} else {
 				break; // This shouldn't happen
 			}
 		}
+
+		return false;
 	}
 
 	/**
@@ -122,25 +139,27 @@ public class Trie {
 		}
 
 		List<String> strings = new ArrayList<>();
-		TrieNode trieNode = root;
-		StringBuilder realKey = new StringBuilder(); // Used if the key is not the correct case
+
+		Map<TrieNode, String> nodes = new HashMap<>(); // Contains a key for each TrieNode
+		nodes.put(root, ""); // Start with the root node
 
 		for (int i = 0; i < key.length(); i++) {
 			int finalI = i;
-			Optional<TrieNode> optional = trieNode.children.stream()
-				.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).findFirst(); // Find matches for lower and upper case
+			Map<TrieNode, String> newNodes = new HashMap<>(); // An updated version of nodes, will not contain the old values
+			for (Map.Entry<TrieNode, String> entry : nodes.entrySet()) { // Loop through the old nodes
+				List<TrieNode> list = entry.getKey().children.stream()
+					.filter(e -> Character.toLowerCase(e.character) == Character.toLowerCase(key.charAt(finalI))).collect(Collectors.toList()); // Find matches for lower and upper case
 
-			if (!optional.isPresent()) { // No existing TrieNode here, stop searching
-				break;
-			}
-
-			trieNode = optional.get();
-			realKey.append(trieNode.character);
-			if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
-				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) { // Recursively find all children
-					strings.add(realKey + string); // Add the key to the front of each child string
+				for (TrieNode listNode : list) { // Loop through all matches, could be a list of 1 or 2 - for example if we looked for "e" and the node had children "e" and "E" the list would have 2 values
+					newNodes.put(listNode, entry.getValue()+listNode.character); // entry.getValue is the old key for the node, for example "bana" as entry.getValue() and "n" as listNode.character resulting in "banan" for listNode
+					if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
+						for (String string : getChildrenStrings(listNode, new ArrayList<>())) { // Recursively find all children
+							strings.add(newNodes.get(listNode) + string); // Add the key to the front of each child string
+						}
+					}
 				}
 			}
+			nodes = newNodes;
 		}
 
 		return strings;
