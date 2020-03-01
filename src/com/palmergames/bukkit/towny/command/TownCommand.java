@@ -2234,8 +2234,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public void townBuy(Player player, String[] split) {
+		
+		if (!TownySettings.isUsingEconomy()) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_no_economy"));
+		}
+
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			
+		
 		Resident resident;
 		Town town;
 		try {
