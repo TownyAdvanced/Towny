@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
 import java.util.ArrayList;
