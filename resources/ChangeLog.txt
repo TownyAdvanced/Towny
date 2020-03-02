@@ -4170,6 +4170,9 @@ v0.92.0.11:
   - Removed unneeded permission check for /n spawn.
     - towny.command.nation.spawn node is no longer tested for.
     - towny.nation.spawn.* nodes still remain in use. 
+0.95.2.17:
+  - Updated chinese.yml, courtesy of qsefthuopq with PR #3703.
+  - Added tab completion for /invite commands, courtesy of stzups with PR #3705.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
