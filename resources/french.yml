@@ -1,5 +1,5 @@
 name: Towny
-version: 0.71
+version: 0.72
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK
 website: 'http://townyadvanced.github.io/'
@@ -1077,3 +1077,6 @@ msg_you_cannot_kick_this_resident: 'Vous ne pouvez pas expulser %s, il est le Ma
 # Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'La parcelle: %s appartient à un groupe, faites /plot group fs [nombre]'
 msg_err_plot_belongs_to_group_plot_nfs: 'La parcelle: %s appartient à un groupe, faites /plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
