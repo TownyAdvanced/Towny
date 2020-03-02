@@ -123,7 +123,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"npc",
 		"debug",
 		"devmode",
-		"withdraw"
+		"townwithdraw",
+		"nationwithdraw"
 	));
 	
 	private static final List<String> adminPlotTabCompletes = new ArrayList<>(Arrays.asList(
@@ -346,6 +347,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
 					}
+				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
+					return getTownyStartingWith(args[3], "r");
 				}
 				break;
 			case "nation":
