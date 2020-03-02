@@ -4177,6 +4177,13 @@ v0.92.0.11:
   - zh-TW.yml updated by shou692199 with PR #3708.
   - Flesh out .gitignore with OS specific (usually hidden) files, courtesy of Siris with PR #3706.
   - Updated & smarter /nation command tab-completion, courtesy of stzups with PR #3710. 
+0.95.2.18:
+  - Fix CombatUtil not disabling PVP in townblocks where PVP is off, when PVP is still on in the town.
+    - Towns will no longer override PVP settings for townblocks.
+    - The below 3 fixes were required after adjusting this.
+  - Fix using /plot perm in the wilderness just returning '[Towny] Not registered' message. Towny will now display the World status page.
+  - Fix ChunkNotification not displaying change of PVP status when moving between two townblocks with differing PVP settings.
+  - Fix /plot perm hud not displaying PVP setting for plots correctly.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
