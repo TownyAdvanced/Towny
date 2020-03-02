@@ -1511,8 +1511,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("town");
 					if (line != null)
 						if (line.isEmpty()) {
-							TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);							
-							TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+							TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);							
+							TownyMessaging.sendErrorMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 							TownyWorld world = townBlock.getWorld();
 							world.removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
@@ -1600,8 +1600,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				} catch (Exception e) {
 					if (test == "town") {
-						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);						
-						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+						TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);						
+						TownyMessaging.sendErrorMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 						TownyWorld world = townBlock.getWorld();
 						world.removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
