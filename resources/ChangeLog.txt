@@ -4158,6 +4158,7 @@ v0.92.0.11:
     - Remove LECTERN from the protections.switch_ids list in the config.
     - This will make it possible for players to read books on lecterns without having switch perms.
     - Players will still be unable to take the book (unless they have destroy permissions in the plot.)
+  - QOL interface changes/redundancy removal, courtesy of Siris with PR #3677.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
