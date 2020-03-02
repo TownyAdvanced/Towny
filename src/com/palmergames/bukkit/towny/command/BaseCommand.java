@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class BaseCommand implements TabCompleter{
 	
