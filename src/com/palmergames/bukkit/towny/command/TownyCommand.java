@@ -39,7 +39,6 @@ import org.bukkit.plugin.Plugin;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
