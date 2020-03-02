@@ -4218,3 +4218,5 @@ v0.92.0.11:
   - Fix for Tab Completion leaving out some towns/nations/players, as well as caring about upper/lower-case letters, courtesy of stzups with PR #3728.
   - Fix allowing /t buy bonus to be used when the config has using_economy: false.
   - Fix a couple missing options not showing under /plot set perm tab completion.
+  - Fix for more tab completions, courtesy of stzups with PR #3734.
+    - Closes #3733.
