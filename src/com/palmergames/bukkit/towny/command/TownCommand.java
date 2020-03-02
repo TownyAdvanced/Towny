@@ -117,7 +117,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"toggle",
 		"join",
 		"invite",
-		"buy"
+		"buy",
+		"mayor"
 		));
 	private static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"board",
