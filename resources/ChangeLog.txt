@@ -4161,6 +4161,7 @@ v0.92.0.11:
   - QOL interface changes/redundancy removal, courtesy of Siris with PR #3677.
   - Readd economy lookups for town and nation banks, deprecated.
   - Readd pay() and collect() to Towns and Nations, deprecated, courtesy of Siris with PR #3697.
+0.95.2.16:
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
