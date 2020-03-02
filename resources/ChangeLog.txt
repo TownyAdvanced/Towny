@@ -4203,6 +4203,7 @@ v0.92.0.11:
     - Closes #3722.
   - Create resident.getNamePostfix() & resident.getNamePrefix() for gather pre/postfixes of kings and mayor residents.
   - Fix possible NPE when Nation taxes were collected from towns.
+  - Fix any *possible* NPE's in NameUtil, courtesy of Siris with PR #3724.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
