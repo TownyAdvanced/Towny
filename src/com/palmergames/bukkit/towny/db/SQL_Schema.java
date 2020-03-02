@@ -180,6 +180,7 @@ public class SQL_Schema {
 		columns.add("`siegeScheduledEndTime` BIGINT");
 		columns.add("`siegeActualEndTime` BIGINT");
 		columns.add("`siegeZones` mediumtext");
+		columns.add("`siegeTotalPillageAmount` float NOT NULL");
 		columns.add("`occupied` bool NOT NULL DEFAULT '0'");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`desiredNeutralityValue` bool NOT NULL DEFAULT '0'");

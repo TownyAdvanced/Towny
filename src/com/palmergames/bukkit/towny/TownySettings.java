@@ -3095,5 +3095,8 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_MINIMUM_RUINS_DURATION_HOURS);
 	}
 
+	public static double getWarSiegeMaximumPillageAmountPerPlot() {
+		return getDouble(ConfigNodes.WAR_SIEGE_MAXIMUM_PILLAGE_AMOUNT_PER_PLOT);
+	}
 }
 

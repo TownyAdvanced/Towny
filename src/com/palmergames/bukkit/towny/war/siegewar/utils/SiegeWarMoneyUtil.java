@@ -103,11 +103,13 @@ public class SiegeWarMoneyUtil {
 
 			if (defendingTown.getAccount().canPayFromHoldings(fullPillageAmount)) {
 				defendingTown.getAccount().payTo(fullPillageAmount, pillagingResident, "Town pillaged by attacker");
+				defendingTown.getSiege().increaseTotalPillageAmount(fullPillageAmount);
 				universe.getDataSource().saveResident(pillagingResident);
 				universe.getDataSource().saveTown(defendingTown);
 			} else {
 				double actualPillageAmount = defendingTown.getAccount().getHoldingBalance();
 				defendingTown.getAccount().payTo(actualPillageAmount, pillagingResident, "Towny pillaged by attacker");
+				defendingTown.getSiege().increaseTotalPillageAmount(actualPillageAmount);
 
 				TownyMessaging.sendGlobalMessage(
 					String.format(

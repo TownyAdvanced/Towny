@@ -1158,7 +1158,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					} catch (Exception e) {
 					}
+
+					try {
+						line = keys.get("siegeTotalPillageAmount");
+						siege.setTotalPillageAmount(Double.parseDouble(line));
+					} catch (Exception e) {
+						siege.setTotalPillageAmount(0d);
+					}
 				}
+
 				line = keys.get("occupied");
 				if (line != null)
 					try {
@@ -2244,6 +2252,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("siegeScheduledEndTime=" + siege.getScheduledEndTime());
 			list.add("siegeActualEndTime=" + siege.getActualEndTime());
 			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames(), ","));
+			list.add("siegeTotalPillageAmount=" + siege.getTotalPillageAmount());
 		}
 		
 		list.add("occupied=" + town.isOccupied());

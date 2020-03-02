@@ -1094,7 +1094,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						}
 					}
 
-                }
+					siege.setTotalPillageAmount(rs.getDouble("siegeTotalPillageAmount"));
+				}
 				town.setOccupied(rs.getBoolean("occupied"));
 				town.setNeutral(rs.getBoolean("neutral"));
 				town.setDesiredNeutralityValue(rs.getBoolean("desiredNeutralityValue"));
@@ -1837,7 +1838,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 twn_hm.put("siegeScheduledEndTime", siege.getScheduledEndTime());
                 twn_hm.put("siegeActualEndTime", siege.getActualEndTime());
                 twn_hm.put("siegeZones", StringMgmt.join(siege.getSiegeZoneNames(), ","));
-            } else {
+				twn_hm.put("siegeTotalPillageAmount", siege.getTotalPillageAmount());
+			} else {
 				twn_hm.put("siegeStatus", "");
 				twn_hm.put("siegeTownPlundered", false);
 				twn_hm.put("siegeTownInvaded", false);
@@ -1846,6 +1848,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("siegeScheduledEndTime", 0);
 				twn_hm.put("siegeActualEndTime", 0);
 				twn_hm.put("siegeZones", "");
+				twn_hm.put("siegeTotalPillageAmount", 0d);
 			}
 			twn_hm.put("occupied", town.isOccupied());
 			twn_hm.put("neutral=", town.isNeutral());

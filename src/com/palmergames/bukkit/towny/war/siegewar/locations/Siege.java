@@ -38,6 +38,7 @@ public class Siege {
     private long scheduledEndTime;    //Scheduled end of siege
     private long actualEndTime;       //Actual end time of siege
     private Map<Nation, SiegeZone> siegeZones;
+	private double totalPillageAmount;     //The total amount pillaged so far from the town
 
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
@@ -151,5 +152,17 @@ public class Siege {
 
 	public long getTimeUntilAbandonIsAllowedMillis() {
 		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
+	}
+
+	public double getTotalPillageAmount() {
+		return totalPillageAmount;
+	}
+
+	public void setTotalPillageAmount(double totalPillageAmount) {
+		this.totalPillageAmount = totalPillageAmount;
+	}
+
+	public void increaseTotalPillageAmount(double pillageAmount) {
+    	this.totalPillageAmount += pillageAmount;
 	}
 }
