@@ -555,8 +555,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Resident: " + resident.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
+				FileInputStream fis = new FileInputStream(fileResident);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 				Properties properties = new Properties();
-				properties.load(new InputStreamReader(new FileInputStream(fileResident), StandardCharsets.UTF_8));
+				properties.load(isr);
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -634,6 +636,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					resident.setMetadata(line.trim());
 				
+				isr.close();
+				fis.close();
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
 				return false;
@@ -658,8 +663,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Town: " + town.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
+				FileInputStream fis = new FileInputStream(fileTown);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 				Properties properties = new Properties();
-				properties.load(new InputStreamReader(new FileInputStream(fileTown), StandardCharsets.UTF_8));
+				properties.load(isr);
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -970,6 +977,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
 				
+				isr.close();
+				fis.close();
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -994,8 +1004,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Nation: " + nation.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
+				FileInputStream fis = new FileInputStream(fileNation);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 				Properties properties = new Properties();
-				properties.load(new InputStreamReader(new FileInputStream(fileNation), StandardCharsets.UTF_8));
+				properties.load(isr);
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -1140,6 +1152,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					nation.setMetadata(line.trim());
+				isr.close();
+				fis.close();
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1171,8 +1185,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading World: " + world.getName());
 			try {
 				HashMap<String, String> keys = new HashMap<>();
+				FileInputStream fis = new FileInputStream(fileWorld);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 				Properties properties = new Properties();
-				properties.load(new InputStreamReader(new FileInputStream(fileWorld), StandardCharsets.UTF_8));
+				properties.load(isr);
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -1423,6 +1439,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					world.setMetadata(line.trim());
 				
+				isr.close();
+				fis.close();
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 				return false;
@@ -1449,8 +1468,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				String test = null;
 				try {
 					HashMap<String, String> keys = new HashMap<>();
+					FileInputStream fis = new FileInputStream(groupFile);
+					InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 					Properties properties = new Properties();
-					properties.load(new InputStreamReader(new FileInputStream(groupFile), StandardCharsets.UTF_8));
+					properties.load(isr);
 					for (String key : properties.stringPropertyNames()) {
 						String value = properties.getProperty(key);
 						keys.put(key, String.valueOf(value));
@@ -1479,6 +1500,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty())
 						group.setPrice(Double.parseDouble(line.trim()));
 						
+					isr.close();
+					fis.close();
 					
 				} catch (Exception e) {
 					if (test.equals("town")) {
@@ -1514,9 +1537,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
 				String test = null;
 				try {
-					HashMap<String, String> keys = new HashMap<>();
+					HashMap<String, String> keys = new HashMap<>();					
+					FileInputStream fis = new FileInputStream(fileTownBlock);
+					InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 					Properties properties = new Properties();
-					properties.load(new InputStreamReader(new FileInputStream(fileTownBlock), StandardCharsets.UTF_8));
+					properties.load(isr);
 					for (String key : properties.stringPropertyNames()) {
 						String value = properties.getProperty(key);
 						keys.put(key, String.valueOf(value));
@@ -1613,6 +1638,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						townBlock.setPlotObjectGroup(group);
 					}
 
+					isr.close();
+					fis.close();
 				} catch (Exception e) {
 					if (test == "town") {
 						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);						

@@ -4162,6 +4162,9 @@ v0.92.0.11:
   - Readd economy lookups for town and nation banks, deprecated.
   - Readd pay() and collect() to Towns and Nations, deprecated, courtesy of Siris with PR #3697.
 0.95.2.16:
+  - New Language: Taiwanese courtesy of shou692199 with PR #3689.
+    - set language: zh-TW.yml in config to use.
+  - Fix for potentially causing too many file open exceptions on servers with large databases and small Open File Limits.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
