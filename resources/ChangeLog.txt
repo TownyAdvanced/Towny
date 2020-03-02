@@ -4187,6 +4187,7 @@ v0.92.0.11:
   - Implementation of a trie data structure for residents, towns, and nations; courtesy of stzups & Siris with PR #3712.
   - Fix death_payments feature not working on mob-kills of players.
   - Fix PlayerCommandPreprocessEvent error seen in log when players chat while Towny is in safe mode.
+  - Fix edge-case scenario where a townblock could be null when listing outposts.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
