@@ -14,6 +14,9 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author ElgarL
  * 
@@ -264,4 +267,51 @@ public abstract class TownyPermissionSource {
 		return false;
 
 	}
+
+	/**
+	 * This method checks the permissions of a resident
+	 *
+	 * Returns true if a resident has a certain permission node.
+	 *
+	 * @param resident - Resident to check
+	 * @param permissionNode - Permission node to check for
+	 * @return true if the resident has this permission node.
+	 */
+	public boolean has(Resident resident, PermissionNodes permissionNode) {
+		String permissionNodeString = permissionNode.getNode();
+		Map<String, Boolean> residentPerms = TownyPerms.getResidentPerms(resident);
+		String permissionNodeWildCardString = permissionNodeString.replaceFirst("[\\w]*$", "*");
+		return (residentPerms.containsKey(permissionNodeString) || residentPerms.containsKey(permissionNodeWildCardString));
+	}
+
+	/**
+	 * This method checks if the given nation rank, will allow the given permission node
+	 *
+	 * @param nationRank - A nation rank (e.g. soldier, helper)
+	 * @param permissionNode - Permission node to check for
+	 * @return true if the rank allows the permission node
+	 */
+	public boolean doesNationRankAllowPermissionNode(String nationRank, PermissionNodes permissionNode) {
+		List<String> allPermissionNodesAllowedByRank = TownyPerms.getNationRank(nationRank);
+		String permissionNodeString = permissionNode.getNode();
+		String permissionNodeWildCardString = permissionNodeString.replaceFirst("[\\w]*$", "*");
+		return (allPermissionNodesAllowedByRank.contains(permissionNodeString) 
+			|| allPermissionNodesAllowedByRank.contains(permissionNodeWildCardString));
+	}
+
+	/**
+	 * This method checks if the given town rank, will allow the given permission node
+	 *
+	 * @param townRank - A town rank (e.g. guard, helper)
+	 * @param permissionNode - Permission node to check for
+	 * @return true if the rank allows the permission node
+	 */
+	public boolean doesTownRankAllowPermissionNode(String townRank, PermissionNodes permissionNode) {
+		List<String> allPermissionNodesAllowedByRank = TownyPerms.getTownRank(townRank);
+		String permissionNodeString = permissionNode.getNode();
+		String permissionNodeWildCardString = permissionNodeString.replaceFirst("[\\w]*$", "*");
+		return (allPermissionNodesAllowedByRank.contains(permissionNodeString) 
+			|| allPermissionNodesAllowedByRank.contains(permissionNodeWildCardString));
+	}
+
 }

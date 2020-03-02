@@ -54,8 +54,8 @@ public class Siege {
     public Map<Nation, SiegeZone> getSiegeZones() {
         return siegeZones;
     }
-    
-    public long getScheduledEndTime() {
+
+	public long getScheduledEndTime() {
         return scheduledEndTime;
     }
 

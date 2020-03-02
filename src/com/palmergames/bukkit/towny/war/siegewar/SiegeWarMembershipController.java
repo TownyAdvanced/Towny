@@ -19,13 +19,16 @@ public class SiegeWarMembershipController {
 	/**
 	 * Evaluates a town removing a resident, and determines if any siege penalty points apply
 	 * 
+	 * If the resident has guard rank, and the town has a siege, points are awarded.
+	 * If the resident has soldier/general rank, and the nation and/or allies have any sieges, points are awarded
+	 * 
 	 * @param resident The resident who is being removed
 	 *  
 	 */
-	public static void evaluateTownRemoveResident(Resident resident) {
-		SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_resident_leave_town"));
+	public static void evaluateTownRemoveResident(Town town, Resident resident) {
+		SiegeWarPointsUtil.evaluateFighterRemovalPenalty(town, resident, TownySettings.getLangString("msg_siege_war_resident_leave_town"));
 	}
-	
+
 	/**
 	 * Evaluates a nation removing a town, and determines if any siege penalty points apply
 	 *
@@ -34,7 +37,7 @@ public class SiegeWarMembershipController {
 	 */
 	public static void evaluateNationRemoveTown(Town town) {
 		for (Resident resident : town.getResidents()) {
-				SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_town_leave_nation"));
+			SiegeWarPointsUtil.evaluateFighterRemovalPenalty(town, resident, TownySettings.getLangString("msg_siege_war_town_leave_nation"));
 		}
 	}
 
@@ -42,15 +45,12 @@ public class SiegeWarMembershipController {
 	 * Evaluates a nation removing an ally, and determines if any siege penalty points apply
 	 *
 	 * @param ally The ally being removed
-	 * 
+	 *
 	 */
 	public static void evaluateNationRemoveAlly(Nation nation, Nation ally) {
-		for (Resident resident : nation.getResidents()) {
-			SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_ally_removed"));
-		}
+		//Apply penalty to nation for each allied soldier
 		for (Resident resident : ally.getResidents()) {
-			SiegeWarPointsUtil.evaluateSiegePenaltyPoints(resident, TownySettings.getLangString("msg_siege_war_ally_removed"));
+			SiegeWarPointsUtil.evaluateSoldierRemovalPenalty(nation, resident, null, TownySettings.getLangString("msg_siege_war_ally_removed"));
 		}
 	}
-
 }

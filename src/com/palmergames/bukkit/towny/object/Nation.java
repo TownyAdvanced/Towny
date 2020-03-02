@@ -741,11 +741,24 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return result;
 	}
 
-	public List<Town> getTownsUnderActiveSiegeDefence() {
-		List<Town> result = new ArrayList<Town>();
+	public List<SiegeZone> getActiveSiegeAttackZones() {
+		List<SiegeZone> result = new ArrayList<>();
+		for(SiegeZone siegeZone: siegeZones) {
+			if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+				result.add(siegeZone);
+			}
+		}
+		return result;
+	}
+
+	public List<SiegeZone> getActiveSiegeDefenceZones(Town townToExclude) {
+		List<SiegeZone> result = new ArrayList<>();
 		for(Town town: towns) {
+			if(town == townToExclude)
+				continue;
+
 			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
-				result.add(town);
+				result.addAll(town.getSiege().getSiegeZones().values());
 			}
 		}
 		return result;

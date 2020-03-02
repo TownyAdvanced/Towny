@@ -633,7 +633,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		} else {
 
 			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarMembershipController.evaluateTownRemoveResident(resident);
+				SiegeWarMembershipController.evaluateTownRemoveResident(this, resident);
 
 			remove(resident);
 

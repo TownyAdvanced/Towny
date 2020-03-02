@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -159,14 +156,21 @@ public class CombatUtil {
 				 * Check the defenders TownBlock and it's Town for their PvP
 				 * status, else the world
 				 * Check if the attacker has 'post-spawn damage/attack immunity'
+				 * Check if the attacker is from a neutral town
 				 */
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 					|| preventPvP(world, attackerTB)
 					|| preventPvP(world, defenderTB)
 					|| (TownySettings.getWarSiegeEnabled()
-						&& TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()
-						&& attackingPlayer.isInvulnerable())) {
-
+							&& 
+							(
+								(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && attackingPlayer.isInvulnerable())
+					  			|| 
+								(TownySettings.getWarSiegeTownNeutralityEnabled() && isPlayerFromANeutralOrDesiredNeutralTown(attackingPlayer))
+							)
+					   )
+					)
+				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
 
@@ -591,5 +595,16 @@ public class CombatUtil {
 		} catch (NotRegisteredException e) {
 			return false;
 		}
+	}
+
+	private static boolean isPlayerFromANeutralOrDesiredNeutralTown(Player player) {
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			if(resident.hasTown()) { 
+				return resident.getTown().isNeutral() || resident.getTown().getDesiredNeutralityValue();
+			} else {
+				return false;
+			}
+		} catch (NotRegisteredException e) { return false; }
 	}
 }

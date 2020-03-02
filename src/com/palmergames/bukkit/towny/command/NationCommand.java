@@ -810,7 +810,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			//Check that town is not neutral
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegeTownNeutralityEnabled()
-				&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+				&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_join_nation"));
 			}
 			
@@ -1288,7 +1288,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			//Check that town is not neutral
 			if(TownySettings.getWarSiegeEnabled() 
 				&& TownySettings.getWarSiegeTownNeutralityEnabled()
-				&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+				&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_create_nation"));
 			}
 			
@@ -1567,7 +1567,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				//Check that town is not neutral
 				if(TownySettings.getWarSiegeEnabled()
 					&& TownySettings.getWarSiegeTownNeutralityEnabled()
-					&& (town.isNeutral() || !town.isNeutral() && town.getNeutralityChangeConfirmationCounterDays() > 0)) {
+					&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
 					TownyMessaging.sendErrorMsg(player,String.format(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_invite_to_nation"), town.getName()));
 					continue;
 				}
