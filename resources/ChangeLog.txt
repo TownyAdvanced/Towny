@@ -4206,6 +4206,9 @@ v0.92.0.11:
   - Fix any *possible* NPE's in NameUtil, courtesy of Siris with PR #3724.
 0.95.2.21:
   - Fix for root cause of issue solved with #3724, courtesy of stzups with PR #3725.
+  - Fix lack of message when an unjailed player uses /res jail foo.
+    - Closes #3726.
+  - Language files bumped to 0.73.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
