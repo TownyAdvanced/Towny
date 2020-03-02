@@ -4185,6 +4185,7 @@ v0.92.0.11:
   - Fix ChunkNotification not displaying change of PVP status when moving between two townblocks with differing PVP settings.
   - Fix /plot perm hud not displaying PVP setting for plots correctly.
   - Implementation of a trie data structure for residents, towns, and nations; courtesy of stzups & Siris with PR #3712.
+  - Fix death_payments feature not working on mob-kills of players.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
