@@ -4198,6 +4198,10 @@ v0.92.0.11:
   - Fix DailyTimerTask not resetting cosmetic list of removedTowns, removedNations, totalUpkeeps.
   - Fix towns being kicked from a nation for non-payment of taxes being included in the removedTowns.
   - Temporarily make TownBlocks that are deleted for not containing a proper town entry ErrorMessages in the log rather than just debug messages.
+0.95.2.20:
+  - Re-add removed TownyFormatter functions as deprecated.
+    - Closes #3722.
+  - Create resident.getNamePostfix() & resident.getNamePrefix() for gather pre/postfixes of kings and mayor residents.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.

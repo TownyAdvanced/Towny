@@ -709,6 +709,32 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			
 		return (hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
 	}
+
+	/**
+	 * Returns King or Mayor prefix set in the Town and Nation Levels of the config.
+	 * 
+	 * @return Prefix of a King or Mayor if resident is a king or mayor.
+	 */	
+	public String getNamePrefix() {
+		if (isKing())
+			return TownySettings.getKingPrefix(this);
+		if (isMayor())
+			return TownySettings.getMayorPrefix(this);
+		return "";
+	}
+	
+	/**
+	 * Returns King or Mayor postfix set in the Town and Nation Levels of the config.
+	 * 
+	 * @return Postfix of a King or Mayor if resident is a king or mayor.
+	 */	
+	public String getNamePostfix() {
+		if (isKing())
+			return TownySettings.getKingPostfix(this);
+		if (isMayor())
+			return TownySettings.getMayorPostfix(this);
+		return "";
+	}
 	
 	public String getFormattedTitleName() {
 		if (!hasTitle())
