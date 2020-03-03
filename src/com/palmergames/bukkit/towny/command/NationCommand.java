@@ -52,6 +52,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.Trie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,6 +65,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -215,6 +217,32 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (args.length == 1 && args[0].equalsIgnoreCase("test")) {
+			long start = System.nanoTime();
+			final char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_".toCharArray();
+			final int amount = 100000;
+			final int length = 30;
+			List<String> names = new ArrayList<>();
+			Random random = new Random();
+			for (int i = 0; i < amount; i++) {
+				char[] name = new char[length];
+				for (int x = 0; x < name.length; x++) {
+					if (random.nextBoolean()) {
+						name[x] = chars[(int) (random.nextFloat() * chars.length)];
+					} else {
+						name[x] = Character.toLowerCase(chars[(int) (random.nextFloat() * chars.length)]);
+					}
+				}
+				names.add(new String(name));
+			}
+			System.out.println("Made "+amount+" strings in "+(float)(System.nanoTime()-start)/1000000+"ms");
+			Trie nationsTrie = TownyUniverse.getInstance().getNationsTrie();
+			start = System.nanoTime();
+			for (String name : names) {
+				nationsTrie.addKey(name);
+			}
+			System.out.println("Added "+amount+" strings to trie in "+(float)(System.nanoTime()-start)/1000000+"ms");
+		}
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;

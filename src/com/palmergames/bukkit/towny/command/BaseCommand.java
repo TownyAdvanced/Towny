@@ -86,6 +86,7 @@ public class BaseCommand implements TabCompleter{
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
+		long start = System.nanoTime();
 		if (type.contains("r")) {
 			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
 		}
@@ -102,6 +103,7 @@ public class BaseCommand implements TabCompleter{
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
 
+		System.out.println((float)(System.nanoTime()-start)/1000000+"ms");
 		return matches;
 	}
 
