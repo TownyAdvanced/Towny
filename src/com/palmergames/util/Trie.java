@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 
 /**
@@ -84,30 +85,32 @@ public class Trie {
 		for (int i = 0; i < key.length(); i++) {
 			char index = key.charAt(i);
 			TrieNode lastNode = trieNode;
-	
-			for (TrieNode node : lastNode.children) {
-				if (node.character == index) {
-					trieNode = node;
-					found.add(trieNode);
+			TrieNode node = null;
+			for (TrieNode nodeLoop : lastNode.children) {
+				if (nodeLoop.character == index) {
+					node = nodeLoop;
+				}
+			}
 
-					if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending
-
-						foundLoop:
-						for (TrieNode trieNode1 : found) {
-							Iterator<TrieNode> iterator = trieNode1.children.iterator();
-
-							while (iterator.hasNext()) {
-								TrieNode child = iterator.next();
-
-								if (found.contains(child) && child.children.size() < 2) { // Only remove if in found and there are one or no children
-									iterator.remove();
-								} else {
-									break foundLoop;
-								}
+			if (node != null) {
+				trieNode = node;
+				found.add(trieNode);
+				if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
+					foundLoop:
+					for (TrieNode trieNode1 : found) {
+						Iterator<TrieNode> iterator = trieNode1.children.iterator();
+						while (iterator.hasNext()) {
+							TrieNode child = iterator.next();
+							if (found.contains(child) && child.children.size() < 2) { // Only remove if in found and there are one or no children
+								iterator.remove();
+							} else {
+								break foundLoop;
 							}
 						}
 					}
 				}
+			} else {
+				break; // This shouldn't happen
 			}
 		}
 	}
