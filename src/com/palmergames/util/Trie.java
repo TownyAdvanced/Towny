@@ -49,23 +49,25 @@ public class Trie {
 		TrieNode trieNode = root;
 
 		// Loop through each character of key
-		outer:
 		for (int i = 0; i < key.length(); i++) {
 			char index = key.charAt(i);
 
 			TrieNode lastNode = trieNode;
+			trieNode = null;
 			for (TrieNode node : lastNode.children) {
 				if (node.character == index) {
 					trieNode = node;
-					continue outer;
+					break;
 				}
 			}
 
-			trieNode = new TrieNode(index);
-			lastNode.children.add(trieNode); // Put this node as one of lastNode's children
+			if (trieNode == null) {
+				trieNode = new TrieNode(index);
+				lastNode.children.add(trieNode); // Put this node as one of lastNode's children
 
-			if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
-				trieNode.endOfWord = true;
+				if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending
+					trieNode.endOfWord = true;
+				}
 			}
 		}
 	}
