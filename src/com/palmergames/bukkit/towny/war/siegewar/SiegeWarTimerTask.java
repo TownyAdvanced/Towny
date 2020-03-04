@@ -117,6 +117,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 		int attackPointInstancesAwarded = 0;
 		int defencePointInstancesAwarded = 0;
+		List<Player> pillagingPlayers = new ArrayList<>();
 
 		//Evaluate the siege zone only if the siege is 'in progress'.
 		if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) 
@@ -185,16 +186,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
-
-								//Pillage
-								double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siegeZone.getDefendingTown().getTownBlocks().size();
-								if(TownySettings.getWarSiegePillagingEnabled() 
-									&& TownySettings.isUsingEconomy() 
-									&& !siegeZone.getDefendingTown().isNeutral()
-									&& siegeZone.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount) 
-								{
-									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
-								}
+								pillagingPlayers.add(player);
 							}
 
 						} else if (defencePointInstancesAwarded <= TownySettings.getWarSiegeMaxPlayersPerSideForTimedPoints()
@@ -226,16 +218,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 							if(attackPointsAwarded) {
 								attackPointInstancesAwarded++;
-
-								//Pillage
-								double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siegeZone.getDefendingTown().getTownBlocks().size();
-								if(TownySettings.getWarSiegePillagingEnabled()
-									&& TownySettings.isUsingEconomy()
-									&& !siegeZone.getDefendingTown().isNeutral()
-									&& siegeZone.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount)
-								{
-									SiegeWarMoneyUtil.pillageTown(player, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
-								}
+								pillagingPlayers.add(player);
 							}
 						}
 					}
@@ -243,7 +226,17 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			} catch (NotRegisteredException e) {
 			}
 		}
-		
+
+		//Pillage
+		double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siegeZone.getDefendingTown().getTownBlocks().size();
+		if(TownySettings.getWarSiegePillagingEnabled()
+			&& TownySettings.isUsingEconomy()
+			&& !siegeZone.getDefendingTown().isNeutral()
+			&& siegeZone.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount)
+		{
+			SiegeWarMoneyUtil.pillageTown(pillagingPlayers, siegeZone.getAttackingNation(), siegeZone.getDefendingTown());
+		}
+
 		//Save siege zone to db if it was changed
 		if(attackPointInstancesAwarded > 0 || defencePointInstancesAwarded > 0) {
 			universe.getDataSource().saveSiegeZone(siegeZone);
