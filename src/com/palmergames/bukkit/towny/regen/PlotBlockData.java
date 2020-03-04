@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import de.themoep.idconverter.IdMappings;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;

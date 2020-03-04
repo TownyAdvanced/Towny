@@ -74,6 +74,10 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>minebench-repo</id>
+            <url>https://repo.minebench.de/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -132,7 +136,12 @@
             <version>2.10.4</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>de.themoep.idconverter</groupId>
+            <artifactId>mappings</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
