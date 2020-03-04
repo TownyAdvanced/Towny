@@ -140,12 +140,13 @@ public class Trie {
 				for (TrieNode node : entry.getKey().children) {
 
 					if (Character.toLowerCase(node.character) == index) {
-						newNodes.put(node, entry.getValue()+node.character); // entry.getValue is the old key for the node, for example "bana" as entry.getValue() and "n" as listNode.character resulting in "banan" for listNode
+						String realKey = entry.getValue()+node.character;
+						newNodes.put(node, realKey); // entry.getValue is the old key for the node, for example "bana" as entry.getValue() and "n" as listNode.character resulting in "banan" for listNode
 
 						if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending. From here we need to find all the possible children
 
 							for (String string : getChildrenStrings(node, new ArrayList<>())) { // Recursively find all children
-								strings.add(newNodes.get(node) + string); // Add the key to the front of each child string
+								strings.add(realKey + string); // Add the key to the front of each child string
 							}
 						}
 					}
