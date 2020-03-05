@@ -4222,3 +4222,4 @@ v0.92.0.11:
     - Closes #3733.
   - Fix a small typo, courtesy of introvertism with PR #3736.
   - Fix for Towny not clearing a residents' modes when they quit.
+  - Further optimize Trie used in tab completion, courtesy of stzups with PR #3739.
