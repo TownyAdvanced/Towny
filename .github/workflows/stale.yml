@@ -17,3 +17,5 @@ jobs:
         stale-pr-message: "This Pull Request hasn't had any activity in a while."
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
+        days-before-stale: 90
+
