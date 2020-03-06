@@ -94,4 +94,5 @@ public abstract class TownyObject implements Nameable {
 			metadata.add(CustomDataField.load(object));
 		}
 	}
+	
 }
