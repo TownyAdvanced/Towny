@@ -188,17 +188,14 @@ public class TownyWarCustomListener implements Listener {
 
 			// Defender loses townblock
 			if (TownyWarConfig.isFlaggedTownblockTransfered()) {
-				// Defender loses townblock
-				universe.getDataSource().removeTownBlock(townBlock);
-
 				// Attacker Claim Automatically
 				try {
-					List<WorldCoord> selection = new ArrayList<>();
-					selection.add(worldCoord);
-					TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
-					new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
-				} catch (TownyException te) {
+					townBlock.setTown(attackingTown);
+					TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+				} catch (Exception te) {
 					// Couldn't claim it.
+					TownyMessaging.sendErrorMsg(te.getMessage());
+					te.printStackTrace();
 				}
 			} else {
 				
