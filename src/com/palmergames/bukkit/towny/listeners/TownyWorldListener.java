@@ -10,15 +10,26 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -182,59 +193,33 @@ public class TownyWorldListener implements Listener {
 		if (!removed.isEmpty())
 			event.getBlocks().removeAll(removed);
 	}
-	
-// Below is an attempt at blocking portals being made by people who could not build the 2nd side of the portal.
-// It fails to place the player into the hashmap fast enough that the PlayerPortalEvent can be cancelled.
-// Players who do have their CreateEvent cancelled end up suffocating in the dirt of their destination world.
-//	
-//	@EventHandler(priority = EventPriority.LOWEST)
-//	public void onPortalCreate(PortalCreateEvent event) {
-//		
-//		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-//		Player player = null;
-//		try {
-//			if (!townyUniverse.getDataSource().getWorld(event.getWorld().getName()).isUsingTowny())
-//				return;
-//		} catch (NotRegisteredException ignored) {
-//		}
-//		
-//		CreateReason reason = event.getReason();
-//		if (!reason.equals(CreateReason.NETHER_PAIR))
-//			return;
-//		
-//		if (event.getEntity().getType().equals(EntityType.PLAYER)) {
-//			player = (Player) event.getEntity();
-//		} else 
-//			return;
-//		
-//		
-//
-//		Location loc = null;
-//		boolean bBuild = false;
-//		for (BlockState blocks : event.getBlocks()) {
-//			loc = blocks.getBlock().getLocation();
-//
-//			bBuild = PlayerCacheUtil.getCachePermission(player, loc, Material.OBSIDIAN, ActionType.BUILD);
-//			if (!bBuild) {
-//				playersMap.add(player.getName());
-//				event.setCancelled(true);				
-//				System.out.println("Build Test for portal Failed.");
-//				break;
-//			}
-//		}
-//	}
-//	
-//	@EventHandler(priority = EventPriority.HIGHEST) 
-//	public void onPlayerPortal(PlayerPortalEvent event) {
-//		
-//		if (!event.getCause().equals(TeleportCause.NETHER_PORTAL))
-//			return;
-//		
-//		System.out.println("portalMap empty" + playersMap.isEmpty() );
-//		if (playersMap.contains(event.getPlayer().getName())) {
-//			event.setCancelled(true);
-//			playersMap.remove(event.getPlayer().getName());
-//			System.out.println("event canceled");
-//		}
-//	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPortalCreate(PortalCreateEvent event) {
+		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
+			return;
+		}
+		try {
+			if (!TownyUniverse.getInstance().getDataSource().getWorld(event.getWorld().getName()).isUsingTowny()) {
+				return;
+			}
+		} catch (Exception ignored) {}
+
+		if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
+			return;
+		}
+		
+		for (BlockState block : event.getBlocks()) {
+			// Check if player can build in destination portal townblock.
+			boolean bBuild = PlayerCacheUtil.getCachePermission((Player) event.getEntity(), block.getLocation(), Material.OBSIDIAN, TownyPermission.ActionType.BUILD);
+
+			// If not reject the creation of the portal. No need to cancel event, bukkit does that automatically.
+			if (!bBuild) {
+				TownyMessaging.sendErrorMsg(event.getEntity(), "You're not allowed to create the other side of this portal in this location.");
+				event.setCancelled(true);
+				break;
+			}
+		}
+	}
+
 }
