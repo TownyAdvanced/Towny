@@ -4234,3 +4234,4 @@ v0.92.0.11:
 0.95.2.23:
   - zh-TW.yml updated by shou692199 with PR #3751.
   - Fix plot toggle tab-completion and remove unused code, courtesy of silverwolfg11 with PR #3750.
+  - Add database load time to startup.
