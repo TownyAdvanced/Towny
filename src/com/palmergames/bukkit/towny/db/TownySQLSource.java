@@ -1560,7 +1560,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     @Override
     public synchronized boolean saveResident(Resident resident) {
 
-        TownyMessaging.sendDebugMsg("Saving Resident");
+        TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
         try {
             HashMap<String, Object> res_hm = new HashMap<>();
             res_hm.put("name", resident.getName());
