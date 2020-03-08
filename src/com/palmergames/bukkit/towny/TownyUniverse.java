@@ -97,7 +97,7 @@ public class TownyUniverse {
             return false;
         }
         long time = System.currentTimeMillis() - startTime;
-        System.out.println("Towny database loaded in " + time + "ms.");
+        System.out.println("[Towny] Database loaded in " + time + "ms.");
         
         try {
             dataSource.cleanupBackups();
