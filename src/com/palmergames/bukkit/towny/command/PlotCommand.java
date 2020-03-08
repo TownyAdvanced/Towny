@@ -124,6 +124,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"rect",
 		"circle"
 	));
+	
+	private static final List<String> plotToggleTabCompletes = new ArrayList<>(Arrays.asList(
+		"fire",
+		"pvp",
+		"explosion",
+		"mob"
+	));
 
 	public PlotCommand(Towny instance) {
 
@@ -174,8 +181,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
 					}
+					break;
 				case "toggle":
-					return toggleTabCompletes(StringMgmt.remArgs(args, 2));
+					if (args.length == 2)
+						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+					break;
 				case "claim":
 				case "notforsale":
 				case "nfs":

@@ -60,13 +60,6 @@ public class BaseCommand implements TabCompleter{
 		"on",
 		"off"
 	));
-
-	private static final List<String> toggleTabCompletes = new ArrayList<>(Arrays.asList(
-		"fire",
-		"pvp",
-		"explosion",
-		"mob"
-	));
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -146,20 +139,6 @@ public class BaseCommand implements TabCompleter{
 				break;
 			case 3:
 				return NameUtil.filterByStart(setOnOffCompletes, args[2]);
-		}
-		
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Used for toggle tab completes which are common across several commands
-	 * 
-	 * @param args args, make sure to remove the first few irrelevant args
-	 * @return tab completes matching the proper arg
-	 */
-	static List<String> toggleTabCompletes(String[] args) {
-		if (args.length == 1) {
-			return NameUtil.filterByStart(toggleTabCompletes, args[0]);
 		}
 		
 		return Collections.emptyList();
