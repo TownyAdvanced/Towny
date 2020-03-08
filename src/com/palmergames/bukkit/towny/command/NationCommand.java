@@ -912,9 +912,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Nation nation = townyUniverse.getDataSource().getNation(split[0]);
 				List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 				if (onlineResidents.size() > 0 ) {
-					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
-					TownyMessaging.sendMsg(player, Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation));
+					TownyMessaging.sendMessage(player, Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -925,7 +925,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Town town = resident.getTown();
 				Nation nation = town.getNation();
-				TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
 			}

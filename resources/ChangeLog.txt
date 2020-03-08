@@ -4237,3 +4237,4 @@ v0.92.0.11:
   - Add database load time to startup.
   - Fix possibility of residents getting duplicate town and nation ranks.
   - Fix unhelpful debug messages when saving residents in sql.
+  - Potential fix for /t and /n online commands not parsing their outputs nicely.
