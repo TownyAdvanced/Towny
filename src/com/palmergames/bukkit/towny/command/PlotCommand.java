@@ -79,7 +79,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		output.add(TownySettings.getLangString("msg_nfs_abr"));
 	}
 	
-	private static final List<String> plotTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotTabCompletes = Arrays.asList(
 		"claim",
 		"unclaim",
 		"forsale",
@@ -92,9 +92,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"toggle",
 		"clear",
 		"group"
-	));
+	);
 	
-	private static final List<String> plotGroupTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotGroupTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"set",
@@ -103,9 +103,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"notforsale",
 		"forsale",
 		"perm"
-	));
+	);
 	
-	private static final List<String> plotSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotSetTabCompletes = Arrays.asList(
 		"reset",
 		"shop",
 		"embassy",
@@ -118,19 +118,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"outpost",
 		"name",
 		"perm"
-	));
+	);
 	
-	private static final List<String> plotRectCircleCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotRectCircleCompletes = Arrays.asList(
 		"rect",
 		"circle"
-	));
+	);
 	
-	private static final List<String> plotToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotToggleTabCompletes = Arrays.asList(
 		"fire",
 		"pvp",
 		"explosion",
 		"mob"
-	));
+	);
 
 	public PlotCommand(Towny instance) {
 
