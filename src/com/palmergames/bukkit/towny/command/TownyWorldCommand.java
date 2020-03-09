@@ -155,7 +155,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}		
 
-		if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("toggle")) {
+		if (split[0].equalsIgnoreCase("set")) {
+			for (String line : townyworld_set_console) {
+				sender.sendMessage(line);
+			}
+		}
+		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
 			for (String line : townyworld_help_console) {
 				sender.sendMessage(line);
 			}
