@@ -71,7 +71,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> ta_help = new ArrayList<>();
 	private static final List<String> ta_panel = new ArrayList<>();
 	private static final List<String> ta_unclaim = new ArrayList<>();
-	private static final List<String> adminTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminTabCompletes = Arrays.asList(
 		"delete",
 		"plot",
 		"resident",
@@ -90,9 +90,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"mysqldump",
 		"tpplot",
 		"database"
-	));
+	);
 
-	private static final List<String> adminTownTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminTownTabCompletes = Arrays.asList(
 		"new",
 		"add",
 		"remove",
@@ -106,18 +106,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"toggle",
 		"set",
 		"meta"
-	));
+	);
 
-	private static final List<String> adminNationTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
 		"rename",
 		"delete",
 		"toggle",
 		"set",
 		"meta"
-	));
+	);
 
-	private static final List<String> adminToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminToggleTabCompletes = Arrays.asList(
 		"war",
 		"neutral",
 		"npc",
@@ -125,43 +125,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"devmode",
 		"townwithdraw",
 		"nationwithdraw"
-	));
+	);
 	
-	private static final List<String> adminPlotTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminPlotTabCompletes = Arrays.asList(
 		"claim",
 		"meta"
-	));
+	);
 	
-	private static final List<String> adminPlotMetaTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminPlotMetaTabCompletes = Arrays.asList(
 		"set",
 		"add",
 		"remove"
-	));
+	);
 	
-	private static final List<String> adminDatabaseTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminDatabaseTabCompletes = Arrays.asList(
 		"save",
 		"load"
-	));
+	);
 	
-	private static final List<String> adminResidentTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminResidentTabCompletes = Arrays.asList(
 		"rename",
 		"friend"
-	));
+	);
 	
-	private static final List<String> adminResidentFriendTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminResidentFriendTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"list",
 		"clear"
-	));
+	);
 	
-	private static final List<String> adminSetCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> adminSetCompletes = Arrays.asList(
 		"mayor",
 		"capital",
 		"title",
 		"surname",
 		"plot"
-	));
+	);
 	
 
 	private boolean isConsole;

@@ -42,15 +42,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townyworld_set_console = new ArrayList<>();
 	private static TownyWorld Globalworld;
 	
-	private static final List<String> townyWorldTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyWorldTabCompletes = Arrays.asList(
 		"list",
 		"toggle",
 		"set",
 		"regen",
 		"undo"
-	));
+	);
 
-	private static final List<String> townyWorldToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyWorldToggleTabCompletes = Arrays.asList(
 		"claimable",
 		"usingtowny",
 		"pvp",
@@ -63,15 +63,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertunclaim",
 		"revertexpl",
 		"warallowed"
-	));
+	);
 	
-	private static List<String> townySetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static List<String> townySetTabCompletes = Arrays.asList(
 		"usedefault",
 		"wildperm",
 		"wildignore",
 		"wildregen",
 		"wildname"
-	));
+	);
 	
 	private boolean isConsole = false;
 

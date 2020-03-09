@@ -75,7 +75,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> king_help = new ArrayList<>();
 	private static final List<String> alliesstring = new ArrayList<>();
 	private static final List<String> invite = new ArrayList<>();
-	private static final List<String> nationTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationTabCompletes = Arrays.asList(
 		"list",
 		"online",
 		"leave",
@@ -99,9 +99,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"spawn",
 		"king"
-	));
+	);
 
-	private static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationSetTabCompletes = Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -112,36 +112,36 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"title",
 		"surname",
 		"tag"
-	));
+	);
 	
-	static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationToggleTabCompletes = Arrays.asList(
 		"neutral",
 		"peaceful",
 		"public",
 		"open"
-	));
+	);
 	
-	private static final List<String> nationEnemyTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationEnemyTabCompletes = Arrays.asList(
 		"add",
 		"remove"
-	));
+	);
 	
-	private static final List<String> nationAllyTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationAllyTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"sent",
 		"received",
 		"accept",
 		"deny"
-	));
+	);
 
-	private static final List<String> nationKingTabCompletes = new ArrayList<>(Collections.singletonList("?"));
+	private static final List<String> nationKingTabCompletes = Collections.singletonList("?");
 	
-	private static final List<String> nationConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
 		"list"
-	));
+	);
 	
 	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
 	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
