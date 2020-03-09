@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BaseCommand implements TabCompleter{
 	
-	private static final List<String> setPermTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setPermTabCompletes = Arrays.asList(
 		"on",
 		"off",
 		"resident",
@@ -29,37 +29,37 @@ public class BaseCommand implements TabCompleter{
 		"switch",
 		"itemuse",
 		"reset"
-	));
+	);
 
-	private static final List<String> setLevelCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setLevelCompletes = Arrays.asList(
 		"resident",
 		"ally",
 		"outsider",
 		"nation",
 		"friend",
 		"town"		
-	));
+	);
 
-	private static final List<String> setTypeCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setTypeCompletes = Arrays.asList(
 		"build",
 		"destroy",
 		"switch",
 		"itemuse"
-	));
+	);
 
-	private static final List<String> setOnOffCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setOnOffCompletes = Arrays.asList(
 		"on",
 		"off"
-	));
+	);
 
-	private static final List<String> toggleTypeOnOffCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> toggleTypeOnOffCompletes = Arrays.asList(
 		"build",
 		"destroy",
 		"switch",
 		"itemuse",
 		"on",
 		"off"
-	));
+	);
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {

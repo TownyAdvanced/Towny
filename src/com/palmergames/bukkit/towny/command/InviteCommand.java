@@ -30,10 +30,10 @@ import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
-	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> inviteTabCompletes = Arrays.asList(
 		TownySettings.getAcceptCommand(),
 		TownySettings.getDenyCommand()
-	));
+	);
 	
 	@SuppressWarnings("unused")
 	private static Towny plugin;
