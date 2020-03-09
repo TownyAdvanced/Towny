@@ -26,7 +26,7 @@ public class SiegeWarRankController {
 	 *  
 	 */
 	public static void evaluateTownRemoveRank(Resident resident, String rank) {
-		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+		if(!TownySettings.getWarSiegePenaltyPointsEnabled())
 			return;
 
 		TownyUniverse universe = TownyUniverse.getInstance();
@@ -49,7 +49,7 @@ public class SiegeWarRankController {
 	 *
 	 */
 	public static void evaluateNationRemoveRank(Resident resident, String rank) {
-		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+		if(!TownySettings.getWarSiegePenaltyPointsEnabled())
 			return;
 
 		TownyUniverse universe = TownyUniverse.getInstance();

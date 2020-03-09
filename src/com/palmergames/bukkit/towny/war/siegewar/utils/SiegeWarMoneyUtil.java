@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -100,7 +99,12 @@ public class SiegeWarMoneyUtil {
 
 		try {
 			if(pillagingPlayers.size() > 0) {
-				double fullPillageAmountForAllPlayers = TownySettings.getWarSiegePillageAmountPerPlot() * defendingTown.getTownBlocks().size();
+
+				double fullPillageAmountForAllPlayers = 
+					TownySettings.getWarSiegePillageAmountPerPlot() 
+						* defendingTown.getTownBlocks().size()
+						* getMoneyMultiplier(defendingTown);
+
 				double fullPillageAmountForOnePlayer = fullPillageAmountForAllPlayers / pillagingPlayers.size();
 
 				for (Player player : pillagingPlayers) {
@@ -133,6 +137,22 @@ public class SiegeWarMoneyUtil {
 			x.printStackTrace();
 		} catch (NotRegisteredException x) {
 			x.printStackTrace();
+		}
+	}
+
+	/**
+	 * Gets the siegewar money multiplier for the given town
+	 *
+	 * @param town the town to consider
+	 * @return the multiplier
+	 */
+	public static double getMoneyMultiplier(Town town) {
+		double extraMoneyPercentage = TownySettings.getWarSiegeExtraMoneyPercentagePerTownLevel();
+
+		if(extraMoneyPercentage == 0) {
+			return 1;
+		} else {
+			return 1 + ((extraMoneyPercentage / 100) * (TownySettings.calcTownLevelId(town) -1));
 		}
 	}
 }

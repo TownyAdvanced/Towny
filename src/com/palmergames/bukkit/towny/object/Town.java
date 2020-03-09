@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
@@ -1389,12 +1390,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return TimeMgmt.getFormattedTimeValue(hoursRemainingMillis);
 	}
 
-	public double getPlunderValue() {
-		return TownySettings.getWarSiegeAttackerPlunderAmountPerPlot() * townBlocks.size();
-	}
-
 	public double getSiegeCost() {
-		return TownySettings.getWarSiegeAttackerCostUpFrontPerPlot() * townBlocks.size();
+		double cost = 
+			TownySettings.getWarSiegeAttackerCostUpFrontPerPlot() 
+				* townBlocks.size()
+				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
+		return cost;
 	}
 
 	public String getFormattedHoursUntilSiegeImmunityEnds() {

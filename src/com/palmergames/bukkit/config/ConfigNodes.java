@@ -1952,6 +1952,25 @@ public enum ConfigNodes {
 			"80.0",
 			"# The value specifies what proportion of the initial nation cost is refunded," +
 			"# When the nation is deleted or defeated."),
+	WAR_SIEGE_EXTRA_MONEY_PERCENTAGE_PER_TOWN_LEVEL(
+			"war.siege.money.extra_money_percentage_per_town_level",
+			"50",
+			"# This value increases the monetary costs & gains of sieges, depending on town level.",
+			"# ",
+			"# The value is recommended, so that established towns/nations will not feel unaffected by war moneys.",
+			"# The value is applied to attack cost (war-chest), pillage, and plunder.",
+			"# The value is appropriate in servers where town wealth does not correspond linearly to number of plots.",
+			"# Example: On server x, small towns tend to have 10 plots + 100 gold, and large towns tend to have 100 plots + 999,999 gold.",
+			"#          Clearly on this server, wealth is heavily concentrated in larger towns. Thus this value should be high ",
+	        "# ",
+			"# Example of how this value would affect attack cost (@20/plot), if the value was set to 50 : ",
+			"# ",
+			"# Level 1 (1 resident), 5 plots. Cost = (20 * 5) + 0% = 100",
+			"# Level 2 (3 residents), 15 plots. Cost = (20 * 15) + 50% = 450",
+			"# Level 3 (8 residents), 50 plots. Cost = (20 * 50) + 100% = 2000",
+			"# Level 4 (12 residents), 80 plots. Cost = (20 * 80) + 150% = 4000",
+			"# ",
+			"# If the value is 0, then money amounts are not modified."),
 
 	//Non-Monetary Quantities
 	WAR_SIEGE_MAX_ACTIVE_SIEGE_ATTACKS_PER_NATION(

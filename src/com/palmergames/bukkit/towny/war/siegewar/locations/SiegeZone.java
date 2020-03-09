@@ -128,18 +128,7 @@ public class SiegeZone {
 	}
 
 	public double getWarChestAmount() {
-    	if(warChestAmount == 0) {
-    		//This logic is only possible after initial deployment of warchest to a server with running sieges.
-			//3 days after this, it can removed
-			//Todo
-			try {
-				return defendingTown.getSiegeCost();
-			} catch (Exception e) {
-				return 100;  //just in case
-			}
-		} else {
-			return warChestAmount;
-		}
+    	return warChestAmount;
 	}
 
 	public void setWarChestAmount(double warChestAmount) {

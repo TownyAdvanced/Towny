@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -77,7 +78,9 @@ public class PlunderTown {
 
         double fullPlunderAmount =
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
-                        * defendingTown.getTownBlocks().size();
+					* defendingTown.getTownBlocks().size()
+					* SiegeWarMoneyUtil.getMoneyMultiplier(defendingTown);
+
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
 			

@@ -202,6 +202,30 @@ public class TownySettings {
 		return 0;
 	}
 
+	/**
+	 * This method returns the id of the town level
+	 *
+	 * e.g.
+	 * ruins = 0
+	 * hamlet = 1
+	 * village = 2
+	 *
+	 * @param town
+	 * @return id
+	 */
+	public static int calcTownLevelId(Town town) {
+		if(town.isRuined())
+			return 0;
+
+		int townLevelId = -1;
+		int numResidents = town.getNumResidents();
+		for (Integer level : configTownLevel.keySet()) {
+			if (level <= numResidents)
+				townLevelId ++;
+		}
+		return townLevelId;
+	}
+
 	public static int calcNationLevel(Nation nation) {
 //Creatorfromhell's PR for replacing SortedMap town and nation levels.
 //		Integer level = configNationLevel.floorKey(nation.getNumResidents());
@@ -3127,5 +3151,8 @@ public class TownySettings {
 	public static boolean getWarSiegeKeepInventoryOnSiegeDeath() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_KEEP_INVENTORY_ON_SIEGE_DEATH);
 	}
-}
 
+	public static int getWarSiegeExtraMoneyPercentagePerTownLevel() {
+		return getInt(ConfigNodes.WAR_SIEGE_EXTRA_MONEY_PERCENTAGE_PER_TOWN_LEVEL);
+	}
+}
