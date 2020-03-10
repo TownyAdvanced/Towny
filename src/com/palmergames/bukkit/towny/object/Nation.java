@@ -730,6 +730,16 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	/**
+	 * Shows if the nation is allied with the specified nation.
+	 * 
+	 * @param nation The nation that is allied.
+	 * @return true if it is allied, false otherwise.
+	 */
+	public boolean isAlliedWith(Nation nation) {
+		return allies.contains(nation);
+	}
+
+	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *
 	 * @return The world this resides in.
