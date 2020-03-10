@@ -397,6 +397,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
+				
 			Player player = (Player) sender;
 			parseTownCommand(player, args);
 		} else

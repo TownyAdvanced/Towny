@@ -79,6 +79,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			if (command.getName().equalsIgnoreCase("invite")) {
 				parseInviteCommand(player, args);

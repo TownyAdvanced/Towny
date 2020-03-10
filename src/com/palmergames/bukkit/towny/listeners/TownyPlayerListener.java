@@ -554,6 +554,10 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
 
 		Player player = event.getPlayer();
 		// Cancel teleport if Jailed by Towny.

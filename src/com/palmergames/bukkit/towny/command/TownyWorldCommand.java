@@ -106,6 +106,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_set_console.add(ChatTools.formatCommand("", "/townyworld {world} set", "wildname [name]", ""));
 		
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			parseWorldCommand(sender, args);
 		} else {
 			isConsole = true;			

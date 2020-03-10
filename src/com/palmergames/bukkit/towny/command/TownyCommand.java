@@ -134,6 +134,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			parseTownyCommand(player, args);
 		} else {
