@@ -202,6 +202,7 @@ public class TownyUniverse {
         try {
             Resident resident = dataSource.getResident(player.getName());
             resident.setLastOnline(System.currentTimeMillis());
+            resident.clearModes();
             dataSource.saveResident(resident);
         } catch (NotRegisteredException ignored) {
         }

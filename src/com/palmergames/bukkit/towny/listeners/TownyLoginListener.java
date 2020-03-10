@@ -51,7 +51,7 @@ public class TownyLoginListener implements Listener {
 		if (disallowed) {
 			String ip = event.getAddress().toString();
 			ip = ip.substring(1);
-			String msg = "A player using the IP address " + Color.RED + ip + Color.GREEN + " tried to log in using am accountname which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
+			String msg = "A player using the IP address " + Color.RED + ip + Color.GREEN + " tried to log in using an account name which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
 			TownyMessaging.sendMsg(msg);
 			for (Player ops : Bukkit.getOnlinePlayers()) {     	 
         		if (ops.isOp() || ops.hasPermission("towny.admin"))

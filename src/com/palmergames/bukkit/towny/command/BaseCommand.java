@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,10 @@ public class BaseCommand implements TabCompleter{
 	private static final List<String> setPermTabCompletes = new ArrayList<>(Arrays.asList(
 		"on",
 		"off",
+		"resident",
+		"friend",
+		"town",
+		"nation",
 		"ally",
 		"outsider",
 		"build",
@@ -30,7 +36,8 @@ public class BaseCommand implements TabCompleter{
 		"ally",
 		"outsider",
 		"nation",
-		"friend"
+		"friend",
+		"town"		
 	));
 
 	private static final List<String> setTypeCompletes = new ArrayList<>(Arrays.asList(
@@ -75,10 +82,10 @@ public class BaseCommand implements TabCompleter{
 	 * @return Matches for the arg with the chosen type
 	 */
 	static List<String> getTownyStartingWith(String arg, String type) {
-		
+
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
+
 		if (type.contains("r")) {
 			matches.addAll(townyUniverse.getResidentsTrie().getStringsFromKey(arg));
 		}
@@ -90,11 +97,11 @@ public class BaseCommand implements TabCompleter{
 		if (type.contains("n")) {
 			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
 		}
-		
+
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
 			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
 		}
-		
+
 		return matches;
 	}
 
@@ -156,5 +163,36 @@ public class BaseCommand implements TabCompleter{
 		}
 		
 		return Collections.emptyList();
+	}
+	
+	/**
+	 * Returns the names a player's town's residents that start with a string
+	 *
+	 * @param player the player to get the town's residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		try {
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
+		} catch (NotRegisteredException e) {
+			return Collections.emptyList();
+		}
+	}
+
+	/**
+	 * Returns the names a town's residents that start with a string
+	 *
+	 * @param town the town to get the residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+
+	public static List<String> getResidentsOfTownStartingWith(String town, String str) {
+		try {
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(town).getResidents()), str);
+		} catch (NotRegisteredException e) {
+			return Collections.emptyList();
+		}
 	}
 }

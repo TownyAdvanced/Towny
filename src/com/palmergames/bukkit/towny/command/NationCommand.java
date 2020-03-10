@@ -102,7 +102,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"king"
 	));
 
-	static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -293,7 +293,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							case "add":
 							case "remove":
 								if (args.length == 3) {
-									return NameUtil.getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+									try {
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), args[1]);
+									} catch (NotRegisteredException e) {
+										return Collections.emptyList();
+									}
 								} else if (args.length == 4) {
 									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
 								}
@@ -316,7 +320,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				case "set":
-					return nationSetTabComplete(player, args);
+					try {
+						return nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation(), args);
+					} catch (NotRegisteredException e) {
+						return Collections.emptyList();
+					}
 				default:
 					if (args.length == 1) {
 						List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
@@ -334,7 +342,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 	
-	static List<String> nationSetTabComplete(Player player, String[] args) {
+	static List<String> nationSetTabComplete(Nation nation, String[] args) {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
 		} else if (args.length == 3){
@@ -342,9 +350,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "king":
 				case "title":
 				case "surname":
-					return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+					return NameUtil.filterByStart(NameUtil.getNames(nation.getResidents()), args[2]);
 				case "capital":
-					return NameUtil.getTownNamesOfPlayerNationStartingWith(player, args[2]);
+					return NameUtil.filterByStart(NameUtil.getNames(nation.getTowns()), args[2]);
 			}
 		}
 		

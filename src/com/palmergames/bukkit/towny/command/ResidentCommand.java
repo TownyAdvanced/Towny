@@ -271,9 +271,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				if (!townyUniverse.getDataSource().getResident(player.getName()).isJailed())
+				if (!townyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_you_aren't currently jailed"));
 					return;
-				
+				}
 				if (split[1].equalsIgnoreCase("paybail")) {
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					if (resident.getAccount().canPayFromHoldings(TownySettings.getBailAmount())) {

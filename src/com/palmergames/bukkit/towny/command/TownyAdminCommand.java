@@ -123,7 +123,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"npc",
 		"debug",
 		"devmode",
-		"withdraw"
+		"townwithdraw",
+		"nationwithdraw"
 	));
 	
 	private static final List<String> adminPlotTabCompletes = new ArrayList<>(Arrays.asList(
@@ -254,6 +255,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminSetCompletes, args[1]);
 					}
 				}
+				break;
 			case "plot":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(adminPlotTabCompletes, args[1]);
@@ -316,11 +318,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return null;
 						case "kick":
 							if (args.length == 4)
-								return NameUtil.getTownResidentNamesOfPlayerStartingWith(player, args[3]);
+								return getResidentsOfTownStartingWith(args[1], args[3]);
 						case "rank":
-							return TownCommand.townRankTabComplete(player, StringMgmt.remArgs(args, 2));
+							switch (args.length) {
+								case 4:
+									return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args[3]);
+								case 5:
+									return getResidentsOfTownStartingWith(args[1], args[4]);
+								case 6:
+									switch (args[3].toLowerCase()) {
+										case "add":
+											return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[5]);
+										case "remove":
+											try {
+												return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(args[4]).getTownRanks(), args[5]);
+											} catch (NotRegisteredException ignored) {}
+									}
+							}
+							break;
 						case "set":
-							return TownCommand.townSetTabComplete(player, StringMgmt.remArgs(args, 2));
+							try {
+								return TownCommand.townSetTabComplete(TownyUniverse.getInstance().getDataSource().getTown(args[1]), StringMgmt.remArgs(args, 2));
+							} catch (NotRegisteredException ignored) {}
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
@@ -328,6 +347,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
 					}
+				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
+					return getTownyStartingWith(args[3], "r");
 				}
 				break;
 			case "nation":
@@ -342,7 +363,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 4) 
 								return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
 						case "set":
-							return NationCommand.nationSetTabComplete(player, StringMgmt.remArgs(args, 2));
+							try {
+								return NationCommand.nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getNation(args[1]), StringMgmt.remArgs(args, 2));
+							} catch (NotRegisteredException e) {
+								return Collections.emptyList();
+							}
 						case "merge":
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "n");
@@ -1199,29 +1224,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length < 2) {
 
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set capital"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", ""));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", "[nation name]"));
 
 			} else {
-
+				
 				try {
 					Town newCapital = townyUniverse.getDataSource().getTown(split[1]);
-
-					if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-						TownyMessaging.sendErrorMsg(this.player, String.format(TownySettings.getLangString("msg_not_enough_residents_capital"), newCapital.getName()));
-						return;
-					}
-
 					Nation nation = newCapital.getNation();
-
-					nation.setCapital(newCapital);
-					plugin.resetCache();
-
-					TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
-
-					townyUniverse.getDataSource().saveNation(nation);
-					townyUniverse.getDataSource().saveNationList();
-
-				} catch (TownyException e) {
+					NationCommand.nationSet(player, split, true, nation);
+				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 

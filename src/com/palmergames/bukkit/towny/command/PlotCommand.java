@@ -199,6 +199,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return permTabComplete(StringMgmt.remFirstArg(args));
 					}
 					break;
+				case "perm":
+					if (args.length == 2)
+						return NameUtil.filterByStart(Collections.singletonList("hud"), args[1]);
+					break;
 				default:
 					if (args.length == 1)
 						return NameUtil.filterByStart(plotTabCompletes, args[0]);
