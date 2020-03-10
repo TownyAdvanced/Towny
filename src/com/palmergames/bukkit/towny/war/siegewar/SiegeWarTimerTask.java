@@ -334,6 +334,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 
 			//Points awarded
+			siegePointsForZoneOccupation = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePointsForZoneOccupation, siegeZone);
 			siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
 
 			return true;

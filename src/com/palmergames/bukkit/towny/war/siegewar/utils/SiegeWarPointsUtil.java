@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -17,7 +16,6 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -167,9 +165,11 @@ public class SiegeWarPointsUtil {
 		int siegePoints;
 		if (attackerDeath) {
 			siegePoints = TownySettings.getWarSiegePointsForAttackerDeath();
+			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
 			siegeZone.adjustSiegePoints(-siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
+			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
 			siegeZone.adjustSiegePoints(siegePoints);
 		}
 
@@ -198,5 +198,33 @@ public class SiegeWarPointsUtil {
 		for(Nation alliedNation: alliesToInform) {
 			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
 		}
+	}
+
+	public static int adjustSiegePointGainForCurrentSiegePointBalance(int siegePointsAdjustment, SiegeZone siegeZone) {
+		//Reduce gain if you already have an advantage
+		if(TownySettings.getWarSiegePointsGainDecreasePer1000Advantage() > 0) {
+			if(
+				(siegeZone.getSiegePoints() > 0 && siegePointsAdjustment > 0) 
+					|| 
+				(siegeZone.getSiegePoints() < 0 && siegePointsAdjustment < 0) 
+			) {
+				siegePointsAdjustment -= ((siegeZone.getSiegePoints() / 1000) * TownySettings.getWarSiegePointsGainDecreasePer1000Advantage());
+				return siegePointsAdjustment;
+			} 
+		}
+
+		//Increase gain if you already have a disadvantage
+		if(TownySettings.getWarSiegePointsGainIncreasePer1000Disadvantage() > 0) {
+			if(
+				(siegeZone.getSiegePoints() > 0 && siegePointsAdjustment < 0)
+					||
+				(siegeZone.getSiegePoints() < 0 && siegePointsAdjustment > 0)
+			) {
+				siegePointsAdjustment -= ((siegeZone.getSiegePoints() / 1000) * TownySettings.getWarSiegePointsGainIncreasePer1000Disadvantage());
+				return siegePointsAdjustment;
+			}
+		}
+
+		return siegePointsAdjustment;
 	}
 }
