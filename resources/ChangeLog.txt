@@ -4245,3 +4245,5 @@ v0.92.0.11:
   - Fix Towny safe-mode induced via /ta reload still allowing Towny commands to be used.
   - Fix Towny moving Citizens NPCs to server spawn when Towny loads in safe mode.
     - Closes #3760.
+  - Fix Ally invite sending to already allied nations, courtesy of Siris with PR #3755.
+    - Closes #3749.
