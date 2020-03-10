@@ -4240,3 +4240,5 @@ v0.92.0.11:
   - Potential fix for /t and /n online commands not parsing their outputs nicely.
   - Fix townyworld set messages for console not being used, courtesy of silverwolfg11 with PR #3757.
   - Remove redundant arraylist creation for tab-completion, courtesy of silverwolfg11 with #3756.
+  - Fix revert-on-unclaim not respecting the PlotManagementSpeed set in the config.
+    - Closes #3759.
