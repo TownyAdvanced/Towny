@@ -3098,5 +3098,14 @@ public class TownySettings {
 	public static double getWarSiegeMaximumPillageAmountPerPlot() {
 		return getDouble(ConfigNodes.WAR_SIEGE_MAXIMUM_PILLAGE_AMOUNT_PER_PLOT);
 	}
+
+	public static int getWarSiegePointsGainDecreasePer1000Advantage() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_GAIN_DECREASE_PER_1000_ADVANTAGE);
+	}
+
+	public static int getWarSiegePointsGainIncreasePer1000Disadvantage() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_GAIN_INCREASE_PER_1000_DISADVANTAGE);
+	}
+	
 }
 
