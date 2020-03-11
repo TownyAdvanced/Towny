@@ -26,7 +26,7 @@ public class TownBlock extends TownyObject {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField> metadata = null;
+	private HashSet<CustomDataField<?>> metadata = null;
 	private PlotGroup plotGroup;
 
 	//Plot level permissions
@@ -425,7 +425,7 @@ public class TownBlock extends TownyObject {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 
-	public HashSet<CustomDataField> getMetadata() {
+	public HashSet<CustomDataField<?>> getMetadata() {
 		return metadata;
 	}
 
