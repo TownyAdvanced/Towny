@@ -1027,8 +1027,8 @@ msg_enemy_areas: 'Feindesgebiet'
 msg_neutral_towns: 'Neutrale Städte'
 
 # Added in 0.64
-msg_err_no_nation_with_that_name: 'No nation found with name %s'
-msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
+msg_err_no_nation_with_that_name: 'Es wurde keine Nation mit dem Namen %s gefunden'
+msg_err_cannot_unclaim_homeblock: 'Du kannst deinen Heimatblock nicht zurückfordern. Verwende ''/town set homeblock'' um deinen Heimatblock zu verschieben.'
 
 # Added in 0.65
 msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
