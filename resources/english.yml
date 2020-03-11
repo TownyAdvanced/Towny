@@ -1122,8 +1122,14 @@ msg_siege_war_town_became_neutral: '&b%s has declared itself neutral. It can no 
 msg_siege_war_town_became_non_neutral: '&b%s has declared itself not-neutral. It can now join a nation and (officially) take sides in wars, and is no longer immune to material siege costs.'
 
 #Siege war error message
+#PVP
+msg_err_siege_besieged_town_cannot_toggle_pvp_off: "&6[War]&c Besieged towns have PVP forced ON."
+#Recruiting
+msg_err_siege_besieged_town_cannot_toggle_open_off: "&6[War]&c Besieged towns cannot open their doors to new residents."
+msg_err_siege_besieged_town_cannot_recruit: "&6[War]&c Besieged towns cannot recruit new residents."
 #Claiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
+msg_err_siege_besieged_town_cannot_claim: "&6[War]&c Besieged towns cannot claim new land."
 #Deleting
 msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."

@@ -1888,6 +1888,16 @@ public enum ConfigNodes {
 			"# If this value is true, then spawn camping is prevented/reduced by the following automatic measure: ",
 			"# - After spawning, a player will be immune to damage (and cannot damage entities) for a short time (typically less than a minute).",
 			"# - Thus, during a siege, even if the enemy has breached the town walls, a spawning player has time to get to (or create) a safe location."),
+	WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED(
+			"war.siege.switches.besieged_town_recruitment_disabled",
+			"true",
+			"# If this value is true, then a town under active siege cannot recruit new residents.",
+			"#  This setting is recommended because it helps discourage 'fake' sieges just for the purpose of of gifting immunity."),
+	WAR_SIEGE_BESIEGED_TOWN_CLAIMING_DISABLED(
+			"war.siege.switches.besieged_town_claiming_disabled",
+			"true",
+			"# If this value is true, then a town under active siege cannot claim new plots.",
+			"#  This setting is recommended because it helps discourage 'fake' sieges just for the purpose of of gifting immunity."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

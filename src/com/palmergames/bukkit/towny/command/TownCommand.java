@@ -45,6 +45,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -1486,9 +1487,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if(TownySettings.getWarSiegeEnabled()
 						&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 						&& town.hasSiege()
-						&& (town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS))
+						&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
 				{
-					throw new TownyException("In besieged towns, PVP is automatically set to 'ON', and cannot be changed until the siege is over.");
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_pvp_off"));
 				}
 
 				// Make sure we are allowed to set these permissions.
@@ -1544,6 +1545,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town.setTaxPercentage(!town.isTaxPercentage());
 				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_taxpercent"), town.isTaxPercentage() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
+
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+					&& town.hasSiege()
+					&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				{
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_open_off"));
+				}
 
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_open"), town.isOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
@@ -3106,6 +3115,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+
+		//If town is under siege, town cannot recruit new members
+		if(sender instanceof Player
+			&& !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin((Player)sender)
+			&& TownySettings.getWarSiegeEnabled()
+			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+			&& town.hasSiege()
+			&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+		{
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_siege_besieged_town_cannot_recruit"));
+			return;
+		}
+
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
 			if (!town.hasSpawn())
@@ -3336,7 +3358,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 				}
 
-				if(TownySettings.getWarSiegeClaimingDisabledNearSiegeZones()) {
+				resident = townyUniverse.getDataSource().getResident(player.getName());
+				town = resident.getTown();
+
+				//If the claimer's town is under siege, they cannot claim any land
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeBesiegedTownClaimingDisabled()
+					&& town.hasSiege()
+					&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				{
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_claim"));
+				}
+
+				//If the land is too near any active siege zone, it cannot be claimed.
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeClaimingDisabledNearSiegeZones()) 
+				{
 					int claimDisableDistance = TownySettings.getWarSiegeClaimDisableDistanceBlocks();
 					for(SiegeZone siegeZone: townyUniverse.getDataSource().getSiegeZones()) {
 						if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
@@ -3344,9 +3381,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					}
 				}
-				
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-				town = resident.getTown();
+
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				if (!world.isUsingTowny()) {

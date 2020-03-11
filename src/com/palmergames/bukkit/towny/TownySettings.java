@@ -3106,6 +3106,13 @@ public class TownySettings {
 	public static int getWarSiegePointsGainIncreasePer1000Disadvantage() {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_GAIN_INCREASE_PER_1000_DISADVANTAGE);
 	}
-	
+
+	public static boolean getWarSiegeBesiegedTownRecruitmentDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED);
+	}
+
+	public static boolean getWarSiegeBesiegedTownClaimingDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_CLAIMING_DISABLED);
+	}
 }
 

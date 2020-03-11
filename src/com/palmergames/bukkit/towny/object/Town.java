@@ -1010,8 +1010,18 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isOpen() {
-
-		return isOpen;
+		//If town is under siege, public joining is disabled
+		if(TownySettings.getWarSiegeEnabled()
+			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+			&& hasSiege()
+			&& getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+		{
+			return false;
+		}
+		else
+		{
+			return isOpen;
+		}
 	}
 
 	public void collect(double amount) throws EconomyException {
