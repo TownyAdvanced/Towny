@@ -4247,3 +4247,4 @@ v0.92.0.11:
     - Closes #3760.
   - Fix Ally invite sending to already allied nations, courtesy of Siris with PR #3755.
     - Closes #3749.
+  - Remove metadata raw access warnings, courtesy of Siris with PR #3762.
