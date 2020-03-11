@@ -695,8 +695,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return TownySettings.getNationPrefix(this) + this.getName().replaceAll("_", " ")
 			+ TownySettings.getNationPostfix(this);
 	}
-
-	public void addMetaData(CustomDataField md) {
+	
+	@Override
+	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveNation(this);

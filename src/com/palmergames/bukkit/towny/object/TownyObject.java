@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class TownyObject implements Nameable {
 	private String name;
 
-	private HashSet<CustomDataField> metadata = null;
+	private HashSet<CustomDataField<?>> metadata = null;
 	
 	protected TownyObject(String name) {
 		this.name = name;
@@ -59,14 +59,14 @@ public abstract class TownyObject implements Nameable {
 		return getName().replaceAll("_", " ");
 	}
 
-	public void addMetaData(CustomDataField md) {
+	public void addMetaData(CustomDataField<?> md) {
 		if (getMetadata() == null)
 			metadata = new HashSet<>();
 
 		getMetadata().add(md);
 	}
 
-	public void removeMetaData(CustomDataField md) {
+	public void removeMetaData(CustomDataField<?> md) {
 		if (!hasMeta())
 			return;
 
@@ -76,7 +76,7 @@ public abstract class TownyObject implements Nameable {
 			this.metadata = null;
 	}
 
-	public HashSet<CustomDataField> getMetadata() {
+	public HashSet<CustomDataField<?>> getMetadata() {
 		return metadata;
 	}
 
