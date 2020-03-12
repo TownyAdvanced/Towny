@@ -4240,6 +4240,8 @@ v0.92.0.11:
   - Potential fix for /t and /n online commands not parsing their outputs nicely.
   - Fix townyworld set messages for console not being used, courtesy of silverwolfg11 with PR #3757.
   - Remove redundant arraylist creation for tab-completion, courtesy of silverwolfg11 with #3756.
+  - Fix revert-on-unclaim not respecting the PlotManagementSpeed set in the config.
+    - Closes #3759.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
