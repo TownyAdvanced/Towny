@@ -553,7 +553,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTownRanks(List<String> ranks) {
-		townRanks.addAll(ranks);
+		for (String rank : ranks) 
+			if (!this.hasTownRank(rank))
+				townRanks.add(rank);
 	}
 
 	public boolean hasTownRank(String rank) {
@@ -594,7 +596,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setNationRanks(List<String> ranks) {
-		nationRanks.addAll(ranks);
+		for (String rank : ranks)
+			if (!this.hasNationRank(rank))
+				nationRanks.add(rank);
 	}
 
 	public boolean hasNationRank(String rank) {
