@@ -4231,7 +4231,9 @@ v0.92.0.11:
   - Fix flagwar not transferring TownBlocks correctly, courtesy of Siris with PR #3744.
   - Add automatic labelling of PRs, automatic labelling of 'stale' to older PRs and Issues, courtesy of Siris with PR #3738.
   - Language files bumped to 0.74.
+0.95.2.23:
   - zh-TW.yml updated by shou692199 with PR #3751.
+  - Fix plot toggle tab-completion and remove unused code, courtesy of silverwolfg11 with PR #3750.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
