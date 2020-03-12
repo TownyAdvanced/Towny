@@ -4225,6 +4225,12 @@ v0.92.0.11:
   - Further optimize Trie used in tab completion, courtesy of stzups with PR #3739.
 0.95.2.22:
   - Fix /ta set capital {townname} {nationname} not working.
+  - Fix nether portals being created in areas the portal-creator cannot build, courtesy of Siris with PR #3745.
+    - Stops 'portal griefing'.
+    - Closes #3412.
+  - Fix flagwar not transferring TownBlocks correctly, courtesy of Siris with PR #3744.
+  - Add automatic labelling of PRs, automatic labelling of 'stale' to older PRs and Issues, courtesy of Siris with PR #3738.
+  - Language files bumped to 0.74.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
