@@ -4221,6 +4221,7 @@ v0.92.0.11:
   - Fix for more tab completions, courtesy of stzups with PR #3734.
     - Closes #3733.
   - Fix a small typo, courtesy of introvertism with PR #3736.
+  - Fix for Towny not clearing a residents' modes when they quit.
 0.96.0.0:
   - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
