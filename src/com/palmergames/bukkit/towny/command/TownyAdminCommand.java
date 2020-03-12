@@ -1224,29 +1224,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length < 2) {
 
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set capital"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", ""));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", "[nation name]"));
 
 			} else {
-
+				
 				try {
 					Town newCapital = townyUniverse.getDataSource().getTown(split[1]);
-
-					if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-						TownyMessaging.sendErrorMsg(this.player, String.format(TownySettings.getLangString("msg_not_enough_residents_capital"), newCapital.getName()));
-						return;
-					}
-
 					Nation nation = newCapital.getNation();
-
-					nation.setCapital(newCapital);
-					plugin.resetCache();
-
-					TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
-
-					townyUniverse.getDataSource().saveNation(nation);
-					townyUniverse.getDataSource().saveNationList();
-
-				} catch (TownyException e) {
+					NationCommand.nationSet(player, split, true, nation);
+				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 
