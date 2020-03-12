@@ -2071,13 +2071,13 @@ public enum ConfigNodes {
 			"# - Also siege-zone occupation can sometimes be boring if one side is avoiding meeting the other in direct combat.",
 			"# If the value is too low, then too few players can be involved in siege zone banner occupation.",
 			"# - Thus, some players in a town, nation, or allies may not be able to contribute as much to wars as they might wish."),
-	WAR_SIEGE_POINTS_GAIN_DECREASE_PER_1000_ADVANTAGE(
-			"war.siege.scoring.points_gain_decrease_per_1000_advantage",
+	WAR_SIEGE_PERCENTAGE_POINTS_GAIN_DECREASE_PER_1000_ADVANTAGE(
+			"war.siege.scoring.percentage_points_gain_decrease_per_1000_advantage",
 			"0",
 			"# This setting gives an disadvantage to larger/more active towns and nations",
 			"# It works by decreasing all siege point gains for a side, depending on how far the side is already ahead."),
-	WAR_SIEGE_POINTS_GAIN_INCREASE_PER_1000_DISADVANTAGE(
-			"war.siege.scoring.points_gain_increase_per_1000_disadvantage",
+	WAR_SIEGE_PERCENTAGE_POINTS_GAIN_INCREASE_PER_1000_DISADVANTAGE(
+			"war.siege.scoring.percentage_points_gain_increase_per_1000_disadvantage",
 			"0",
 			"# This setting gives an advantage to smaller/less active towns and nations",
 			"# It works by increasing all siege point gains for a side, depending on how far the side is already behind.");

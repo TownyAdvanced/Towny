@@ -200,31 +200,37 @@ public class SiegeWarPointsUtil {
 		}
 	}
 
-	public static int adjustSiegePointGainForCurrentSiegePointBalance(int siegePointsAdjustment, SiegeZone siegeZone) {
+	public static int adjustSiegePointGainForCurrentSiegePointBalance(double siegePointsAdjustment, SiegeZone siegeZone) {
 		//Reduce gain if you already have an advantage
-		if(TownySettings.getWarSiegePointsGainDecreasePer1000Advantage() > 0) {
+		if(TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage() > 0) {
 			if(
 				(siegeZone.getSiegePoints() > 0 && siegePointsAdjustment > 0) 
 					|| 
 				(siegeZone.getSiegePoints() < 0 && siegePointsAdjustment < 0) 
 			) {
-				siegePointsAdjustment -= ((siegeZone.getSiegePoints() / 1000) * TownySettings.getWarSiegePointsGainDecreasePer1000Advantage());
-				return siegePointsAdjustment;
+				int numThousands = Math.abs(siegeZone.getSiegePoints() / 1000);
+				int percentageDecrease = numThousands * TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage();
+				double actualDecrease = siegePointsAdjustment / 100 * percentageDecrease;
+				siegePointsAdjustment -= actualDecrease;
+				return (int)siegePointsAdjustment;
 			} 
 		}
 
 		//Increase gain if you already have a disadvantage
-		if(TownySettings.getWarSiegePointsGainIncreasePer1000Disadvantage() > 0) {
+		if(TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage() > 0) {
 			if(
 				(siegeZone.getSiegePoints() > 0 && siegePointsAdjustment < 0)
 					||
 				(siegeZone.getSiegePoints() < 0 && siegePointsAdjustment > 0)
 			) {
-				siegePointsAdjustment -= ((siegeZone.getSiegePoints() / 1000) * TownySettings.getWarSiegePointsGainIncreasePer1000Disadvantage());
-				return siegePointsAdjustment;
+				int numThousands = Math.abs(siegeZone.getSiegePoints() / 1000);
+				int percentageIncrease = numThousands * TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage();
+				double actualIncrease = siegePointsAdjustment / 100 * percentageIncrease;
+				siegePointsAdjustment += actualIncrease;
+				return (int)siegePointsAdjustment;
 			}
 		}
 
-		return siegePointsAdjustment;
+		return (int)siegePointsAdjustment;
 	}
 }
