@@ -28,6 +28,9 @@ import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+
+import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -89,7 +92,11 @@ public class TownyPlayerListener implements Listener {
 			player.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
 			return;
 		}
-		
+		// Citizens were being moved to the server spawn when a server was in safe mode, this solves that.
+		if (plugin.isCitizens2())
+			if (!CitizensAPI.getNPCRegistry().isNPC(player))
+				return;
+
 		TownyUniverse.getInstance().onLogin(player);
 	}
 
