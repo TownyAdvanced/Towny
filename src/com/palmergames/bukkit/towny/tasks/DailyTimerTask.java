@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
+import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -48,6 +49,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		removedTowns.clear();
 		removedNations.clear();
 
+		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
+		
 		TownyMessaging.sendDebugMsg("New Day");
 
 		// Collect taxes
