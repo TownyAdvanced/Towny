@@ -4249,3 +4249,5 @@ v0.92.0.11:
     - Closes #3749.
   - Remove metadata raw access warnings, courtesy of Siris with PR #3762.
   - German.yml updated to 0.75 by enterih.
+  - API: preNewDayEvent, courtesy of silverwolfg11 with PR #3770.
+    - Closes #3765.
