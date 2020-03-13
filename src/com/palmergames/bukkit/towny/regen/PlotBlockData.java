@@ -100,8 +100,8 @@ public class PlotBlockData {
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
-		
-		TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Version " + version);
+
+
 		//Scale for the number of elements
 		switch (version) {
 
@@ -168,13 +168,14 @@ public class PlotBlockData {
 							try {
 			
 									block.setType(mat, false);		
-									break;
+									return true;
 							} catch (Exception e) {
 								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java - BlockID found in legacy plotsnapshot which could not be resolved to a Material. ");
 							}
 			
 						} else {					
-							block.setType(Material.AIR);					
+							block.setType(Material.AIR);
+							return true;
 						}
 			
 						return true;
@@ -183,11 +184,7 @@ public class PlotBlockData {
 					break;
 				
 				case 4:
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.getBlockData());
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData " + storedData.getBlockData());
-					
 					blockListRestored += scale;
-					
 					
 					mat = storedData.getMaterial();
 					if (mat == null) {
@@ -198,25 +195,26 @@ public class PlotBlockData {
 							try {								
 								block.setType(mat, false);
 								block.setBlockData(storedData.getBlockData());
-								break;
+								return true;
 							} catch (Exception e) {
 								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
 								break;
 							}
 			
 						} else {					
-							block.setType(Material.AIR);					
+							block.setType(Material.AIR);
+							return true;
 						}
 			
-						return true;
 					}
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
+					//TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
 					break;
 					
 				default:
 					TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - You should not be seeing this message.");					
 					
 			}
+			
 		}
 		// reset as we are finished with the regeneration
 		resetBlockListRestored();

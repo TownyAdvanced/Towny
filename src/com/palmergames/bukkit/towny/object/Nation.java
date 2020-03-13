@@ -695,8 +695,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return TownySettings.getNationPrefix(this) + this.getName().replaceAll("_", " ")
 			+ TownySettings.getNationPostfix(this);
 	}
-
-	public void addMetaData(CustomDataField md) {
+	
+	@Override
+	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
@@ -727,6 +728,16 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 		
 		return account;
+	}
+
+	/**
+	 * Shows if the nation is allied with the specified nation.
+	 * 
+	 * @param nation The nation that is allied.
+	 * @return true if it is allied, false otherwise.
+	 */
+	public boolean isAlliedWith(Nation nation) {
+		return allies.contains(nation);
 	}
 
 	/**
