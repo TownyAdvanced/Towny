@@ -4249,8 +4249,10 @@ v0.92.0.11:
     - Closes #3749.
   - Remove metadata raw access warnings, courtesy of Siris with PR #3762.
 0.96.0.0:
-  - Special 'Testing' Release for 1.13.2 Servers preceding 0.96.0.0
+  - Special Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
     - Reverted ProtectionRegenTask class to previous version found in 1.13 branch (API Incompatibility)
       - This may result in run-time bugs! I am not familiar with this class, or the methods that call it.
     - Changed to full-path import for ActionType in TownyPlayerListener.
+    - Reverted Nether portal fix introduced in 0.95.2.22 (PR #3745)
+      - Incompatible with 1.13, admins are advised to just ban abusers.
