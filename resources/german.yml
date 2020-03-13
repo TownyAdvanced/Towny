@@ -1,5 +1,5 @@
 name: Towny
-version: 0.74
+version: 0.75
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -944,8 +944,8 @@ msg_cache_block_error_town_nation: '&cMitglieder der Nation sind für %s nicht b
 msg_err_already_res2: '&c%s gehört bereits einer Stadt an.'
 msg_err_cannot_afford_plot_set_type_cost: '&cDu kannst es dir nicht leisten den Plot zum %s Typ zu ändern. Preis: %s'
 msg_plot_set_cost: '&bDir wurden %s verrechnet, weil du den Plottyp zu %s geändert hast.'
-msg_err_townspawn_has_not_been_set: '&cStadtspawn wurde nicht festgelegt.'
-msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn und kann deshalb keine Beitrittseinladung für die Stadt erhalten. Maximale Entfernung: %s Townyblöcke.'
+msg_err_townspawn_has_not_been_set: '&cDer Stadtspawn wurde nicht festgelegt.'
+msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn entfernt und kann deshalb keine Beitrittseinladung für die Stadt erhalten. Maximale Entfernung: %s Townyblöcke.'
 
 # Added in 0.58:
 msg_resident_bail_amount: 'Kautionskosten für Einwohner: '
@@ -1031,60 +1031,63 @@ msg_err_no_nation_with_that_name: 'Es wurde keine Nation mit dem Namen %s gefund
 msg_err_cannot_unclaim_homeblock: 'Du kannst deinen Heimatblock nicht zurückfordern. Verwende ''/town set homeblock'' um deinen Heimatblock zu verschieben.'
 
 # Added in 0.65
-msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
+msg_err_rename_cancelled: 'Das Umbenennen wurde von einem anderen Plugin abgebrochen.'
 
 # Added in 0.66
-msg_war_defender_keeps_claims: 'Capturing disabled. Defending town will keep it''s claims.'
+msg_war_defender_keeps_claims: 'Das Erobern deaktiviert. Städte, die sich verteidigen, behalten ihr Land.'
 
 # Added in 0.67
-msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'Die Stadt %s wurde erobert und ist deshalb der Nation %s für %s Tage beigetreten.'
 msg_conquered: '[Conquered]'
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Deine Stadt kann die Nation nicht verlassen, da sie noch als erobert zählt.'
 
 # Added in 0.68
-msg_plot_group_claim_confirmation: 'This plot is part a group of %s plot(s) by confirming your claim you will purchase them all.'
-msg_plot_group_unclaim_confirmation: 'This plot is part a group of %s plot(s) by confirming you will unclaim them all.'
-msg_plot_group_toggle_confirmation: 'This plot is part a group of %s plot(s) by confirming you will toggle a property on them all.'
-msg_plot_group_set_perm_confirmation: 'This plot is part a group of %s plot(s) by confirming you will set the perm line on them all.'
-msg_plot_evict_group: 'You have successfully evicted the player of this grouped plot, %s.'
-msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s belongs to a group, use /plot group [group name] fs [amount]'
-msg_err_plot_belongs_to_group_set: 'Plot belongs to a group, use /plot group set'
-msg_plot_group_set_for_sale: 'Group %s was put up for sale!'
-msg_err_plot_already_belongs_to_a_group: 'This plot already belongs to a group: %s, please remove the townblock from that group before adding it to another.'
-msg_err_you_must_specify_a_group_name: 'You must specify a plot group name.'
-msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2was put into group %s'
-msg_err_plot_not_associated_with_a_group: 'This plot is not associated with a group.'
-msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
-msg_plot_renamed_from_x_to_y: 'Plot %s has been renamed to %s.'
-msg_err_plot_group_specify_price: 'Please specify the price, ex: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
-msg_err_could_not_set_group_type: 'Could not set group type - '
-msg_set_group_type_to_x: 'Changed plot group''s type to %s'
-msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
-status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
-msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
+msg_plot_group_claim_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du deinen Anspruch bestätigst, wirst du alles bezahlen.'
+msg_plot_group_unclaim_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst, wirst du deinen Anspruch auf diese Plots verlieren.'
+msg_plot_group_toggle_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst wirst du die Eigenschaften für alle Plots festlegen.'
+msg_plot_group_set_perm_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst, wirst du die Berechtigungslinie für alle Plots festlegen.'
+msg_plot_evict_group: 'Du hast den Spieler erfolgreich von dieser Plotgruppe %s vertrieben.'
+msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s gehört zu einer Gruppe; Verwende /plot group [group name] fs [amount]'
+msg_err_plot_belongs_to_group_set: 'Der Plot gehört zu einer Gruppe. Verwende /plot group set'
+msg_plot_group_set_for_sale: 'Die Gruppe %s wurde zum Verkauf angeboten!'
+msg_err_plot_already_belongs_to_a_group: 'Dieser Plot gehört bereits zu einer Gruppe: %s. Wir würden es schätzen, den Stadtblock von dieser Gruppe zu entfernen, ansonsten können wir ihn nicht zu einer anderen Gruppe hinzufügen.'
+msg_err_you_must_specify_a_group_name: 'Es wird einen Namen für die Plotgruppe festlegen.'
+msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2wurde zur Gruppe %s hinzugefügt.'
+msg_err_plot_not_associated_with_a_group: 'Dieser Plot hat mit keiner Gruppe etwas zu tun.'
+msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2wurde von der Gruppe %s entfernt.'
+msg_plot_renamed_from_x_to_y: 'Plot %s wurde zu %s umbenannt.'
+msg_err_plot_group_specify_price: 'Es wäre cool, wenn du einen Preis festlegen würdest. Bsp: /plot group fs [Preis]'
+msg_player_put_group_up_for_sale: '%s hat die Gruppe %s zum Verkauf für %s angeboten.'
+msg_err_could_not_set_group_type: 'Gruppentyp konnte nicht festgelegt werden. - '
+msg_set_group_type_to_x: 'Den Typ der Gruppe wurde zu %s geändert.'
+msg_player_successfully_bought_group_x: '%s hat erfolgreich die Plotgruppe %s gekauft.'
+status_plot_group_name_and_size: '&2Der Stadtblock ist der Gruppe: &s. Die Gruppe hat insgesamt %s Stadtblöcke.'
+msg_player_made_group_not_for_sale: '%s hat die Gruppe  %s als ''nicht zu verkaufen'' festgelegt.'
 
 # Added in 0.69
-msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_cannot_set_group_to_jail: 'Plotgruppen kannst zu nicht zum Jail-Typ ändern.'
 
 # Added in 0.70
-msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Click to accept'
-msg_confirmation_spigot_hover_cancel: 'Click to cancel'
-msg_confirmation_spigot_click_accept: 'Click %s or type %s'
-msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
-msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
-msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+msg_err_plot_group_name_required: 'Du musst der Plotgruppe einen Namen geben. Bsp: /plot group add {name}'
+msg_confirmation_spigot_hover_accept: 'Klicken um anzunehmen'
+msg_confirmation_spigot_hover_cancel: 'Klicken um abzulehnen'
+msg_confirmation_spigot_click_accept: 'Klicke %s oder gib %s ein'
+msg_confirmation_spigot_click_cancel: 'Klicke %s oder gib %s ein'
+msg_you_cannot_kick_yourself: 'Du kannst dich nicht selber kicken...'
+msg_you_cannot_kick_this_resident: 'Du kannst nicht %s kicken. Er ist der Bürgermeister oder ein Assistent.'
 
 # Added in 0.71
-msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
-msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s gehört zu einer Gruppe. Verwende /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s gehört zu einer Gruppe. Verwende /plot group nfs'
 
 # Added in 0.72
-msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Die Admin-kontrollierte %s Einstellung hindert sich daran, PvP zu %s zu wechseln.'
 
 # Added in 0.73
-msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+msg_err_you_aren't currently jailed: 'Du bist derzeit nicht gefangen.'
 
 # Added in 0.74
-msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Dir ist es nicht erlaubt, die andere Seite des Portals an diesem Ort zu erstellen.'
+
+# Added in 0.75
+msg_already_ally: 'Deine Nation ist bereits mit %s verbündet.'
