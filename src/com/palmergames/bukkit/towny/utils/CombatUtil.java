@@ -132,18 +132,6 @@ public class CombatUtil {
 		 */
 		if (attackingPlayer != null) {
 
-			// If attacking player has post-spawn immunity, that player cannot damage entities.
-			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
-				try {
-					if(attackingPlayer.isInvulnerable()) {
-						return true;
-					}
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(e.getMessage());
-					e.printStackTrace();
-				}
-			}
-
 			/*
 			 * If another player is the target
 			 * or
@@ -169,9 +157,15 @@ public class CombatUtil {
 				 * Check the attackers TownBlock and it's Town for their PvP
 				 * status, else the world.
 				 * Check the defenders TownBlock and it's Town for their PvP
-				 * status, else the world.
+				 * status, else the world
+				 * Check if the attacker has 'post-spawn damage/attack immunity'
 				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
+				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
+					|| preventPvP(world, attackerTB)
+					|| preventPvP(world, defenderTB)
+					|| (TownySettings.getWarSiegeEnabled()
+						&& TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()
+						&& attackingPlayer.isInvulnerable())) {
 
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
