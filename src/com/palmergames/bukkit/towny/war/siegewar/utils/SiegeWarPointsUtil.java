@@ -164,9 +164,9 @@ public class SiegeWarPointsUtil {
 		//Give siege points to opposing side
 		int siegePoints;
 		if (attackerDeath) {
-			siegePoints = TownySettings.getWarSiegePointsForAttackerDeath();
+			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
 			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
-			siegeZone.adjustSiegePoints(-siegePoints);
+			siegeZone.adjustSiegePoints(siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
 			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
