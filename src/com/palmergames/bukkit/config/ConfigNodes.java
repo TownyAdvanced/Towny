@@ -1256,6 +1256,11 @@ public enum ConfigNodes {
 			"economy.new_expand.price_new_town",
 			"250.0",
 			"# How much it costs to start a town."),
+	ECO_PRICE_RECLAIM_TOWN(
+			"economy.new_expand.price_reclaim_town",
+			"200.0",
+			"# How much it costs to reclaim a ruined town.",
+			"# This is only applicable if the delay-town-removal & allow-town-reclaim features are enabled."),
 	ECO_PRICE_OUTPOST(
 			"economy.new_expand.price_outpost",
 			"500.0",
@@ -1845,7 +1850,7 @@ public enum ConfigNodes {
 			"war.siege.switches.ruins_reclaim_enabled",
 			"true",
 			"# If this is true, then after a town has been ruined for a certain (configurable) duration,",
-			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required cost (same as for new town)"),
+			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price (configured in the eco section in this file)"),
 	WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED(
 			"war.siege.switches.attacker_spawn_into_besieged_town_disabled",
 			"true",

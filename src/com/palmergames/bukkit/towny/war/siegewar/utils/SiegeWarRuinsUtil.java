@@ -139,8 +139,8 @@ public class SiegeWarRuinsUtil {
 				throw new TownyException(TownySettings.getLangString("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
-			double townRecoveryCost = TownySettings.getNewTownPrice();
-			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townRecoveryCost))
+			double townReclaimCost = TownySettings.getReclaimTownPrice();
+			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 
 			//Validate if player can remove at this time
@@ -154,7 +154,7 @@ public class SiegeWarRuinsUtil {
 			}
 
 			//Recover Town now
-			resident.getAccount().pay(townRecoveryCost, "Cost of town reclaim.");
+			resident.getAccount().pay(townReclaimCost, "Cost of town reclaim.");
 			town.setRecentlyRuinedEndTime(0);
 			
 			//Set player as mayor (and remove npc)

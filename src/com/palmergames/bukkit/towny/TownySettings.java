@@ -1195,6 +1195,11 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_TOWN);
 	}
 
+	public static double getReclaimTownPrice() {
+
+		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_TOWN);
+	}
+
 	public static double getNewNationPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_NATION);
