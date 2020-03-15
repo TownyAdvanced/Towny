@@ -97,7 +97,7 @@ public class TownyPlayerListener implements Listener {
 		}
 		// Citizens were being moved to the server spawn when a server was in safe mode, this solves that.
 		if (plugin.isCitizens2())
-			if (!CitizensAPI.getNPCRegistry().isNPC(player))
+			if (CitizensAPI.getNPCRegistry().isNPC(player))
 				return;
 
 		TownyUniverse.getInstance().onLogin(player);
