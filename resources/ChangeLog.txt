@@ -4251,3 +4251,4 @@ v0.92.0.11:
   - German.yml updated to 0.75 by enterih.
   - API: preNewDayEvent, courtesy of silverwolfg11 with PR #3770.
     - Closes #3765.
+  - Fix titles and surname losing their trailing and leading spaces.
