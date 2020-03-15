@@ -19,6 +19,7 @@ public class NameUtil {
 	 * A helper function that extracts names from objects.
 	 * 
 	 * @param objs The Nameable objects to get the names from.
+	 * @param <T> The nameable object.   
 	 * @return A list of the names of the objects.
 	 */
 	public static <T extends Nameable> List<String> getNames(Collection<T> objs) {
