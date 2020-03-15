@@ -95,10 +95,6 @@ public class TownyPlayerListener implements Listener {
 			player.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
 			return;
 		}
-		// Citizens were being moved to the server spawn when a server was in safe mode, this solves that.
-		if (plugin.isCitizens2())
-			if (!CitizensAPI.getNPCRegistry().isNPC(player))
-				return;
 
 		TownyUniverse.getInstance().onLogin(player);
 	}
@@ -562,6 +558,10 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
 		if (plugin.isError()) {
+			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
+			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
+			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
+				return;
 			event.setCancelled(true);
 			return;
 		}
