@@ -97,10 +97,12 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (!hasAlly(nation))
 			throw new NotRegisteredException();
 		else {
-			if(TownySettings.getWarSiegeEnabled())
+			boolean result = getAllies().remove(nation);
+
+			if(result && TownySettings.getWarSiegeEnabled())
 				SiegeWarMembershipController.evaluateNationRemoveAlly(this, nation);
 
-			return getAllies().remove(nation);
+			return result;
 		}
 	}
 
