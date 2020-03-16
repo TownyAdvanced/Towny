@@ -212,6 +212,7 @@ public class SiegeWarBlockUtil {
 			case STRIPPED_JUNGLE_LOG:
 			case STRIPPED_OAK_LOG:
 			case STRIPPED_SPRUCE_LOG:
+			case CACTUS:
 				return true;
 			default:
 				return false;
