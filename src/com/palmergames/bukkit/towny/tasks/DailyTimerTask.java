@@ -3,10 +3,18 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.event.PreNewDayEvent;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Bukkit;
@@ -38,6 +46,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		removedTowns.clear();
 		removedNations.clear();
 
+		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
+		
 		TownyMessaging.sendDebugMsg("New Day");
 
 		// Collect taxes

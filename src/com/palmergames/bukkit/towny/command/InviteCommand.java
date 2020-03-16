@@ -30,10 +30,10 @@ import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
-	private static final List<String> inviteTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> inviteTabCompletes = Arrays.asList(
 		TownySettings.getAcceptCommand(),
 		TownySettings.getDenyCommand()
-	));
+	);
 	
 	@SuppressWarnings("unused")
 	private static Towny plugin;
@@ -79,6 +79,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			if (command.getName().equalsIgnoreCase("invite")) {
 				parseInviteCommand(player, args);

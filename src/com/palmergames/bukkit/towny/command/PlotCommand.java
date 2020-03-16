@@ -80,7 +80,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		output.add(TownySettings.getLangString("msg_nfs_abr"));
 	}
 	
-	private static final List<String> plotTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotTabCompletes = Arrays.asList(
 		"claim",
 		"unclaim",
 		"forsale",
@@ -93,9 +93,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"toggle",
 		"clear",
 		"group"
-	));
+	);
 	
-	private static final List<String> plotGroupTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotGroupTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"set",
@@ -104,9 +104,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"notforsale",
 		"forsale",
 		"perm"
-	));
+	);
 	
-	private static final List<String> plotSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotSetTabCompletes = Arrays.asList(
 		"reset",
 		"shop",
 		"embassy",
@@ -119,12 +119,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"outpost",
 		"name",
 		"perm"
-	));
+	);
 	
-	private static final List<String> plotRectCircleCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> plotRectCircleCompletes = Arrays.asList(
 		"rect",
 		"circle"
-	));
+	);
+	
+	private static final List<String> plotToggleTabCompletes = Arrays.asList(
+		"fire",
+		"pvp",
+		"explosion",
+		"mob"
+	);
 
 	public PlotCommand(Towny instance) {
 
@@ -135,6 +142,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			try {
 				if (!TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).isUsingTowny()) {
@@ -175,8 +186,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
 					}
+					break;
 				case "toggle":
-					return toggleTabCompletes(StringMgmt.remArgs(args, 2));
+					if (args.length == 2)
+						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+					break;
 				case "claim":
 				case "notforsale":
 				case "nfs":

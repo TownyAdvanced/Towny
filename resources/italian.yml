@@ -1,5 +1,5 @@
 name: Towny
-version: 0.74
+version: 0.75
 language: italian
 author: Leomixer17
 website: 'http://townyadvanced.github.io/'
@@ -1087,3 +1087,6 @@ msg_err_you_aren't currently jailed: 'You are not currently jailed.'
 
 # Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+
+# Added in 0.75
+msg_already_ally: 'Your nation is already allied with %s.'

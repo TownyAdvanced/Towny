@@ -80,7 +80,6 @@ public class WallGen {
 				(!isPartOfTown(tb.x-1, tb.z, town) && !isPartOfTown(tb.x, tb.z-1, town)) )
 				town.wall.sections.add(new WallSection(lowestInGrid(tb.x*TownyProperties.blockSize, tb.z*TownyProperties.blockSize, 4, 4), 0, (isPartOfTown(tb.x-1, tb.z, town) && isPartOfTown(tb.x, tb.z-1, town)) ? 2 : 1));
 			
-			//TODO: delete walls where turrets are. Don't
 		}
 		
 		/*

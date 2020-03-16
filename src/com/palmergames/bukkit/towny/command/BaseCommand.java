@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BaseCommand implements TabCompleter{
 	
-	private static final List<String> setPermTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setPermTabCompletes = Arrays.asList(
 		"on",
 		"off",
 		"resident",
@@ -29,44 +29,37 @@ public class BaseCommand implements TabCompleter{
 		"switch",
 		"itemuse",
 		"reset"
-	));
+	);
 
-	private static final List<String> setLevelCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setLevelCompletes = Arrays.asList(
 		"resident",
 		"ally",
 		"outsider",
 		"nation",
 		"friend",
 		"town"		
-	));
+	);
 
-	private static final List<String> setTypeCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setTypeCompletes = Arrays.asList(
 		"build",
 		"destroy",
 		"switch",
 		"itemuse"
-	));
+	);
 
-	private static final List<String> setOnOffCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> setOnOffCompletes = Arrays.asList(
 		"on",
 		"off"
-	));
+	);
 
-	private static final List<String> toggleTypeOnOffCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> toggleTypeOnOffCompletes = Arrays.asList(
 		"build",
 		"destroy",
 		"switch",
 		"itemuse",
 		"on",
 		"off"
-	));
-
-	private static final List<String> toggleTabCompletes = new ArrayList<>(Arrays.asList(
-		"fire",
-		"pvp",
-		"explosion",
-		"mob"
-	));
+	);
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -146,20 +139,6 @@ public class BaseCommand implements TabCompleter{
 				break;
 			case 3:
 				return NameUtil.filterByStart(setOnOffCompletes, args[2]);
-		}
-		
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Used for toggle tab completes which are common across several commands
-	 * 
-	 * @param args args, make sure to remove the first few irrelevant args
-	 * @return tab completes matching the proper arg
-	 */
-	static List<String> toggleTabCompletes(String[] args) {
-		if (args.length == 1) {
-			return NameUtil.filterByStart(toggleTabCompletes, args[0]);
 		}
 		
 		return Collections.emptyList();

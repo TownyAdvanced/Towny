@@ -4231,3 +4231,26 @@ v0.92.0.11:
   - Fix flagwar not transferring TownBlocks correctly, courtesy of Siris with PR #3744.
   - Add automatic labelling of PRs, automatic labelling of 'stale' to older PRs and Issues, courtesy of Siris with PR #3738.
   - Language files bumped to 0.74.
+0.95.2.23:
+  - zh-TW.yml updated by shou692199 with PR #3751.
+  - Fix plot toggle tab-completion and remove unused code, courtesy of silverwolfg11 with PR #3750.
+  - Add database load time to startup.
+  - Fix possibility of residents getting duplicate town and nation ranks.
+  - Fix unhelpful debug messages when saving residents in sql.
+  - Potential fix for /t and /n online commands not parsing their outputs nicely.
+  - Fix townyworld set messages for console not being used, courtesy of silverwolfg11 with PR #3757.
+  - Remove redundant arraylist creation for tab-completion, courtesy of silverwolfg11 with #3756.
+  - Fix revert-on-unclaim not respecting the PlotManagementSpeed set in the config.
+    - Closes #3759.
+  - Fix Towny safe-mode induced via /ta reload still allowing Towny commands to be used.
+  - Fix Towny moving Citizens NPCs to server spawn when Towny loads in safe mode.
+    - Closes #3760.
+  - Fix Ally invite sending to already allied nations, courtesy of Siris with PR #3755.
+    - Closes #3749.
+  - Remove metadata raw access warnings, courtesy of Siris with PR #3762.
+  - German.yml updated to 0.75 by enterih.
+  - API: preNewDayEvent, courtesy of silverwolfg11 with PR #3770.
+    - Closes #3765.
+  - Fix titles and surname losing their trailing and leading spaces.
+  - Actually fix Towny preventing Citizens NPCs from loading into their proper locations when safe mode happens.
+    - Closes #3773.

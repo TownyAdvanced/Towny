@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeMgmt;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -93,7 +94,7 @@ public class TownyPlayerListener implements Listener {
 			player.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
 			return;
 		}
-		
+
 		TownyUniverse.getInstance().onLogin(player);
 	}
 
@@ -566,6 +567,14 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
+		if (plugin.isError()) {
+			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
+			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
+			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
+				return;
+			event.setCancelled(true);
+			return;
+		}
 
 		Player player = event.getPlayer();
 		// Cancel teleport if Jailed by Towny.

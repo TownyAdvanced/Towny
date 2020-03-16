@@ -76,7 +76,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> king_help = new ArrayList<>();
 	private static final List<String> alliesstring = new ArrayList<>();
 	private static final List<String> invite = new ArrayList<>();
-	private static final List<String> nationTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationTabCompletes = Arrays.asList(
 		"list",
 		"online",
 		"leave",
@@ -100,9 +100,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"spawn",
 		"king"
-	));
+	);
 
-	private static final List<String> nationSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationSetTabCompletes = Arrays.asList(
 		"king",
 		"capital",
 		"board",
@@ -113,36 +113,36 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"title",
 		"surname",
 		"tag"
-	));
+	);
 	
-	static final List<String> nationToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> nationToggleTabCompletes = Arrays.asList(
 		"neutral",
 		"peaceful",
 		"public",
 		"open"
-	));
+	);
 	
-	private static final List<String> nationEnemyTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationEnemyTabCompletes = Arrays.asList(
 		"add",
 		"remove"
-	));
+	);
 	
-	private static final List<String> nationAllyTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationAllyTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"sent",
 		"received",
 		"accept",
 		"deny"
-	));
+	);
 
-	private static final List<String> nationKingTabCompletes = new ArrayList<>(Collections.singletonList("?"));
+	private static final List<String> nationKingTabCompletes = Collections.singletonList("?");
 	
-	private static final List<String> nationConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> nationConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
 		"list"
-	));
+	);
 	
 	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
 	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
@@ -368,6 +368,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			if (args == null) {
 				for (String line : nation_help)
@@ -920,9 +924,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Nation nation = townyUniverse.getDataSource().getNation(split[0]);
 				List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 				if (onlineResidents.size() > 0 ) {
-					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
-					TownyMessaging.sendMsg(player, Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation));
+					TownyMessaging.sendMessage(player, Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -933,7 +937,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Town town = resident.getTown();
 				Nation nation = town.getNation();
-				TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
 			}
@@ -1779,17 +1783,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					ally = townyUniverse.getDataSource().getNation(name);
 					if (nation.equals(ally)) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_own_nation_disallow"));
-						return;
+					} else if (nation.isAlliedWith(ally)) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_already_ally"), ally));
 					} else {
 						list.add(ally);
 					}
+					
 				} catch (NotRegisteredException e) { // So "-Name" isn't a town, remove the - check if that is a town.
 					if (name.startsWith("-") && TownySettings.isDisallowOneWayAlliance()) {
 						try {
 							ally = townyUniverse.getDataSource().getNation(name.substring(1));
 							if (nation.equals(ally)) {
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_own_nation_disallow"));
-								return;
 							} else {
 								remlist.add(ally);
 							}
@@ -1797,11 +1802,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							// Do nothing here as it doesn't match a Nation
 							// Well we don't want to send the commands again so just say invalid name
 							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
-							return;
 						}
 					} else {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
-						return;
 					}
 				}
 			}

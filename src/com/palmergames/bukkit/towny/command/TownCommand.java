@@ -96,7 +96,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
 	private static final List<String> invite = new ArrayList<>();
-	private static final List<String> townTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townTabCompletes = Arrays.asList(
 		"here",
 		"leave",
 		"list",
@@ -124,8 +124,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"invite",
 		"buy",
 		"mayor"
-		));
-	private static final List<String> townSetTabCompletes = new ArrayList<>(Arrays.asList(
+		);
+	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
 		"mayor",
 		"homeblock",
@@ -145,9 +145,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"embassytax",
 		"title",
 		"surname"
-	));
+	);
 
-	static final List<String> townToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> townToggleTabCompletes = Arrays.asList(
 		"explosion",
 		"fire",
 		"mobs",
@@ -156,38 +156,38 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"taxpercent",
 		"open",
 		"jail"
-	));
+	);
 	
-	private static final List<String> townConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
 		"list"
-	));
+	);
 	
-	static final List<String> townAddRemoveTabCompletes = new ArrayList<>(Arrays.asList(
+	static final List<String> townAddRemoveTabCompletes = Arrays.asList(
 		"add",
 		"remove"
-	));
+	);
 	
-	private static final List<String> townClaimTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townClaimTabCompletes = Arrays.asList(
 		"outpost",
 		"circle",
 		"rect"
-	));
+	);
 	
-	private static final List<String> townUnclaimTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townUnclaimTabCompletes = Arrays.asList(
 		"circle",
 		"rect",
 		"all",
 		"outpost"
-	));
+	);
 	
-	private static List<String> townInviteTabCompletes = new ArrayList<>(Arrays.asList(
+	private static List<String> townInviteTabCompletes = Arrays.asList(
 		"sent",
 		"received",
 		"accept",
 		"deny"
-	));
+	);
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -403,6 +403,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
+				
 			Player player = (Player) sender;
 			parseTownCommand(player, args);
 		} else
@@ -1200,9 +1205,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Town town = townyUniverse.getDataSource().getTown(split[0]);
 				List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 				if (onlineResidents.size() > 0) {
-					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 				} else {
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("default_towny_prefix") + Colors.White + "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_town_online") + ": " + town));
+					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.White + "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_town_online") + ": " + town));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -1212,7 +1217,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Town town = resident.getTown();
-				TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendMessage(player, TownySettings.getLangString("msg_err_dont_belong_town"));
 			}

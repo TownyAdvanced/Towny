@@ -234,7 +234,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTitle(String title) {
-		this.title = title.trim();
+		if (title.matches(" "))
+			title = "";
+		this.title = title;
 	}
 
 	public String getTitle() {
@@ -248,7 +250,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setSurname(String surname) {
-		this.surname = surname.trim();
+		if (surname.matches(" "))
+			surname = "";
+		this.surname = surname;
 	}
 
 	public String getSurname() {
@@ -555,7 +559,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTownRanks(List<String> ranks) {
-		townRanks.addAll(ranks);
+		for (String rank : ranks) 
+			if (!this.hasTownRank(rank))
+				townRanks.add(rank);
 	}
 
 	public boolean hasTownRank(String rank) {
@@ -599,7 +605,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setNationRanks(List<String> ranks) {
-		nationRanks.addAll(ranks);
+		for (String rank : ranks)
+			if (!this.hasNationRank(rank))
+				nationRanks.add(rank);
 	}
 
 	public boolean hasNationRank(String rank) {

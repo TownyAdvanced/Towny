@@ -2105,8 +2105,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (resident.hasMeta()) {
-			HashSet<CustomDataField> tdata = resident.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			HashSet<CustomDataField<?>> tdata = resident.getMetadata();
+			for (CustomDataField<?> cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}
 		}
@@ -2226,8 +2226,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (town.hasMeta()) {
-			HashSet<CustomDataField> tdata = town.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			HashSet<CustomDataField<?>> tdata = town.getMetadata();
+			for (CustomDataField<?> cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}
 		}
@@ -2344,8 +2344,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (nation.hasMeta()) {
-			HashSet<CustomDataField> tdata = nation.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			HashSet<CustomDataField<?>> tdata = nation.getMetadata();
+			for (CustomDataField<?> cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}
 		}
@@ -2509,8 +2509,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (world.hasMeta()) {
-			HashSet<CustomDataField> tdata = world.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			HashSet<CustomDataField<?>> tdata = world.getMetadata();
+			for (CustomDataField<?> cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}
 		}
@@ -2586,8 +2586,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (townBlock.hasMeta()) {
-			HashSet<CustomDataField> tdata = townBlock.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			HashSet<CustomDataField<?>> tdata = townBlock.getMetadata();
+			for (CustomDataField<?> cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}
 		}

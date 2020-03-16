@@ -41,7 +41,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
-	private static final List<String> residentTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentTabCompletes = Arrays.asList(
 		"friend",
 		"list",
 		"jail",
@@ -49,16 +49,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"toggle",
 		"set",
 		"tax"
-	));
+	);
 	
-	private static final List<String> residentFriendTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentFriendTabCompletes = Arrays.asList(
 		"add",
 		"remove",
 		"clear",
 		"list"
-	));
+	);
 
-	private static final List<String> residentToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentToggleTabCompletes = Arrays.asList(
 		"pvp",
 		"fire",
 		"mobs",
@@ -68,9 +68,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"townclaim",
 		"map",
 		"spy"
-	));
+	);
 	
-	private static final List<String> residentModeTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentModeTabCompletes = Arrays.asList(
 		"map",
 		"townclaim",
 		"townunclaim",
@@ -80,18 +80,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"constantplotborder",
 		"ignoreplots",
 		"reset"
-	));
+	);
 	
-	private static final List<String> residentConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
 		"list"
-	));
+	);
 	
-	private static final List<String> residentSetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> residentSetTabCompletes = Arrays.asList(
 		"perm",
 		"mode"
-	));
+	);
 	
 
 	static {
@@ -119,6 +119,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			if (args == null) {
 				for (String line : output)

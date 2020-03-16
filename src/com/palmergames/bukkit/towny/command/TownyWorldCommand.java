@@ -42,15 +42,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townyworld_set_console = new ArrayList<>();
 	private static TownyWorld Globalworld;
 	
-	private static final List<String> townyWorldTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyWorldTabCompletes = Arrays.asList(
 		"list",
 		"toggle",
 		"set",
 		"regen",
 		"undo"
-	));
+	);
 
-	private static final List<String> townyWorldToggleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyWorldToggleTabCompletes = Arrays.asList(
 		"claimable",
 		"usingtowny",
 		"pvp",
@@ -63,15 +63,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertunclaim",
 		"revertexpl",
 		"warallowed"
-	));
+	);
 	
-	private static List<String> townySetTabCompletes = new ArrayList<>(Arrays.asList(
+	private static List<String> townySetTabCompletes = Arrays.asList(
 		"usedefault",
 		"wildperm",
 		"wildignore",
 		"wildregen",
 		"wildname"
-	));
+	);
 	
 	private boolean isConsole = false;
 
@@ -106,6 +106,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_set_console.add(ChatTools.formatCommand("", "/townyworld {world} set", "wildname [name]", ""));
 		
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			parseWorldCommand(sender, args);
 		} else {
 			isConsole = true;			
@@ -155,7 +159,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}		
 
-		if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("toggle")) {
+		if (split[0].equalsIgnoreCase("set")) {
+			for (String line : townyworld_set_console) {
+				sender.sendMessage(line);
+			}
+		}
+		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
 			for (String line : townyworld_help_console) {
 				sender.sendMessage(line);
 			}

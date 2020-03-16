@@ -51,7 +51,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> towny_top = new ArrayList<>();
 	private static final List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
-	private static final List<String> townyTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
 		"prices",
 		"time",
@@ -60,9 +60,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"universe",
 		"v",
 		"war"
-	));
+	);
 	
-	private static final List<String> townyConsoleTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyConsoleTabCompletes = Arrays.asList(
 		"prices",
 		"time",
 		"top",
@@ -71,31 +71,31 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"tree",
 		"v",
 		"war"
-	));
+	);
 
-	private static final List<String> townyWarTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyWarTabCompletes = Arrays.asList(
 		"stats",
 		"scores",
 		"hud",
 		"participants"
-	));
+	);
 	
-	private static final List<String> townyTopTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyTopTabCompletes = Arrays.asList(
 		"residents",
 		"land"
-	));
+	);
 	
-	private static final List<String> townyTopResidentsTabComplete = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyTopResidentsTabComplete = Arrays.asList(
 		"all",
 		"town",
 		"nation"
-	));
+	);
 	
-	private static final List<String> townyTopLandTabCompletes = new ArrayList<>(Arrays.asList(
+	private static final List<String> townyTopLandTabCompletes = Arrays.asList(
 		"all",
 		"resident",
 		"town"
-	));
+	);
 	
 
 	static {
@@ -134,6 +134,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			parseTownyCommand(player, args);
 		} else {

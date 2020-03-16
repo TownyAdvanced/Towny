@@ -1310,14 +1310,16 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		
 		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
 	}
-
-	public void addMetaData(CustomDataField md) {
+	
+    @Override
+	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
-	public void removeMetaData(CustomDataField md) {
+	@Override
+	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
