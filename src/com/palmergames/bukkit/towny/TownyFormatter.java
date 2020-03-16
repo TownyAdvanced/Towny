@@ -410,6 +410,7 @@ public class TownyFormatter {
 			// Assistants [2]: Sammy, Ginger
 			List<String> ranklist = new ArrayList<>();
 			getRanks(town, ranklist);
+			out.addAll(ranklist);
 
 			// Nation: Azur Empire
 			try {
