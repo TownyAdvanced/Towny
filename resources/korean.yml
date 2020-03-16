@@ -246,7 +246,7 @@ msg_town_set_name: '&b%s님이 마을의 이름을 %s(으)로 변경하였습니
 msg_nation_set_name: '&b%s님이 국가의 이름을 %s(으)로 변경하였습니다.'
 
 msg_changed_pvp: '&c%s의 PVP 설정 : %s.'
-msg_changed_public: '&c%s 공공 설정 : %s.'
+msg_changed_public: '&c마을 공개 설정 : %s.'
 msg_changed_expl: '&c%s 폭발 설정 : %s.'
 msg_changed_fire: '&c%s 불번짐 설정 : %s.'
 msg_changed_mobs: '&c%s 몹스폰 설정 : %s.'

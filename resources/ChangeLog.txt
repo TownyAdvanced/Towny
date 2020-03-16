@@ -4259,3 +4259,4 @@ v0.92.0.11:
   - Language files bumped to 0.76
   - Fix missing translation.
     - Closes #3777. 
+  - Fix msg_changed_public in korean.yml not working.
