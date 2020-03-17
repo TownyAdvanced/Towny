@@ -2594,7 +2594,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String notAffordMSG;
 
 			// Set target town and affiliated messages.
-			if ((split.length == 0) || ((split.length > 0) && (outpost))) {
+			if (split.length == 0 || outpost) {
 
 				if (!resident.hasTown()) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
@@ -2611,8 +2611,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return;
 				}
 
-				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
-
 			} else {
 				// split.length > 1
 				town = townyUniverse.getDataSource().getTown(split[0]);
@@ -2624,10 +2622,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (townSpawnEvent.isCancelled()) {
 					return;
 				}
-				
-				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 
 			}
+			
+			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 		} catch (NotRegisteredException e) {
 
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
