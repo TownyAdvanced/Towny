@@ -26,6 +26,9 @@ public class SiegeWarMembershipController {
 	 *  
 	 */
 	public static void evaluateTownRemoveResident(Town town, Resident resident) {
+		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+			return;
+
 		SiegeWarPointsUtil.evaluateFighterRemovalPenalty(town, resident, TownySettings.getLangString("msg_siege_war_resident_leave_town"));
 	}
 
@@ -36,6 +39,9 @@ public class SiegeWarMembershipController {
 	 *
 	 */
 	public static void evaluateNationRemoveTown(Town town) {
+		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+			return;
+
 		for (Resident resident : town.getResidents()) {
 			SiegeWarPointsUtil.evaluateFighterRemovalPenalty(town, resident, TownySettings.getLangString("msg_siege_war_town_leave_nation"));
 		}
@@ -48,6 +54,9 @@ public class SiegeWarMembershipController {
 	 *
 	 */
 	public static void evaluateNationRemoveAlly(Nation nation, Nation ally) {
+		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+			return;
+
 		//Apply penalty to nation for each allied soldier
 		for (Resident resident : ally.getResidents()) {
 			SiegeWarPointsUtil.evaluateSoldierRemovalPenalty(nation, resident, null, TownySettings.getLangString("msg_siege_war_ally_removed"));

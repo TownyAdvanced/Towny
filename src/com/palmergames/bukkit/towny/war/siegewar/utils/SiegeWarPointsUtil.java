@@ -188,9 +188,23 @@ public class SiegeWarPointsUtil {
 		TownyUniverse.getInstance().getDataSource().saveSiegeZone(siegeZone);
 
 		//Send messages to siege participants
+		String residentInformationString;
+		try {
+			if(resident.hasTown()) {
+				Town residentTown = resident.getTown();
+				if(residentTown.hasNation())
+					residentInformationString = resident.getName() + " (" + residentTown.getName() + " | " + residentTown.getNation().getName() + ")";
+				else
+					residentInformationString = resident.getName() + " (" + residentTown.getName() + ")";
+			} else {
+				residentInformationString = resident.getName();
+			}
+		} catch (NotRegisteredException e) { residentInformationString = ""; }
+
 		String message = String.format(
 			unformattedErrorMessage,
 			siegeZone.getDefendingTown().getFormattedName(),
+			residentInformationString,
 			siegePoints);
 
 		//Inform attacker nation

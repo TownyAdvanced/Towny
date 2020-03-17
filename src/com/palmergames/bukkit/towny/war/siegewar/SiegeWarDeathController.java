@@ -75,8 +75,8 @@ public class SiegeWarDeathController {
 				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 					if (siegeZone.getDefendingTown().hasNation()
 						&& siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-						&& (deadResidentTown.getNation() == siegeZone.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation())
-						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks())
+						&& (deadResidentTown.getNation() == siegeZone.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
+						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()
 					) {
 						SiegeWarPointsUtil.awardSiegePenaltyPoints(
 							false,
@@ -94,8 +94,8 @@ public class SiegeWarDeathController {
 			) {
 				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 					if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-						&& (deadResidentTown.getNation() == siegeZone.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getAttackingNation())
-						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks())
+						&& (deadResidentTown.getNation() == siegeZone.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getAttackingNation()))
+						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()
 					) {
 						SiegeWarPointsUtil.awardSiegePenaltyPoints(
 							true,

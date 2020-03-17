@@ -26,6 +26,9 @@ public class SiegeWarRankController {
 	 *  
 	 */
 	public static void evaluateTownRemoveRank(Resident resident, String rank) {
+		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+			return;
+
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().doesTownRankAllowPermissionNode(rank, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
 
@@ -46,6 +49,9 @@ public class SiegeWarRankController {
 	 *
 	 */
 	public static void evaluateNationRemoveRank(Resident resident, String rank) {
+		if(TownySettings.getWarSiegePenaltyPointsEnabled())
+			return;
+
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		if(universe.getPermissionSource().doesNationRankAllowPermissionNode(rank, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
