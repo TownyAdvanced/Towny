@@ -4256,6 +4256,9 @@ v0.92.0.11:
     - Closes #3773.
 0.95.2.24:
   - zh-TW.yml updated by shou692199 with PR #3775.
+  - Language fiels bumped to 0.75
+  - Fix missing translation.
+    - Closes #3777. 
 0.96.0.0:
   - Special Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
