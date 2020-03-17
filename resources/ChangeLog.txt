@@ -4259,6 +4259,7 @@ v0.92.0.11:
   - Language files bumped to 0.76
   - Fix missing translation.
     - Closes #3777. 
+  - Fix msg_changed_public in korean.yml not working.
 0.96.0.0:
   - Special Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
