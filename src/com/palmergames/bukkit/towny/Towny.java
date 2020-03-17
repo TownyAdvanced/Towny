@@ -262,6 +262,8 @@ public class Towny extends JavaPlugin {
 
 	public boolean load() {
 
+		checkCitizens();
+		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
 			return false;
@@ -293,6 +295,15 @@ public class Towny extends JavaPlugin {
 		return true;
 	}
 
+	private void checkCitizens() {
+		/*
+		 * Test for Citizens2 so we can avoid removing their NPC's
+		 */
+		Plugin test = getServer().getPluginManager().getPlugin("Citizens");
+		if (test != null)
+			citizens2 = getServer().getPluginManager().getPlugin("Citizens").isEnabled();
+	}
+	
 	private void checkPlugins() {
 
 		List<String> using = new ArrayList<>();
@@ -357,15 +368,6 @@ public class Towny extends JavaPlugin {
 			TownyMessaging.sendErrorMsg("You may safely remove Questioner.jar from your plugins folder.");
 		}
 
-		/*
-		 * Test for Citizens2 so we can avoid removing their NPC's
-		 */
-		test = getServer().getPluginManager().getPlugin("Citizens");
-		if (test != null) {
-			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled()) {
-				citizens2 = test.getDescription().getVersion().startsWith("2");
-			}
-		}
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
 		if(test != null){
             new TownyPlaceholderExpansion(this).register();

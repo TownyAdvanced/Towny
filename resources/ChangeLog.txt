@@ -4252,6 +4252,8 @@ v0.92.0.11:
   - API: preNewDayEvent, courtesy of silverwolfg11 with PR #3770.
     - Closes #3765.
   - Fix titles and surname losing their trailing and leading spaces.
+  - Actually fix Towny preventing Citizens NPCs from loading into their proper locations when safe mode happens.
+    - Closes #3773.
 0.96.0.0:
   - Special Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
