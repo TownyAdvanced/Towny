@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -45,6 +46,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -2602,6 +2604,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
+				Bukkit.getPluginManager().callEvent(townSpawnEvent);
+
+				if (townSpawnEvent.isCancelled()) {
+					return;
+				}
+
 				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 
 			} else {
@@ -2609,6 +2618,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = townyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
 
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
+				Bukkit.getPluginManager().callEvent(townSpawnEvent);
+				
+				if (townSpawnEvent.isCancelled()) {
+					return;
+				}
+				
 				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 
 			}
