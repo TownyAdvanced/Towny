@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
-import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
@@ -2613,29 +2612,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation = resident.getTown().getNation();
                 notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
-				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
-				
-				if (nationSpawnEvent.isCancelled()) {
-					return;
-				}
+                SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
 
-			} else {
+            } else {
                 // split.length > 1
                 nation = townyUniverse.getDataSource().getNation(split[0]);
                 notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_nation"), nation.getName());
 
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
-				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
+                SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
 
-				if (nationSpawnEvent.isCancelled()) {
-					return;
-				}
-
-			}
-            
-			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
-		} catch (NotRegisteredException e) {
+            }
+        } catch (NotRegisteredException e) {
 
             throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 
