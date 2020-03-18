@@ -1854,26 +1854,24 @@ public class TownySettings {
 
 		if (town != null) {
 			if (isUpkeepByPlot()) {
-				multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
+				multiplier = town.getTownBlocks().size();
 			} else {
-				multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+				multiplier = Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 			}
 		} else
 			multiplier = 1.0;
 
-		Double amount = 0.0;
+		double amount = 0.0;
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
-				nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (NotRegisteredException e) {
+				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+			} catch (NumberFormatException|NotRegisteredException e) {
 				e.printStackTrace();
 			}
 			if (isUpkeepByPlot()) {
 				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-					amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
+					amount = (((getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
 				else
 					amount = (getTownUpkeep() * multiplier) * nationMultiplier;
 				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
@@ -1884,7 +1882,7 @@ public class TownySettings {
 		} else {
 			if (isUpkeepByPlot()) {
 				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-					amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+					amount = (getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 				else
 					amount = getTownUpkeep() * multiplier;
 				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
@@ -1975,11 +1973,11 @@ public class TownySettings {
 		if (nation != null) {
 			if (isNationUpkeepPerTown()) {
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
-					return (getNationUpkeep() * nation.getTowns().size()) * Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+					return (getNationUpkeep() * nation.getTowns().size()) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 				else
 					return (getNationUpkeep() * nation.getTowns().size());
 			} else {
-				multiplier = Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				multiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 			}
 		} else
 			multiplier = 1.0;
