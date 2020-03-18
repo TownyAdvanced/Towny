@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
+import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
+import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
@@ -22,6 +25,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -1839,52 +1843,55 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_EVENT_REMOVE_ON_MONARCH_DEATH);
 	}
 
-    public static double getTownUpkeepCost(Town town) {
-    	 
-        double multiplier;
- 
-        if (town != null) {
-            if (isUpkeepByPlot()) {
-                multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
-            } else {
-                multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
-            }
-        } else
-            multiplier = 1.0;
- 
-        Double amount = 0.0;
-        if (town.hasNation()) {
-            double nationMultiplier = 1.0;
-            try {
-                nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } catch (NotRegisteredException e) {
-                e.printStackTrace();
-            }
-            if (isUpkeepByPlot()) {
-            	if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-            		amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
-            	else
-            		amount = (getTownUpkeep() * multiplier) * nationMultiplier;
-            	if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
-               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
-                return amount;
-            } else
-                return (getTownUpkeep() * multiplier) * nationMultiplier;
-        } else {
-            if (isUpkeepByPlot()) {
-            	if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-            		amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
-            	else
-            		amount = getTownUpkeep() * multiplier;
-                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
-               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
-                return amount;
-            } else
-                return getTownUpkeep() * multiplier;
-        }
-    }
+	public static double getTownUpkeepCost(Town town) {
+		TownUpkeepCalculationEvent event = new TownUpkeepCalculationEvent(town,getTownUpkeepCostRaw(town));
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getUpkeep();
+	}
+
+	private static double getTownUpkeepCostRaw(Town town) {
+		double multiplier;
+
+		if (town != null) {
+			if (isUpkeepByPlot()) {
+				multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
+			} else {
+				multiplier = Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+			}
+		} else
+			multiplier = 1.0;
+
+		double amount;
+		if (town.hasNation()) {
+			double nationMultiplier = 1.0;
+			try {
+				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+			} catch (NumberFormatException|NotRegisteredException e) {
+				e.printStackTrace();
+			}
+			if (isUpkeepByPlot()) {
+				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
+					amount = (((getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
+				else
+					amount = (getTownUpkeep() * multiplier) * nationMultiplier;
+				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+					amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+				return amount;
+			} else
+				return (getTownUpkeep() * multiplier) * nationMultiplier;
+		} else {
+			if (isUpkeepByPlot()) {
+				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
+					amount = (getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+				else
+					amount = getTownUpkeep() * multiplier;
+				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+					amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+				return amount;
+			} else
+				return getTownUpkeep() * multiplier;
+		}
+	}
 
 	public static double getTownUpkeep() {
 
@@ -1911,26 +1918,34 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
 	}
-	
-    public static double getTownPenaltyUpkeepCost(Town town) {
-    	
-    	int claimed, allowedClaims, overClaimed;
-    	
-	    if (getUpkeepPenalty() > 0) {
-	    	
-	    	claimed = town.getTownBlocks().size();
-	    	allowedClaims = getMaxTownBlocks(town);
-	    	overClaimed = claimed - allowedClaims;
 
-	    	if (!town.isOverClaimed())
-	    		return 0;
-	    	
-	    	if (isUpkeepPenaltyByPlot())
-	    		return getUpkeepPenalty() * overClaimed;
-	    	else
-	    		return getUpkeepPenalty();
-	    } else return 0;
-    }
+	public static double getTownPenaltyUpkeepCost(Town town) {
+		TownUpkeepPenalityCalculationEvent event = new TownUpkeepPenalityCalculationEvent(town, getTownPenaltyUpkeepCostRaw(town));
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getUpkeep();
+	}
+
+	private static double getTownPenaltyUpkeepCostRaw(Town town) {
+
+		int claimed;
+		int allowedClaims;
+		int overClaimed;
+
+		if (getUpkeepPenalty() > 0) {
+
+			claimed = town.getTownBlocks().size();
+			allowedClaims = getMaxTownBlocks(town);
+			overClaimed = claimed - allowedClaims;
+
+			if (!town.isOverClaimed())
+				return 0;
+
+			if (isUpkeepPenaltyByPlot())
+				return getUpkeepPenalty() * overClaimed;
+			else
+				return getUpkeepPenalty();
+		} else return 0;
+	}
 
     public static double getUpkeepPenalty() {
     	
@@ -1947,20 +1962,27 @@ public class TownySettings {
 	}
 
 	public static double getNationUpkeepCost(Nation nation) {
+		NationUpkeepCalculationEvent event = new NationUpkeepCalculationEvent(nation, getNationUpkeepCostRaw(nation));
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getUpkeep();
+	}
+
+	private static double getNationUpkeepCostRaw(Nation nation) {
 
 		double multiplier;
 
 		if (nation != null) {
 			if (isNationUpkeepPerTown()) {
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
-					return (getNationUpkeep() * nation.getTowns().size()) * Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+					return (getNationUpkeep() * nation.getTowns().size()) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 				else
 					return (getNationUpkeep() * nation.getTowns().size());
 			} else {
-				multiplier = Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				multiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 			}
-		} else
+		} else {
 			multiplier = 1.0;
+		}
 
 		return getNationUpkeep() * multiplier;
 	}
