@@ -1854,14 +1854,14 @@ public class TownySettings {
 
 		if (town != null) {
 			if (isUpkeepByPlot()) {
-				multiplier = town.getTownBlocks().size();
+				multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
 			} else {
 				multiplier = Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 			}
 		} else
 			multiplier = 1.0;
 
-		double amount = 0.0;
+		double amount;
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
@@ -1927,7 +1927,9 @@ public class TownySettings {
 
 	private static double getTownPenaltyUpkeepCostRaw(Town town) {
 
-		int claimed, allowedClaims, overClaimed;
+		int claimed;
+		int allowedClaims;
+		int overClaimed;
 
 		if (getUpkeepPenalty() > 0) {
 
@@ -1959,7 +1961,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_UPKEEP);
 	}
 
-
 	public static double getNationUpkeepCost(Nation nation) {
 		NationUpkeepCalculationEvent event = new NationUpkeepCalculationEvent(nation, getNationUpkeepCostRaw(nation));
 		Bukkit.getPluginManager().callEvent(event);
@@ -1979,8 +1980,9 @@ public class TownySettings {
 			} else {
 				multiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 			}
-		} else
+		} else {
 			multiplier = 1.0;
+		}
 
 		return getNationUpkeep() * multiplier;
 	}
@@ -2941,3 +2943,4 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
 	}
 }
+
