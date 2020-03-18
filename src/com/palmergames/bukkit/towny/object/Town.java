@@ -36,7 +36,7 @@ import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
-	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
+	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private List<Resident> residents = new ArrayList<>();
 	private List<Resident> outlaws = new ArrayList<>();
@@ -71,8 +71,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private EconomyAccount account;
-	private List<TownBlock> townBlocks = new ArrayList<>();
+	private transient EconomyAccount account;
+	private transient List<TownBlock> townBlocks = new ArrayList<>();
 	private TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
@@ -1442,7 +1442,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
 	 * 
 	 * @return the holding balance of the economy account.
-	 * @throws EconomyException
+	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public double getHoldingBalance() throws EconomyException {

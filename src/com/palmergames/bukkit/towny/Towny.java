@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
@@ -42,6 +43,8 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import com.palmergames.bukkit.towny.utils.SaveUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
@@ -191,7 +194,22 @@ public class Towny extends JavaPlugin {
 					townyUniverse.onLogin(player);
 				}
 		}
+		// ------------------- TESTING CODE -------------------
+		save(new Town("test"));
+		// ------------------- TESTING CODE -------------------
 	}
+	
+	// ------------------- TESTING CODE -------------------
+	public void save(TownyObject object) {
+		Town town = townyUniverse.getTownsMap().get("dude");
+		HashMap<String, String> saveData = SaveUtil.getSaveMap(town);
+		
+		for (Map.Entry<String, String> entry : saveData.entrySet()) {
+			TownyMessaging.sendErrorMsg(entry.toString());
+		}
+	}
+	// ------------------- TESTING CODE -------------------
+	
 
 	public void setWorldFlags() {
 		TownyUniverse universe = TownyUniverse.getInstance();
