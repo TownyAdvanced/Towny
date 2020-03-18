@@ -4261,6 +4261,7 @@ v0.92.0.11:
     - Closes #3777. 
   - Fix msg_changed_public in korean.yml not working.
   - zh-TW.yml updated by shou692199 with PR #3782.
+  - Fix a couple missing child nodes for permissions in the plugin.yml.
 0.96.0.0:
   - Special Release for 1.13.2 Servers preceding 0.96.0.0
     - Some "Required Config Changes" will not be necessary for this release.
