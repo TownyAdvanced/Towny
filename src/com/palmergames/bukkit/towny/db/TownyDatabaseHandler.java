@@ -673,6 +673,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation.getName());
 		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		Resident king = nation.getKing();
 		
 		if (preEvent.isCancelled())
 			return;
@@ -703,24 +705,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				nation.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
-
-		//Refund some of the initial setup cost to the king
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.isUsingEconomy()
-			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-			try {
-				//Refund the king with some of the initial nation setup cost
-				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-				nation.getKing().getAccount().collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			TownyMessaging.sendGlobalMessage(
-				String.format(
-				TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"),
-				nation.getKing().getFormattedName(),
-				TownySettings.getWarSiegeNationCostRefundPercentageOnDelete() + "%"));
-		}
 
 		//Delete nation and save towns
 		deleteNation(nation);
@@ -775,6 +759,24 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveNationList();
 		if(siegeZonesToDelete.size() >0)
 			saveSiegeZoneList();
+
+		//Refund some of the initial setup cost to the king
+		if(TownySettings.getWarSiegeEnabled()
+			&& TownySettings.isUsingEconomy()
+			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+			try {
+				//Refund the king with some of the initial nation setup cost
+				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+				king.getAccount().collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			TownyMessaging.sendGlobalMessage(
+				String.format(
+					TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"),
+					king.getFormattedName(),
+					TownySettings.getWarSiegeNationCostRefundPercentageOnDelete() + "%"));
+		}
 
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 	}
