@@ -3123,5 +3123,9 @@ public class TownySettings {
 	public static boolean getWarSiegePenaltyPointsEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PENALTY_POINTS_ENABLED);
 	}
+
+	public static boolean getWarSiegeKeepInventoryOnSiegeDeath() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_KEEP_INVENTORY_ON_SIEGE_DEATH);
+	}
 }
 

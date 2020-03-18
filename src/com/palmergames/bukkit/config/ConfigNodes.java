@@ -1911,6 +1911,15 @@ public enum ConfigNodes {
 			"# For example, if a soldier in a siege simply left their town just before dying, they would avoid sp loss.",
 			"# As per the wiki, nations & allies are thus recommended to never reduce armed forces if they have active sieges.",
 			"# This setting is recommended to save moderators from extra manual monitoring and enforcement efforts."),
+	WAR_SIEGE_KEEP_INVENTORY_ON_SIEGE_DEATH(
+			"war.siege.switches.keep_inventory_on_siege_death",
+			"true",
+			"# If this setting is true, then it applies to military ranked players. (soldier/guard etc.)",
+			"# If such a player dies in the death-zone of a siege they are involved in, they keep inventory.",
+			"# The setting greatly reduces the material cost of wars, because valuable equipment is not lost.",
+			"# Underdog sides in particularly, have significantly less to lose by counter attacking.",
+			"# The setting causes battles to be more aggressive/immediate.", 
+			"# The setting is recommended."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

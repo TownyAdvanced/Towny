@@ -67,10 +67,6 @@ public class TownyEntityMonitorListener implements Listener {
 		if (defenderEntity instanceof Player) {
 			Player defenderPlayer = (Player) defenderEntity;
 			Resident defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
-
-			//Evaluate siege related aspects of death
-			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarDeathController.evaluateSiegePlayerDeath(defenderPlayer, defenderResident);
 			
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
