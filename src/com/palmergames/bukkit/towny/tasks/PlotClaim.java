@@ -192,8 +192,6 @@ public class PlotClaim extends Thread {
 	 * @author Suneet Tipirneni (Siris)
 	 */
 	private boolean residentGroupClaim(List<WorldCoord> worldCoords) throws TownyException, EconomyException {
-
-		System.out.println("groupclaimhit");
 		
 		for (int i = 0; i < worldCoords.size(); ++i) {
 			
