@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,6 +41,37 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townyworld_set = new ArrayList<>();
 	private static final List<String> townyworld_set_console = new ArrayList<>();
 	private static TownyWorld Globalworld;
+	
+	private static final List<String> townyWorldTabCompletes = Arrays.asList(
+		"list",
+		"toggle",
+		"set",
+		"regen",
+		"undo"
+	);
+
+	private static final List<String> townyWorldToggleTabCompletes = Arrays.asList(
+		"claimable",
+		"usingtowny",
+		"pvp",
+		"forcepvp",
+		"explosion",
+		"forceexplosion",
+		"fire",
+		"townmobs",
+		"worldmobs",
+		"revertunclaim",
+		"revertexpl",
+		"warallowed"
+	);
+	
+	private static List<String> townySetTabCompletes = Arrays.asList(
+		"usedefault",
+		"wildperm",
+		"wildignore",
+		"wildregen",
+		"wildname"
+	);
 	
 	private boolean isConsole = false;
 
@@ -73,6 +106,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_set_console.add(ChatTools.formatCommand("", "/townyworld {world} set", "wildname [name]", ""));
 		
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			parseWorldCommand(sender, args);
 		} else {
 			isConsole = true;			
@@ -85,6 +122,26 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_help.clear();
 		Globalworld = null;
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		switch (args[0].toLowerCase()) {
+			case "toggle":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
+				break;
+			case "set":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townySetTabCompletes, args[1]);
+				break;
+			default:
+				if (args.length == 1)
+					return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
+		}
+		
+		return Collections.emptyList();
 	}
 
 	private void parseWorldFromConsole(CommandSender sender, String[] split) {
@@ -102,7 +159,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}		
 
-		if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("toggle")) {
+		if (split[0].equalsIgnoreCase("set")) {
+			for (String line : townyworld_set_console) {
+				sender.sendMessage(line);
+			}
+		}
+		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
 			for (String line : townyworld_help_console) {
 				sender.sendMessage(line);
 			}
@@ -296,6 +358,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "usingtowny", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "warallowed", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "pvp/forcepvp", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "explosion/forceexplosion", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "fire/forcefire", ""));
@@ -327,7 +390,17 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
+			
+			} else if (split[0].equalsIgnoreCase("warallowed")) {
 
+				Globalworld.setWarAllowed(!Globalworld.isWarAllowed());
+				plugin.resetCache();
+				msg = String.format(Globalworld.isWarAllowed() ? TownySettings.getLangString("msg_set_war_allowed_on") : TownySettings.getLangString("msg_set_war_allowed_off"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+				
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
 				Globalworld.setPVP(!Globalworld.isPVP());

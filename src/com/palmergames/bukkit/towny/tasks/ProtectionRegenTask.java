@@ -7,7 +7,9 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +24,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	private BlockLocation blockLocation;
 	private int TaskId;
 	private List<ItemStack> contents = new ArrayList<ItemStack>();
-	
+
 	//Tekkit - InventoryView
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
@@ -58,15 +60,48 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	}
 
 	public void replaceProtections() {
-		
+
 		Block block = state.getBlock();
 		try {
-			BlockData blockData = state.getBlockData().clone();			
+			BlockData blockData = state.getBlockData().clone();
 			block.setType(state.getType(), false);
 			block.setBlockData(blockData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		// If the state is a creature spawner, then replace properly.
+		if (state instanceof CreatureSpawner) {
+			// Up cast to interface.
+			CreatureSpawner spawner = (CreatureSpawner) state;
+			
+			// Capture spawn type and set it.
+			EntityType type = spawner.getSpawnedType();
+			((CreatureSpawner) state).setSpawnedType(type);
+
+			// update blocks.
+			state.update();
+		}
+		
+		/* Add inventory back to the block if it conforms to BlockInventoryHolder.
+		*
+		* Unusable on 1.13
+		* 
+		if (state instanceof BlockInventoryHolder) {
+			// Up cast to interface.
+			BlockInventoryHolder container = (BlockInventoryHolder) state;
+			
+			// Check for chest.
+			if (container instanceof Chest) {
+				((Chest) state).getBlockInventory().setContents(contents);
+			} else {
+				((BlockInventoryHolder) state).getInventory().setContents(contents);
+			}
+			
+			// update blocks.
+			state.update();
+		}
+		 */
 	}
 
 	/**

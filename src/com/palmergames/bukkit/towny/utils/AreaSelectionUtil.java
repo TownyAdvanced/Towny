@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -14,6 +15,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AreaSelectionUtil {
@@ -165,7 +167,9 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other towns as set in the config.
 	 * 
-	 * @param selection
+
+	 * @param selection - List&lt;WorldCoord&gt; of coordinates
+	 * @param town - Town to check distance from
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
@@ -186,7 +190,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 
-	 * @param selection
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterTownOwnedBlocks(List<WorldCoord> selection) {
@@ -205,7 +209,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks.
 	 * 
-	 * @param selection
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterWildernessBlocks(List<WorldCoord> selection) {
@@ -230,6 +234,49 @@ public class AreaSelectionUtil {
 			} catch (NotRegisteredException ignored) {
 			}
 		return out;
+	}
+
+	/**
+	 * Gives a list of townblocks that have membership to the specified group.
+	 * @param group The plot group to filter against.
+	 * @param selection The selection of townblocks.
+	 * @return A List of {@link WorldCoord} that contains the coordinates of townblocks part of the specified group.
+	 * @author Suneet Tipirneni (Siris)
+	 */
+	public static List<WorldCoord> filterPlotsByGroup(PlotGroup group, List<WorldCoord> selection) {
+		List<WorldCoord> out =  new ArrayList<>();
+		
+		for (WorldCoord worldCoord : selection) {
+			
+			try {
+				TownBlock townBlock = worldCoord.getTownBlock();
+				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group)) {
+					out.add(worldCoord);
+				}
+			} catch (NotRegisteredException ignored) {}
+		}
+		
+		return out;
+	}
+	
+	public static HashSet<PlotGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
+		HashSet<PlotGroup> seenGroups = new HashSet<>();
+		
+		for (WorldCoord coord : selection) {
+			
+			PlotGroup group = null;
+			try {
+				group = coord.getTownBlock().getPlotObjectGroup();
+			} catch (NotRegisteredException ignored) {}
+			
+			if (seenGroups.contains(group))
+				continue;
+			
+			seenGroups.add(group);
+			
+		}
+		
+		return seenGroups;
 	}
 
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {

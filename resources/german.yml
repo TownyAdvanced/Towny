@@ -1,8 +1,8 @@
 name: Towny
-version: 0.59
+version: 0.76
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
-website: 'http://towny.palmergames.com/'
+website: 'http://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -305,7 +305,7 @@ msg_must_specify_amnt: '&bDu musst einen Betrag angeben. z.B.: %s 54'
 msg_town_set_tax: '&b%s hat die tägliche Einwohnersteuer auf %s gesetzt.'
 msg_town_set_plottax: '&b%s hat die tägliche Grundsteuer auf %s gesetzt.'
 msg_town_set_plotprice: '&b%s hat den Preis für Grundstücke auf %s gesetzt.'
-msg_town_set_alttax: '&b%s hat die 
+msg_town_set_alttax: '&b%s hat die
 von %s Grundstücken auf %s gesetzt.'
 msg_town_set_altprice: '&b%s hat den Preis für %s Grundstücke auf %s gesetzt.'
 msg_town_set_nation_tax: '&b%s hat die Nationssteuer auf %s gesetzt.'
@@ -339,7 +339,7 @@ msg_war_lose_block: '&6[Krieg]&b (%s) der Nation %s ist gefallen.'
 msg_war_score: '&6[Krieg]&b %s erzielte %d Punkte!'
 msg_war_score_nation_elim: '&6[Krieg]&b %s hat %d Punkte für die Auslöschung der Nation %s erhalten!'
 msg_war_score_town_elim: '&6[Krieg]&b %s hat %d Punkte für die Eroberung der Stadt %s erhalten! (%d Stadtplätze erobert)'
-msg_war_score_townblock_elim: '&6[Krieg]&b %s hat %d points für die Zerstörung des Stadtplatzes von %s erhalten!'
+msg_war_score_townblock_elim: '&6[Krieg]&b %s hat %d Punkte für die Zerstörung des Stadtplatzes von %s erhalten!'
 msg_war_score_player_kill: '&6[Krieg]&b %s hat %s getötet. (%d Punkte für %s)'
 msg_war_score_player_kill_defending: '&6[War]&b %s hat %s getötet wärend %s verteidigt hat. (%d Punkte für %s)'
 msg_war_king_killed: '&6[Krieg]&b Der König von %s wurde getötet!'
@@ -393,7 +393,7 @@ msg_err_dont_belong_town: '&cDu gehörst zu keiner Stadt.'
 msg_err_dont_belong_nation: '&bDu gehörst zu keiner Nation.'
 msg_err_not_same_nation: '&b%s gehört nicht zu deiner Nation.'
 msg_err_rect_auto: '&cNur Städte oder Bürger können ''auto'' benutzen.'
-msg_err_invalid_radius: '&cUngültiger Radius. Benutze eine ganze Zahl oder 
+msg_err_invalid_radius: '&cUngültiger Radius. Benutze eine ganze Zahl oder
 ''auto''.'
 msg_err_not_configured: '&cDiese Welt wurde nicht von Towny konfiguriert.'
 msg_err_updating_item_perms: '&cBeim Aktualisieren der Use-Berechtigungen im Zwischenspeicher ist ein Fehler aufgetreten.'
@@ -517,8 +517,8 @@ msg_you_lost_money_dying: 'Du hast %s verloren.'
 msg_your_town_lost_money_dying: 'Deine Stadt hat %s verloren.'
 msg_your_nation_lost_money_dying: 'Deine Nation hat %s verloren.'
 msg_err_couldnt_take_deathfunds: 'Konnte das Geld für den Tod nicht einziehen.'
-msg_err_couldnt_take_town_deathfunds: 'Konnte das Geld für das Stürzen der Stadt nicht einziehen.' 
-msg_err_couldnt_take_nation_deathfunds: 'Konnte das Geld für das Stürzen der Nation nicht einziehen.' 
+msg_err_couldnt_take_town_deathfunds: 'Konnte das Geld für das Stürzen der Stadt nicht einziehen.'
+msg_err_couldnt_take_nation_deathfunds: 'Konnte das Geld für das Stürzen der Nation nicht einziehen.'
 msg_you_gained_money_for_killing: 'Du hast %s für das Töten von %s bekommen .'
 
 msg_err_ender_pearls_disabled: '&Enderperlen sind abgeschaltet!'
@@ -659,7 +659,7 @@ nation_zone_this_area_under_protection_of: 'Dieser teil der %s steht unter dem S
 you_have_been_invited_to_join2: 'Du wurdest eingeladen, %s beizutreten'
 you_have_been_requested_to_ally2: 'Du wurdest angefragt, dich mit %s zu verbünden'
 
-# Added in 0.43 
+# Added in 0.43
 town_help_11: 'Erstellt eine neue Stadt. Verwende ''_'' statt Leerzeichen.'
 changed_plot_town: '&bDu hast das Grundstück erfolgreich der Stadt %s zugewiesen!'
 not_standing_in_plot: 'Du stehst nicht innerhalb eines gültigen Grundstücks!'
@@ -711,7 +711,7 @@ msg_err_over_outposts_limit: 'Du kannst dich nicht zu deinem Außenposten telepo
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Vogelfreie: &f'                    # Used on /t outlawlist
-online: '&a(Online)' 
+online: '&a(Online)'
 registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Berechtigungen: '       # Used on /town
@@ -723,7 +723,7 @@ status_forced: '&cFestgelegt'
 status_adjustable: '&aEinstellbar'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosionen: '              # Used on /plot perm, /res
-explosions2: '&2Explosionen: '               # Used on /town and /tw 
+explosions2: '&2Explosionen: '               # Used on /town and /tw
 firespread: '  &2Feuerausbreitung: '
 mobspawns: '  &2Mobspawns: '
 owner_of_x_plots: '&2Besitzer von &a%s Grundstücken'
@@ -840,7 +840,6 @@ enabled: 'Aktiviert'
 disabled: 'Deaktiviert'
 forced: 'Erzwungen'
 adjustable: 'Einstellbar'
-adjustable: 'Einstellbar'
 
 # Added in 0.48:
 msg_no_funds_new_town2: '&c%s kann es sich nicht leisten, hier eine Stadt zu gründen. Die Kosten betragen %s.'
@@ -902,7 +901,7 @@ msg_error_nation_has_no_allies: 'Die Nation hat keine Verbündeten.'
 msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
 msg_error_ta_plot_claim: 'Der Spielername fehlt. Bsp: /ta plot claim PlayerNameHier'
 msg_error_no_player_with_that_name: 'Es konnte kein Spiel Spieler mit dem Namen %s gefunden werden.'
-msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.' 
+msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.'
 msg_town_forcepvp_setting_set_to: 'Die PvP-Einstellung der Stadt %s wurde geändert zu %s'
 msg_nation_changed_open: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
 msg_err_already_in_a_nation: 'Deine Stadt befindet sich bereits in einer Nation.'
@@ -932,21 +931,21 @@ war_hud_top_towns: 'Beste Städte'
 war_stats_nations: '  Nationen: '
 war_stats_towns: '  Städte: '
 war_stats_warzone: '  Kriegszone: '
-war_stats_spoils_of_war: '  Kriegsbeute: ' 
+war_stats_spoils_of_war: '  Kriegsbeute: '
 war_starts_in_x: 'Krieg startet in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4Während du im Gefängnis sitzt, kannst du den Befehl nicht ausführen.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cMitglieder der Nation sind für %s nicht berechtigt.' 
+msg_cache_block_error_town_nation: '&cMitglieder der Nation sind für %s nicht berechtigt.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s gehört bereits einer Stadt an.'
 msg_err_cannot_afford_plot_set_type_cost: '&cDu kannst es dir nicht leisten den Plot zum %s Typ zu ändern. Preis: %s'
 msg_plot_set_cost: '&bDir wurden %s verrechnet, weil du den Plottyp zu %s geändert hast.'
-msg_err_townspawn_has_not_been_set: '&cStadtspawn wurde nicht festgelegt.'
-msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn und kann deshalb keine Beitrittseinladung für die Stadt erhalten. Maximale Entfernung: %s Townyblöcke.'
+msg_err_townspawn_has_not_been_set: '&cDer Stadtspawn wurde nicht festgelegt.'
+msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn entfernt und kann deshalb keine Beitrittseinladung für die Stadt erhalten. Maximale Entfernung: %s Townyblöcke.'
 
 # Added in 0.58:
 msg_resident_bail_amount: 'Kautionskosten für Einwohner: '
@@ -1001,3 +1000,97 @@ msg_err_tag_too_long: 'Der tag ist zu lang.'
 msg_err_nation_has_not_set_a_spawn_location: 'Die Nation hat keinen festgelegten Spawnpunkt.'
 msg_err_resident_doesnt_belong_to_any_town: 'Der Einwohner gehört zu keiner Stadt.'
 msg_err_could_not_set_default_modes_for: 'Der Defaultmodus konnte nicht festgelegt werden für'
+
+# Added in 0.60
+msg_set_war_allowed_on: 'Krieg wird in dieser Welt möglich sein.'
+msg_set_war_allowed_off: 'Diese Welt wird nicht vom Krieg beeinflusst sein..'
+msg_war_not_enough_nations: '&6[Krieg]&f Weniger als 2 Nationen haben sich für den Krieg versammelt und wird deswegen abgebrochen.'
+msg_war_no_enemies_for_war: '&6[Krieg]&f Es sind momentan keine Feinde für den Krieg versammelt und wird deswegen abgebrochen.'
+msg_war_prefix: '&6[Krieg]&f '
+msg_war_participants_header: '&6[Krieg] &eNationname &f(&bTowns&f)'
+msg_war_participants: '&6[Krieg] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'Während einem Angriff ist das nicht möglich!'
+msg_war_flag_deny_nation_under_attack: 'Während eine Stadt von deiner Nation angegriffen wird, ist das nicht möglich!'
+msg_war_flag_deny_recently_attacked: 'Das ist nicht möglich! Du wurdest vor nicht allzu langer Zeit angegriffen!'
+
+# Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Du kannst PvP nicht umschalten. Du musst %s Sekunden warten.'
+msg_err_cannot_spawn_x_seconds_remaining: 'Du kannst in den nächsten %s Sekunden nicht spawnen.'
+
+# Added in 0.63
+msg_plot_set_to_nfs: 'Plot ist nicht mehr zu kaufen.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn ist nicht verfügbar von %s.'
+msg_the_wilderness: 'Die Wildnis'
+msg_enemy_areas: 'Feindesgebiet'
+msg_neutral_towns: 'Neutrale Städte'
+
+# Added in 0.64
+msg_err_no_nation_with_that_name: 'Es wurde keine Nation mit dem Namen %s gefunden'
+msg_err_cannot_unclaim_homeblock: 'Du kannst deinen Heimatblock nicht zurückfordern. Verwende ''/town set homeblock'' um deinen Heimatblock zu verschieben.'
+
+# Added in 0.65
+msg_err_rename_cancelled: 'Das Umbenennen wurde von einem anderen Plugin abgebrochen.'
+
+# Added in 0.66
+msg_war_defender_keeps_claims: 'Das Erobern deaktiviert. Städte, die sich verteidigen, behalten ihr Land.'
+
+# Added in 0.67
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'Die Stadt %s wurde erobert und ist deshalb der Nation %s für %s Tage beigetreten.'
+msg_conquered: '[Conquered]'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Deine Stadt kann die Nation nicht verlassen, da sie noch als erobert zählt.'
+
+# Added in 0.68
+msg_plot_group_claim_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du deinen Anspruch bestätigst, wirst du alles bezahlen.'
+msg_plot_group_unclaim_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst, wirst du deinen Anspruch auf diese Plots verlieren.'
+msg_plot_group_toggle_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst wirst du die Eigenschaften für alle Plots festlegen.'
+msg_plot_group_set_perm_confirmation: 'Dieser Plot ist Teil einer Gruppe von %s Plots. Falls du bestätigst, wirst du die Berechtigungslinie für alle Plots festlegen.'
+msg_plot_evict_group: 'Du hast den Spieler erfolgreich von dieser Plotgruppe %s vertrieben.'
+msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s gehört zu einer Gruppe; Verwende /plot group [group name] fs [amount]'
+msg_err_plot_belongs_to_group_set: 'Der Plot gehört zu einer Gruppe. Verwende /plot group set'
+msg_plot_group_set_for_sale: 'Die Gruppe %s wurde zum Verkauf angeboten!'
+msg_err_plot_already_belongs_to_a_group: 'Dieser Plot gehört bereits zu einer Gruppe: %s. Wir würden es schätzen, den Stadtblock von dieser Gruppe zu entfernen, ansonsten können wir ihn nicht zu einer anderen Gruppe hinzufügen.'
+msg_err_you_must_specify_a_group_name: 'Es wird einen Namen für die Plotgruppe festlegen.'
+msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2wurde zur Gruppe %s hinzugefügt.'
+msg_err_plot_not_associated_with_a_group: 'Dieser Plot hat mit keiner Gruppe etwas zu tun.'
+msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2wurde von der Gruppe %s entfernt.'
+msg_plot_renamed_from_x_to_y: 'Plot %s wurde zu %s umbenannt.'
+msg_err_plot_group_specify_price: 'Es wäre cool, wenn du einen Preis festlegen würdest. Bsp: /plot group fs [Preis]'
+msg_player_put_group_up_for_sale: '%s hat die Gruppe %s zum Verkauf für %s angeboten.'
+msg_err_could_not_set_group_type: 'Gruppentyp konnte nicht festgelegt werden. - '
+msg_set_group_type_to_x: 'Den Typ der Gruppe wurde zu %s geändert.'
+msg_player_successfully_bought_group_x: '%s hat erfolgreich die Plotgruppe %s gekauft.'
+status_plot_group_name_and_size: '&2Der Stadtblock ist der Gruppe: &s. Die Gruppe hat insgesamt %s Stadtblöcke.'
+msg_player_made_group_not_for_sale: '%s hat die Gruppe  %s als ''nicht zu verkaufen'' festgelegt.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plotgruppen kannst zu nicht zum Jail-Typ ändern.'
+
+# Added in 0.70
+msg_err_plot_group_name_required: 'Du musst der Plotgruppe einen Namen geben. Bsp: /plot group add {name}'
+msg_confirmation_spigot_hover_accept: 'Klicken um anzunehmen'
+msg_confirmation_spigot_hover_cancel: 'Klicken um abzulehnen'
+msg_confirmation_spigot_click_accept: 'Klicke %s oder gib %s ein'
+msg_confirmation_spigot_click_cancel: 'Klicke %s oder gib %s ein'
+msg_you_cannot_kick_yourself: 'Du kannst dich nicht selber kicken...'
+msg_you_cannot_kick_this_resident: 'Du kannst nicht %s kicken. Er ist der Bürgermeister oder ein Assistent.'
+
+# Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s gehört zu einer Gruppe. Verwende /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s gehört zu einer Gruppe. Verwende /plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Die Admin-kontrollierte %s Einstellung hindert sich daran, PvP zu %s zu wechseln.'
+
+# Added in 0.73
+msg_err_you_aren't currently jailed: 'Du bist derzeit nicht gefangen.'
+
+# Added in 0.74
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Dir ist es nicht erlaubt, die andere Seite des Portals an diesem Ort zu erstellen.'
+
+# Added in 0.75
+msg_already_ally: 'Deine Nation ist bereits mit %s verbündet.'
+
+# Added in 0.76
+msg_you: 'You'

@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -14,7 +13,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -26,9 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TownyWarCustomListener implements Listener {
 
@@ -61,6 +56,10 @@ public class TownyWarCustomListener implements Listener {
 
 		Player player = event.getPlayer();
 		CellUnderAttack cell = event.getCell().getAttackData();
+
+		try {
+			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+		} catch (NotRegisteredException ignored) {}
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 
@@ -98,13 +97,13 @@ public class TownyWarCustomListener implements Listener {
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(TownyWarConfig.getDefendedAttackReward());
 				if (defendingPlayer == null) {
-					if (attackingPlayer.pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
+					if (attackingPlayer.getAccount().pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_greater_forces"), formattedMoney));
 						} catch (TownyException ignored) {
 						}
 				} else {
-					if (attackingPlayer.payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
+					if (attackingPlayer.getAccount().payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_attacker"), defendingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
@@ -141,6 +140,8 @@ public class TownyWarCustomListener implements Listener {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			Town defendingTown = townBlock.getTown();
 
+			TownyWar.townFlagged(defendingTown);
+
 			// Payments
 			double amount = 0;
 			String moneyTranserMsg = null;
@@ -158,8 +159,8 @@ public class TownyWarCustomListener implements Listener {
 					if (amount > 0) {
 						// Defending Town -> Attacker (Pillage)
 						String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
-						amount = Math.min(amount, defendingTown.getHoldingBalance());
-						defendingTown.payTo(amount, attackingResident, reason);
+						amount = Math.min(amount, defendingTown.getAccount().getHoldingBalance());
+						defendingTown.getAccount().payTo(amount, attackingResident, reason);
 
 						// Message
 						moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_pillage"), attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
@@ -167,7 +168,7 @@ public class TownyWarCustomListener implements Listener {
 						// Attacker -> Defending Town (Rebuild cost)
 						amount = -amount; // Inverse the amount so it's positive.
 						String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
-						if (!attackingResident.payTo(amount, defendingTown, reason)) {
+						if (!attackingResident.getAccount().payTo(amount, defendingTown, reason)) {
 							// Could Not Pay Defending Town the Rebuilding Cost.
 							TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"), attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 						}
@@ -181,16 +182,20 @@ public class TownyWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			universe.getDataSource().removeTownBlock(townBlock);
-
-			// Attacker Claim Automatically
-			try {
-				List<WorldCoord> selection = new ArrayList<>();
-				selection.add(worldCoord);
-				TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
-				new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
-			} catch (TownyException te) {
-				// Couldn't claim it.
+			if (TownyWarConfig.isFlaggedTownblockTransfered()) {
+				// Attacker Claim Automatically
+				try {
+					townBlock.setTown(attackingTown);
+					TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+				} catch (Exception te) {
+					// Couldn't claim it.
+					TownyMessaging.sendErrorMsg(te.getMessage());
+					te.printStackTrace();
+				}
+			} else {
+				
+				TownyMessaging.sendPrefixedTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
 			}
 
 			// Cleanup
@@ -206,7 +211,7 @@ public class TownyWarCustomListener implements Listener {
 						TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);
 					} catch (TownyException ignored) {
 					}
-					TownyMessaging.sendTownMessage(defendingTown, moneyTranserMsg);
+					TownyMessaging.sendPrefixedTownMessage(defendingTown, moneyTranserMsg);
 				}
 			}
 		} catch (NotRegisteredException e) {
@@ -221,6 +226,10 @@ public class TownyWarCustomListener implements Listener {
 			return;
 
 		CellUnderAttack cell = event.getCell();
+
+		try {
+			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+		} catch (NotRegisteredException ignored) {}
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 

@@ -33,17 +33,23 @@ public class TownyWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
+	private static Map<Town, Long> lastFlag;
 
 	public static void onEnable() {
 
 		cellsUnderAttack = new HashMap<>();
 		cellsUnderAttackByPlayer = new HashMap<>();
+		lastFlag = new HashMap<>();
 	}
 
 	public static void onDisable() {
 
-		for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
-			attackCanceled(cell);
+	
+		try {
+			for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
+				attackCanceled(cell);
+			}
+		} catch (NullPointerException ignored) {
 		}
 	}
 
@@ -77,6 +83,39 @@ public class TownyWar {
 
 		List<CellUnderAttack> activeFlags = cellsUnderAttackByPlayer.get(playerName);
 		return activeFlags == null ? 0 : activeFlags.size();
+	}
+
+	/**
+	 * Get all cells currently under attack
+	 * 
+	 * @return all the cells currently under attack
+	 */
+	public static List<CellUnderAttack> getCellsUnderAttack() {
+		return new ArrayList<>(cellsUnderAttack.values());
+	}
+
+	/**
+	 * Get all cells currently under attack in the specified town
+	 * 
+	 * @param town the town to get cells under attack
+	 * @return the cells under attack
+	 */
+	public static List<CellUnderAttack> getCellsUnderAttack(Town town) {
+		List<CellUnderAttack> cells = new ArrayList<>();
+		for(CellUnderAttack cua : cellsUnderAttack.values()) {
+			try {
+				Town townUnderAttack = TownyAPI.getInstance().getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
+				if (townUnderAttack == null) {
+					continue;
+				}
+				if(townUnderAttack == town) {
+					cells.add(cua);
+				}
+			}
+			catch(NotRegisteredException ignored) {
+			}
+		}
+		return cells;
 	}
 	
 	public static boolean isUnderAttack(Town town) {
@@ -243,7 +282,7 @@ public class TownyWar {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				double requiredAmount = costToPlaceWarFlag;
-				double balance = attackingResident.getHoldingBalance();
+				double balance = attackingResident.getAccount().getHoldingBalance();
 
 				// Check that the user can pay for the warflag.
 				if (balance < costToPlaceWarFlag)
@@ -311,7 +350,7 @@ public class TownyWar {
 			// Skip payment + message if no cost.
 			if (costToPlaceWarFlag > 0) {
 				try {
-					attackingResident.pay(costToPlaceWarFlag, "War - WarFlag Cost");
+					attackingResident.getAccount().pay(costToPlaceWarFlag, "War - WarFlag Cost");
 					TownyMessaging.sendResidentMessage(attackingResident, String.format(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 				} catch (EconomyException e) {
 					e.printStackTrace();
@@ -352,5 +391,19 @@ public class TownyWar {
 	public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {
 
 		return new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
+	}
+
+	public static long lastFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			return lastFlag.get(town);
+		else
+			return 0;
+	}
+
+	public static void townFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			lastFlag.replace(town, System.currentTimeMillis());
+		else
+			lastFlag.put(town, System.currentTimeMillis());
 	}
 }

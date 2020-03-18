@@ -1,14 +1,14 @@
 name: Towny
-version: 0.59
+version: 0.76
 language: español
 author: VreyaViress
-website: 'http://towny.palmergames.com'
+website: 'http://townyadvanced.github.io/'
 description: >
     Archivo de lenguaje para todos los mensajes del juego.  No altere este archivo.
     Si desea cambiar alguna de las entradas, haga una copia con otro nombre.
     Los archivos de lenguajes alternos pueden ser activados alterando la entrada
     [language] en config.yml
-    
+
 #
 #
 #         DEBES mantener los espacios en los textos.
@@ -503,8 +503,8 @@ msg_you_lost_money_dying: 'You lost %s.'
 msg_your_town_lost_money_dying: 'Your town lost %s.'
 msg_your_nation_lost_money_dying: 'Your nation lost %s.'
 msg_err_couldnt_take_deathfunds: 'Could not take death funds.'
-msg_err_couldnt_take_town_deathfunds: 'Could not take town death funds.' 
-msg_err_couldnt_take_nation_deathfunds: 'Could not take nation death funds.' 
+msg_err_couldnt_take_town_deathfunds: 'Could not take town death funds.'
+msg_err_couldnt_take_nation_deathfunds: 'Could not take nation death funds.'
 msg_you_gained_money_for_killing: 'You gained %s for killing %s.'
 
 msg_err_ender_pearls_disabled: '&4Ender Pearls are disabled!'
@@ -645,7 +645,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
-# Added in 0.43 
+# Added in 0.43
 town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
@@ -696,7 +696,7 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
-online: '&a(Online)' 
+online: '&a(Online)'
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Permissions: '       # Used on /town
@@ -708,7 +708,7 @@ status_forced: '&cForced'
 status_adjustable: '&aAdjustable'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosions: '              # Used on /plot perm, /res
-explosions2: '&2Explosions: '               # Used on /town and /tw 
+explosions2: '&2Explosions: '               # Used on /town and /tw
 firespread: '  &2Firespread: '
 mobspawns: '  &2Mob Spawns: '
 owner_of_x_plots: '&2Owner of &a%s plots'
@@ -716,7 +716,7 @@ status_bank: '&2Bank: &a%s'
 status_town: '&2Town: &a'
 status_no_town: 'None'
 status_town_ranks: '&2Town Ranks: &a'
-status_nation_ranks: '&2Nation Ranks: &a' 
+status_nation_ranks: '&2Nation Ranks: &a'
 jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
 status_friends: 'Friends'
 rank_list_title: ' &3Rank List'
@@ -886,7 +886,7 @@ msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'No player found with name %s'
-msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s' 
+msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
 msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
 msg_err_already_in_a_nation: 'Your town is already in a nation.'
@@ -916,14 +916,14 @@ war_hud_top_towns: 'Top Towns'
 war_stats_nations: '  Nations: '
 war_stats_towns: '  Towns: '
 war_stats_warzone: '  WarZone: '
-war_stats_spoils_of_war: '  Spoils of War: ' 
+war_stats_spoils_of_war: '  Spoils of War: '
 war_starts_in_x: 'War starts in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
@@ -985,3 +985,97 @@ msg_err_tag_too_long: 'Tag too long.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nation has not set a spawn location.'
 msg_err_resident_doesnt_belong_to_any_town: 'Resident doesn''t belong to any town'
 msg_err_could_not_set_default_modes_for: 'Could not set default modes for '
+
+# Added in 0.60
+msg_set_war_allowed_on: 'War will be allowed in this world.'
+msg_set_war_allowed_off: 'War will not affect this world.'
+msg_war_not_enough_nations: '&6[War]&f Less than 2 nations gathered for war, war canceled.'
+msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, war canceled.'
+msg_war_prefix: '&6[War]&f '
+msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
+msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
+msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
+
+# Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
+msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s seconds.'
+
+# Added in 0.63
+msg_plot_set_to_nfs: 'Plot is no longer for sale.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
+msg_the_wilderness: 'the Wilderness'
+msg_enemy_areas: 'Enemy areas'
+msg_neutral_towns: 'Neutral towns'
+
+# Added in 0.64
+msg_err_no_nation_with_that_name: 'No nation found with name %s'
+msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
+
+# Added in 0.65
+msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
+
+# Added in 0.66
+msg_war_defender_keeps_claims: 'Capturing disabled. Defending town will keep it''s claims.'
+
+# Added in 0.67
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
+msg_conquered: '[Conquered]'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'
+
+# Added in 0.68
+msg_plot_group_claim_confirmation: 'This plot is part a group of %s plot(s) by confirming your claim you will purchase them all.'
+msg_plot_group_unclaim_confirmation: 'This plot is part a group of %s plot(s) by confirming you will unclaim them all.'
+msg_plot_group_toggle_confirmation: 'This plot is part a group of %s plot(s) by confirming you will toggle a property on them all.'
+msg_plot_group_set_perm_confirmation: 'This plot is part a group of %s plot(s) by confirming you will set the perm line on them all.'
+msg_plot_evict_group: 'You have successfully evicted the player of this grouped plot, %s.'
+msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s belongs to a group, use /plot group [group name] fs [amount]'
+msg_err_plot_belongs_to_group_set: 'Plot belongs to a group, use /plot group set'
+msg_plot_group_set_for_sale: 'Group %s was put up for sale!'
+msg_err_plot_already_belongs_to_a_group: 'This plot already belongs to a group: %s, please remove the townblock from that group before adding it to another.'
+msg_err_you_must_specify_a_group_name: 'You must specify a plot group name.'
+msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2was put into group %s'
+msg_err_plot_not_associated_with_a_group: 'This plot is not associated with a group.'
+msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
+msg_plot_renamed_from_x_to_y: 'Plot %s has been renamed to %s.'
+msg_err_plot_group_specify_price: 'Please specify the price, ex: /plot group fs [price]'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
+msg_err_could_not_set_group_type: 'Could not set group type - '
+msg_set_group_type_to_x: 'Changed plot group''s type to %s'
+msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'
+status_plot_group_name_and_size: '&2Townblock is part of group: %s. Group has %s Townblocks total.'
+msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
+
+# Added in 0.69
+msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+
+# Added in 0.70
+msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
+msg_confirmation_spigot_hover_accept: 'Click to accept'
+msg_confirmation_spigot_hover_cancel: 'Click to cancel'
+msg_confirmation_spigot_click_accept: 'Click %s or type %s'
+msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
+msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
+msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
+
+# Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s belongs to a group, use /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+
+# Added in 0.73
+msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+
+# Added in 0.74
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+
+# Added in 0.75
+msg_already_ally: 'Your nation is already allied with %s.'
+
+# Added in 0.76
+msg_you: 'You'

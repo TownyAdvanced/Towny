@@ -21,8 +21,8 @@ public class NullPermSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player's Name
+	 * @param node - Node to check (String)
 	 * @return -1 = can't find
 	 */
 	@Override
@@ -41,8 +41,8 @@ public class NullPermSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player's Name
+	 * @param node - Node to check (String)
 	 * @return empty = can't find
 	 */
 	@Override
@@ -55,7 +55,7 @@ public class NullPermSource extends TownyPermissionSource {
 	/**
 	 * Returns the players Group name.
 	 * 
-	 * @param player
+	 * @param player - Player
 	 * @return empty as we are using no permissions
 	 */
 	@Override

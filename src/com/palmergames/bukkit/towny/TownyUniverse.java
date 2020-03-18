@@ -3,10 +3,12 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -19,6 +21,7 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -28,9 +31,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -44,8 +48,11 @@ public class TownyUniverse {
     private final Towny towny;
     
     private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
+    private final Trie residentsTrie = new Trie();
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
+    private final Trie townsTrie = new Trie();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
+    private final Trie nationsTrie = new Trie();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
@@ -71,13 +78,9 @@ public class TownyUniverse {
             e.printStackTrace();
             return false;
         }
+		// Init logger
+		TownyLogger.getInstance();
         
-		// Enable debug logger if set in the config.
-		if (TownySettings.getDebug()) {
-			TownyLogger.getInstance().enableDebugLogger();
-			TownyLogger.getInstance().updateLoggers();
-		}
-		
         String saveDbType = TownySettings.getSaveDatabase();
         String loadDbType = TownySettings.getLoadDatabase();
         
@@ -88,10 +91,13 @@ public class TownyUniverse {
         
         clearAll();
                 
+        long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
             System.out.println("[Towny] Error: Failed to load!");
             return false;
         }
+        long time = System.currentTimeMillis() - startTime;
+        System.out.println("[Towny] Database loaded in " + time + "ms.");
         
         try {
             dataSource.cleanupBackups();
@@ -146,6 +152,7 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
+        
         return true;
     }
     
@@ -196,6 +203,7 @@ public class TownyUniverse {
         try {
             Resident resident = dataSource.getResident(player.getName());
             resident.setLastOnline(System.currentTimeMillis());
+            resident.clearModes();
             dataSource.saveResident(resident);
         } catch (NotRegisteredException ignored) {
         }
@@ -215,7 +223,8 @@ public class TownyUniverse {
     
     public void addWarZone(WorldCoord worldCoord) {
         try {
-            worldCoord.getTownyWorld().addWarZone(worldCoord);
+        	if (worldCoord.getTownyWorld().isWarAllowed())
+            	worldCoord.getTownyWorld().addWarZone(worldCoord);
         } catch (NotRegisteredException e) {
             // Not a registered world
         }
@@ -255,10 +264,18 @@ public class TownyUniverse {
         return nations;
     }
     
+    public Trie getNationsTrie() {
+    	return nationsTrie;
+	}
+	
     public ConcurrentHashMap<String, Resident> getResidentMap() {
         return residents;
     }
-    
+
+	public Trie getResidentsTrie() {
+		return residentsTrie;
+	}
+	
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
     }
@@ -267,6 +284,10 @@ public class TownyUniverse {
         return towns;
     }
     
+    public Trie getTownsTrie() {
+    	return townsTrie;
+	}
+	
     public ConcurrentHashMap<String, TownyWorld> getWorldMap() {
         return worlds;
     }
@@ -328,7 +349,7 @@ public class TownyUniverse {
      *
      * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
      * @param tb                   - TownBlock to check if its contained..
-     * @return {@link true} if the TownBlock is considered an outpost by it's Town.
+     * @return true if the TownBlock is considered an outpost by it's Town.
      * @author Lukas Mansour (Articdive)
      */
     public boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
@@ -364,7 +385,115 @@ public class TownyUniverse {
         residents.clear();
     }
 
+	public boolean hasGroup(String townName, UUID groupID) {
+		Town t = towns.get(townName);
+		
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID) != null;
+		}
+		
+		return false;
+	}
+
+	public boolean hasGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.hasObjectGroupName(groupName);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get all the plot object groups from all towns
+	 * Returns a collection that does not reflect any group additions/removals
+	 * 
+	 * @return collection of PlotObjectGroup
+	 */
+	public Collection<PlotGroup> getGroups() {
+    	List<PlotGroup> groups = new ArrayList<>();
+    	
+		for (Town town : towns.values()) {
+			if (town.hasObjectGroups()) {
+				groups.addAll(town.getPlotObjectGroups());
+			}
+		}
+		
+		return groups;
+	}
+
+
+	/**
+	 * Gets the plot group from the town name and the plot group UUID 
+	 * 
+	 * @param townName Town name
+	 * @param groupID UUID of the plot group
+	 * @return PlotGroup if found, null if none found.
+	 */
+	public PlotGroup getGroup(String townName, UUID groupID) {
+		Town t = null;
+		try {
+			t = TownyUniverse.getInstance().getDataSource().getTown(townName);
+		} catch (NotRegisteredException e) {
+			return null;
+		}
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID);
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Gets the plot group from the town name and the plot group name
+	 * 
+	 * @param townName Town Name
+	 * @param groupName Plot Group Name
+	 * @return the plot group if found, otherwise null
+	 */
+	public PlotGroup getGroup(String townName, String groupName) {
+		Town t = towns.get(townName);
+
+		if (t != null) {
+			return t.getPlotObjectGroupFromName(groupName);
+		}
+
+		return null;
+	}
+
 	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+		return getRegisteredMetadata();
+	}
+
+	public PlotGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
+    	
+    	// Create new plot group.
+		PlotGroup newGroup = new PlotGroup(id, name, town);
+		
+		// Check if there is a duplicate
+		if (town.hasObjectGroupName(newGroup.getName())) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
+			throw new AlreadyRegisteredException();
+		}
+		
+		// Create key and store group globally.
+		town.addPlotGroup(newGroup);
+		
+		return newGroup;
+	}
+
+	public UUID generatePlotGroupID() {
+		return UUID.randomUUID();
+	}
+
+
+	public void removeGroup(PlotGroup group) {
+		group.getTown().removePlotGroup(group);
+		
+	}
+	
+	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
 }

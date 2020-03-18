@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -35,6 +37,7 @@ public class TownyWorld extends TownyObject {
 	private List<String> entityExplosionProtection = null;
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
 	private boolean isFire = TownySettings.isFire();
@@ -191,6 +194,16 @@ public class TownyWorld extends TownyObject {
 																						 * )
 																						 */);
 		return out;
+	}
+
+	public void setWarAllowed(boolean isWarAllowed) {
+
+		this.isWarAllowed = isWarAllowed;
+	}
+
+	public boolean isWarAllowed() {
+
+		return this.isWarAllowed;
 	}
 
 	public void setPVP(boolean isPVP) {
@@ -694,10 +707,10 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	/**
-	 * Returns the closes town from a given coord (key).
-	 * 
-	 * @param key - Coord.
-	 * @param nearestTown - Closest town to given coord.
+	 * Returns the closest town from a given coord (key).
+	 * @param key - Coord
+	 * @param nearestTown - Closest town to the given coord.
+	 * @return the nearestTown
 	 */
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
@@ -718,10 +731,11 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	/**
-	 * Returns the closes town from a given coord (key).
+	 * Returns the closest town with a nation from a given coord (key).
 	 * 
 	 * @param key - Coord.
 	 * @param nearestTown - Closest town to given coord.
+	 * @return the nearest town belonging to a nation.   
 	 */
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		
@@ -756,5 +770,17 @@ public class TownyWorld extends TownyObject {
 	public boolean isWarZone(Coord coord) {
 
 		return warZones.contains(coord);
+	}
+
+	public void addMetaData(CustomDataField md) {
+		super.addMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+	public void removeMetaData(CustomDataField md) {
+		super.removeMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 }

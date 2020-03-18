@@ -91,7 +91,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 	 * We specify the value identifier in this method. <br>
 	 * Since version 2.9.1 can you use OfflinePlayers in your requests.
 	 *
-	 * @param player     A {@link org.bukkit.Player Player}.
+	 * @param player     A {@link org.bukkit.entity.Player Player}.
 	 * @param identifier A String containing the identifier/value.
 	 *
 	 * @return possibly-null String of the requested identifier.
@@ -115,6 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		String title = "";
 		String amount = "";
 		String name = "";
+		Double cost = 0.0;
 
 		switch (identifier) {
 		case "town": // %townyadvanced_town%
@@ -145,13 +146,13 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return nation;
 		case "town_balance": // %townyadvanced_town_balance%
 			try {
-				balance = resident.getTown().getHoldingFormattedBalance();
+				balance = resident.getTown().getAccount().getHoldingFormattedBalance();
 			} catch (NotRegisteredException ignored) {
 			}
 			return balance;
 		case "nation_balance": // %townyadvanced_nation_balance%
 			try {
-				balance = resident.getTown().getNation().getHoldingFormattedBalance();
+				balance = resident.getTown().getNation().getAccount().getHoldingFormattedBalance();
 			} catch (NotRegisteredException ignored) {
 			}
 			return balance;
@@ -417,6 +418,41 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				}
 			}
 			return name;
+		case "daily_town_upkeep": // %townyadvanced_daily_town_upkeep%
+			if (resident.hasTown()) {
+				try {
+					cost = TownySettings.getTownUpkeepCost(resident.getTown());
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return String.valueOf(cost);
+		case "daily_nation_upkeep": // %townyadvanced_daily_nation_upkeep%
+			if (resident.hasTown()) {
+				try {
+					if (resident.getTown().hasNation())
+						cost = TownySettings.getNationUpkeepCost(resident.getTown().getNation());
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return String.valueOf(cost);
+		case "has_town": // %townyadvanced_has_town%
+			return String.valueOf(resident.hasTown());
+		case "has_nation": // %townyadvanced_has_nation%
+			return String.valueOf(resident.hasNation());
+		case "nation_tag_town_formatted": // %townyadvanced_nation_tag_town_formatted%
+			try {
+				if (resident.hasTown()) {
+					town = resident.getTown().getFormattedName();
+					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag())
+						nation = resident.getTown().getNation().getTag();
+				}
+				if (!nation.isEmpty())
+					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+				else if (!town.isEmpty())
+					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			} catch (NotRegisteredException ignored) {
+			}
+			return tag;
 		default:
 			return null;
 		}

@@ -15,8 +15,8 @@ public class SQL_Task {
 	/**
 	 * Constructor for a Delete task
 	 * 
-	 * @param tb_name
-	 * @param args
+	 * @param tb_name - Table name.
+	 * @param args - Arguments.
 	 */
 	public SQL_Task(String tb_name, HashMap<String, Object> args) {
 
@@ -27,9 +27,9 @@ public class SQL_Task {
 	/**
 	 * Constructor for an INSERT/UPDATE task.
 	 * 
-	 * @param tb_name
-	 * @param args
-	 * @param keys
+	 * @param tb_name - Table Name.
+	 * @param args - Arguments.
+	 * @param keys - Keys to add to table.
 	 */
 	public SQL_Task(String tb_name, HashMap<String, Object> args, List<String> keys) {
 

@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.invites;
 
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+
 /**
  * @author Articdive
  */
@@ -20,4 +22,13 @@ public interface Invite {
 	 */
 	TownyInviteSender getSender();
 
+	/**
+	 * @throws TownyException - Sends errors back up to be processed by the caller.
+	 */
+	void accept() throws TownyException;
+
+	/**
+	 * @param fromSender - Tells if invite was revoked (true) or declined (false).
+	 */
+	void decline(boolean fromSender);
 }

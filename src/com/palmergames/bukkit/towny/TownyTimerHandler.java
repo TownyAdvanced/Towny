@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -34,6 +35,7 @@ public class TownyTimerHandler{
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
+	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
 
 	public static void newDay() {
@@ -78,7 +80,7 @@ public class TownyTimerHandler{
 
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
-			System.out.println("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
+			System.out.println("[Towny] Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
@@ -117,6 +119,18 @@ public class TownyTimerHandler{
 		}
 	}
 	
+	public static void toggleCooldownTimer(boolean on) {
+		
+		if (on && !isCooldownTimerRunning()) {
+			cooldownTimerTask = BukkitTools.scheduleAsyncRepeatingTask(new CooldownTimerTask(plugin), 0, 20);
+			if (cooldownTimerTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule cooldown timer loop.");			
+		} else if (!on && isCooldownTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(cooldownTimerTask);
+			cooldownTimerTask = -1;
+		}
+	}
+	
 	public static void toggleDrawSmokeTask(boolean on) {
 		if (on && !isDrawSmokeTaskRunning()) {
 			drawSmokeTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSmokeTask(plugin), 0, 100);
@@ -152,6 +166,11 @@ public class TownyTimerHandler{
 	public static boolean isTeleportWarmupRunning() {
 
 		return teleportWarmupTask != -1;
+	}
+	
+	public static boolean isCooldownTimerRunning() {
+
+		return cooldownTimerTask != -1;
 	}
 	
 	public static boolean isDrawSmokeTaskRunning() {

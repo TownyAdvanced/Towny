@@ -8,6 +8,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 
+import java.util.Objects;
+
 public class WorldCoord extends Coord {
 
 	private String worldName;
@@ -112,8 +114,8 @@ public class WorldCoord extends Coord {
 	/**
 	 * Shortcut for TownyUniverse.getDataSource().getWorld(worldName)
 	 * 
-	 * @return the relevant TownyWorld instance, or throw a
-	 *         NotRegisteredException.
+	 * @return the relevant TownyWorld instance
+	 * @throws NotRegisteredException if unable to return a TownyWorld instance
 	 */
 	public TownyWorld getTownyWorld() throws NotRegisteredException {
 		return TownyUniverse.getInstance().getDataSource().getWorld(worldName);
@@ -127,5 +129,18 @@ public class WorldCoord extends Coord {
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
 		return getTownyWorld().getTownBlock(getCoord());
+	}
+
+	/**
+	 * Checks that locations are in different cells without allocating any garbage to the heap.
+	 * 
+	 * @param from Original location
+	 * @param to Next location
+	 * @return whether the locations are in different cells
+	 */
+	public static boolean cellChanged(Location from, Location to) {
+		return toCell(from.getBlockX()) != toCell(to.getBlockX()) ||
+			   toCell(from.getBlockZ()) != toCell(to.getBlockZ()) ||
+			   !Objects.equals(from.getWorld(), to.getWorld());
 	}
 }

@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
@@ -17,9 +16,10 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -37,6 +37,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -49,6 +51,52 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> towny_top = new ArrayList<>();
 	private static final List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
+	private static final List<String> townyTabCompletes = Arrays.asList(
+		"map",
+		"prices",
+		"time",
+		"top",
+		"spy",
+		"universe",
+		"v",
+		"war"
+	);
+	
+	private static final List<String> townyConsoleTabCompletes = Arrays.asList(
+		"prices",
+		"time",
+		"top",
+		"spy",
+		"universe",
+		"tree",
+		"v",
+		"war"
+	);
+
+	private static final List<String> townyWarTabCompletes = Arrays.asList(
+		"stats",
+		"scores",
+		"hud",
+		"participants"
+	);
+	
+	private static final List<String> townyTopTabCompletes = Arrays.asList(
+		"residents",
+		"land"
+	);
+	
+	private static final List<String> townyTopResidentsTabComplete = Arrays.asList(
+		"all",
+		"town",
+		"nation"
+	);
+	
+	private static final List<String> townyTopLandTabCompletes = Arrays.asList(
+		"all",
+		"resident",
+		"town"
+	);
+	
 
 	static {
 		towny_general_help.add(ChatTools.formatTitle(TownySettings.getLangString("help_0")));
@@ -86,6 +134,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			parseTownyCommand(player, args);
 		} else {
@@ -118,6 +170,40 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		switch (args[0].toLowerCase()) {
+			case "top":
+				switch (args.length) {
+					case 2:
+						return NameUtil.filterByStart(townyTopTabCompletes, args[1]);
+					case 3:
+						switch (args[1].toLowerCase()) {
+							case "residents":
+								return NameUtil.filterByStart(townyTopResidentsTabComplete, args[2]);
+							case "land":
+								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
+						}
+				}
+				break;
+			case "war":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
+				break;
+			default:
+				if (args.length == 1) {
+					if (sender instanceof Player) {
+						return NameUtil.filterByStart(townyTabCompletes, args[0]);
+					} else {
+						return NameUtil.filterByStart(townyConsoleTabCompletes, args[0]);
+					}
+				}
+		}
+		
+		return Collections.emptyList();
 	}
 
 	private void parseTownyCommand(Player player, String[] split) {
@@ -377,7 +463,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Returns prices for town's taxes/upkeep.
-	 * @param town
+	 * @param town - The town being checked.
 	 * @return - Prices screen for a town.
 	 */
 	public List<String> getTownyPrices(Town town) {
@@ -410,7 +496,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(Colors.Gray + "Overclaimed upkeep is based on " + Colors.LightGreen + (TownySettings.isUpkeepPenaltyByPlot() ? "the number of plots overclaimed * " + TownySettings.getUpkeepPenalty() : "a flat cost of " + TownySettings.getUpkeepPenalty()));
 
 		if (town != null) {
-			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");
+			output.add(Colors.Yellow + "Town [" + town.getFormattedName() + "]");
 			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
 			output.add(Colors.Rose + "             " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice()));
 
@@ -422,29 +508,29 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(Colors.Rose + "                      " + Colors.Green + "Bank: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost()));
 			
 			if (nation != null) {
-				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
+				output.add(Colors.Yellow + "Nation [" + nation.getFormattedName() + "]");
 				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + nation.getTaxes() + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;
 	}
 
-	public List<String> getTopBankBalance(List<TownyEconomyObject> list, int maxListing) throws EconomyException {
+	public List<String> getTopBankBalance(List<EconomyAccount> list, int maxListing) throws EconomyException {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<TownyEconomyObject, Double> kvTable = new KeyValueTable<>();
-		for (TownyEconomyObject obj : list) {
+		KeyValueTable<EconomyAccount, Double> kvTable = new KeyValueTable<>();
+		for (EconomyAccount obj : list) {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<TownyEconomyObject, Double> kv : kvTable.getKeyValues()) {
+		for (KeyValue<EconomyAccount, Double> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownyEconomyObject town = kv.key;
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", TownyFormatter.getFormattedName(town), TownyEconomyHandler.getFormattedBalance(kv.value)));
+			EconomyAccount town = kv.key;
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", town.getFormattedName(), TownyEconomyHandler.getFormattedBalance(kv.value)));
 		}
 		return output;
 	}
@@ -463,7 +549,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			ResidentList residentList = kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName((TownyObject) residentList), kv.value));
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) residentList).getFormattedName(), kv.value));
 		}
 		return output;
 	}
@@ -481,8 +567,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownBlockOwner town = kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName(town), kv.value));
+			Town town = (Town) kv.key;
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d",town.getFormattedName(), kv.value));
 		}
 		return output;
 	}

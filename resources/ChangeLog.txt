@@ -3565,7 +3565,6 @@ v0.92.0.11:
       - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
 0.95.0.0:
-  - Special backported release of 0.95.0.0 for 1.13.2 servers.
   - Bump to Release version number.
 0.95.0.1:
   - More PAPI placeholders:
@@ -3768,6 +3767,507 @@ v0.92.0.11:
   - Attempt to stop the perm hud plotname NPE, again.
 0.95.1.0: 
   - Bump version number for release.
-  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper. (Backported from 0.95.1.1 for 1.14)
+0.95.1.1:
+  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper.
   - Add nation_zones_enabled & database_type to bstats.
-  - Special Release for 1.13.2 Servers
+0.95.1.2:
+  - Fix server_type never returning Spigot.
+  - Changed from using the Bukkit API to the Spigot API.
+  - New feature: when your server is running not-craftbukkit (spigot, paper etc) the plot notifications will appear in the Action Bar line.
+    - Closes ticket #2929
+  - REQUIRED CONFIG.YML CHANGE:
+    - Add ",BREWING_STAND" to the end of the protection.switch_ids to protect Brewing Stands.
+0.95.1.3:
+  - Fix bstats nation_zones_enabled always returning false.
+  - New Config Option: new_world_settings.pvp.war_allowed
+    - Default: true
+    - If set to false the world will not be included in war events.
+    - Note that like all other new_world_settings this is only the default setting applied to newly added worlds.
+      - The actual value is stored per-world.
+    - Closes ticket #1188
+  - New Command: /tw toggle warallowed
+    - toggles whether Event War affects the world.
+  - Language files bumped to 0.60.
+  - Added placeholders:
+    - %townyadvanced_daily_town_upkeep% - Shows town's upkeep cost.
+    - %townyadvanced_daily_nation_upkeep% - Shows nation's upkeep cost.
+    - Closes ticket #3496
+  - TOWNYPERMS.YML REQUIRED CHANGE:
+    - add towny.command.towny.war.hud to your nomad rank.
+  - Make the start of the War Event smarter.
+    - Townblocks in worlds which are not warallowed will no longer be included.
+    - Towns with no homeblock will no longer be included.
+    - Towns which have their homeblock in a world which is not warallowed will no longer be included.
+    - Nations which do not have any qualifying towns will not be included.
+    - Nations which do not have their capital city involved will not be included.
+    - War will not start if there is less than 2 nations participating.
+    - War requires at least one enemy-enemy relationship between nations to start.
+0.95.1.4:
+  - Fixed Flag War - Courtesy of the CivWars team [Emperor-Koala, FlagCourier]
+  - Language files bumped to 0.61.
+  - Flag War: Added safeguards to prevent defenders from playing dirty - see next three config options.
+    - New Config Option: war.enemy.prevent_interaction_while_flagged
+      - Default: true
+      - Prevents players in towns from withdrawing from the bank, leaving the town/nation, and unclaiming land while an enemy war flag is in play.
+    - New Config Option: war.enemy.prevent_nation_interaction_while_flagged
+      - Default: true
+      - Same as above, applies to national level and extends to all towns in a nation.
+    - New Config Option: war.enemy.time_to_wait_after_flagged
+      - Default: 600000 (ms)
+      - Time after a flag has expired or been defended until players can perform special interactions.
+  - New Feature: nation zones show notifications when you enter into them.
+    - Closes ticket #3406
+  - New Config Option: global_nation_settings.nationzone.show_notifications
+    - Default: false
+    - When set to true, players will receive a notification when they enter into a nationzone.
+    - Set to false by default because, like the nationzone feature, it will generate more load on servers.
+0.95.1.5:
+  - New Feature: Cooldown timers for toggling PVP and using res/town spawn commands.
+    - Closes tickets #2224 #2315
+  - New Config Option: global_town_settings.spawn_cooldown_time
+    - default '30'
+    - Number of seconds that must pass before a player can use /n spawn, /t spawn or /res spawn.
+  - New Config Option: global_town_settings.pvp_cooldown_time
+    - default '30'
+    - Number of seconds that must pass before pvp can be toggled by a town using /t toggle pvp.
+    - Also applies to residents of the town using /res toggle pvp, as well as plots having their PVP toggled using /plot toggle pvp.
+    - /ta town {town} toggle pvp bypasses cooldowntimer.
+  - Language files bumped to 0.62.
+0.95.1.6:
+  - Language files bumped to 0.63.
+  - Fix cosmetics of setting a plot not for sale appearing to display as an error.
+    - Closes ticket #3503.
+  - Added SpawnUtil with PR #3505.
+  - Using /res spawn will now charge the town's spawn cost instead of the config's.
+    - This could mean a slight price-break.
+  - Fix sending nomad outlaws to jail when killed.
+    - Closes ticket #3506.
+0.95.1.7:
+  - API: TownPreAddResidentEvent & NationPreAddTownEvent, courtesy of Siris with PR #3507
+    - Can be used by other plugins to cancel residents/towns from joining towns/nations.
+    - Works for /t join and /n join as well as /t add and /n add commands. 
+  - REQUIRED TOWNYPERMS.YML CHANGE: add towny.command.nation.leave to the mayor group.
+    - Closes ticket #3511
+  - Language files bumped to 0.64.
+  - Fix lack of feedback when adding a nation enemy that doesn't exist.
+    - Closes ticket #3512
+  - API: New events courtesy of Siris with PR #3510
+    - TownyTransactionEvent: Monitor all economy transactions.
+    - TownyPreTransactionEvent : Cancellable event on all economy transactions.
+    - NationTransactionEvent: Monitor all nation deposits/withdrawls.
+    - NationPreTransactionEvent: Cancellable event on all nation deposits/withdrawls.
+    - TownTransactionEvent: Monitor all town deposits/withdrawls.
+    - TownPreTransactionEvent: Cancellable event on all town deposits/withdrawls.
+    - PlotPreClearEvent: Cancellable event used to stop clearing of a plot.
+    - PreDeleteTownEvent: Cancellable event used to stop a town from being deleted.
+    - PreDeleteNationEvent: Cancellable event used to stop a nation from being deleted.
+    - Closes ticket #3322
+  - Made it so that towns cannot unclaim their homeblocks, they must move them to another townblock first.
+    - /t unclaim all still allows a town to fully-unclaim, but the first townblock they claim will become the homeblock.
+  - Fixed an NPE on the townscreen for towns which have no homeblock.
+  - korean.yml updated by wolfwork with PR #3513
+0.95.1.8:
+  - Improvement to switch handling tile entites, courtesy of Silverwolfg11.
+  - Added placeholders:
+    - %townyadvanced_has_town% - returns true or false whether the resident has a town.
+    - %townyadvanced_has_nation% - returns true or false whether the resident has a nation.
+    - Closes ticket #3497.
+  - API: New War Events added:
+    - EventWarPreStartEvent - used to manipulate the war spoils amount.
+    - EventWarStartEvent - used to get a list of towns, nations participating in the war, as well as the final initial amount of war spoils.
+    - EventWarEndEvent - used to get a list of surviving towns & nations, the town with the highest score, as well as the townWinnings and nationWinnings.
+    - Closes ticket #3087.
+  - Language files bumped to 0.65.
+  - API: New cancellable pre-rename events:
+    - TownPreRenameEvent.
+    - NationPreRenameEvent. 
+    - Closes ticket #3121.
+0.95.1.9:
+  - REQUIRED CONFIG CHANGE:
+    - If you had town.max_purchased_blocks: 0 in your config:
+      - In your town_level section you must add: 'townBlockBuyBonusLimit: 0' to each level.
+    - If you did not have town.max_purchased_blocks: 0 in your config:
+      - In your town_level section you must add: 'townBlockBuyBonusLimit: #' to each level.
+      - # being what you had your town.max_purchased_blocks set to.
+    - Failure to do so will cause your Towny to not enable.
+  - New Feature:
+    - The ability to set maximum purchased blocks (/town buy bonus #) per Town_Level.
+    - This means a higher population town will be able to buy more extra blocks.
+    - Requires the town.max_purchased_blocks_uses_town_levels setting to be true.
+    - By default new configs will generate with townBlockBuyBonusLimits set to 0 for all Town_Levels, making the feature off by default.
+    - Closes ticket #3483.
+  - New Config Option: town.max_purchased_blocks_uses_town_levels
+    - Default: true    
+    - When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase.
+  - Fix flagwar NPE seen when Towny failed to enable.
+  - Fix savingtask NPE seen when Towny failed to enable.
+  - Add helpful messages shown when town & nation levels fail to load on startup. 
+  - Fixed building with maven and some people having errors re: javadocs, courtesy of TheFlagCourier with PR #3521.
+    - Closes ticket #3519.
+  - Did some tinkering with event war, created a WarUtil to contain some repeated tests.
+  - Invites system revamped by Emperor-Koala, allowing better expandibility for other plugins' use.
+  - Bump langfile versions to 0.66
+  - FlagWar Feature: Disable capture of a defender's townblocks.
+    - Add boolean config node 'war.enemy.flag_takes_ownership_of_townblocks'; If false, defenders will keep their claims
+    - This is similar effect to Event War's 'winner_takes_ownership_of_townblocks', but does not mess with bonus plots.
+    - Adds the 'msg_war_defender_keeps_claims' language string to notify the towns that capturing the townblock is disabled.
+    - Closes ticket #3514
+  - chinese.yml updated to 0.66 by qsefthuopq
+  - Made /ta ? require the towny.admin permission node.
+    - Closes ticket #3531.
+  - REQUIRED CONFIG CHANGE (?!):
+    - Due to spelling corrections, two nodes may need to be fixed (Add what's in [brackets]) (if your existing settings are true you can ignore this one.):
+      - economy.banks.town_allow_withdraw[a]ls
+        - default: true
+      - economy.banks.nation_allow_withdraw[a]ls
+        - default: true
+      - #FlagIsAnAss - love, TheFlagCourier
+  - Added description for war.enemy.flag.waiting_time to prevent (some) further confusion. (#flagwar)
+  - Fix documentation pointers. Permissions should now point to the Towny Wiki, Placeholders to their own page.
+  - And various non-invasive spelling corrections in the config.
+0.95.2.1:
+  - New Config Option: war.event.winner_takes_ownership_of_town
+    - default: false
+    - If set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.
+    - The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed.
+  - New Config Option: war.event.conquer_time
+    - default: 7
+    - Number of Towny new days until a conquered town loses its conquered status.
+  - Event War addition: town conquering:
+    - If war.event.winner_takes_ownership_of_town is set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.
+    - The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed. 
+    - Add conquered & conqueredDays to Towns.
+    - A town's conqueredDays will decrease each Towny new day.
+    - Closes ticket #3477.
+  - Fix /ta plot ? help screen.
+  - Bump language files to 0.67.
+  - Fix for /ta town meta not working on towns the admin doesnt own, courtesy of Siris with PR #3549.
+  - New Config Option: notification.town_names_are_verbose
+    - Default: true
+    - When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.
+    - When false, it is only the town name.	
+  - Made the town & nation levels' town, nation, capital prefixes and postfixes support the & colour codes.
+  - Expansion of Metadata: courtesy of Emperor-Koala with PR #3548.
+    - Added the ability to expand status screens for through the use of metadata. By giving the metadata field, a label, it will then be displayed on the status screen for any object it is added to.
+    - Added metadata to worlds, nations and residents.
+    - Closes ticket #3543.
+  - Fix keep inventory and keep experience features.
+    - Closes ticket #3551.
+0.95.2.2:
+  - Switch API to 1.15-R0.1-SNAPSHOT.
+    - For the time being this is working on 1.14.* and 1.15 servers.
+  - Slightly change pom.xml to align with our wiki.
+  - Fix /ta set throwing error.
+    - Closes ticket #3565.
+  - Fixes for Nation_Zones not working/not giving capitals their proper bonus, courtesy of Goosius with PR #3567.
+  - Courtesy of Emperor-Koala with PR #3566:
+    - API:
+      - NationPreAddEnemyEvent - Cancellable
+      - NationAddEnemeyEvent
+      - NationPreRemoveEnemyEvent - Cancellable
+      - NationRemoveEnemyEvent
+      - New methods to get the cells under attack in Flag War.
+  - Made most of the unprefixed messages Towny emits use prefixes, either [Towny], [Townname] or [Nationname].
+  - Fixed explosion regen deleting the contents of BlockInventoryHolders (chests, furnaces, hopper and more.)
+    - Closes tickets #3569, #3570. 
+  - Object Allocation on player move reduced by Silverwolfg11 in PR #3573. 
+  - Added remaining ExtraFields for metadata, courtesy of Emperor-Koala with PR #3575.
+  - Add town_block_size to bstats charts.
+  - Switch API to 1.15.1-R0.1-SNAPSHOT.
+0.95.2.3:
+  - Fix WARZONE status being given to townblocks when war is not active.
+  - Fix WARZONE status overriding the allow_block_griefing: false setting.
+    - Closes #3577. 
+  - Clear out warringNations & warringTowns on war end.
+  - New Feature: Plot Groups, courtesy of Siris with PR #3578.
+    - Group plots together, which can be named, sold, set with a uniform plot type, a uniform perm line.
+    - Plot Groups which are claimed or unclaimed will have confirmation messages showing number of plots in a group, as well as cost.
+    - Groups appear in the Chunk Notifications in white. 
+    - Already priced plots which are added to a group will increase the group price by the plot.
+    - Closes ticket #472.
+  - New Commands:
+    - /plot group [add|new|create] [groupname]
+      - Creates a plot group where a player is standing.
+      - Also adds plots to existing an existing group.
+    - /plot group remove
+      - Removes the plot you're standing in from its group.
+    - /plot group rename [newname]
+      - Renames a plot group.
+    - /plot group set perm ....
+      - Used to set the perm line of a group you are standing in.
+    - /plot group set [townblocktype]
+      - Used to set a group of plots to a shop, farm, embassy, etc.
+    - /plot group toggle [fire|mobs|pvp|explosions]
+      - Set the toggleable settings for townblocks across the entire group.
+    - /plot group [forsale|fs] [price]
+      - Sets the group for sale at the set price.
+    - /plot group [notforsale|nfs]
+      - Sets the group not for sale.
+  - Language files bumped to 0.68.
+0.95.2.4:
+  - Fix for plot groups sometimes throwing a CommandException, courtesy of Siris with PR #3597.
+    - Closes #3601.
+0.95.2.5:
+  - Clean up unused methods left over from PlotGroup commits.
+  - API: PreNewTownEvent, courtesy of Siris with PR #3606.
+    - Cancellable event.
+  - New language: Portuguese (Brazilian) Translation, courtesy of BannerGames with PR #3603.
+    - use pt-br.yml as your language in the config to enable.
+  - Fix Mysql databases not creating plotblocksnapshot files.
+    - Closes #3589.
+  - Fix Mysql databases not purging fallen towns.
+    - Closes #3610.
+  - REQUIRED CONFIG CHANGE:
+    - Villager should be added to the protection.mob_types list.
+  - Fixed: Villagers protected from damage by other Entities when not configured to be protected.
+    - Pillagers were unable to harm villagers, even when villagers were not in the protected list.
+    - Closes #3580. 
+  - Fix town_plotbased_upkeep_minimum_amount not working when town_plotbased_upkeep_affected_by_town_level_modifier is set to false.
+    - Closes #3616.
+  - French translation updated by Mitsu13Ion with PR #3614.
+0.95.2.6:
+  - Placeholder added: %townyadvanced_nation_tag_town_formatted%
+    - Shows the nation tag and the full town name.
+    - If nation tag is not set, only the town name is shown.
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - towny.town.spawn.ally should be added to the default nation rank.
+    - adding this will mean that when the config's global_town_settings.allow_town_spawn_travel_ally will work properly when set to true. 
+  - Update Reserve API, courtesy of thecreatorfromhell, with PR #3612.
+  - Make sure world is properly handled when a town renames itself.
+  - Fix renaming towns which have 0 plot groups.
+    - Closes #3626.
+0.95.2.7:
+  - Changed required permission node for using /ta from towny.admin to towny.command.townyadmin
+    - Fixes scenario where an admin has other /townyadmin permission nodes but not towny.admin.
+  - New Permission Node: towny.command.townyadmin
+    - Used to view the /townyadmin screen.
+    - Gateway permission node to all other townyadmin sub-commands
+    - Child node of towny.command.townyadmin.*
+  - Fix bug with /plot group set {plottype}
+  - Disallowed the use of /plot group set jail, jails can only be set before grouping. 
+  - Language files bumped to 0.69.
+  - Fix plot groups not loading after server stop and start.
+  - Fix for spawners not reverting properly courtesy of Siris with PR #3629.
+    - Closes #3627.
+0.95.2.8:
+  - Fix NPE when '/plot group add' was used without any name, courtesy of Siris with PR #3630.
+  - Language files bumped to 0.70. 
+  - Pom and pom_deb updates by TheFlagCourier with PR #3632.
+    - Javadocs should only build on the install phase.
+    - Github actions should again function properly.
+  - Change to saving for plotgroups on flatfile, removing now-redundant world.
+    - Already-made plot groups should load properly and save without a world. 
+  - Improve debug messaging on flatfile database load.
+  - Fix plot groups whose town doesn't exist anymore causing safe mode.
+  - Fix edge-case scenario where revoking invites couldn't be done because we were matching the wrong player.
+    - Closes #3635.
+  - Fix french.yml not parsing.
+  - Confirmations can now be accepted/declined/confirmed/cancelled by clicking on the text if you use Spigot.
+    - Courtesy of Siris with PRs #3631 + #3639
+    - Closes #3534. 
+    - Commands can still be used, clicking only for spigot servers, not craftbukkit servers.
+  - New Config Option: notification.notifications_appear_in_action_bar
+    - default: true
+    - This setting only applies to servers running spigot, paper or bungeecord.
+    - On servers using craftbukkit.jar the notifications will always appear in the chat.
+    - When set to false the notifications will appear in the chat rather than the action bar.
+    - Closes #3636.
+  - Translated cannot-kick-that-resident strings.
+  - Create ResidentUtil for resident-related methods.
+  - TownyPermission data rewritten to a 2d boolean array, courtesy of Silverwolfg11 with PR #3600.
+0.95.2.9:
+  - Fix message shown when a player tries to set their nation spawn in the wilderness.
+    - Closes #3640.
+  - Fix for 0.95.2.8 not running on Craftbukkit servers.
+    - Courtesy of Siris with PR #3642. 
+  - Fix for trees and mushrooms growing into plots they shouldn't.
+    - Closes #3641.
+0.95.2.10:
+  - API: Added TownPreUnclaimEvent
+    - Useful for getting the TownBlock object that will be unclaimed.
+    - Cancellable but probably not a good idea.
+  - Missing apostrophe in error message fixed by Deuphic with PR #3645.
+  - Fix Null message when plots were claimed/unclaimed.
+  - Bump language files to 0.71
+  - Fix error message for the /plot fs when used on a plot group.
+  - Fix being false-positive shown when using /plot nfs on a plot group.
+  - Fix error shown in console when entering a plot that is for sale but is not part of a plot group.
+0.95.2.11:
+  - PT-BR.yml updated by BannerGames with PR #3647.
+  - Fix successful message when economy.new_expand.price_claim_townblock_refund is set to a negative value. 
+  - Korean.yml updated by wolfwork with PR #3651.
+  - Fix for town invites from nation, courtesy of Siris with PR #3653.
+  - Fix no message being shown when an invalid subcommand of "/plot group" is used.
+0.95.2.12:
+  - Javadocs fixed courtesy of TheFlagCourier with PR #3655.
+  - Github Actions workflow adjustment courtesy of TheFlagCourier with PR #3654.
+  - Fix /ta rename not passing on NPC status to residents.
+  - Fix /plot set perm showing the opposite PVP setting in its final output.
+  - Update logger, courtesy of ArticDive/Siris with PR #3664.
+  - Fix /ta town {townname} {command} not showing anything helpful when the {command} used is not a valid command.
+    - Closes #3667.
+  - Fix ranks not being capitalized on /res, /town and /nation screens.
+    - Closes #3669.
+  - Added StringMgmt.capitalize();
+  - Fix 'msg_modes_set' in ResidentCommand not being used for translation, courtesy of TheFlagCourier with PR #3658.
+0.95.2.13:
+  - Fix towny.admin players being limited by pvp cooldown timer.
+  - Fix town/nation permissions missing on the /plot perm hud scoreboard.
+  - Fix NPE shown when player is using /plot perm hud, but has another plugin's scoreboard show up.
+  - Fix missing town/nation key values on /plot perm hud.
+  - Fix missing townblock type on /plot perm hud.
+  - Fix /n new name with out underscores not parsing spaces into underscores.
+  - New Command: /townyadmin nation new {name} {capital}
+    - Creates a nation for the specified town.
+    - Does not charge the town money.
+  - New Permission Node: towny.command.townyadmin.nation.new
+    - Allows the use of the /ta nation new {name} {capital} command.
+  - Pom updates for javadocs courtesy of FlagCourier with PR #3672.
+  - Eco backend refactor courtesy of Siris with PR #3663.
+0.95.2.14:
+  - Fix for revoking town invites on a player not actually revoking the invite.
+  - Fix for single-town nations when the winner_takes_ownership_of_town is true.
+    - Closes #3678.
+  - Fix for eventwar war participants message using two lines when it ought to only use one.
+  - Added TownyMessaging.sendPlainGlobalMessage() which doesn't use the [Towny] prefix.
+  - Fix eventwar wars that don't start properly leaving remainders in the warringsTowns and warringNations.
+  - French.yml updated by Mitsu13Ion with PR #3680.
+  - Fix null response when sending an invite to an offline player.
+  - Add permission nodes to /t list by x and /n list by x commands.
+    - You can negate the new child nodes to limit which ways players are allowed to sort towns.
+  - New Permission Nodes: Child nodes of towny.command.nation.list, no townyperms.yml update required.
+    - towny.command.nation.list.residents
+    - towny.command.nation.list.towns
+    - towny.command.nation.list.open
+    - towny.command.nation.list.balance
+    - towny.command.nation.list.name
+    - towny.command.nation.list.townblocks
+    - towny.command.nation.list.online
+  - New Permission Nodes: Child nodes of towny.command.town.list, no townyperms.yml update required.
+    - towny.command.town.list.residents
+    - towny.command.town.list.open
+    - towny.command.town.list.balance
+    - towny.command.town.list.name
+    - towny.command.town.list.townblocks
+    - towny.command.town.list.online
+  - Fix lag caused by /t list and /n list.
+0.95.2.15:
+  - Continue != break, courtesy of creatorfromhell with PR #3690.
+  - Changed message shown at the end of the new day to print in the log regardless of debug mode being true.
+  - REQUIRED CONFIG CHANGE:
+    - Remove LECTERN from the protections.switch_ids list in the config.
+    - This will make it possible for players to read books on lecterns without having switch perms.
+    - Players will still be unable to take the book (unless they have destroy permissions in the plot.)
+  - QOL interface changes/redundancy removal, courtesy of Siris with PR #3677.
+  - Readd economy lookups for town and nation banks, deprecated.
+  - Readd pay() and collect() to Towns and Nations, deprecated, courtesy of Siris with PR #3697.
+0.95.2.16:
+  - New Language: Taiwanese courtesy of shou692199 with PR #3689.
+    - set language: zh-TW.yml in config to use.
+  - Fix for potentially causing too many file open exceptions on servers with large databases and small Open File Limits.
+  - New Feature: smart tab-completion of most Towny commands, courtesy of Siris with PR #3700.
+    - Closes #3314.
+  - Removed unneeded permission check for /n spawn.
+    - towny.command.nation.spawn node is no longer tested for.
+    - towny.nation.spawn.* nodes still remain in use. 
+0.95.2.17:
+  - Updated chinese.yml, courtesy of qsefthuopq with PR #3703.
+  - Added tab completion for /invite commands, courtesy of stzups with PR #3705.
+  - Fix bug where renamed towns and nations would lose their bank balances, introduced in 0.95.2.13.
+  - zh-TW.yml updated by shou692199 with PR #3708.
+  - Flesh out .gitignore with OS specific (usually hidden) files, courtesy of Siris with PR #3706.
+  - Updated & smarter /nation command tab-completion, courtesy of stzups with PR #3710. 
+0.95.2.18:
+  - Fix CombatUtil not disabling PVP in townblocks where PVP is off, when PVP is still on in the town.
+    - Towns will no longer override PVP settings for townblocks.
+    - The below 3 fixes were required after adjusting this.
+  - Fix using /plot perm in the wilderness just returning '[Towny] Not registered' message. Towny will now display the World status page.
+  - Fix ChunkNotification not displaying change of PVP status when moving between two townblocks with differing PVP settings.
+  - Fix /plot perm hud not displaying PVP setting for plots correctly.
+  - Implementation of a trie data structure for residents, towns, and nations; courtesy of stzups & Siris with PR #3712.
+  - Fix death_payments feature not working on mob-kills of players.
+  - Fix PlayerCommandPreprocessEvent error seen in log when players chat while Towny is in safe mode.
+  - Fix edge-case scenario where a townblock could be null when listing outposts.
+  - Updated & smarter tab-completion for remaining commands, courtesy of stzups with PR #3714.
+  - Reorganization of TownyFormatter, courtesy of Siris with PR #3715.
+    - Deprecates a couple things that other plugins are unlikely to be using, notes were made for new replacements.
+0.95.2.19:
+  - Fix tw-ZH.yml courtesy of shou692199 with PR #3719.
+  - Fix to the preventPVP function, allowing for towns with PVP off to set PVP true on individual plots, courtesy of silverwolfg11 with PR #3718.
+  - Language files bumped to 0.72.
+  - Fix DailyTimerTask not resetting cosmetic list of removedTowns, removedNations, totalUpkeeps.
+  - Fix towns being kicked from a nation for non-payment of taxes being included in the removedTowns.
+  - Temporarily make TownBlocks that are deleted for not containing a proper town entry ErrorMessages in the log rather than just debug messages.
+0.95.2.20:
+  - Re-add removed TownyFormatter functions as deprecated.
+    - Closes #3722.
+  - Create resident.getNamePostfix() & resident.getNamePrefix() for gather pre/postfixes of kings and mayor residents.
+  - Fix possible NPE when Nation taxes were collected from towns.
+  - Fix any *possible* NPE's in NameUtil, courtesy of Siris with PR #3724.
+0.95.2.21:
+  - Fix for root cause of issue solved with #3724, courtesy of stzups with PR #3725.
+  - Fix lack of message when an unjailed player uses /res jail foo.
+    - Closes #3726.
+  - Language files bumped to 0.73.
+  - Fix BED_BLOCK in the default config's new_world_settings.plot_management.block_delete.unclaim_delete list.
+  - REQUIRED: amending towny\data\worlds\WORLDNAME.txt files
+    - All existing Towny\data\worlds\WORLDNAME.txt files should have their plotManagementDeleteIds lines changed to WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED,TORCH,REDSTONE_WIRE,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,WOODEN_DOOR,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON
+  - Fix Wither Skulls & Shulker Boxes not being in the new_world_settings.plot_management.revert_on_unclaim.block_ignore list.
+  - REQUIRED: amending towny\data\worlds\WORLDNAME.txt files:
+    - All existing Towny\data\worlds\WORLDNAME.txt files should have their plotManagementIgnoreIds lines changed to GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK,WITHER_SKELETON_SKULL,WITHER_SKELETON_WALL_SKULL,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,BEACON
+  - Fix for Tab Completion leaving out some towns/nations/players, as well as caring about upper/lower-case letters, courtesy of stzups with PR #3728.
+  - Fix allowing /t buy bonus to be used when the config has using_economy: false.
+  - Fix a couple missing options not showing under /plot set perm tab completion.
+  - Fix for more tab completions, courtesy of stzups with PR #3734.
+    - Closes #3733.
+  - Fix a small typo, courtesy of introvertism with PR #3736.
+  - Fix for Towny not clearing a residents' modes when they quit.
+  - Further optimize Trie used in tab completion, courtesy of stzups with PR #3739.
+0.95.2.22:
+  - Fix /ta set capital {townname} {nationname} not working.
+  - Fix nether portals being created in areas the portal-creator cannot build, courtesy of Siris with PR #3745.
+    - Stops 'portal griefing'.
+    - Closes #3412.
+  - Fix flagwar not transferring TownBlocks correctly, courtesy of Siris with PR #3744.
+  - Add automatic labelling of PRs, automatic labelling of 'stale' to older PRs and Issues, courtesy of Siris with PR #3738.
+  - Language files bumped to 0.74.
+0.95.2.23:
+  - zh-TW.yml updated by shou692199 with PR #3751.
+  - Fix plot toggle tab-completion and remove unused code, courtesy of silverwolfg11 with PR #3750.
+  - Add database load time to startup.
+  - Fix possibility of residents getting duplicate town and nation ranks.
+  - Fix unhelpful debug messages when saving residents in sql.
+  - Potential fix for /t and /n online commands not parsing their outputs nicely.
+  - Fix townyworld set messages for console not being used, courtesy of silverwolfg11 with PR #3757.
+  - Remove redundant arraylist creation for tab-completion, courtesy of silverwolfg11 with #3756.
+  - Fix revert-on-unclaim not respecting the PlotManagementSpeed set in the config.
+    - Closes #3759.
+  - Fix Towny safe-mode induced via /ta reload still allowing Towny commands to be used.
+  - Fix Towny moving Citizens NPCs to server spawn when Towny loads in safe mode.
+    - Closes #3760.
+  - Fix Ally invite sending to already allied nations, courtesy of Siris with PR #3755.
+    - Closes #3749.
+  - Remove metadata raw access warnings, courtesy of Siris with PR #3762.
+  - German.yml updated to 0.75 by enterih.
+  - API: preNewDayEvent, courtesy of silverwolfg11 with PR #3770.
+    - Closes #3765.
+  - Fix titles and surname losing their trailing and leading spaces.
+  - Actually fix Towny preventing Citizens NPCs from loading into their proper locations when safe mode happens.
+    - Closes #3773.
+0.95.2.24:
+  - zh-TW.yml updated by shou692199 with PR #3775.
+  - Language files bumped to 0.76
+  - Fix missing translation.
+    - Closes #3777. 
+  - Fix msg_changed_public in korean.yml not working.
+  - zh-TW.yml updated by shou692199 with PR #3782.
+  - Fix a couple missing child nodes for permissions in the plugin.yml.
+0.96.0.0:
+  - Bump version number for release.
+  - Special Release for 1.13.2 Servers preceding 0.96.0.0
+    - Some "Required Config Changes" will not be necessary for this release.
+    - Reverted ProtectionRegenTask class to previous version found in 1.13 branch (API Incompatibility)
+      - This may result in run-time bugs! I am not familiar with this class, or the methods that call it.
+    - Changed to full-path import for ActionType in TownyPlayerListener.
+    - Reverted Nether portal fix introduced in 0.95.2.22 (PR #3745)
+      - Incompatible with 1.13, admins are advised to just ban abusers.

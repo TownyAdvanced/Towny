@@ -10,10 +10,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -51,7 +51,7 @@ public class TownyRegenAPI {
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord
 	 */
 	public static void addWorldCoord(WorldCoord worldCoord) {
 
@@ -70,7 +70,7 @@ public class TownyRegenAPI {
 	/**
 	 * Check if this WorldCoord is waiting for a snapshot to be taken.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord to check
 	 * @return true if it's in the queue.
 	 */
 	public static boolean hasWorldCoord(WorldCoord worldCoord) {
@@ -118,7 +118,7 @@ public class TownyRegenAPI {
 	/**
 	 * Removes a Plot Chunk from the regeneration Hashtable
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to remove (PlotBlockData)
 	 */
 	public static void deletePlotChunk(PlotBlockData plotChunk) {
 
@@ -131,8 +131,8 @@ public class TownyRegenAPI {
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
 	 * 
-	 * @param plotChunk
-	 * @param save
+	 * @param plotChunk - Chunk to add (PlotBlockData)
+	 * @param save - If Regen List should be saved
 	 */
 	public static void addPlotChunk(PlotBlockData plotChunk, boolean save) {
 
@@ -147,7 +147,7 @@ public class TownyRegenAPI {
 	/**
 	 * Saves a Plot Chunk snapshot to the datasource
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to take Snapshot (PlotBlockData)
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -159,16 +159,17 @@ public class TownyRegenAPI {
 	/**
 	 * Deletes a Plot Chunk snapshot from the datasource
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to delete snapshot (PlotBlockData)
 	 */
 	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse.getInstance().getDataSource().deletePlotData(plotChunk);
 	}
 
 	/**
-	 * Loads a Plot Chunk snapshot from the datasource
+	 * Loads a Plot Chunk snapshot from the data source
 	 * 
-	 * @param townBlock
+	 * @param townBlock - TownBlock to get
+	 * @return loads the PlotData for the given townBlock   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
 		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
@@ -177,7 +178,8 @@ public class TownyRegenAPI {
 	/**
 	 * Gets a Plot Chunk from the regeneration Hashtable
 	 * 
-	 * @param townBlock
+	 * @param townBlock - TownBlock to get
+	 * @return PlotChunks or null   
 	 */
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
 
@@ -197,12 +199,11 @@ public class TownyRegenAPI {
 		return "[" + townBlock.getWorld().getName() + "|" + townBlock.getX() + "|" + townBlock.getZ() + "]";
 	}
 
-	//TODO: restore functionality of the chunk regen command for use in 1.13+ servers.
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
+	/**
+	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
+	 * 
+	 * @param player
+	 */
 //	public static void regenChunk(Player player) {
 //		
 //		try {
@@ -258,8 +259,6 @@ public class TownyRegenAPI {
 //		} catch (NotRegisteredException e) {
 //			// Failed to get resident
 //		}
-//		
-//		
 //	}
 //	
 //	/**
@@ -369,7 +368,7 @@ public class TownyRegenAPI {
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord for the Town Block
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 
@@ -411,8 +410,8 @@ public class TownyRegenAPI {
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
-	 * @param townBlock
-	 * @param material
+	 * @param townBlock - TownBlock to delete from
+	 * @param material - Material to delete
 	 */
 	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
 
@@ -452,7 +451,7 @@ public class TownyRegenAPI {
 	/**
 	 * Does a task for this block already exist?
 	 * 
-	 * @param blockLocation
+	 * @param blockLocation - Location of the block
 	 * @return true if a task exists
 	 */
 	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
@@ -464,7 +463,7 @@ public class TownyRegenAPI {
 	/**
 	 * Fetch the relevant regen task for this block
 	 * 
-	 * @param blockLocation
+	 * @param blockLocation - Location of the block.
 	 * @return the stored task, or null if there is none.
 	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
@@ -478,7 +477,7 @@ public class TownyRegenAPI {
 	/**
 	 * Add this task to the protection regen queue.
 	 * 
-	 * @param task
+	 * @param task - ProtectionRegenTask to add to queue
 	 */
 	public static void addProtectionRegenTask(ProtectionRegenTask task) {
 
@@ -488,7 +487,7 @@ public class TownyRegenAPI {
 	/**
 	 * Remove this task form the protection regen queue
 	 * 
-	 * @param task
+	 * @param task - ProtectionRegenTask to remove from queue
 	 */
 	public static void removeProtectionRegenTask(ProtectionRegenTask task) {
 
@@ -513,7 +512,7 @@ public class TownyRegenAPI {
 	/**
 	 * Is this a placholder block?
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 * @return true if it is a placeholder
 	 */
 	public static boolean isPlaceholder(Block block) {
@@ -524,7 +523,7 @@ public class TownyRegenAPI {
 	/**
 	 * Add this block as a placeholder (will be replaced when it's regeneration task occurs)
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 */
 	public static void addPlaceholder(Block block) {
 
@@ -534,7 +533,7 @@ public class TownyRegenAPI {
 	/**
 	 * Remove this block from being tracked as a placeholder.
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 */
 	public static void removePlaceholder(Block block) {
 

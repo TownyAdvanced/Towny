@@ -12,6 +12,13 @@ public enum PermissionNodes {
 	 * Nation command permissions
 	 */
 	TOWNY_COMMAND_NATION_LIST("towny.command.nation.list"),
+	    TOWNY_COMMAND_NATION_LIST_RESIDENTS("towny.command.nation.list.residents"),
+	    TOWNY_COMMAND_NATION_LIST_TOWNS("towny.command.nation.list.towns"),
+	    TOWNY_COMMAND_NATION_LIST_OPEN("towny.command.nation.list.open"),
+	    TOWNY_COMMAND_NATION_LIST_BALANCE("towny.command.nation.list.balance"),
+	    TOWNY_COMMAND_NATION_LIST_NAME("towny.command.nation.list.name"),
+	    TOWNY_COMMAND_NATION_LIST_TOWNBLOCKS("towny.command.nation.list.townblocks"),
+	    TOWNY_COMMAND_NATION_LIST_ONLINE("towny.command.nation.list.online"),
 	TOWNY_COMMAND_NATION_TOWNLIST("towny.command.nation.townlist"),
 	TOWNY_COMMAND_NATION_ALLYLIST("towny.command.nation.allylist"),
 	TOWNY_COMMAND_NATION_ENEMYLIST("towny.command.nation.enemylist"),
@@ -48,9 +55,6 @@ public enum PermissionNodes {
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
     TOWNY_COMMAND_NATION_TOGGLE_PUBLIC("towny.command.nation.toggle.public"),
     TOWNY_COMMAND_NATION_TOGGLE_OPEN("towny.command.nation.toggle.open"),
-    
-    TOWNY_COMMAND_NATION_SPAWN("towny.command.nation.spawn"),
-
 
 	TOWNY_COMMAND_NATION_ENEMY("towny.command.nation.enemy"),
 	TOWNY_COMMAND_NATION_DELETE("towny.command.nation.delete"),
@@ -87,6 +91,12 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_OTHERTOWN("towny.command.town.othertown"),
 		TOWNY_COMMAND_TOWN_HERE("towny.command.town.here"),
 		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list"),
+		    TOWNY_COMMAND_TOWN_LIST_RESIDENTS("towny.command.town.list.residents"),
+		    TOWNY_COMMAND_TOWN_LIST_OPEN("towny.command.town.list.open"),
+		    TOWNY_COMMAND_TOWN_LIST_BALANCE("towny.command.town.list.balance"),
+		    TOWNY_COMMAND_TOWN_LIST_NAME("towny.command.town.list.name"),
+		    TOWNY_COMMAND_TOWN_LIST_TOWNBLOCKS("towny.command.town.list.townblocks"),
+		    TOWNY_COMMAND_TOWN_LIST_ONLINE("towny.command.town.list.online"),
 		TOWNY_COMMAND_TOWN_OUTPOST_LIST("towny.command.town.outpost.list"),
 		TOWNY_COMMAND_TOWN_NEW("towny.command.town.new"),
 		TOWNY_COMMAND_TOWN_LEAVE("towny.command.town.leave"),
@@ -206,6 +216,7 @@ public enum PermissionNodes {
 	 * TownyAdmin command permissions
 	 */
 	TOWNY_COMMAND_TOWNYADMIN("towny.command.townyadmin.*"),
+	TOWNY_COMMAND_TOWNYADMIN_SCREEN("towny.command.townyadmin"),
 	TOWNY_COMMAND_TOWNYADMIN_SET("towny.command.townyadmin.set.*"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR("towny.command.townyadmin.set.mayor"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_PLOT("towny.command.townyadmin.set.plot"),
@@ -236,6 +247,7 @@ public enum PermissionNodes {
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_NATION("towny.command.townyadmin.nation.*"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_NEW("towny.command.townyadmin.nation.new"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ADD("towny.command.townyadmin.nation.add"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE("towny.command.townyadmin.nation.delete"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME("towny.command.townyadmin.nation.rename"),
@@ -388,6 +400,7 @@ public enum PermissionNodes {
 	 * Retrieves the permission node
 	 * replacing the character *
 	 * 
+	 * @param replace - String
 	 * @return The permission node
 	 */
 	public String getNode(String replace) {

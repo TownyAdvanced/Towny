@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -9,9 +8,11 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -22,10 +23,18 @@ import org.bukkit.entity.Player;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
+	private static final List<String> inviteTabCompletes = Arrays.asList(
+		TownySettings.getAcceptCommand(),
+		TownySettings.getDenyCommand()
+	);
+	
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	private static final List<String> invite_help = new ArrayList<>();
@@ -42,11 +51,38 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public InviteCommand(Towny instance) {
 		plugin = instance;
 	}
-
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		switch (args.length) {
+			case 1:
+				return NameUtil.filterByStart(inviteTabCompletes, args[0]);
+			case 2:
+				switch (args[0].toLowerCase()) {
+					case "accept":
+					case "deny":
+						try {
+							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
+								.stream()
+								.map(Invite::getSender)
+								.map(TownyInviteSender::getName)
+								.collect(Collectors.toList()), args[1]);
+						} catch (TownyException ignored) {}
+				}
+		}
+		
+		return Collections.emptyList();
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			Player player = (Player) sender;
 			if (command.getName().equalsIgnoreCase("invite")) {
 				parseInviteCommand(player, args);
@@ -148,22 +184,23 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 		}
-		ListMultimap<Town, Resident> town2residents = InviteHandler.getTowntoresidentinvites();
-		if (town2residents.containsKey(town)) {
-			if (town2residents.get(town).contains(resident)) {
-				for (Invite invite : resident.getReceivedInvites()) {
-					if (invite.getSender().equals(town)) {
-						try {
-							InviteHandler.declineInvite(invite, false);
-							return;
-						} catch (InvalidObjectException e) {
-							e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-						}
-					}
-				}
+		
+		Invite toDecline = null;
+
+		for (Invite invite : InviteHandler.getActiveInvites()) {
+			if (invite.getSender().equals(town) && invite.getReceiver().equals(resident)) {
+				toDecline = invite;
+				break;
 			}
 		}
-		TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+		if (toDecline != null) {
+			try {
+				InviteHandler.declineInvite(toDecline, false);
+			} catch (InvalidObjectException e) {
+				e.printStackTrace();
+			}
+		} else
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));			
 
 
 	}
@@ -200,22 +237,24 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		// At this point I consider having a valid Town & a valid Player so a final check is ran:
-		ListMultimap<Town, Resident> town2residents = InviteHandler.getTowntoresidentinvites();
-		if (town2residents.containsEntry(town, resident)) {
-			for (Invite invite : resident.getReceivedInvites()) {
-				if (invite.getSender().equals(town)) {
-					try {
-						InviteHandler.acceptInvite(invite);
-						return;
-					} catch (TownyException | InvalidObjectException e) {
-						// Shouldn't happen, however like i said a fallback
-						e.printStackTrace();
-					}
-					
-				}
+
+		Invite toAccept = null;
+
+		for (Invite invite : InviteHandler.getActiveInvites()) {
+			if (invite.getSender().equals(town) && invite.getReceiver().equals(resident)) {
+				toAccept = invite;
+				break;
 			}
 		}
-		TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+
+		if (toAccept != null) {
+			try {
+				InviteHandler.acceptInvite(toAccept);
+			} catch (TownyException | InvalidObjectException e) {
+				e.printStackTrace();
+			}
+		} else
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
 
 
 	}

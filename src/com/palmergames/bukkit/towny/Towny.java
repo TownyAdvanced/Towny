@@ -42,6 +42,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -58,7 +59,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -78,13 +81,13 @@ import java.util.concurrent.Callable;
 /**
  * Towny Plugin for Bukkit
  * 
- * Website & Source: https://github.com/TownyAdvanced/Towny
+ * Website &amp; Source: https://github.com/TownyAdvanced/Towny
  * 
  * @author Shade, ElgarL, LlmDl
  */
 
 public class Towny extends JavaPlugin {
-	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
+	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private String version = "2.0.0";
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -94,7 +97,7 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
-	private final TownyWorldListener worldListener = new TownyWorldListener();
+	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
@@ -107,6 +110,7 @@ public class Towny extends JavaPlugin {
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
+	public static boolean isSpigot = false;
 
 	private boolean error = false;
 	
@@ -125,14 +129,17 @@ public class Towny extends JavaPlugin {
 		version = this.getDescription().getVersion();
 
 		townyUniverse = TownyUniverse.getInstance();
+		
+		isSpigot = BukkitTools.isSpigot();
 
 		// Setup classes
 		BukkitTools.initialize(this);
 		TownyTimerHandler.initialize(this);
 		TownyEconomyHandler.initialize(this);
-		TownyFormatter.initialize(this);
+		TownyFormatter.initialize();
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
+		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		ConfirmationHandler.initialize(this);
@@ -144,7 +151,13 @@ public class Towny extends JavaPlugin {
 			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
 			getCommand("resident").setExecutor(new ResidentCommand(this));
 			getCommand("towny").setExecutor(new TownyCommand(this));
-			getCommand("town").setExecutor(new TownCommand(this));
+
+			CommandExecutor townCommandExecutor = new TownCommand(this);
+			getCommand("town").setExecutor(townCommandExecutor);
+			
+			// This is needed because the vanilla "/t" tab completer needs to be overridden.
+			getCommand("t").setTabCompleter((TabCompleter)townCommandExecutor);
+			
 			getCommand("nation").setExecutor(new NationCommand(this));
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
@@ -234,8 +247,12 @@ public class Towny extends JavaPlugin {
 
 		playerCache.clear();
 		
-		// Shut down our saving task.
-		townyUniverse.getDataSource().cancelTask();
+		try {
+			// Shut down our saving task.
+			townyUniverse.getDataSource().cancelTask();
+		} catch (NullPointerException ignored) {
+			// The saving task will not have started if this disable was fired by onEnable failing.			
+		}
 
 		this.townyUniverse = null;
 
@@ -245,6 +262,8 @@ public class Towny extends JavaPlugin {
 
 	public boolean load() {
 
+		checkCitizens();
+		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
 			return false;
@@ -260,6 +279,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleCooldownTimer(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		// Start timers
@@ -268,12 +288,22 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		resetCache();
 
 		return true;
 	}
 
+	private void checkCitizens() {
+		/*
+		 * Test for Citizens2 so we can avoid removing their NPC's
+		 */
+		Plugin test = getServer().getPluginManager().getPlugin("Citizens");
+		if (test != null)
+			citizens2 = getServer().getPluginManager().getPlugin("Citizens").isEnabled();
+	}
+	
 	private void checkPlugins() {
 
 		List<String> using = new ArrayList<>();
@@ -314,6 +344,10 @@ public class Towny extends JavaPlugin {
 
 			if (TownyEconomyHandler.setupEconomy()) {
 				using.add(TownyEconomyHandler.getVersion());
+				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy")) {
+					System.out.println("[Towny] Warning: Essentials Economy has been known to reset town and nation bank accounts to their default amount. The authors of Essentials recommend using another economy plugin until they have fixed this bug.");
+				}
+					
 			} else {
 				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. Install Vault.jar with any of the supported eco systems.");
 				TownyMessaging.sendErrorMsg("If you do not want an economy to be used, set using_economy: false in your Towny config.yml.");
@@ -334,15 +368,6 @@ public class Towny extends JavaPlugin {
 			TownyMessaging.sendErrorMsg("You may safely remove Questioner.jar from your plugins folder.");
 		}
 
-		/*
-		 * Test for Citizens2 so we can avoid removing their NPC's
-		 */
-		test = getServer().getPluginManager().getPlugin("Citizens");
-		if (test != null) {
-			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled()) {
-				citizens2 = test.getDescription().getVersion().startsWith("2");
-			}
-		}
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
 		if(test != null){
             new TownyPlaceholderExpansion(this).register();
@@ -538,6 +563,8 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Resets all Online player caches if their location equals this one
+	 * 
+	 * @param worldCoord - the location to check for
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 
@@ -826,7 +853,32 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("server_type", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return Bukkit.getServer().getName();
+				if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
+					return "Paper";
+				else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
+					if (isSpigot)
+						return "Spigot";
+					else 
+						return "CraftBukkit";
+				}
+				return "Unknown";
+			}
+		}));
+
+		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				if (TownySettings.getNationZonesEnabled())
+					return "true";
+				else
+					return "false";
+			}
+		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return TownySettings.getSaveDatabase();
 			}
 		}));		
 
@@ -844,5 +896,11 @@ public class Towny extends JavaPlugin {
 			}
 		}));
 		
+		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return String.valueOf(TownySettings.getTownBlockSize());
+			}
+		}));
 	}
 }

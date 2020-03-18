@@ -21,6 +21,8 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -43,7 +45,7 @@ public class TownySettings {
 
 	// Town Level
 	public enum TownLevel {
-		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT
+		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT, TOWN_BLOCK_BUY_BONUS_LIMIT
 	}
 
 	// Nation Level
@@ -57,7 +59,7 @@ public class TownySettings {
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
 	
-	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit) {
+	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
 		m.put(TownySettings.TownLevel.NAME_PREFIX, namePrefix);
@@ -67,6 +69,7 @@ public class TownySettings {
 		m.put(TownySettings.TownLevel.TOWN_BLOCK_LIMIT, townBlockLimit);
 		m.put(TownySettings.TownLevel.UPKEEP_MULTIPLIER, townUpkeepMultiplier);
 		m.put(TownySettings.TownLevel.OUTPOST_LIMIT, townOutpostLimit);
+		m.put(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT, townBlockBuyBonusLimit);
 		configTownLevel.put(numResidents, m);
 	}
 
@@ -96,23 +99,30 @@ public class TownySettings {
 	 *
 	 * townBlockLimit is a required field even if using a calculated ratio.
 	 *
-	 * @throws IOException
+	 * @throws IOException if unable to load the Town Levels
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
 		for (Map<?, ?> level : levels) {
 
-			newTownLevel(
-					(Integer) level.get("numResidents"),
-					(String) level.get("namePrefix"),
-					(String) level.get("namePostfix"),
-					(String) level.get("mayorPrefix"),
-					(String) level.get("mayorPostfix"),
-					(Integer) level.get("townBlockLimit"),
-					(Double) level.get("upkeepModifier"),
-					(Integer) level.get("townOutpostLimit")
-					);
+			try {
+				newTownLevel(
+						(Integer) level.get("numResidents"),
+						(String) level.get("namePrefix"),
+						(String) level.get("namePostfix"),
+						(String) level.get("mayorPrefix"),
+						(String) level.get("mayorPostfix"),
+						(Integer) level.get("townBlockLimit"),
+						(Double) level.get("upkeepModifier"),
+						(Integer) level.get("townOutpostLimit"),
+						(Integer) level.get("townBlockBuyBonusLimit")
+						);
+			} catch (NullPointerException e) {
+				System.out.println("Your Towny config.yml's town_level section is out of date.");
+				System.out.println("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
+				throw new IOException("Config.yml town_levels incomplete.");
+			}
 
 		}
 	}
@@ -124,7 +134,7 @@ public class TownySettings {
 	 * numResidents:namePrefix:namePostfix:capitalPrefix:capitalPostfix:
 	 * kingPrefix:kingPostfix
 	 *
-	 * @throws IOException
+	 * @throws IOException if Nation Levels cannot be loaded from config
 	 */
 
 	public static void loadNationLevelConfig() throws IOException {
@@ -148,8 +158,8 @@ public class TownySettings {
 						(Integer) level.get("nationBonusOutpostLimit")
 						);
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Your Towny config.yml's Nation_Levels section is out of date.");
-				TownyMessaging.sendErrorMsg("This can be fixed automatically by deleting the Nation_Level section and letting Towny remake it on the next startup.");
+				System.out.println("Your Towny config.yml's nation_level section is out of date.");
+				System.out.println("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml nation_levels incomplete.");
 			}
 
@@ -501,6 +511,7 @@ public class TownySettings {
 		newConfig = null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private static String convertIds(List<String> list) {
 		
 		int value;
@@ -557,6 +568,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 1);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 1);
@@ -567,6 +579,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 16);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 2);
@@ -577,6 +590,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 32);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 6);
@@ -587,6 +601,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 96);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -597,6 +612,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 160);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 14);
@@ -607,6 +623,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 224);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -617,6 +634,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 24);
@@ -627,6 +645,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 384);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 28);
@@ -637,6 +656,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 448);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 4);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
@@ -940,7 +960,7 @@ public class TownySettings {
 	public static String getCapitalPostfix(Town town) {
 
 		try {
-			return (String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPostfix.");
 			return "";
@@ -950,7 +970,7 @@ public class TownySettings {
 	public static String getTownPostfix(Town town) {
 
 		try {
-			return (String) getTownLevel(town).get(TownySettings.TownLevel.NAME_POSTFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_POSTFIX));
 		} catch (Exception e) {
 			sendError("getTownPostfix.");
 			return "";
@@ -960,7 +980,7 @@ public class TownySettings {
 	public static String getNationPostfix(Nation nation) {
 
 		try {
-			return (String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_POSTFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_POSTFIX));
 		} catch (Exception e) {
 			sendError("getNationPostfix.");
 			return "";
@@ -970,7 +990,7 @@ public class TownySettings {
 	public static String getNationPrefix(Nation nation) {
 
 		try {
-			return (String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_PREFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_PREFIX));
 		} catch (Exception e) {
 			sendError("getNationPrefix.");
 			return "";
@@ -980,7 +1000,7 @@ public class TownySettings {
 	public static String getTownPrefix(Town town) {
 
 		try {
-			return (String) getTownLevel(town).get(TownySettings.TownLevel.NAME_PREFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_PREFIX));
 		} catch (Exception e) {
 			sendError("getTownPrefix.");
 			return "";
@@ -990,7 +1010,7 @@ public class TownySettings {
 	public static String getCapitalPrefix(Town town) {
 
 		try {
-			return (String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX);
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPrefix.");
 			return "";
@@ -1110,6 +1130,11 @@ public class TownySettings {
 		int n = townOutposts + nationOutposts;
 		return n;
 	}
+	
+	public static int getMaxBonusBlocks(Town town) {
+		
+		return (Integer) getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT);
+	}
 
 	public static int getNationBonusBlocks(Nation nation) {
 
@@ -1210,6 +1235,10 @@ public class TownySettings {
 	public static boolean isNotificationOwnerShowingNationTitles() {
 		
 		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
+	}
+	
+	public static boolean isNotificationsAppearingInActionBar() {
+		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_IN_ACTION_BAR);
 	}
 
 	public static boolean getShowTownBoardOnLogin() {
@@ -1428,9 +1457,12 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_LIMIT);
 	}
 
-	public static int getMaxPurchedBlocks() {
+	public static int getMaxPurchedBlocks(Town town) {
 
-		return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+		if (isBonusBlocksPerTownLevel())
+			return getMaxBonusBlocks(town);
+		else			
+			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
 	}
 	
 	public static int getMaxClaimRadiusValue() {
@@ -1438,9 +1470,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
 	}
 
-	public static boolean isSellingBonusBlocks() {
+	public static boolean isSellingBonusBlocks(Town town) {
 
-		return getMaxPurchedBlocks() != 0;
+		return getMaxPurchedBlocks(town) != 0;
+	}
+	
+	public static boolean isBonusBlocksPerTownLevel() { 
+		
+		return getBoolean(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS);
 	}
 
 	public static double getPurchasedBonusBlocksCost() {
@@ -1671,6 +1708,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS);
 	}
 	
+	public static boolean getWarEventWinnerTakesOwnershipOfTown() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWN);
+	}
+	
+	public static int getWarEventConquerTime() {
+		
+		return getInt(ConfigNodes.WAR_EVENT_CONQUER_TIME);
+	}
+	
 	public static boolean isChargingDeath() {
 		
 		return (getDeathPrice()>0 || getDeathPriceTown()>0 || getDeathPriceNation()>0 );
@@ -1815,21 +1862,28 @@ public class TownySettings {
             } catch (NotRegisteredException e) {
                 e.printStackTrace();
             }
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
-            	amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
+            if (isUpkeepByPlot()) {
+            	if (isTownLevelModifiersAffectingPlotBasedUpkeep())
+            		amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
+            	else
+            		amount = (getTownUpkeep() * multiplier) * nationMultiplier;
+            	if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+                return amount;
+            } else
+                return (getTownUpkeep() * multiplier) * nationMultiplier;
+        } else {
+            if (isUpkeepByPlot()) {
+            	if (isTownLevelModifiersAffectingPlotBasedUpkeep())
+            		amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+            	else
+            		amount = getTownUpkeep() * multiplier;
                 if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
                		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
                 return amount;
             } else
-                return (getTownUpkeep() * multiplier) * nationMultiplier ;
-        } else
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
-                amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
-                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
-               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
-                return amount;
-            } else
-                return getTownUpkeep() * multiplier ;
+                return getTownUpkeep() * multiplier;
+        }
     }
 
 	public static double getTownUpkeep() {
@@ -2527,6 +2581,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
 	}
 	
+	public static int getSpawnCooldownTime() {
+		
+		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
+	}
+	
+	public static int getPVPCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_PVP_COOLDOWN_TIMER);
+	}
+	
 	public static String getTownAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
@@ -2549,17 +2613,17 @@ public class TownySettings {
 
 	public static boolean getTownBankAllowWithdrawls() {
 
-		return getBoolean(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS);
+		return getBoolean(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS);
 	}
 
 	public static void SetTownBankAllowWithdrawls(boolean newSetting) {
 
-		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS.getRoot(), newSetting);
+		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
 	public static boolean geNationBankAllowWithdrawls() {
 
-		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS);
+		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}
 	
 	public static boolean isBankActionDisallowedOutsideTown() {
@@ -2574,7 +2638,7 @@ public class TownySettings {
 
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
-		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
+		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
 	@Deprecated
@@ -2706,6 +2770,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_WAR_DISABLES);
 	}
 	
+	public static boolean getNationZonesShowNotifications() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_SHOW_NOTIFICATIONS);
+	}
+	
 	public static int getNationZonesCapitalBonusSize() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
 	}
@@ -2832,6 +2900,25 @@ public class TownySettings {
 	public static boolean isTownListRandom() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
 	}
+
+	public static boolean isWarAllowed() {
+		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
+	}
 	
+	public static int timeToWaitAfterFlag() {
+		return getInt(ConfigNodes.WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED);
+	}
+	
+	public static boolean isFlaggedInteractionTown() {
+		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED);
+	}
+	
+	public static boolean isFlaggedInteractionNation() {
+		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
+	}
+	
+	public static boolean isNotificationsTownNamesVerbose() {
+		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
+	}
 }
 

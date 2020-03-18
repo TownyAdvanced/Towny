@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.flagwar;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -20,8 +19,13 @@ public class CellUnderAttack extends Cell {
 	private Block flagBaseBlock, flagBlock, flagLightBlock;
 	private int flagColorId;
 	private int thread;
+	private long timeBetweenColorChange;
 
 	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {
+		this(plugin, nameOfFlagOwner, flagBaseBlock, TownyWarConfig.getTimeBetweenFlagColorChange());
+	}
+	
+	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock, long timeBetweenColorChange) {
 
 		super(flagBaseBlock.getLocation());
 		this.plugin = plugin;
@@ -33,6 +37,8 @@ public class CellUnderAttack extends Cell {
 		World world = flagBaseBlock.getWorld();
 		this.flagBlock = world.getBlockAt(flagBaseBlock.getX(), flagBaseBlock.getY() + 1, flagBaseBlock.getZ());
 		this.flagLightBlock = world.getBlockAt(flagBaseBlock.getX(), flagBaseBlock.getY() + 2, flagBaseBlock.getZ());
+		
+		this.timeBetweenColorChange = timeBetweenColorChange;
 	}
 
 	public void loadBeacon() {
@@ -141,16 +147,14 @@ public class CellUnderAttack extends Cell {
 
 	public void updateFlag() {
 
-		DyeColor[] woolColors = TownyWarConfig.getWoolColors();
+		Material[] woolColors = TownyWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
-//TODO: Maybe fix this some day, or preferably receive a PR fixing this from someone that wants this. 
-//			int woolId = BukkitTools.getMaterialId(Material.LEGACY_WOOL);
-//			byte woolData = woolColors[flagColorId].getDyeData();
-//			BukkitTools.setTypeIdAndData(flagBlock, woolId, woolData, true);
-//
-//			for (Block block : beaconFlagBlocks)
-//				BukkitTools.setTypeIdAndData(block, woolId, woolData, true);
+			
+			flagBlock.setType(woolColors[flagColorId]);
+			
+			for (Block block : beaconFlagBlocks)
+				block.setType(woolColors[flagColorId]);
 			
 		}
 	}
@@ -169,7 +173,7 @@ public class CellUnderAttack extends Cell {
 	public void begin() {
 
 		drawFlag();
-		thread = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new CellAttackThread(this), TownyWarConfig.getTimeBetweenFlagColorChange(), TownyWarConfig.getTimeBetweenFlagColorChange());
+		thread = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new CellAttackThread(this), this.timeBetweenColorChange, this.timeBetweenColorChange);
 	}
 
 	public void cancel() {

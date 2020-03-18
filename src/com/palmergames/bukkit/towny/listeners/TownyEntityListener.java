@@ -87,7 +87,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
-	 * @param event
+	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -212,7 +212,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent monsters from dropping blocks if within an arena plot.
 	 * 
-	 * @param event
+	 * @param event - EntityDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
@@ -247,7 +247,7 @@ public class TownyEntityListener implements Listener {
 	 * Prevents players from stealing animals in personally owned plots 
 	 * To tempt an animal in a personally owned plot requires the ability to also destroy dirt blocks there.
 	 * 
-	 * @param event
+	 * @param event - EntityTargetLivingEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
@@ -281,7 +281,7 @@ public class TownyEntityListener implements Listener {
 	 * Prevent explosions from hurting players if Event War is active and
 	 * WarzoneBlockPermissions' explosions tag is set to true.
 	 * 
-	 * @param event
+	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
@@ -309,7 +309,10 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
 		
 		// Entities requiring special protection.
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal || entity instanceof Villager) {
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof EnderCrystal 
+				|| (TownySettings.getEntityTypes().contains("Animals") && entity instanceof Animals) // Only protect these entities if servers specifically add them to the protections.
+				|| (TownySettings.getEntityTypes().contains("Villager") && entity instanceof Villager) // Only protect these entities if servers specifically add them to the protections.
+				){
 			
 			// Handle exploding causes of damage.
 		    if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
@@ -398,7 +401,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
-	 *  @param event
+	 *  @param event - LingeringPotionSplashEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
@@ -472,7 +475,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent splash potion damage on players in non PVP areas
 	 * 
-	 * @param event
+	 * @param event - PotionSplashEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPotionSplashEvent(PotionSplashEvent event) {
@@ -533,8 +536,8 @@ public class TownyEntityListener implements Listener {
 	 * Handles removal of newly spawned animals/monsters for use in the 
 	 * world-removal and town-removal lists.
 	 * 
-	 * @param event
-	 * @throws NotRegisteredException
+	 * @param event - CreatureSpawnEvent
+	 * @throws NotRegisteredException - If failed to fetch a world or not
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
@@ -606,8 +609,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Handles crop trampling as well as pressure plates (switch use)
 	 * 
-	 * @param event
-	 * @throws NotRegisteredException
+	 * @param event - EntityInteractEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
@@ -683,7 +685,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Handles Wither Explosions and Enderman Thieving block protections
 	 * 
-	 * @param event
+	 * @param event - onEntityChangeBlockEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
@@ -738,8 +740,8 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Test if this location has explosions enabled.
 	 * 
-	 * @param world
-	 * @param target
+	 * @param world - Towny-enabled World
+	 * @param target - Location to check
 	 * @return true if allowed.
 	 */
 	public boolean locationCanExplode(TownyWorld world, Location target) {
@@ -767,7 +769,7 @@ public class TownyEntityListener implements Listener {
 	 * Handles explosion regeneration in War (inside towns,)
 	 * and from regular non-war causes (outside towns.)  
 	 * 
-	 * @param event
+	 * @param event - EntityExplodeEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
@@ -968,8 +970,8 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * Can also prevent tnt from destroying armorstands
 	 * 
-	 * @param event
-	 * @throws NotRegisteredException 
+	 * @param event - EntityCombustByEntityEvent
+	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) throws NotRegisteredException {
@@ -1009,7 +1011,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Handles protection of item frames and other Hanging types.
 	 * 
-	 * @param event
+	 * @param event - HangingBreakEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
@@ -1114,7 +1116,7 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Placing of hanging objects like Item Frames.
 	 * 
-	 * @param event
+	 * @param event - HangingPlaceEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingPlace(HangingPlaceEvent event) {
@@ -1138,6 +1140,11 @@ public class TownyEntityListener implements Listener {
 		event.setCancelled(!bBuild);
 	}
 
+	/**
+	 * When a Pig is zapped by lightning
+	 * 
+	 * @param event - PigZapEvent
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPigHitByLightning(PigZapEvent event) {
 		if (plugin.isError()) {

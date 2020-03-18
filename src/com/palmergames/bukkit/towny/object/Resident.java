@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
+public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -46,9 +47,12 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private transient EconomyAccount account = new EconomyAccount(getName());
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
+	private List<TownBlock> townBlocks = new ArrayList<>();
+	private TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
 		super(name);
@@ -84,35 +88,39 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
 	}
 	
-	public void sendToJail(Player player, Integer index) {
+	public void sendToJail(Player player, Integer index, Town town) {
 		this.setJailed(true);
 		this.setJailSpawn(index);
-		this.setJailTown(town.toString());
+		this.setJailTown(town.getName());
 		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_you_have_been_sent_to_jail"));
-		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
+		TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
 
 	}
 	
-	public void freeFromJail(Player player, Integer index) {
+	public void freeFromJail(Player player, Integer index, boolean escaped) {
+		this.setJailed(false);
 		this.removeJailSpawn();
 		this.setJailTown(" ");
-		TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));		
+		if (!escaped) {
+			TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+		} else
+			try {
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void setJailedByMayor(Player player, Integer index, Town town, Integer days) {
 
 		if (this.isJailed) {
-			this.setJailed(false);
 			try {
-				Location loc = this.getTown().getSpawn();
-				
+				Location loc = this.getTown().getSpawn();				
 				if (BukkitTools.isOnline(player.getName())) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(player, loc);
 				}
-				freeFromJail(player, index);
+				freeFromJail(player, index, false);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
@@ -125,7 +133,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().jailTeleport(player, loc);
 
-				sendToJail(player, index);
+				sendToJail(player, index, town);
 				if (days > 0) {
 					this.setJailDays(days);
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
@@ -143,7 +151,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			player = BukkitTools.getPlayer(resident.getName());
 		
 		if (this.isJailed) {
-			this.setJailed(false);
 			try {
 				if (player != null) {
 					Location loc;
@@ -153,7 +160,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 						loc = player.getWorld().getSpawnLocation();
 					player.teleport(loc);
 				}
-				freeFromJail(player, index);
+				freeFromJail(player, index, false);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
@@ -162,7 +169,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			try {
 				Location loc = town.getJailSpawn(index);
 				player.teleport(loc);
-				sendToJail(player, index);
+				sendToJail(player, index, town);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
@@ -175,7 +182,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public boolean hasJailSpawn() {
-		return this.jailSpawn <= 1;
+		return this.jailSpawn > 0;
 	}
 
 	public int getJailSpawn() {
@@ -225,7 +232,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setTitle(String title) {
-		this.title = title.trim();
+		if (title.matches(" "))
+			title = "";
+		this.title = title;
 	}
 
 	public String getTitle() {
@@ -239,7 +248,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setSurname(String surname) {
-		this.surname = surname.trim();
+		if (surname.matches(" "))
+			surname = "";
+		this.surname = surname;
 	}
 
 	public String getSurname() {
@@ -342,8 +353,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		for (Resident resident : new ArrayList<>(friends))
 			try {
 				removeFriend(resident);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void clear() throws EmptyTownException {
@@ -357,8 +367,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				setTitle("");
 				setSurname("");
 				updatePerms();
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void updatePerms() {
@@ -458,21 +467,18 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 //
 //		}
 //	}	
-
-	@Override
+	
 	public List<String> getModes() {
 
 		return this.modes;
 	}
-
-	@Override
+	
 	public boolean hasMode(String mode) {
 
 		return this.modes.contains(mode.toLowerCase());
 	}
-
-	@Override
-	public void toggleMode(String newModes[], boolean notify) {
+	
+	public void toggleMode(String[] newModes, boolean notify) {
 
 		/*
 		 * Toggle any modes passed to us on/off.
@@ -497,8 +503,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (notify)
 			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
-
-	@Override
+	
 	public void setModes(String[] modes, boolean notify) {
 
 		this.modes.clear();
@@ -509,8 +514,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 
 	}
-
-	@Override
+	
 	public void clearModes() {
 
 		this.modes.clear();
@@ -519,12 +523,12 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
 	}
-
+	
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *
-	 * @param modes
-	 * @param notify
+	 * @param modes - String Array of modes
+	 * @param notify - If notifications should be sent
 	 */
 	public void resetModes(String[] modes, boolean notify) {
 
@@ -553,7 +557,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setTownRanks(List<String> ranks) {
-		townRanks.addAll(ranks);
+		for (String rank : ranks) 
+			if (!this.hasTownRank(rank))
+				townRanks.add(rank);
 	}
 
 	public boolean hasTownRank(String rank) {
@@ -594,7 +600,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setNationRanks(List<String> ranks) {
-		nationRanks.addAll(ranks);
+		for (String rank : ranks)
+			if (!this.hasNationRank(rank))
+				nationRanks.add(rank);
 	}
 
 	public boolean hasNationRank(String rank) {
@@ -616,16 +624,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		throw new NotRegisteredException();
 
-	}
-
-	@Override
-	protected World getBukkitWorld() {
-		Player player = BukkitTools.getPlayer(getName());
-		if (player != null) {
-			return player.getWorld();
-		} else {
-			return super.getBukkitWorld();
-		}
 	}
 
 	public boolean isAlliedWith(Resident otherresident) {
@@ -675,5 +673,138 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		return confirmationType;
 	}
 
+	public void addMetaData(CustomDataField md) {
+		super.addMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	public void removeMetaData(CustomDataField md) {
+		super.removeMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	@Override
+	public EconomyAccount getAccount() {
+		if (account == null) {
+
+			String accountName = StringMgmt.trimMaxLength(getName(), 32);
+			World world;
+
+			Player player = BukkitTools.getPlayer(getName());
+			if (player != null) {
+				world = player.getWorld();
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+
+			account = new EconomyAccount(accountName, world);
+		}
+		
+		return account;
+	}
+
+	@Override
+	public String getFormattedName() {
+		if (isKing()) {
+			return (hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
+		}
+			
+		if (isMayor()) {
+			return (hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
+		}
+			
+		return (hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
+	}
+
+	/**
+	 * Returns King or Mayor prefix set in the Town and Nation Levels of the config.
+	 * 
+	 * @return Prefix of a King or Mayor if resident is a king or mayor.
+	 */	
+	public String getNamePrefix() {
+		if (isKing())
+			return TownySettings.getKingPrefix(this);
+		if (isMayor())
+			return TownySettings.getMayorPrefix(this);
+		return "";
+	}
+	
+	/**
+	 * Returns King or Mayor postfix set in the Town and Nation Levels of the config.
+	 * 
+	 * @return Postfix of a King or Mayor if resident is a king or mayor.
+	 */	
+	public String getNamePostfix() {
+		if (isKing())
+			return TownySettings.getKingPostfix(this);
+		if (isMayor())
+			return TownySettings.getMayorPostfix(this);
+		return "";
+	}
+	
+	public String getFormattedTitleName() {
+		if (!hasTitle())
+			return getFormattedName();
+		else
+			return getTitle() + " " + getName();
+	}
+
+	@Override
+	public void setTownblocks(List<TownBlock> townBlocks) {
+		this.townBlocks = townBlocks;
+	}
+
+	@Override
+	public List<TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		return townBlocks.contains(townBlock);
+	}
+
+	@Override
+	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
+		if (hasTownBlock(townBlock))
+			throw new AlreadyRegisteredException();
+		else
+			townBlocks.add(townBlock);
+	}
+
+	@Override
+	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
+		if (!hasTownBlock(townBlock))
+			throw new NotRegisteredException();
+		else
+			townBlocks.remove(townBlock);
+	}
+
+	@Override
+	public void setPermissions(String line) {
+		this.permissions.load(line);
+	}
+
+	@Override
+	public TownyPermission getPermissions() {
+		return permissions;
+	}
+
+	/**
+	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
+	@Deprecated
+	public World getBukkitWorld() {
+		Player player = BukkitTools.getPlayer(getName());
+		if (player != null) {
+			return player.getWorld();
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
+	}
 }
 

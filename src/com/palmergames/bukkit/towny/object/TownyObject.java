@@ -1,13 +1,16 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
-public abstract class TownyObject {
+public abstract class TownyObject implements Nameable {
 	private String name;
+
+	private HashSet<CustomDataField<?>> metadata = null;
 	
 	protected TownyObject(String name) {
 		this.name = name;
@@ -16,7 +19,8 @@ public abstract class TownyObject {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -42,12 +46,53 @@ public abstract class TownyObject {
 
 	@Override
 	public String toString() {
-
 		return getName();
 	}
 
+	/**
+	 * Get the formatted name, usually replacing the "_" with a space.
+	 * For example: <code>"Object_Name"</code> would be <code>"Object Name"</code>
+	 * 
+	 * @return The formatted name.
+	 */
 	public String getFormattedName() {
-
-		return TownyFormatter.getFormattedName(this);
+		return getName().replaceAll("_", " ");
 	}
+
+	public void addMetaData(CustomDataField<?> md) {
+		if (getMetadata() == null)
+			metadata = new HashSet<>();
+
+		getMetadata().add(md);
+	}
+
+	public void removeMetaData(CustomDataField<?> md) {
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md);
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
+	}
+
+	public HashSet<CustomDataField<?>> getMetadata() {
+		return metadata;
+	}
+
+	public boolean hasMeta() {
+		return getMetadata() != null;
+	}
+
+	public void setMetadata(String str) {
+
+		if (metadata == null)
+			metadata = new HashSet<>();
+
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
+		}
+	}
+	
 }

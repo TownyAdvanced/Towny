@@ -10,10 +10,12 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -31,10 +33,16 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -231,9 +239,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     /**
      * Build the SQL string and execute to INSERT/UPDATE
      *
-     * @param tb_name
-     * @param args
-     * @param keys
+     * @param tb_name - Database Table name.
+     * @param args - Arguments.
+     * @param keys - Table keys.
      * @return true if the update was successful.
      */
     public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
@@ -400,8 +408,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     /**
      * Build the SQL string and execute to DELETE
      *
-     * @param tb_name
-     * @param args
+     * @param tb_name - Database Table name
+     * @param args - Arguments
      * @return true if the delete was a success.
      */
     public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
@@ -755,6 +763,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						resident.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+
+				}
+
 				/*
 				 * Attempt these for older databases.
 				 */
@@ -842,6 +859,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 town.setSpawnCost(rs.getFloat("spawnCost"));
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
+                town.setConquered(rs.getBoolean("conquered"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
                 town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
@@ -959,6 +977,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     town.setUuid(UUID.randomUUID());
                 }
 
+                line = rs.getString("conqueredDays");
+                if (line != null)
+                	town.setConqueredDays(Integer.valueOf(line));
+                else 
+                	town.setConqueredDays(0);
 
                 /*
                  * Attempt these for older databases.
@@ -1114,6 +1137,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             } catch (NumberFormatException | NullPointerException e) {
                 nation.setRegistered(0);
             }
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					nation.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+
+			}
 
             s.close();
             return true;
@@ -1371,6 +1403,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     world.setUsingTowny(result);
                 } catch (Exception ignored) {
                 }
+                
+                result = rs.getBoolean("warAllowed");
+                try {
+                    world.setWarAllowed(result);
+                } catch (Exception ignored) {
+                }
+
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						world.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+
+				}
 
             }
 
@@ -1479,6 +1526,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						}
 					} catch (SQLException ignored) {
 					}
+					
+					try {
+						line = rs.getString("groupID");
+						if (line != null && !line.isEmpty()) {
+							try {
+								UUID groupID = UUID.fromString(line.trim());
+								PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
+								townBlock.setPlotObjectGroup(group);
+							} catch (Exception ignored) {}
+							
+						}
+					} catch (SQLException ignored) {
+					}
     
                 }
 
@@ -1500,7 +1560,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     @Override
     public synchronized boolean saveResident(Resident resident) {
 
-        TownyMessaging.sendDebugMsg("Saving Resident");
+        TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
         try {
             HashMap<String, Object> res_hm = new HashMap<>();
             res_hm.put("name", resident.getName());
@@ -1519,6 +1579,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
+            
+			if (resident.hasMeta())
+				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
+			else
+				res_hm.put("metadata", "");
 
             UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
             return true;
@@ -1558,6 +1623,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("taxpercent", town.isTaxPercentage());
             twn_hm.put("open", town.isOpen());
             twn_hm.put("public", town.isPublic());
+            twn_hm.put("conquered", town.isConquered());
+            twn_hm.put("conqueredDays", town.getConqueredDays());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			if (town.hasMeta())
@@ -1598,7 +1665,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return false;
     }
 
-    @Override
+	@Override
+	public synchronized boolean savePlotGroup(PlotGroup group) {
+		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
+		try {
+			HashMap<String, Object> nat_hm = new HashMap<>();
+			nat_hm.put("groupName", group.getName());
+			nat_hm.put("groupID", group.getID());
+			nat_hm.put("groupPrice", group.getPrice());
+			nat_hm.put("town", group.getTown().toString());
+
+			UpdateDB("PLOTGROUPS", nat_hm, Collections.singletonList("name"));
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
     public synchronized boolean saveNation(Nation nation) {
 
         TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
@@ -1624,6 +1710,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
+            
+			if (nation.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
+			else
+				nat_hm.put("metadata", "");
 
             UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
@@ -1718,6 +1809,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             // Using Towny
             nat_hm.put("usingTowny", world.isUsingTowny());
 
+            // War allowed in this world.
+            nat_hm.put("warAllowed", world.isWarAllowed());
+
+			if (world.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(world.getMetadata()), ";"));
+			else
+				nat_hm.put("metadata", "");
+            
             UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 
         } catch (Exception e) {
@@ -1751,6 +1850,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
             tb_hm.put("locked", townBlock.isLocked());
             tb_hm.put("changed", townBlock.isChanged());
+            if (townBlock.hasPlotObjectGroup())
+            	tb_hm.put("groupID", townBlock.getPlotObjectGroup().getID().toString());
+            else
+            	tb_hm.put("groupID", "");
             if (townBlock.hasMeta())
 				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
 			else
@@ -1767,23 +1870,177 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean savePlotData(PlotBlockData plotChunk) {
-        return false;
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+		        
+		        String path = getPlotFilename(plotChunk);
+		        try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
+		            
+		            switch (plotChunk.getVersion()) {
+		                
+		                case 1:
+		                case 2:
+		                case 3:
+		                case 4:
+		                    /*
+		                     * New system requires pushing
+		                     * version data first
+		                     */
+		                    fout.write("VER".getBytes(StandardCharsets.UTF_8));
+		                    fout.write(plotChunk.getVersion());
+		                    
+		                    break;
+		                
+		                default:
+		                
+		            }
+		            
+		            // Push the plot height, then the plot block data types.
+		            fout.writeInt(plotChunk.getHeight());
+		            for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+		                fout.writeUTF(block);
+		            }
+		            
+		        } catch (Exception e) {
+		            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
+		            e.printStackTrace();
+		            return false;
+		        }
+				return true;
     }
     
-    @Override
-    public PlotBlockData loadPlotData(String worldName, int x, int z) {
-        return null;
-    }
-    
+	/**
+	 * Load PlotBlockData
+	 *
+	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param x - Coordinate for X.
+	 * @param z - Coordinate for Z.
+	 * @return PlotBlockData or null
+	 */
+	@Override
+	public PlotBlockData loadPlotData(String worldName, int x, int z) {
+
+		try {
+			TownyWorld world = getWorld(worldName);
+			TownBlock townBlock = new TownBlock(x, z, world);
+
+			return loadPlotData(townBlock);
+		} catch (NotRegisteredException e) {
+			// Failed to get world
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Load PlotBlockData for regen at unclaim
+	 *
+	 * @param townBlock - townBlock being reverted
+	 * @return PlotBlockData or null
+	 */
     @Override
     public PlotBlockData loadPlotData(TownBlock townBlock) {
+        
+        String fileName = getPlotFilename(townBlock);
+        
+        String value;
+        
+        if (isFile(fileName)) {
+            PlotBlockData plotBlockData = new PlotBlockData(townBlock);
+            List<String> blockArr = new ArrayList<>();
+            int version = 0;
+            
+            try (DataInputStream fin = new DataInputStream(new FileInputStream(fileName))) {
+                
+                //read the first 3 characters to test for version info
+                fin.mark(3);
+                byte[] key = new byte[3];
+                fin.read(key, 0, 3);
+                String test = new String(key);
+                
+                if (elements.fromString(test) == elements.VER) {// Read the file version
+                    version = fin.read();
+                    plotBlockData.setVersion(version);
+                    
+                    // next entry is the plot height
+                    plotBlockData.setHeight(fin.readInt());
+                } else {
+                    /*
+                     * no version field so set height
+                     * and push rest to queue
+                     */
+                    plotBlockData.setVersion(version);
+                    // First entry is the plot height
+                    fin.reset();
+                    plotBlockData.setHeight(fin.readInt());
+                    blockArr.add(fin.readUTF());
+                    blockArr.add(fin.readUTF());
+                }
+                
+                /*
+                 * Load plot block data based upon the stored version number.
+                 */
+                switch (version) {
+                    
+                    default:
+                    case 4:
+                    case 3:
+                    case 1:
+                        
+                        // load remainder of file
+                        while ((value = fin.readUTF()) != null) {
+                            blockArr.add(value);
+                        }
+                        
+                        break;
+                    
+                    case 2: {
+                        
+                        // load remainder of file
+                        int temp = 0;
+                        while ((temp = fin.readInt()) >= 0) {
+                            blockArr.add(temp + "");
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                
+            } catch (EOFException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            plotBlockData.setBlockList(blockArr);
+            plotBlockData.resetBlockListRestored();
+            return plotBlockData;
+        }
         return null;
     }
     
     @Override
-    public void deletePlotData(PlotBlockData plotChunk) {
+	public void deletePlotData(PlotBlockData plotChunk) {
+
+		File file = new File(getPlotFilename(plotChunk));
+		if (file.exists())
+			file.delete();
+	}
     
-    }
+	private boolean isFile(String fileName) {
+
+		File file = new File(fileName);
+		return file.exists() && file.isFile();
+
+	}
+
+	@Override
+	public void deleteFile(String fileName) {
+
+		File file = new File(fileName);
+		if (file.exists())
+			file.delete();
+	}
+
     
     @Override
     public void deleteResident(Resident resident) {
@@ -1824,13 +2081,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         DeleteDB("TOWNBLOCKS", twn_hm);
 
     }
-    
-    @Override
-    public void deleteFile(String file) {
-    
-    }
-    
-    @Override
+
+	@Override
+	public void deletePlotGroup(PlotGroup group) {
+		
+	}
+
+	@Override
     public synchronized boolean backup() throws IOException {
 
         TownyMessaging.sendMsg("Performing backup");
@@ -1874,8 +2131,101 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public void deleteUnusedResidents() {
     
     }
-    
-    @Override
+
+	public boolean loadPlotGroupList() {
+		TownyMessaging.sendDebugMsg("Loading PlotGroup List");
+		if (!getContext())
+			return false;
+		try {
+			Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT groupID,town,groupName FROM " + tb_prefix + "PLOTGROUPS");
+
+			while (rs.next()) {
+				
+				UUID id = UUID.fromString(rs.getString("groupID"));
+				String groupName = rs.getString("groupName");				
+				Town town = null;
+				try {
+					town = getTown(rs.getString("town"));
+				} catch (NotRegisteredException e) {
+					continue;
+				}
+				
+				try {
+					TownyUniverse.getInstance().newGroup(town,groupName,id);
+				} catch (AlreadyRegisteredException ignored) {
+				}
+
+			}
+
+			s.close();
+
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean loadPlotGroups() {
+		String line = "";
+		TownyMessaging.sendDebugMsg("Loading plot groups.");
+
+		// Load town blocks
+		if (!getContext())
+			return false;
+
+		ResultSet rs;
+
+		for (PlotGroup plotGroup : getAllPlotGroups()) {
+			try {
+				Statement s = cntx.createStatement();
+				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='" + plotGroup.getID().toString() + "'");
+				
+				while (rs.next()) {
+					line = rs.getString("groupName");
+					if (line != null)
+						try {
+							plotGroup.setName(line.trim());
+						} catch (Exception ignored) {}
+					
+					line = rs.getString("groupID");
+					if (line != null) {
+						try {
+							plotGroup.setID(UUID.fromString(line.trim()));
+						} catch (Exception ignored) {}
+					}
+					
+					line = rs.getString("town");
+					if (line != null) {
+						try {
+							plotGroup.setTown(getTown(line.trim()));
+						} catch (Exception ignored) {}
+					}
+					
+					line = rs.getString("groupPrice");
+					if (line != null) {
+						try {
+							plotGroup.setPrice(Float.parseFloat(line.trim()));
+						} catch (Exception ignored) {}
+					}
+				}
+				
+				s.close();
+			} catch (SQLException e) {
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + plotGroup.getName() + " at line: " + line + " in the sql database");
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
     public boolean cleanup() {
 
 		/*
@@ -1911,7 +2261,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return true;
     }
 
-    @Override
+	@Override
+	public boolean savePlotGroupList() {
+		return true;
+	}
+
+	@Override
     public boolean saveNationList() {
 
         return true;
@@ -1974,14 +2329,24 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             town.setOutpostSpawns(validoutpostspawns);
         }
     }
+
+    public String getPlotFilename(PlotBlockData plotChunk) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".data";
+	}
+	
+	public String getPlotFilename(TownBlock townBlock) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
+	}
     
     /**
      * Load townblocks according to the given line Townblock: x,y,forSale Eg:
      * townBlocks=world:10,11;10,12,true;|nether:1,1|
      *
-     * @param line
-     * @param town
-     * @param resident
+     * @param line - Line to load
+     * @param town - Town to load from
+     * @param resident - resident to set to townblock
      */
     @Deprecated
     public void utilLoadTownBlocks(String line, Town town, Resident resident) {
@@ -2087,3 +2452,4 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return out.toString();
     }
 }
+

@@ -3,7 +3,7 @@ main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
-website: https://github.com/TownyAdvanced/Towny
+website: 'http://townyadvanced.github.io/'
 prefix: Towny
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
@@ -170,6 +170,18 @@ permissions:
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
 
+    towny.command.nation.list:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children: 
+            towny.command.nation.list.residents: true
+            towny.command.nation.list.towns: true
+            towny.command.nation.list.open: true
+            towny.command.nation.list.balance: true
+            towny.command.nation.list.name: true
+            towny.command.nation.list.townblocks: true
+            towny.command.nation.list.online: true
+
     towny.command.nation.deposit.other:
         description: User can deposit money into the town bank of a nation member.
         default: false
@@ -190,6 +202,7 @@ permissions:
             towny.command.nation.ally.add: true
             towny.command.nation.ally.accept: true
             towny.command.nation.ally.deny: true
+            towny.command.nation.ally.remove: true
 
     towny.command.nation.ally.sent:
         description: User can see sent ally invites from their nation.
@@ -209,6 +222,7 @@ permissions:
         children:
             towny.command.nation.invite.manage.* : true
             towny.command.nation.invite.sent: true
+            towny.command.nation.invite.received: true
             towny.command.nation.invite: true
 
     towny.command.nation.invite.manage.*:
@@ -290,6 +304,17 @@ permissions:
             towny.command.town.toggle.*: true
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
+
+    towny.command.town.list:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children: 
+            towny.command.town.list.residents: true
+            towny.command.town.list.open: true
+            towny.command.town.list.balance: true
+            towny.command.town.list.name: true
+            towny.command.town.list.townblocks: true
+            towny.command.town.list.online: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
@@ -459,6 +484,7 @@ permissions:
         description: User can access the admin commands.
         default: false
         children:
+            towny.command.townyadmin: true
             towny.command.townyadmin.backup: true
             towny.command.townyadmin.checkperm: true
             towny.command.townyadmin.givebonus: true
@@ -522,6 +548,7 @@ permissions:
         description: User can access the admin nation commands.
         default: false
         children:
+            towny.command.townyadmin.nation.new: true
             towny.command.townyadmin.nation.add: true
             towny.command.townyadmin.nation.delete: true
             towny.command.townyadmin.nation.rename: true
