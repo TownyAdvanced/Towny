@@ -232,6 +232,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "townlist":
 				case "allylist":
 				case "enemylist":
+				case "online":
 				case "join":
 				case "delete":
 				case "spawn":
