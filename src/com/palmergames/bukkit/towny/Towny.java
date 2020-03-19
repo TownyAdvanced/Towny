@@ -42,10 +42,13 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.LoadUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.bukkit.towny.utils.SaveUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.loadHandlers.ResidentLoadHandler;
+import com.palmergames.bukkit.towny.utils.loadHandlers.TypeContext;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -74,6 +77,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -196,6 +200,25 @@ public class Towny extends JavaPlugin {
 		}
 		// ------------------- TESTING CODE -------------------
 		save(new Town("test"));
+
+		LoadUtil loadUtil = new LoadUtil();
+		TypeContext<?> context = new TypeContext<List<Resident>>(){};
+		loadUtil.registerLoadHandler(context.getType(), new ResidentLoadHandler());
+		
+		try {
+			Field field = new Town("test").getClass().getDeclaredField("residents");
+			List<Resident> residents = (List<Resident>) loadUtil.parseString("Singried", field);
+			
+			TownyMessaging.sendErrorMsg("GOT " + residents);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+		
+		
+		for (Field field : ReflectionUtil.getAllFields(new Town("hi"), true)) {
+			TownyMessaging.sendErrorMsg(field.getName() + "-" + field.getGenericType());
+		}
+		
 		// ------------------- TESTING CODE -------------------
 	}
 	

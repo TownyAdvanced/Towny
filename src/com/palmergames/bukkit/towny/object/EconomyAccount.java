@@ -28,6 +28,11 @@ public class EconomyAccount extends TownyObject {
 		super(name);
 	}
 
+	@Override
+	public String getSavePath() {
+		return null;
+	}
+
 	public World getWorld() {
 		return world;
 	}

@@ -18,6 +18,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import com.palmergames.bukkit.towny.utils.SaveUtil;
+import com.palmergames.bukkit.towny.utils.loadHandlers.LoadSetter;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -46,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
@@ -2629,5 +2633,36 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     		file.deleteOnExit();
     	else
     		TownyMessaging.sendErrorMsg("That file doesn't exist!");
+	}
+
+	@Override
+	public void save(TownyObject object) {
+		HashMap<String, String> saveMap = SaveUtil.getSaveMap(object);
+		List<String> saveList = convertToFileFormat(saveMap);
+		
+		this.queryQueue.add(new FlatFile_Task(saveList, object.getSavePath()));
+	}
+	
+	public List<String> convertToFileFormat(HashMap<String, String> saveMap) {
+    	List<String> stringList = new ArrayList<>();
+    	for (Map.Entry<String, String> entry : saveMap.entrySet()) {
+    		stringList.add(entry.getKey() + "=" + entry.getValue());
+		}
+    	
+    	return stringList;
+	}
+	
+	public <T extends TownyObject> void load(TownyObject object, Class<T> clazz) {
+    	// Load all fields.
+    	List<Field> fields = ReflectionUtil.getAllFields(object, true);
+    	
+    	for (Field field : fields) {
+    		field.setAccessible(true);
+    		if (field.getDeclaredAnnotation(LoadSetter.class) != null) {
+    			
+			}
+    		String fieldName = field.getName();
+    		Class<?> type = field.getType();
+		}
 	}
 }

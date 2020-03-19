@@ -703,6 +703,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
+	@Override
+	public String getSavePath() {
+		return null;
+	}
+
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 

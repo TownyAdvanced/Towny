@@ -69,7 +69,8 @@ public class SaveUtil {
 		}
 		
 		if (object instanceof Location) {
-			
+			Location location = (Location)object;
+			return location.getWorld().getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getPitch() + "," + location.getYaw();
 		}
 		
 		return String.valueOf(object);

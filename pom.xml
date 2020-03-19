@@ -154,13 +154,6 @@
                 <configuration>
                     <source>${java.version}</source>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 

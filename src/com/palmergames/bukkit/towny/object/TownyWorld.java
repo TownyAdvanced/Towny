@@ -196,6 +196,11 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
+	@Override
+	public String getSavePath() {
+		return null;
+	}
+
 	public void setWarAllowed(boolean isWarAllowed) {
 
 		this.isWarAllowed = isWarAllowed;

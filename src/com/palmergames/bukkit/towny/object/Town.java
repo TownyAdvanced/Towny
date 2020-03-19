@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -18,12 +19,14 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.loadHandlers.LoadSetter;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +63,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private boolean isOpen = TownySettings.getTownDefaultOpen();
 	private String townBoard = "/town set board [msg]";
 	private String tag = "";
+	
+	@LoadSetter(setterName = "forceSetHomeBlock")
 	private TownBlock homeBlock;
+	
 	private TownyWorld world;
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
@@ -1412,6 +1418,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 		
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
+	}
+
+	@Override
+	public String getSavePath() {
+		return Towny.getPlugin().getDataFolder() + File.separator + "towns" + File.separator + getName() + ".txt";
 	}
 
 	/**

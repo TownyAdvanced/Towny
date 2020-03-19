@@ -718,6 +718,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return (hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
 	}
 
+	@Override
+	public String getSavePath() {
+		return null;
+	}
+
 	/**
 	 * Returns King or Mayor prefix set in the Town and Nation Levels of the config.
 	 * 

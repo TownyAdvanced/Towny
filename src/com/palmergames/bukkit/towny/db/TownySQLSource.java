@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -2238,6 +2239,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
         return true;
     }
+
+	@Override
+	public void save(TownyObject object) {
+		
+	}
 
 	/*
 	 * Save keys

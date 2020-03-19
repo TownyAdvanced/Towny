@@ -443,7 +443,12 @@ public class TownBlock extends TownyObject {
 			metadata.add(CustomDataField.load(object));
 		}
 	}
-	
+
+	@Override
+	public String getSavePath() {
+		return null;
+	}
+
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }
 	
 	public PlotGroup getPlotObjectGroup() {

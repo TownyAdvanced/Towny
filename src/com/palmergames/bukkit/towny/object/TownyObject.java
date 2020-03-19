@@ -95,4 +95,5 @@ public abstract class TownyObject implements Nameable {
 		}
 	}
 	
+	public abstract String getSavePath();
 }
