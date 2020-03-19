@@ -232,7 +232,7 @@ public class War {
 			}			
 		}
 		if (!enemy) {
-			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_no_enemies_for_war"));;
+			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_no_enemies_for_war"));
 			return;
 		}
 		
@@ -776,8 +776,7 @@ public class War {
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
-		StringBuilder sb = new StringBuilder(town.getFormattedName()).append(" (").append(fallenTownBlocks).append(TownySettings.getLangString("msg_war_append_townblocks_fallen"));
-		sendEliminateMessage(sb.toString());
+		sendEliminateMessage(town.getFormattedName() + " (" + fallenTownBlocks + TownySettings.getLangString("msg_war_append_townblocks_fallen"));
 	}
 
 	/**

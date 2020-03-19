@@ -1347,7 +1347,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			iMax = towns.size();
 		}
 
-		List<String> townsformatted = new ArrayList();
+		List<String> townsformatted = new ArrayList<>();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 

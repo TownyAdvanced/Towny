@@ -420,7 +420,7 @@ public class TownyWorld extends TownyObject {
 	@Deprecated
 	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 
-		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
+		if (getPlotManagementIgnoreIds().contains(id + ":" + data))
 			return true;
 		
 		return getPlotManagementIgnoreIds().contains(id);
