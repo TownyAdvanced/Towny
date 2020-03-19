@@ -4265,3 +4265,5 @@ v0.92.0.11:
 0.96.0.0:
   - Bump version number for release.
   - Update bukkit api to 1.15.2.
+0.96.0.1:
+  - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
