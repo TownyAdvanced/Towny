@@ -250,7 +250,7 @@ public class PlayerCacheUtil {
 
 			if (townBlock.isLocked()) {
 				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-				if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+				if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
 					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
 					return TownBlockStatus.LOCKED;
 				}

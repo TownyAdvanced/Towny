@@ -33,8 +33,6 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
@@ -193,32 +191,6 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
-	public void setWorldFlags() {
-		TownyUniverse universe = TownyUniverse.getInstance();
-		for (Town town : universe.getDataSource().getTowns()) {
-
-			if (town.getWorld() == null) {
-				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");
-				if (town.hasHomeBlock())
-					try {
-						TownyWorld world = town.getHomeBlock().getWorld();
-						if (!world.hasTown(town)) {
-							world.addTown(town);
-							universe.getDataSource().saveTown(town);
-							universe.getDataSource().saveWorld(world);
-						}
-					} catch (TownyException e) {
-						// Error fetching homeblock
-						LOGGER.warn("[Towny Error] Failed get world data for: " + town.getName());
-					}
-				else {
-					LOGGER.warn("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
-				}
-			}
-		}
-
-	}
-
 	@Override
 	public void onDisable() {
 
@@ -270,8 +242,6 @@ public class Towny extends JavaPlugin {
 		}
 
 		checkPlugins();
-
-		setWorldFlags();
 
 		// make sure the timers are stopped for a reset
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
