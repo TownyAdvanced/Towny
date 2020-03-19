@@ -202,6 +202,7 @@ permissions:
             towny.command.nation.ally.add: true
             towny.command.nation.ally.accept: true
             towny.command.nation.ally.deny: true
+            towny.command.nation.ally.remove: true
 
     towny.command.nation.ally.sent:
         description: User can see sent ally invites from their nation.
@@ -221,6 +222,7 @@ permissions:
         children:
             towny.command.nation.invite.manage.* : true
             towny.command.nation.invite.sent: true
+            towny.command.nation.invite.received: true
             towny.command.nation.invite: true
 
     towny.command.nation.invite.manage.*:

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.75
+version: 0.76
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1088,6 +1088,9 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are no
 
 # Added in 0.75
 msg_already_ally: 'Your nation is already allied with %s.'
+
+# Added in 0.76
+msg_you: 'You'
 
 # Added in ? (for siege war)
 #Siege war happy-path messages

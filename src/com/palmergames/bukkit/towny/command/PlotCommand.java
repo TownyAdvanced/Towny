@@ -280,7 +280,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 									// Add the confirmation for claiming a plot group.
 									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_CLAIM_ACTION, new GroupConfirmation(group, player));
-									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 									
 									return true;

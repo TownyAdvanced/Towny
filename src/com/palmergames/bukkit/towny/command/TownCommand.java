@@ -2484,7 +2484,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? TownySettings.getLangString("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
 			
 			newTown(world, name, resident, key, player.getLocation(), player);
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));

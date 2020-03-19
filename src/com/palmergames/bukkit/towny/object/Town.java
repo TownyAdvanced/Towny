@@ -1607,7 +1607,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
 	 * 
 	 * @return the holding balance of the economy account.
-	 * @throws EconomyException
+	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public double getHoldingBalance() throws EconomyException {

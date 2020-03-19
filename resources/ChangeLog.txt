@@ -4254,3 +4254,14 @@ v0.92.0.11:
   - Fix titles and surname losing their trailing and leading spaces.
   - Actually fix Towny preventing Citizens NPCs from loading into their proper locations when safe mode happens.
     - Closes #3773.
+0.95.2.24:
+  - zh-TW.yml updated by shou692199 with PR #3775.
+  - Language files bumped to 0.76
+  - Fix missing translation.
+    - Closes #3777. 
+  - Fix msg_changed_public in korean.yml not working.
+  - zh-TW.yml updated by shou692199 with PR #3782.
+  - Fix a couple missing child nodes for permissions in the plugin.yml.
+0.96.0.0:
+  - Bump version number for release.
+  - Update bukkit api to 1.15.2.

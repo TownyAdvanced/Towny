@@ -53,8 +53,8 @@ public class TownyEntityMonitorListener implements Listener {
 	 * - DeathPayments,
 	 * - Jailing Players,
 	 * - Awarding WarTimeDeathPoints.
-	 * @param event
-	 * @throws NotRegisteredException
+	 * @param event The event.
+	 * @throws NotRegisteredException When a towny object is not found.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) throws NotRegisteredException {

@@ -602,7 +602,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
 	 * 
 	 * @param file - File from which the HashMap will be made.
-	 * @return HashMap<String, String> - Used for loading keys and values from object files. 
+	 * @return HashMap - Used for loading keys and values from object files. 
 	 */
 	public HashMap<String, String> loadFileIntoHashMap(File file) {
 		HashMap<String, String> keys = new HashMap<>();

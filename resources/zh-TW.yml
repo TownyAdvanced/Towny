@@ -1,5 +1,5 @@
 name: Towny
-version: 0.75
+version: 0.76
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1086,4 +1086,7 @@ msg_err_you_aren't currently jailed: '你現在沒有被監禁。'
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '不允許在此位置創建此門戶的另一側。'
 
 # Added in 0.75
-msg_already_ally: 'Your nation is already allied with %s.'
+msg_already_ally: '您的國家已經與%s建立了聯盟。'
+
+# Added in 0.76
+msg_you: '您'
