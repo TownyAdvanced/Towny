@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.loadHandlers.LoadSetter;
-import com.palmergames.bukkit.towny.utils.loadHandlers.LoadHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadSetter;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class LoadUtil {
 
-	public HashMap<Type, LoadHandler<?>> loadHandlers = new HashMap<>();
+	public HashMap<Type, FlatFileLoadHandler<?>> loadHandlers = new HashMap<>();
 	public HashMap<Field, Method> setters = new HashMap<>();
 	
 	public <T> void load(Class<T> clazz, HashMap<String, String> saveData) {
@@ -115,22 +115,49 @@ public class LoadUtil {
 		return townyPermission;
 	}
 
-	public void registerLoadHandler(Type type, LoadHandler<?> handler) {
+	public void registerLoadHandler(Type type, FlatFileLoadHandler<?> handler) {
 		TownyMessaging.sendErrorMsg("added " + type);
 		loadHandlers.put(type, handler);
 	}
 
 	public Object handle(String str, Type type) {
+		
+		if (isPrimitive(type) || isWrappedPrimitive(type)) {
+			return PrimitiveLoader.load(str, type);
+		}
 
 		if (!loadHandlers.containsKey(type)) {
 			throw new UnsupportedOperationException("There is not load handler for " + type);
 		}
 
-		LoadHandler<?> handler = loadHandlers.get(type);
+		FlatFileLoadHandler<?> handler = loadHandlers.get(type);
 
 		TownyMessaging.sendErrorMsg(handler.load(str) + "");
 
 		return handler.load(str);
+	}
+	
+	public boolean isPrimitive(Type type) {
+		boolean retVal;
+		
+		retVal = type == int.class;
+		retVal |= type == float.class;
+		retVal |= type == double.class;
+		retVal |= type == char.class;
+		
+		return retVal;
+	}
+	
+	public boolean isWrappedPrimitive(Type type) {
+		boolean retVal;
+		
+		retVal = type == Integer.class;
+		retVal |= type == Double.class;
+		retVal |= type == String.class;
+		retVal |= type == Float.class;
+		retVal |= type == Character.class;
+		
+		return retVal;
 	}
 	
 	private boolean usingSetter(Field field) {

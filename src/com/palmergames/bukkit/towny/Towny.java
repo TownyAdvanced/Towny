@@ -42,13 +42,11 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.LoadUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.ReflectionUtil;
-import com.palmergames.bukkit.towny.utils.SaveUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.loadHandlers.ResidentLoadHandler;
-import com.palmergames.bukkit.towny.utils.loadHandlers.TypeContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.FileParser;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.TypeContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers.ResidentListFlatFileHandler;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -77,7 +75,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -200,36 +197,25 @@ public class Towny extends JavaPlugin {
 		}
 		// ------------------- TESTING CODE -------------------
 		save(new Town("test"));
-
-		LoadUtil loadUtil = new LoadUtil();
+		
+		FileParser fileParser = new FileParser();
 		TypeContext<?> context = new TypeContext<List<Resident>>(){};
-		loadUtil.registerLoadHandler(context.getType(), new ResidentLoadHandler());
+		fileParser.registerLoadHandler(context.getType(), new ResidentListFlatFileHandler());
 		
-		try {
-			Field field = new Town("test").getClass().getDeclaredField("residents");
-			List<Resident> residents = (List<Resident>) loadUtil.parseString("Singried", field);
-			
-			TownyMessaging.sendErrorMsg("GOT " + residents);
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		}
+		Town testTown = (Town)TownyUniverse.getInstance().getTownsMap().values().toArray()[0];
+
+		File townFile = new File(getDataFolder() + File.separator + "data" + File.separator + "towns" + File.separator + testTown.getName() + ".txt");
 		
+		Town town = (Town) fileParser.parseFile(townFile, Town.class);
 		
-		for (Field field : ReflectionUtil.getAllFields(new Town("hi"), true)) {
-			TownyMessaging.sendErrorMsg(field.getName() + "-" + field.getGenericType());
-		}
+		TownyMessaging.sendErrorMsg(town.toString());
 		
 		// ------------------- TESTING CODE -------------------
 	}
 	
 	// ------------------- TESTING CODE -------------------
 	public void save(TownyObject object) {
-		Town town = townyUniverse.getTownsMap().get("dude");
-		HashMap<String, String> saveData = SaveUtil.getSaveMap(town);
 		
-		for (Map.Entry<String, String> entry : saveData.entrySet()) {
-			TownyMessaging.sendErrorMsg(entry.toString());
-		}
 	}
 	// ------------------- TESTING CODE -------------------
 	

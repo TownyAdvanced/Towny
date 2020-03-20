@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.utils.loadHandlers;
+package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

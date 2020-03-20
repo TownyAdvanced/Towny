@@ -48,7 +48,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	/**
-	 * This handles EntityDeathEvents on MONITOR in order to handle Towny features such as:
+	 * This handles EntityDeathEvents on MONITOR in order to load Towny features such as:
 	 * - DeathPayments,
 	 * - Jailing Players,
 	 * - Awarding WarTimeDeathPoints.

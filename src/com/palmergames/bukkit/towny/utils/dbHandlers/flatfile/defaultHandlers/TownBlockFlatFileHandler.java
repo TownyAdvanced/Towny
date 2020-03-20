@@ -1,15 +1,17 @@
-package com.palmergames.bukkit.towny.utils.loadHandlers;
+package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileDatabaseHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
 
-public class TownBlockLoadHandler implements LoadHandler<TownBlock> {
+public class TownBlockFlatFileHandler implements FlatFileDatabaseHandler<TownBlock> {
 
 	@Override
-	public TownBlock load(String str) {
+	public TownBlock load(FlatFileLoadContext context, String str) {
 		
 		String[] townBlockElements = str.split(",");
 		try {
@@ -32,7 +34,7 @@ public class TownBlockLoadHandler implements LoadHandler<TownBlock> {
 		return null;
 	}
 
-	public TownyWorld getWorld(String name) throws NotRegisteredException {
+	private TownyWorld getWorld(String name) throws NotRegisteredException {
 
 		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(name.toLowerCase());
 
@@ -40,5 +42,10 @@ public class TownBlockLoadHandler implements LoadHandler<TownBlock> {
 			throw new NotRegisteredException("World not registered!");
 
 		return world;
+	}
+
+	@Override
+	public String save(TownBlock object) {
+		return object.getWorld() + "," + object.getX() + "," + object.getZ();
 	}
 }

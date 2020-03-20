@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.utils.loadHandlers;
+package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
