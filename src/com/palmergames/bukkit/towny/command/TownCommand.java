@@ -1822,7 +1822,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setTitle(title + " ");
+				resident.setTitle(title);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasTitle())
@@ -1857,7 +1857,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setSurname(" " + surname);
+				resident.setSurname(surname);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasSurname())
