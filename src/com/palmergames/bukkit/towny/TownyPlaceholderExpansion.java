@@ -284,7 +284,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return title;
 		case "towny_prefix": // %townyadvanced_towny_prefix%
 			if (resident.hasTitle())
-				title = resident.getTitle();
+				title = resident.getTitle() + " ";
 			else {
 				if (resident.isMayor())
 					title = TownySettings.getMayorPrefix(resident);
@@ -294,7 +294,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return title;
 		case "towny_postfix": // %townyadvanced_towny_postfix%
 			if (resident.hasSurname())
-				title = resident.getSurname();
+				title = " " + resident.getSurname();
 			else {
 				if (resident.isMayor())
 					title = TownySettings.getMayorPostfix(resident);

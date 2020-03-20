@@ -4267,3 +4267,4 @@ v0.92.0.11:
   - Update bukkit api to 1.15.2.
 0.96.0.1:
   - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
+  - Fix missing spaces %townyadvanced_towny_prefix% & %townyadvanced_towny_postfix% placeholders.
