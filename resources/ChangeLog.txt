@@ -4268,3 +4268,9 @@ v0.92.0.11:
 0.96.0.1:
   - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
   - Fix missing spaces %townyadvanced_towny_prefix% & %townyadvanced_towny_postfix% placeholders.
+  - API: Add Calculation Events, courtesy of Valentina_pro with PR #3794.
+    - TownUpkeepCalculationEvent - get/set upkeep per town.
+    - TownUpkeepPenalityCalculationEvent - get/set upkeep overclaim penalty per town.
+    - NationUpkeepCalculationEvent - get/set upkeep per nation.  
+    - Allows third party plugins to completely override all town and nation upkeeps.
+    - Closes #3781.
