@@ -99,7 +99,7 @@ public class TownySettings {
 	 *
 	 * townBlockLimit is a required field even if using a calculated ratio.
 	 *
-	 * @throws IOException if unable to load the Town Levels
+	 * @throws IOException if unable to loadString the Town Levels
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 
@@ -219,7 +219,7 @@ public class TownySettings {
 			// read the config.yml into memory
 			config = new CommentedConfiguration(file);
 			if (!config.load()) {
-				System.out.print("Failed to load Config!");
+				System.out.print("Failed to loadString Config!");
 			}
 
 			setDefaults(version, file);
@@ -236,7 +236,7 @@ public class TownySettings {
 			
 			playermap = new CommentedConfiguration(file);
 			if (!playermap.load()) {
-				System.out.println("Failed to load playermap!");
+				System.out.println("Failed to loadString playermap!");
 				
 				
 			}
@@ -260,9 +260,9 @@ public class TownySettings {
 		ChunkNotification.loadFormatStrings();
 	}
 
-	// This will read the language entry in the config.yml to attempt to load
+	// This will read the language entry in the config.yml to attempt to loadString
 	// custom languages
-	// if the file is not found it will load the default from resource
+	// if the file is not found it will loadString the default from resource
 	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
 
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);

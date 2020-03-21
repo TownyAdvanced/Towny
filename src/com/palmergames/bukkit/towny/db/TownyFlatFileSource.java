@@ -885,15 +885,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								TownBlock homeBlock = world.getTownBlock(x, z);
 								town.forceSetHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid location.");
 							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid TownBlock.");
 							} catch (TownyException e) {
 								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 							}
 							
 						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid world.");
 						}
 				}
 				
@@ -1643,7 +1643,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "townblocks.txt"));
 
@@ -1682,7 +1682,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "residents.txt"));
 
@@ -1702,7 +1702,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "towns.txt"));
 
@@ -1722,7 +1722,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "nations.txt"));
 
@@ -1742,7 +1742,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "worlds.txt"));
 
@@ -1805,7 +1805,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getResidentFilename(resident)));
 
@@ -1927,7 +1927,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + md.toString());
 		
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
 
@@ -2014,7 +2014,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + md.toString());
 		
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getNationFilename(nation)));
 
@@ -2155,7 +2155,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + md.toString());
 		
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getWorldFilename(world)));
 
@@ -2244,7 +2244,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		
 		/*
-		 *  Make sure we only save in async
+		 *  Make sure we only getString in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getTownBlockFilename(townBlock)));
 
@@ -2295,7 +2295,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * townBlocks=world:10,11;10,12,true;|nether:1,1|
 	 *
 	 * @param line - Line which to read from.
-	 * @param town - Town for which to load townblocks for.
+	 * @param town - Town for which to loadString townblocks for.
 	 * @param resident - Owner of a given townblock.
 	 */
 	@Deprecated
@@ -2453,7 +2453,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData
 	 *
-	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param worldName - World in which to loadString PlotBlockData for.
 	 * @param x - Coordinate for X.
 	 * @param z - Coordinate for Z.
 	 * @return PlotBlockData or null
@@ -2528,7 +2528,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
                     case 3:
                     case 1:
                         
-                        // load remainder of file
+                        // loadString remainder of file
                         while ((value = fin.readUTF()) != null) {
                             blockArr.add(value);
                         }
@@ -2537,7 +2537,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
                     
                     case 2: {
                         
-                        // load remainder of file
+                        // loadString remainder of file
                         int temp = 0;
                         while ((temp = fin.readInt()) >= 0) {
                             blockArr.add(temp + "");

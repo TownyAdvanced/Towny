@@ -44,7 +44,7 @@ public class ChunkNotification {
 	public static String groupNotificationFormat = Colors.White + "[%s]";
 
 	/**
-	 * Called on Config load.
+	 * Called on Config loadString.
 	 * Specifically: TownySettings.loadCachedLangStrings()
 	 */
 	public static void loadFormatStrings() {

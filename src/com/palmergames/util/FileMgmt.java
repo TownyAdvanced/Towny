@@ -116,7 +116,7 @@ public class FileMgmt {
 
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
 
-		// open a load to yml file
+		// open a loadString to yml file
 		File file = new File(filePath);
 
 		if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)

@@ -334,7 +334,7 @@ public class Metrics {
         }
         HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
         
-        // Compress the data to save bandwidth
+        // Compress the data to getString bandwidth
         byte[] compressedData = compress(data.toString());
         
         // Add headers

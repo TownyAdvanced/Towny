@@ -220,7 +220,7 @@ public class TownyRegenAPI {
 //				for (int z = 0; z < 16; z++) {
 //					for (int y = 0; y < maxHeight; y++) {
 //						
-//						//Current block to save
+//						//Current block to getString
 //						BlockState state = chunk.getBlock(x, y, z).getState();
 //						
 //						if (state instanceof org.bukkit.block.Sign) {

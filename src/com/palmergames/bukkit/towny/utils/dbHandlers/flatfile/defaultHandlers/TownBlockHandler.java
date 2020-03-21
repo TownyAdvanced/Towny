@@ -5,13 +5,15 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileDatabaseHandler;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.SaveContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.SerializationHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.sql.object.SQLData;
 
-public class TownBlockFlatFileHandler implements FlatFileDatabaseHandler<TownBlock> {
+public class TownBlockHandler implements SerializationHandler<TownBlock> {
 
 	@Override
-	public TownBlock load(FlatFileLoadContext context, String str) {
+	public TownBlock loadString(LoadContext context, String str) {
 		
 		String[] townBlockElements = str.split(",");
 		try {
@@ -22,15 +24,20 @@ public class TownBlockFlatFileHandler implements FlatFileDatabaseHandler<TownBlo
 				int z = Integer.parseInt(townBlockElements[2]);
 				return world.getTownBlock(x, z);
 			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to load invalid location.");
+				TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to loadString invalid location.");
 			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to load invalid TownBlock.");
+				TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to loadString invalid TownBlock.");
 			}
 
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to load invalid world.");
+			TownyMessaging.sendErrorMsg("[Warning] homeBlock tried to loadString invalid world.");
 		}
 		
+		return null;
+	}
+
+	@Override
+	public TownBlock loadSQL(Object result) {
 		return null;
 	}
 
@@ -43,9 +50,14 @@ public class TownBlockFlatFileHandler implements FlatFileDatabaseHandler<TownBlo
 
 		return world;
 	}
+	
+	@Override
+	public String getFileString(SaveContext context, TownBlock obj) {
+		return null;
+	}
 
 	@Override
-	public String save(TownBlock object) {
-		return object.getWorld() + "," + object.getX() + "," + object.getZ();
+	public SQLData<TownBlock> getSQL(SaveContext context, TownBlock obj) {
+		return null;
 	}
 }

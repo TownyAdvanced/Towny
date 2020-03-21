@@ -558,7 +558,7 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
 		if (plugin.isError()) {
-			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
+			// Citizens stores their NPCs at the world spawn and when players loadString chunks the NPC is teleported there. 
 			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
 			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
 				return;
@@ -913,7 +913,7 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 		if (TownySettings.getKeepExperienceInTowns()) {
-			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
+			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do getString thier invs.
 				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
 				if (tb != null) { // So a valid TownBlock appears, how wonderful
 					if (tb.hasTown()) { // So the townblock has atown, and is at the death location

@@ -1,14 +1,12 @@
 package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.utils.PrimitiveLoader;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadHandler;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileSaveContext;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileSaveHandler;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.Handler;
 
 import java.io.File;
@@ -67,11 +65,11 @@ public class FileParser {
 		
 		Handler<?> handler = loadHandlers.get(type);
 
-		if (!(handler instanceof FlatFileLoadHandler)) {
+		if (!(handler instanceof LoadHandler)) {
 			return null;
 		}
 		
-		FlatFileLoadContext context = new FlatFileLoadContext(loadHandlers);
+		LoadContext context = new LoadContext(loadHandlers);
 		
 		return handler.load(context, str);
 	}
@@ -120,7 +118,7 @@ public class FileParser {
 		return retVal;
 	}
 
-	public void registerLoadHandler(Type type, FlatFileLoadHandler<?> handler) {
+	public void registerLoadHandler(Type type, LoadHandler<?> handler) {
 		TownyMessaging.sendErrorMsg("added " + type);
 		loadHandlers.put(type, handler);
 	}

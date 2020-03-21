@@ -880,15 +880,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                                 TownBlock homeBlock = world.getTownBlock(x, z);
                                 town.forceSetHomeBlock(homeBlock);
                             } catch (NumberFormatException e) {
-                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid location.");
                             } catch (NotRegisteredException e) {
-                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid TownBlock.");
                             } catch (TownyException e) {
                                 TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
                             }
 
                         } catch (NotRegisteredException e) {
-                            TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+                            TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to loadString invalid world.");
                         }
                 }
 
@@ -1912,7 +1912,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData
 	 *
-	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param worldName - World in which to loadString PlotBlockData for.
 	 * @param x - Coordinate for X.
 	 * @param z - Coordinate for Z.
 	 * @return PlotBlockData or null
@@ -1987,7 +1987,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     case 3:
                     case 1:
                         
-                        // load remainder of file
+                        // loadString remainder of file
                         while ((value = fin.readUTF()) != null) {
                             blockArr.add(value);
                         }
@@ -1996,7 +1996,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     
                     case 2: {
                         
-                        // load remainder of file
+                        // loadString remainder of file
                         int temp = 0;
                         while ((temp = fin.readInt()) >= 0) {
                             blockArr.add(temp + "");
@@ -2350,8 +2350,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
      * Load townblocks according to the given line Townblock: x,y,forSale Eg:
      * townBlocks=world:10,11;10,12,true;|nether:1,1|
      *
-     * @param line - Line to load
-     * @param town - Town to load from
+     * @param line - Line to loadString
+     * @param town - Town to loadString from
      * @param resident - resident to set to townblock
      */
     @Deprecated

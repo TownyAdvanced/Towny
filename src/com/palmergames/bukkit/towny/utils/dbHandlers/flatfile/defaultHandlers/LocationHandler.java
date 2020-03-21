@@ -1,15 +1,15 @@
 package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers;
 
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileDatabaseHandler;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.SerializationHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileSaveContext;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class LocationHandler implements FlatFileDatabaseHandler<Location> {
+public class LocationHandler implements SerializationHandler<Location> {
 	@Override
-	public Location load(FlatFileLoadContext context, String str) {
+	public Location loadString(LoadContext context, String str) {
 		String[] tokens = str.split(",");
 		
 		World world;
@@ -35,7 +35,7 @@ public class LocationHandler implements FlatFileDatabaseHandler<Location> {
 	}
 
 	@Override
-	public String save(FlatFileSaveContext context, Location object) {
+	public String getString(FlatFileSaveContext context, Location object) {
 		return object.getWorld().getName() + "," + object.getX() + "," + object.getY() + object.getZ() + "," + object.getPitch() + "," + object.getYaw();
 	}
 }

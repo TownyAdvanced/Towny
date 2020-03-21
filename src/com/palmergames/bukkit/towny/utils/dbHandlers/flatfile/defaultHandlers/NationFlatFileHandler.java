@@ -2,12 +2,12 @@ package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadHandler;
 
-public class NationFlatFileHandler implements FlatFileLoadHandler<Nation> {
+public class NationFlatFileHandler implements LoadHandler<Nation> {
 	@Override
-	public Nation load(FlatFileLoadContext context, String str) {
+	public Nation loadString(LoadContext context, String str) {
 		return TownyUniverse.getInstance().getNationsMap().get(str);
 	}
 }

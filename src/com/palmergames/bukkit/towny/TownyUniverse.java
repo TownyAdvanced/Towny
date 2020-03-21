@@ -84,7 +84,7 @@ public class TownyUniverse {
         String saveDbType = TownySettings.getSaveDatabase();
         String loadDbType = TownySettings.getLoadDatabase();
         
-        // Setup any defaults before we load the dataSource.
+        // Setup any defaults before we loadString the dataSource.
         Coord.setCellSize(TownySettings.getTownBlockSize());
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
@@ -93,7 +93,7 @@ public class TownyUniverse {
                 
         long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
-            System.out.println("[Towny] Error: Failed to load!");
+            System.out.println("[Towny] Error: Failed to loadString!");
             return false;
         }
         long time = System.currentTimeMillis() - startTime;
@@ -136,12 +136,12 @@ public class TownyUniverse {
                 // Update all Worlds data files
                 dataSource.saveAllWorlds();
             } else {
-                //Formats are different so save ALL data.
+                //Formats are different so getString ALL data.
                 dataSource.saveAll();
             }
             
         } catch (UnsupportedOperationException e) {
-            System.out.println("[Towny] Error: Unsupported save format!");
+            System.out.println("[Towny] Error: Unsupported getString format!");
             return false;
         }
         

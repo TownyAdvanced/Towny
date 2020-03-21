@@ -525,7 +525,7 @@ public enum ConfigNodes {
 			"global_nation_settings.nationzone.enable",
 			"false",
 			"",
-			"# Nation zone feature is disabled by default. This is because it can cause a higher server load for servers with a large player count."),
+			"# Nation zone feature is disabled by default. This is because it can cause a higher server loadString for servers with a large player count."),
 	GNATION_SETTINGS_NATIONZONE_ONLY_CAPITALS(
 			"global_nation_settings.nationzone.only_capitals",
 			"true",
@@ -546,7 +546,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, players will receive a notification when they enter into a nationzone.",
-			"# Set to false by default because, like the nationzone feature, it will generate more load on servers."),
+			"# Set to false by default because, like the nationzone feature, it will generate more loadString on servers."),
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
@@ -604,7 +604,7 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"",
-			"# Valid load and save types are: flatfile, mysql, h2."),
+			"# Valid loadString and getString types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
 
@@ -1104,7 +1104,7 @@ public enum ConfigNodes {
 			"# a player's first log in and when they can be invited to a town."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
 			"invite_system.maximum_invites_sent",
-			"# Max invites for Town & Nations, which they can send. Invites are capped to decrease load on large servers.",
+			"# Max invites for Town & Nations, which they can send. Invites are capped to decrease loadString on large servers.",
 			"# You can increase these limits but it is not recommended. Invites/requests are not saved between server reloads/stops."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN(
 			"invite_system.maximum_invites_sent.town_toplayer",
@@ -1121,7 +1121,7 @@ public enum ConfigNodes {
 			"# Only used when war.disallow_one_way_alliance is set to true."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED(
 			"invite_system.maximum_invites_received",
-			"# Max invites for Players, Towns & nations, which they can receive. Invites are capped to decrease load on large servers.",
+			"# Max invites for Players, Towns & nations, which they can receive. Invites are capped to decrease loadString on large servers.",
 			"# You can increase these limits but it is not recommended. Invites/requests are not saved between server reloads/stops."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER(
 			"invite_system.maximum_invites_received.player",

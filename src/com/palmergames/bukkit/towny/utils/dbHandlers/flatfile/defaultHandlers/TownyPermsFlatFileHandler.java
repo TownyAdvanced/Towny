@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers;
 
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadHandler;
 
-public class TownyPermsFlatFileHandler implements FlatFileLoadHandler<TownyPermission> {
+public class TownyPermsFlatFileHandler implements LoadHandler<TownyPermission> {
 	@Override
-	public TownyPermission load(FlatFileLoadContext context, String str) {
+	public TownyPermission loadString(LoadContext context, String str) {
 		TownyPermission townyPermission = new TownyPermission();
 		townyPermission.load(str);
 

@@ -44,7 +44,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		/*
 		  The following actions should be performed every second.
 		 */
-		// Take a snapshot of the next townBlock and save.
+		// Take a snapshot of the next townBlock and getString.
 		if (TownyRegenAPI.hasWorldCoords()) {
 			try {
 				TownBlock townBlock = TownyRegenAPI.getWorldCoord().getTownBlock();

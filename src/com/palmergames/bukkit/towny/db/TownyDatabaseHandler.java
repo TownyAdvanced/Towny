@@ -685,7 +685,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
-		//Delete nation and save towns
+		//Delete nation and getString towns
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
 		nation.clear();
@@ -1101,7 +1101,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setJailed(isJailed);
 			resident.setJailSpawn(JailSpawn);
 			
-			//save stuff
+			//getString stuff
 			saveResidentList();
 			saveResident(resident);
 			if(town != null){

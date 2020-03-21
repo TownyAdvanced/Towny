@@ -46,7 +46,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.FileParser;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.TypeContext;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers.ResidentListFlatFileHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -200,7 +200,7 @@ public class Towny extends JavaPlugin {
 		
 		FileParser fileParser = new FileParser();
 		TypeContext<?> context = new TypeContext<List<Resident>>(){};
-		fileParser.registerLoadHandler(context.getType(), new ResidentListFlatFileHandler());
+		fileParser.registerLoadHandler(context.getType(), new ResidentListHandler());
 		
 		Town testTown = (Town)TownyUniverse.getInstance().getTownsMap().values().toArray()[0];
 

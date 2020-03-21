@@ -129,7 +129,7 @@ public class TownBlock extends TownyObject {
 
 	public void setPermissions(String line) {
 
-		//permissions.reset(); not needed, already done in permissions.load()
+		//permissions.reset(); not needed, already done in permissions.loadString()
 		permissions.load(line);
 	}
 

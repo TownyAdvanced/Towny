@@ -1019,7 +1019,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					p.sendMessage(TownySettings.getLangString("msg_plot_set_to_nfs"));
 					
-					// Since the groups are stored in towns we need to save the town.
+					// Since the groups are stored in towns we need to getString the town.
 					TownyUniverse.getInstance().getDataSource().saveTown(group.getTown());
 				}
 			} catch (NotRegisteredException e) {

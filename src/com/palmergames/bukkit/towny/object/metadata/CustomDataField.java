@@ -86,7 +86,7 @@ public abstract class CustomDataField<T> {
     }
 
 	/**
-	 * @param str - The metadata string to load
+	 * @param str - The metadata string to loadString
 	 * @return - The data field defined by the string
 	 */
     public static CustomDataField load(String str) {

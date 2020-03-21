@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadSetter;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class LoadUtil {
 
-	public HashMap<Type, FlatFileLoadHandler<?>> loadHandlers = new HashMap<>();
+	public HashMap<Type, LoadHandler<?>> loadHandlers = new HashMap<>();
 	public HashMap<Field, Method> setters = new HashMap<>();
 	
 	public <T> void load(Class<T> clazz, HashMap<String, String> saveData) {
@@ -49,7 +49,7 @@ public class LoadUtil {
 					setters.put(field, setterMethod);
 				} catch (NoSuchMethodException e) {
 					// This is a fail-fast either it works or we shouldn't.
-					throw new RuntimeException("Could not load setter: " + setterName);
+					throw new RuntimeException("Could not loadString setter: " + setterName);
 				}
 
 			}
@@ -115,7 +115,7 @@ public class LoadUtil {
 		return townyPermission;
 	}
 
-	public void registerLoadHandler(Type type, FlatFileLoadHandler<?> handler) {
+	public void registerLoadHandler(Type type, LoadHandler<?> handler) {
 		TownyMessaging.sendErrorMsg("added " + type);
 		loadHandlers.put(type, handler);
 	}
@@ -127,14 +127,14 @@ public class LoadUtil {
 		}
 
 		if (!loadHandlers.containsKey(type)) {
-			throw new UnsupportedOperationException("There is not load handler for " + type);
+			throw new UnsupportedOperationException("There is not loadString handler for " + type);
 		}
 
-		FlatFileLoadHandler<?> handler = loadHandlers.get(type);
+		LoadHandler<?> handler = loadHandlers.get(type);
 
-		TownyMessaging.sendErrorMsg(handler.load(str) + "");
+		TownyMessaging.sendErrorMsg(handler.loadString(str) + "");
 
-		return handler.load(str);
+		return handler.loadString(str);
 	}
 	
 	public boolean isPrimitive(Type type) {

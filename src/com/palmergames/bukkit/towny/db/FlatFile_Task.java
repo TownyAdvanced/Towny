@@ -8,8 +8,8 @@ public class FlatFile_Task {
 	public final String path;
 	
 	/**
-	 * Constructor to save a list
-	 * @param list - list to save.
+	 * Constructor to getString a list
+	 * @param list - list to getString.
 	 * @param path - path on filesystem.
 	 */
 	public FlatFile_Task(List<String> list, String path) {

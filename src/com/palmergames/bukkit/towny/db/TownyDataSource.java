@@ -36,7 +36,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /*
  * Loading Towns:
- * Make sure to load TownBlocks, then HomeBlock, then Spawn.
+ * Make sure to loadString TownBlocks, then HomeBlock, then Spawn.
  */
 
 public abstract class TownyDataSource {
@@ -176,7 +176,7 @@ public abstract class TownyDataSource {
 				//return false;
 			}
 
-		// Remove any resident which failed to load.
+		// Remove any resident which failed to loadString.
 		for (Resident resident : toRemove) {
 			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
 			removeResidentList(resident);

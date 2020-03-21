@@ -60,7 +60,7 @@ v0.18:
 	Town assistants can now set plots for sale.
 	During war. The death of a mayor or king will remove the town/nation from war.
 	Defeating a townblock during war will give your town +1 bonus, and the enemy town -1 bonus.
-	Resident perms load on boot now.
+	Resident perms loadString on boot now.
 	Added command "/towny top" to show a few highscore lists.
 	Added permission:
 		towny.spawntp (To let a player use /town spawn [town] even when ALLOW_TOWN_SPAWN_TRAVEL=false)
@@ -331,7 +331,7 @@ v0.73.0:
     - Fixed Health regen in towns to correctly display in the Admin panel.
     - Fixed the connection to Essentials for using teleport timers.
     - Fixed an error where a player leaving town could sometimes not correctly update the old town data file.
-    - Fixed a typo causing Nation levels to not load.
+    - Fixed a typo causing Nation levels to not loadString.
     - Fixed players having to relog after leaving a town before they could join another.
     - Added chests and furnaces to the switch_id's (now protected by permission flags).
     - changed the default setting for town mob removal to 'true'.
@@ -419,11 +419,11 @@ v0.75.0:
     - Fixed an error if a player uses '/town spawn' after logging in, but before moving. This caused the player cache to be empty.
     - All console messages should now have their colour codes removed correctly.
     - New config.yml handling code means no need to delete config at each upgrade. (thanks dumptruckman)
-    - Fixed town spawn being lost at load when using non standard (16x16) plot sizes.
+    - Fixed town spawn being lost at loadString when using non standard (16x16) plot sizes.
     - Allow the ignition of obsidian for lighting portals, even when fire spread is disabled in a town.
     - Durations specified in the config are now in seconds rather than milliseconds.
     - Implemented Towny's own teleport_warmup_time for town spawns.
-    - Added a command '/townyadmin reset'. Wipes all settings and generate/load a default config.yml.
+    - Added a command '/townyadmin reset'. Wipes all settings and generate/loadString a default config.yml.
     - Title and Surnames can now be limited in length by the setting 'max_title_length' in config.yml.
     - Towny is now an observable object.  This allows other plugins to observe events that happen in Towny.
     - Towny now abbreviates it's residents lists when displayed, for easier reading.
@@ -614,7 +614,7 @@ v0.76.1.7:
 	  '/townyworld set wildperm [build,destroy,switch,ItemUse]'
 	  '/townyworld set wildignore xx,xx,xx'
 	  '/townyworld set wildname Wildy'
-	- Added a fix for tags in data files crashing towny on load.
+	- Added a fix for tags in data files crashing towny on loadString.
 v0.76.1.8:
 	- Fixed town spawns to correctly follow config and permissions settings.
 v0.76.1.9:
@@ -663,7 +663,7 @@ v0.76.2.0:
 v0.76.2.1:
 	- Fixed an error when not using a currency type with Essentials Eco.
 v0.76.2.2:
-	- Force load the destination chunk when teleporting. Attempt to prevent the falling through the world bug.
+	- Force loadString the destination chunk when teleporting. Attempt to prevent the falling through the world bug.
 	- If wild_revert_on_mob_explosion is enabled, the explosions no longer drop any blocks.
 	- Simplfied Plugin interfacing for Economy plugins to a single setting of using_economy.
 	  Towny will first attempt to use Register.jar. If it's not present
@@ -1055,7 +1055,7 @@ v0.78.0.4:
 v0.78.0.5:
 	- Fixed '/town spawn' when players have teleport disable toggled in essentials.
 	- Changed 'towny.town.claim' to default to false in superperms.
-	- Fixed Changing database types between load and save (new code).
+	- Fixed Changing database types between loadString and save (new code).
 v0.78.0.6:
 	- Nations breaking an alliance will now result in the opposing nation removing the ally status too (they can retaliate).
 	- If another nation has you set as an enemy you can no longer set them as an ally to avoid conflict (PvP).
@@ -1063,7 +1063,7 @@ v0.78.0.6:
 	- Added '/tw undo' with five levels of undo for the '/tw regen' command.
 	  The undo memory is for the last 5 regen actions and is persistant between logins (not server restarts).
 v0.78.0.7:
-	- If Towny fails to load it 'should' now lock everything into safe mode until it's fixed.
+	- If Towny fails to loadString it 'should' now lock everything into safe mode until it's fixed.
 	  No one will be able to do anything at all until the fault is cleared.
 v0.78.0.8:
 	- Fix for not being able to eat (caused in 0.78.0.7).
@@ -1206,7 +1206,7 @@ v0.79.0.15:
 	- Rework of Plot revert so adjusting it's timer will not affect plot claiming (snapshots).
 	- Fix hooking of GroupManager Events (use action instead of event name).
 v0.79.1.0:
-	- Dynamically register child permissions for block types. Should reduce CPU load and increase performance of Towny.
+	- Dynamically register child permissions for block types. Should reduce CPU loadString and increase performance of Towny.
 	  This will also allow you ot grant a parent node and negate child elements.
 	  eg.
 	    - towny.wild.*
@@ -1804,7 +1804,7 @@ v0.82.1.11:
 	- Move the BlockPhysics listener to it's own class so we don't register it if it's not needed.
 	- Allow protection of hopper minecarts from being right clicked.
 v0.82.1.12:
-	- Attempt to load town data even if there is a resident listed who is in another town (flatfile manual editing of files can cause this).
+	- Attempt to loadString town data even if there is a resident listed who is in another town (flatfile manual editing of files can cause this).
 	- Minor english.yml fixes.
 v0.82.1.13:
 	- Ad a PlotClear event.
@@ -1958,16 +1958,16 @@ v0.85.0.15:
 v0.85.0.16
 	- Revert plot perm changes and no longer delete any townblock data unless it's unclaimed.
 v0.85.0.17:
-	- Fix plot perms on load when using the new TownBlock save data.
+	- Fix plot perms on loadString when using the new TownBlock save data.
 v0.85.0.18:
-	- Revert townblock perm setting on data load.
+	- Revert townblock perm setting on data loadString.
 v0.85.0.18:
 	- Fix custom plot perms being overwritten by town when updating.
 v0.85.0.19:
 	- Decrease warning level for the message at startup when using custom CraftBukkit/Spout builds.
 	- Fix SQL saving extra characters on the end of some data.
 	- Fix FlatFiles from appending an extra comma.
-	- Only attempt to load townBlocks for older databases.
+	- Only attempt to loadString townBlocks for older databases.
 	- Add missing field saving on TownBlocks to SQL.
 	- Only delete old files if using flatfile for saving or loading.
 v0.85.0.20:
@@ -2083,7 +2083,7 @@ v0.89.0.1:
     - Fix config.yml growing with blank spaces and #'s.
       - If your config has been growing do the following:
         - Stop your server and add the new Towny.jar.
-        - Start the server, let it load completely.
+        - Start the server, let it loadString completely.
         - Open the Towny config.yml and remove any empty lines and lines beginning with # at the top of the file.
         - Save the config.yml
         - use /ta reload to reload the config.
@@ -2757,7 +2757,7 @@ v0.92.0.5:
       - If you do not want to do this you can delete the nation_level section of your config and Towny will re-create it with the missing lines and new default settings.
     - New Config Option: global_nation_settings.nationzone.enable
 	  - default: false
-	  - Nation zone feature is disabled by default. This is because it can cause a higher server load for servers with a large player count.
+	  - Nation zone feature is disabled by default. This is because it can cause a higher server loadString for servers with a large player count.
 	- New Config Option: global_nation_settings.nationzone.only_capitals
 	  - default: true
       - When set to true, only the capital town of a nation will be surrounded by a nation zone type of wilderness.
@@ -3683,9 +3683,9 @@ v0.92.0.11:
   - Fix bug where Towny failed to find the new economy accounts for player's who've changed their name.
     - Closes ticket #3466
   - New Command: /ta mysqldump
-    - When your config has save & load set to mysql you can use this command to dump the mysql database to flatfile.
+    - When your config has save & loadString set to mysql you can use this command to dump the mysql database to flatfile.
     - Closes ticket #2628
-  - New Command: /ta database [save|load]
+  - New Command: /ta database [save|loadString]
     - Saves or loads the database.
     - Closes ticket #2070
   - New Command: /plot set outpost
@@ -3820,7 +3820,7 @@ v0.92.0.11:
   - New Config Option: global_nation_settings.nationzone.show_notifications
     - Default: false
     - When set to true, players will receive a notification when they enter into a nationzone.
-    - Set to false by default because, like the nationzone feature, it will generate more load on servers.
+    - Set to false by default because, like the nationzone feature, it will generate more loadString on servers.
 0.95.1.5:
   - New Feature: Cooldown timers for toggling PVP and using res/town spawn commands.
     - Closes tickets #2224 #2315
@@ -3901,7 +3901,7 @@ v0.92.0.11:
     - When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase.
   - Fix flagwar NPE seen when Towny failed to enable.
   - Fix savingtask NPE seen when Towny failed to enable.
-  - Add helpful messages shown when town & nation levels fail to load on startup. 
+  - Add helpful messages shown when town & nation levels fail to loadString on startup.
   - Fixed building with maven and some people having errors re: javadocs, courtesy of TheFlagCourier with PR #3521.
     - Closes ticket #3519.
   - Did some tinkering with event war, created a WarUtil to contain some repeated tests.
@@ -4056,8 +4056,8 @@ v0.92.0.11:
     - Javadocs should only build on the install phase.
     - Github actions should again function properly.
   - Change to saving for plotgroups on flatfile, removing now-redundant world.
-    - Already-made plot groups should load properly and save without a world. 
-  - Improve debug messaging on flatfile database load.
+    - Already-made plot groups should loadString properly and save without a world.
+  - Improve debug messaging on flatfile database loadString.
   - Fix plot groups whose town doesn't exist anymore causing safe mode.
   - Fix edge-case scenario where revoking invites couldn't be done because we were matching the wrong player.
     - Closes #3635.
@@ -4234,7 +4234,7 @@ v0.92.0.11:
 0.95.2.23:
   - zh-TW.yml updated by shou692199 with PR #3751.
   - Fix plot toggle tab-completion and remove unused code, courtesy of silverwolfg11 with PR #3750.
-  - Add database load time to startup.
+  - Add database loadString time to startup.
   - Fix possibility of residents getting duplicate town and nation ranks.
   - Fix unhelpful debug messages when saving residents in sql.
   - Potential fix for /t and /n online commands not parsing their outputs nicely.

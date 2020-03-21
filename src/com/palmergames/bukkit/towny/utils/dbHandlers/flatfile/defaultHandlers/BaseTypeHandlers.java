@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.defaultHandlers;
 
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileDatabaseHandler;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.FlatFileLoadContext;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.SerializationHandler;
+import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadContext;
 
 public class BaseTypeHandlers {
-	public static final FlatFileDatabaseHandler<Integer> INTEGER_HANDLER = new FlatFileDatabaseHandler<Integer>() {
+	public static final SerializationHandler<Integer> INTEGER_HANDLER = new SerializationHandler<Integer>() {
 		@Override
-		public Integer load(FlatFileLoadContext context, String str) {
+		public Integer loadString(LoadContext context, String str) {
 			return Integer.parseInt(str);
 		}
 
