@@ -4277,3 +4277,4 @@ v0.92.0.11:
 0.96.0.2:
   - Change metrics chart to report only in lower-case.
   - API: Add gettable Nation to NationTagChangeEvent, courtesy of Travja with PR #3808. 
+  - Fix resident tab-complete for nation rank manipulation, courtesy of silverwolfg11 with PR#3807.
