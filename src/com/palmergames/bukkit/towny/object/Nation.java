@@ -63,7 +63,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 		}
 		this.tag = text.toUpperCase().trim();
-		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
+		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this, this.tag));
 	}
 
 	public String getTag() {
