@@ -4281,3 +4281,5 @@ v0.92.0.11:
     - NationUpkeepCalculationEvent - get/set upkeep per nation.  
     - Allows third party plugins to completely override all town and nation upkeeps.
     - Closes #3781.
+0.96.0.2:
+  - Change metrics chart to report only in lower-case.
