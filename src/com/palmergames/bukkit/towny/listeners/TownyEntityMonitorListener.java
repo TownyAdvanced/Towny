@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -484,11 +483,8 @@ public class TownyEntityMonitorListener implements Listener {
 						TownBlock jailBlock = null;
 						Integer index = 1;
 						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
-							try {
-								jailBlock = townyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
-							} catch (TownyException e) {
-								e.printStackTrace();
-							} 
+							jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
+
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
 								defenderResident.setJailed(defenderResident, index, attackerTown);
 								try {
@@ -540,11 +536,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownBlock jailBlock = null;
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
-					try {
-						jailBlock = townyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
-					} catch (TownyException e) {
-						e.printStackTrace();
-					} 
+					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
 					if (War.isWarZone(jailBlock.getWorldCoord())) {
 						defenderResident.setJailed(defenderResident, index, town);
 						try {

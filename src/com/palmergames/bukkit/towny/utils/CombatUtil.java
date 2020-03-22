@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -114,19 +115,8 @@ public class CombatUtil {
 			return false;
 
 		Coord coord = Coord.parseCoord(defendingEntity);
-		TownBlock defenderTB = null;
-		TownBlock attackerTB = null;
-
-		try {
-			attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-		} catch (NotRegisteredException ex) {
-		}
-
-		try {
-			defenderTB = world.getTownBlock(coord);
-		} catch (NotRegisteredException ex) {
-		}
-		
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
 		 * We have an attacking player
 		 */

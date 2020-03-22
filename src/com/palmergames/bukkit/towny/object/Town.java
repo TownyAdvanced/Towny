@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -43,6 +44,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
+	
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -806,16 +808,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		removeOutpostSpawn(Coord.parseCoord(spawn));
 
-		Coord spawnBlock = Coord.parseCoord(spawn);
-
 		try {
-			TownBlock outpost = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
-			if (outpost.getX() == spawnBlock.getX() && outpost.getZ() == spawnBlock.getZ()) {
-				if (!outpost.isOutpost())
-					throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_an_outpost_plot"));
+			TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
+			if (!outpost.isOutpost())
+				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_an_outpost_plot"));
 
-				outpostSpawns.add(spawn);
-			}
+			outpostSpawns.add(spawn);
+			TownyUniverse.getInstance().getDataSource().saveTown(this);
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
@@ -876,6 +875,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
+				TownyUniverse.getInstance().getDataSource().saveTown(this);
 			}
 		}
 	}
@@ -1051,19 +1051,18 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void addJailSpawn(Location spawn) throws TownyException {
+		if (TownyAPI.getInstance().isWilderness(spawn))
+			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
+			
 		removeJailSpawn(Coord.parseCoord(spawn));
 		
-		Coord spawnBlock = Coord.parseCoord(spawn);
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownBlock jail = townyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
-			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
-				if (!jail.isJail())
-					throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_jail_plot"));
+			TownBlock jail = TownyAPI.getInstance().getTownBlock(spawn);
+			if (!jail.isJail())
+				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_jail_plot"));
 				
-				jailSpawns.add(spawn);
-				townyUniverse.getDataSource().saveTown(this);
-			}
+			jailSpawns.add(spawn);
+			TownyUniverse.getInstance().getDataSource().saveTown(this);
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));

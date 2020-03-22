@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -77,48 +78,14 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				if (!world.isChunkLoaded(livingEntityLoc.getBlockX() >> 4, livingEntityLoc.getBlockZ() >> 4))
 					continue;
 
-				Coord coord = Coord.parseCoord(livingEntityLoc);
+				// Check if entity is a Citizens NPC
+				if (plugin.isCitizens2()) {
+					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
+						continue;
+				}
 				
-
-				if (!townyWorld.hasTownBlock(coord))
-					continue;
-
-				try {
-					TownBlock townBlock = townyWorld.getTownBlock(coord);
-
-					// The entity is inside a registered plot.
-
-					// Check if mobs are always allowed inside towns in this world.
-					if (townyWorld.isForceTownMobs())
-						continue;
-
-					// Check if plot allows mobs.
-					if (townBlock.getPermissions().mobs)
-						continue;
-
-					// Check if the plot is registered to a town.
-					Town town = townBlock.getTown();
-
-					// Check if the town this plot is registered to allows mobs.
-					if (town.hasMobs())
-						continue;
-					
-					// Special check if it's a rabbit, for the Killer Bunny variant.
-					if (livingEntity.getType().equals(EntityType.RABBIT))
-						if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
-							livingEntitiesToRemove.add(livingEntity);							
-							continue;						
-						}
-
-					// Check that Towny is removing this type of entity inside towns.
-					if (!isRemovingTownEntity(livingEntity))
-						continue;
-
-				} catch (NotRegisteredException x) {
-					// It will fall through to here if the mob is:
-					// - In an unregistered plot in this world.
-					// - If the plot isn't registered to a town.
-
+				// Handles entities in the wilderness.
+				if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
 					// Check if we're allowing mobs in unregistered plots in this world.
 					if (townyWorld.hasWorldMobs())
 						continue;
@@ -128,11 +95,39 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 						continue;
 				}
 
-				// Check if entity is a Citizens NPC
-				if (plugin.isCitizens2()) {
-					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
-						continue;
+				// The entity is inside of a town.
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
+
+				// Check if mobs are always allowed inside towns in this world.
+				if (townyWorld.isForceTownMobs())
+					continue;
+
+				// Check if plot allows mobs.
+				if (townBlock.getPermissions().mobs)
+					continue;
+
+				// Get the town this is registered to.
+				Town town = null;
+				try {
+					town = townBlock.getTown();
+				} catch (NotRegisteredException ignored) {
 				}
+
+				// Check if the town this plot is registered to allows mobs.
+				if (town.hasMobs())
+					continue;
+				
+				// Special check if it's a rabbit, for the Killer Bunny variant.
+				if (livingEntity.getType().equals(EntityType.RABBIT))
+					if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+						livingEntitiesToRemove.add(livingEntity);							
+						continue;						
+					}
+
+				// Check that Towny is removing this type of entity inside towns.
+				if (!isRemovingTownEntity(livingEntity))
+					continue;
+
 				if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
 					continue;
 

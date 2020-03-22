@@ -519,9 +519,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
-					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
-					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
+					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 				}
 
@@ -559,9 +557,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 					}
-					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
-					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
+					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 				}
 
@@ -1378,29 +1374,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public void showTownStatusHere(Player player) {
 
 		try {
-			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
-			Coord coord = Coord.parseCoord(player);
-			showTownStatusAtCoord(player, world, coord);
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_not_claimed"), Coord.parseCoord(player.getLocation())));
+
+			Town town = TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown();
+			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-	}
-
-	/**
-	 * Send a the status of the town at the target coordinates to the player
-	 *
-	 * @param player - Player.
-	 * @param world - TownyWorld object.
-	 * @param coord - Coord.
-	 * @throws TownyException - Exception.
-	 */
-	public void showTownStatusAtCoord(Player player, TownyWorld world, Coord coord) throws TownyException {
-
-		if (!world.hasTownBlock(coord))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_not_claimed"), coord));
-
-		Town town = world.getTownBlock(coord).getTown();
-		TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
 	}
 
 	public void showTownMayorHelp(Player player) {
@@ -2154,7 +2135,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
-						townBlock = townyUniverse.getDataSource().getWorld(player.getWorld().getName()).getTownBlock(coord);
+						townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 						oldWorld = town.getWorld();
 						town.setHomeBlock(townBlock);
 						town.setSpawn(player.getLocation());
@@ -2182,8 +2163,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
 					try {
-						TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
-						if (townyWorld.getTownBlock(Coord.parseCoord(player.getLocation())).getTown().getName().equals(town.getName())) {
+						if (TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().getName().equals(town.getName())) {
 							town.addOutpostSpawn(player.getLocation());
 							TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_outpost_spawn"));
 						} else

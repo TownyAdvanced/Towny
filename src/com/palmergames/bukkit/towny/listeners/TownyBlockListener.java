@@ -249,22 +249,10 @@ public class TownyBlockListener implements Listener {
 		}
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
-		Coord coord = Coord.parseCoord(loc);
-		Coord coordTo = Coord.parseCoord(locTo);
-
-		TownyWorld townyWorld = null;
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
-			currentTownBlock = townyWorld.getTownBlock(coord);
-		} catch (NotRegisteredException e) {
-		}
-
-		try {
-			destinationTownBlock = townyWorld.getTownBlock(coordTo);
-		} catch (NotRegisteredException e1) {
-		}
+		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
+		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
 
 		if (currentTownBlock != destinationTownBlock) {
 			
@@ -417,19 +405,17 @@ public class TownyBlockListener implements Listener {
 		}
 		TownBlock townBlock = null;
 		boolean isNeutral = false;
-		try {
-			townBlock = world.getTownBlock(coord);
-			if (townBlock.hasTown())
-				if (!War.isWarZone(townBlock.getWorldCoord()))
-					isNeutral = true;
-		} catch (NotRegisteredException e1) {
-			if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
-				isNeutral = !world.isExpl();
-				if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
-					return false;				
-				if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
-					return true;	
-			}
+		townBlock = TownyAPI.getInstance().getTownBlock(target);
+		if (townBlock != null && townBlock.hasTown())
+			if (!War.isWarZone(townBlock.getWorldCoord()))
+				isNeutral = true;
+
+		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
+			isNeutral = !world.isExpl();
+			if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
+				return false;				
+			if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
+				return true;	
 		}
 		
 		try {			
