@@ -951,7 +951,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				town.getAccount().collect(amount, "Admin Deposit");
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString(""), "")); // TODO Town Deposit Language String
+				
+				// Send notifications
+				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
+				TownyMessaging.sendMessage(sender, depositMessage);
+				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
 			}
 			else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
@@ -964,7 +968,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				town.getAccount().pay(amount, "Admin Withdraw");
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString(""), "")); // TODO Town Withdraw Language String
+				
+				// Send notifications
+				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
+				TownyMessaging.sendMessage(sender, withdrawMessage);
+				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -1174,7 +1182,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				nation.getAccount().collect(amount, "Admin Deposit");
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString(""), "")); // TODO Nation Deposit Language String
+				
+				// Send notifications
+				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("nation_sing"));
+				TownyMessaging.sendMessage(sender, depositMessage);
+				TownyMessaging.sendPrefixedNationMessage(nation, depositMessage);
 			}
 			else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
@@ -1187,7 +1199,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				nation.getAccount().pay(amount, "Admin Withdraw");
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString(""), "")); // TODO Nation Withdraw Language String
+				
+				// Send notifications
+				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("nation_sing"));
+				TownyMessaging.sendMessage(sender, withdrawMessage);
+				TownyMessaging.sendPrefixedNationMessage(nation, withdrawMessage);
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException | EconomyException e) {
