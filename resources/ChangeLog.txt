@@ -4287,3 +4287,11 @@ v0.92.0.11:
   - Fix resident tab-complete for nation rank manipulation, courtesy of silverwolfg11 with PR #3807.
   - Fix plot toggle mobs tab-complete, courtesy of silverwolfg11 with PR #3811.
   - Fix untranslated "town" & "nation" seen in the withdraw and deposit commands feeback.
+  - Add economy commands to towny admin, courtesy of silverwolfg11 with PR #3810.
+    - Closes #3687.
+  - Fix unicode not being saved, courtesy of Siris with PR #3809.
+    - REQUIRES the following settings be made to take effect, these are the new config defaults:
+    - name_check_regex: ^[\P{M}\p{M}*+a-zA-Z0-9._\[\]-]*$
+    - name_remove_regex: '[^\P{M}\p{M}*+a-zA-Z0-9\&._\[\]-]'
+    - Change not required if you don't want players to be able to use Unicode characters.
+    - Closes #3805, #3803.
