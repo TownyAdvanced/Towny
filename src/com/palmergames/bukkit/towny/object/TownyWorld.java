@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -91,6 +92,7 @@ public class TownyWorld extends TownyObject {
 		}
 	}
 
+	@Deprecated
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
 
 		TownBlock townBlock = townBlocks.get(coord);
@@ -100,11 +102,13 @@ public class TownyWorld extends TownyObject {
 			return townBlock;
 	}
 
+	@Deprecated
 	public void newTownBlock(int x, int z) throws AlreadyRegisteredException {
 
 		newTownBlock(new Coord(x, z));
 	}
 
+	@Deprecated
 	public TownBlock newTownBlock(Coord key) throws AlreadyRegisteredException {
 
 		if (hasTownBlock(key))
@@ -113,11 +117,13 @@ public class TownyWorld extends TownyObject {
 		return townBlocks.get(new Coord(key.getX(), key.getZ()));
 	}
 
+	@Deprecated
 	public boolean hasTownBlock(Coord key) {
 
 		return townBlocks.containsKey(key);
 	}
 
+	@Deprecated
 	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
 
 		return getTownBlock(new Coord(x, z));
@@ -132,6 +138,7 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
+	@Deprecated
 	public Collection<TownBlock> getTownBlocks() {
 
 		return townBlocks.values();
@@ -151,7 +158,7 @@ public class TownyWorld extends TownyObject {
 			 */
 		}
 	}
-
+	@Deprecated
 	public void removeTownBlock(TownBlock townBlock) {
 
 		if (hasTownBlock(townBlock.getCoord())) {			
@@ -170,13 +177,13 @@ public class TownyWorld extends TownyObject {
 			removeTownBlock(townBlock.getCoord());
 		}
 	}
-
+	@Deprecated
 	public void removeTownBlocks(List<TownBlock> townBlocks) {
 
 		for (TownBlock townBlock : new ArrayList<>(townBlocks))
 			removeTownBlock(townBlock);
 	}
-
+	@Deprecated
 	public void removeTownBlock(Coord coord) {
 
 		townBlocks.remove(coord);

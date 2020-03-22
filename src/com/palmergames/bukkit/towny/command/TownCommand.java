@@ -2368,7 +2368,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			Coord key = Coord.parseCoord(player);
 
-			if (world.hasTownBlock(key))
+			if (!TownyAPI.getInstance().isWilderness(player.getLocation()))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
 			
 			if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
@@ -2399,12 +2399,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		world.newTownBlock(key);
+//		townyUniverse.newTownBlock(key, world);
 		townyUniverse.getDataSource().newTown(name);
 		Town town = townyUniverse.getDataSource().getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
-		TownBlock townBlock = world.getTownBlock(key);
+		TownBlock townBlock = townyUniverse.newTownBlock(key, world);
 		townBlock.setTown(town);
 		town.setHomeBlock(townBlock);
 		// Set the plot permissions to mirror the towns.
@@ -2445,7 +2445,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		townyUniverse.getDataSource().saveWorld(world);
 		
 		townyUniverse.getDataSource().saveTownList();
-		townyUniverse.getDataSource().saveTownBlockList();
+		townyUniverse.getDataSource().saveTownBlockList(town);
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -3261,7 +3261,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						// Run various tests required by configuration/permissions through Util.
 						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
 						
-						if (world.hasTownBlock(key))
+						if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
 
 						

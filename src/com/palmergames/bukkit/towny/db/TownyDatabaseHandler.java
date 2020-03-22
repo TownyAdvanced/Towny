@@ -40,6 +40,7 @@ import javax.naming.InvalidNameException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -361,9 +362,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (resident != null)
 			saveResident(resident);
 
-		world.removeTownBlock(townBlock);
-
+		town.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
+		
 		// Raise an event to signal the unclaim
 		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, coord));	
 	}
@@ -388,13 +389,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} catch (NotRegisteredException ignored) {
 		}
 
-		TownyWorld world = townBlock.getWorld();
-		world.removeTownBlock(townBlock);
-
-		saveWorld(world);
+		town.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
-		saveTownBlockList();
+		saveTownBlockList(town);
 
 //		if (resident != null)           - Removed in 0.95.2.5, residents don't store townblocks in them.
 //			saveResident(resident);
@@ -427,14 +425,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
 			removeOneOfManyTownBlocks(townBlock, town);
-		saveTownBlockList();
+		saveTownBlockList(town);
 	}
 
 	@Override
 	public List<TownBlock> getAllTownBlocks() {
 		List<TownBlock> townBlocks = new ArrayList<>();
-		for (TownyWorld world : getWorlds())
-			townBlocks.addAll(world.getTownBlocks());
+		for (Map.Entry<WorldCoord, TownBlock> mapElement : TownyUniverse.getInstance().getTownBlocks().entrySet()) {
+			townBlocks.add(mapElement.getValue());
+		}
 		return townBlocks;
 	}
 	

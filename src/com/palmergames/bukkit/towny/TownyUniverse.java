@@ -55,6 +55,8 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+    
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -495,5 +497,30 @@ public class TownyUniverse {
 	
 	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
+	}
+	
+	public void newTownBlock(int x, int z, TownyWorld world) {
+
+		newTownBlock(new Coord(x, z), world);
+	}
+
+	public TownBlock newTownBlock(Coord key, TownyWorld world) {
+		if (hasTownBlock(key))
+			return null;
+		TownBlock newTownBlock = new TownBlock(key.getX(), key.getZ(), world);
+		townBlocks.put(new WorldCoord(world.getName(), key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), world));
+		return newTownBlock;
+	}
+	
+	public boolean hasTownBlock(Coord key) {
+
+		return townBlocks.containsKey(key);
+	}
+	/**
+	 * Should not be accessed, only used for loading.
+	 * @return townblocks hashmap read from townblock files.
+	 */	
+	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlocks() {
+		return townBlocks;
 	}
 }

@@ -42,10 +42,8 @@ public class TownBlock extends TownyObject {
 
 	public void setTown(Town town) {
 
-		try {
-			if (hasTown())
-				this.town.removeTownBlock(this);
-		} catch (NotRegisteredException ignored) {}
+		if (hasTown())
+			this.town.removeTownBlock(this);
 		this.town = town;
 		try {
 			town.addTownBlock(this);

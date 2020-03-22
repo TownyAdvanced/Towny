@@ -475,10 +475,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 int x = Integer.parseInt(rs.getString("x"));
                 int z = Integer.parseInt(rs.getString("z"));
 
-                try {
-                    world.newTownBlock(x, z);
-                } catch (AlreadyRegisteredException ignored) {
-                }
+                TownyUniverse.getInstance().newTownBlock(x, z, world);
 
             }
 
@@ -876,7 +873,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                             try {
                                 int x = Integer.parseInt(tokens[1]);
                                 int z = Integer.parseInt(tokens[2]);
-                                TownBlock homeBlock = world.getTownBlock(x, z);
+                                TownBlock homeBlock = town.getTownBlock(new WorldCoord(world.getName(), x, z));
                                 town.forceSetHomeBlock(homeBlock);
                             } catch (NumberFormatException e) {
                                 TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
@@ -2249,6 +2246,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return true;
     }
 
+    @Override
+    public boolean saveTownBlockList(Town town) {
+
+        return true;
+    }
+    
     @Override
     public boolean saveResidentList() {
 

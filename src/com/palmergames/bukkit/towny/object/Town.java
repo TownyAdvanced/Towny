@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
@@ -75,6 +76,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private int conqueredDays;
 	private EconomyAccount account;
 	private List<TownBlock> townBlocks = new ArrayList<>();
+	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocksMap = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
@@ -111,6 +113,33 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
+	public void addTownBlockMap(TownBlock townBlock) {
+		townBlocksMap.put(townBlock.getWorldCoord(), townBlock);		
+	}
+	
+	public void removeTownBlockMap(TownBlock townBlock) {
+		townBlocksMap.remove(townBlock.getWorldCoord());
+	}
+	
+	public boolean hasTownBlockMap(TownBlock townBlock) {
+		return hasTownBlockMap(townBlock.getWorldCoord());
+	}
+
+	public boolean hasTownBlockMap(WorldCoord worldCoord) {
+		return townBlocksMap.containsKey(worldCoord);
+	}
+
+	
+	public TownBlock getTownBlock(WorldCoord worldCoord) {
+		if (hasTownBlockMap(worldCoord))
+			return townBlocksMap.get(worldCoord);
+		return null;
+	}
+	
+	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
+		return townBlocksMap;
+	}
+	
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
@@ -767,10 +796,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
+	public void removeTownBlock(TownBlock townBlock){
 
 		if (!hasTownBlock(townBlock))
-			throw new NotRegisteredException();
+			return;
 		else {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost())
@@ -784,6 +813,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					setHomeBlock(null);
 			} catch (TownyException ignored) {}
 			townBlocks.remove(townBlock);
+			if (townBlocksMap.containsKey(townBlock.getWorldCoord()))
+				townBlocksMap.remove(townBlock.getWorldCoord());
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}

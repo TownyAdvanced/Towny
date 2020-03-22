@@ -308,7 +308,7 @@ public class TownyBlockListener implements Listener {
 				
 				boolean inWarringTown = false;
 				if (TownyAPI.getInstance().isWarTime()) {
-					if (townyWorld.hasTownBlock(coord))
+					if (!TownyAPI.getInstance().isWilderness(loc))
 						if (War.isWarringTown(townBlock.getTown()))
 							inWarringTown = true;
 				}

@@ -105,6 +105,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadPlotGroups();
 
 	abstract public boolean saveTownBlockList();
+	
+	abstract public boolean saveTownBlockList(Town town);
 
 	abstract public boolean saveResidentList();
 
