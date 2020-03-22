@@ -103,7 +103,7 @@ public class NameValidation {
 	 */
 	public static boolean isValidName(String name) {
 
-		if (name.contains("'")) {
+		if (name.contains("'") || name.contains("`")) {
 			return false;
 		}
 	
@@ -119,7 +119,7 @@ public class NameValidation {
 	}
 	public static boolean isValidString(String name) {
 		
-		if (name.contains("'")) {
+		if (name.contains("'") || name.contains("`")) {
 			return false;
 		}
 
