@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.util;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import javax.naming.InvalidNameException;
