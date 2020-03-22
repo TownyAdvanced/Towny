@@ -3499,7 +3499,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			
 			town.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, TownySettings.getLangString("town_sign")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -3536,7 +3536,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 			
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("town_sign")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());

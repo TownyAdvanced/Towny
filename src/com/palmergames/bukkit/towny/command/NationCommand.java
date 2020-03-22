@@ -1075,7 +1075,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			nation.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, TownySettings.getLangString("nation_sign")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -1112,7 +1112,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.getAccount().payTo(amount, nation, "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("nation_sign")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
