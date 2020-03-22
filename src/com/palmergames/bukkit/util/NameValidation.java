@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import javax.naming.InvalidNameException;
@@ -102,6 +103,10 @@ public class NameValidation {
 	 * @return true if this name is valid.
 	 */
 	public static boolean isValidName(String name) {
+
+		if (name.contains("'")) {
+			return false;
+		}
 	
 		try {
 			if (namePattern == null)
@@ -114,6 +119,10 @@ public class NameValidation {
 		
 	}
 	public static boolean isValidString(String name) {
+		
+		if (name.contains("'")) {
+			return false;
+		}
 
 		try {
 			if (stringPattern == null)
