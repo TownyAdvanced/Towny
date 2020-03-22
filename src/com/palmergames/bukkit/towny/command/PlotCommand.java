@@ -129,7 +129,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"fire",
 		"pvp",
 		"explosion",
-		"mob"
+		"mobs"
 	);
 
 	public PlotCommand(Towny instance) {
