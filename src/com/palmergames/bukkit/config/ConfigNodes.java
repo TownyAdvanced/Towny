@@ -719,13 +719,13 @@ public enum ConfigNodes {
 			"[ /]"),
 	FILTERS_REGEX_NAME_CHECK_REGEX(
 			"filters_colour_chat.regex.name_check_regex",
-			"^[\\p{L}a-zA-Z0-9._\\[\\]-]*$"),
+			"^[\\P{M}\\p{M}*+a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
 			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^\\p{L}a-zA-Z0-9\\&._\\[\\]-]"),
+			"[^\\P{M}\\p{M}*+a-zA-Z0-9\\&._\\[\\]-]"),
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
 			"filters_colour_chat.modify_chat.max_name_length",
