@@ -12,12 +12,14 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TownyWorld extends TownyObject {
 
-	private List<Town> towns = new ArrayList<>();
+	private HashMap<String, Town> towns = new HashMap<>();
 	private boolean isClaimable = true;
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
@@ -58,7 +60,7 @@ public class TownyWorld extends TownyObject {
 		super(name);
 	}
 
-	public List<Town> getTowns() {
+	public HashMap<String, Town> getTowns() {
 
 		return towns;
 	}
@@ -70,15 +72,15 @@ public class TownyWorld extends TownyObject {
 
 	public boolean hasTown(String name) {
 
-		for (Town town : towns)
-			if (town.getName().equalsIgnoreCase(name))
+		for (Map.Entry<String, Town> mapElement : towns.entrySet())
+			if (mapElement.getKey().equalsIgnoreCase(name))
 				return true;
 		return false;
 	}
 
 	public boolean hasTown(Town town) {
 
-		return towns.contains(town);
+		return towns.containsKey(town.getName());
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
@@ -86,7 +88,7 @@ public class TownyWorld extends TownyObject {
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
 		else {
-			towns.add(town);
+			towns.put(town.getName(), town);
 			town.setWorld(this);
 		}
 	}
@@ -142,7 +144,7 @@ public class TownyWorld extends TownyObject {
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
-			towns.remove(town);
+			towns.remove(town.getName());
 			/*
 			 * try {
 			 * town.setWorld(null);
@@ -645,7 +647,8 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
+			Town town = mapElement.getValue();
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
@@ -659,7 +662,7 @@ public class TownyWorld extends TownyObject {
 					min = dist;
 			} catch (TownyException e) {
 			}
-
+		}
 		return (int) Math.ceil(min);
 	}
 
@@ -684,7 +687,8 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
+			Town town = mapElement.getValue();
 			try {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
@@ -702,7 +706,7 @@ public class TownyWorld extends TownyObject {
 				}
 			} catch (TownyException e) {
 			}
-
+		}
 		return (int) Math.ceil(min);
 	}
 	
@@ -715,7 +719,8 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
+		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
+			Town town = mapElement.getValue();
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
@@ -740,7 +745,8 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
+		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
+			Town town = mapElement.getValue();
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;

@@ -579,7 +579,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	/**
-	 * Fetch the World this town homeblocl is registered too.
+	 * Fetch the World this town homeblock is registered too.
 	 * If the world is null it will poll the TownyWorlds for a townblock owned by the Town.
 	 * If it fails to find any claimed blocks it will return the first TownyWorld as a placeholder.
 	 * 

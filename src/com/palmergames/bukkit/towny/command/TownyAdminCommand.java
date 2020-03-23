@@ -775,7 +775,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					final String town = resident.getJailTown();
 					final int index = resident.getJailSpawn();
 					try	{
-						final Location loc = Bukkit.getWorld(townyUniverse.getDataSource().getTownWorld(town).getName()).getSpawnLocation();
+						final Location loc = Bukkit.getWorld(TownyAPI.getInstance().getDataSource().getTown(town).getHomeblockWorld().getName()).getSpawnLocation();
 
 						// Use teleport warmup
 						jailedPlayer.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
