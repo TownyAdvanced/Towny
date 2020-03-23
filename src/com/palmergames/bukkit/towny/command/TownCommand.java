@@ -1341,13 +1341,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 	
 	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
+		int iMax = Math.min(page * 10, towns.size());
 
-		int iMax = page * 10;
-		if ((page * 10) > towns.size()) {
-			iMax = towns.size();
-		}
-
-		List<String> townsformatted = new ArrayList<>();
+		List<String> townsformatted = new ArrayList<>(10);
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 

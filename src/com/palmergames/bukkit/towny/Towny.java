@@ -137,7 +137,6 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.initialize(this);
 		TownyEconomyHandler.initialize(this);
 		TownyFormatter.initialize();
-		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
 		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
