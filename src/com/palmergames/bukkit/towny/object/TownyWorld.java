@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TownyWorld extends TownyObject {
 
@@ -644,8 +643,7 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
-			Town town = mapElement.getValue();
+		for (Town town : getTowns().values()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
@@ -684,8 +682,7 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
-			Town town = mapElement.getValue();
+		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
@@ -716,8 +713,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
-			Town town = mapElement.getValue();
+		for (Town town : getTowns().values()) {
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
@@ -742,8 +738,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Map.Entry<String, Town> mapElement : getTowns().entrySet()) {
-			Town town = mapElement.getValue();
+		for (Town town : getTowns().values()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
