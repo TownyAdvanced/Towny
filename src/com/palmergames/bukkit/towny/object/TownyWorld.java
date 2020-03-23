@@ -72,15 +72,12 @@ public class TownyWorld extends TownyObject {
 
 	public boolean hasTown(String name) {
 
-		for (Map.Entry<String, Town> mapElement : towns.entrySet())
-			if (mapElement.getKey().equalsIgnoreCase(name))
-				return true;
-		return false;
+		return towns.containsKey(name);
 	}
 
 	public boolean hasTown(Town town) {
 
-		return towns.containsKey(town.getName());
+		return hasTown(town.getName());
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
