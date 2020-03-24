@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownMayorChangeEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -153,6 +154,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if (!hasResident(mayor))
 			throw new TownyException(TownySettings.getLangString("msg_err_mayor_doesnt_belong_to_town"));
+
+		TownMayorChangeEvent mayorChange = new TownMayorChangeEvent(this, mayor);
+		Bukkit.getPluginManager().callEvent(mayorChange);
+		
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);

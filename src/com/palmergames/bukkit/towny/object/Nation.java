@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -477,6 +478,10 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			throw new TownyException(TownySettings.getLangString("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
 			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
+
+		NationKingChangeEvent event = new NationKingChangeEvent(this, king);
+		Bukkit.getPluginManager().callEvent(event);
+		
 		setCapital(king.getTown());
 	}
 
