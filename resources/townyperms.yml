@@ -123,5 +123,8 @@ nations:
             - towny.command.nation.add
         soldier:
             - towny.nation.siege.points
+        captain:
+            - towny.nation.siege.points
+            - towny.nation.siege.leadership
         general:
             - towny.nation.siege.*

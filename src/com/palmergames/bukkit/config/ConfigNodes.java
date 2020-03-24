@@ -2072,7 +2072,14 @@ public enum ConfigNodes {
 			"100",
 			"# If a siege zone participant dies within this distance of the siege banner,",
 			"# their opponents are awarded siege points."),
-	
+	WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS(
+		"war.siege.distances.leadership_aura_radius_blocks",
+			"50",
+			"# This setting determines the size of the 'Military Leadership Aura'.",
+			"# The aura emanates from kings, generals, and captains.",
+			"# The aura decreases death point losses for nearby nation/allied soldiers in a siege.",
+			"# The aura increases death point gains for nearby enemy soldiers in a siege."),
+
 	//Siege points
 	WAR_SIEGE_POINTS_FOR_ATTACKER_OCCUPATION(
 			"war.siege.scoring.points_for_attacker_occupation",
@@ -2120,7 +2127,16 @@ public enum ConfigNodes {
 			"war.siege.scoring.percentage_points_gain_increase_per_1000_disadvantage",
 			"0",
 			"# This setting gives an advantage to smaller/less active towns and nations",
-			"# It works by increasing all siege point gains for a side, depending on how far the side is already behind.");
+			"# It works by increasing all siege point gains for a side, depending on how far the side is already behind."),
+	WAR_SIEGE_POINTS_PERCENTAGE_ADJUSTMENT_FOR_LEADER_PROXIMITY(
+			"war.siege.scoring.percentage_adjustment_for_leader_proximity",
+			"10",
+			"# If a friendly military leader is nearby when a soldier dies in a siege, then points loss is reduced by this percentage.",
+			"# If an enemy military leader is nearby when a soldier dies in a siege, then points loss is increased by this percentage."),
+	WAR_SIEGE_POINTS_PERCENTAGE_ADJUSTMENT_FOR_LEADER_DEATH(
+			"war.siege.scoring.percentage_adjustment_for_leader_death",
+			"50",
+			"# If a military leader dies in a siege, then points loss in increased by this percentage.");
 
 	private final String Root;
 	private final String Default;

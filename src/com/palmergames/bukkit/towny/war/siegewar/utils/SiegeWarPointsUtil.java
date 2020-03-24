@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -127,7 +128,7 @@ public class SiegeWarPointsUtil {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
 			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
-				awardSiegePenaltyPoints(false, resident, siegeZone, unformattedErrorMessage);
+				awardSiegePenaltyPoints(false, null, resident, siegeZone, unformattedErrorMessage);
 			}
 			return town;
 		} else {
@@ -152,11 +153,11 @@ public class SiegeWarPointsUtil {
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
 			//Apply penalty to siege-zones where the nation is attacking
 			for(SiegeZone siegeZone: nation.getActiveSiegeAttackZones()) {
-				awardSiegePenaltyPoints(true, resident, siegeZone, unformattedErrorMessage);
+				awardSiegePenaltyPoints(true, null, resident, siegeZone, unformattedErrorMessage);
 			}
 			//Apply penalty to siege-zones where the nation is defending
 			for(SiegeZone siegeZone: nation.getActiveSiegeDefenceZones(townToExclude)) {
-				awardSiegePenaltyPoints(false, resident, siegeZone, unformattedErrorMessage);
+				awardSiegePenaltyPoints(false, null, resident, siegeZone, unformattedErrorMessage);
 			}
 		}
 	}
@@ -165,11 +166,13 @@ public class SiegeWarPointsUtil {
 	 * This method applies penalty points to the given siegezone
 	 *
 	 * @param residentIsAttacker is the resident an attacker or defender?
+	 * @param player the player who the punishment relates to
 	 * @param resident the resident who the punishment relates to
 	 * @param siegeZone to siegezone to apply the penalty to
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
 	 */
 	public static void awardSiegePenaltyPoints(boolean residentIsAttacker,
+											   Player player,
 											   Resident resident,
 											   SiegeZone siegeZone,
 											   String unformattedErrorMessage) {
@@ -177,11 +180,13 @@ public class SiegeWarPointsUtil {
 		int siegePoints;
 		if (residentIsAttacker) {
 			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
-			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
+			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siegeZone);
 			siegeZone.adjustSiegePoints(siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
-			siegePoints = SiegeWarPointsUtil.adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
+			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siegeZone);
 			siegeZone.adjustSiegePoints(siegePoints);
 		}
 
@@ -271,4 +276,98 @@ public class SiegeWarPointsUtil {
 		return (int)baseSiegePointGain;
 	}
 
+	private static int adjustSiegePenaltyPointsForMilitaryLeadership(boolean residentIsAttacker,
+																	 double siegePoints,
+																	 Player player,
+																	 Resident resident,
+																	 SiegeZone siegeZone) {
+		try {
+			TownyUniverse universe = TownyUniverse.getInstance();
+
+			//Resident town has nation
+			if(resident.getTown().hasNation()) {
+
+				if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)) {
+					//Player is Leader. Apply points increase
+					double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderDeath() / 100);
+					return (int)(siegePoints * modifier);
+
+				} else {
+					//Player is not leader
+					if(player == null) {
+						//Player is null. Apply points increase regardless of player location/online/offline, to avoid exploits
+						double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+						return (int)(siegePoints * modifier);
+					} else {
+						//Player is online. Look for nearby friendly/hostile leaders
+						Resident otherResident;
+						boolean friendlyLeaderNearby = false;
+						boolean hostileLeaderNearby = false;
+
+						for (Player otherPlayer : BukkitTools.getOnlinePlayers()) {
+							if (friendlyLeaderNearby && hostileLeaderNearby)
+								break;
+
+							//Look for friendly military leader 
+							if (!friendlyLeaderNearby) {
+								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
+								if (otherResident.hasTown()
+									&& otherResident.hasNation()
+									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& (otherResident.getTown().getNation() == resident.getTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(resident.getTown().getNation()))
+									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									friendlyLeaderNearby = true;
+									continue;
+								}
+							}
+
+							//As attacker, look for hostile military leader
+							if (!hostileLeaderNearby && residentIsAttacker) {
+								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
+
+								if (otherResident.hasTown()
+									&& otherResident.getTown().hasNation()
+									&& siegeZone.getDefendingTown().hasNation()
+									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& (otherResident.getTown().getNation() == siegeZone.getDefendingTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
+									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									hostileLeaderNearby = true;
+									continue;
+								}
+							}
+
+							//As defender, look for hostile military leader
+							if (!hostileLeaderNearby && !residentIsAttacker) {
+								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
+
+								if (otherResident.hasTown()
+									&& otherResident.getTown().hasNation()
+									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& (otherResident.getTown().getNation() == siegeZone.getAttackingNation() || otherResident.getTown().getNation().hasMutualAlly(siegeZone.getAttackingNation()))
+									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									hostileLeaderNearby = true;
+									continue;
+								}
+							}
+						}
+
+						if (friendlyLeaderNearby && !hostileLeaderNearby) {
+							//Friendly leader nearby. Apply points decrease
+							double modifier = 1 - (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+							return (int) (siegePoints * modifier);
+						} else if (hostileLeaderNearby && !friendlyLeaderNearby) {
+							//Enemy leader nearby. Apply points increase
+							double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+							return (int) (siegePoints * modifier);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Problem adjusting siege point penalty for military leadership");
+			e.printStackTrace();
+		}
+
+		return (int)siegePoints;
+	}
 }

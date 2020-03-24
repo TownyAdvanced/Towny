@@ -65,6 +65,7 @@ public class SiegeWarDeathController {
 						keepInventory(playerDeathEvent);
 						SiegeWarPointsUtil.awardSiegePenaltyPoints(
 							false,
+							deadPlayer,
 							deadResident,
 							siegeZone,
 							TownySettings.getLangString("msg_siege_war_defender_death"));
@@ -86,6 +87,7 @@ public class SiegeWarDeathController {
 						keepInventory(playerDeathEvent);
 						SiegeWarPointsUtil.awardSiegePenaltyPoints(
 							false,
+							deadPlayer,
 							deadResident,
 							siegeZone,
 							TownySettings.getLangString("msg_siege_war_defender_death"));
@@ -106,6 +108,7 @@ public class SiegeWarDeathController {
 						keepInventory(playerDeathEvent);
 						SiegeWarPointsUtil.awardSiegePenaltyPoints(
 							true,
+							deadPlayer,
 							deadResident,
 							siegeZone,
 							TownySettings.getLangString("msg_siege_war_attacker_death"));
@@ -125,4 +128,5 @@ public class SiegeWarDeathController {
 			playerDeathEvent.getDrops().clear();
 		}
 	}
+
 }

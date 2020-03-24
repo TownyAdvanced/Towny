@@ -83,6 +83,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN_INVITE_DENY("towny.command.town.invite.deny"),
 
 	TOWNY_NATION_SIEGE_POINTS("towny.nation.siege.points"),
+	TOWNY_NATION_SIEGE_LEADERSHIP("towny.nation.siege.leadership"),
 	TOWNY_NATION_SIEGE_ATTACK("towny.nation.siege.attack"),
 	TOWNY_NATION_SIEGE_ABANDON("towny.nation.siege.abandon"),
 	TOWNY_NATION_SIEGE_INVADE("towny.nation.siege.invade"),

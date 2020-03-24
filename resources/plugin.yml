@@ -173,7 +173,7 @@ permissions:
     towny.command.nation.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
@@ -281,10 +281,12 @@ permissions:
         default: false
         children:
             towny.nation.siege.points: true
+            towny.nation.siege.leadership: true
             towny.nation.siege.attack: true
             towny.nation.siege.abandon: true
             towny.nation.siege.invade: true
             towny.nation.siege.plunder: true
+
 
 
     # Town command permissions
@@ -319,7 +321,7 @@ permissions:
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.town.list.residents: true
             towny.command.town.list.open: true
             towny.command.town.list.balance: true

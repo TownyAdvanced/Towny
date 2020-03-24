@@ -3167,4 +3167,16 @@ public class TownySettings {
 	public static int getWarSiegeExtraMoneyPercentagePerTownLevel() {
 		return getInt(ConfigNodes.WAR_SIEGE_EXTRA_MONEY_PERCENTAGE_PER_TOWN_LEVEL);
 	}
+
+	public static double getWarSiegePointsPercentageAdjustmentForLeaderProximity() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PERCENTAGE_ADJUSTMENT_FOR_LEADER_PROXIMITY);
+	}
+
+	public static double getWarSiegePointsPercentageAdjustmentForLeaderDeath() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PERCENTAGE_ADJUSTMENT_FOR_LEADER_DEATH);
+	}
+
+	public static int getWarSiegeLeadershipAuraRadiusBlocks() {
+		return getInt(ConfigNodes.WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS);
+	}
 }
