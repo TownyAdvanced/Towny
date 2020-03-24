@@ -881,7 +881,7 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return TownySettings.getSaveDatabase();
+				return TownySettings.getSaveDatabase().toLowerCase();
 			}
 		}));
 		

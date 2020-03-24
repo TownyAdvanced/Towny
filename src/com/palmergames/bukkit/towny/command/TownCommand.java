@@ -1905,7 +1905,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setTitle(title + " ");
+				resident.setTitle(title);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasTitle())
@@ -1940,7 +1940,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setSurname(" " + surname);
+				resident.setSurname(surname);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasSurname())
@@ -3625,7 +3625,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			
 			town.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, TownySettings.getLangString("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -3662,7 +3662,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 			
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
