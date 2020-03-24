@@ -495,16 +495,12 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setKing(Resident king) throws TownyException {
-
+		if(isKing(king))
+			return;
 		if (!hasResident(king))
 			throw new TownyException(TownySettings.getLangString("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
 			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
-
-		NationKingChangeEvent event = new NationKingChangeEvent(this, king, true);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled())
-			throw new TownyException(TownySettings.getLangString("msg_err_king_cancelled"));
 		
 		setCapital(king.getTown());
 	}
