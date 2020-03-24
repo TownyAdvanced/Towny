@@ -2,24 +2,25 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class NationKingChangeEvent extends Event implements Cancellable {
+public class NationCapitalChangeEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private Nation nation;
-	private Resident king;
+	private Town capital;
 	private boolean isCancellable;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 
-	public NationKingChangeEvent(Nation nation, Resident newKing, boolean isCancellable) {
+	public NationCapitalChangeEvent(Nation nation, Town capital, boolean isCancellable) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.nation = nation;
-		this.king = newKing;
+		this.capital = capital;
 		this.isCancellable = isCancellable;
 	}
 
@@ -38,7 +39,11 @@ public class NationKingChangeEvent extends Event implements Cancellable {
 	}
 
 	public Resident getNewKing() {
-		return king;
+		return capital.getMayor();
+	}
+
+	public Town getNewCapital() {
+		return capital;
 	}
 
 	@Override

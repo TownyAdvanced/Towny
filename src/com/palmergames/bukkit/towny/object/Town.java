@@ -4,10 +4,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownMayorChangeEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
-import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -151,12 +148,24 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setMayor(Resident mayor) throws TownyException {
+		if (isMayor(mayor))
+			return; //They're already the mayor, so we don't need to change anything.
 
 		if (!hasResident(mayor))
 			throw new TownyException(TownySettings.getLangString("msg_err_mayor_doesnt_belong_to_town"));
 
 		TownMayorChangeEvent mayorChange = new TownMayorChangeEvent(this, mayor);
 		Bukkit.getPluginManager().callEvent(mayorChange);
+		if (mayorChange.isCancelled())
+			throw new TownyException(TownySettings.getLangString("msg_err_mayor_cancelled"));
+		
+		try { //Get a nation if one exists and run NationKingChangeEvent for the new mayor
+			Nation nation = this.getNation();
+			NationKingChangeEvent event = new NationKingChangeEvent(nation, mayor, true);
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled())
+				throw new TownyException(TownySettings.getLangString("msg_err_mayor_king_cancelled"));
+		} catch (NotRegisteredException e) {}
 		
 		this.mayor = mayor;
 		

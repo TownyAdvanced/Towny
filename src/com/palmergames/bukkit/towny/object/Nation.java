@@ -4,10 +4,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.NationAddTownEvent;
-import com.palmergames.bukkit.towny.event.NationKingChangeEvent;
-import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -205,7 +202,32 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		}
 	}
 
-	public void setCapital(Town capital) {
+	public void setCapital(Town capital) throws TownyException {
+		if (isCapital(capital))
+			return;
+		
+		NationCapitalChangeEvent nationChange = new NationCapitalChangeEvent(this, capital, true);
+		NationKingChangeEvent kingChangeEvent = new NationKingChangeEvent(this, capital.getMayor(), true);
+		Bukkit.getPluginManager().callEvent(nationChange);
+		Bukkit.getPluginManager().callEvent(kingChangeEvent);
+		if (nationChange.isCancelled() || kingChangeEvent.isCancelled())
+			throw new TownyException(TownySettings.getLangString("msg_err_new_capital_cancelled"));
+
+		this.capital = capital;
+		try {
+			recheckTownDistance();
+			TownyPerms.assignPermissions(capital.getMayor(), null);
+		} catch (Exception e) {
+			// Dummy catch to prevent errors on startup when setting nation.
+		}
+	}
+
+	public void forceSetCapital(Town capital) {
+		if (isCapital(capital))
+			return;
+		
+		Bukkit.getPluginManager().callEvent(new NationCapitalChangeEvent(this, capital, false));
+		Bukkit.getPluginManager().callEvent(new NationKingChangeEvent(this, capital.getMayor(), false));
 
 		this.capital = capital;
 		try {
@@ -367,7 +389,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 					}
 
 				if (tempCapital != null) {
-					setCapital(tempCapital);
+					forceSetCapital(tempCapital);
 				}
 
 			}
@@ -479,8 +501,10 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (!king.isMayor())
 			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
 
-		NationKingChangeEvent event = new NationKingChangeEvent(this, king);
+		NationKingChangeEvent event = new NationKingChangeEvent(this, king, true);
 		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			throw new TownyException(TownySettings.getLangString("msg_err_king_cancelled"));
 		
 		setCapital(king.getTown());
 	}

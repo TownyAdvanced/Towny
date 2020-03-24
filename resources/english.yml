@@ -1091,3 +1091,8 @@ msg_already_ally: 'Your nation is already allied with %s.'
 
 # Added in 0.76
 msg_you: 'You'
+
+msg_err_mayor_cancelled: 'Another plugin cancelled setting the mayor.'
+msg_err_mayor_king_cancelled: "Another plugin indirectly cancelled setting the mayor by cancelling setting a nation's king."
+msg_err_king_cancelled: 'Another plugin cancelled setting the king.'
+msg_err_new_capital_cancelled: "Another plugin cancelled setting the nation's capital."
