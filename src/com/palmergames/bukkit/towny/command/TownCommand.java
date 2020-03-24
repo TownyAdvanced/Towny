@@ -3321,7 +3321,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				for(WorldCoord coord : selection){
 					//Use the user's current world
-					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player);
+					TownBlock townBlock = new TownBlock(coord.getX(), coord.getZ(), world);
+					townBlock.setOutpost(outpost);
+					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
 					if(preClaimEvent.isCancelled())
 						blockedClaims++;
