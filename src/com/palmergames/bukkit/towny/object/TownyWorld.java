@@ -12,12 +12,13 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 public class TownyWorld extends TownyObject {
 
-	private List<Town> towns = new ArrayList<>();
+	private HashMap<String, Town> towns = new HashMap<>();
 	private boolean isClaimable = true;
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
@@ -58,7 +59,7 @@ public class TownyWorld extends TownyObject {
 		super(name);
 	}
 
-	public List<Town> getTowns() {
+	public HashMap<String, Town> getTowns() {
 
 		return towns;
 	}
@@ -70,15 +71,12 @@ public class TownyWorld extends TownyObject {
 
 	public boolean hasTown(String name) {
 
-		for (Town town : towns)
-			if (town.getName().equalsIgnoreCase(name))
-				return true;
-		return false;
+		return towns.containsKey(name);
 	}
 
 	public boolean hasTown(Town town) {
 
-		return towns.contains(town);
+		return hasTown(town.getName());
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
@@ -86,7 +84,7 @@ public class TownyWorld extends TownyObject {
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
 		else {
-			towns.add(town);
+			towns.put(town.getName(), town);
 			town.setWorld(this);
 		}
 	}
@@ -142,7 +140,7 @@ public class TownyWorld extends TownyObject {
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
-			towns.remove(town);
+			towns.remove(town.getName());
 			/*
 			 * try {
 			 * town.setWorld(null);
@@ -645,21 +643,21 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		for (Town town : getTowns().values()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
 						continue;
 				
-				if (!town.getWorld().equals(this)) continue;
+				if (!town.getHomeblockWorld().equals(this)) continue;
 				
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min)
 					min = dist;
 			} catch (TownyException e) {
 			}
-
+		}
 		return (int) Math.ceil(min);
 	}
 
@@ -684,7 +682,7 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
@@ -702,7 +700,7 @@ public class TownyWorld extends TownyObject {
 				}
 			} catch (TownyException e) {
 			}
-
+		}
 		return (int) Math.ceil(min);
 	}
 	
@@ -715,7 +713,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
+		for (Town town : getTowns().values()) {
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
@@ -740,7 +738,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
+		for (Town town : getTowns().values()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
