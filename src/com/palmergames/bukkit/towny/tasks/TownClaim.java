@@ -70,7 +70,7 @@ public class TownClaim extends Thread {
 
 		List<TownyWorld> worlds = new ArrayList<>();
 		List<Town> towns = new ArrayList<>();
-		TownyWorld world;
+		TownyWorld world = null;
 		if (player != null)
 			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Town Claim..." : "Town unclaim..."));
 
@@ -169,11 +169,11 @@ public class TownClaim extends Thread {
 		if (player != null) {
 			if (claim) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				if (town.getWorld().isUsingPlotManagementRevert())
+				if (world != null && world.isUsingPlotManagementRevert())
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			} else if (forced) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				if ((town != null) &&(town.getWorld().isUsingPlotManagementRevert()))
+				if ((town != null) && (world != null && world.isUsingPlotManagementRevert()))
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			}
 		}
@@ -201,7 +201,7 @@ public class TownClaim extends Thread {
 				town.addOutpostSpawn(outpostLocation);
 			}
 
-			if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+			if (worldCoord.getTownyWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
 				PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 				if (plotChunk != null) {
 					TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
