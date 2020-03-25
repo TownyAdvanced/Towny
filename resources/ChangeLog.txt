@@ -4296,3 +4296,12 @@ v0.92.0.11:
     - Change not required if you don't want players to be able to use Unicode characters.
     - Closes #3805, #3803.
 0.96.0.3:
+  - Worlds no longer save a list of Towns in them.
+    - This will result in less ways for Towny to enter into Safe Mode.
+    - Towns have changed from town.getWorld() to town.getHomeblockWorld(), with getWorld() becoming deprecated and returning getHomeblockWorld().
+    - Some instances of town.getWorld() are now correctly using townblock.getWorld() or something similar when it is called for.
+    - Stop getHomeblockWorld() from returning null when towns have claimed 0 townblocks.
+    - Towny.setWorldFlags() from startup sequence is gone.
+    - SQL now drops old towns columns and saves/loads worlds without towns like flatfile.
+    - Swap out the List version of towns in TownyWorld for a HashMap, for faster loading of TownBlocks
+  - Fix pvp disabled worlds still be affected with recent change to CombatUtil#preventPVP.
