@@ -13,7 +13,6 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 public class TownyWorld extends TownyObject {
@@ -33,7 +32,6 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 	
@@ -92,38 +90,16 @@ public class TownyWorld extends TownyObject {
 		}
 	}
 
-	@Deprecated
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
 
-		TownBlock townBlock = townBlocks.get(coord);
-		if (townBlock == null)
-			throw new NotRegisteredException();
-		else
-			return townBlock;
+		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), coord));
 	}
 
-	@Deprecated
-	public void newTownBlock(int x, int z) throws AlreadyRegisteredException {
-
-		newTownBlock(new Coord(x, z));
-	}
-
-	@Deprecated
-	public TownBlock newTownBlock(Coord key) throws AlreadyRegisteredException {
-
-		if (hasTownBlock(key))
-			throw new AlreadyRegisteredException();
-		townBlocks.put(new Coord(key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), this));
-		return townBlocks.get(new Coord(key.getX(), key.getZ()));
-	}
-
-	@Deprecated
 	public boolean hasTownBlock(Coord key) {
 
-		return townBlocks.containsKey(key);
+		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), key));
 	}
 
-	@Deprecated
 	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
 
 		return getTownBlock(new Coord(x, z));
@@ -138,10 +114,16 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
-	@Deprecated
+	/*
+	 * Used only in the getTreeString() method.
+	 */
 	public Collection<TownBlock> getTownBlocks() {
 
-		return townBlocks.values();
+		List<TownBlock> townBlocks = new ArrayList<>();
+		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values())
+			if (townBlock.getWorld() == this)
+				townBlocks.add(townBlock);
+		return townBlocks;
 	}
 
 	public void removeTown(Town town) throws NotRegisteredException {
@@ -158,7 +140,7 @@ public class TownyWorld extends TownyObject {
 			 */
 		}
 	}
-	@Deprecated
+
 	public void removeTownBlock(TownBlock townBlock) {
 
 		if (hasTownBlock(townBlock.getCoord())) {			
@@ -174,19 +156,14 @@ public class TownyWorld extends TownyObject {
 			} catch (NotRegisteredException e) {
 			}
 	
-			removeTownBlock(townBlock.getCoord());
+			TownyUniverse.getInstance().removeTownBlock(townBlock);
 		}
 	}
-	@Deprecated
+
 	public void removeTownBlocks(List<TownBlock> townBlocks) {
 
 		for (TownBlock townBlock : new ArrayList<>(townBlocks))
 			removeTownBlock(townBlock);
-	}
-	@Deprecated
-	public void removeTownBlock(Coord coord) {
-
-		townBlocks.remove(coord);
 	}
 
 	@Override

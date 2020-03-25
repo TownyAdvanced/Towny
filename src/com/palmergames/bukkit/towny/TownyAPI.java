@@ -234,6 +234,22 @@ public class TownyAPI {
     }
     
     /**
+     * Check if the specified {@link Location} is in the wilderness.
+     *
+     * @param location {@link Location} to test widlerness for.
+     * @return true if the {@link Location} is in the wilderness, false otherwise.
+     */
+    public boolean isWilderness(WorldCoord worldCoord) {
+        
+        try {
+            return worldCoord.getTownBlock().getTown() == null;
+        } catch (NotRegisteredException e) {
+            // Must be wilderness
+            return true;
+        }
+    }    
+    
+    /**
      * Returns value of usingTowny for the given world.
      * 
      * @param world - the world to check

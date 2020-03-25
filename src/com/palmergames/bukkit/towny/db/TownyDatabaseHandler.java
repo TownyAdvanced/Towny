@@ -331,44 +331,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
-	public void removeOneOfManyTownBlocks(TownBlock townBlock, Town town) {
-		
-		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
-		BukkitTools.getPluginManager().callEvent(event);
-		
-		if (event.isCancelled())
-			return;
-
-		Resident resident = null;
-		try {
-			resident = townBlock.getResident();
-		} catch (NotRegisteredException ignored) {
-		}
-		
-		TownyWorld world = townBlock.getWorld();
-		WorldCoord coord = townBlock.getWorldCoord(); 
-
-		if (world.isUsingPlotManagementDelete())
-			TownyRegenAPI.addDeleteTownBlockIdQueue(coord);
-
-		// Move the plot to be restored
-		if (world.isUsingPlotManagementRevert()) {
-			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
-			if (plotData != null && !plotData.getBlockList().isEmpty()) {
-				TownyRegenAPI.addPlotChunk(plotData, true);
-			}
-		}
-
-		if (resident != null)
-			saveResident(resident);
-
-		town.removeTownBlock(townBlock);
-		deleteTownBlock(townBlock);
-		
-		// Raise an event to signal the unclaim
-		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, coord));	
-	}
-	
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
 
@@ -391,8 +353,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		town.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
-
-		saveTownBlockList(town);
 
 //		if (resident != null)           - Removed in 0.95.2.5, residents don't store townblocks in them.
 //			saveResident(resident);
@@ -419,13 +379,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
-	}
-	
-	public void removeManyTownBlocks(Town town) {
-
-		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
-			removeOneOfManyTownBlocks(townBlock, town);
-		saveTownBlockList(town);
 	}
 
 	@Override
@@ -582,7 +535,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 		
-		removeManyTownBlocks(town);
+		removeTownBlocks(town);
 		//removeTownBlocks(town);		
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
@@ -1192,4 +1145,5 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
+	
 }

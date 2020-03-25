@@ -498,29 +498,115 @@ public class TownyUniverse {
 	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
+
+	/**
+	 * How to get a TownBlock for now.
+	 * 
+	 * @param worldCoord we are testing for a townblock.
+	 * @return townblock if it exists, otherwise null.
+	 * @throws NotRegisteredException
+	 */
+	public TownBlock getTownBlock(WorldCoord worldCoord) throws NotRegisteredException {
+		if (hasTownBlock(worldCoord))
+			return townBlocks.get(worldCoord);
+		else 
+			throw new NotRegisteredException();
+	}
 	
+	/**
+	 * How to get all of the townblocks in a server for now.
+	 * 
+	 * Only used twice: 
+	 *  1. In Daily Timer task for outputting of stats.
+	 *  2. In /towny universe output.
+	 * TODO: That TownBlockCache
+	 * @return ConcurrentHashMap<WorldCoord, TownBlock> of all TownBlocks.
+	 */
+	public ConcurrentHashMap<WorldCoord, TownBlock> getAllTownBlocks() {
+		return getTownBlocks();
+	}
+	
+	/**
+	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
+	 * Populated at load time from townblocks folder's files.
+	 * 
+	 * 
+	 * @return townblocks hashmap read from townblock files.
+	 */	
+	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+	
+	/**
+	 * Should not be accessed, only used for loading.
+	 */	
 	public void newTownBlock(int x, int z, TownyWorld world) {
 
 		newTownBlock(new Coord(x, z), world);
 	}
 
+	/**
+	 * Should not be accessed, only used for loading.
+	 */	
 	public TownBlock newTownBlock(Coord key, TownyWorld world) {
-		if (hasTownBlock(key))
+		if (hasTownBlock(new WorldCoord(world.getName(), key)))
 			return null;
 		TownBlock newTownBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlocks.put(new WorldCoord(world.getName(), key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), world));
 		return newTownBlock;
 	}
 	
-	public boolean hasTownBlock(Coord key) {
-
-		return townBlocks.containsKey(key);
-	}
 	/**
-	 * Should not be accessed, only used for loading.
-	 * @return townblocks hashmap read from townblock files.
+	 * Does this WorldCoord have a TownBlock?
+	 * @param key - the coord for which we want to know if there is a townblock.
+	 * @return true if Coord is a townblock
 	 */	
-	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlocks() {
-		return townBlocks;
+	public boolean hasTownBlock(WorldCoord worldCoord) {
+
+		return townBlocks.containsKey(worldCoord);
 	}
+
+	/**
+	 * Remove one townblock from the TownyUniverse townblock map.
+	 * @param townBlock to remove.
+	 */
+	public void removeTownBlock(TownBlock townBlock) {
+
+		if (hasTownBlock(townBlock.getWorldCoord())) {			
+	
+			try {
+				if (townBlock.hasResident())
+					townBlock.getResident().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+			try {
+				if (townBlock.hasTown())
+					townBlock.getTown().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+	
+			removeTownBlock(townBlock.getWorldCoord());
+		}
+	}
+	
+	/**
+	 * Remove a list of TownBlocks from the TownyUniverse townblock map.
+	 * @param townBlocks to remove.
+	 */
+	public void removeTownBlocks(List<TownBlock> townBlocks) {
+
+		for (TownBlock townBlock : new ArrayList<>(townBlocks))
+			removeTownBlock(townBlock);
+	}
+
+	/** 
+	 * Removes a townblock at the given worldCoord from the TownyUniverse townblock map.
+	 * @param worldCoord to remove.
+	 */
+	private void removeTownBlock(WorldCoord worldCoord) {
+
+		townBlocks.remove(worldCoord);
+	}
+
+	
 }

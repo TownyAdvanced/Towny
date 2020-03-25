@@ -189,7 +189,7 @@ public class TownClaim extends Thread {
 				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
 			}
 		} catch (NotRegisteredException e) {
-			final TownBlock townBlock = worldCoord.getTownyWorld().newTownBlock(worldCoord);
+			final TownBlock townBlock = town.newTownBlock(worldCoord);
 			townBlock.setTown(town);
 			if (!town.hasHomeBlock())
 				town.setHomeBlock(townBlock);
@@ -215,7 +215,6 @@ public class TownClaim extends Thread {
 			
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
-			townyUniverse.getDataSource().saveTownBlockList(town);
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));

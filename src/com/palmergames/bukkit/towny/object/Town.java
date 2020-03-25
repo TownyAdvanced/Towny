@@ -75,8 +75,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private EconomyAccount account;
-	private List<TownBlock> townBlocks = new ArrayList<>();
-	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocksMap = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
@@ -84,28 +83,38 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		permissions.loadDefault(this);
 	}
 
+	/*
+	 * Not used but required to Implement TownBlockOwner (non-Javadoc)
+	 * @see com.palmergames.bukkit.towny.object.TownBlockOwner#setTownblocks(java.util.List)
+	 */
 	@Override
 	public void setTownblocks(List<TownBlock> townblocks) {
-		this.townBlocks = townblocks;
+		//this.townBlocks = townblocks;
 	}
 
 	@Override
 	public List<TownBlock> getTownBlocks() {
-		return townBlocks;
+		List<TownBlock> townBlockList = new ArrayList<>();
+		townBlockList.addAll(townBlocks.values());
+		return townBlockList;
 	}
 
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
-		return townBlocks.contains(townBlock);
+		return hasTownBlock(townBlock.getWorldCoord());
 	}
 
+	public boolean hasTownBlock(WorldCoord worldCoord) {
+		return townBlocks.containsKey(worldCoord);
+	}
+	
 	@Override
 	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
 
 		if (hasTownBlock(townBlock))
 			throw new AlreadyRegisteredException();
 		else {
-			townBlocks.add(townBlock);
+			addTownBlockMap(townBlock);
 			if (townBlocks.size() == 1 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
@@ -113,31 +122,39 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
+	public TownBlock newTownBlock(WorldCoord worldCoord) throws AlreadyRegisteredException, NotRegisteredException {
+		if (hasTownBlock(worldCoord))
+			throw new AlreadyRegisteredException();
+		townBlocks.put(worldCoord, new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld()));
+		return townBlocks.get(worldCoord);
+	}
+	
 	public void addTownBlockMap(TownBlock townBlock) {
-		townBlocksMap.put(townBlock.getWorldCoord(), townBlock);		
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);		
 	}
 	
+	/**
+	 * Handles removing townblocks from both the Town's townblock hashmap
+	 * as well as the global townblock hashmap in TownyUniverse.
+	 * 
+	 * Called by {@link Town#removeTownBlock(TownBlock)}
+	 * 
+	 * @param townBlock to be removed.
+	 */
 	public void removeTownBlockMap(TownBlock townBlock) {
-		townBlocksMap.remove(townBlock.getWorldCoord());
-	}
-	
-	public boolean hasTownBlockMap(TownBlock townBlock) {
-		return hasTownBlockMap(townBlock.getWorldCoord());
-	}
-
-	public boolean hasTownBlockMap(WorldCoord worldCoord) {
-		return townBlocksMap.containsKey(worldCoord);
+		TownyUniverse.getInstance().removeTownBlock(townBlock);
+		townBlocks.remove(townBlock.getWorldCoord());
 	}
 
 	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
-		if (hasTownBlockMap(worldCoord))
-			return townBlocksMap.get(worldCoord);
+		if (hasTownBlock(worldCoord))
+			return townBlocks.get(worldCoord);
 		return null;
 	}
 	
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
-		return townBlocksMap;
+		return townBlocks;
 	}
 	
 	public void setTag(String text) throws TownyException {
@@ -812,9 +829,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				if (getHomeBlock() == townBlock)
 					setHomeBlock(null);
 			} catch (TownyException ignored) {}
-			townBlocks.remove(townBlock);
-			if (townBlocksMap.containsKey(townBlock.getWorldCoord()))
-				townBlocksMap.remove(townBlock.getWorldCoord());
+			if (townBlocks.containsKey(townBlock.getWorldCoord()))
+				removeTownBlockMap(townBlock);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}

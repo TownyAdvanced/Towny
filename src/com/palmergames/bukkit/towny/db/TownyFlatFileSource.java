@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
@@ -669,10 +668,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("protectionStatus");
 				if (line != null)
 					resident.setPermissions(line);
-				
-				line = keys.get("townBlocks");
-				if (line != null)
-					utilLoadTownBlocks(line, null, resident);
 
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
@@ -890,10 +885,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setConqueredDays(Integer.valueOf(line));
 
-				line = keys.get("townBlocks");
-				if (line != null)
-					utilLoadTownBlocks(line, town, null);
-				
 				line = keys.get("homeBlock");
 				if (line != null) {
 					tokens = line.split(",");
@@ -1655,23 +1646,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public boolean saveTownBlockList() {
-		for (Town town : getTowns()) {
-			saveTownBlockList(town);
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean saveTownBlockList(Town town) {
-		List<String> list = new ArrayList<>();
-		for (Map.Entry<WorldCoord, TownBlock> mapElement : town.getTownBlockMap().entrySet()) {
-			list.add(mapElement.getValue().getWorld().getName() + "," + mapElement.getValue().getX() + "," + mapElement.getValue().getZ());				
-		}
-		return true;
-	}
-	
-	@Override
 	public boolean savePlotGroupList() {
 		List<String> list = new ArrayList<>();
 		
@@ -2313,118 +2287,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 
-	}
-
-	/**
-	 * Load townblocks according to the given line Townblock: x,y,forSale Eg:
-	 * townBlocks=world:10,11;10,12,true;|nether:1,1|
-	 *
-	 * @param line - Line which to read from.
-	 * @param town - Town for which to load townblocks for.
-	 * @param resident - Owner of a given townblock.
-	 */
-	@Deprecated
-	public void utilLoadTownBlocks(String line, Town town, Resident resident) {
-
-		String[] worlds = line.split("\\|");
-		for (String w : worlds) {
-			String[] split = w.split(":");
-			if (split.length != 2) {
-				TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " BlockList does not have a World or data.");
-				continue;
-			}
-			try {
-				TownyWorld world = getWorld(split[0]);
-				for (String s : split[1].split(";")) {
-					String blockTypeData = null;
-					int indexOfType = s.indexOf("[");
-					if (indexOfType != -1) { //is found
-						int endIndexOfType = s.indexOf("]");
-						if (endIndexOfType != -1) {
-							blockTypeData = s.substring(indexOfType + 1, endIndexOfType);
-						}
-						s = s.substring(endIndexOfType + 1);
-					}
-					String[] tokens = s.split(",");
-					if (tokens.length < 2)
-						continue;
-					try {
-						int x = Integer.parseInt(tokens[0]);
-						int z = Integer.parseInt(tokens[1]);
-
-						try {
-							world.newTownBlock(x, z);
-						} catch (AlreadyRegisteredException ignored) {
-						}
-						TownBlock townblock = world.getTownBlock(x, z);
-
-						if (town != null)
-							townblock.setTown(town);
-
-						if (resident != null && townblock.hasTown())
-							townblock.setResident(resident);
-
-						if (blockTypeData != null) {
-							utilLoadTownBlockTypeData(townblock, blockTypeData);
-						}
-
-						//if present set the plot price
-						if (tokens.length >= 3) {
-							if (tokens[2].equals("true"))
-								townblock.setPlotPrice(town.getPlotPrice());
-							else
-								townblock.setPlotPrice(Double.parseDouble(tokens[2]));
-						}
-
-					} catch (NumberFormatException | NotRegisteredException ignored) {
-					}
-				}
-			} catch (NotRegisteredException e) {
-				// Continue; No longer necessary it's last statement!
-			}
-		}
-	}
-
-	@Deprecated
-	public void utilLoadTownBlockTypeData(TownBlock townBlock, String data) {
-
-		String[] tokens = data.split(",");
-
-		// Plot Type
-		if (tokens.length >= 1)
-			townBlock.setType(Integer.valueOf(tokens[0]));
-
-		// Outpost or normal plot.
-		if (tokens.length >= 2)
-			townBlock.setOutpost(tokens[1].equalsIgnoreCase("1"));
-	}
-
-	@Deprecated
-	public String utilSaveTownBlocks(List<TownBlock> townBlocks) {
-
-		HashMap<TownyWorld, ArrayList<TownBlock>> worlds = new HashMap<>();
-		StringBuilder out = new StringBuilder();
-
-		// Sort all town blocks according to what world its in
-		for (TownBlock townBlock : townBlocks) {
-			TownyWorld world = townBlock.getWorld();
-			if (!worlds.containsKey(world))
-				worlds.put(world, new ArrayList<>());
-			worlds.get(world).add(townBlock);
-		}
-
-		for (TownyWorld world : worlds.keySet()) {
-			out.append(world.getName()).append(":");
-			for (TownBlock townBlock : worlds.get(world)) {
-				out.append("[").append(townBlock.getType().getId());
-				out.append(",").append(townBlock.isOutpost() ? "1" : "0");
-				out.append("]").append(townBlock.getX()).append(",").append(townBlock.getZ()).append(",").append(townBlock.getPlotPrice()).append(";");
-			}
-			out.append("|");
-
-		}
-
-		return out.toString();
 	}
 
 	/**

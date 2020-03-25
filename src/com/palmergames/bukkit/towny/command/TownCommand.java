@@ -2445,7 +2445,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		townyUniverse.getDataSource().saveWorld(world);
 		
 		townyUniverse.getDataSource().saveTownList();
-		townyUniverse.getDataSource().saveTownBlockList(town);
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
