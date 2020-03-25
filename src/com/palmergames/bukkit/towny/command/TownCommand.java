@@ -2398,8 +2398,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-//		townyUniverse.newTownBlock(key, world);
+
 		townyUniverse.getDataSource().newTown(name);
 		Town town = townyUniverse.getDataSource().getTown(name);
 		town.addResident(resident);
@@ -2413,7 +2412,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		town.setSpawn(spawn);
 		town.setUuid(UUID.randomUUID());
 		town.setRegistered(System.currentTimeMillis());
-		// world.addTown(town);
 
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);

@@ -46,7 +46,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Location> jailSpawns = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
 	
-	
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
