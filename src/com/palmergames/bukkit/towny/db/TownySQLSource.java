@@ -1137,7 +1137,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         String line;
         boolean result;
         long resultLong;
-        String[] tokens;
         TownyMessaging.sendDebugMsg("Loading world " + world.getName());
         if (!getContext())
             return false;
@@ -1147,20 +1146,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
-                line = rs.getString("towns");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Town town = getTown(token);
-                            if (town != null) {
-                                town.setWorld(world);
-                            }
-                        }
-                    }
-                }
-
                 result = rs.getBoolean("claimable");
                 try {
                     world.setClaimable(result);
@@ -1447,6 +1432,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         try {
                             Town town = getTown(line.trim());
                             townBlock.setTown(town);
+                            TownyWorld townyWorld = townBlock.getWorld();
+                            if (townyWorld != null && !townyWorld.hasTown(town))
+                            	townyWorld.addTown(town);
                         } catch (Exception ignored) {
                         }
 
@@ -1707,8 +1695,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
             nat_hm.put("name", world.getName());
 
-            // Towns
-            nat_hm.put("towns", StringMgmt.join(world.getTowns(), "#"));
             // PvP
             nat_hm.put("pvp", world.isPVP());
             // Force PvP
@@ -2197,7 +2183,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
     public boolean cleanup() {
 
