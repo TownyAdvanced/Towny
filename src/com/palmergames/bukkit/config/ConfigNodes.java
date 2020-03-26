@@ -1919,6 +1919,17 @@ public enum ConfigNodes {
 			"# Underdog sides in particularly, have significantly less to lose by counter attacking.",
 			"# The setting causes battles to be more aggressive/immediate.", 
 			"# The setting is recommended."),
+	WAR_SIEGE_TACTICAL_VISIBILITY_ENABLED(
+			"war.siege.switches.tactical_visibility_enabled",
+			"true",
+			"# If this setting is true, then tactical visibility is enabled",
+			"# This feature changes how player visibility works on the dynmap, as follows:",
+			"# * King or General - Always visible on map.",
+			"# * Player with shield equipped - Hidden on map.",
+			"# * Player riding horse - Hidden on map.",
+			"# * Player piloting boat - Hidden on map.",
+			"# * Player affected by invis potion - Hidden on map.",
+			"# * Any other player - Visible on map."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

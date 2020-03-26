@@ -3179,4 +3179,8 @@ public class TownySettings {
 	public static int getWarSiegeLeadershipAuraRadiusBlocks() {
 		return getInt(ConfigNodes.WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS);
 	}
+
+	public static boolean getWarSiegeTacticalVisibilityEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_TACTICAL_VISIBILITY_ENABLED);
+	}
 }

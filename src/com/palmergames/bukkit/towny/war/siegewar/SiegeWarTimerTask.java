@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemovePostSpawnDamageImmunity;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDynmapUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -55,7 +56,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		if (TownySettings.getWarSiegeEnabled()) {
-			
+
+			SiegeWarDynmapUtil.clearDynmapVisiblePlayers(); //note - this line should be top of the sequence
+			evaluateTacticalVisibility();
+
 			evaluateSiegeZones();
 
 			evaluateSieges();
@@ -63,6 +67,16 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateRuinsRemovals();
 
 			evaluatePostSpawnDamageImmunityRemovals();
+		}
+	}
+
+	/**
+	 * Evaluate the visibility of players on the dynmap
+	 * when using the 'tactical visibility' feature
+	 */
+	private void evaluateTacticalVisibility() {
+		if(TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
+			SiegeWarDynmapUtil.evaluateTacticalVisibilityOfPlayers();
 		}
 	}
 
@@ -225,6 +239,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				}
 			} catch (NotRegisteredException e) {
 			}
+		}
+
+		//Players earning siege-points at banner are always visible
+		if(TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
+			SiegeWarDynmapUtil.addDynmapVisiblePlayers(pillagingPlayers);
 		}
 
 		//Pillage
