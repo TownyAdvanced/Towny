@@ -4303,3 +4303,4 @@ v0.92.0.11:
 0.96.0.4:
   - Make /t outpost outpostname case insensitive.
     - Fixes part of #3826.
+  - Fix explosion revert bug.
