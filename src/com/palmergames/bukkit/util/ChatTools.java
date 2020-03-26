@@ -93,7 +93,7 @@ public class ChatTools {
 
 		String line = TownySettings.getLangString("title_banner");
 		int pivot = line.length() / 2;
-		String center = TownySettings.getLangString("title_banner_left") + title + TownySettings.getLangString("title_banner_right");
+		String center = String.format(TownySettings.getLangString("title_banner_center"), title);
 		String out = TownySettings.getLangString("title_banner_prefix") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
 		out += center + line.substring(pivot + center.length() / 2);
 		return out;

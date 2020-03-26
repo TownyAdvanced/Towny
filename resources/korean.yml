@@ -1008,5 +1008,4 @@ msg_you: 'You'
  # Added in 0.96.0.4
 title_banner: '.oOo.__________________________________________________.oOo.'
 title_banner_prefix: '&6'
-title_banner_left: '.[ &e'
-title_banner_right: '&6 ].'
+title_banner_center: '.[ &e%s&6 ].'
