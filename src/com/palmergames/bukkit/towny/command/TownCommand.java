@@ -1346,7 +1346,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	
 	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
 		
-		if (Towny.isSpigot) {
+		if (Towny.isSpigot && sender instanceof Player) {
 			TownySpigotMessaging.sendSpigotTownList(sender, towns, page, total);
 			return;
 		}
