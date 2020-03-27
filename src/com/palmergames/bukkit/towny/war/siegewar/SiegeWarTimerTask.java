@@ -56,7 +56,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		if (TownySettings.getWarSiegeEnabled()) {
-			
+
 			evaluateSiegeZones();
 
 			evaluateSieges();

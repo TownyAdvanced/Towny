@@ -75,11 +75,12 @@ public class SiegeWarDynmapUtil {
 
 			}
 		};
-	
+
 	/**
 	 * Evaluate the visibility of players on the dynmap
 	 *
-	 * Kings, generals - always visible
+	 * Kings & generals - always visible
+	 * Pillaging player in siegezone - always visible
 	 * Others - can become map-invisible via the following methods
 	 * 1. Equip shield in off hand
 	 * 2. Equip compass in off hand
