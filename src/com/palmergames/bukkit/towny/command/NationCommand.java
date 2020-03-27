@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
@@ -1245,6 +1246,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public void sendList(CommandSender sender, List<Nation> nations, int page, int total) {
+		
+		if (Towny.isSpigot) {
+			TownySpigotMessaging.sendSpigotNationList(sender, nations, page, total);
+			return;
+		}
 
 		int iMax = page * 10;
 		if ((page * 10) > nations.size()) {
