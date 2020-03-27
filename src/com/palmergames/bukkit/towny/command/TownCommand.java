@@ -1629,22 +1629,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		split = split.toLowerCase();
 
 		if (split.contains("mobs")) {
-			if (town.getWorld().isForceTownMobs())
+			if (town.getHomeblockWorld().isForceTownMobs())
 				throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
 		}
 
 		if (split.contains("fire")) {
-			if (town.getWorld().isForceFire())
+			if (town.getHomeblockWorld().isForceFire())
 				throw new TownyException(TownySettings.getLangString("msg_world_fire"));
 		}
 
 		if (split.contains("explosion")) {
-			if (town.getWorld().isForceExpl())
+			if (town.getHomeblockWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
 		}
 
 		if (split.contains("pvp")) {
-			if (town.getWorld().isForcePVP())
+			if (town.getHomeblockWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 		}
 	}
@@ -2167,7 +2167,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
 						townBlock = townyUniverse.getDataSource().getWorld(player.getWorld().getName()).getTownBlock(coord);
-						oldWorld = town.getWorld();
+						oldWorld = town.getHomeblockWorld();
 						town.setHomeBlock(townBlock);
 						town.setSpawn(player.getLocation());
 
@@ -2245,7 +2245,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.
 			if (oldWorld != null) {
-				townyUniverse.getDataSource().saveWorld(town.getWorld());
+				townyUniverse.getDataSource().saveWorld(town.getHomeblockWorld());
 				townyUniverse.getDataSource().saveWorld(oldWorld);
 			}
 		}
