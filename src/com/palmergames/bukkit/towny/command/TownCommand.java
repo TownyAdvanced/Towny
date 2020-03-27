@@ -1372,6 +1372,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			townsformatted, TownySettings.getListPageMsg(page, total)
 		);
 		
+		sender.sendMessage(messages);
+		
 	}
 
 	public void townMayor(Player player, String[] split) {

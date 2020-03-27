@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.ChatTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -98,7 +99,7 @@ public class TownySpigotMessaging {
 			
 			if (!TownySettings.isTownListRandom()) {
 				TextComponent nextComponent = new TextComponent(" - ");
-				nextComponent.setColor(net.md_5.bungee.api.ChatColor.GRAY);
+				nextComponent.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
 				TextComponent resCount = new TextComponent(town.getResidents().size() + "");
 				resCount.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				nextComponent.addExtra(resCount);
@@ -149,10 +150,12 @@ public class TownySpigotMessaging {
 
 			if (!TownySettings.isTownListRandom()) {
 				TextComponent nextComponent = new TextComponent(" - ");
-				nextComponent.setColor(net.md_5.bungee.api.ChatColor.GRAY);
+				nextComponent.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
 				TextComponent resCount = new TextComponent(nation.getResidents().size() + "");
 				resCount.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+				TextComponent townCount = new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")");
 				nextComponent.addExtra(resCount);
+				nextComponent.addExtra(townCount);
 				nationName.addExtra(nextComponent);
 			}
 
