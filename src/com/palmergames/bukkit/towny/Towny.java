@@ -39,6 +39,7 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -48,9 +49,16 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 import net.milkbowl.vault.permission.Permission;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -65,16 +73,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 /**
  * Towny Plugin for Bukkit
@@ -186,7 +184,17 @@ public class Towny extends JavaPlugin {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
-					townyUniverse.onLogin(player);
+					
+					// Test and kick any players with invalid names.
+					if (player.getName().contains(" ")) {
+						player.kickPlayer("Invalid name!");
+						return;
+					}
+
+					// Perform login code in it's own thread to update Towny data.
+					if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(this, player), 0L) == -1) {
+						TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
+					}
 				}
 		}
 	}
