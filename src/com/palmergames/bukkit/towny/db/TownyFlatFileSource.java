@@ -237,14 +237,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadTownBlockList() {
 		
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
-//		String line = null;
-		
+
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
 		File[] worldFolders = townblocksFolder.listFiles();
-		System.out.println("Folders found " + worldFolders.length);
+		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		try {
 			for (File worldfolder : worldFolders) {
-				System.out.println("Townblock World folder found " + worldfolder.getName());
 				String worldName = worldfolder.getName();
 				TownyWorld world;
 				try {
@@ -255,65 +253,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
 				File[] townBlockFiles = worldFolder.listFiles();
+				int total = 0;
 				for (File townBlockFile : townBlockFiles) {					
 					String[] coords = townBlockFile.getName().split("_");
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
 					TownyUniverse.getInstance().newTownBlock(x, z, world);
-
+					total++;
 				}
+				TownyMessaging.sendDebugMsg("World: " + worldName + " loaded " + total + " townblocks.");
 			}
 			return true;
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			return false;
 		}
-
-		
-//		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "townblocks.txt"), StandardCharsets.UTF_8))) {
-//			
-//			while ((line = fin.readLine()) != null) {
-//				if (!line.equals("")) {
-//					
-//					String[] tokens = line.split(",");
-//					
-//					if (tokens.length < 3) {
-//						continue;
-//					}
-//					
-//					TownyWorld world;
-//					
-//					try {
-//						
-//						world = getWorld(tokens[0]);
-//						
-//					} catch (NotRegisteredException ex) {
-//						
-//						/*
-//						 * The world is not listed.
-//						 * Allow the creation of new worlds here to account
-//						 * for mod worlds which are not reported at startup.
-//						 */
-//						newWorld(tokens[0]);
-//						world = getWorld(tokens[0]);
-//						
-//					}
-//					
-//					int x = Integer.parseInt(tokens[1]);
-//					int z = Integer.parseInt(tokens[2]);
-//					
-//					TownyUniverse.getInstance().newTownBlock(x, z, world);
-//				}
-//			}
-//			
-//			return true;
-//			
-//		} catch (Exception e) {
-//			TownyMessaging.sendErrorMsg("Error Loading Townblock List at " + line + ", in towny\\data\\townblocks.txt");
-//			e.printStackTrace();
-//			return false;
-//			
-//		}
 	}
 	
 	@Override
@@ -890,24 +844,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length == 3)
 						try {
-							TownyWorld world = getWorld(tokens[0]);
-							
-							try {
-								int x = Integer.parseInt(tokens[1]);
-								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = town.getTownBlock(new WorldCoord(world.getName(), x, z));
-								town.forceSetHomeBlock(homeBlock);
-							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-							}
-							
+							int x = Integer.parseInt(tokens[1]);
+							int z = Integer.parseInt(tokens[2]);
+							TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(town.getHomeblockWorld().getName(), x, z));
+							town.forceSetHomeBlock(homeBlock);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
 						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-						}
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+						}	
 				}
 				
 				line = keys.get("spawn");
