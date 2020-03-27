@@ -469,15 +469,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             Statement s = cntx.createStatement();
             ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
 
+            int total = 0;
             while (rs.next()) {
 
                 TownyWorld world = getWorld(rs.getString("world"));
                 int x = Integer.parseInt(rs.getString("x"));
                 int z = Integer.parseInt(rs.getString("z"));
 
-                TownyUniverse.getInstance().newTownBlock(x, z, world);
+                TownBlock townBlock = new TownBlock(x, z, world);
+                TownyUniverse.getInstance().addTownBlock(townBlock);
+                total++;
 
             }
+            TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
 
             s.close();
 
@@ -1432,6 +1436,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         try {
                             Town town = getTown(line.trim());
                             townBlock.setTown(town);
+                            town.addTownBlock(townBlock);
                             TownyWorld townyWorld = townBlock.getWorld();
                             if (townyWorld != null && !townyWorld.hasTown(town))
                             	townyWorld.addTown(town);

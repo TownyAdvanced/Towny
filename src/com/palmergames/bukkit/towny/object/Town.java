@@ -121,27 +121,18 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
-	public TownBlock newTownBlock(WorldCoord worldCoord) throws AlreadyRegisteredException, NotRegisteredException {
-		if (hasTownBlock(worldCoord))
-			throw new AlreadyRegisteredException();
-		townBlocks.put(worldCoord, new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld()));
-		return townBlocks.get(worldCoord);
-	}
-	
 	public void addTownBlockMap(TownBlock townBlock) {
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);		
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
 	}
 	
 	/**
-	 * Handles removing townblocks from both the Town's townblock hashmap
-	 * as well as the global townblock hashmap in TownyUniverse.
+	 * Handles removing townblocks from both the Town's townblock hashmap.
 	 * 
 	 * Called by {@link Town#removeTownBlock(TownBlock)}
 	 * 
 	 * @param townBlock to be removed.
 	 */
 	public void removeTownBlockMap(TownBlock townBlock) {
-		TownyUniverse.getInstance().removeTownBlock(townBlock);
 		townBlocks.remove(townBlock.getWorldCoord());
 	}
 
@@ -830,8 +821,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				if (getHomeBlock() == townBlock)
 					setHomeBlock(null);
 			} catch (TownyException ignored) {}
-			if (townBlocks.containsKey(townBlock.getWorldCoord()))
-				removeTownBlockMap(townBlock);
+			removeTownBlockMap(townBlock);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}

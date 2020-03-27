@@ -89,7 +89,8 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
-
+		if (!hasTownBlock(coord))
+			throw new NotRegisteredException();
 		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), coord));
 	}
 

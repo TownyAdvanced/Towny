@@ -352,7 +352,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} catch (NotRegisteredException ignored) {
 		}
 
-		town.removeTownBlock(townBlock);
+		TownyUniverse.getInstance().removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
 //		if (resident != null)           - Removed in 0.95.2.5, residents don't store townblocks in them.

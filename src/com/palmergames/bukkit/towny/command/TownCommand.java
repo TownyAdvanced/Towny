@@ -518,8 +518,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
-					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
+					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().getName().equals(TownyAPI.getInstance().getTownName(player.getLocation()))) 
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 				}
 
@@ -2403,10 +2403,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		Town town = townyUniverse.getDataSource().getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
-		TownBlock townBlock = townyUniverse.newTownBlock(key, world);
+		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
-		town.setHomeBlock(townBlock);
+
 		// Set the plot permissions to mirror the towns.
+
 		townBlock.setType(townBlock.getType());
 
 		town.setSpawn(spawn);

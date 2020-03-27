@@ -181,19 +181,11 @@ public class TownClaim extends Thread {
 
 	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost) throws TownyException {
 
-		try {
-			TownBlock townBlock = worldCoord.getTownBlock();
-			try {
-				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), townBlock.getTown().getName()));
-			} catch (NotRegisteredException e) {
-				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
-			}
-		} catch (NotRegisteredException e) {
-			final TownBlock townBlock = town.newTownBlock(worldCoord);
+		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
+				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), "some town"));
+		else {
+			TownBlock townBlock = new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
 			townBlock.setTown(town);
-			if (!town.hasHomeBlock())
-				town.setHomeBlock(townBlock);
-
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
 			if (isOutpost) {
@@ -213,8 +205,7 @@ public class TownClaim extends Thread {
 				}
 			}
 			
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));

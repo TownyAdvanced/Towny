@@ -385,6 +385,7 @@ public class TownyUniverse {
         nations.clear();
         towns.clear();
         residents.clear();
+        townBlocks.clear();
     }
 
 	public boolean hasGroup(String townName, UUID groupID) {
@@ -537,32 +538,17 @@ public class TownyUniverse {
 		return townBlocks;
 	}
 	
-	/**
-	 * Should not be accessed, only used for loading.
-	 */	
-	public void newTownBlock(int x, int z, TownyWorld world) {
-
-		newTownBlock(new Coord(x, z), world);
+	public void addTownBlock(TownBlock townBlock) {
+		if (hasTownBlock(townBlock.getWorldCoord()))
+			return;
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
 	}
-
-	/**
-	 * Should not be accessed, only used for loading.
-	 */	
-	public TownBlock newTownBlock(Coord key, TownyWorld world) {
-		if (hasTownBlock(new WorldCoord(world.getName(), key)))
-			return null;
-		TownBlock newTownBlock = new TownBlock(key.getX(), key.getZ(), world);
-		townBlocks.put(new WorldCoord(world.getName(), key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), world));
-		return newTownBlock;
-	}
-	
 	/**
 	 * Does this WorldCoord have a TownBlock?
 	 * @param key - the coord for which we want to know if there is a townblock.
 	 * @return true if Coord is a townblock
 	 */	
 	public boolean hasTownBlock(WorldCoord worldCoord) {
-
 		return townBlocks.containsKey(worldCoord);
 	}
 

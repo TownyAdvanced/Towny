@@ -258,7 +258,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String[] coords = townBlockFile.getName().split("_");
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
-					TownyUniverse.getInstance().newTownBlock(x, z, world);
+	                TownBlock townBlock = new TownBlock(x, z, world);
+	                TownyUniverse.getInstance().addTownBlock(townBlock);
 					total++;
 				}
 				TownyMessaging.sendDebugMsg("World: " + worldName + " loaded " + total + " townblocks.");
@@ -1470,7 +1471,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						try {
 							Town town = getTown(line.trim());
 							townBlock.setTown(town);
-							town.addTownBlockMap(townBlock);
+							town.addTownBlock(townBlock);
 							TownyWorld townyWorld = townBlock.getWorld();
 							if (townyWorld != null && !townyWorld.hasTown(town))
 								townyWorld.addTown(town);
@@ -2439,7 +2440,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		File file = new File(getTownBlockFilename(townBlock));
 		if (file.exists())
-			file.deleteOnExit();
+			file.delete();//file.deleteOnExit();
 	}
 	
 	@Override
