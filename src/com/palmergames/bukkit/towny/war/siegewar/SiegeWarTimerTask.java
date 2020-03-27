@@ -56,10 +56,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		if (TownySettings.getWarSiegeEnabled()) {
-
-			SiegeWarDynmapUtil.clearDynmapVisiblePlayers(); //note - this line should be top of the sequence
-			evaluateTacticalVisibility();
-
+			
 			evaluateSiegeZones();
 
 			evaluateSieges();
@@ -67,6 +64,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateRuinsRemovals();
 
 			evaluatePostSpawnDamageImmunityRemovals();
+
+			evaluateTacticalVisibility();
 		}
 	}
 
@@ -85,6 +84,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 */
 	private void evaluateSiegeZones() {
 		TownyUniverse universe = TownyUniverse.getInstance();
+		universe.clearPillagingPlayers();;
 		for(SiegeZone siegeZone: universe.getDataSource().getSiegeZones()) {
 			try {
 				evaluateSiegeZone(siegeZone);
@@ -241,9 +241,9 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 		}
 
-		//Players earning siege-points at banner are always visible
+		//Record pillaging players (for tactical hiding usage)
 		if(TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
-			SiegeWarDynmapUtil.addDynmapVisiblePlayers(pillagingPlayers);
+			universe.addPillagingPlayers(pillagingPlayers);
 		}
 
 		//Pillage

@@ -29,12 +29,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -62,7 +57,8 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-    
+    private final Set<Player> playersAtSiegeBanners = new HashSet<>();
+
     private TownyUniverse() {
         towny = Towny.getPlugin();
         rootFolder = towny.getDataFolder().getPath();
@@ -501,5 +497,17 @@ public class TownyUniverse {
 	
 	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
+	}
+
+	public Set<Player> getPillagingPlayers() {
+		return playersAtSiegeBanners;
+	}
+
+	public void addPillagingPlayers(List<Player> players) {
+		playersAtSiegeBanners.addAll(players);
+	}
+
+	public void clearPillagingPlayers() {
+		playersAtSiegeBanners.clear();
 	}
 }
