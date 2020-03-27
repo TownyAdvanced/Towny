@@ -4298,3 +4298,9 @@ v0.92.0.11:
     - SQL now drops old towns columns and saves/loads worlds without towns like flatfile.
     - Swap out the List version of towns in TownyWorld for a HashMap, for faster loading of TownBlocks
   - Fix pvp disabled worlds still be affected with recent change to CombatUtil#preventPVP.
+  - Add space after commas between nation/town ranks, courtesy of jkmartindale with PR #3820.
+    - See in the /resident status page. 
+0.96.0.4:
+  - Make /t outpost outpostname case insensitive.
+    - Fixes part of #3826.
+  - Fix explosion revert bug.

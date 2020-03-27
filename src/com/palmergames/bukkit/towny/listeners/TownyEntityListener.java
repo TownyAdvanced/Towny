@@ -927,6 +927,9 @@ public class TownyEntityListener implements Listener {
 													Tag.WOODEN_PRESSURE_PLATES.isTagged(block.getType()) ||
 													block.getType().equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE) ||
 													block.getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) ||
+													block.getType().equals(Material.BEACON) ||
+													block.getType().equals(Material.PLAYER_HEAD) ||
+													block.getType().equals(Material.PLAYER_WALL_HEAD) ||													
 													block.getState() instanceof ShulkerBox) {
 												block.setType(Material.AIR);
 											}
