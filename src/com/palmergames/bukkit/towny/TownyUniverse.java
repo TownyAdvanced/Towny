@@ -21,6 +21,9 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import org.bukkit.Location;
-import org.bukkit.World;
 
 /**
  * Towny's class for internal API Methods
