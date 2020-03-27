@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadSetter;
-import com.palmergames.bukkit.towny.utils.dbHandlers.flatfile.object.LoadHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadSetter;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
