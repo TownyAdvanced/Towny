@@ -93,7 +93,6 @@ public class TownySpigotMessaging {
 		BaseComponent[] townsformatted = new BaseComponent[towns.size()];
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
-			TownyMessaging.sendErrorMsg(town.getName());
 			TextComponent townName = new TextComponent(StringMgmt.remUnderscore(town.getName()));
 			townName.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 			
@@ -113,17 +112,13 @@ public class TownySpigotMessaging {
 			}
 			
 			String spawnCost;
+
+			spawnCost = ChatColor.RESET + String.format(TownySettings.getLangString("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 			
-			if (town.getSpawnCost() == 0) {
-				spawnCost = "Free";
-			} else {
-				spawnCost = "$" + town.getSpawnCost();
-			}
-			String hoverText = ChatColor.GREEN + "Click to spawn to: " + ChatColor.BOLD + ChatColor.YELLOW + town + ChatColor.RESET + ChatColor.GREEN +  "\n" + "Spawn Cost = " + ChatColor.YELLOW + spawnCost;
+			String hoverText = String.format(TownySettings.getLangString("msg_click_spawn"), town) + "\n" + spawnCost;
 			
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
-
 			
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
@@ -149,7 +144,6 @@ public class TownySpigotMessaging {
 		BaseComponent[] nationsformatted = new BaseComponent[nations.size()];
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
-			TownyMessaging.sendErrorMsg(nation.getName());
 			TextComponent nationName = new TextComponent(StringMgmt.remUnderscore(nation.getName()));
 			nationName.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 
@@ -170,13 +164,9 @@ public class TownySpigotMessaging {
 
 			String spawnCost;
 
-			if (nation.getSpawnCost() == 0) {
-				spawnCost = "Free";
-			} else {
-				spawnCost = "$" + nation.getSpawnCost();
-			}
+			spawnCost = ChatColor.RESET + String.format(TownySettings.getLangString("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
-			String hoverText = ChatColor.GREEN + "Click to spawn to: " + ChatColor.BOLD + ChatColor.YELLOW + nation + ChatColor.RESET + ChatColor.GREEN +  "\n" + "Spawn Cost = " + ChatColor.YELLOW + spawnCost;
+			String hoverText = String.format(TownySettings.getLangString("msg_click_spawn"), nation) + "\n" + spawnCost;
 
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
