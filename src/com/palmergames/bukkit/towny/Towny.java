@@ -39,6 +39,7 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -186,7 +187,17 @@ public class Towny extends JavaPlugin {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
-					townyUniverse.onLogin(player);
+					
+					// Test and kick any players with invalid names.
+					if (player.getName().contains(" ")) {
+						player.kickPlayer("Invalid name!");
+						return;
+					}
+
+					// Perform login code in it's own thread to update Towny data.
+					if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(this, player), 0L) == -1) {
+						TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
+					}
 				}
 		}
 	}
