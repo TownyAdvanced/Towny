@@ -64,29 +64,30 @@ public class TownyCustomListener implements Listener {
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				String msg = chunkNotifier.getNotificationString(resident);
 				
-				// Cancel any older tasks running to prevent them from leaking over.
-				if (playerActionTasks.get(player) != null) {
-					Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-				}
-				
-				int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);;
-				if (msg != null)
-					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
-						int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg)), 0, 20L).getTaskId();
-						Bukkit.getScheduler().runTaskLater(plugin, () -> {
-							
-							// Cancel task.
-							Bukkit.getScheduler().cancelTask(taskID);
-							
-							// Remove cached task.
-							playerActionTasks.remove(player);
-						}, 20L * seconds);
-						
-						// Cache ID
-						playerActionTasks.put(player, taskID);
-					} else {						
-						player.sendMessage(msg);
+				int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
+				if (seconds > 3) { // Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
+					// Cancel any older tasks running to prevent them from leaking over.
+					if (playerActionTasks.get(player) != null) {
+						Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
 					}
+					
+					if (msg != null)
+						if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
+							int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg)), 0, 20L).getTaskId();
+							Bukkit.getScheduler().runTaskLater(plugin, () -> {							
+								// Cancel task.
+								Bukkit.getScheduler().cancelTask(taskID);
+							}, 20L * seconds);
+							// Remove previous task.
+							if (playerActionTasks.containsKey(player))
+								Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+							// Cache ID
+							playerActionTasks.put(player, taskID);
+						} else {						
+							player.sendMessage(msg);
+						}
+				} else 
+					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 			}
 		} catch (NotRegisteredException e) {
 			// likely Citizens' NPC
