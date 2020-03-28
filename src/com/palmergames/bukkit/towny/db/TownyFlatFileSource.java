@@ -849,18 +849,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (tokens.length == 3)
 						try {
 							TownyWorld world = getWorld(tokens[0]);
-							
-							int x = Integer.parseInt(tokens[1]);
-							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
-							town.forceSetHomeBlock(homeBlock);
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-						}	
+							try {
+								int x = Integer.parseInt(tokens[1]);
+								int z = Integer.parseInt(tokens[2]);
+								TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
+								town.forceSetHomeBlock(homeBlock);
+							} catch (NumberFormatException e) {
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+							} catch (NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+							} catch (TownyException e) {
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+							}
+                        } catch (NotRegisteredException e) {
+                            TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+                        }
 				}
 				
 				line = keys.get("spawn");
