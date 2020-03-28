@@ -4304,3 +4304,18 @@ v0.92.0.11:
   - Make /t outpost outpostname case insensitive.
     - Fixes part of #3826.
   - Fix explosion revert bug.
+  - Add Click-to-Spawn for Town Lists and Nation Lists, courtesy of Siris with PR #3832.
+    - You can now click the lists to spawn to the town or nation.
+    - The cost to spawn will appear as well.
+  - Move onLogin and onLogout out of TownyUniverse, courtesy of Siris with PR #3830.
+  - Language files bumped to 0.77.
+0.96.0.5:
+  - zh-TW.yml updated by shou692199 with PR #3836.
+  - Rename FlagWar files from "TownyWar"; Separate NationZone checks from FlagWar, courtesy of TheFlagCourier with PR #3661.
+  - Prevent admins with the towny.admin permission node (and console users too,) from being slowed down by the invite cooldown.
+    - Closes #3834.
+  - Changed Command: /ta town TOWNNAME add NAME
+    - no longer sends an invite to the player, used to force a player to join a town.
+    - Closes #3812.
+  - New Command: /ta town TOWNNAME invite NAME
+    - sends invite to player, does not have a cooldown.

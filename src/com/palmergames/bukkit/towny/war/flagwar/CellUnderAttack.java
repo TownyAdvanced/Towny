@@ -22,7 +22,7 @@ public class CellUnderAttack extends Cell {
 	private long timeBetweenColorChange;
 
 	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {
-		this(plugin, nameOfFlagOwner, flagBaseBlock, TownyWarConfig.getTimeBetweenFlagColorChange());
+		this(plugin, nameOfFlagOwner, flagBaseBlock, FlagWarConfig.getTimeBetweenFlagColorChange());
 	}
 	
 	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock, long timeBetweenColorChange) {
@@ -46,10 +46,10 @@ public class CellUnderAttack extends Cell {
 		beaconFlagBlocks = new ArrayList<Block>();
 		beaconWireframeBlocks = new ArrayList<Block>();
 
-		if (!TownyWarConfig.isDrawingBeacon())
+		if (!FlagWarConfig.isDrawingBeacon())
 			return;
 
-		int beaconSize = TownyWarConfig.getBeaconSize();
+		int beaconSize = FlagWarConfig.getBeaconSize();
 		if (Coord.getCellSize() < beaconSize)
 			return;
 
@@ -82,7 +82,7 @@ public class CellUnderAttack extends Cell {
 
 	private int getMinimumHeightForBeacon() {
 
-		return getTopOfFlagBlock().getY() + TownyWarConfig.getBeaconMinHeightAboveFlag();
+		return getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMinHeightAboveFlag();
 	}
 
 	private int getEdgeCount(int x, int y, int z, int outerEdge) {
@@ -98,16 +98,16 @@ public class CellUnderAttack extends Cell {
 	private Block getBeaconMinBlock(World world) {
 
 		int middle = (int) Math.floor(Coord.getCellSize() / 2.0);
-		int radiusCenterExpansion = TownyWarConfig.getBeaconRadius() - 1;
+		int radiusCenterExpansion = FlagWarConfig.getBeaconRadius() - 1;
 		int fromCorner = middle - radiusCenterExpansion;
 
 		int x = (getX() * Coord.getCellSize()) + fromCorner;
 		int z = (getZ() * Coord.getCellSize()) + fromCorner;
 
 		int maxY = world.getMaxHeight();
-		int y = getTopOfFlagBlock().getY() + TownyWarConfig.getBeaconMaxHeightAboveFlag();
+		int y = getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMaxHeightAboveFlag();
 		if (y > maxY) {
-			y = maxY - TownyWarConfig.getBeaconSize();
+			y = maxY - FlagWarConfig.getBeaconSize();
 		}
 
 		return world.getBlockAt(x, y, z);
@@ -125,7 +125,7 @@ public class CellUnderAttack extends Cell {
 
 	public boolean hasEnded() {
 
-		return flagColorId >= TownyWarConfig.getWoolColors().length;
+		return flagColorId >= FlagWarConfig.getWoolColors().length;
 	}
 
 	public void changeFlag() {
@@ -138,16 +138,16 @@ public class CellUnderAttack extends Cell {
 
 		loadBeacon();
 
-		flagBaseBlock.setType(TownyWarConfig.getFlagBaseMaterial());
+		flagBaseBlock.setType(FlagWarConfig.getFlagBaseMaterial());
 		updateFlag();
-		flagLightBlock.setType(TownyWarConfig.getFlagLightMaterial());
+		flagLightBlock.setType(FlagWarConfig.getFlagLightMaterial());
 		for (Block block : beaconWireframeBlocks)
-			block.setType(TownyWarConfig.getBeaconWireFrameMaterial());
+			block.setType(FlagWarConfig.getBeaconWireFrameMaterial());
 	}
 
 	public void updateFlag() {
 
-		Material[] woolColors = TownyWarConfig.getWoolColors();
+		Material[] woolColors = FlagWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
 			
