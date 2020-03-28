@@ -4317,3 +4317,4 @@ v0.92.0.11:
   - Move onLogin and onLogout out of TownyUniverse, courtesy of Siris with PR #3830.
   - Language files bumped to 0.77.
 0.96.0.5:
+  - zh-TW.yml updated by shou692199 with PR #3836.
