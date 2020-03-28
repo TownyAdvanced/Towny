@@ -4314,3 +4314,8 @@ v0.92.0.11:
   - Rename FlagWar files from "TownyWar"; Separate NationZone checks from FlagWar, courtesy of TheFlagCourier with PR #3661.
   - Prevent admins with the towny.admin permission node (and console users too,) from being slowed down by the invite cooldown.
     - Closes #3834.
+  - Changed Command: /ta town TOWNNAME add NAME
+    - no longer sends an invite to the player, used to force a player to join a town.
+    - Closes #3812.
+  - New Command: /ta town TOWNNAME invite NAME
+    - sends invite to player, does not have a cooldown.
