@@ -853,14 +853,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode(split[1].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
-			if (split[1].equalsIgnoreCase("add")) {
-				/*
-				 * if (isConsole) { sender.sendMessage(
-				 * "[Towny] InputError: This command was designed for use in game only."
-				 * ); return; }
-				 */
+			if (split[1].equalsIgnoreCase("invite")) {
+				// Give admins the ability to invite a player to town, invite still requires acceptance.
 				TownCommand.townAdd(getSender(), town, StringMgmt.remArgs(split, 2));
-
+				
+			} else if (split[1].equalsIgnoreCase("add")) {
+				// Force-join command for admins to use to bypass invites system.
+				Resident resident;
+				try {
+					resident = townyUniverse.getDataSource().getResident(split[2]);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[2]));
+					return;
+				}
+				TownCommand.townAddResident(town, resident);
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
+				
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, ResidentUtil.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
