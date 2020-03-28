@@ -970,8 +970,8 @@ public enum ConfigNodes {
 			"# This setting only applies to servers running spigot, paper or bungeecord.",
 			"# On servers using craftbukkit.jar the notifications will always appear in the chat.",
 			"# When set to false the notifications will appear in the chat rather than the action bar."),
-
-
+	NOTIFICATION_ACTIONBAR_DURATION("notification.notification_actionbar_duration", "15",
+		"# This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds"),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",
