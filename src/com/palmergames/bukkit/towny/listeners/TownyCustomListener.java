@@ -72,7 +72,14 @@ public class TownyCustomListener implements Listener {
 				if (msg != null)
 					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
 						int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg)), 0, 20L).getTaskId();
-						Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getScheduler().cancelTask(taskID), 20L * seconds);
+						Bukkit.getScheduler().runTaskLater(plugin, () -> {
+							
+							// Cancel task.
+							Bukkit.getScheduler().cancelTask(taskID);
+							
+							// Remove cached task.
+							playerActionTasks.remove(player);
+						}, 20L * seconds);
 						
 						// Cache ID
 						playerActionTasks.put(player, taskID);
