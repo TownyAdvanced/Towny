@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -2397,19 +2398,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
 
-		townyUniverse.getDataSource().newTown(name);
-		Town town = townyUniverse.getDataSource().getTown(name);
+		townyDataSource.newTown(name);
+		Town town = townyDataSource.getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
 
 		// Set the plot permissions to mirror the towns.
-
 		townBlock.setType(townBlock.getType());
-
 		town.setSpawn(spawn);
 		town.setUuid(UUID.randomUUID());
 		town.setRegistered(System.currentTimeMillis());
@@ -2432,18 +2431,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
 			try {
-				town.getAccount().setBalance(0, "Deleting Town");
+				town.getAccount().setBalance(0, "Setting 0 balance for Town");
 			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTownBlock(townBlock);
-		townyUniverse.getDataSource().saveTown(town);
-		townyUniverse.getDataSource().saveWorld(world);
+		townyDataSource.saveResident(resident);
+		townyDataSource.saveTownBlock(townBlock);
+		townyDataSource.saveTown(town);
+		townyDataSource.saveWorld(world);
 		
-		townyUniverse.getDataSource().saveTownList();
+		townyDataSource.saveTownList();
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());

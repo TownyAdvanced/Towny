@@ -1462,9 +1462,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("town");
 					if (line != null)
 						if (line.isEmpty()) {
-							TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);							
-//							TownyWorld world = townBlock.getWorld();
-//							world.removeTownBlock(townBlock);
+							TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);
+							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
@@ -1554,9 +1553,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				} catch (Exception e) {
 					if (test == "town") {
-						TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);						
-//						TownyWorld world = townBlock.getWorld();
-//						world.removeTownBlock(townBlock);
+						TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);
+						TownyUniverse.getInstance().removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
 						continue;
 					}
@@ -1566,12 +1564,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} else {
 				TownyMessaging.sendErrorMsg("TownBlock file contains unknown error, deleting " + path);
-//				TownyWorld world = townBlock.getWorld();
-//				world.removeTownBlock(townBlock);
+				TownyUniverse.getInstance().removeTownBlock(townBlock);
 				deleteTownBlock(townBlock);
 			}
 		}
-//		saveTownBlockList();
 		
 		return true;
 	}
@@ -2089,12 +2085,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveAllTownBlocks() {
-
-//		for (TownyWorld world : getWorlds()) {
-//			for (TownBlock townBlock : world.getTownBlocks())
-//				saveTownBlock(townBlock);
-//		}
-
 		for (Town town : getTowns()) {
 			for (TownBlock townBlock : town.getTownBlocks())
 				saveTownBlock(townBlock);
@@ -2440,14 +2430,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		File file = new File(getTownBlockFilename(townBlock));
 		if (file.exists())
-			file.delete();//file.deleteOnExit();
+			file.delete();
 	}
 	
 	@Override
 	public void deletePlotGroup(PlotGroup group) {
     	File file = new File(getPlotGroupFilename(group));
     	if (file.exists())
-    		file.deleteOnExit();
+    		file.delete();
     	else
     		TownyMessaging.sendErrorMsg("That file doesn't exist!");
 	}

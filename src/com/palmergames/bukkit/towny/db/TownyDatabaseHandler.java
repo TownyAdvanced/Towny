@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -39,8 +38,8 @@ import org.bukkit.entity.Player;
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -383,12 +382,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public List<TownBlock> getAllTownBlocks() {
-		List<TownBlock> townBlocks = new ArrayList<>();
-		for (Map.Entry<WorldCoord, TownBlock> mapElement : TownyUniverse.getInstance().getTownBlocks().entrySet()) {
-			townBlocks.add(mapElement.getValue());
-		}
-		return townBlocks;
+	public Collection<TownBlock> getAllTownBlocks() {
+		return TownyUniverse.getInstance().getTownBlocks().values();
 	}
 	
 	public List<PlotGroup> getAllPlotGroups() {
@@ -537,7 +532,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return;
 		
 		removeTownBlocks(town);
-		//removeTownBlocks(town);		
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();
@@ -1146,5 +1140,4 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
-	
 }

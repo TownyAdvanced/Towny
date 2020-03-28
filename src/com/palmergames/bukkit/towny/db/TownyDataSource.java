@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -103,10 +104,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadPlotGroupList();
 
 	abstract public boolean loadPlotGroups();
-//
-//	abstract public boolean saveTownBlockList();
-//	
-//	abstract public boolean saveTownBlockList(Town town);
 
 	abstract public boolean saveResidentList();
 
@@ -313,7 +310,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public List<TownBlock> getAllTownBlocks();
+	abstract public Collection<TownBlock> getAllTownBlocks();
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 

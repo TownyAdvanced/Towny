@@ -537,7 +537,7 @@ public class TownyEntityMonitorListener implements Listener {
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
 					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
-					if (War.isWarZone(jailBlock.getWorldCoord())) {
+					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
 						defenderResident.setJailed(defenderResident, index, town);
 						try {
 							TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");

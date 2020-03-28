@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -138,31 +137,6 @@ public class TownyWorld extends TownyObject {
 			 * }
 			 */
 		}
-	}
-
-	public void removeTownBlock(TownBlock townBlock) {
-
-		if (hasTownBlock(townBlock.getCoord())) {			
-	
-			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-	
-			TownyUniverse.getInstance().removeTownBlock(townBlock);
-		}
-	}
-
-	public void removeTownBlocks(List<TownBlock> townBlocks) {
-
-		for (TownBlock townBlock : new ArrayList<>(townBlocks))
-			removeTownBlock(townBlock);
 	}
 
 	@Override

@@ -513,20 +513,7 @@ public class TownyUniverse {
 		else 
 			throw new NotRegisteredException();
 	}
-	
-	/**
-	 * How to get all of the townblocks in a server for now.
-	 * 
-	 * Only used twice: 
-	 *  1. In Daily Timer task for outputting of stats.
-	 *  2. In /towny universe output.
-	 * TODO: That TownBlockCache
-	 * @return ConcurrentHashMap<WorldCoord, TownBlock> of all TownBlocks.
-	 */
-	public ConcurrentHashMap<WorldCoord, TownBlock> getAllTownBlocks() {
-		return getTownBlocks();
-	}
-	
+
 	/**
 	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
 	 * Populated at load time from townblocks folder's files.
