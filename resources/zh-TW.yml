@@ -1,5 +1,5 @@
 name: Towny
-version: 0.76
+version: 0.77
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1090,3 +1090,7 @@ msg_already_ally: '您的國家已經與%s建立了聯盟。'
 
 # Added in 0.76
 msg_you: '您'
+
+# Added in 0.77
+msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_spawn_cost: '&aSpawn Cost = &e%s'

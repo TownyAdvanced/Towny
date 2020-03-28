@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
@@ -62,6 +63,9 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -1341,6 +1345,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 	
 	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
+		
+		if (Towny.isSpigot && sender instanceof Player) {
+			TownySpigotMessaging.sendSpigotTownList(sender, towns, page, total);
+			return;
+		}
 
 		int iMax = page * 10;
 		if ((page * 10) > towns.size()) {
@@ -1356,12 +1365,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
 		}
-		sender.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
-				Colors.Blue + TownySettings.getLangString("town_name") + 
+		
+		String[] messages = ChatTools.formatList(TownySettings.getLangString("town_plu"),
+			Colors.Blue + TownySettings.getLangString("town_name") +
 				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents")),
-				townsformatted, TownySettings.getListPageMsg(page, total)
-				)
+			townsformatted, TownySettings.getListPageMsg(page, total)
 		);
+		
+		sender.sendMessage(messages);
+		
 	}
 
 	public void townMayor(Player player, String[] split) {
