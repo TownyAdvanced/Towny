@@ -24,6 +24,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -32,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TownyCustomListener implements Listener {
 	private final Towny plugin;
-	private ConcurrentHashMap<Player, Integer> playerActionTasks = new ConcurrentHashMap<>();
+	private Map<Player, Integer> playerActionTasks = new HashMap<>();
 
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
