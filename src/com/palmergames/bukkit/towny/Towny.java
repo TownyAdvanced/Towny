@@ -220,32 +220,6 @@ public class Towny extends JavaPlugin {
 	// ------------------- TESTING CODE -------------------
 	
 
-	public void setWorldFlags() {
-		TownyUniverse universe = TownyUniverse.getInstance();
-		for (Town town : universe.getDataSource().getTowns()) {
-
-			if (town.getWorld() == null) {
-				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");
-				if (town.hasHomeBlock())
-					try {
-						TownyWorld world = town.getHomeBlock().getWorld();
-						if (!world.hasTown(town)) {
-							world.addTown(town);
-							universe.getDataSource().saveTown(town);
-							universe.getDataSource().saveWorld(world);
-						}
-					} catch (TownyException e) {
-						// Error fetching homeblock
-						LOGGER.warn("[Towny Error] Failed get world data for: " + town.getName());
-					}
-				else {
-					LOGGER.warn("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
-				}
-			}
-		}
-
-	}
-
 	@Override
 	public void onDisable() {
 
@@ -297,8 +271,6 @@ public class Towny extends JavaPlugin {
 		}
 
 		checkPlugins();
-
-		setWorldFlags();
 
 		// make sure the timers are stopped for a reset
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
@@ -905,7 +877,7 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return TownySettings.getSaveDatabase();
+				return TownySettings.getSaveDatabase().toLowerCase();
 			}
 		}));
 		

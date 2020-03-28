@@ -232,6 +232,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "townlist":
 				case "allylist":
 				case "enemylist":
+				case "online":
 				case "join":
 				case "delete":
 				case "spawn":
@@ -294,7 +295,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							case "remove":
 								if (args.length == 3) {
 									try {
-										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), args[1]);
+										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), args[2]);
 									} catch (NotRegisteredException e) {
 										return Collections.emptyList();
 									}
@@ -1075,7 +1076,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			nation.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, TownySettings.getLangString("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -1112,7 +1113,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.getAccount().payTo(amount, nation, "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2411,7 +2412,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setTitle(title + " ");
+				resident.setTitle(title);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasTitle())
@@ -2446,7 +2447,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-				resident.setSurname(" " + surname);
+				resident.setSurname(surname);
 				townyUniverse.getDataSource().saveResident(resident);
 
 				if (resident.hasSurname())

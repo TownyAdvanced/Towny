@@ -551,7 +551,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
 	 * 
 	 * @param file - File from which the HashMap will be made.
-	 * @return HashMap<String, String> - Used for loading keys and values from object files. 
+	 * @return HashMap - Used for loading keys and values from object files. 
 	 */
 	public HashMap<String, String> loadFileIntoHashMap(File file) {
 		HashMap<String, String> keys = new HashMap<>();
@@ -1168,7 +1168,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadWorld(TownyWorld world) {
 		
 		String line = "";
-		String[] tokens;
 		String path = getWorldFilename(world);
 		
 		// create the world file if it doesn't exist
@@ -1181,21 +1180,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading World: " + world.getName());
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileWorld);
-				
-				line = keys.get("towns");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null) {
-								town.setWorld(world);
-								//world.addTown(town); not needed as it's handled in the Town object
-							}
-						}
-					}
-				}
 				
 				line = keys.get("claimable");
 				if (line != null)
@@ -1527,6 +1511,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						try {
 							Town town = getTown(line.trim());
 							townBlock.setTown(town);
+							TownyWorld townyWorld = townBlock.getWorld();
+							if (townyWorld != null && !townyWorld.hasTown(town))
+								townyWorld.addTown(town);
 						} catch (Exception ignored) {
 						}
 
@@ -2026,11 +2013,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveWorld(TownyWorld world) {
 
 		List<String> list = new ArrayList<>();
-
-		// Towns
-		list.add("towns=" + StringMgmt.join(world.getTowns(), ","));
-
-		list.add("");
 
 		// PvP
 		list.add("pvp=" + world.isPVP());

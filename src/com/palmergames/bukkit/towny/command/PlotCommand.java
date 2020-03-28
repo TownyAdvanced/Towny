@@ -129,7 +129,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"fire",
 		"pvp",
 		"explosion",
-		"mob"
+		"mobs"
 	);
 
 	public PlotCommand(Towny instance) {
@@ -275,7 +275,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 									// Add the confirmation for claiming a plot group.
 									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_CLAIM_ACTION, new GroupConfirmation(group, player));
-									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+									String firstLine = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 									
 									return true;
@@ -1223,26 +1223,26 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	private void toggleTest(Player player, TownBlock townBlock, String split) throws TownyException {
 
 		// Make sure we are allowed to set these permissions.
-		Town town = townBlock.getTown();
+
 		split = split.toLowerCase();
 
 		if (split.contains("mobs")) {
-			if (town.getWorld().isForceTownMobs())
+			if (townBlock.getWorld().isForceTownMobs())
 				throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
 		}
 
 		if (split.contains("fire")) {
-			if (town.getWorld().isForceFire())
+			if (townBlock.getWorld().isForceFire())
 				throw new TownyException(TownySettings.getLangString("msg_world_fire"));
 		}
 
 		if (split.contains("explosion")) {
-			if (town.getWorld().isForceExpl())
+			if (townBlock.getWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
 		}
 
 		if (split.contains("pvp")) {
-			if (town.getWorld().isForcePVP())
+			if (townBlock.getWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 		}
 		if ((split.contains("pvp")) || (split.trim().equalsIgnoreCase("off"))) {

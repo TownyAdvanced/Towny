@@ -27,7 +27,6 @@ public class SQL_Schema {
 
 	private static List<String> getWorldColumns() {
 		List<String> columns = new ArrayList<>();
-		columns.add("`towns` mediumtext NOT NULL");
 		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
@@ -439,9 +438,7 @@ public class SQL_Schema {
      *
      * @param cntx - Connection.
      * @param db_name - Name of database.
-	 * @deprecated - This method no longer does anything do to being empty.
      */
-    @Deprecated
     public static void cleanup(Connection cntx, String db_name) {
     	
 		/*
@@ -465,5 +462,24 @@ public class SQL_Schema {
 //                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
 //
 //        }
+
+    	/*
+    	 * Update WORLDS 
+    	 */
+    	String world_update;
+    	
+    	try {
+    		world_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "WORLDS` " + "DROP COLUMN `towns`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(world_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table WORLDS :" + ee.getMessage());
+    	
+    	}    	
 	}
 }

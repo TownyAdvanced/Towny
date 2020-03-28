@@ -63,7 +63,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 		}
 		this.tag = text.toUpperCase().trim();
-		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
+		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this, this.tag));
 	}
 
 	public String getTag() {
@@ -723,7 +723,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			World world;
 
 			if (hasCapital() && getCapital().hasWorld()) {
-				world = BukkitTools.getWorld(getCapital().getWorld().getName());
+				world = BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
 			} else {
 				world = BukkitTools.getWorlds().get(0);
 			}
@@ -753,7 +753,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	@Deprecated
 	public World getBukkitWorld() {
 		if (hasCapital() && getCapital().hasWorld()) {
-			return BukkitTools.getWorld(getCapital().getWorld().getName());
+			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
