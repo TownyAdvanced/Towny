@@ -75,7 +75,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups"
 		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "townblocks.txt",
 			dataFolderPath + File.separator + "residents.txt",
 			dataFolderPath + File.separator + "towns.txt",
 			dataFolderPath + File.separator + "nations.txt",
@@ -254,7 +253,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
 				File[] townBlockFiles = worldFolder.listFiles();
 				int total = 0;
-				for (File townBlockFile : townBlockFiles) {					
+				for (File townBlockFile : townBlockFiles) {
+					if (!townBlockFile.getName().endsWith(".data") || townBlockFile.getName().equalsIgnoreCase("deleted")) {
+						// File is not a townblock.data file or is the deleted folder.
+						continue;
+					}
 					String[] coords = townBlockFile.getName().split("_");
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
@@ -2430,7 +2433,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		File file = new File(getTownBlockFilename(townBlock));
 		if (file.exists())
-			file.delete();
+			try {
+				FileMgmt.moveTownBlockFile(file, "deleted", townBlock.getTown().getName());
+			} catch (NotRegisteredException e) {
+				file.delete();
+			}
 	}
 	
 	@Override
