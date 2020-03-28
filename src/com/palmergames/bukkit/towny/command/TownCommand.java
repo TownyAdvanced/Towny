@@ -2689,10 +2689,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static void townAddResidents(Object sender, Town town, List<Resident> invited) {
 		String name;
+		boolean admin = false;
 		if (sender instanceof Player) {
 			name = ((Player) sender).getName();
+			if (TownyUniverse.getInstance().getPermissionSource().has((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
+				admin = true;				
 		} else {
-			name = null;
+			name = "Console";
+			admin = true;
 		}
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
@@ -2718,7 +2722,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown() ));
 					invited.remove(newMember);
-				} else if (TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
+				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_resident_doesnt_meet_invite_cooldown"), newMember));
 					invited.remove(newMember);
 				} else {
@@ -2739,9 +2743,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		if (invited.size() > 0) {
 			StringBuilder msg = new StringBuilder();
-			if (name == null){
-				name = "Console";
-			}
 			for (Resident newMember : invited)
 				msg.append(newMember.getName()).append(", ");
 
