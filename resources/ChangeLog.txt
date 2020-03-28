@@ -4319,3 +4319,5 @@ v0.92.0.11:
 0.96.0.5:
   - zh-TW.yml updated by shou692199 with PR #3836.
   - Rename FlagWar files from "TownyWar"; Separate NationZone checks from FlagWar, courtesy of TheFlagCourier with PR #3661.
+  - Prevent admins with the towny.admin permission node (and console users too,) from being slowed down by the invite cooldown.
+    - Closes #3834.
