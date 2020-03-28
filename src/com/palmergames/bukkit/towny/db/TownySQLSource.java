@@ -865,7 +865,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                             try {
                                 int x = Integer.parseInt(tokens[1]);
                                 int z = Integer.parseInt(tokens[2]);
-                                TownBlock homeBlock = town.getTownBlock(new WorldCoord(world.getName(), x, z));
+                                TownBlock homeBlock =  TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
                                 town.forceSetHomeBlock(homeBlock);
                             } catch (NumberFormatException e) {
                                 TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");

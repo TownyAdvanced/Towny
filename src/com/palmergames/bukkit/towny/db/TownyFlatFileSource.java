@@ -848,9 +848,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length == 3)
 						try {
+							TownyWorld world = getWorld(tokens[0]);
+							
 							int x = Integer.parseInt(tokens[1]);
 							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(town.getHomeblockWorld().getName(), x, z));
+							TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
 							town.forceSetHomeBlock(homeBlock);
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
