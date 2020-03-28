@@ -4311,3 +4311,4 @@ v0.92.0.11:
   - Language files bumped to 0.77.
 0.96.0.5:
   - zh-TW.yml updated by shou692199 with PR #3836.
+  - Rename FlagWar files from "TownyWar"; Separate NationZone checks from FlagWar, courtesy of TheFlagCourier with PR #3661.
