@@ -4311,3 +4311,8 @@ v0.92.0.11:
   - Make /t outpost outpostname case insensitive.
     - Fixes part of #3826.
   - Fix explosion revert bug.
+  - Add Click-to-Spawn for Town Lists and Nation Lists, courtesy of Siris with PR #3832.
+    - You can now click the lists to spawn to the town or nation.
+    - The cost to spawn will appear as well.
+  - Move onLogin and onLogout out of TownyUniverse, courtesy of Siris with PR #3830.
+  - Language files bumped to 0.77.
