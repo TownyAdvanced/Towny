@@ -766,7 +766,7 @@ public class Towny extends JavaPlugin {
 
 	
 	/**
-	 * @return the townyWarBlockListener
+	 * @return the flagWarBlockListener
 	 */
 	public FlagWarBlockListener getFlagWarBlockListener() {
 	
@@ -775,7 +775,7 @@ public class Towny extends JavaPlugin {
 
 	
 	/**
-	 * @return the townyWarCustomListener
+	 * @return the flagWarCustomListener
 	 */
 	public FlagWarCustomListener getFlagWarCustomListener() {
 	
@@ -784,7 +784,7 @@ public class Towny extends JavaPlugin {
 
 	
 	/**
-	 * @return the townyWarEntityListener
+	 * @return the flagWarEntityListener
 	 */
 	public FlagWarEntityListener getFlagWarEntityListener() {
 	

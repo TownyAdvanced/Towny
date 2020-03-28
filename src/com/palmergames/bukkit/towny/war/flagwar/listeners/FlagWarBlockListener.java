@@ -35,7 +35,7 @@ public class FlagWarBlockListener implements Listener {
 	 * if (block == null)
 	 * return;
 	 * 
-	 * if (block.getType() == TownyWarConfig.getFlagBaseMaterial()) {
+	 * if (block.getType() == FlagWarConfig.getFlagBaseMaterial()) {
 	 * int topY = block.getWorld().getHighestBlockYAt(block.getX(),
 	 * block.getZ()) - 1;
 	 * if (block.getY() >= topY) {
