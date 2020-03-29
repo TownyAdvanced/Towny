@@ -4323,4 +4323,5 @@ v0.92.0.11:
   - New Config Option: notification.notification_actionbar_duration
     - default: 15
     - This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds.
-    
+  - Fix player-name-changes not updating the account Towny looks to for economy.
+    - Closes #3815, #3840.
