@@ -129,7 +129,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				}
 
 				// Check if entity is a Citizens NPC
-				if (plugin.isCitizens2()) {
+				if (Towny.isCitizens) {
 					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
 						continue;
 				}

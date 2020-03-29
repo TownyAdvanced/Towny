@@ -52,7 +52,7 @@ public class BukkitTools {
 		
 		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
 			String iterPlayerName = iterPlayer.getName();
-			if (plugin.isCitizens2()) {
+			if (Towny.isCitizens) {
 				if (CitizensAPI.getNPCRegistry().isNPC(iterPlayer)) {
 					continue;
 				}

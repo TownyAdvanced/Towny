@@ -44,6 +44,13 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.naming.InvalidNameException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -52,14 +59,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import javax.naming.InvalidNameException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:
@@ -479,7 +478,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[0].equalsIgnoreCase("mysqldump")) {
 				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
-					TownyDataSource dataSource = new TownyFlatFileSource(plugin, townyUniverse);
+					TownyDataSource dataSource = new TownyFlatFileSource(plugin);
 					dataSource.saveAll();
 					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_mysql_dump_success"));
 					return true;
@@ -1446,22 +1445,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void reloadTowny(Boolean reset) {
-
 		if (reset) {
 			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
 		}
-		if (plugin.load()) {
-			
-			// Register all child permissions for ranks
-			TownyPerms.registerPermissionNodes();
-			
-			// Update permissions for all online players
-			TownyPerms.updateOnlinePerms();
-			
-		}
+		plugin.load();
+
+		// Register all child permissions for ranks
+		TownyPerms.registerPermissionNodes();
+
+		// Update permissions for all online players
+		TownyPerms.updateOnlinePerms();
 
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded"));
-		// TownyMessaging.sendMsg(TownySettings.getLangString("msg_reloaded"));
 	}
 
 	/**

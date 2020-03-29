@@ -43,9 +43,9 @@ public abstract class TownyDataSource {
 	protected final Towny plugin;
 	protected final TownyUniverse universe;
 
-	TownyDataSource(Towny plugin, TownyUniverse universe) {
+	TownyDataSource(Towny plugin) {
 		this.plugin = plugin;
-		this.universe = universe;
+		this.universe = TownyUniverse.getInstance();
 	}
 
 	public abstract boolean backup() throws IOException;

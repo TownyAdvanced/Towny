@@ -80,8 +80,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
     // private boolean ish2 = false;
 
-    public TownySQLSource(Towny plugin, TownyUniverse universe, String type) {
-        super(plugin, universe);
+    public TownySQLSource(Towny plugin, String type) {
+        super(plugin);
         this.type = type;
 		if (!FileMgmt.checkOrCreateFolders(
 			rootFolderPath,

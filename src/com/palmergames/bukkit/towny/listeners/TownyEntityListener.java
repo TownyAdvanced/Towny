@@ -561,7 +561,7 @@ public class TownyEntityListener implements Listener {
 			// remove from world if set to remove mobs globally
 			if (townyWorld.isUsingTowny()) {
 				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
-					if (plugin.isCitizens2()) {
+					if (Towny.isCitizens) {
 						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 							// TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled "
 							// + event.getEntityType().name() +
@@ -584,7 +584,7 @@ public class TownyEntityListener implements Listener {
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
 						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
-							if (plugin.isCitizens2()) {
+							if (Towny.isCitizens) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									// TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled "
 									// + event.getEntityType().name() +

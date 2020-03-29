@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import java.util.List;
 
 public class FlatFile_Task {
@@ -13,7 +14,6 @@ public class FlatFile_Task {
 	 * @param path - path on filesystem.
 	 */
 	public FlatFile_Task(List<String> list, String path) {
-
 		this.list = list;
 		this.path = path;	
 	}

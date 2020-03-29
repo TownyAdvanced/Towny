@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
-import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -16,16 +14,9 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
-import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
-import org.bukkit.Location;
-import org.bukkit.World;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  * Towny's class for internal API Methods
@@ -44,136 +37,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
-    
-    private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
-    private final Trie residentsTrie = new Trie();
-    private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
-    private final Trie townsTrie = new Trie();
-    private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
-    private final Trie nationsTrie = new Trie();
-    private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
-    private final List<Resident> jailedResidents = new ArrayList<>();
-    private final String rootFolder;
-    private TownyDataSource dataSource;
-    private TownyPermissionSource permissionSource;
-    private War warEvent;
+
+	private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
+	private final Trie residentsTrie = new Trie();
+	private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
+	private final Trie townsTrie = new Trie();
+	private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
+	private final Trie nationsTrie = new Trie();
+	private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+	private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+	private final List<Resident> jailedResidents = new ArrayList<>();
+	private final String rootFolder;
+	protected TownyDataSource dataSource;
+	protected TownyPermissionSource permissionSource;
+	private War warEvent;
     
     private TownyUniverse() {
         towny = Towny.getPlugin();
         rootFolder = towny.getDataFolder().getPath();
-    }
-    
-    // TODO: Put loadSettings into the constructor, since it is 1-time-run code.
-    boolean loadSettings() {
-        
-        try {
-            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
-            TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-		// Init logger
-		TownyLogger.getInstance();
-        
-        String saveDbType = TownySettings.getSaveDatabase();
-        String loadDbType = TownySettings.getLoadDatabase();
-        
-        // Setup any defaults before we load the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
-        
-        System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-        
-        clearAll();
-                
-        long startTime = System.currentTimeMillis();
-        if (!loadDatabase(loadDbType)) {
-            System.out.println("[Towny] Error: Failed to load!");
-            return false;
-        }
-        long time = System.currentTimeMillis() - startTime;
-        System.out.println("[Towny] Database loaded in " + time + "ms.");
-        
-        try {
-            dataSource.cleanupBackups();
-            // Set the new class for saving.
-            switch (saveDbType.toLowerCase()) {
-                case "ff":
-                case "flatfile": {
-                    this.dataSource = new TownyFlatFileSource(towny, this);
-                    break;
-                }
-                case "h2":
-                case "sqlite":
-                case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
-                    break;
-                }
-                default: {
-                
-                }
-            }
-            FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            try {
-                dataSource.backup();
-                
-                if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    dataSource.deleteUnusedResidents();
-                }
-                
-            } catch (IOException e) {
-                System.out.println("[Towny] Error: Could not create backup.");
-                e.printStackTrace();
-                return false;
-            }
-            
-            if (loadDbType.equalsIgnoreCase(saveDbType)) {
-                // Update all Worlds data files
-                dataSource.saveAllWorlds();
-            } else {
-                //Formats are different so save ALL data.
-                dataSource.saveAll();
-            }
-            
-        } catch (UnsupportedOperationException e) {
-            System.out.println("[Towny] Error: Unsupported save format!");
-            return false;
-        }
-        
-        File f = new File(rootFolder, "outpostschecked.txt");
-        if (!(f.exists())) {
-            for (Town town : dataSource.getTowns()) {
-                TownySQLSource.validateTownOutposts(town);
-            }
-            towny.saveResource("outpostschecked.txt", false);
-        }
-        
-        return true;
-    }
-    
-    private boolean loadDatabase(String loadDbType) {
-        
-        switch (loadDbType.toLowerCase()) {
-            case "ff":
-            case "flatfile": {
-                this.dataSource = new TownyFlatFileSource(towny, this);
-                break;
-            }
-            case "h2":
-            case "sqlite":
-            case "mysql": {
-                this.dataSource = new TownySQLSource(towny, this, loadDbType.toLowerCase());
-                break;
-            }
-            default: {
-                return false;
-            }
-        }
-        
-        return dataSource.loadAll();
     }
     
     public void startWarEvent() {
@@ -212,7 +93,7 @@ public class TownyUniverse {
     }
     
     public void setPermissionSource(TownyPermissionSource permissionSource) {
-        this.permissionSource = permissionSource;
+    	throw new UnsupportedOperationException();
     }
     
     public War getWarEvent() {

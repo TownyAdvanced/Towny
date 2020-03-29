@@ -58,8 +58,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	private final String newLine = System.getProperty("line.separator");
 	
-	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
-		super(plugin, universe);
+	public TownyFlatFileSource(Towny plugin) {
+		super(plugin);
 		// Create files and folders if non-existent
 		if (!FileMgmt.checkOrCreateFolders(
 			rootFolderPath,

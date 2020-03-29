@@ -54,8 +54,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String logFolderPath;
 	final String backupFolderPath;
 	
-	public TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
-		super(plugin, universe);
+	public TownyDatabaseHandler(Towny plugin) {
+		super(plugin);
 		this.rootFolderPath = universe.getRootFolder();
 		this.dataFolderPath = rootFolderPath + File.separator + "data";
 		this.settingsFolderPath = rootFolderPath + File.separator + "settings";

@@ -83,10 +83,6 @@ public class TownyUniverse {
 		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource();
 	}
 
-	public void setPermissionSource(TownyPermissionSource permissionSource) {
-		com.palmergames.bukkit.towny.TownyUniverse.getInstance().setPermissionSource(permissionSource);
-	}
-
 	public static TownyPermissionSource getPermissionSource() {
 		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getPermissionSource();
 	}

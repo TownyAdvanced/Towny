@@ -584,7 +584,7 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
 			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
-			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
+			if (Towny.isCitizens && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
 				return;
 			event.setCancelled(true);
 			return;
