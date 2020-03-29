@@ -1391,22 +1391,23 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownySettings.getWarSiegeEnabled()) {
 
-				if (TownySettings.getWarSiegeTownLeaveDisabled() && !TownySettings.getWarSiegeRevoltEnabled())
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_voluntary_leave_impossible"));
+				if (TownySettings.getWarSiegeTownLeaveDisabled()) {
 
-				if (town.isRevoltImmunityActive())
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_revolt_immunity_active"));
+					if (!TownySettings.getWarSiegeRevoltEnabled())
+						throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_voluntary_leave_impossible"));
+					if (town.isRevoltImmunityActive())
+						throw new TownyException(TownySettings.getLangString("msg_err_siege_war_revolt_immunity_active"));
 
-				//Activate revolt immunity
-				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
+					//Activate revolt immunity
+					SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
 
-				TownyMessaging.sendGlobalMessage(
-					String.format(TownySettings.getLangString("msg_siege_war_revolt"),
-						town.getFormattedName(),
-						town.getMayor().getFormattedName(),
-						nation.getFormattedName()));
+					TownyMessaging.sendGlobalMessage(
+						String.format(TownySettings.getLangString("msg_siege_war_revolt"),
+							town.getFormattedName(),
+							town.getMayor().getFormattedName(),
+							nation.getFormattedName()));
+				}
 			}
-
 
 			nation.removeTown(town);
 			
