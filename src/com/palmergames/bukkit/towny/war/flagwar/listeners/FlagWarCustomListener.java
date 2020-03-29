@@ -14,8 +14,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
@@ -25,11 +25,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class TownyWarCustomListener implements Listener {
+public class FlagWarCustomListener implements Listener {
 
 	private final Towny plugin;
 
-	public TownyWarCustomListener(Towny instance) {
+	public FlagWarCustomListener(Towny instance) {
 
 		plugin = instance;
 	}
@@ -41,7 +41,7 @@ public class TownyWarCustomListener implements Listener {
 
 		try {
 			CellUnderAttack cell = event.getData();
-			TownyWar.registerAttack(cell);
+			FlagWar.registerAttack(cell);
 		} catch (Exception e) {
 			event.setCancelled(true);
 			event.setReason(e.getMessage());
@@ -58,7 +58,7 @@ public class TownyWarCustomListener implements Listener {
 		CellUnderAttack cell = event.getCell().getAttackData();
 
 		try {
-			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+			FlagWar.townFlagged(FlagWar.cellToWorldCoord(cell).getTownBlock().getTown());
 		} catch (NotRegisteredException ignored) {}
 
 		TownyUniverse universe = TownyUniverse.getInstance();
@@ -95,15 +95,15 @@ public class TownyWarCustomListener implements Listener {
 					}
 				}
 
-				String formattedMoney = TownyEconomyHandler.getFormattedBalance(TownyWarConfig.getDefendedAttackReward());
+				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
 				if (defendingPlayer == null) {
-					if (attackingPlayer.getAccount().pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
+					if (attackingPlayer.getAccount().pay(FlagWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_greater_forces"), formattedMoney));
 						} catch (TownyException ignored) {
 						}
 				} else {
-					if (attackingPlayer.getAccount().payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
+					if (attackingPlayer.getAccount().payTo(FlagWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_attacker"), defendingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
@@ -134,13 +134,13 @@ public class TownyWarCustomListener implements Listener {
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
-			WorldCoord worldCoord = TownyWar.cellToWorldCoord(cell);
+			WorldCoord worldCoord = FlagWar.cellToWorldCoord(cell);
 			universe.removeWarZone(worldCoord);
 
 			TownBlock townBlock = worldCoord.getTownBlock();
 			Town defendingTown = townBlock.getTown();
 
-			TownyWar.townFlagged(defendingTown);
+			FlagWar.townFlagged(defendingTown);
 
 			// Payments
 			double amount = 0;
@@ -149,10 +149,10 @@ public class TownyWarCustomListener implements Listener {
 				try {
 					String reasonType;
 					if (townBlock.isHomeBlock()) {
-						amount = TownyWarConfig.getWonHomeblockReward();
+						amount = FlagWarConfig.getWonHomeblockReward();
 						reasonType = "Homeblock";
 					} else {
-						amount = TownyWarConfig.getWonTownblockReward();
+						amount = FlagWarConfig.getWonTownblockReward();
 						reasonType = "Townblock";
 					}
 
@@ -182,7 +182,7 @@ public class TownyWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			if (TownyWarConfig.isFlaggedTownblockTransfered()) {
+			if (FlagWarConfig.isFlaggedTownblockTransfered()) {
 				// Attacker Claim Automatically
 				try {
 					townBlock.setTown(attackingTown);
@@ -228,7 +228,7 @@ public class TownyWarCustomListener implements Listener {
 		CellUnderAttack cell = event.getCell();
 
 		try {
-			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+			FlagWar.townFlagged(FlagWar.cellToWorldCoord(cell).getTownBlock().getTown());
 		} catch (NotRegisteredException ignored) {}
 
 		TownyUniverse universe = TownyUniverse.getInstance();

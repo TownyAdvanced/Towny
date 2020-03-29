@@ -4261,3 +4261,69 @@ v0.92.0.11:
     - Closes #3777. 
   - Fix msg_changed_public in korean.yml not working.
   - zh-TW.yml updated by shou692199 with PR #3782.
+  - Fix a couple missing child nodes for permissions in the plugin.yml.
+0.96.0.0:
+  - Bump version number for release.
+  - Update bukkit api to 1.15.2.
+0.96.0.1:
+  - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
+  - Fix missing spaces %townyadvanced_towny_prefix% & %townyadvanced_towny_postfix% placeholders.
+  - API: Add Calculation Events, courtesy of Valentina_pro with PR #3794.
+    - TownUpkeepCalculationEvent - get/set upkeep per town.
+    - TownUpkeepPenalityCalculationEvent - get/set upkeep overclaim penalty per town.
+    - NationUpkeepCalculationEvent - get/set upkeep per nation.  
+    - Allows third party plugins to completely override all town and nation upkeeps.
+    - Closes #3781.
+0.96.0.2:
+  - Change metrics chart to report only in lower-case.
+  - API: Add gettable Nation to NationTagChangeEvent, courtesy of Travja with PR #3808. 
+  - Fix resident tab-complete for nation rank manipulation, courtesy of silverwolfg11 with PR #3807.
+  - Fix plot toggle mobs tab-complete, courtesy of silverwolfg11 with PR #3811.
+  - Fix untranslated "town" & "nation" seen in the withdraw and deposit commands feeback.
+  - Add economy commands to towny admin, courtesy of silverwolfg11 with PR #3810.
+    - Closes #3687.
+  - Fix unicode not being saved, courtesy of Siris with PR #3809.
+    - REQUIRES the following settings be made to take effect, these are the new config defaults:
+    - name_check_regex: ^[\P{M}\p{M}*+a-zA-Z0-9._\[\]-]*$
+    - name_remove_regex: '[^\P{M}\p{M}*+a-zA-Z0-9\&._\[\]-]'
+    - Change not required if you don't want players to be able to use Unicode characters.
+    - Closes #3805, #3803.
+0.96.0.3:
+  - Worlds no longer save a list of Towns in them.
+    - This will result in less ways for Towny to enter into Safe Mode.
+    - Towns have changed from town.getWorld() to town.getHomeblockWorld(), with getWorld() becoming deprecated and returning getHomeblockWorld().
+    - Some instances of town.getWorld() are now correctly using townblock.getWorld() or something similar when it is called for.
+    - Stop getHomeblockWorld() from returning null when towns have claimed 0 townblocks.
+    - Towny.setWorldFlags() from startup sequence is gone.
+    - SQL now drops old towns columns and saves/loads worlds without towns like flatfile.
+    - Swap out the List version of towns in TownyWorld for a HashMap, for faster loading of TownBlocks
+  - Fix pvp disabled worlds still be affected with recent change to CombatUtil#preventPVP.
+  - Add space after commas between nation/town ranks, courtesy of jkmartindale with PR #3820.
+    - See in the /resident status page. 
+0.96.0.4:
+  - Make /t outpost outpostname case insensitive.
+    - Fixes part of #3826.
+  - Fix explosion revert bug.
+  - Add Click-to-Spawn for Town Lists and Nation Lists, courtesy of Siris with PR #3832.
+    - You can now click the lists to spawn to the town or nation.
+    - The cost to spawn will appear as well.
+  - Move onLogin and onLogout out of TownyUniverse, courtesy of Siris with PR #3830.
+  - Language files bumped to 0.77.
+0.96.0.5:
+  - zh-TW.yml updated by shou692199 with PR #3836.
+  - Rename FlagWar files from "TownyWar"; Separate NationZone checks from FlagWar, courtesy of TheFlagCourier with PR #3661.
+  - Prevent admins with the towny.admin permission node (and console users too,) from being slowed down by the invite cooldown.
+    - Closes #3834.
+  - Changed Command: /ta town TOWNNAME add NAME
+    - no longer sends an invite to the player, used to force a player to join a town.
+    - Closes #3812.
+  - New Command: /ta town TOWNNAME invite NAME
+    - sends invite to player, does not have a cooldown.
+  - Add Duration Config Option for Action Bar and Increase Default Duration, courtesy of Siris with PR #3833.
+  - New Config Option: notification.notification_actionbar_duration
+    - default: 15
+    - This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds.
+  - Fix player-name-changes not updating the account Towny looks to for economy.
+    - Closes #3815, #3840.
+  - Remove extra delayed task to cancel repeating task, courtesy of Siris with PR #3839.
+    - More efficient way of doing the long-duration action bar.

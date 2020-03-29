@@ -1,5 +1,5 @@
 name: Towny
-version: 0.76
+version: 0.77
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1077,7 +1077,7 @@ msg_err_plot_belongs_to_group_plot_fs2: '土地: %s 屬於土地組, 請使用 /
 msg_err_plot_belongs_to_group_plot_nfs: '土地: %s 屬於土地組, 請使用 /plot group nfs 停售'
 
 # Added in 0.72
-msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理員控制的%s設定封锁您將pvp切換到%s。'
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理員控制的%s設定封鎖您將pvp切換到%s。'
 
 # Added in 0.73
 msg_err_you_aren't currently jailed: '你現在沒有被監禁。'
@@ -1090,3 +1090,7 @@ msg_already_ally: '您的國家已經與%s建立了聯盟。'
 
 # Added in 0.76
 msg_you: '您'
+
+# Added in 0.77
+msg_click_spawn: '&a點擊以傳送至: &e%s'
+msg_spawn_cost: '&a傳送花費 = &e%s'

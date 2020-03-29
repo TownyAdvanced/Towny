@@ -102,6 +102,10 @@ public class NameValidation {
 	 * @return true if this name is valid.
 	 */
 	public static boolean isValidName(String name) {
+
+		if (name.contains("'") || name.contains("`")) {
+			return false;
+		}
 	
 		try {
 			if (namePattern == null)
@@ -114,6 +118,10 @@ public class NameValidation {
 		
 	}
 	public static boolean isValidString(String name) {
+		
+		if (name.contains("'") || name.contains("`")) {
+			return false;
+		}
 
 		try {
 			if (stringPattern == null)

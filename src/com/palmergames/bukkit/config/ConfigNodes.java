@@ -719,14 +719,13 @@ public enum ConfigNodes {
 			"[ /]"),
 	FILTERS_REGEX_NAME_CHECK_REGEX(
 			"filters_colour_chat.regex.name_check_regex",
-			"^[a-zA-Z0-9._\\[\\]-]*$"),
+			"^[\\P{M}\\p{M}*+a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
 			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^a-zA-Z0-9\\&._\\[\\]-]"),
-
+			"[^\\P{M}\\p{M}*+a-zA-Z0-9\\&._\\[\\]-]"),
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
 			"filters_colour_chat.modify_chat.max_name_length",
@@ -971,8 +970,8 @@ public enum ConfigNodes {
 			"# This setting only applies to servers running spigot, paper or bungeecord.",
 			"# On servers using craftbukkit.jar the notifications will always appear in the chat.",
 			"# When set to false the notifications will appear in the chat rather than the action bar."),
-
-
+	NOTIFICATION_ACTIONBAR_DURATION("notification.notification_actionbar_duration", "15",
+		"# This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds"),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",
