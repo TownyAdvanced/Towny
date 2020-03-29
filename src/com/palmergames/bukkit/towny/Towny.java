@@ -52,7 +52,6 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import java.io.BufferedReader;
 import java.io.File;
