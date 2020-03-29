@@ -70,6 +70,7 @@ public class TownyCustomListener implements Listener {
 					// Cancel any older tasks running to prevent them from leaking over.
 					if (playerActionTasks.get(player) != null) {
 						Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+						playerActionTasks.remove(player);
 					}
 					
 					if (msg != null)
@@ -82,6 +83,7 @@ public class TownyCustomListener implements Listener {
 								
 								if (remainingSeconds.get() == 0) {
 									Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+									playerActionTasks.remove(player);
 								}
 							}, 0, 20L).getTaskId();
 							
