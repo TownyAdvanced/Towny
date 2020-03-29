@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Author: Chris H (Zren / Shade)
@@ -69,19 +70,23 @@ public class TownyCustomListener implements Listener {
 					// Cancel any older tasks running to prevent them from leaking over.
 					if (playerActionTasks.get(player) != null) {
 						Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+						playerActionTasks.remove(player);
 					}
 					
 					if (msg != null)
 						if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
-							int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg)), 0, 20L).getTaskId();
-							Bukkit.getScheduler().runTaskLater(plugin, () -> {							
-								// Cancel task.
-								Bukkit.getScheduler().cancelTask(taskID);
-							}, 20L * seconds);
-							// Remove previous task.
-							if (playerActionTasks.containsKey(player))
-								Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-							// Cache ID
+
+							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
+							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+								player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+								remainingSeconds.getAndDecrement();
+								
+								if (remainingSeconds.get() == 0) {
+									Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+									playerActionTasks.remove(player);
+								}
+							}, 0, 20L).getTaskId();
+							
 							playerActionTasks.put(player, taskID);
 						} else {						
 							player.sendMessage(msg);
