@@ -1830,8 +1830,15 @@ public enum ConfigNodes {
 	WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS(
 			"war.siege.switches.pvp_always_on_in_besieged_towns",
 			"true",
-			"# If true, then pvp is always set to on during sieges",
-			"# Pvp returns to its previous setting when the siege ends"),
+			"# If true, then town pvp is always set to on during sieges.",
+			"# The town pvp flag returns to its previous value when the siege ends."),
+	WAR_SIEGE_EXPLOSIONS_ALWAYS_ON_IN_BESIEGED_TOWNS(
+			"war.siege.switches.explosions_always_on_in_besieged_towns",
+			"false",
+			"# If true, then town explosions are always set to on during sieges.",
+			"# The town explosions flag returns to its previous value when the siege ends.",
+			"# The setting is false by default, because SiegeWar is designed to be minimally-destructive.",
+			"# The setting is only recommended for use in combination with a block regeneration feature."),
 	WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES(
 			"war.siege.switches.claiming_disabled_near_siege_zones",
 			"true",

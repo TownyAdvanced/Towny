@@ -357,6 +357,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isBANG() {
 
+		if(TownySettings.getWarSiegeEnabled()
+			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+			&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && isNeutral())
+			&& siege != null
+			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			return true;
+		}
+
 		return this.permissions.explosion;
 	}
 

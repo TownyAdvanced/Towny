@@ -1487,15 +1487,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_public"), town.isPublic() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
-
-				if(TownySettings.getWarSiegeEnabled()
-						&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-						&& town.hasSiege()
-						&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
-				{
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_pvp_off"));
-				}
-
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				
@@ -1712,11 +1703,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (split.contains("explosion")) {
 			if (town.getWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
+
+			if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+				&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())
+				&& town.hasSiege()
+				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_explosions"));
+			}
 		}
 
 		if (split.contains("pvp")) {
 			if (town.getWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
+
+			if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+				&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())
+				&& town.hasSiege()
+				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_pvp"));
+			}
 		}
 	}
 

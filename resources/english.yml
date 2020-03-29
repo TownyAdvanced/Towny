@@ -1127,8 +1127,9 @@ msg_siege_war_town_became_neutral: '&b%s has been confirmed as Neutral. The town
 msg_siege_war_town_became_non_neutral: '&b%s has been confirmed as not-neutral. The town can now join a nation. The town residents can now inflict PVP damange. The town is no longer immune to material siege costs (e.g. pvp, plunder, and taxes).'
 
 #Siege war error message
-#PVP
-msg_err_siege_besieged_town_cannot_toggle_pvp_off: "&6[War]&c Besieged towns have PVP forced ON."
+#Town Toggling
+msg_err_siege_besieged_town_cannot_toggle_pvp: "&6[War]&c Besieged towns have PVP forced ON."
+msg_err_siege_besieged_town_cannot_toggle_explosions: "&6[War]&c Besieged towns have Explosions forced ON."
 #Recruiting
 msg_err_siege_besieged_town_cannot_toggle_open_off: "&6[War]&c Besieged towns cannot open their doors to new residents."
 msg_err_siege_besieged_town_cannot_recruit: "&6[War]&c Besieged towns cannot recruit new residents."

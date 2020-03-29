@@ -3000,7 +3000,11 @@ public class TownySettings {
 	public static boolean getWarSiegePvpAlwaysOnInBesiegedTowns() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
-	
+
+	public static boolean getWarSiegeExplosionsAlwaysOnInBesiegedTowns() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_EXPLOSIONS_ALWAYS_ON_IN_BESIEGED_TOWNS);
+	}
+
 	public static boolean getWarSiegeDelayFullTownRemoval() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL);
 	}
