@@ -4334,3 +4334,5 @@ v0.92.0.11:
     - Closes #3815, #3840.
   - Remove extra delayed task to cancel repeating task, courtesy of Siris with PR #3839.
     - More efficient way of doing the long-duration action bar.
+  - API: TownSpawnEvent, NationSpawnEvent courtesy of Siris with PR #3789.
+    - Closes #3785.
