@@ -4319,3 +4319,8 @@ v0.92.0.11:
     - Closes #3812.
   - New Command: /ta town TOWNNAME invite NAME
     - sends invite to player, does not have a cooldown.
+  - Add Duration Config Option for Action Bar and Increase Default Duration, courtesy of Siris with PR #3833.
+  - New Config Option: notification.notification_actionbar_duration
+    - default: 15
+    - This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds.
+    
