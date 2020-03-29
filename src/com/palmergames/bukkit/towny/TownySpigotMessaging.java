@@ -89,7 +89,7 @@ public class TownySpigotMessaging {
 			iMax = towns.size();
 		}
 
-		BaseComponent[] townsformatted = new BaseComponent[towns.size()];
+		BaseComponent[] townsformatted = new BaseComponent[10];
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
 			TextComponent townName = new TextComponent(StringMgmt.remUnderscore(town.getName()));
@@ -122,14 +122,13 @@ public class TownySpigotMessaging {
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
 			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town));
-			townsformatted[i] = townName;
+			townsformatted[i % 10] = townName;
 			
 		}
 		
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
 		for (BaseComponent baseComponent : townsformatted) {
-			if (baseComponent != null)  // Fixes ProtocolSupport reading a bunch of empty lines.
-				sender.spigot().sendMessage(baseComponent);
+			sender.spigot().sendMessage(baseComponent);
 		}
 		
 		sender.sendMessage(TownySettings.getListPageMsg(page, total));
@@ -177,14 +176,13 @@ public class TownySpigotMessaging {
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
 			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation));
-			nationsformatted[i] = nationName;
+			nationsformatted[i % 10] = nationName;
 
 		}
 
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
 		for (BaseComponent baseComponent : nationsformatted) {
-			if (baseComponent != null)  // Fixes ProtocolSupport reading a bunch of empty lines.
-				sender.spigot().sendMessage(baseComponent);
+			sender.spigot().sendMessage(baseComponent);
 		}
 
 		sender.sendMessage(TownySettings.getListPageMsg(page, total));
