@@ -4332,3 +4332,5 @@ v0.92.0.11:
     - This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds.
   - Fix player-name-changes not updating the account Towny looks to for economy.
     - Closes #3815, #3840.
+  - Remove extra delayed task to cancel repeating task, courtesy of Siris with PR #3839.
+    - More efficient way of doing the long-duration action bar.
