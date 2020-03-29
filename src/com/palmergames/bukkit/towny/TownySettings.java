@@ -2122,19 +2122,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 
-	public static boolean isTownyUpdating(String currentVersion) {
-
-		if (isTownyUpToDate(currentVersion))
-			return false;
-		else
-			return true; // Assume
-	}
-
-	public static boolean isTownyUpToDate(String currentVersion) {
-
-		return currentVersion.equals(getLastRunVersion(currentVersion));
-	}
-
 	public static String getLastRunVersion(String currentVersion) {
 
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);

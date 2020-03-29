@@ -28,20 +28,4 @@ public class JavaUtil {
 		}
 		return false;
 	}
-
-	public static List<String> readTextFromJar(String path) throws IOException {
-
-		BufferedReader fin = new BufferedReader(new InputStreamReader(JavaUtil.class.getResourceAsStream(path)));
-		String line;
-		List<String> out = new ArrayList<>();
-		try {
-			while ((line = fin.readLine()) != null)
-				out.add(line);
-		} catch (IOException e) {
-			throw new IOException(e.getCause());
-		} finally {
-			fin.close();
-		}
-		return out;
-	}
 }

@@ -54,8 +54,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -177,8 +179,32 @@ public class Towny extends JavaPlugin {
 
 			FlagWar.onEnable();
 
-			if (TownySettings.isTownyUpdating(getVersion())) {
-				update();
+			// If there are significant changes from versions to versions they can go here.
+			if (version.equalsIgnoreCase(TownySettings.getLastRunVersion(version))) {
+				try {
+					LOGGER.log(Level.INFO, "------------------------------------");
+					LOGGER.log(Level.INFO, "[Towny] ChangeLog up until v" + getVersion());
+					boolean display = false;
+					String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
+					BufferedReader reader = new BufferedReader(new InputStreamReader(Towny.class.getResourceAsStream("/ChangeLog.txt")));
+					String line;
+					while ((line = reader.readLine()) != null) {
+						if (line.startsWith(lastVersion)) {
+							display = true;
+						}
+						if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+							LOGGER.log(Level.INFO, line);
+						}
+						
+					}
+					LOGGER.log(Level.INFO, "------------------------------------");
+				} catch (IOException e) {
+					TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
+				}
+				TownySettings.setLastRunVersion(getVersion());
+				TownyUniverse townyUniverse = TownyUniverse.getInstance();
+				townyUniverse.getDataSource().saveAll();
+				townyUniverse.getDataSource().cleanup();
 			}
 
 			// Register all child permissions for ranks
@@ -345,7 +371,7 @@ public class Towny extends JavaPlugin {
 			}
 			saveResource("outpostschecked.txt", false);
 		}
-		////
+		//// End Database
 		
 		// Check for dependencies
 		checkPlugins();
@@ -488,34 +514,6 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(entityListener, this);
 
 	}
-
-	private void update() {
-
-		try {
-			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
-			boolean display = false;
-			System.out.println("------------------------------------");
-			System.out.println("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
-			for (String line : changeLog) { // TODO: crawl from the bottom, then
-											// past from that index.
-				if (line.startsWith(lastVersion)) {
-					display = true;
-				}
-				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					System.out.println(line);
-				}
-			}
-			System.out.println("------------------------------------");
-		} catch (IOException e) {
-			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
-		}
-		TownySettings.setLastRunVersion(getVersion());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveAll();
-		townyUniverse.getDataSource().cleanup();
-	}
-
 	/**
 	 * Fetch the TownyUniverse instance.
 	 * 
