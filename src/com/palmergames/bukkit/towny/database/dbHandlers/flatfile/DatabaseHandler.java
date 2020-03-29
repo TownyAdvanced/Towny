@@ -1,13 +1,22 @@
 package com.palmergames.bukkit.towny.database.dbHandlers.flatfile;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.dbHandlers.TypeAdapter;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.defaultHandlers.LocationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.defaultHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.SaveHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLLoadHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLSaveHandler;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import org.bukkit.Location;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DatabaseHandler {
@@ -15,16 +24,41 @@ public class DatabaseHandler {
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
+		registerAdapter(Resident.class, new ResidentHandler());
+		registerAdapter(Location.class, new LocationHandler());
 	}
 	
-	public <T> String toFileString(T obj, Class<T> type) {
+	public void save(Object obj) {
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		
+		for (Field field : fields) {
+			Class<?> type = field.getGenericType().getClass();
+			field.setAccessible(true);
+			
+			Object value = null;
+			try {
+				value = field.get(obj);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			String storedValue = toFileString(value, type);
+			TownyMessaging.sendErrorMsg(field.getName() + "=" + storedValue);
+		}
+	}
+	
+	public <T> String toFileString(Object obj, Class<T> type) {
 		TypeAdapter<T> adapter = getAdapter(type);
+		
+		if (obj == null) {
+			return "null";
+		}
 		
 		if (adapter == null) {
 			return obj.toString();
 		}
 		
-		return adapter.getFileFormat(obj);
+		return adapter.getFileFormat((T) obj);
 	}
 	
 	public <T> SQLData<T> toSQL(T obj, Class<T> type) {
@@ -57,6 +91,7 @@ public class DatabaseHandler {
 		return adapter.fromSQL(null);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> void registerAdapter(Class<T> type, Object typeAdapter) {
 		
 		if (!(typeAdapter instanceof SaveHandler || typeAdapter instanceof LoadHandler

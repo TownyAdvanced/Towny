@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LoadUtil {
-
+/*
 	public HashMap<Type, LoadHandler<?>> loadHandlers = new HashMap<>();
 	public HashMap<Field, Method> setters = new HashMap<>();
 	
@@ -163,4 +163,6 @@ public class LoadUtil {
 	private boolean usingSetter(Field field) {
 		return setters.get(field) != null;
 	}
+	
+ */
 }

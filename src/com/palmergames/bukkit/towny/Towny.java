@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.FlatFileDatabase;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -62,6 +64,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -207,29 +210,21 @@ public class Towny extends JavaPlugin {
 				}
 		}
 		// ------------------- TESTING CODE -------------------
-		save(new Town("test"));
+		DatabaseHandler databaseHandler = new DatabaseHandler();
 		
-		FileParser fileParser = new FileParser();
-		TypeContext<?> context = new TypeContext<List<Resident>>(){};
-		fileParser.registerLoadHandler(context.getType(), new ResidentListHandler());
+		Town test = new Town("test");
 		
-		Town testTown = (Town)TownyUniverse.getInstance().getTownsMap().values().toArray()[0];
+		Resident res = new Resident("Siris");
+		try {
+			test.addResident(res);
+			test.setSpawn(new Location(null, 0.5, 0.6, 0.7));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		File townFile = new File(getDataFolder() + File.separator + "data" + File.separator + "towns" + File.separator + testTown.getName() + ".txt");
-		
-		Town town = (Town) fileParser.parseFile(townFile, Town.class);
-		
-		TownyMessaging.sendErrorMsg(town.toString());
-		
+		databaseHandler.save(test);
 		// ------------------- TESTING CODE -------------------
 	}
-	
-	// ------------------- TESTING CODE -------------------
-	public void save(TownyObject object) {
-		
-	}
-	// ------------------- TESTING CODE -------------------
-	
 
 	@Override
 	public void onDisable() {

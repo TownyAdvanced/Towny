@@ -11,4 +11,9 @@ public class UUIDHandler implements LoadHandler<UUID> {
 	public UUID loadString(LoadContext context, String str) {
 		return UUID.fromString(str);
 	}
+
+	@Override
+	public UUID loadSQL(Object result) {
+		return null;
+	}
 }

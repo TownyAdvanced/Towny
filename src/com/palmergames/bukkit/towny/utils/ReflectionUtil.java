@@ -17,7 +17,7 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static List<Field> getAllFields(TownyObject townyObject, boolean ignoreTransient) {
+	public static List<Field> getAllFields(Object townyObject, boolean ignoreTransient) {
 		
 		// Get the class object.
 		Class<?> type = townyObject.getClass();

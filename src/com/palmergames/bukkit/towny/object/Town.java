@@ -41,7 +41,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private List<Resident> residents = new ArrayList<>();
+	private transient List<Resident> residents = new ArrayList<>();
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
