@@ -128,7 +128,8 @@ public class TownySpigotMessaging {
 		
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
 		for (BaseComponent baseComponent : townsformatted) {
-			sender.spigot().sendMessage(baseComponent);
+			if (baseComponent != null)  // Fixes ProtocolSupport reading a bunch of empty lines.
+				sender.spigot().sendMessage(baseComponent);
 		}
 		
 		sender.sendMessage(TownySettings.getListPageMsg(page, total));
@@ -182,7 +183,8 @@ public class TownySpigotMessaging {
 
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
 		for (BaseComponent baseComponent : nationsformatted) {
-			sender.spigot().sendMessage(baseComponent);
+			if (baseComponent != null)  // Fixes ProtocolSupport reading a bunch of empty lines.
+				sender.spigot().sendMessage(baseComponent);
 		}
 
 		sender.sendMessage(TownySettings.getListPageMsg(page, total));
