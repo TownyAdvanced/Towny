@@ -205,8 +205,12 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
 		}
 	}
-
+	
 	public void setCapital(Town capital) throws TownyException {
+		setCapital(capital, false);
+	}
+
+	public void setCapital(Town capital, boolean force) throws TownyException {
 		if (isCapital(capital))
 			return;
 		
@@ -214,24 +218,8 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		NationKingChangeEvent kingChangeEvent = new NationKingChangeEvent(this, capital.getMayor(), true);
 		Bukkit.getPluginManager().callEvent(nationChange);
 		Bukkit.getPluginManager().callEvent(kingChangeEvent);
-		if (nationChange.isCancelled() || kingChangeEvent.isCancelled())
+		if (!force && (nationChange.isCancelled() || kingChangeEvent.isCancelled()))
 			throw new TownyException(TownySettings.getLangString("msg_err_new_capital_cancelled"));
-
-		this.capital = capital;
-		try {
-			recheckTownDistance();
-			TownyPerms.assignPermissions(capital.getMayor(), null);
-		} catch (Exception e) {
-			// Dummy catch to prevent errors on startup when setting nation.
-		}
-	}
-
-	public void forceSetCapital(Town capital) {
-		if (isCapital(capital))
-			return;
-		
-		Bukkit.getPluginManager().callEvent(new NationCapitalChangeEvent(this, capital, false));
-		Bukkit.getPluginManager().callEvent(new NationKingChangeEvent(this, capital.getMayor(), false));
 
 		this.capital = capital;
 		try {
@@ -393,7 +381,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 					}
 
 				if (tempCapital != null) {
-					forceSetCapital(tempCapital);
+					try {
+						setCapital(tempCapital, true);
+					} catch (TownyException e) {
+						//Do nothing, because we're forcing, this exception won't be thrown anyway
+					}
 				}
 
 			}

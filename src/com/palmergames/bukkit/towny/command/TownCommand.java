@@ -2880,7 +2880,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if ((town.isCapital()) && (TownySettings.getNumResidentsCreateNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
 			for (Town newCapital : town.getNation().getTowns())
 				if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
-					town.getNation().forceSetCapital(newCapital);
+					try {
+						town.getNation().setCapital(newCapital, true);
+					} catch (TownyException e) {}
 					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 						try {
 							town.getNation().removeTown(town);

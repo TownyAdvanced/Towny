@@ -832,7 +832,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// If this was a nation capitol
 			if (isCapital) {
-				nation.forceSetCapital(town);
+				try {
+					nation.setCapital(town, true);
+				} catch (TownyException e) {
+					//Do nothing. Comes from Nation#setCapital, but because we're forcing, the exception won't be thrown.
+				}
 			}
 			town.setUuid(oldUUID);
 			town.setRegistered(oldregistration);

@@ -43,7 +43,7 @@ public class NationKingChangeEvent extends Event implements Cancellable {
 
 	@Override
 	public boolean isCancelled() {
-		return isCancellable ? isCancelled : isCancellable;
+		return isCancellable && isCancelled;
 	}
 
 	@Override
