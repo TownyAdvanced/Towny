@@ -4271,3 +4271,6 @@ v0.92.0.11:
     - Changed to full-path import for ActionType in TownyPlayerListener.
     - Reverted Nether portal fix introduced in 0.95.2.22 (PR #3745)
       - Incompatible with 1.13, admins are advised to just ban abusers.
+  - Update bukkit api to 1.15.2.
+0.96.0.1:
+  - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
