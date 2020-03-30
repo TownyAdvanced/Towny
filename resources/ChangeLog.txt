@@ -4329,3 +4329,5 @@ v0.92.0.11:
     - More efficient way of doing the long-duration action bar.
   - API: TownSpawnEvent, NationSpawnEvent courtesy of Siris with PR #3789.
     - Closes #3785.
+0.96.0.6:
+  - Fix for ProtocolSupport servers and /town & /nation lists, courtesy of Siris with PR #3847.
