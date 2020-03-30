@@ -89,7 +89,15 @@ public class TownySpigotMessaging {
 			iMax = towns.size();
 		}
 
-		BaseComponent[] townsformatted = new BaseComponent[towns.size()];
+		BaseComponent[] townsformatted;
+		
+		if ((page * 10) > towns.size()) {
+			townsformatted = new BaseComponent[towns.size() % 10];
+		} else {
+			townsformatted = new BaseComponent[10];
+		}
+		
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
 			TextComponent townName = new TextComponent(StringMgmt.remUnderscore(town.getName()));
@@ -122,7 +130,7 @@ public class TownySpigotMessaging {
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
 			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town));
-			townsformatted[i] = townName;
+			townsformatted[i % 10] = townName;
 			
 		}
 		
@@ -140,7 +148,13 @@ public class TownySpigotMessaging {
 			iMax = nations.size();
 		}
 
-		BaseComponent[] nationsformatted = new BaseComponent[nations.size()];
+		BaseComponent[] nationsformatted;
+		if ((page * 10) > nations.size()) {
+			nationsformatted = new BaseComponent[nations.size() % 10];
+		} else {
+			nationsformatted = new BaseComponent[10];
+		}
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
 			TextComponent nationName = new TextComponent(StringMgmt.remUnderscore(nation.getName()));
@@ -176,7 +190,7 @@ public class TownySpigotMessaging {
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
 			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation));
-			nationsformatted[i] = nationName;
+			nationsformatted[i % 10] = nationName;
 
 		}
 
