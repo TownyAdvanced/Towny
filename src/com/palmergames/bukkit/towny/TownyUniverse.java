@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -64,7 +65,6 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-    private final Set<Player> playersAtSiegeBanners = new HashSet<>();
     private final HashMap<Resident, Location> recentlyLoggedOutResidentLocationMap = new HashMap<>();
 
     private TownyUniverse() {
@@ -476,16 +476,12 @@ public class TownyUniverse {
 		return registeredMetadata;
 	}
 
-	public Set<Player> getPillagingPlayers() {
-		return playersAtSiegeBanners;
-	}
-
-	public void addPillagingPlayers(List<Player> players) {
-		playersAtSiegeBanners.addAll(players);
-	}
-
-	public void clearPillagingPlayers() {
-		playersAtSiegeBanners.clear();
+	public Set<Player> getPlayersInBannerControlSessions() {
+		Set<Player> result = new HashSet<>();
+		for(SiegeZone siegeZone: siegeZones.values()) {
+			result.addAll(siegeZone.getBannerControlSessions().keySet());
+		}
+		return result;
 	}
 
 	public void addRecentlyLoggedOutResident(Resident resident, Location location) {
@@ -494,5 +490,20 @@ public class TownyUniverse {
 
 	public Map<Resident, Location> getRecentlyLoggedOutResidentLocationMap() {
 		return new HashMap<>(recentlyLoggedOutResidentLocationMap);
+	}
+
+	/**
+	 * Get all the sieges in the universe
+	 *
+	 * @return list of all the sieges in the universe
+	 */
+	public List<Siege> getAllSieges() {
+		List<Siege> result = new ArrayList<>();
+		for(Town town: getTownsMap().values()) {
+			if(town.hasSiege()) {
+				result.add(town.getSiege());
+			}
+		}
+		return result;
 	}
 }

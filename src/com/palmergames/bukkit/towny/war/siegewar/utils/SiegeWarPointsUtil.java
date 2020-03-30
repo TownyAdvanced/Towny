@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -16,10 +15,7 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class contains utility functions related to siege points
@@ -251,27 +247,7 @@ public class SiegeWarPointsUtil {
 			residentInformationString,
 			siegePoints);
 
-		//Inform attacker nation
-		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
-		Set<Nation> alliesToInform = new HashSet<>();
-		alliesToInform.addAll(siegeZone.getAttackingNation().getMutualAllies());
-
-		//Inform defending town, and nation if there is one
-		try {
-			if (siegeZone.getDefendingTown().hasNation()) {
-				TownyMessaging.sendPrefixedNationMessage(siegeZone.getDefendingTown().getNation(), message);
-				alliesToInform.addAll(siegeZone.getDefendingTown().getNation().getMutualAllies());
-			} else {
-				TownyMessaging.sendPrefixedTownMessage(siegeZone.getDefendingTown(), message);
-			}
-		} catch (NotRegisteredException e) {
-			//yum yum
-		}
-
-		//Inform allies
-		for(Nation alliedNation: alliesToInform) {
-			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
-		}
+		SiegeWarNotificationUtil.informSiegeParticipants(siegeZone, message);
 
 		return true;
 	}

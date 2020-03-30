@@ -2075,6 +2075,10 @@ public enum ConfigNodes {
 			"# This value determines the minimum duration after spawning in which a player is immune to damage (and cannot damage entities).",
 			"# The actual value may be larger for each individual respawn - the max additional time is approximately equal to the siege war timer tick interval.",
 			"# Thus by default the actual value will be 30-60 seconds"),
+	WAR_SIEGE_BANNER_CONTROL_SESSION_DURATION_MINUTES (
+			"war.siege.times.banner_control_session_duration_minutes",
+			"10",
+			"# This value determines the duration of each banner control session."),
 
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(

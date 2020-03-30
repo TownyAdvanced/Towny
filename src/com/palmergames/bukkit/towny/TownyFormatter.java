@@ -14,6 +14,8 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.bukkit.towny.war.siegewar.locations.BannerControlSession;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -451,29 +453,32 @@ public class TownyFormatter {
 							String siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
 							out.add(siegeStatus);
 
-							// > Banners XYZ: {2223,82,9877}, {3983,32323,4344}
-							String[] bannerLocations = getBannerLocations(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
-							if (bannerLocations.length > 10) {
-								String[] entire = bannerLocations;
-								bannerLocations = new String[10];
-								System.arraycopy(entire, 0, bannerLocations, 0, 10);
-								bannerLocations[10] = TownySettings.getLangString("status_town_siege_status_banners_xyz_list_overlength");
-							}
-							out.addAll(ChatTools.listArr(bannerLocations, String.format(TownySettings.getLangString("status_town_siege_status_banners_xyz_list"), bannerLocations.length)));
+							// > Banner XYZ: {2223,82,9877}
+							String bannerLocation = getBannerLocations(siege.getSiegeZones().values().toArray(new SiegeZone[0]))[0];
+							out.add(String.format(TownySettings.getLangString("status_town_siege_status_banner_xyz"), bannerLocation));
 
-							// > Attackers: Land of Empire (Nation) {+30}, Land of Killers (Nation) {-8}
-							String[] siegeAttacks = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
-							if (siegeAttacks.length > 10) {
-								String[] entire = siegeAttacks;
-								siegeAttacks = new String[10];
-								System.arraycopy(entire, 0, siegeAttacks, 0, 10);
-								siegeAttacks[10] = TownySettings.getLangString("status_town_siege_attacks_list_overlength");
-							}
-							out.addAll(ChatTools.listArr(siegeAttacks, String.format(TownySettings.getLangString("status_town_siege_attacks_list"), siegeAttacks.length)));
+							// > Attacker: Land of Empire (Nation) {+30}
+							String besieger = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]))[0];
+							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), besieger));
 
 							// >  Victory Timer: 5.3 hours
 							String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
 							out.add(victoryTimer);
+
+							// > Banner Control: Attackers [4] Killbot401x, NerfeyMcNerferson, WarCriminal80372
+							SiegeZone siegeZone = new ArrayList<>(town.getSiege().getSiegeZones().values()).get(0);
+							String[] bannerControllingResidents = getFormattedNames(siegeZone.getBannerControllingResidents());
+							if (bannerControllingResidents.length > 34) {
+								String[] entire = bannerControllingResidents;
+								bannerControllingResidents = new String[36];
+								System.arraycopy(entire, 0, bannerControllingResidents, 0, 35);
+								bannerControllingResidents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+							}
+							if(siegeZone.getBannerControllingSide() == SiegeSide.NOBODY) {
+								out.add( String.format(TownySettings.getLangString("status_town_banner_control_nobody"), siegeZone.getBannerControllingSide().getFormattedName()));
+							} else {
+								out.addAll(ChatTools.listArr(bannerControllingResidents, String.format(TownySettings.getLangString("status_town_banner_control"), siegeZone.getBannerControllingSide().getFormattedName(), siegeZone.getBannerControllingResidents().size())));
+							}
 						break;
 
 						case ATTACKER_WIN:

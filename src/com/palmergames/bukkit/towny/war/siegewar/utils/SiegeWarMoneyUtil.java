@@ -91,52 +91,61 @@ public class SiegeWarMoneyUtil {
 	 * This method steals money from the defending town and gives it to one or more attacking players
 	 * The full steal amount is divided between all pillaging players
 	 * 
-	 * @param pillagingPlayers the players doing the pillaging
+	 * @param pillagingResidents the residents doing the pillaging
 	 * @param attackingNation the attacking nation
 	 * @param defendingTown the defending town
 	 */
-	public static void pillageTown(List<Player> pillagingPlayers, Nation attackingNation, Town defendingTown) {
-
+	public static void pillageTown(List<Resident> pillagingResidents, Nation attackingNation, Town defendingTown) {
 		try {
-			if(pillagingPlayers.size() > 0) {
+			TownyUniverse universe = TownyUniverse.getInstance();
+			boolean townRuined = false;
 
-				double fullPillageAmountForAllPlayers = 
-					TownySettings.getWarSiegePillageAmountPerPlot() 
+			if (pillagingResidents.size() > 0
+				&& defendingTown != null
+				&& defendingTown.getTownBlocks() != null) {
+
+				double fullPillageAmountForAllResidents =
+					TownySettings.getWarSiegePillageAmountPerPlot()
 						* defendingTown.getTownBlocks().size()
 						* getMoneyMultiplier(defendingTown);
+				double fullPillageAmountForOneResident = fullPillageAmountForAllResidents / pillagingResidents.size();
 
-				double fullPillageAmountForOnePlayer = fullPillageAmountForAllPlayers / pillagingPlayers.size();
-
-				for (Player player : pillagingPlayers) {
-					TownyUniverse universe = TownyUniverse.getInstance();
-					Resident pillagingResident = universe.getDataSource().getResident(player.getName());
-
-					if (defendingTown.getAccount().canPayFromHoldings(fullPillageAmountForOnePlayer)) {
-						defendingTown.getAccount().payTo(fullPillageAmountForOnePlayer, pillagingResident, "Town pillaged by attacker");
-						defendingTown.getSiege().increaseTotalPillageAmount(fullPillageAmountForOnePlayer);
+				//Pillage for each resident
+				for (Resident pillagingResident : pillagingResidents) {
+					if (defendingTown.getAccount().canPayFromHoldings(fullPillageAmountForOneResident)) {
+						defendingTown.getAccount().payTo(fullPillageAmountForOneResident, pillagingResident, "Town pillaged by attacker");
+						defendingTown.getSiege().increaseTotalPillageAmount(fullPillageAmountForOneResident);
 						universe.getDataSource().saveResident(pillagingResident);
-						universe.getDataSource().saveTown(defendingTown);
 					} else {
 						double actualPillageAmount = defendingTown.getAccount().getHoldingBalance();
 						defendingTown.getAccount().payTo(actualPillageAmount, pillagingResident, "Towny pillaged by attacker");
 						defendingTown.getSiege().increaseTotalPillageAmount(actualPillageAmount);
-
-						TownyMessaging.sendGlobalMessage(
-							String.format(
-								TownySettings.getLangString("msg_siege_war_town_ruined_from_pillage"),
-								defendingTown.getFormattedName(),
-								attackingNation.getFormattedName()));
-
 						universe.getDataSource().saveResident(pillagingResident);
-						universe.getDataSource().removeTown(defendingTown);
+						townRuined = true;
 						break;
 					}
 				}
+
+				//Save town
+				universe.getDataSource().saveTown(defendingTown);
+
+				//Remove town if necessary
+				if (townRuined) {
+					universe.getDataSource().removeTown(defendingTown);
+					TownyMessaging.sendGlobalMessage(
+						String.format(
+							TownySettings.getLangString("msg_siege_war_town_ruined_from_pillage"),
+							defendingTown.getFormattedName(),
+							attackingNation.getFormattedName()));
+				}
 			}
-		} catch (EconomyException x) {
-			x.printStackTrace();
-		} catch (NotRegisteredException x) {
-			x.printStackTrace();
+		} catch (Exception e) {
+			if(defendingTown == null) {
+				System.out.println("Problem with pillaging.");
+			} else {
+				System.out.println("Problem with pillaging at town " + defendingTown.getName() + ".");
+			}
+			e.printStackTrace();
 		}
 	}
 

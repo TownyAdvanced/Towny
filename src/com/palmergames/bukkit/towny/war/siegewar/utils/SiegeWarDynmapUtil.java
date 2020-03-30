@@ -80,7 +80,7 @@ public class SiegeWarDynmapUtil {
 	 * Evaluate the visibility of players on the dynmap
 	 *
 	 * Kings & generals - always visible
-	 * Pillaging player in siegezone - always visible
+	 * Players in banner control sessions - always visible
 	 * Others - can become map-invisible via the following methods
 	 * 1. Equip shield in off hand
 	 * 2. Equip compass in off hand
@@ -97,7 +97,7 @@ public class SiegeWarDynmapUtil {
 					//Visible on map
 					player.removeMetadata("tacticallyInvisible", plugin);
 
-				} else if (universe.getPillagingPlayers().contains(player)) {
+				} else if (universe.getPlayersInBannerControlSessions().contains(player)) {
 					//Visible on map
 					player.removeMetadata("tacticallyInvisible", plugin);
 

@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.war.siegewar.locations;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,13 +20,8 @@ import java.util.Map;
  * 
  * This class keeps track of the 'siege points', which usually determine who wins a siege.
  * 
- * The defending town requires negative siege points in all siegezones to win.  
- * Both defending town residents, and defending nation members can contribute.
- * An attacking nation requires positive siegepoints in their siegezone to win.
- * 
- * For a player to get siegepoints adjusted in their favour,
- * they need to 'occupy' the wilderness area within one town-block-length of the siege banner.
- * This is done simply by remaining on the ground in that area (and not flying or invisible.)
+ * The defending town requires negative siege points to win.
+ * An attacking nation requires positive siegepoints to win.
  *
  * @author Goosius
  */
@@ -32,20 +31,20 @@ public class SiegeZone {
     private Nation attackingNation;
     private Town defendingTown;
     private int siegePoints;
-    private Map<Player, Long> attackerPlayerScoreTimeMap; //player, time when they will score
-    private Map<Player, Long> defenderPlayerScoreTimeMap; //player, time when they will score
-	private Map<Player, Long> playerAfkTimeMap;  //player, time they will be considered afk
 	private double warChestAmount;
-	
-    public SiegeZone() {
+	private List<Resident> bannerControllingResidents;
+	private SiegeSide bannerControllingSide;
+	private Map<Player, BannerControlSession> bannerControlSessions;
+
+	public SiegeZone() {
         attackingNation = null;
         defendingTown = null;
         siegePoints = 0;
         siegeBannerLocation = null;
-        attackerPlayerScoreTimeMap = new HashMap<>();
-        defenderPlayerScoreTimeMap = new HashMap<>();
-		playerAfkTimeMap = new HashMap<>();
 		warChestAmount = 0;
+		bannerControllingResidents = new ArrayList<>();
+		bannerControllingSide = SiegeSide.NOBODY;
+		bannerControlSessions = new HashMap<>();
     }
 
     public SiegeZone(Nation attackingNation, Town defendingTown) {
@@ -53,10 +52,10 @@ public class SiegeZone {
         this.attackingNation = attackingNation;
         siegePoints = 0;
         siegeBannerLocation = null;
-        attackerPlayerScoreTimeMap = new HashMap<>();
-        defenderPlayerScoreTimeMap = new HashMap<>();
-		playerAfkTimeMap = new HashMap<>();
 		warChestAmount = 0;
+		bannerControllingResidents = new ArrayList<>();
+		bannerControllingSide = SiegeSide.NOBODY;
+		bannerControlSessions = new HashMap<>();
     }
 
     public String getName() {
@@ -87,14 +86,6 @@ public class SiegeZone {
         this.siegeBannerLocation = location;
     }
 
-    public Map<Player, Long> getAttackerPlayerScoreTimeMap() {
-        return attackerPlayerScoreTimeMap;
-    }
-
-    public Map<Player, Long> getDefenderPlayerScoreTimeMap() {
-        return defenderPlayerScoreTimeMap;
-    }
-
     public Integer getSiegePoints() {
         return siegePoints;
     }
@@ -119,19 +110,43 @@ public class SiegeZone {
         siegePoints += adjustment;
     }
 
-	public Map<Player, Long> getPlayerAfkTimeMap() {
-		return playerAfkTimeMap;
-	}
-
-	public void setPlayerAfkTimeMap(Map<Player, Long> playerAfkTimeMap) {
-		this.playerAfkTimeMap = playerAfkTimeMap;
-	}
-
 	public double getWarChestAmount() {
     	return warChestAmount;
 	}
 
 	public void setWarChestAmount(double warChestAmount) {
 		this.warChestAmount = warChestAmount;
+	}
+
+	public List<Resident> getBannerControllingResidents() {
+		return new ArrayList<>(bannerControllingResidents);
+	}
+
+	public void addBannerControllingResident(Resident resident) {
+		bannerControllingResidents.add(resident);
+	}
+
+	public void clearBannerControllingResidents() {
+		bannerControllingResidents.clear();
+	}
+
+	public SiegeSide getBannerControllingSide() {
+		return bannerControllingSide;
+	}
+
+	public void setBannerControllingSide(SiegeSide bannerControllingSide) {
+		this.bannerControllingSide = bannerControllingSide;
+	}
+
+	public Map<Player, BannerControlSession> getBannerControlSessions() {
+		return new HashMap<>(bannerControlSessions);
+	}
+
+	public void removeBannerControlSession(BannerControlSession bannerControlSession) {
+		bannerControlSessions.remove(bannerControlSession.getPlayer());
+	}
+
+	public void addBannerControlSession(Player player, BannerControlSession bannerControlSession) {
+		bannerControlSessions.put(player, bannerControlSession);
 	}
 }

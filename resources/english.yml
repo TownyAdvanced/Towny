@@ -1129,6 +1129,12 @@ msg_siege_war_town_declared_non_neutral: '&bNon-Neutrality Declared!. The town w
 msg_siege_war_town_neutrality_countdown_cancelled: '&bThe neutrality status change countdown was cancelled.'
 msg_siege_war_town_became_neutral: '&b%s has been confirmed as Neutral. The town can no longer join a nation. The town residents can no longer inflict PVP damage. The town is now immune to material siege costs (e.g. pvp, plunder, and taxes).'
 msg_siege_war_town_became_non_neutral: '&b%s has been confirmed as not-neutral. The town can now join a nation. The town residents can now inflict PVP damange. The town is no longer immune to material siege costs (e.g. pvp, plunder, and taxes).'
+msg_siege_war_attacking_troops_at_siege_banner: '&6[War]&b Siege on %s > Attackers are at the siege banner.'
+msg_siege_war_defending_troops_at_siege_banner: '&6[War]&b Siege on %s > Town defenders are at the siege banner.'
+msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. If you remain outside the town, and within %d blocks of the siege-banner, for %s, you will gain banner control (or be added to the banner control list). Do not go invisible/flying/underground.'
+msg_siege_war_banner_control_session_success: '&6[War]&b Banner control session succeeded!. You have been added to the banner control list.'
+msg_siege_war_banner_control_gained_by_attacker: '&6[War]&b Siege on %s > The attackers have gained banner control.'
+msg_siege_war_banner_control_gained_by_defender: '&6[War]&b Siege on %s > The defenders have gained banner control.'
 
 #Siege war error message
 #Town Toggling
@@ -1195,10 +1201,9 @@ msg_err_siege_war_banner_support_block_not_stable: "&6[War]&c You cannot place t
 # Spawn
 msg_err_siege_war_cannot_spawn_into_besieged_town: '&6[War]&c You cannot spawn into %s while your nation, or an ally, is besieging it.'
 # Ruins
-msg_err_siege_war_cannot_use_command_because_town_ruined: "&c You cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
-
-#Occupy zone
-msg_err_siege_war_cannot_occupy_zone_for_too_long: "&6[War]&c You have achieved maximum siege points for your current siege-zone occupation session. To resume scoring points, exit the siege zone for a few minutes, then re-enter."
+msg_err_siege_war_cannot_use_command_because_town_ruined: "&6[War]&c You cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
+#Banner control
+msg_siege_war_banner_control_session_failure: "&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, going too far from the banner, going under a block, or going invisible/flying."
 
 #Town Info Siege Section
 status_town_title_neutral: '&b (NEUTRAL)'
@@ -1210,13 +1215,13 @@ status_town_siege_status_attacker_win: 'Attacker Victory - %s'
 status_town_siege_status_attacker_abandon: 'Attacker Retreat'
 status_town_siege_status_defender_win: 'Town Victory'
 status_town_siege_status_defender_surrender: 'Town Surrender - to %s'
-status_town_siege_attacks_list: '&2 > Attackers &a[%s]&2: &f'
-status_town_siege_attacks_list_overlength: 'and more...'
-status_town_siege_status_banners_xyz_list: '&2 > Banners XYZ: &a[%s]&2: &f'
-status_town_siege_status_banners_xyz_list_overlength: 'and more...'
+status_town_siege_status_besieger: '&2 > Besieger &a%s'
+status_town_siege_status_banner_xyz: '&2 > Banner XYZ: &a%s'
 status_town_siege_immunity_timer: '&2 > Immunity Timer: &a%s'
 status_town_siege_victory_timer: '&2 > Victory Timer: &a%s'
 status_town_siege_invaded_plundered_status: '&2 > Town Captured: %s  &2Town Plundered: %s'
+status_town_banner_control: '&2 > Banner Control: %s &a[%s]&2: &f'
+status_town_banner_control_nobody: '&2 > Banner Control: %s'
 
 #Nation Info Siege Section
 status_nation_siege_attacks: '&2Siege Attacks &a[%s]&2: &f'
@@ -1226,8 +1231,11 @@ status_nation_siege_defences: '&2Siege Defences &a[%s]&2: &f'
 msg_days: ' days'
 status_no_green: '&aNO'
 msg_occupier: '&4*Occupier*'
+msg_nobody: '&aNobody'
+msg_attackers: '&aAttackers'
+msg_defenders: '&aDefenders'
 
-#Town Ruins recovery
+#Town Ruins reclaim
 town_help_12: 'Reclaim your town from a ruined state.'
 msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
 msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %s.'

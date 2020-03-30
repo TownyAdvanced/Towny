@@ -3188,4 +3188,8 @@ public class TownySettings {
 	public static boolean getWarSiegeTacticalVisibilityEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TACTICAL_VISIBILITY_ENABLED);
 	}
+
+	public static int getWarSiegeBannerControlSessionDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_SESSION_DURATION_MINUTES);
+	}
 }
