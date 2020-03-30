@@ -2624,6 +2624,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 				
 				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
 					return;
 				}
 
@@ -2636,6 +2637,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 
 				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
 					return;
 				}
 

@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -2616,6 +2617,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Bukkit.getPluginManager().callEvent(townSpawnEvent);
 
 				if (townSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
 					return;
 				}
 
@@ -2628,6 +2630,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Bukkit.getPluginManager().callEvent(townSpawnEvent);
 				
 				if (townSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
 					return;
 				}
 
