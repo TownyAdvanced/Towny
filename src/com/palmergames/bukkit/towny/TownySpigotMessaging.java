@@ -84,10 +84,7 @@ public class TownySpigotMessaging {
 	}
 	
 	public static void sendSpigotTownList(CommandSender sender, List<Town> towns, int page, int total) {
-		int iMax = page * 10;
-		if ((page * 10) > towns.size()) {
-			iMax = towns.size();
-		}
+		int iMax = Math.min(page * 10, towns.size());
 
 		BaseComponent[] townsformatted;
 		
@@ -143,10 +140,7 @@ public class TownySpigotMessaging {
 	}
 	
 	public static void sendSpigotNationList(CommandSender sender, List<Nation> nations, int page, int total) {
-		int iMax = page * 10;
-		if ((page * 10) > nations.size()) {
-			iMax = nations.size();
-		}
+		int iMax = Math.min(page * 10, nations.size());
 
 		BaseComponent[] nationsformatted;
 		if ((page * 10) > nations.size()) {
