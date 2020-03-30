@@ -89,7 +89,15 @@ public class TownySpigotMessaging {
 			iMax = towns.size();
 		}
 
-		BaseComponent[] townsformatted = new BaseComponent[10];
+		BaseComponent[] townsformatted;
+		
+		if ((page * 10) > towns.size()) {
+			townsformatted = new BaseComponent[towns.size() % 10];
+		} else {
+			townsformatted = new BaseComponent[10];
+		}
+		
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
 			TextComponent townName = new TextComponent(StringMgmt.remUnderscore(town.getName()));
@@ -140,7 +148,13 @@ public class TownySpigotMessaging {
 			iMax = nations.size();
 		}
 
-		BaseComponent[] nationsformatted = new BaseComponent[nations.size()];
+		BaseComponent[] nationsformatted;
+		if ((page * 10) > nations.size()) {
+			nationsformatted = new BaseComponent[nations.size() % 10];
+		} else {
+			nationsformatted = new BaseComponent[10];
+		}
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
 			TextComponent nationName = new TextComponent(StringMgmt.remUnderscore(nation.getName()));
