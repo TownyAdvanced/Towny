@@ -54,6 +54,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +238,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		switch (args[0].toLowerCase()) {
+			case "reload":
+				if (args.length > 1)
+					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang"), args[1]);
 			case "set":
 				if (args.length > 1) {
 					switch (args[1].toLowerCase()) {
@@ -455,12 +459,35 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				giveBonus(StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("reload")) {
-
-				reloadTowny(false);
-
+				if (split.length == 2) {
+					switch (split[1]) {
+						case "db":
+						case "database":
+							reloadDatabase(false);
+							break;
+						case "config":
+							reloadConfig();
+							break;
+						case "perms":
+						case "permissions":
+							reloadPerms();
+							break;
+						case "language":
+						case "lang":
+							reloadLangs();
+							break;
+						default:
+							player.sendMessage(ChatTools.formatTitle("/ta reload"));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms>", ""));
+					}
+				} else {
+					player.sendMessage(ChatTools.formatTitle("/ta reload"));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms>", ""));
+					return false;
+				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadTowny(true);
+				reloadDatabase(true);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
@@ -1444,24 +1471,61 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_too_many_npc"));
 		} while (true);
 	}
+	
+	public void reloadLangs() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		try {
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_lang"));
+	}
+	
+	public void reloadPerms() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_perms"));
+	}
 
-	public void reloadTowny(Boolean reset) {
+	/**
+	 * Reloads only the config
+	 */
+	public void reloadConfig() {
+		try {
+			String rootFolder = TownyUniverse.getInstance().getRootFolder();
+			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+			return;
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_config"));
+	}
 
+	/**
+	 * Reloads both the database and the config. Used with a database reload command.
+	 * 
+	 * @param reset Whether or not to reset the database.
+	 */
+	public void reloadDatabase(Boolean reset) {
 		if (reset) {
 			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
 		}
 		if (plugin.load()) {
-			
+
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
-			
+
 			// Update permissions for all online players
 			TownyPerms.updateOnlinePerms();
-			
+
 		}
 
-		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded"));
-		// TownyMessaging.sendMsg(TownySettings.getLangString("msg_reloaded"));
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_db"));
 	}
 
 	/**
