@@ -4338,3 +4338,6 @@ v0.92.0.11:
     - Closes #3785.
 0.96.0.6:
   - Fix for ProtocolSupport servers and /town & /nation lists, courtesy of Siris with PR #3847.
+0.96.1.0 for MC 1.13.2:
+  - Bump version number for release.
+  - A special backport of Towny 0.96.1.0 for Minecraft 1.13.2, courtesy of TheFlagCourier with PR #3850.
