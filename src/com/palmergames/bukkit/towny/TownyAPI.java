@@ -199,7 +199,7 @@ public class TownyAPI {
      * @return true if the {@link Location} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(Location location) {
-        return isWilderness(new WorldCoord(WorldCoord.parseWorldCoord(location)));
+        return isWilderness(WorldCoord.parseWorldCoord(location));
     }
     
     /**
@@ -256,7 +256,7 @@ public class TownyAPI {
      */
     public UUID getTownUUID(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(WorldCoord.parseWorldCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getUuid();
         } catch (NotRegisteredException e) {
             // No data so return null
