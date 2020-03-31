@@ -478,11 +478,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							break;
 						default:
 							player.sendMessage(ChatTools.formatTitle("/ta reload"));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms>", ""));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms|lang>", ""));
 					}
 				} else {
 					player.sendMessage(ChatTools.formatTitle("/ta reload"));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms>", ""));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms|lang>", ""));
 					return false;
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
