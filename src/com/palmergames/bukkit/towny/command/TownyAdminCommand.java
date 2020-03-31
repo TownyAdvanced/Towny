@@ -240,7 +240,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		switch (args[0].toLowerCase()) {
 			case "reload":
 				if (args.length > 1)
-					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang"), args[1]);
+					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms"), args[1]);
 			case "set":
 				if (args.length > 1) {
 					switch (args[1].toLowerCase()) {
@@ -463,12 +463,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					switch (split[1]) {
 						case "db":
 						case "database":
-							reloadDatabase(false);
+							reloadDatabase();
 							break;
 						case "config":
-							reloadConfig();
+							reloadConfig(false);
 							break;
 						case "perms":
+						case "townyperms":
 						case "permissions":
 							reloadPerms();
 							break;
@@ -476,18 +477,32 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "lang":
 							reloadLangs();
 							break;
+						case "all":
+							reloadConfig(false);
+							reloadLangs();
+							reloadDatabase();
+							reloadPerms();
+							break;
 						default:
 							player.sendMessage(ChatTools.formatTitle("/ta reload"));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms|lang>", ""));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "confg", "Reloads config"));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 					}
 				} else {
 					player.sendMessage(ChatTools.formatTitle("/ta reload"));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "<database|config|perms|lang>", ""));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "confg", "Reloads config"));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 					return false;
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadDatabase(true);
+				reloadConfig(true);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
@@ -1492,8 +1507,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Reloads only the config
+	 * 
+	 * @param reset Whether or not to reset the config.
 	 */
-	public void reloadConfig() {
+	public void reloadConfig(boolean reset) {
+
+		if (reset) {
+			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
+			TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reset_config"));
+		}
+		
 		try {
 			String rootFolder = TownyUniverse.getInstance().getRootFolder();
 			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
@@ -1508,13 +1531,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Reloads both the database and the config. Used with a database reload command.
-	 * 
-	 * @param reset Whether or not to reset the database.
+	 *
 	 */
-	public void reloadDatabase(Boolean reset) {
-		if (reset) {
-			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
-		}
+	public void reloadDatabase() {
+		
 		if (plugin.load()) {
 
 			// Register all child permissions for ranks
