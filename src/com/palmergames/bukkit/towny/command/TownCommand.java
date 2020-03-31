@@ -1349,10 +1349,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 
-		int iMax = page * 10;
-		if ((page * 10) > towns.size()) {
-			iMax = towns.size();
-		}
+		int iMax = Math.min(page * 10, towns.size());
 
 		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
