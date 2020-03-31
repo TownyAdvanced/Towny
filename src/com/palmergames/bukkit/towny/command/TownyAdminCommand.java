@@ -484,20 +484,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadPerms();
 							break;
 						default:
-							sender.sendMessage(ChatTools.formatTitle("/ta reload"));
-							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
-							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
-							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
-							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
-							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+							showReloadHelp();
 					}
 				} else {
-					sender.sendMessage(ChatTools.formatTitle("/ta reload"));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+					showReloadHelp();
 					return false;
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
@@ -1995,6 +1985,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		return true;
+	}
+	
+	private void showReloadHelp() {
+		sender.sendMessage(ChatTools.formatTitle("/ta reload"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 	}
 
 }
