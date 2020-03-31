@@ -4323,4 +4323,14 @@ v0.92.0.11:
   - New Config Option: notification.notification_actionbar_duration
     - default: 15
     - This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds.
-    
+  - Fix player-name-changes not updating the account Towny looks to for economy.
+    - Closes #3815, #3840.
+  - Remove extra delayed task to cancel repeating task, courtesy of Siris with PR #3839.
+    - More efficient way of doing the long-duration action bar.
+  - API: TownSpawnEvent, NationSpawnEvent courtesy of Siris with PR #3789.
+    - Closes #3785.
+0.96.0.6:
+  - Fix for ProtocolSupport servers and /town & /nation lists, courtesy of Siris with PR #3847.
+  - Handle invalid arguments for townyadmin economy cmds, courtesy of silverwolfg11 with PR #3849.
+0.96.1.0:
+  - Bump version for release.

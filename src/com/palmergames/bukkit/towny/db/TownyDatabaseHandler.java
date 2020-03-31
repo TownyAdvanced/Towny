@@ -1032,6 +1032,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					resident.getAccount().removeAccount();
 				} catch (EconomyException ignored) {
 				}				
+			} else {
+				resident.getAccount().setName(newName);
 			}
 			
 			//get data needed for resident
