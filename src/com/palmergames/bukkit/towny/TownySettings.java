@@ -1659,20 +1659,26 @@ public class TownySettings {
 	}
 
 	public static double getMaxTax() {
-
 		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
+	}
+
+	public static double getMaxTownTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TOWN_TAXES_MAX);
+	}
+
+	public static double getMaxNationTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_NATION_TAXES_MAX);
 	}
 	
 	public static double getMaxPlotPrice() {
 		
 		return getDouble(ConfigNodes.GTOWN_MAX_PLOT_PRICE_COST);
 	}
-
-	public static double getMaxTaxPercent() {
-
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX_PERCENT);
+	
+	public static double getMaxTownTaxPercent() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT);
 	}
-
+	
 	public static boolean isBackingUpDaily() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);

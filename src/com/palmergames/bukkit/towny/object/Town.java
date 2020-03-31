@@ -135,11 +135,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setTaxes(double taxes) {
-
 		if (isTaxPercentage) {
-			this.taxes = Math.min(taxes, TownySettings.getMaxTaxPercent());
+			this.taxes = Math.min(taxes, TownySettings.getMaxTownTaxPercent());
 		} else {
-			this.taxes = Math.min(taxes, TownySettings.getMaxTax());
+			this.taxes = Math.min(taxes, TownySettings.getMaxTownTax());
 		}
 	}
 
