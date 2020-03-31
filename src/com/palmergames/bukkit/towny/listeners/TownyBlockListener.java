@@ -18,10 +18,11 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -72,9 +73,9 @@ public class TownyBlockListener implements Listener {
 		 */
 		PlayerCache cache = plugin.getCache(player);
 
-		if ((cache.getStatus() == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+		if ((cache.getStatus() == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
 				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-			if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
+			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 				event.setCancelled(true);
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
 			}
@@ -124,10 +125,10 @@ public class TownyBlockListener implements Listener {
 			/*
 			 * Flag war
 			 */
-			if (((status == TownBlockStatus.ENEMY) && TownyWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial())) {
+			if (((status == TownBlockStatus.ENEMY) && FlagWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == FlagWarConfig.getFlagBaseMaterial())) {
 
 				try {
-					if (TownyWar.callAttackCellEvent(plugin, player, block, worldCoord))
+					if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
 						return;
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -137,9 +138,9 @@ public class TownyBlockListener implements Listener {
 				event.setCancelled(true);
 
 			// Event War piggy backing on flag war's EditableMaterialInWarZone 
-			} else if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War 
+			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
 					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-				if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
+				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
 					event.setCancelled(true);
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
@@ -328,7 +329,7 @@ public class TownyBlockListener implements Listener {
 				 * Event War piggybacking off of Flag War's fire control setting.
 				 */
 				if (townyWorld.isWarZone(coord) || TownyAPI.getInstance().isWarTime() && inWarringTown) {
-					if (TownyWarConfig.isAllowingFireInWarZone()) {
+					if (WarZoneConfig.isAllowingFireInWarZone()) {
 						return false;
 					} else {
 						TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within " + coord.toString() + ".");
@@ -412,7 +413,7 @@ public class TownyBlockListener implements Listener {
 
 		Coord coord = Coord.parseCoord(target);
 
-		if (world.isWarZone(coord) && !TownyWarConfig.isAllowingExplosionsInWarZone()) {
+		if (world.isWarZone(coord) && !WarZoneConfig.isAllowingExplosionsInWarZone()) {
 			return false;
 		}
 		TownBlock townBlock = null;
@@ -434,10 +435,10 @@ public class TownyBlockListener implements Listener {
 		
 		try {			
 			if (world.isUsingTowny() && !world.isForceExpl()) {
-				if (TownyAPI.getInstance().isWarTime() && TownyWarConfig.explosionsBreakBlocksInWarZone() && !isNeutral){
+				if (TownyAPI.getInstance().isWarTime() && WarZoneConfig.explosionsBreakBlocksInWarZone() && !isNeutral){
 					return true;				
 				}
-				if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && TownyWarConfig.isAllowingExplosionsInWarZone() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG()))
+				if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && WarZoneConfig.isAllowingExplosionsInWarZone() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG()))
 					return false;
 			}
 		} catch (NotRegisteredException e) {
