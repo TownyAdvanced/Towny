@@ -34,7 +34,7 @@ import org.bukkit.World;
  *
  * @author Lukas Mansour (Articdive)
  */
-public class TownyUniverse {
+public final class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
 
