@@ -484,20 +484,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadPerms();
 							break;
 						default:
-							player.sendMessage(ChatTools.formatTitle("/ta reload"));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
-							player.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+							sender.sendMessage(ChatTools.formatTitle("/ta reload"));
+							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+							sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 					}
 				} else {
-					player.sendMessage(ChatTools.formatTitle("/ta reload"));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
-					player.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+					sender.sendMessage(ChatTools.formatTitle("/ta reload"));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 					return false;
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
@@ -1510,6 +1510,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
 			e.printStackTrace();
+			return;
 		}
 		
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_lang"));
@@ -1536,6 +1537,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			String rootFolder = TownyUniverse.getInstance().getRootFolder();
 			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
 			e.printStackTrace();
