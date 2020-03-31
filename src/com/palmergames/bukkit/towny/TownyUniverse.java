@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -65,6 +66,7 @@ public class TownyUniverse {
     private TownyPermissionSource permissionSource;
     private War warEvent;
     private final Set<Player> playersAtSiegeBanners = new HashSet<>();
+    private final HashMap<Resident, Location> recentlyLoggedOutResidentLocationMap = new HashMap<>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -516,5 +518,13 @@ public class TownyUniverse {
 
 	public void clearPillagingPlayers() {
 		playersAtSiegeBanners.clear();
+	}
+
+	public void addRecentlyLoggedOutResident(Resident resident, Location location) {
+		recentlyLoggedOutResidentLocationMap.put(resident, location);
+	}
+
+	public Map<Resident, Location> getRecentlyLoggedOutResidentLocationMap() {
+		return new HashMap<>(recentlyLoggedOutResidentLocationMap);
 	}
 }

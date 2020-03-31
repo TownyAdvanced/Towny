@@ -61,16 +61,17 @@ public class SiegeWarDeathController {
 				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
 			) {
 				for (SiegeZone siegeZone : deadResidentTown.getSiege().getSiegeZones().values()) {
-					if (deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+					boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
+						false,
+						deadPlayer,
+						deadResident,
+						siegeZone,
+						TownySettings.getLangString("msg_siege_war_defender_death"));
+
+					if(pointsAwarded)
 						keepInventory(playerDeathEvent);
-						SiegeWarPointsUtil.awardSiegePenaltyPoints(
-							false,
-							deadPlayer,
-							deadResident,
-							siegeZone,
-							TownySettings.getLangString("msg_siege_war_defender_death"));
-						return;
-					}
+
+					return;
 				}
 			}
 
@@ -82,15 +83,17 @@ public class SiegeWarDeathController {
 					if (siegeZone.getDefendingTown().hasNation()
 						&& siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
 						&& (deadResidentTown.getNation() == siegeZone.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
-						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()
 					) {
-						keepInventory(playerDeathEvent);
-						SiegeWarPointsUtil.awardSiegePenaltyPoints(
+						boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
 							false,
 							deadPlayer,
 							deadResident,
 							siegeZone,
 							TownySettings.getLangString("msg_siege_war_defender_death"));
+
+						if(pointsAwarded)
+							keepInventory(playerDeathEvent);
+
 						return;
 					}
 				}
@@ -103,15 +106,17 @@ public class SiegeWarDeathController {
 				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 					if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
 						&& (deadResidentTown.getNation() == siegeZone.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getAttackingNation()))
-						&& deadPlayer.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()
 					) {
-						keepInventory(playerDeathEvent);
-						SiegeWarPointsUtil.awardSiegePenaltyPoints(
+						boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
 							true,
 							deadPlayer,
 							deadResident,
 							siegeZone,
 							TownySettings.getLangString("msg_siege_war_attacker_death"));
+
+						if(pointsAwarded)
+							keepInventory(playerDeathEvent);
+
 						return;
 					}
 				}

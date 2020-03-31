@@ -5,13 +5,16 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 
 public class TownyLoginListener implements Listener {
@@ -57,6 +60,19 @@ public class TownyLoginListener implements Listener {
         		if (ops.isOp() || ops.hasPermission("towny.admin"))
         			TownyMessaging.sendMsg(ops, msg);        		
         	}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		try {
+			TownyUniverse universe = TownyUniverse.getInstance();
+			Resident resident = universe.getDataSource().getResident(event.getPlayer().getName());
+			Location location = event.getPlayer().getLocation();
+			universe.addRecentlyLoggedOutResident(resident, location);
+		} catch (Exception e) {
+			System.out.println("Problem evaluating player logout");
+			e.printStackTrace();
 		}
 	}
 }

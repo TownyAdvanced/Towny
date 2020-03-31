@@ -318,7 +318,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		if (playerScoreTimeMap.containsKey(player)) {
 			
 			//Player must still be in zone
-			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
+			if (!SiegeWarPointsUtil.isPlayerInTimedPointZone(player, siegeZone)) {
 				playerScoreTimeMap.remove(player);
 				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return false;
@@ -361,7 +361,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		} else {
 
 			//Player must be in zone
-			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
+			if (!SiegeWarPointsUtil.isPlayerInTimedPointZone(player, siegeZone)) {
 				return false;
 			}
 

@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -52,7 +53,7 @@ public class SiegeWarPointsUtil {
     }
 
 	/**
-	 * This method determines if a players is in the 'point scoring zone' of a siegezone
+	 * This method determines if a players is in the 'timed point zone' of a siegezone
 	 * 
 	 * - Must be in same world as flag
 	 * - Must be in wilderness  (This is important, otherwise the defender could create a 'safe space' 
@@ -61,14 +62,46 @@ public class SiegeWarPointsUtil {
 	 *
 	 * @param player the player
 	 * @param siegeZone the siege zone
-	 * @return true if a player in in the siege point zone
+	 * @return true if a player in in the timed point zone
 	 */
-	public static boolean isPlayerInSiegePointZone(Player player, SiegeZone siegeZone) {
+	public static boolean isPlayerInTimedPointZone(Player player, SiegeZone siegeZone) {
 		return player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
 				&& !TownyAPI.getInstance().hasTownBlock(player.getLocation())
 				&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize();
 	}
-	
+
+	/**
+	 * This method determines if a player is in the 'death point zone' of a siegezone
+	 * This zone is usually a large (configurable) simple radius around the siege banner
+	 *
+	 * @param player the player
+	 * @param resident the resident
+	 * @param siegeZone the siege zone
+	 * @return true if a player in in the death point zone
+	 */
+	private static boolean isPlayerInDeathPointZone(Player player, Resident resident, SiegeZone siegeZone) {
+		if(player == null)
+			player = TownyAPI.getInstance().getPlayer(resident); //Gets player if online, null otherwise
+
+		if(player != null) {
+			//User location of online player
+			return player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
+		} else {
+			//Use location of logged out player
+			Map<Resident, Location> recentlyLoggedOutResidentLocationMap = TownyUniverse.getInstance().getRecentlyLoggedOutResidentLocationMap();
+			if(recentlyLoggedOutResidentLocationMap.containsKey(resident)) {
+				return recentlyLoggedOutResidentLocationMap.get(resident).distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
+			} else {
+				/*
+				 * We get here if the player is offline, and a server reboot has occurred since they logged off.
+				 * We don't have location information any more, so cannot determine if player was in zone.
+				 * No punish (because this is very unlikely to be exploited).
+				 */
+				return false;
+			}
+		}
+	}
+
 	/**
 	 * This method evaluates a fighter being 'removed' in some way while a siege is ongoing,
 	 * and determines if a siege point penalty applies
@@ -128,7 +161,7 @@ public class SiegeWarPointsUtil {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
 			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
-				awardSiegePenaltyPoints(false, null, resident, siegeZone, unformattedErrorMessage);
+				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siegeZone, unformattedErrorMessage);
 			}
 			return town;
 		} else {
@@ -153,29 +186,35 @@ public class SiegeWarPointsUtil {
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
 			//Apply penalty to siege-zones where the nation is attacking
 			for(SiegeZone siegeZone: nation.getActiveSiegeAttackZones()) {
-				awardSiegePenaltyPoints(true, null, resident, siegeZone, unformattedErrorMessage);
+				awardPointsIfPlayerIsInDeathPointZone(true, null, resident, siegeZone, unformattedErrorMessage);
 			}
 			//Apply penalty to siege-zones where the nation is defending
 			for(SiegeZone siegeZone: nation.getActiveSiegeDefenceZones(townToExclude)) {
-				awardSiegePenaltyPoints(false, null, resident, siegeZone, unformattedErrorMessage);
+				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siegeZone, unformattedErrorMessage);
 			}
 		}
 	}
 
 	/**
-	 * This method applies penalty points to the given siegezone
+	 * This method applies penalty points to a player if they are in the given siegezone
+	 * Offline players will also be punished
 	 *
 	 * @param residentIsAttacker is the resident an attacker or defender?
-	 * @param player the player who the punishment relates to
-	 * @param resident the resident who the punishment relates to
+	 * @param player the player who the penalty relates to
+	 * @param resident the resident who the penalty relates to
 	 * @param siegeZone to siegezone to apply the penalty to
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
+	 * @return true if points awarded
 	 */
-	public static void awardSiegePenaltyPoints(boolean residentIsAttacker,
-											   Player player,
-											   Resident resident,
-											   SiegeZone siegeZone,
-											   String unformattedErrorMessage) {
+	public static boolean awardPointsIfPlayerIsInDeathPointZone(boolean residentIsAttacker,
+																Player player,
+																Resident resident,
+																SiegeZone siegeZone,
+																String unformattedErrorMessage) {
+		//Return false if player is not in death point zone
+		if(!isPlayerInDeathPointZone(player, resident, siegeZone))
+			return false;
+
 		//Give siege points to opposing side
 		int siegePoints;
 		if (residentIsAttacker) {
@@ -233,6 +272,8 @@ public class SiegeWarPointsUtil {
 		for(Nation alliedNation: alliesToInform) {
 			TownyMessaging.sendPrefixedNationMessage(alliedNation, message);
 		}
+
+		return true;
 	}
 
 	/**
