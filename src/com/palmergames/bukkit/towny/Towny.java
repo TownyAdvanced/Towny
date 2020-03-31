@@ -179,7 +179,7 @@ public class Towny extends JavaPlugin {
 			FlagWar.onEnable();
 
 			// If there are significant changes from versions to versions they can go here.
-			if (version.equalsIgnoreCase(TownySettings.getLastRunVersion(version))) {
+			if (!version.equalsIgnoreCase(TownySettings.getLastRunVersion(version))) {
 				try {
 					LOGGER.log(Level.INFO, "------------------------------------");
 					LOGGER.log(Level.INFO, "[Towny] ChangeLog up until v" + getVersion());
