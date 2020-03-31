@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -25,7 +24,6 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -183,37 +181,6 @@ public class TownyUniverse {
         }
         
         return dataSource.loadAll();
-    }
-    
-    public void onLogin(Player player) {
-        
-        if (!player.isOnline())
-            return;
-        
-        // Test and kick any players with invalid names.
-        player.getName();
-        if (player.getName().contains(" ")) {
-            player.kickPlayer("Invalid name!");
-            return;
-        }
-        
-        // Perform login code in it's own thread to update Towny data.
-        //new OnPlayerLogin(plugin, player).start();
-        if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(towny, player), 0L) == -1) {
-            TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
-        }
-        
-    }
-    
-    public void onLogout(Player player) {
-        
-        try {
-            Resident resident = dataSource.getResident(player.getName());
-            resident.setLastOnline(System.currentTimeMillis());
-            resident.clearModes();
-            dataSource.saveResident(resident);
-        } catch (NotRegisteredException ignored) {
-        }
     }
     
     public void startWarEvent() {

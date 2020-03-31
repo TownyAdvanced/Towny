@@ -563,6 +563,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if (homeBlock == null) {
 			this.homeBlock = null;
+			TownyMessaging.sendErrorMsg("town.forceSetHomeblock() is returning null.");
 			return;
 		}
 
@@ -587,7 +588,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	/**
-	 * Sets the world this town belongs to. If it's a world change it will
+	 * Sets the world this town homeblock belongs to. If it's a world change it will
 	 * remove the town from the old world and place in the new.
 	 * 
 	 * @param world - TownyWorld to attribute a town to
@@ -617,12 +618,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	/**
-	 * Fetch the World this town is registered too. If (for any reason) it's
-	 * null it will attempt to find the owning world from TownyUniverse.
+	 * Fetch the World this town homeblock is registered too.
+	 * If the world is null it will poll the TownyWorlds for a townblock owned by the Town.
+	 * If it fails to find any claimed blocks it will return the first TownyWorld as a placeholder.
 	 * 
-	 * @return world or null
+	 * @return world
 	 */
-	public TownyWorld getWorld() {
+	public TownyWorld getHomeblockWorld() {
 
 		if (world != null)
 			return world;
@@ -1532,7 +1534,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			World world;
 
 			if (hasWorld()) {
-				world = BukkitTools.getWorld(getWorld().getName());
+				world = BukkitTools.getWorld(getHomeblockWorld().getName());
 			} else {
 				world = BukkitTools.getWorlds().get(0);
 			}
@@ -1560,7 +1562,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	@Deprecated
 	public World getBukkitWorld() {
 		if (hasWorld()) {
-			return BukkitTools.getWorld(getWorld().getName());
+			return BukkitTools.getWorld(getHomeblockWorld().getName());
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
@@ -1657,4 +1659,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public boolean collect(double amount, String reason) throws EconomyException {
 		return getAccount().collect(amount, reason);
 	}
+	
+	/**
+	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
+	 */
+	@Deprecated
+	public TownyWorld getWorld() {
+		return getHomeblockWorld();
+	}
+	
 }

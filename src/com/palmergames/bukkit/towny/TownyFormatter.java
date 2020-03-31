@@ -216,13 +216,13 @@ public class TownyFormatter {
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ",")));
+				out.add(TownySettings.getLangString("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
 		}
 		
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ",")));
+				out.add(TownySettings.getLangString("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
 		}
 		
 		// Jailed: yes if they are jailed.
@@ -318,7 +318,7 @@ public class TownyFormatter {
 
 		TownyWorld world;
 		try {
-			world = town.getWorld();
+			world = town.getHomeblockWorld();
 		} catch (NullPointerException e) {
 			// Some towns can have no homeblock, causing getWorld() to return null.
 			// We're going to supplant the first TownyWorld so that the forceexpl/forcefire/forcepvp tests below do not have trouble.
@@ -329,7 +329,7 @@ public class TownyFormatter {
 		
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
-		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
+		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
 		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
 		title += (town.isNeutral() ? TownySettings.getLangString("status_town_title_neutral") : "");
 		out.add(ChatTools.formatTitle(title));

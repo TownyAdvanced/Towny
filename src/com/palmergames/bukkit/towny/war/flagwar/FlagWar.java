@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TownyWar {
+public class FlagWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
@@ -65,8 +65,8 @@ public class TownyWar {
 
 		// Check that the user is under his limit of active warflags.
 		int futureActiveFlagCount = getNumActiveFlags(playerName) + 1;
-		if (futureActiveFlagCount > TownyWarConfig.getMaxActiveFlagsPerPerson())
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_enemy_war_reached_max_active_flags"), TownyWarConfig.getMaxActiveFlagsPerPerson()));
+		if (futureActiveFlagCount > FlagWarConfig.getMaxActiveFlagsPerPerson())
+			throw new Exception(String.format(TownySettings.getLangString("msg_err_enemy_war_reached_max_active_flags"), FlagWarConfig.getMaxActiveFlagsPerPerson()));
 
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
@@ -217,12 +217,12 @@ public class TownyWar {
 
 	public static void checkBlock(Player player, Block block, Cancellable event) {
 
-		if (TownyWarConfig.isAffectedMaterial(block.getType())) {
+		if (FlagWarConfig.isAffectedMaterial(block.getType())) {
 			Cell cell = Cell.parse(block.getLocation());
 			if (cell.isUnderAttack()) {
 				CellUnderAttack cellAttackData = cell.getAttackData();
 				if (cellAttackData.isFlag(block)) {
-					TownyWar.attackDefended(player, cellAttackData);
+					FlagWar.attackDefended(player, cellAttackData);
 					event.setCancelled(true);
 				} else if (cellAttackData.isUneditableBlock(block)) {
 					event.setCancelled(true);
@@ -274,11 +274,11 @@ public class TownyWar {
 		checkIfNationHasMinOnlineForWar(attackingNation);
 
 		// Check that attack takes place on the edge of a town
-		if (TownyWarConfig.isAttackingBordersOnly() && !AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
+		if (FlagWarConfig.isAttackingBordersOnly() && !AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_not_on_edge_of_town"));
 
 		// Check that the user can pay for the warflag + fines from losing/winning.
-		double costToPlaceWarFlag = TownyWarConfig.getCostToPlaceWarFlag();
+		double costToPlaceWarFlag = FlagWarConfig.getCostToPlaceWarFlag();
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				double requiredAmount = costToPlaceWarFlag;
@@ -290,13 +290,13 @@ public class TownyWar {
 
 				// Check that the user can pay the fines from losing/winning all future warflags.
 				int activeFlagCount = getNumActiveFlags(attackingResident.getName());
-				double defendedAttackCost = TownyWarConfig.getDefendedAttackReward() * (activeFlagCount + 1);
+				double defendedAttackCost = FlagWarConfig.getDefendedAttackReward() * (activeFlagCount + 1);
 				double attackWinCost = 0;
 
 				double amount;
-				amount = TownyWarConfig.getWonHomeblockReward();
+				amount = FlagWarConfig.getWonHomeblockReward();
 				double homeBlockFine = amount < 0 ? -amount : 0;
-				amount = TownyWarConfig.getWonTownblockReward();
+				amount = FlagWarConfig.getWonTownblockReward();
 				double townBlockFine = amount < 0 ? -amount : 0;
 
 				// Assume rest of attacks are townblocks.
@@ -374,7 +374,7 @@ public class TownyWar {
 
 	public static void checkIfTownHasMinOnlineForWar(Town town) throws TownyException {
 
-		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInTownForWar();
+		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInTownForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(town).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, town.getFormattedName()));
@@ -382,7 +382,7 @@ public class TownyWar {
 
 	public static void checkIfNationHasMinOnlineForWar(Nation nation) throws TownyException {
 
-		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInNationForWar();
+		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInNationForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(nation).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, nation.getFormattedName()));

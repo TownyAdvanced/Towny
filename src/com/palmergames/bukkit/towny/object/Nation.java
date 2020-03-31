@@ -17,10 +17,10 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -501,7 +501,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		else {
 			if (neutral) {
 				for (Resident resident : getResidents()) {
-					TownyWar.removeAttackerFlags(resident.getName());
+					FlagWar.removeAttackerFlags(resident.getName());
 				}
 			}
 			this.neutral = neutral;
@@ -833,7 +833,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			World world;
 
 			if (hasCapital() && getCapital().hasWorld()) {
-				world = BukkitTools.getWorld(getCapital().getWorld().getName());
+				world = BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
 			} else {
 				world = BukkitTools.getWorlds().get(0);
 			}
@@ -863,7 +863,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	@Deprecated
 	public World getBukkitWorld() {
 		if (hasCapital() && getCapital().hasWorld()) {
-			return BukkitTools.getWorld(getCapital().getWorld().getName());
+			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}

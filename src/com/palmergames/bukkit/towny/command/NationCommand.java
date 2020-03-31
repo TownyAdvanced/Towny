@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
+import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
@@ -46,8 +48,8 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1064,7 +1066,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			boolean underAttack = false;
 			for (Town town : nation.getTowns()) {
-				if (TownyWar.isUnderAttack(town) || System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+				if (FlagWar.isUnderAttack(town) || System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 					underAttack = true;
 					break;
 				}
@@ -1253,11 +1255,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public void sendList(CommandSender sender, List<Nation> nations, int page, int total) {
-
-		int iMax = page * 10;
-		if ((page * 10) > nations.size()) {
-			iMax = nations.size();
+		
+		if (Towny.isSpigot  && sender instanceof Player) {
+			TownySpigotMessaging.sendSpigotNationList(sender, nations, page, total);
+			return;
 		}
+
+		int iMax = Math.min(page * 10, nations.size());
 		List<String> nationsordered = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
@@ -1381,11 +1385,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (town.isConquered())
 				throw new TownyException(TownySettings.getLangString("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 
-			if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
+			if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 			}
 
-			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+			if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 			}
 
@@ -2658,17 +2662,31 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation = resident.getTown().getNation();
                 notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-                SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
+				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
+				
+				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
+					return;
+				}
 
-            } else {
+			} else {
                 // split.length > 1
                 nation = townyUniverse.getDataSource().getNation(split[0]);
                 notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_nation"), nation.getName());
 
-                SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
+				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 
-            }
-        } catch (NotRegisteredException e) {
+				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
+					return;
+				}
+
+			}
+            
+			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+		} catch (NotRegisteredException e) {
 
             throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 

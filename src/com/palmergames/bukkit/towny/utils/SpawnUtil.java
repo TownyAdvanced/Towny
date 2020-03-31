@@ -149,8 +149,8 @@ public class SpawnUtil {
 					for (Location loc : town.getAllOutpostSpawns()) {
 						TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
 						if (tboutpost != null) {
-							String name = tboutpost.getName();
-							if (name.startsWith(split[split.length - 1])) {
+							String name = tboutpost.getName().toLowerCase();
+							if (name.startsWith(split[split.length - 1].toLowerCase())) {
 								index = 1 + town.getAllOutpostSpawns().indexOf(loc);
 							}
 						}

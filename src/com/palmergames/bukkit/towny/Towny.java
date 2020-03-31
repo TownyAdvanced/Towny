@@ -33,20 +33,19 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
+import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
@@ -98,9 +97,9 @@ public class Towny extends JavaPlugin {
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
-	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
-	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
-	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
+	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener(this);
+	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
+	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -164,7 +163,7 @@ public class Towny extends JavaPlugin {
 
 			addMetricsCharts();
 
-			TownyWar.onEnable();
+			FlagWar.onEnable();
 
 			if (TownySettings.isTownyUpdating(getVersion())) {
 				update();
@@ -188,35 +187,19 @@ public class Towny extends JavaPlugin {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
-					townyUniverse.onLogin(player);
-				}
-		}
-	}
-
-	public void setWorldFlags() {
-		TownyUniverse universe = TownyUniverse.getInstance();
-		for (Town town : universe.getDataSource().getTowns()) {
-
-			if (town.getWorld() == null) {
-				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");
-				if (town.hasHomeBlock())
-					try {
-						TownyWorld world = town.getHomeBlock().getWorld();
-						if (!world.hasTown(town)) {
-							world.addTown(town);
-							universe.getDataSource().saveTown(town);
-							universe.getDataSource().saveWorld(world);
-						}
-					} catch (TownyException e) {
-						// Error fetching homeblock
-						LOGGER.warn("[Towny Error] Failed get world data for: " + town.getName());
+					
+					// Test and kick any players with invalid names.
+					if (player.getName().contains(" ")) {
+						player.kickPlayer("Invalid name!");
+						return;
 					}
-				else {
-					LOGGER.warn("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
-				}
-			}
-		}
 
+					// Perform login code in it's own thread to update Towny data.
+					if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(this, player), 0L) == -1) {
+						TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
+					}
+				}
+		}
 	}
 
 	@Override
@@ -229,7 +212,7 @@ public class Towny extends JavaPlugin {
 		}
 
 		if (!error) {
-			TownyWar.onDisable();
+			FlagWar.onDisable();
 		}
 
 		if (TownyAPI.getInstance().isWarTime()) {
@@ -271,8 +254,6 @@ public class Towny extends JavaPlugin {
 		}
 
 		checkPlugins();
-
-		setWorldFlags();
 
 		// make sure the timers are stopped for a reset
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
@@ -395,8 +376,8 @@ public class Towny extends JavaPlugin {
 
 		if (!isError()) {
 			// Have War Events get launched before regular events.
-			pluginManager.registerEvents(townyWarBlockListener, this);
-			pluginManager.registerEvents(townyWarEntityListener, this);
+			pluginManager.registerEvents(flagWarBlockListener, this);
+			pluginManager.registerEvents(flagWarEntityListener, this);
 			
 			// Huds
 			pluginManager.registerEvents(HUDManager, this);
@@ -405,7 +386,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(vehicleListener, this);
 			pluginManager.registerEvents(weatherListener, this);
-			pluginManager.registerEvents(townyWarCustomListener, this);
+			pluginManager.registerEvents(flagWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
@@ -788,29 +769,29 @@ public class Towny extends JavaPlugin {
 
 	
 	/**
-	 * @return the townyWarBlockListener
+	 * @return the flagWarBlockListener
 	 */
-	public TownyWarBlockListener getTownyWarBlockListener() {
+	public FlagWarBlockListener getFlagWarBlockListener() {
 	
-		return townyWarBlockListener;
+		return flagWarBlockListener;
 	}
 
 	
 	/**
-	 * @return the townyWarCustomListener
+	 * @return the flagWarCustomListener
 	 */
-	public TownyWarCustomListener getTownyWarCustomListener() {
+	public FlagWarCustomListener getFlagWarCustomListener() {
 	
-		return townyWarCustomListener;
+		return flagWarCustomListener;
 	}
 
 	
 	/**
-	 * @return the townyWarEntityListener
+	 * @return the flagWarEntityListener
 	 */
-	public TownyWarEntityListener getTownyWarEntityListener() {
+	public FlagWarEntityListener getFlagWarEntityListener() {
 	
-		return townyWarEntityListener;
+		return flagWarEntityListener;
 	}
 	
 	/**

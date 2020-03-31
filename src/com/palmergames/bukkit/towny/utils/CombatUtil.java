@@ -302,6 +302,10 @@ public class CombatUtil {
 				 * Check the attackers TownBlock and it's Town for their PvP
 				 * status
 				 */
+				
+				if (!world.isPVP() && !world.isForcePVP())
+					return true;
+
 				if (townBlock.getTown().isAdminDisabledPVP())
 					return true;
 
