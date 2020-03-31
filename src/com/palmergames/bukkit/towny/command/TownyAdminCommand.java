@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -105,7 +106,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"rank",
 		"toggle",
 		"set",
-		"meta"
+		"meta",
+		"deposit",
+		"withdraw"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -114,7 +117,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"delete",
 		"toggle",
 		"set",
-		"meta"
+		"meta",
+		"deposit",
+		"withdraw"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
@@ -775,7 +780,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					final String town = resident.getJailTown();
 					final int index = resident.getJailSpawn();
 					try	{
-						final Location loc = Bukkit.getWorld(townyUniverse.getDataSource().getTownWorld(town).getName()).getSpawnLocation();
+						final Location loc = Bukkit.getWorld(TownyAPI.getInstance().getDataSource().getTown(town).getHomeblockWorld().getName()).getSpawnLocation();
 
 						// Use teleport warmup
 						jailedPlayer.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
@@ -816,7 +821,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] set", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] toggle", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
-
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+			
 			return;
 		}
 
@@ -846,14 +853,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode(split[1].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
-			if (split[1].equalsIgnoreCase("add")) {
-				/*
-				 * if (isConsole) { sender.sendMessage(
-				 * "[Towny] InputError: This command was designed for use in game only."
-				 * ); return; }
-				 */
+			if (split[1].equalsIgnoreCase("invite")) {
+				// Give admins the ability to invite a player to town, invite still requires acceptance.
 				TownCommand.townAdd(getSender(), town, StringMgmt.remArgs(split, 2));
-
+				
+			} else if (split[1].equalsIgnoreCase("add")) {
+				// Force-join command for admins to use to bypass invites system.
+				Resident resident;
+				try {
+					resident = townyUniverse.getDataSource().getResident(split[2]);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[2]));
+					return;
+				}
+				TownCommand.townAddResident(town, resident);
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
+				
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, ResidentUtil.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
@@ -932,6 +948,48 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				handleTownMetaCommand(player, town, split);
+			}
+			else if (split[1].equalsIgnoreCase("deposit")) {
+				int amount;
+				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "deposit [amount]"));
+				
+				try {
+					amount = Integer.parseInt(split[2]);
+				} catch (NumberFormatException ex) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+				
+				town.getAccount().collect(amount, "Admin Deposit");
+				
+				// Send notifications
+				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
+				TownyMessaging.sendMessage(sender, depositMessage);
+				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
+			}
+			else if (split[1].equalsIgnoreCase("withdraw")) {
+				int amount;
+
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "withdraw [amount]"));
+				
+				try {
+					amount = Integer.parseInt(split[2]);
+				} catch (NumberFormatException ex) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+
+				town.getAccount().pay(amount, "Admin Withdraw");
+				
+				// Send notifications
+				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
+				TownyMessaging.sendMessage(sender, withdrawMessage);
+				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -945,11 +1003,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] set", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] toggle", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
-
+				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
+				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+				
 				return;
 			}
 
-		} catch (TownyException e) {
+		} catch (TownyException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
 		
@@ -1039,6 +1099,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] recheck", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] toggle", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] set", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] deposit [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] withdraw [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[oldnation] merge [newnation]", ""));
 
 			return;
@@ -1126,9 +1188,50 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[1].equalsIgnoreCase("toggle")) {
 				
 				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
+			} else if (split[1].equalsIgnoreCase("deposit")) {
+				int amount;
+				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "deposit [amount]"));
+				
+				try {
+					amount = Integer.parseInt(split[2]);
+				} catch (NumberFormatException ex) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+
+				nation.getAccount().collect(amount, "Admin Deposit");
+				
+				// Send notifications
+				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("nation_sing"));
+				TownyMessaging.sendMessage(sender, depositMessage);
+				TownyMessaging.sendPrefixedNationMessage(nation, depositMessage);
+			}
+			else if (split[1].equalsIgnoreCase("withdraw")) {
+				int amount;
+				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "withdraw [amount]"));
+				
+				try {
+					amount = Integer.parseInt(split[2]);
+				} catch (NumberFormatException ex) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+
+				nation.getAccount().pay(amount, "Admin Withdraw");
+				
+				// Send notifications
+				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("nation_sing"));
+				TownyMessaging.sendMessage(sender, withdrawMessage);
+				TownyMessaging.sendPrefixedNationMessage(nation, withdrawMessage);
 			}
 
-		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException e) {
+		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
 	}

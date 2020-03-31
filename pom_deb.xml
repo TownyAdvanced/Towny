@@ -5,14 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <!-- NOTE: This pom file is meant for the GitHub Actions deployment workflow, and for MacOS and Debian derivatives.
-            Javadocs will only run on GitHub Actions by specifying the path to the Javadoc executable.
-            The same goes for the OS that the workflow is currently based on, Ubuntu. -->
+    <!-- NOTE: This pom file is meant for the GitHub Actions deployment workflow, and for Debian derivatives. -->
 
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.0.0 for 1.13.2</version>
+    <version>0.96.0.6-for-1.13.2</version>
 
     <licenses>
         <license>
@@ -29,7 +27,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
+        <project.bukkitAPIVersion>1.13</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

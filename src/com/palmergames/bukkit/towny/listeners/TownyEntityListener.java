@@ -20,8 +20,8 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -302,7 +302,7 @@ public class TownyEntityListener implements Listener {
 		}
 		
 		// Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.  
-		if (TownyAPI.getInstance().isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
+		if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
 			event.setCancelled(true);			
 		
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
@@ -748,7 +748,7 @@ public class TownyEntityListener implements Listener {
 
 		Coord coord = Coord.parseCoord(target);
 
-		if (world.isWarZone(coord) && !TownyWarConfig.isAllowingExplosionsInWarZone()) {
+		if (world.isWarZone(coord) && !WarZoneConfig.isAllowingExplosionsInWarZone()) {
 			return false;
 		}
 
@@ -824,19 +824,19 @@ public class TownyEntityListener implements Listener {
 				}
 				
 				if (!isNeutralTownBlock) {
-					if (!TownyWarConfig.isAllowingExplosionsInWarZone()) {
+					if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
 						if (event.getEntity() != null)
 							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + Coord.parseCoord(block.getLocation()).toString() + ".");
 						event.setCancelled(true);
 						return;
 					} else {
 						event.setCancelled(false);
-						if (TownyWarConfig.explosionsBreakBlocksInWarZone()) {
-							if (TownyWarConfig.getExplosionsIgnoreList().contains(block.getType().toString()) || TownyWarConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())){
+						if (WarZoneConfig.explosionsBreakBlocksInWarZone()) {
+							if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().toString()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())){
 								it.remove();
 								continue;
 							}
-							if (TownyWarConfig.regenBlocksAfterExplosionInWarZone()) {
+							if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
 								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
@@ -945,6 +945,9 @@ public class TownyEntityListener implements Listener {
 													Tag.WOODEN_PRESSURE_PLATES.isTagged(block.getType()) ||
 													block.getType().equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE) ||
 													block.getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) ||
+													block.getType().equals(Material.BEACON) ||
+													block.getType().equals(Material.PLAYER_HEAD) ||
+													block.getType().equals(Material.PLAYER_WALL_HEAD) ||													
 													block.getState() instanceof ShulkerBox) {
 												block.setType(Material.AIR);
 											}

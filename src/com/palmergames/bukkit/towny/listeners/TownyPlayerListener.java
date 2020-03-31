@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
@@ -23,9 +24,12 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -93,7 +97,20 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		TownyUniverse.getInstance().onLogin(player);
+		if (!player.isOnline()) {
+			return;
+		}
+
+		// Test and kick any players with invalid names.
+		if (player.getName().contains(" ")) {
+			player.kickPlayer("Invalid name!");
+			return;
+		}
+
+		// Perform login code in it's own thread to update Towny data.
+		if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(Towny.getPlugin(), player), 0L) == -1) {
+			TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -102,13 +119,20 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.onLogout(event.getPlayer());
+		
+		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
+		try {
+			Resident resident = dataSource.getResident(event.getPlayer().getName());
+			resident.setLastOnline(System.currentTimeMillis());
+			resident.clearModes();
+			dataSource.saveResident(resident);
+		} catch (NotRegisteredException ignored) {
+		}
 
 		// Remove from teleport queue (if exists)
 		try {
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
-				TownyAPI.getInstance().abortTeleportRequest(townyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
+				TownyAPI.getInstance().abortTeleportRequest(dataSource.getResident(event.getPlayer().getName().toLowerCase()));
 			}
 		} catch (NotRegisteredException ignored) {
 		}
@@ -702,9 +726,9 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 				
 				// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
-				if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+				if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
 						|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-					if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
+					if (!WarZoneConfig.isAllowingItemUseInWarZone()) {
 						cancelState = true;
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
 					}
@@ -769,9 +793,9 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Flag war & now Event War
 		 */
-		if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
+			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
 				return true;
 			}

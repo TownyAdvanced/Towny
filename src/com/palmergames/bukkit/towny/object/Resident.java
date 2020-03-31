@@ -232,9 +232,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTitle(String title) {
-		if (title.matches(" "))
-			title = "";
-		this.title = title;
+		this.title = title.trim();
 	}
 
 	public String getTitle() {
@@ -248,9 +246,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setSurname(String surname) {
-		if (surname.matches(" "))
-			surname = "";
-		this.surname = surname;
+		this.surname = surname.trim();
 	}
 
 	public String getSurname() {
