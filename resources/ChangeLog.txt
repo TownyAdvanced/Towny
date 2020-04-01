@@ -4334,3 +4334,6 @@ v0.92.0.11:
   - Handle invalid arguments for townyadmin economy cmds, courtesy of silverwolfg11 with PR #3849.
 0.96.1.0:
   - Bump version for release.
+0.96.1.1:
+  - Fix EventWar bug when winner_takes_ownership_of_townblocks is true.
+    - Closes #3862.
