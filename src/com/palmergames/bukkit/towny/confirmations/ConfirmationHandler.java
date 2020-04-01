@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeTools;
 
@@ -47,6 +48,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, GroupConfirmation> groupremoveconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> groupsetpermconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> grouptoggleconfirmations = new HashMap<>();
+	private static HashMap<Resident, TownSpawnConfirmation> townSpawnConfirmations = new HashMap<>();
 	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
 	private static Object consoleExtra = null;
 
@@ -153,6 +155,16 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
+			case TOWNY_SPAWN:
+				r.setConfirmationType(type);
+				townSpawnConfirmations.put(r, (TownSpawnConfirmation) extra);
+
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(r, type, false);
+					}
+				}.runTaskLater(plugin, 400);
 				
 		}
 	}
@@ -223,6 +235,13 @@ public class ConfirmationHandler {
 					sendmessage = true;
 				}
 				grouptoggleconfirmations.remove(r);
+				r.setConfirmationType(null);
+				break;
+			case TOWNY_SPAWN:
+				if (townSpawnConfirmations.containsKey(r) && !successful) {
+					sendmessage = true;
+				}
+				townSpawnConfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
 		}
@@ -365,6 +384,16 @@ public class ConfirmationHandler {
 			// Perform the toggle.
 			new PlotCommand(Towny.getPlugin()).plotGroupToggle(confirmation.getPlayer(),
 				confirmation.getGroup(), confirmation.getArgs());
+			
+			removeConfirmation(r, type, true);
+		}
+		
+		if (type == ConfirmationType.TOWNY_SPAWN) {
+			TownSpawnConfirmation confirm = townSpawnConfirmations.get(r);
+			
+			// Spawn:
+			SpawnUtil.sendToTownySpawn(confirm.getPlayer(), confirm.getSplit(), confirm.getTownyObject(),
+				confirm.getNotAffordMSG(), confirm.isOutpost(), confirm.getSpawnType());
 			
 			removeConfirmation(r, type, true);
 		}

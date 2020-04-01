@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.confirmations.TownSpawnConfirmation;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -610,7 +611,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			        Parse standard nation spawn command.
 			     */
 				String[] newSplit = StringMgmt.remFirstArg(split);
-				nationSpawn(player, newSplit);
+				boolean ignoreWarning = false;
+				
+				if (split.length > 2) {
+					if (split[2].equals("-ignore")) {
+						ignoreWarning = true;
+					}
+				}
+				
+				nationSpawn(player, newSplit, ignoreWarning);
             }
 			else if (split[0].equalsIgnoreCase("deposit")) {
 
@@ -2592,7 +2601,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
      * @param split  - Current command arguments.
      * @throws TownyException - Exception.
      */
-    public static void nationSpawn(Player player, String[] split) throws TownyException {
+    public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
         try {
@@ -2638,6 +2647,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
+			}
+            
+            if (nation.hasResident(resident)) {
+            	ignoreWarning = true;
+			}
+
+			if (nation.getSpawnCost() > 0 && !ignoreWarning) {
+				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost())), null, null, null);
+				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNY_SPAWN, townSpawnConfirmation);
+				return;
 			}
             
 			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.77
+version: 0.78
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1098,3 +1098,6 @@ msg_you: 'You'
 # Added in 0.77
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
+
+#Added in 0.78
+msg_spawn_warn: 'It costs %s to spawn here. Continue?'

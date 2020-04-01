@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.confirmations.TownSpawnConfirmation;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -639,7 +640,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					/*
 					 * town spawn handles it's own perms.
 					 */
-					townSpawn(player, newSplit, false);
+					boolean ignoreWarning = false;
+					
+					if (split.length > 2) {
+						if (split[2].equals("-ignore")) {
+							ignoreWarning = true;
+						}
+					}
+					
+					townSpawn(player, newSplit, false, ignoreWarning);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 					if (split.length >= 2) {
@@ -703,10 +712,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_must_belong_town"));
 							}
 						} else {
-							townSpawn(player, newSplit, true);
+							boolean ignoreWarning = false;
+
+							if (split.length == 2) {
+								if (split[1].equals("-ignore")) {
+									ignoreWarning = true;
+								}
+							}
+							townSpawn(player, newSplit, true, ignoreWarning);
 						}
 					} else {
-						townSpawn(player, newSplit, true);
+						townSpawn(player, newSplit, true, false);
 					}
 				} else if (split[0].equalsIgnoreCase("delete")) {
 
@@ -2589,7 +2605,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param outpost - Whether this in an outpost or not.
 	 * @throws TownyException - Exception.
 	 */
-	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException{
+	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
@@ -2630,6 +2646,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return;
 				}
 
+			}
+			
+			if (town.hasResident(resident)) {
+				ignoreWarning = true;
+			}
+			
+			if (town.getSpawnCost() > 0 && !ignoreWarning) {
+				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())), null, null, null);
+				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNY_SPAWN, townSpawnConfirmation);
+				return;
 			}
 			
 			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
