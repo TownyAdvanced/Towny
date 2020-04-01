@@ -1337,7 +1337,7 @@ public enum ConfigNodes {
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed when using flat taxes this option"),
+			"# Maximum tax amount allowed for townblocks"),
 	ECO_DAILY_TOWN_TAXES_MAX(
 		"economy.daily_taxes.max_town_tax_amount",
 		"1000.0",
