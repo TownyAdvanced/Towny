@@ -1658,8 +1658,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_ENABLED);
 	}
 
-	public static double getMaxTax() {
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
+	public static double getMaxPlotTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_PLOT_TAX);
 	}
 
 	public static double getMaxTownTax() {

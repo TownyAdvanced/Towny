@@ -1334,8 +1334,8 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
-	ECO_DAILY_TAXES_MAX_TAX(
-			"economy.daily_taxes.max_tax_amount",
+	ECO_DAILY_TAXES_MAX_PLOT_TAX(
+			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
 			"# Maximum tax amount allowed when using flat taxes this option"),
 	ECO_DAILY_TOWN_TAXES_MAX(

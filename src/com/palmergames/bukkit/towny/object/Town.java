@@ -945,7 +945,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setPlotTax(double plotTax) {
-		this.plotTax = Math.min(plotTax, TownySettings.getMaxTax());
+		this.plotTax = Math.min(plotTax, TownySettings.getMaxPlotTax());
 	}
 
 	public double getPlotTax() {
@@ -954,7 +954,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setCommercialPlotTax(double commercialTax) {
-		this.commercialPlotTax = Math.min(commercialTax, TownySettings.getMaxTax());
+		this.commercialPlotTax = Math.min(commercialTax, TownySettings.getMaxPlotTax());
 	}
 
 	public double getCommercialPlotTax() {
@@ -963,7 +963,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setEmbassyPlotTax(double embassyPlotTax) {
-		this.embassyPlotTax = Math.min(embassyPlotTax, TownySettings.getMaxTax());
+		this.embassyPlotTax = Math.min(embassyPlotTax, TownySettings.getMaxPlotTax());
 	}
 
 	public double getEmbassyPlotTax() {
