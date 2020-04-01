@@ -1652,6 +1652,10 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Reading disallowed town spawn zones. ");
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
+	
+	public static boolean getSpawnWarnConfirmations() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
+	}
 
 	public static boolean isTaxingDaily() {
 

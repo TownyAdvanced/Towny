@@ -2653,7 +2653,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             	ignoreWarning = true;
 			}
 
-			if (nation.getSpawnCost() > 0 && !ignoreWarning) {
+			if (nation.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations()) {
 				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost())), null, null, null);
 				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, nation, notAffordMSG, false, SpawnType.NATION);
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNY_SPAWN, townSpawnConfirmation);

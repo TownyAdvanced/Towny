@@ -385,6 +385,11 @@ public enum ConfigNodes {
 			"global_town_settings.spawn_cooldown_time",
 			"30",
 			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_SPAWN_WARNINGS(
+		"global_town_settings.spawn_warnings",
+		"false",
+		"# Decides whether confirmations should appear if you spawn to an area with an associated cost."
+	),
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
