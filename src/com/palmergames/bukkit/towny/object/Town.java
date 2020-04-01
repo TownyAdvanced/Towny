@@ -64,7 +64,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private String townBoard = "/town set board [msg]";
 	private String tag = "";
 	
-	@LoadSetter(setterName = "forceSetHomeBlock")
 	private TownBlock homeBlock;
 	
 	private TownyWorld world;

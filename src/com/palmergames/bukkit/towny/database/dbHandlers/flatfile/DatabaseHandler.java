@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLLoadHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLSaveHandler;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import org.bukkit.Location;
 
@@ -32,7 +31,7 @@ public class DatabaseHandler {
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 		
 		for (Field field : fields) {
-			Class<?> type = field.getGenericType().getClass();
+			Class<?> type = field.getType();
 			field.setAccessible(true);
 			
 			Object value = null;
@@ -47,6 +46,7 @@ public class DatabaseHandler {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> String toFileString(Object obj, Class<T> type) {
 		TypeAdapter<T> adapter = getAdapter(type);
 		
@@ -105,12 +105,15 @@ public class DatabaseHandler {
 		SQLSaveHandler<T> sqlSaveHandler = typeAdapter instanceof SQLSaveHandler ? (SQLSaveHandler<T>) typeAdapter : null;
 		SQLLoadHandler<T> sqlLoadHandler = typeAdapter instanceof SQLLoadHandler ? (SQLLoadHandler<T>) typeAdapter : null;
 		
-		TypeAdapter<?> adapter = new TypeAdapter<T>(this,flatFileLoadHandler, flatFileSaveHandler, sqlLoadHandler, sqlSaveHandler);
+		
+		
+		TypeAdapter<?> adapter = new TypeAdapter<>(this, flatFileLoadHandler, flatFileSaveHandler, sqlLoadHandler, sqlSaveHandler);
 		
 		// Add to hashmap.
 		registeredAdapters.put(type, adapter);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private <T> TypeAdapter<T> getAdapter(Class<T> type) {
 		return (TypeAdapter<T>) registeredAdapters.get(type);
 	}

@@ -42,7 +42,16 @@ public class LocationHandler implements SerializationHandler<Location> {
 
 	@Override
 	public String getFileString(SaveContext context, Location obj) {
-		return null;
+		World world = obj.getWorld();
+		double x = obj.getX();
+		double y = obj.getY();
+		double z = obj.getZ();
+		double pitch = obj.getPitch();
+		double yaw = obj.getYaw();
+		
+		assert world != null;
+		
+		return world.getName() + "," + x + "," + y + "," + z + "," + pitch + "," + yaw;
 	}
 
 	@Override

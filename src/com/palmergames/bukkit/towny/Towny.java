@@ -36,6 +36,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -211,17 +212,15 @@ public class Towny extends JavaPlugin {
 		}
 		// ------------------- TESTING CODE -------------------
 		DatabaseHandler databaseHandler = new DatabaseHandler();
+		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get("world");
 		
-		Town test = new Town("test");
-		
-		Resident res = new Resident("Siris");
+		Town test = TownyUniverse.getInstance().getDataSource().getTowns().get(0);
 		try {
-			test.addResident(res);
-			test.setSpawn(new Location(null, 0.5, 0.6, 0.7));
+			TownyMessaging.sendErrorMsg(test.getSpawn() + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		databaseHandler.save(test);
 		// ------------------- TESTING CODE -------------------
 	}

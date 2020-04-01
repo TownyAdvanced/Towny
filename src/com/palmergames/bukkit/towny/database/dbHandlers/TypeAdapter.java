@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadContext;
 import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadHandler;
@@ -22,7 +23,7 @@ public class TypeAdapter<T> {
 		
 		// Default behavior.
 		if (flatFileSaveHandler == null) {
-			throw new UnsupportedOperationException("No flat file save adapter for " + object);
+			return object.toString();
 		}
 
 		SaveContext saveContext = new SaveContext(handler);
