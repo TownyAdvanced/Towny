@@ -1253,10 +1253,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		int iMax = page * 10;
-		if ((page * 10) > nations.size()) {
-			iMax = nations.size();
-		}
+		int iMax = Math.min(page * 10, nations.size());
 		List<String> nationsordered = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
@@ -2624,6 +2621,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 				
 				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
 					return;
 				}
 
@@ -2636,6 +2634,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 
 				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
 					return;
 				}
 

@@ -952,6 +952,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			else if (split[1].equalsIgnoreCase("deposit")) {
 				int amount;
 				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "deposit [amount]"));
+				
 				try {
 					amount = Integer.parseInt(split[2]);
 				} catch (NumberFormatException ex) {
@@ -969,6 +973,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
 
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "withdraw [amount]"));
+				
 				try {
 					amount = Integer.parseInt(split[2]);
 				} catch (NumberFormatException ex) {
@@ -1182,7 +1190,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				int amount;
-
+				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "deposit [amount]"));
+				
 				try {
 					amount = Integer.parseInt(split[2]);
 				} catch (NumberFormatException ex) {
@@ -1199,7 +1211,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
-
+				
+				// Handle incorrect number of arguments
+				if (split.length != 3)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "withdraw [amount]"));
+				
 				try {
 					amount = Integer.parseInt(split[2]);
 				} catch (NumberFormatException ex) {

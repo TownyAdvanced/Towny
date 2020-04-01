@@ -11,15 +11,14 @@ public class TownSpawnEvent extends PlayerTeleportEvent {
 	
 	Town fromTown;
 	private Town toTown;
+	private String cancelMessage = "Sorry, this event was canceled.";
 	
 	public TownSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
 		
 		try {
 			fromTown = WorldCoord.parseWorldCoord(from).getTownBlock().getTown();
-		} catch (NotRegisteredException e) {
-			return;
-		}
+		} catch (NotRegisteredException ignored) {}
 		
 		try {
 			toTown = WorldCoord.parseWorldCoord(to).getTownBlock().getTown();
@@ -33,5 +32,13 @@ public class TownSpawnEvent extends PlayerTeleportEvent {
 
 	public Town getFromTown() {
 		return fromTown;
+	}
+
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
+
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
 	}
 }
