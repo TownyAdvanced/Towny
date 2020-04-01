@@ -1346,10 +1346,6 @@ public enum ConfigNodes {
 		"economy.daily_taxes.max_nation_tax_amount",
 		"1000.0",
 		"# Maximum tax amount allowed for nations when using flat taxes"),
-	ECO_DAILY_TAXES_MAX_TAX_PERCENT(
-			"economy.daily_taxes.max_tax_percent",
-			"25",
-			"# maximum tax percentage allowed when taxing by percentages"),
 	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
 		"economy.daily_taxes.max_town_tax_percent",
 		"25",
