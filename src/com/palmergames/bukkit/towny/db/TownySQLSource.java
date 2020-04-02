@@ -1793,12 +1793,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean saveAllTownBlocks() {
-		for (Town town : getTowns()) {
-			for (TownBlock townBlock : town.getTownBlocks())
-				saveTownBlock(townBlock);
-		}
-		
-		return true;
+        return false;
     }
     
     @Override
