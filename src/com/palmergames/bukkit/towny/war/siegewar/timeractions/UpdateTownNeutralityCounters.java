@@ -44,7 +44,6 @@ public class UpdateTownNeutralityCounters {
 
 			if(town.getNeutralityChangeConfirmationCounterDays() == 0) {
 				town.flipNeutral();
-				TownyUniverse.getInstance().getDataSource().saveTown(town);
 
 				if(town.isNeutral()) {
 					TownyMessaging.sendGlobalMessage(
@@ -56,6 +55,8 @@ public class UpdateTownNeutralityCounters {
 						town.getFormattedName()));
 				}
 			}
+
+			TownyUniverse.getInstance().getDataSource().saveTown(town);
 		}
 	}
 }
