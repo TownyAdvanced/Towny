@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
 
+import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +27,11 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 
 	@Override
 	public List<Resident> loadSQL(LoadContext context, Object result) {
-		return null;
+		return loadString(context, (String)result);
 	}
 
 	@Override
 	public String getFileString(SaveContext context, List<Resident> obj) {
-		
 		StringBuilder retVal = new StringBuilder();
 		for (Resident resident : obj) {
 			retVal.append(context.toFileString(resident, Resident.class)).append(",");
@@ -42,6 +42,11 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 
 	@Override
 	public SQLData getSQL(SaveContext context, List<Resident> obj) {
-		return null;
+		StringBuilder retVal = new StringBuilder();
+		for (Resident resident : obj) {
+			retVal.append(context.toFileString(resident, Resident.class)).append(",");
+		}
+		
+		return new SQLData(retVal, JDBCType.VARCHAR);
 	}
 }
