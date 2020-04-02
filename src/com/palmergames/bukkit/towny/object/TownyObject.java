@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class TownyObject implements Nameable {
 	private String name;
 
-	private HashSet<CustomDataField<?>> metadata = null;
+	private transient HashSet<CustomDataField<?>> metadata = null;
 	
 	protected TownyObject(String name) {
 		this.name = name;

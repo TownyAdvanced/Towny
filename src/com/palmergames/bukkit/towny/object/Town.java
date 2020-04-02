@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadSetter;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
@@ -19,7 +20,6 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadSetter;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -45,7 +45,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private HashMap<String, PlotGroup> plotGroups = null;
+	private transient HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -64,6 +64,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private String townBoard = "/town set board [msg]";
 	private String tag = "";
 	
+	@LoadSetter(setterName = "forceSetHomeBlock")
 	private TownBlock homeBlock;
 	
 	private TownyWorld world;
@@ -526,7 +527,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @throws TownyException - General TownyException
 	 */
 	public void forceSetHomeBlock(TownBlock homeBlock) throws TownyException {
-
 		if (homeBlock == null) {
 			this.homeBlock = null;
 			TownyMessaging.sendErrorMsg("town.forceSetHomeblock() is returning null.");

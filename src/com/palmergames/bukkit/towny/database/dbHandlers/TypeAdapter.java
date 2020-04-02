@@ -1,11 +1,9 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.DatabaseHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.SaveHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLLoadHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLSaveHandler;

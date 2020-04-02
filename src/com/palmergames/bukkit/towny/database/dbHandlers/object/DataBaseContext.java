@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object;
+package com.palmergames.bukkit.towny.database.dbHandlers.object;
 
 public abstract class DataBaseContext {
 	SerializationHandler<?> handler;

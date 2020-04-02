@@ -1,9 +1,9 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.flatfile.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
 
 public class ResidentHandler implements LoadHandler<Resident> {
 

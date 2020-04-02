@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object;
+package com.palmergames.bukkit.towny.database.dbHandlers.object;
 
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 

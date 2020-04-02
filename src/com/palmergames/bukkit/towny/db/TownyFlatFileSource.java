@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.bukkit.towny.utils.SaveUtil;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadSetter;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadSetter;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;

@@ -1,8 +1,9 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.flatfile.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
 
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.SerializationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.flatfile.object.LoadContext;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 public class LocationHandler implements SerializationHandler<Location> {
 	@Override
 	public Location loadString(LoadContext context, String str) {
+		TownyMessaging.sendErrorMsg(str);
 		String[] tokens = str.split(",");
 		
 		World world;

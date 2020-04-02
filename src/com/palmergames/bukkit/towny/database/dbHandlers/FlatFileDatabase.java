@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.flatfile;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
 public class FlatFileDatabase {
 	
