@@ -41,10 +41,11 @@ public class UpdateTownNeutralityCounters {
 	public static void updateTownNeutralityCounter(Town town) {
 		if(town.getNeutralityChangeConfirmationCounterDays() != 0) {
 			town.decrementNeutralityChangeConfirmationCounterDays();
-			
+
 			if(town.getNeutralityChangeConfirmationCounterDays() == 0) {
 				town.flipNeutral();
-			
+				TownyUniverse.getInstance().getDataSource().saveTown(town);
+
 				if(town.isNeutral()) {
 					TownyMessaging.sendGlobalMessage(
 						String.format(TownySettings.getLangString("msg_siege_war_town_became_neutral"), 
