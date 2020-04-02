@@ -2649,10 +2649,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
             
-            if (nation.hasResident(resident)) {
-            	ignoreWarning = true;
-			}
-            
 			if (nation.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations() && nation.isPublic()) {
 				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost())), null, null, null);
 				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, nation, notAffordMSG, false, SpawnType.NATION);
