@@ -172,7 +172,7 @@ public class DatabaseHandler {
 			throw new UnsupportedOperationException("There is no adapter for " + type);
 		}
 		
-		return adapter.getSQL(obj, type);
+		return adapter.getSQL(obj);
 	}
 	
 	public <T> T fromFileString(String str, Type type) {
