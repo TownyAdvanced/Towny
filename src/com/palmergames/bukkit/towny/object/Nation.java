@@ -405,7 +405,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setTaxes(double taxes) {
-		this.taxes = Math.min(taxes, TownySettings.getMaxTax());
+		this.taxes = Math.min(taxes, TownySettings.getMaxNationTax());
 	}
 
 	public double getTaxes() {
