@@ -1337,19 +1337,19 @@ public enum ConfigNodes {
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed for townblocks"),
+			"# Maximum tax amount allowed for townblocks sold to players."),
 	ECO_DAILY_TOWN_TAXES_MAX(
-		"economy.daily_taxes.max_town_tax_amount",
-		"1000.0",
-		"# Maximum tax amount allowed for towns when using flat taxes"),
+			"economy.daily_taxes.max_town_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for towns when using flat taxes."),
 	ECO_DAILY_NATION_TAXES_MAX(
-		"economy.daily_taxes.max_nation_tax_amount",
-		"1000.0",
-		"# Maximum tax amount allowed for nations when using flat taxes"),
+			"economy.daily_taxes.max_nation_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for nations when using flat taxes."),
 	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
-		"economy.daily_taxes.max_town_tax_percent",
-		"25",
-		"# maximum tax percentage allowed when taxing by percentages for towns."),
+			"economy.daily_taxes.max_town_tax_percent",
+			"25",
+			"# Maximum tax percentage allowed when taxing by percentages for towns."),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",
