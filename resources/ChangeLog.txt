@@ -4341,3 +4341,4 @@ v0.92.0.11:
     - Closes #3856.
   - Fix SQL saveAllTownBlocks() returning false all of the time, preventing a server from switching from flatfile to mysql storage.
     - Closes #3864.
+  - pt-br.yml updated to 0.77 courtesy of bane with PR #3865.
