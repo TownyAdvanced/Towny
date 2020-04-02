@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -233,13 +234,10 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setNationSpawn(Location spawn) throws TownyException {
-		Coord spawnBlock = Coord.parseCoord(spawn);
-		TownBlock townBlock;
-		TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()); 
-		if (world.hasTownBlock(spawnBlock))
-			townBlock = world.getTownBlock(spawnBlock);
-		else 
+		if (TownyAPI.getInstance().isWilderness(spawn))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
+
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
 
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){

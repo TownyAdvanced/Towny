@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -39,6 +38,7 @@ import org.bukkit.entity.Player;
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -331,44 +331,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
-	public void removeOneOfManyTownBlocks(TownBlock townBlock, Town town) {
-		
-		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
-		BukkitTools.getPluginManager().callEvent(event);
-		
-		if (event.isCancelled())
-			return;
-
-		Resident resident = null;
-		try {
-			resident = townBlock.getResident();
-		} catch (NotRegisteredException ignored) {
-		}
-		
-		TownyWorld world = townBlock.getWorld();
-		WorldCoord coord = townBlock.getWorldCoord(); 
-
-		if (world.isUsingPlotManagementDelete())
-			TownyRegenAPI.addDeleteTownBlockIdQueue(coord);
-
-		// Move the plot to be restored
-		if (world.isUsingPlotManagementRevert()) {
-			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
-			if (plotData != null && !plotData.getBlockList().isEmpty()) {
-				TownyRegenAPI.addPlotChunk(plotData, true);
-			}
-		}
-
-		if (resident != null)
-			saveResident(resident);
-
-		world.removeTownBlock(townBlock);
-
-		deleteTownBlock(townBlock);
-		// Raise an event to signal the unclaim
-		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, coord));	
-	}
-	
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
 
@@ -389,13 +351,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} catch (NotRegisteredException ignored) {
 		}
 
-		TownyWorld world = townBlock.getWorld();
-		world.removeTownBlock(townBlock);
-
-		saveWorld(world);
+		TownyUniverse.getInstance().removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
-
-		saveTownBlockList();
 
 //		if (resident != null)           - Removed in 0.95.2.5, residents don't store townblocks in them.
 //			saveResident(resident);
@@ -423,20 +380,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
 	}
-	
-	public void removeManyTownBlocks(Town town) {
-
-		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
-			removeOneOfManyTownBlocks(townBlock, town);
-		saveTownBlockList();
-	}
 
 	@Override
-	public List<TownBlock> getAllTownBlocks() {
-		List<TownBlock> townBlocks = new ArrayList<>();
-		for (TownyWorld world : getWorlds())
-			townBlocks.addAll(world.getTownBlocks());
-		return townBlocks;
+	public Collection<TownBlock> getAllTownBlocks() {
+		return TownyUniverse.getInstance().getTownBlocks().values();
 	}
 	
 	public List<PlotGroup> getAllPlotGroups() {
@@ -584,8 +531,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 		
-		removeManyTownBlocks(town);
-		//removeTownBlocks(town);		
+		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();

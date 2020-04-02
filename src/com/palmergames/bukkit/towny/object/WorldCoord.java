@@ -122,13 +122,19 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Shortcut for getTownyWorld().getTownBlock(getCoord())
+	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).
 	 * 
 	 * @return the relevant TownBlock instance.
 	 * @throws NotRegisteredException - If there is no TownBlock @ WorldCoord, then this exception.
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
-		return getTownyWorld().getTownBlock(getCoord());
+		if (!hasTownBlock())
+			throw new NotRegisteredException();
+		return TownyUniverse.getInstance().getTownBlock(this);
+	}
+	
+	public boolean hasTownBlock() {
+		return TownyUniverse.getInstance().hasTownBlock(this);
 	}
 
 	/**
