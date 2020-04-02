@@ -97,11 +97,13 @@ public class DatabaseHandler {
 
 		T obj = null;
 		try {
+			assert objConstructor != null;
 			obj = objConstructor.newInstance("");
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
+		assert obj != null;
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 
 		HashMap<String, String> values = loadFileIntoHashMap(file);
