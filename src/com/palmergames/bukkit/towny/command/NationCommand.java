@@ -582,8 +582,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
-					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					Town town = TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown();
 					if (!town.isCapital())
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
 					Nation nation = town.getNation();
@@ -645,8 +644,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
-					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					Town town = TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown();
 					if (!town.isCapital())
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
 					Nation nation = town.getNation();
@@ -1263,7 +1261,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		int iMax = Math.min(page * 10, nations.size());
-		List<String> nationsordered = new ArrayList();
+		List<String> nationsordered = new ArrayList<>(10);
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";

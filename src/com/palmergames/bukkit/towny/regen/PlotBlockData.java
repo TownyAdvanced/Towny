@@ -122,8 +122,8 @@ public class PlotBlockData {
 		while (reverse > 0) {
 			reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
 			y = height - (reverse % height);
-			x = (int) (reverse / height) % size;
-			z = ((int) (reverse / height) / size) % size;
+			x = (reverse / height) % size;
+			z = (reverse / height / size) % size;
 	
 			block = world.getBlockAt(worldx + x, y, worldz + z);
 			blockMat = block.getType();
@@ -144,7 +144,7 @@ public class PlotBlockData {
 							mat = BukkitTools.getMaterial(storedData.getTypeId());
 						} else {
 							try {
-								mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId()+ ":" + storedData.getData() )).getFlatteningType());					
+								mat = Material.getMaterial(IdMappings.getById(storedData.getTypeId() + ":" + storedData.getData()).getFlatteningType());					
 							} catch (NullPointerException e) {
 								// Sometimes blocks facing causes null lookups, we fall back to the base material.
 								mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
