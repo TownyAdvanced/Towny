@@ -1097,5 +1097,5 @@ msg_already_ally: 'A tua nação já é aliada com %s.'
 msg_you: 'Tu'
 
 # Added in 0.77
-msg_click_spawn: '&aClick to spawn to: &e%s'
-msg_spawn_cost: '&aSpawn Cost = &e%s'
+msg_click_spawn: '&aClique para te teletransportares para: &e%s'
+msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
