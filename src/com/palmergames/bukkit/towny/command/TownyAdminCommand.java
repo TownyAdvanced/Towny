@@ -609,7 +609,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				resident = townyUniverse.getDataSource().getResident(split[1]);
 			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[1].toString()));
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[1]));
 			}
 
 			Player player = BukkitTools.getPlayer(sender.getName());
@@ -660,7 +660,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));
 		}
-		y = (double) Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
+		y = Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
 		loc = new Location(world, x, y, z);
 		player.teleport(loc, TeleportCause.PLUGIN);
 	}

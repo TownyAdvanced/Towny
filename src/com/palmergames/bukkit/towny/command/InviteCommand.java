@@ -308,19 +308,13 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
+				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getReceiver() instanceof Resident) {
-					output = Colors.Blue + ((Town) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
 					object = TownySettings.getLangString("town_sing");
 				}
-				if (invite.getReceiver() instanceof Town) {
-					output = Colors.Blue + ((Nation) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
+				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation) {
 					object = TownySettings.getLangString("nation_sing");
 				}
-				if (invite.getReceiver() instanceof Nation) {
-					output = Colors.Blue + ((Nation) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = TownySettings.getLangString("nation_sing");
-				}
-
 			}
 			invitesformatted.add(output);
 		}
