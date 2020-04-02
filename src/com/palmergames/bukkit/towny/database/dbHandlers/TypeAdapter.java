@@ -41,8 +41,14 @@ public class TypeAdapter<T> {
 	}
 	
 	// SQL stuff
-	public SQLData<T> getSQL(T object, Class<T> type) {
-		return null;
+	public SQLData getSQL(T object) {
+		
+		if (flatFileSaveHandler == null) {
+			return null;
+		}
+		
+		SaveContext saveContext = new SaveContext(handler);
+		return flatFileSaveHandler.getSQL(saveContext, object);
 	}
 	public T fromSQL(T obj) {
 		return null;

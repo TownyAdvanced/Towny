@@ -37,7 +37,7 @@ public class TownBlockHandler implements SerializationHandler<TownBlock> {
 	}
 
 	@Override
-	public TownBlock loadSQL(Object result) {
+	public TownBlock loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 
@@ -57,7 +57,7 @@ public class TownBlockHandler implements SerializationHandler<TownBlock> {
 	}
 
 	@Override
-	public SQLData<TownBlock> getSQL(SaveContext context, TownBlock obj) {
+	public SQLData getSQL(SaveContext context, TownBlock obj) {
 		return null;
 	}
 }

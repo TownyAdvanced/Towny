@@ -13,7 +13,7 @@ public class SQLResidentHandler implements SQLDatabaseHandler<List<Resident>> {
 	}
 
 	@Override
-	public SQLData<List<Resident>> save(List<Resident> object) {
+	public SQLData save(List<Resident> object) {
 		return null;
 	}
 	

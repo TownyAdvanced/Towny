@@ -15,7 +15,7 @@ public class TownBlockListHandler implements SerializationHandler<List<TownBlock
 	}
 
 	@Override
-	public List<TownBlock> loadSQL(Object result) {
+	public List<TownBlock> loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 
@@ -25,7 +25,7 @@ public class TownBlockListHandler implements SerializationHandler<List<TownBlock
 	}
 
 	@Override
-	public SQLData<List<TownBlock>> getSQL(SaveContext context, List<TownBlock> obj) {
+	public SQLData getSQL(SaveContext context, List<TownBlock> obj) {
 		return null;
 	}
 }

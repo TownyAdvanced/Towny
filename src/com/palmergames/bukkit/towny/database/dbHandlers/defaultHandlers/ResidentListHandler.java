@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
 import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 	}
 
 	@Override
-	public List<Resident> loadSQL(Object result) {
+	public List<Resident> loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 
@@ -42,7 +41,7 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 	}
 
 	@Override
-	public SQLData<List<Resident>> getSQL(SaveContext context, List<Resident> obj) {
+	public SQLData getSQL(SaveContext context, List<Resident> obj) {
 		return null;
 	}
 }

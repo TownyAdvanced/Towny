@@ -25,7 +25,7 @@ public class LocationListHandler implements SerializationHandler<List<Location>>
 	}
 
 	@Override
-	public List<Location> loadSQL(Object result) {
+	public List<Location> loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 
@@ -40,7 +40,7 @@ public class LocationListHandler implements SerializationHandler<List<Location>>
 	}
 
 	@Override
-	public SQLData<List<Location>> getSQL(SaveContext context, List<Location> obj) {
+	public SQLData getSQL(SaveContext context, List<Location> obj) {
 		return null;
 	}
 }

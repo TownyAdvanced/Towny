@@ -15,7 +15,7 @@ public class SaveContext {
 		return handler.toFileString(obj, type);
 	}
 
-	public <T> SQLData<T> toSQL(T obj, Class<T> type) {
+	public <T> SQLData toSQL(T obj, Class<T> type) {
 		return handler.toSQL(obj, type);
 	}
 	

@@ -13,7 +13,7 @@ public class TypeAdapters {
 		}
 
 		@Override
-		public SQLData<Integer> getSQL(SaveContext context, Integer obj) {
+		public SQLData getSQL(SaveContext context, Integer obj) {
 			return null;
 		}
 	}

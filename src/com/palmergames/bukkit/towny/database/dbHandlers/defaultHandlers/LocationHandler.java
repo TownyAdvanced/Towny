@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.sql.JDBCType;
+
 public class LocationHandler implements SerializationHandler<Location> {
 	@Override
 	public Location loadString(LoadContext context, String str) {
@@ -38,8 +40,9 @@ public class LocationHandler implements SerializationHandler<Location> {
 	}
 
 	@Override
-	public Location loadSQL(Object result) {
-		return null;
+	public Location loadSQL(LoadContext context, Object result) {
+		String data = (String)result;
+		return context.fromFileString(data, Location.class);
 	}
 
 	@Override
@@ -57,7 +60,8 @@ public class LocationHandler implements SerializationHandler<Location> {
 	}
 
 	@Override
-	public SQLData<Location> getSQL(SaveContext context, Location obj) {
-		return null;
+	public SQLData getSQL(SaveContext context, Location obj) {
+		String saveData = context.toFileString(obj, Location.class);
+		return new SQLData(saveData, JDBCType.VARCHAR);
 	}
 }

@@ -165,7 +165,7 @@ public class DatabaseHandler {
 		return adapter.getFileFormat((T) obj);
 	}
 	
-	public <T> SQLData<T> toSQL(T obj, Class<T> type) {
+	public <T> SQLData toSQL(T obj, Class<T> type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {

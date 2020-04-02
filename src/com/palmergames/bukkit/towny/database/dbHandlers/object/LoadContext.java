@@ -18,7 +18,7 @@ public class LoadContext {
 		return handler.fromFileString(str, type);
 	}
 
-	public <T> SQLData<T> toSQL(T obj, Class<T> type) {
+	public <T> SQLData toSQL(T obj, Class<T> type) {
 		return handler.toSQL(obj, type);
 	}
 

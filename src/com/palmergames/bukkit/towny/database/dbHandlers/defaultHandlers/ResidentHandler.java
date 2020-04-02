@@ -13,7 +13,7 @@ public class ResidentHandler implements LoadHandler<Resident> {
 	}
 
 	@Override
-	public Resident loadSQL(Object result) {
+	public Resident loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 }

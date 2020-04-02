@@ -12,7 +12,7 @@ public class NationFlatFileHandler implements LoadHandler<Nation> {
 	}
 
 	@Override
-	public Nation loadSQL(Object result) {
+	public Nation loadSQL(LoadContext context, Object result) {
 		return null;
 	}
 }

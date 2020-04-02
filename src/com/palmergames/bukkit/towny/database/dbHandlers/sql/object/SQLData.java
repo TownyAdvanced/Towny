@@ -2,16 +2,16 @@ package com.palmergames.bukkit.towny.database.dbHandlers.sql.object;
 
 import java.sql.JDBCType;
 
-public class SQLData<T> {
+public class SQLData {
 	JDBCType columnType;
-	T value;
+	Object value;
 	
-	public SQLData(T data, JDBCType columnType) {
+	public SQLData(Object data, JDBCType columnType) {
 		this.value = data;
 		this.columnType = columnType;
 	}
 
-	public T getValue() {
+	public Object getValue() {
 		return value;
 	}
 	

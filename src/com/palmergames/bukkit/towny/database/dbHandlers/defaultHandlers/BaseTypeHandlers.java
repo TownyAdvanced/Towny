@@ -1,10 +1,7 @@
 package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
 
 import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
 
 import java.util.UUID;
 
@@ -16,8 +13,8 @@ public class BaseTypeHandlers {
 		}
 
 		@Override
-		public Integer loadSQL(Object result) {
-			return null;
+		public Integer loadSQL(LoadContext context, Object result) {
+			return (Integer) result;
 		}
 	};
 	
@@ -28,8 +25,8 @@ public class BaseTypeHandlers {
 		}
 
 		@Override
-		public String loadSQL(Object result) {
-			return null;
+		public String loadSQL(LoadContext context, Object result) {
+			return (String)result;
 		}
 	};
 	
@@ -40,8 +37,13 @@ public class BaseTypeHandlers {
 		}
 
 		@Override
-		public UUID loadSQL(Object result) {
-			return null;
+		public UUID loadSQL(LoadContext context, Object result) {
+			
+			// Cast to string.
+			String uuidStr = (String)result;
+			
+			// Initialize it.
+			return UUID.fromString(uuidStr);
 		}
 	};
 }
