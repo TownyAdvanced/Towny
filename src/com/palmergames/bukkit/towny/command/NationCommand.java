@@ -1252,7 +1252,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		int iMax = Math.min(page * 10, nations.size());
-		List<String> nationsordered = new ArrayList();
+		List<String> nationsordered = new ArrayList<>(10);
+		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";

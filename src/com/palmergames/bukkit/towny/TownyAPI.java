@@ -171,9 +171,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
      */
     public List<Player> getOnlinePlayersAlliance(Nation nation) {
-    	ArrayList<Player> players = new ArrayList<>();
-    	
-        players.addAll(getOnlinePlayers(nation));
+		ArrayList<Player> players = new ArrayList<>(getOnlinePlayers(nation));
         if (!nation.getAllies().isEmpty()) {
 			for (Nation nations : nation.getAllies()) {
 				players.addAll(getOnlinePlayers(nations));

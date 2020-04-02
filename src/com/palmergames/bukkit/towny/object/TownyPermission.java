@@ -204,7 +204,7 @@ public class TownyPermission {
 	@Override
 	public String toString() {
 		
-		StringBuilder output = new StringBuilder("");
+		StringBuilder output = new StringBuilder();
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			String permLevelName = permLevel.name().toLowerCase();

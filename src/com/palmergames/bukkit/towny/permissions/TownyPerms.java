@@ -180,9 +180,7 @@ public class TownyPerms {
 	 */
 	public static void removeAttachment(String name) {
 		
-		if (attachments.containsKey(name)) {
-			attachments.remove(name);
-		}
+		attachments.remove(name);
 		
 	}
 	
@@ -245,11 +243,8 @@ public class TownyPerms {
 	 * @return a sorted Map of permission nodes
 	 */
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
-		
-		Set<String> permList = new HashSet<>();
-		
 		// Start by adding the default perms everyone gets
-		permList.addAll(getDefault());
+		Set<String> permList = new HashSet<>(getDefault());
 		
 		//Check for town membership
 		if (resident.hasTown()) {
@@ -497,7 +492,7 @@ public class TownyPerms {
 				ListIterator<String> itr = result.listIterator();
 
 				while (itr.hasNext()) {
-					String node = (String) itr.next();
+					String node = itr.next();
 					String b = node.charAt(0) == '-' ? node.substring(1) : node;
 
 					// Insert the parent node before the child
