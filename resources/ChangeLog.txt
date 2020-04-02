@@ -4339,3 +4339,5 @@ v0.92.0.11:
     - Closes #3862.
   - Fix message output when a single town or nation is fallen because of upkeep costs.
     - Closes #3856.
+  - Fix SQL saveAllTownBlocks() returning false all of the time, preventing a server from switching from flatfile to mysql storage.
+    - Closes #3864.
