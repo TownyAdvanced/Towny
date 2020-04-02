@@ -19,7 +19,7 @@ public class TownBlock extends TownyObject {
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
 	private TownyWorld world;
-	private Town town;
+	private Town town = null;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
@@ -42,12 +42,11 @@ public class TownBlock extends TownyObject {
 
 	public void setTown(Town town) {
 
-		try {
-			if (hasTown())
-				this.town.removeTownBlock(this);
-		} catch (NotRegisteredException ignored) {}
+		if (hasTown())
+			this.town.removeTownBlock(this);
 		this.town = town;
 		try {
+			TownyUniverse.getInstance().addTownBlock(this);
 			town.addTownBlock(this);
 		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}

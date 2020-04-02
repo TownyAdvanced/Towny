@@ -282,6 +282,22 @@ public class FileMgmt {
 			}
 		}
 	}
+	
+	public static void moveTownBlockFile(File sourceFile, String targetLocation, String townDir) {
+
+		synchronized (sourceFile) {
+			if (sourceFile.isFile()) {
+				checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
+				// check for an already existing file of that name
+				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
+				if ((f.exists() && f.isFile()))
+					f.delete();
+				// Move file to new directory
+				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
+
+			}
+		}
+	}
 
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 
