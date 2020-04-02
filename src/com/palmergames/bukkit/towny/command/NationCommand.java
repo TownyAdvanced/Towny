@@ -40,6 +40,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownSpawnLevel;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
@@ -2651,8 +2652,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             if (nation.hasResident(resident)) {
             	ignoreWarning = true;
 			}
-
-			if (nation.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations()) {
+            
+			if (nation.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations() && nation.isPublic()) {
 				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost())), null, null, null);
 				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, nation, notAffordMSG, false, SpawnType.NATION);
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNY_SPAWN, townSpawnConfirmation);
