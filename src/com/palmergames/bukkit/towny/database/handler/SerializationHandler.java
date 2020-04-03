@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.object;
+package com.palmergames.bukkit.towny.database.handler;
 
 /**
  * Used on for namespacing.

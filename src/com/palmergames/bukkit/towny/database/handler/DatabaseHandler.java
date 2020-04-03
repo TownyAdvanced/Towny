@@ -1,18 +1,14 @@
-package com.palmergames.bukkit.towny.database.dbHandlers;
+package com.palmergames.bukkit.towny.database.handler;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.BaseTypeHandlers;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.LocationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.LocationListHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.ResidentHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.ResidentListHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers.TownBlockHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadSetter;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLLoadHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLSaveHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
+import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
+import com.palmergames.bukkit.towny.database.type.TypeAdapter;
+import com.palmergames.bukkit.towny.database.type.TypeContext;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
@@ -201,18 +197,14 @@ public class DatabaseHandler {
 	
 	public <T> void registerAdapter(Type type, Object typeAdapter) {
 		
-		if (!(typeAdapter instanceof SaveHandler || typeAdapter instanceof LoadHandler
-			|| typeAdapter instanceof SQLLoadHandler || typeAdapter instanceof SQLSaveHandler)) {
-			
+		if (!(typeAdapter instanceof SaveHandler || typeAdapter instanceof LoadHandler)) {
 			throw new UnsupportedOperationException(typeAdapter + " is not a valid adapter.");
 		}
 		
 		SaveHandler<T> flatFileSaveHandler = typeAdapter instanceof SaveHandler ? (SaveHandler<T>) typeAdapter : null;
 		LoadHandler<T> flatFileLoadHandler = typeAdapter instanceof LoadHandler ? (LoadHandler<T>) typeAdapter : null;
-		SQLSaveHandler<T> sqlSaveHandler = typeAdapter instanceof SQLSaveHandler ? (SQLSaveHandler<T>) typeAdapter : null;
-		SQLLoadHandler<T> sqlLoadHandler = typeAdapter instanceof SQLLoadHandler ? (SQLLoadHandler<T>) typeAdapter : null;
 		
-		TypeAdapter<?> adapter = new TypeAdapter<>(this, flatFileLoadHandler, flatFileSaveHandler, sqlLoadHandler, sqlSaveHandler);
+		TypeAdapter<?> adapter = new TypeAdapter<>(this, flatFileLoadHandler, flatFileSaveHandler);
 		
 		// Add to hashmap.
 		registeredAdapters.put(type, adapter);

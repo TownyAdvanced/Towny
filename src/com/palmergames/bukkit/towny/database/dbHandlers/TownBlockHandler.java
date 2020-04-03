@@ -1,14 +1,14 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
+import com.palmergames.bukkit.towny.database.handler.LoadContext;
+import com.palmergames.bukkit.towny.database.handler.SaveContext;
+import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
+import com.palmergames.bukkit.towny.database.handler.SQLData;
 
 public class TownBlockHandler implements SerializationHandler<TownBlock> {
 

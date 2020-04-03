@@ -1,9 +1,9 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
+import com.palmergames.bukkit.towny.database.handler.LoadContext;
+import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 
 public class NationFlatFileHandler implements LoadHandler<Nation> {
 	@Override

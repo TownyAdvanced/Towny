@@ -1,7 +1,7 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
+import com.palmergames.bukkit.towny.database.handler.LoadHandler;
+import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
 import java.util.UUID;
 

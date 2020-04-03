@@ -1,10 +1,10 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
+import com.palmergames.bukkit.towny.database.handler.LoadContext;
+import com.palmergames.bukkit.towny.database.handler.SaveContext;
+import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
+import com.palmergames.bukkit.towny.database.handler.SQLData;
 import org.bukkit.Location;
 
 import java.util.ArrayList;

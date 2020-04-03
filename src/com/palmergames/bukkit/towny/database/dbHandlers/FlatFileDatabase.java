@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+
 public class FlatFileDatabase {
 	
 	DatabaseHandler databaseHandler;

@@ -1,7 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.object;
-
-import com.palmergames.bukkit.towny.database.dbHandlers.DatabaseHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
+package com.palmergames.bukkit.towny.database.handler;
 
 public class SaveContext {
 	

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.sql.object;
+package com.palmergames.bukkit.towny.database.handler;
 
 import java.sql.JDBCType;
 

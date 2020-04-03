@@ -1,10 +1,10 @@
-package com.palmergames.bukkit.towny.database.dbHandlers.defaultHandlers;
+package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SaveContext;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.SerializationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.sql.object.SQLData;
+import com.palmergames.bukkit.towny.database.handler.SaveContext;
+import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
+import com.palmergames.bukkit.towny.database.handler.SQLData;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.database.dbHandlers.object.LoadContext;
+import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
 import java.sql.JDBCType;
 import java.util.ArrayList;
