@@ -1096,6 +1096,10 @@ msg_you: 'You'
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
 
+# Added in 0.78
+msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
+msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
+
 # Added in ? (for siege war)
 #Siege war happy-path messages
 msg_siege_war_revolt: '&bThe people of %s, led by %s, have revolted against the occupying power of %s, and declared themselves free to choose their own destiny!'

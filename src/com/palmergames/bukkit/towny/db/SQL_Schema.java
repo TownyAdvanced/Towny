@@ -100,6 +100,7 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
+		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");

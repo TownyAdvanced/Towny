@@ -45,6 +45,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -114,7 +115,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"spawncost",
 		"title",
 		"surname",
-		"tag"
+		"tag",
+		"mapcolor"
 	);
 	
 	static final List<String> nationToggleTabCompletes = Arrays.asList(
@@ -1327,6 +1329,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
+		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		nation.addTown(town);
 		nation.setCapital(town);
 		nation.setUuid(UUID.randomUUID());
@@ -2269,6 +2272,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawn", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawncost [$]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "mapcolor [color]", ""));
 		} else {
 			Resident resident;
 			try {
@@ -2522,6 +2526,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					nation.setNationBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);
+				}
+			} else if (split[0].equalsIgnoreCase("mapcolor")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_MAPCOLOR.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg(player, "Eg: /nation set mapcolor brown.");
+					return;
+				} else {
+					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
+					if (!TownySettings.getNationColorsMap().containsKey(line.toLowerCase())) {
+						String allowedColorsListAsString = TownySettings.getNationColorsMap().keySet().toString();
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_nation_map_color"), allowedColorsListAsString));
+						return;
+					}
+
+					nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase()));
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_map_color_changed"), line.toLowerCase()));
 				}
 			} else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));

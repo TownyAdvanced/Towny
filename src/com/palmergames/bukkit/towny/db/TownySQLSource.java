@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -1149,7 +1150,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 else
                 	nation.setNationBoard("");
 
-                nation.setTag(rs.getString("tag"));
+				line = rs.getString("mapColorHexCode");
+				if (line != null)
+					nation.setMapColorHexCode(line);
+				else
+					nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+
+				nation.setTag(rs.getString("tag"));
 
                 line = rs.getString("allies");
                 if (line != null) {
@@ -1882,6 +1889,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
             nat_hm.put("nationBoard", nation.getNationBoard());
+			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
@@ -1899,7 +1907,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
-            
+
 			if (nation.hasMeta())
 				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
 			else
