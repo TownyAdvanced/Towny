@@ -639,10 +639,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					 */
 					boolean ignoreWarning = false;
 					
-					if (split.length > 2) {
-						if (split[2].equals("-ignore")) {
-							ignoreWarning = true;
-						}
+					if ((split.length > 2 && split[2].equals("-ignore"))) {
+						ignoreWarning = true;
 					}
 					
 					townSpawn(player, newSplit, false, ignoreWarning);
@@ -2585,6 +2583,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
+		if ((split.length == 1 && split[0].equals("-ignore")) || (split.length > 1 && split[1].equals("-ignore"))) {
+			ignoreWarning = true;
+		}
+		
 		try {
 
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
@@ -2592,7 +2594,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String notAffordMSG;
 
 			// Set target town and affiliated messages.
-			if (split.length == 0 || outpost) {
+			if (split.length == 0 || outpost || split[0].equals("-ignore")) {
 
 				if (!resident.hasTown()) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
