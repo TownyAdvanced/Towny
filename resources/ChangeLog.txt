@@ -4334,3 +4334,48 @@ v0.92.0.11:
   - Handle invalid arguments for townyadmin economy cmds, courtesy of silverwolfg11 with PR #3849.
 0.96.1.0:
   - Bump version for release.
+0.96.1.1:
+  - Fix EventWar bug when winner_takes_ownership_of_townblocks is true.
+    - Closes #3862.
+  - Fix message output when a single town or nation is fallen because of upkeep costs.
+    - Closes #3856.
+  - Fix SQL saveAllTownBlocks() returning false all of the time, preventing a server from switching from flatfile to mysql storage.
+    - Closes #3864.
+  - pt-br.yml updated to 0.77 courtesy of bane with PR #3865.
+  - TownBlocks database refactor:
+    - TownBlocks are no longer saved to a TownyWorld.
+    - They are now saved to the Town.
+    - This allows for much easier saving operations.
+    - For flatfile databases: towny\data\townblocks.txt no longer used (you may delete this after updating.)
+    - When townblocks are unclaimed they are now moved to a towny\data\townsblocks\WORLDNAME\deleted\TOWNNAME\ folder.
+      - This allows for easy restoration of townblocks which do get removed, whatever the cause.
+    - This will hopefully end the occurance of disappearing townblocks and fix the following tickets: #3783 #3796 #3813 #3821 #3844.
+    - This refactor has been tested fairly thoroughly, but it is always advised to back up your server before updating Towny. 
+0.96.1.2:
+  - Cleanup and microperformance pull request, courtesy of Articdive with PR #3802.
+  - Make /ta reload more specific, courtesy of Siris with PR #3851.
+    - Command now breaks into 5 subcommands: /ta reload <database|perms|config|lang|all>
+  - Changed Command: /ta reload
+    - /ta reload {database|db} - reloads the database.
+    - /ta reload {perms|townyperms|permissions} - reloads townyperms.yml
+    - /ta reload config - reloads the config & language file.
+    - /ta reload lang - reloads the language file.
+    - /ta reload all - reloads everything like /ta reload used to do.
+  - Add separate tax limits for towns, nations and townblocks, courtesy of Siris with PR #3860.
+    - The old max_tax_amount is removed.
+    - Adds the following new config options:
+  - New Config Options:
+    - economy.daily_taxes.max_plot_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for townblocks sold to players.
+    - economy.daily_taxes.max_town_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for towns when using flat taxes.
+    - economy.daily_taxes.max_nation_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for nations when using flat taxes.
+    - economy.daily_taxes.max_town_tax_percent
+      - default: 25
+      - Maximum tax percentage allowed when taxing by percentages for towns.
+  - Removed Config Option: economy.daily_taxes.max_tax_amount
+    - Replaced by the above new config options.

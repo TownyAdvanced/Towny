@@ -143,7 +143,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("    Towns: " + townyUniverse.getDataSource().getTowns().size());
 		TownyMessaging.sendDebugMsg("    Nations: " + townyUniverse.getDataSource().getNations().size());
 		for (TownyWorld world : townyUniverse.getDataSource().getWorlds())
-			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + world.getTownBlocks().size());
+			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + townyUniverse.getTownBlocks().size());
 
 		TownyMessaging.sendDebugMsg("Memory (Java Heap):");
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (max)", Runtime.getRuntime().maxMemory() / 1024 / 1024));
@@ -428,7 +428,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedTowns != null) {
 			if (removedTowns.size() == 1) 
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"),ChatTools.list(removedTowns)));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"), removedTowns.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));
 		}	
@@ -483,7 +483,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedNations != null) {
 			if (removedNations.size() == 1) 
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), ChatTools.list(removedNations)));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), removedNations.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, TownySettings.getLangString("msg_bankrupt_nation_multiple")));
 		}

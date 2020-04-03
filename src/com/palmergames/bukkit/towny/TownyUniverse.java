@@ -53,6 +53,8 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+    
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -350,6 +352,7 @@ public class TownyUniverse {
         nations.clear();
         towns.clear();
         residents.clear();
+        townBlocks.clear();
     }
 
 	public boolean hasGroup(String townName, UUID groupID) {
@@ -463,4 +466,87 @@ public class TownyUniverse {
 	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
+
+	/**
+	 * How to get a TownBlock for now.
+	 * 
+	 * @param worldCoord we are testing for a townblock.
+	 * @return townblock if it exists, otherwise null.
+	 * @throws NotRegisteredException
+	 */
+	public TownBlock getTownBlock(WorldCoord worldCoord) throws NotRegisteredException {
+		if (hasTownBlock(worldCoord))
+			return townBlocks.get(worldCoord);
+		else 
+			throw new NotRegisteredException();
+	}
+
+	/**
+	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
+	 * Populated at load time from townblocks folder's files.
+	 * 
+	 * 
+	 * @return townblocks hashmap read from townblock files.
+	 */	
+	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+	
+	public void addTownBlock(TownBlock townBlock) {
+		if (hasTownBlock(townBlock.getWorldCoord()))
+			return;
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+	}
+	/**
+	 * Does this WorldCoord have a TownBlock?
+	 * @param key - the coord for which we want to know if there is a townblock.
+	 * @return true if Coord is a townblock
+	 */	
+	public boolean hasTownBlock(WorldCoord worldCoord) {
+		return townBlocks.containsKey(worldCoord);
+	}
+
+	/**
+	 * Remove one townblock from the TownyUniverse townblock map.
+	 * @param townBlock to remove.
+	 */
+	public void removeTownBlock(TownBlock townBlock) {
+
+		if (hasTownBlock(townBlock.getWorldCoord())) {			
+	
+			try {
+				if (townBlock.hasResident())
+					townBlock.getResident().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+			try {
+				if (townBlock.hasTown())
+					townBlock.getTown().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+	
+			removeTownBlock(townBlock.getWorldCoord());
+		}
+	}
+	
+	/**
+	 * Remove a list of TownBlocks from the TownyUniverse townblock map.
+	 * @param townBlocks to remove.
+	 */
+	public void removeTownBlocks(List<TownBlock> townBlocks) {
+
+		for (TownBlock townBlock : new ArrayList<>(townBlocks))
+			removeTownBlock(townBlock);
+	}
+
+	/** 
+	 * Removes a townblock at the given worldCoord from the TownyUniverse townblock map.
+	 * @param worldCoord to remove.
+	 */
+	private void removeTownBlock(WorldCoord worldCoord) {
+
+		townBlocks.remove(worldCoord);
+	}
+
+	
 }
