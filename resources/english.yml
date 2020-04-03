@@ -1095,3 +1095,7 @@ msg_you: 'You'
 # Added in 0.77
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
+
+# Added in 0.78
+msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
+msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'

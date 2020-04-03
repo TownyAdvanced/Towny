@@ -42,6 +42,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private double taxes, spawnCost;
 	private boolean neutral = false;
 	private String nationBoard = "/nation set board [msg]";
+	private String mapColorHexCode = "";
 	private String tag = "";
 	public UUID uuid;
 	private long registered;
@@ -805,5 +806,13 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
 		return getAccount().collect(amount, reason);
+	}
+
+	public String getMapColorHexCode() {
+		return mapColorHexCode;
+	}
+
+	public void setMapColorHexCode(String mapColorHexCode) {
+		this.mapColorHexCode = mapColorHexCode;
 	}
 }

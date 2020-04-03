@@ -50,6 +50,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_BOARD("towny.command.nation.set.board"),
 		TOWNY_COMMAND_NATION_SET_SPAWN("towny.command.nation.set.spawn"),
 		TOWNY_COMMAND_NATION_SET_SPAWNCOST("towny.command.nation.set.spawncost"),
+		TOWNY_COMMAND_NATION_SET_MAPCOLOR("towny.command.nation.set.mapcolor"),
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
