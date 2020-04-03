@@ -4380,3 +4380,4 @@ v0.92.0.11:
   - Removed Config Option: economy.daily_taxes.max_tax_amount
     - Replaced by the above new config options.
   - polish.yml added courtesy of Martinez.
+  - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
