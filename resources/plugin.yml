@@ -173,7 +173,7 @@ permissions:
     towny.command.nation.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
@@ -267,6 +267,7 @@ permissions:
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
+            towny.command.nation.set.mapcolor: true
 
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -308,7 +309,7 @@ permissions:
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.town.list.residents: true
             towny.command.town.list.open: true
             towny.command.town.list.balance: true
