@@ -351,7 +351,7 @@ public class SpawnUtil {
 			}
 		}
 		
-		if (!sendSpawnEvent(player, spawnType, townyObject)) {
+		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {
 			return;
 		}
 
@@ -380,17 +380,10 @@ public class SpawnUtil {
 		}
 	}
 	
-	public static boolean sendSpawnEvent(Player player, SpawnType type, TownyObject object) {
+	public static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
 		switch (type) {
 			case TOWN:
-				Town town = (Town)object;
-				Location to;
-				try {
-					to = town.getSpawn();
-				} catch (Exception e) {
-					to = null;
-				}
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), to);
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), spawnLoc);
 				Bukkit.getPluginManager().callEvent(townSpawnEvent);
 
 				if (townSpawnEvent.isCancelled()) {
@@ -399,14 +392,7 @@ public class SpawnUtil {
 				}
 				break;
 			case NATION:
-				Nation nation = (Nation) object;
-				Location toNationLoc;
-				try {
-					toNationLoc = nation.getNationSpawn();
-				} catch (Exception e) {
-					toNationLoc = null;
-				}
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), toNationLoc);
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
 				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
 
 				if (nationSpawnEvent.isCancelled()) {
