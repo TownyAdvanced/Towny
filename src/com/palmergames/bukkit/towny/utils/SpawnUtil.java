@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -348,35 +350,39 @@ public class SpawnUtil {
 		}
 		
 		// Used later to make sure the chunk we teleport to is loaded.
-		Chunk chunk = spawnLoc.getChunk();
+		CompletableFuture<Chunk> chunkFuture = PaperLib.getChunkAtAsync(spawnLoc);
+		
+		// Legacy code (non-paper sync)
+		//Chunk chunk = spawnLoc.getChunk();
 
-		// If an Admin or Essentials teleport isn't being used, use our own.
-		if (isTownyAdmin) {
-			if (player.getVehicle() != null)
-				player.getVehicle().eject();
-			if (!chunk.isLoaded())
-				chunk.load();
-			player.teleport(spawnLoc, TeleportCause.COMMAND);
-			return;
-		}
-
-		if (!usingESS) {
-			if (TownyTimerHandler.isTeleportWarmupRunning()) {
-				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
-						TownySettings.getTeleportWarmupTime()));
-				TownyAPI.getInstance().requestTeleport(player, spawnLoc);
-			} else {
-				// Don't use teleport warmup
+		Location finalSpawnLoc = spawnLoc;
+		chunkFuture.thenAccept((chunk -> {
+			// If an Admin or Essentials teleport isn't being used, use our own.
+			if (isTownyAdmin) {
 				if (player.getVehicle() != null)
 					player.getVehicle().eject();
-				if (!chunk.isLoaded())
-					chunk.load();
-				player.teleport(spawnLoc, TeleportCause.COMMAND);
-				if (TownySettings.getSpawnCooldownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
+				player.teleport(finalSpawnLoc, TeleportCause.COMMAND);
+				return;
 			}
-		}
+
+			if (!usingESS) {
+				if (TownyTimerHandler.isTeleportWarmupRunning()) {
+					// Use teleport warmup
+					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
+						TownySettings.getTeleportWarmupTime()));
+					TownyAPI.getInstance().requestTeleport(player, finalSpawnLoc);
+				} else {
+					// Don't use teleport warmup
+					if (player.getVehicle() != null)
+						player.getVehicle().eject();
+					player.teleport(finalSpawnLoc, TeleportCause.COMMAND);
+					if (TownySettings.getSpawnCooldownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
+				}
+			}
+		}));
+
+		
 	}
 
 }
