@@ -15,7 +15,7 @@ public abstract class SpawnEvent extends Event implements Cancellable {
 	private Location from;
 	private Location to;
 	private Player player;
-	private String cancelMessage = "Sorry, this event was canceled.";
+	private String cancelMessage = "Sorry, this event was cancelled.";
 	private static final HandlerList handlers = new HandlerList();
 	private boolean isCancelled;
 
