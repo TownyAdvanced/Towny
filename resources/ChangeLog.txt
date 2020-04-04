@@ -4386,3 +4386,7 @@ v0.92.0.11:
   - Fix regression in PVP world settings.
     - It is now again possible to have PVP false in a world, but let the town/townblock override that.
     - Closes #3863. 
+  - Fix for Nation&TownSpawnEvents causing titles/chunknotifications early, courtesy of Siris with PR #3872.
+  - API: Added NationBonusCalculationEvent, courtesy of Silverworldg11 with PR #3873.
+    - Allows plugins to modify the nation bonus returned by a nation.
+    - This is a particularly useful if plugins want to add nation bonus blocks based on their own specific criteria rather than what is determined by Towny config.
