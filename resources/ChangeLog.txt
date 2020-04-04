@@ -4383,3 +4383,6 @@ v0.92.0.11:
   - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
   - Use Paperlib for Async Chunk Loading, courtesy of Siris with PR #3871.
     - Servers using Paper will benefit from faster chunk loading when players are teleported via Towny.
+  - Fix regression in PVP world settings.
+    - It is now again possible to have PVP false in a world, but let the town/townblock override that.
+    - Closes #3863. 
