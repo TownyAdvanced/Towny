@@ -267,6 +267,7 @@ permissions:
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
+            towny.command.nation.set.mapcolor: true
 
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
