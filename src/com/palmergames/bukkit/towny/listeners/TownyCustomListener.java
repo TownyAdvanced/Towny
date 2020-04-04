@@ -3,14 +3,11 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
-import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -106,5 +103,4 @@ public class TownyCustomListener implements Listener {
 			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 		}
 	}
-	
 }
