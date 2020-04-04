@@ -4379,3 +4379,7 @@ v0.92.0.11:
       - Maximum tax percentage allowed when taxing by percentages for towns.
   - Removed Config Option: economy.daily_taxes.max_tax_amount
     - Replaced by the above new config options.
+  - polish.yml added courtesy of Martinez.
+  - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
+  - Use Paperlib for Async Chunk Loading, courtesy of Siris with PR #3871.
+    - Servers using Paper will benefit from faster chunk loading when players are teleported via Towny.

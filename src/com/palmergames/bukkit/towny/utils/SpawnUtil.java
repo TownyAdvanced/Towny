@@ -363,10 +363,10 @@ public class SpawnUtil {
 			return;
 		}
 
-		if (!usingESS) {
-			if (TownyTimerHandler.isTeleportWarmupRunning()) {
-				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
+			if (!usingESS) {
+				if (TownyTimerHandler.isTeleportWarmupRunning()) {
+					// Use teleport warmup
+					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
 						TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 			} else {

@@ -29,12 +29,7 @@ public class ChatTools {
 	public static List<String> list(List<String> args, String prefix) {
 
 		if (args.size() > 0) {
-			StringBuilder line = new StringBuilder();
-			for (int i = 0; i < args.size() - 1; i++)
-				line.append(args.get(i)).append(", ");
-			line.append(args.get(args.size() - 1));
-
-			return color(prefix + line);
+			return color(prefix + String.join(", ", args));
 		}
 
 		return new ArrayList<>();
