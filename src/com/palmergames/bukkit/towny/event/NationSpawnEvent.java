@@ -10,22 +10,25 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class NationSpawnEvent extends Event implements Cancellable {
+/**
+ * An event called when nation spawns occur.
+ * 
+ * @author Suneet Tipirneni (Siris)
+ */
+public class NationSpawnEvent extends SpawnEvent {
 	
 	private Nation toNation;
 	private Nation fromNation;
-	private Location from;
-	private Location to;
-	private Player player;
-	private String cancelMessage = "Sorry, this event was canceled.";
-	private static final HandlerList handlers = new HandlerList();
-	boolean isCancelled;
-	
-	public NationSpawnEvent(Player player, Location from, Location to) {
-		this.player = player;
-		this.to = to;
-		this.from = from;
 
+	/**
+	 * Called when a player is teleported to a nation.
+	 * 
+	 * @param player The player being teleported.
+	 * @param from The location the player is teleporting from.
+	 * @param to The location the player is going to.
+	 */
+	public NationSpawnEvent(Player player, Location from, Location to) {
+		super(player, from, to);
 		try {
 			fromNation = WorldCoord.parseWorldCoord(from).getTownBlock().getTown().getNation();
 		} catch (NotRegisteredException ignored) {}
@@ -35,50 +38,21 @@ public class NationSpawnEvent extends Event implements Cancellable {
 		} catch (NotRegisteredException ignored) {}
 	}
 
+	/**
+	 * Gets the nation that the player to spawning to.
+	 *
+	 * @return The nation being spawned to.
+	 */
 	public Nation getToNation() {
 		return toNation;
 	}
 
+	/**
+	 * Gets the nation the player is spawning from.
+	 * 
+	 * @return null if the player is not standing in a nation owned townblock, the nation otherwise.
+	 */
 	public Nation getFromNation() {
 		return fromNation;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	public Location getFrom() {
-		return from;
-	}
-
-	public Location getTo() {
-		return to;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancel) {
-		isCancelled = cancel;
 	}
 }

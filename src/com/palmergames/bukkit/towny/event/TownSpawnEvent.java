@@ -10,22 +10,19 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class TownSpawnEvent extends Event implements Cancellable {
+/**
+ * An event called when town spawns occur.
+ * 
+ * @author Suneet Tipirneni (Siris)
+ */
+public class TownSpawnEvent extends SpawnEvent {
 	
 	Town fromTown;
 	private Town toTown;
-	private Location from;
-	private Location to;
-	private String cancelMessage = "Sorry, this event was canceled.";
-	private static final HandlerList handlers = new HandlerList();
-	private Player player;
-	private boolean isCancelled;
 	
 	public TownSpawnEvent(Player player, Location from, Location to) {
-		this.from = from;
-		this.to = to;
-		this.player = player;
-		
+		super(player, from, to);
+
 		try {
 			fromTown = WorldCoord.parseWorldCoord(from).getTownBlock().getTown();
 		} catch (NotRegisteredException ignored) {}
@@ -36,50 +33,21 @@ public class TownSpawnEvent extends Event implements Cancellable {
 		
 	}
 
+	/**
+	 * Gets the town that the player is teleporting to.
+	 * 
+	 * @return The Town being teleported to.
+	 */
 	public Town getToTown() {
 		return toTown;
 	}
 
+	/**
+	 * Gets the town being teleported from.
+	 * 
+	 * @return null if the player was not standing in a townblock, the town they were standing in otherwise.
+	 */
 	public Town getFromTown() {
 		return fromTown;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
-	}
-
-	public Location getFrom() {
-		return from;
-	}
-
-	public Location getTo() {
-		return to;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancel) {
-		this.isCancelled = cancel;
 	}
 }
