@@ -1141,6 +1141,7 @@ public class TownySettings {
 	public static int getNationBonusBlocks(Nation nation) {
 		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
 		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
 		return calculationEvent.getBonusBlocks();
 	}
 
