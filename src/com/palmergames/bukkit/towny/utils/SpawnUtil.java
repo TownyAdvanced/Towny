@@ -2,6 +2,10 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import com.palmergames.bukkit.towny.event.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import io.papermc.lib.PaperLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -347,16 +351,15 @@ public class SpawnUtil {
 			}
 		}
 		
-		// Used later to make sure the chunk we teleport to is loaded.
-		Chunk chunk = spawnLoc.getChunk();
+		if (!sendSpawnEvent(player, spawnType, townyObject)) {
+			return;
+		}
 
 		// If an Admin or Essentials teleport isn't being used, use our own.
 		if (isTownyAdmin) {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
-			if (!chunk.isLoaded())
-				chunk.load();
-			player.teleport(spawnLoc, TeleportCause.COMMAND);
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			return;
 		}
 
@@ -370,13 +373,50 @@ public class SpawnUtil {
 				// Don't use teleport warmup
 				if (player.getVehicle() != null)
 					player.getVehicle().eject();
-				if (!chunk.isLoaded())
-					chunk.load();
-				player.teleport(spawnLoc, TeleportCause.COMMAND);
+				PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 				if (TownySettings.getSpawnCooldownTime() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 			}
 		}
+	}
+	
+	public static boolean sendSpawnEvent(Player player, SpawnType type, TownyObject object) {
+		switch (type) {
+			case TOWN:
+				Town town = (Town)object;
+				Location to;
+				try {
+					to = town.getSpawn();
+				} catch (Exception e) {
+					to = null;
+				}
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), to);
+				Bukkit.getPluginManager().callEvent(townSpawnEvent);
+
+				if (townSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+			case NATION:
+				Nation nation = (Nation) object;
+				Location toNationLoc;
+				try {
+					toNationLoc = nation.getNationSpawn();
+				} catch (Exception e) {
+					toNationLoc = null;
+				}
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), toNationLoc);
+				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
+
+				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+		}
+		
+		return true;
 	}
 
 }

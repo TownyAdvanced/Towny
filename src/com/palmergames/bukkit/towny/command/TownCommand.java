@@ -2586,27 +2586,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
-				Bukkit.getPluginManager().callEvent(townSpawnEvent);
-
-				if (townSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
-					return;
-				}
-
 			} else {
 				// split.length > 1
 				town = townyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
-
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
-				Bukkit.getPluginManager().callEvent(townSpawnEvent);
-				
-				if (townSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
-					return;
-				}
-
 			}
 			
 			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
