@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
+import com.palmergames.bukkit.towny.event.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import io.papermc.lib.PaperLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -349,40 +351,58 @@ public class SpawnUtil {
 			}
 		}
 		
-		// Used later to make sure the chunk we teleport to is loaded.
-		CompletableFuture<Chunk> chunkFuture = PaperLib.getChunkAtAsync(spawnLoc);
-		
-		// Legacy code (non-paper sync)
-		//Chunk chunk = spawnLoc.getChunk();
+		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {
+			return;
+		}
 
-		Location finalSpawnLoc = spawnLoc;
-		chunkFuture.thenAccept((chunk -> {
-			// If an Admin or Essentials teleport isn't being used, use our own.
-			if (isTownyAdmin) {
-				if (player.getVehicle() != null)
-					player.getVehicle().eject();
-				player.teleport(finalSpawnLoc, TeleportCause.COMMAND);
-				return;
-			}
+		// If an Admin or Essentials teleport isn't being used, use our own.
+		if (isTownyAdmin) {
+			if (player.getVehicle() != null)
+				player.getVehicle().eject();
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			return;
+		}
 
 			if (!usingESS) {
 				if (TownyTimerHandler.isTeleportWarmupRunning()) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
 						TownySettings.getTeleportWarmupTime()));
-					TownyAPI.getInstance().requestTeleport(player, finalSpawnLoc);
-				} else {
-					// Don't use teleport warmup
-					if (player.getVehicle() != null)
-						player.getVehicle().eject();
-					player.teleport(finalSpawnLoc, TeleportCause.COMMAND);
-					if (TownySettings.getSpawnCooldownTime() > 0)
-						CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
-				}
+				TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+			} else {
+				// Don't use teleport warmup
+				if (player.getVehicle() != null)
+					player.getVehicle().eject();
+				PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+				if (TownySettings.getSpawnCooldownTime() > 0)
+					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 			}
-		}));
+		}
+	}
+	
+	public static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
+		switch (type) {
+			case TOWN:
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), spawnLoc);
+				Bukkit.getPluginManager().callEvent(townSpawnEvent);
 
+				if (townSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+			case NATION:
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
+				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
+
+				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+		}
 		
+		return true;
 	}
 
 }
