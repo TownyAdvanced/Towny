@@ -107,15 +107,4 @@ public class TownyCustomListener implements Listener {
 		}
 	}
 	
-	@EventHandler
-	public void onTownSpawn(TownSpawnEvent event) {
-		TownyMessaging.sendErrorMsg(event.getToTown().toString());
-		event.setCancelled(true);
-	}
-	
-	@EventHandler
-	public void onNationSpawn(NationSpawnEvent event) {
-		TownyMessaging.sendErrorMsg(event.getToNation().toString());
-		event.setCancelled(true);
-	}
 }
