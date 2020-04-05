@@ -4390,3 +4390,10 @@ v0.92.0.11:
   - API: Added NationBonusCalculationEvent, courtesy of Silverworldg11 with PR #3873.
     - Allows plugins to modify the nation bonus returned by a nation.
     - This is a particularly useful if plugins want to add nation bonus blocks based on their own specific criteria rather than what is determined by Towny config.
+  - New Feature: movement-cancels-spawn-warmup.
+    - Will not affect players with the towny.admin node.
+    - Removes essentials from the SpawnUtil.
+    - Closes #3619.    
+  - New config option: global_town_settings.movement_cancels_spawn_warmup
+    - Default: false
+    - When set to true, if players are currently in a spawn warmup, moving will cancel their spawn.
