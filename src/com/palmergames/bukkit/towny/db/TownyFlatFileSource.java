@@ -124,10 +124,22 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public void cancelTask() {
-
+	public void finishTasks() {
+		
+		// Cancel the repeating task as its not needed anymore.
 		task.cancel();
+		
+		// Make sure that *all* tasks are saved before shutting down.
+		while (!queryQueue.isEmpty()) {
+			FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
 
+			try {
+				FileMgmt.listToFile(query.list, query.path);
+			} catch (NullPointerException ex) {
+				if (query != null)
+					TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
+			}
+		}
 	}
 
 	@Override

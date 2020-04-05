@@ -1,6 +1,7 @@
 package com.palmergames.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -227,12 +228,10 @@ public class FileMgmt {
 	 */
 	public static void stringToFile(String source, File file) {
 
-		try {
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-
-			out.write(source);
-			out.close();
-
+		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			
+			bufferedWriter.write(source);
 		} catch (IOException e) {
 			System.out.println("Exception ");
 		}
@@ -247,18 +246,16 @@ public class FileMgmt {
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
 
-		try {
-
-			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-
+		File file = new File(targetLocation);
+		try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			
 			for (String aSource : source) {
-
-				out.write(aSource + System.getProperty("line.separator"));
-
+				bufferedWriter.write(aSource + System.getProperty("line.separator"));
 			}
 
-			out.close();
+			bufferedWriter.close();
+			osw.close();
 			return true;
 
 		} catch (IOException e) {
