@@ -4397,3 +4397,5 @@ v0.92.0.11:
   - New config option: global_town_settings.movement_cancels_spawn_warmup
     - Default: false
     - When set to true, if players are currently in a spawn warmup, moving will cancel their spawn.
+  - Fix /plot set TYPE, always trying to pay into the closed_economy SERVER_ACCOUNT, even when closed_economy is false.
+    - Potential fix for #3870.
