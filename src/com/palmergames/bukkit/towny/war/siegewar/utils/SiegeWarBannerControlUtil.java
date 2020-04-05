@@ -47,10 +47,10 @@ public class SiegeWarBannerControlUtil {
 
 				resident = universe.getDataSource().getResident(player.getName());
 				if(!doesPlayerMeetBasicSessionRequirements(siegeZone, player, resident))
-					return;
+					continue;
 
 				if(siegeZone.getBannerControlSessions().containsKey(player))
-					return; // Player already has a control session
+					continue; // Player already has a control session
 
 				residentTown = resident.getTown();
 				if(residentTown == siegeZone.getDefendingTown()
@@ -58,9 +58,10 @@ public class SiegeWarBannerControlUtil {
 					//Player is defending their own town
 
 					if(siegeZone.getBannerControllingSide() == SiegeSide.DEFENDERS && siegeZone.getBannerControllingResidents().contains(resident))
-						return; //Player already defending
+						continue; //Player already defending
 
 					addNewBannerControlSession(siegeZone, player, resident, SiegeSide.DEFENDERS);
+					continue;
 
 				} else if (residentTown.hasNation()
 					&& universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
@@ -71,10 +72,10 @@ public class SiegeWarBannerControlUtil {
 						//Player is defending another town in the nation
 
 						if(siegeZone.getBannerControllingSide() == SiegeSide.DEFENDERS && siegeZone.getBannerControllingResidents().contains(resident))
-							return; //Player already defending
+							continue; //Player already defending
 
 						addNewBannerControlSession(siegeZone, player, resident, SiegeSide.DEFENDERS);
-						return;
+						continue;
 					}
 
 					if (siegeZone.getAttackingNation() == residentTown.getNation()
@@ -82,10 +83,10 @@ public class SiegeWarBannerControlUtil {
 						//Player is attacking
 
 						if(siegeZone.getBannerControllingSide() == SiegeSide.ATTACKERS && siegeZone.getBannerControllingResidents().contains(resident))
-							return; //Player already attacking
+							continue; //Player already attacking
 
 						addNewBannerControlSession(siegeZone, player, resident, SiegeSide.ATTACKERS);
-						return;
+						continue;
 					}
 				}
 			}
