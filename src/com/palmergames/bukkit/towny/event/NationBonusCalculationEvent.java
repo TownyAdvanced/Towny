@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -14,6 +16,7 @@ public class NationBonusCalculationEvent extends Event {
 	private int bonusBlocks;
 	
 	public NationBonusCalculationEvent(Nation nation, int bonusBlocks) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.nation = nation;
 		this.bonusBlocks = bonusBlocks;
 	}

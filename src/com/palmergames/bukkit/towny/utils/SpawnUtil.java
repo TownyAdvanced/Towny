@@ -10,8 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import com.earth2me.essentials.Teleport;
-import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -313,26 +311,28 @@ public class SpawnUtil {
 		} catch (EconomyException ignored) {
 		}
 
-		// Essentials tests.
-		boolean usingESS = plugin.isEssentials();
+//		// Essentials tests.
+//		boolean usingESS = plugin.isEssentials();
 
-		if (usingESS && !isTownyAdmin) {
-			try {
-				User essentialsUser = plugin.getEssentials().getUser(player);
-
-				// This jail check is specifically for essentials jails, not towny ones.
-				if (!essentialsUser.isJailed()) {
-
-					Teleport teleport = essentialsUser.getTeleport();
-					// Cause an essentials exception if in cooldown.
-					teleport.cooldown(true);
-					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
-				}
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
-				return;
-			}
-		}
+//		if (usingESS && !isTownyAdmin) {
+//			try {
+//				User essentialsUser = plugin.getEssentials().getUser(player);
+//
+//				// This jail check is specifically for essentials jails, not towny ones.
+//				if (!essentialsUser.isJailed()) {
+//
+//					Teleport teleport = essentialsUser.getTeleport();
+//					// Cause an essentials exception if in cooldown.
+//					teleport.cooldown(true);
+//					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
+//				}
+//			} catch (Exception e) {
+//				TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
+//				return;
+//			}
+//		}
+//TODO: Check if essentials jailing matters still.		
+		
 
 		// Actual taking of monies here.
 		if (!townyUniverse.getPermissionSource().has(player,
@@ -362,20 +362,17 @@ public class SpawnUtil {
 			return;
 		}
 
-			if (!usingESS) {
-				if (TownyTimerHandler.isTeleportWarmupRunning()) {
-					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
-						TownySettings.getTeleportWarmupTime()));
-				TownyAPI.getInstance().requestTeleport(player, spawnLoc);
-			} else {
-				// Don't use teleport warmup
-				if (player.getVehicle() != null)
-					player.getVehicle().eject();
-				PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-				if (TownySettings.getSpawnCooldownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
-			}
+		if (TownyTimerHandler.isTeleportWarmupRunning()) {
+			// Use teleport warmup
+			player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+		} else {
+			// Don't use teleport warmup
+			if (player.getVehicle() != null)
+				player.getVehicle().eject();
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			if (TownySettings.getSpawnCooldownTime() > 0)
+				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 		}
 	}
 	
