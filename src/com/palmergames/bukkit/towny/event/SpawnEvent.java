@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -27,6 +28,7 @@ public abstract class SpawnEvent extends Event implements Cancellable {
 	 * @param to The to location.
 	 */
 	public SpawnEvent(Player player, Location from, Location to) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.to = to;
 		this.from = from;
