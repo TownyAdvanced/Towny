@@ -7,6 +7,9 @@ import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 import com.palmergames.bukkit.towny.database.handler.SQLData;
 
+import java.lang.reflect.Type;
+import java.sql.JDBCType;
+
 /**
  * A class which is used a method of transport for type translations. This object is 
  * referenced during loading and saving in order to process how to convert objects
@@ -70,6 +73,8 @@ public class TypeAdapter<T> {
 			return null;
 		}
 		
+		
+		
 		SaveContext saveContext = new SaveContext(databaseHandler);
 		return saveHandler.getSQL(saveContext, object);
 	}
@@ -88,6 +93,19 @@ public class TypeAdapter<T> {
 		this.databaseHandler = dataBaseHandler;
 		this.loadHandler = loadHandler;
 		this.saveHandler = saveHandler;
+	}
+
+	private boolean isPrimitive(Object object) {
+		Class<?> type = object.getClass();
+		boolean primitive = type == int.class;
+		primitive |= type == boolean.class;
+		primitive |= type == char.class;
+		primitive |= type == float.class;
+		primitive |= type == double.class;
+		primitive |= type == long.class;
+		primitive |= type == byte.class;
+		
+		return primitive;
 	}
 	
 }

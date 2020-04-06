@@ -18,4 +18,12 @@ public class SQLData {
 	public JDBCType getColumnType() {
 		return columnType;
 	}
+
+	@Override
+	public String toString() {
+		return "SQLData{" +
+			"columnType=" + columnType +
+			", value=" + value +
+			'}';
+	}
 }

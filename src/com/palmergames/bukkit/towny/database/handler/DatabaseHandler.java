@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.sql.JDBCType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -53,13 +54,13 @@ public class DatabaseHandler {
 	}
 	
 	private boolean isPrimitive(Type type) {
-		boolean primitive = type == int.class;
-		primitive |= type == boolean.class;
-		primitive |= type == char.class;
-		primitive |= type == float.class;
-		primitive |= type == double.class;
-		primitive |= type == long.class;
-		primitive |= type == byte.class;
+		boolean primitive = type == int.class || type == Integer.class;
+		primitive |= type == boolean.class || type == Boolean.class;
+		primitive |= type == char.class || type == Character.class;
+		primitive |= type == float.class || type == Float.class;
+		primitive |= type == double.class || type == Double.class;
+		primitive |= type == long.class || type == Long.class;
+		primitive |= type == byte.class || type == Byte.class;
 		
 		return primitive;
 	}
@@ -79,6 +80,25 @@ public class DatabaseHandler {
 			}
 			
 			String storedValue = toFileString(value, type);
+			TownyMessaging.sendErrorMsg(field.getName() + "=" + storedValue);
+		}
+	}
+	
+	public void saveSQL(Object obj) {
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+
+		for (Field field : fields) {
+			Type type = field.getGenericType();
+			field.setAccessible(true);
+
+			Object value = null;
+			try {
+				value = field.get(obj);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			SQLData storedValue = toSQL(value, type);
 			TownyMessaging.sendErrorMsg(field.getName() + "=" + storedValue);
 		}
 	}
@@ -161,21 +181,29 @@ public class DatabaseHandler {
 		return adapter.getFileFormat((T) obj);
 	}
 	
-	public <T> SQLData toSQL(T obj, Class<T> type) {
+	public <T> SQLData toSQL(Object obj, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
-
-		if (adapter == null) {
-			throw new UnsupportedOperationException("There is no adapter for " + type);
+		
+		if (obj == null) {
+			return null;
 		}
 		
-		return adapter.getSQL(obj);
+		if (isPrimitive(obj.getClass())) {
+			return getPrimitiveSQL(obj);
+		}
+
+		if (adapter == null) {
+			return new SQLData(obj.toString(), JDBCType.VARCHAR);
+		}
+		
+		return adapter.getSQL((T) obj);
 	}
 	
 	public <T> T fromFileString(String str, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
-			throw new UnsupportedOperationException("There is no adapter for " + type);
+			throw new UnsupportedOperationException("There is flatfile load adapter for " + type);
 		}
 		
 		if (str.equals("")) {
@@ -189,7 +217,7 @@ public class DatabaseHandler {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
-			throw new UnsupportedOperationException("There is no adapter for " + type);
+			throw new UnsupportedOperationException("There is SQL load adapter for " + type);
 		}
 		
 		return adapter.fromSQL(null);
@@ -250,6 +278,27 @@ public class DatabaseHandler {
 			return Byte.parseByte(str);
 		}
 		
+		return null;
+	}
+
+	private SQLData getPrimitiveSQL(Object object) {
+		Class<?> type = object.getClass();
+		if (type == int.class || type == Integer.class) {
+			return new SQLData(object, JDBCType.INTEGER);
+		} else if (type == boolean.class || type == Boolean.class) {
+			return new SQLData(object, JDBCType.BOOLEAN);
+		} else if (type == char.class || type == Character.class) {
+			return new SQLData(object, JDBCType.CHAR);
+		} else if (type == float.class || type == Float.class) {
+			return new SQLData(object, JDBCType.FLOAT);
+		} else if (type == double.class || type == Double.class) {
+			return new SQLData(object, JDBCType.DOUBLE);
+		} else if (type == long.class || type == Long.class) {
+			return new SQLData(object, JDBCType.BIGINT);
+		} else if (type == byte.class || type == Byte.class) {
+			return new SQLData(object, JDBCType.VARBINARY);
+		}
+
 		return null;
 	}
 }
