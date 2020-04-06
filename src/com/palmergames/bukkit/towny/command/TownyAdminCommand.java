@@ -54,6 +54,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +238,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		switch (args[0].toLowerCase()) {
+			case "reload":
+				if (args.length > 1)
+					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms", "all"), args[1]);
 			case "set":
 				if (args.length > 1) {
 					switch (args[1].toLowerCase()) {
@@ -455,12 +459,40 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				giveBonus(StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("reload")) {
-
-				reloadTowny(false);
-
+				if (split.length == 2) {
+					switch (split[1]) {
+						case "db":
+						case "database":
+							reloadDatabase();
+							break;
+						case "config":
+							reloadConfig(false);
+							break;
+						case "perms":
+						case "townyperms":
+						case "permissions":
+							reloadPerms();
+							break;
+						case "language":
+						case "lang":
+							reloadLangs();
+							break;
+						case "all":
+							reloadConfig(false);
+							reloadLangs();
+							reloadDatabase();
+							reloadPerms();
+							break;
+						default:
+							showReloadHelp();
+					}
+				} else {
+					showReloadHelp();
+					return false;
+				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadTowny(true);
+				reloadConfig(true);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
@@ -577,7 +609,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				resident = townyUniverse.getDataSource().getResident(split[1]);
 			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[1].toString()));
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_error_no_player_with_that_name"), split[1]));
 			}
 
 			Player player = BukkitTools.getPlayer(sender.getName());
@@ -628,7 +660,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));
 		}
-		y = (double) Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
+		y = Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
 		loc = new Location(world, x, y, z);
 		player.teleport(loc, TeleportCause.PLUGIN);
 	}
@@ -1460,24 +1492,68 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_too_many_npc"));
 		} while (true);
 	}
+	
+	public void reloadLangs() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		try {
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+			return;
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_lang"));
+	}
+	
+	public void reloadPerms() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_perms"));
+	}
 
-	public void reloadTowny(Boolean reset) {
+	/**
+	 * Reloads only the config
+	 * 
+	 * @param reset Whether or not to reset the config.
+	 */
+	public void reloadConfig(boolean reset) {
 
 		if (reset) {
 			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
+			TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reset_config"));
 		}
+		
+		try {
+			String rootFolder = TownyUniverse.getInstance().getRootFolder();
+			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+			return;
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_config"));
+	}
+
+	/**
+	 * Reloads both the database and the config. Used with a database reload command.
+	 *
+	 */
+	public void reloadDatabase() {
+		
 		if (plugin.load()) {
-			
+
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
-			
+
 			// Update permissions for all online players
 			TownyPerms.updateOnlinePerms();
-			
+
 		}
 
-		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded"));
-		// TownyMessaging.sendMsg(TownySettings.getLangString("msg_reloaded"));
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_db"));
 	}
 
 	/**
@@ -1909,6 +1985,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		return true;
+	}
+	
+	private void showReloadHelp() {
+		sender.sendMessage(ChatTools.formatTitle("/ta reload"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 	}
 
 }

@@ -4351,3 +4351,35 @@ v0.92.0.11:
       - This allows for easy restoration of townblocks which do get removed, whatever the cause.
     - This will hopefully end the occurance of disappearing townblocks and fix the following tickets: #3783 #3796 #3813 #3821 #3844.
     - This refactor has been tested fairly thoroughly, but it is always advised to back up your server before updating Towny. 
+0.96.1.2:
+  - Cleanup and microperformance pull request, courtesy of Articdive with PR #3802.
+  - Make /ta reload more specific, courtesy of Siris with PR #3851.
+    - Command now breaks into 5 subcommands: /ta reload <database|perms|config|lang|all>
+  - Changed Command: /ta reload
+    - /ta reload {database|db} - reloads the database.
+    - /ta reload {perms|townyperms|permissions} - reloads townyperms.yml
+    - /ta reload config - reloads the config & language file.
+    - /ta reload lang - reloads the language file.
+    - /ta reload all - reloads everything like /ta reload used to do.
+  - Add separate tax limits for towns, nations and townblocks, courtesy of Siris with PR #3860.
+    - The old max_tax_amount is removed.
+    - Adds the following new config options:
+  - New Config Options:
+    - economy.daily_taxes.max_plot_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for townblocks sold to players.
+    - economy.daily_taxes.max_town_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for towns when using flat taxes.
+    - economy.daily_taxes.max_nation_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for nations when using flat taxes.
+    - economy.daily_taxes.max_town_tax_percent
+      - default: 25
+      - Maximum tax percentage allowed when taxing by percentages for towns.
+  - Removed Config Option: economy.daily_taxes.max_tax_amount
+    - Replaced by the above new config options.
+  - polish.yml added courtesy of Martinez.
+  - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
+  - Use Paperlib for Async Chunk Loading, courtesy of Siris with PR #3871.
+    - Servers using Paper will benefit from faster chunk loading when players are teleported via Towny.

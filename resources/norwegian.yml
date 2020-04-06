@@ -1,5 +1,5 @@
 name: Towny
-version: 0.77
+version: 0.78
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -1095,3 +1095,11 @@ msg_you: 'You'
 # Added in 0.77
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
+
+# Added in 0.78
+msg_reload_error: 'There was an error reloading Towny.'
+msg_reloaded_config: '&2Configuration successfully reloaded.'
+msg_reloaded_perms: '&2Permissions successfully reloaded.'
+msg_reloaded_db: '&2Database successfully reloaded'
+msg_reloaded_lang: '&2Language file successfully reloaded'
+msg_reset_config: '&2Config has been reset'

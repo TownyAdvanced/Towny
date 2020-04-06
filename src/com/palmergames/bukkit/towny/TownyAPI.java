@@ -171,9 +171,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
      */
     public List<Player> getOnlinePlayersAlliance(Nation nation) {
-    	ArrayList<Player> players = new ArrayList<>();
-    	
-        players.addAll(getOnlinePlayers(nation));
+		ArrayList<Player> players = new ArrayList<>(getOnlinePlayers(nation));
         if (!nation.getAllies().isEmpty()) {
 			for (Nation nations : nation.getAllies()) {
 				players.addAll(getOnlinePlayers(nations));
@@ -203,10 +201,10 @@ public class TownyAPI {
     }
     
     /**
-     * Check if the specified {@link Location} is in the wilderness.
+     * Check if the specified {@link WorldCoord} is in the wilderness.
      *
-     * @param location {@link Location} to test widlerness for.
-     * @return true if the {@link Location} is in the wilderness, false otherwise.
+     * @param worldCoord {@link WorldCoord} to test widlerness for.
+     * @return true if the {@link WorldCoord} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(WorldCoord worldCoord) {
         
@@ -239,7 +237,7 @@ public class TownyAPI {
      */
     public String getTownName(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(WorldCoord.parseWorldCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getName();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -272,7 +270,7 @@ public class TownyAPI {
      */
     public TownBlock getTownBlock(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(WorldCoord.parseWorldCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock();
         } catch (NotRegisteredException e) {
             // No data so return null

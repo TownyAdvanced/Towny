@@ -436,7 +436,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 Map.Entry<String, Object> me = i.next();
                 wherecode.append("`").append(me.getKey()).append("` = ");
                 if (me.getValue() instanceof String)
-                    wherecode.append("'").append(((String) me.getValue()).replace("'", "\''")).append("'");
+                    wherecode.append("'").append(((String) me.getValue()).replace("'", "''")).append("'");
                 else if (me.getValue() instanceof Boolean)
                     wherecode.append("'").append(((Boolean) me.getValue()) ? "1" : "0").append("'");
                 else
