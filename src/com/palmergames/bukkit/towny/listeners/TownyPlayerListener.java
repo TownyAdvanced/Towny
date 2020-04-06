@@ -155,9 +155,8 @@ public class TownyPlayerListener implements Listener {
 		//Set post-spawn damage immunity
 		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
 			try {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				resident.setDamageImmunityEndTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
-				player.setInvulnerable(true);
+				long damageImmunityEndTime = System.currentTimeMillis() + (int)(TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS);
+				TownyUniverse.getInstance().addEntryToPostSpawnDamageImmunityMap(player,damageImmunityEndTime);
 			} catch(Exception e) {
 				System.out.println("Problem setting post spawn immunity");
 				TownyMessaging.sendErrorMsg(e.getMessage());

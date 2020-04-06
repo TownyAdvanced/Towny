@@ -164,7 +164,7 @@ public class CombatUtil {
 					|| (TownySettings.getWarSiegeEnabled()
 							&& 
 							(
-								(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && attackingPlayer.isInvulnerable())
+								(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && TownyUniverse.getInstance().getPostSpawnDamageImmunityPlayerEndTimeMap().containsKey(attackingPlayer))
 					  			|| 
 								(TownySettings.getWarSiegeTownNeutralityEnabled() && isPlayerFromANeutralOrDesiredNeutralTown(attackingPlayer))
 							)

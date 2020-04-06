@@ -54,7 +54,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private TownyPermission permissions = new TownyPermission();
-	private long damageImmunityEndTime = 0;
 
 	public Resident(String name) {
 		super(name);
@@ -809,14 +808,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
-	}
-
-	public long getDamageImmunityEndTime() {
-		return damageImmunityEndTime;
-	}
-
-	public void setDamageImmunityEndTime(long pvpImmunityEndTime) {
-		this.damageImmunityEndTime = pvpImmunityEndTime;
 	}
 }
 

@@ -2,13 +2,9 @@ package com.palmergames.bukkit.towny.war.siegewar.timeractions;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * This class is responsible for removing post spawn damage immunity
@@ -22,29 +18,21 @@ public class RemovePostSpawnDamageImmunity {
 	 * It determines which players are currently damage immune, but have reached the immunity time limit - then removes the immunity
 	 */
     public static void removePostSpawnDamageImmunity() {
-		TownyUniverse universe = TownyUniverse.getInstance();
-		List<Player> onlinePlayers = new ArrayList<>(BukkitTools.getOnlinePlayers());
-		ListIterator<Player> playerItr = onlinePlayers.listIterator();
-		Player player;
-		Resident resident;
+    	try {
+			TownyUniverse universe = TownyUniverse.getInstance();
+			Map<Player, Long> postSpawnDamageImmunityPlayerEndTimeMap = new HashMap<>(universe.getPostSpawnDamageImmunityPlayerEndTimeMap());
 
-		while (playerItr.hasNext()) {
-			player = playerItr.next();
-			/*
-			 * We are running in an Async thread so MUST verify all objects.
-			 */
-			try {
-				if(player.isOnline() && player.isInvulnerable()) {
-					resident = universe.getDataSource().getResident(player.getName());
-					if(System.currentTimeMillis() > resident.getDamageImmunityEndTime()) {
-						player.setInvulnerable(false);
-					}
+			for (Map.Entry<Player, Long> playerEndTimeEntry : postSpawnDamageImmunityPlayerEndTimeMap.entrySet()) {
+				/*
+				 * We are running in an Async thread so MUST verify all objects.
+				 */
+				if (playerEndTimeEntry.getKey().isOnline() && System.currentTimeMillis() > playerEndTimeEntry.getValue()) {
+					universe.removeEntryFromPostSpawnDamageImmunityMap(playerEndTimeEntry.getKey());
 				}
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Problem removing immunity from player " + player.getName());
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Problem removing post spawn damage immunity");
+			e.printStackTrace();
 		}
     }
-
 }
