@@ -232,6 +232,7 @@ public class FileMgmt {
 			 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 			
 			bufferedWriter.write(source);
+			
 		} catch (IOException e) {
 			System.out.println("Exception ");
 		}
@@ -245,7 +246,6 @@ public class FileMgmt {
 	 * @return true on success, false on IOException
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
-
 		File file = new File(targetLocation);
 		try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
@@ -254,10 +254,7 @@ public class FileMgmt {
 				bufferedWriter.write(aSource + System.getProperty("line.separator"));
 			}
 
-			bufferedWriter.close();
-			osw.close();
 			return true;
-
 		} catch (IOException e) {
 			System.out.println("Exception ");
 			return false;
