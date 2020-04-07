@@ -34,7 +34,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	public SiegeWarTimerTask(Towny plugin) {
 		super(plugin);
-		nextRuinsRemovalsTick = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+		nextRuinsRemovalsTick = System.currentTimeMillis() + (long) (TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * when using the 'tactical visibility' feature
 	 */
 	private void evaluateTacticalVisibility() {
-		if(TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
+		if (TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
 			SiegeWarDynmapUtil.evaluateTacticalVisibilityOfPlayers();
 		}
 	}
@@ -67,7 +67,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate banner control for all siege zones
 	 */
 	private void evaluateBannerControl() {
-		for(SiegeZone siegeZone: TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
+		for (SiegeZone siegeZone : TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
 			SiegeWarBannerControlUtil.evaluateBannerControl(siegeZone);
 		}
 	}
@@ -77,7 +77,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * e.g. who wins if siege victory timer runs out ?
 	 */
 	private void evaluateTimedSiegeOutcomes() {
-		for(Siege siege: TownyUniverse.getInstance().getAllSieges()) {
+		for (Siege siege : TownyUniverse.getInstance().getAllSieges()) {
 			evaluateTimedSiegeOutcome(siege);
 		}
 	}
@@ -86,10 +86,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate ruins removals
 	 */
 	public void evaluateRuinsRemovals() {
-		if(TownySettings.getWarSiegeDelayFullTownRemoval() && System.currentTimeMillis() > nextRuinsRemovalsTick) {
+		if (TownySettings.getWarSiegeDelayFullTownRemoval() && System.currentTimeMillis() > nextRuinsRemovalsTick) {
 			TownyMessaging.sendDebugMsg("Checking ruined towns now for deletion.");
 			RemoveRuinedTowns.deleteRuinedTowns();
-			nextRuinsRemovalsTick = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+			nextRuinsRemovalsTick = System.currentTimeMillis() + (long) (TownySettings.getWarSiegeRuinsRemovalsTickIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 		}
 	}
 
@@ -97,43 +97,52 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate post spawn damage immunity removals
 	 */
 	private void evaluatePostSpawnDamageImmunityRemovals() {
-		if(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
+		if (TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
 			RemovePostSpawnDamageImmunity.removePostSpawnDamageImmunity();
 		}
 	}
 
 	/**
 	 * Evaluate the timed outcome of 1 siege
-	 * 
+	 *
 	 * @param siege
 	 */
 	private static void evaluateTimedSiegeOutcome(Siege siege) {
-		TownyUniverse universe = TownyUniverse.getInstance();
-		
-		//Process active siege
-		if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+		try {
+			TownyUniverse universe = TownyUniverse.getInstance();
 
-			//If scheduled end time has arrived, choose winner
-			if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
-				TownyObject siegeWinner = SiegeWarPointsUtil.calculateSiegeWinner(siege);
-				if (siegeWinner instanceof Town) {
-					DefenderWin.defenderWin(siege, (Town) siegeWinner);
-				} else {
-					AttackerWin.attackerWin(siege, (Nation) siegeWinner);
+			//Process active siege
+			if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+
+				//If scheduled end time has arrived, choose winner
+				if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
+					TownyObject siegeWinner = SiegeWarPointsUtil.calculateSiegeWinner(siege);
+					if (siegeWinner instanceof Town) {
+						DefenderWin.defenderWin(siege, (Town) siegeWinner);
+					} else {
+						AttackerWin.attackerWin(siege, (Nation) siegeWinner);
+					}
+
+					//Save changes to db
+					com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+					townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
 				}
 
-				//Save changes to db
-				com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
-				townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
-			}
+			} else {
 
-		} else {
-
-			//Siege is finished.
-			//Wait for siege immunity timer to end then delete siege
-			if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
-				universe.getDataSource().removeSiege(siege);
+				//Siege is finished.
+				//Wait for siege immunity timer to end then delete siege
+				if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
+					universe.getDataSource().removeSiege(siege);
+				}
 			}
+		} catch(Exception e) {
+			try {
+				System.out.println("Problem evaluating siege outcome for siege on"+ siege.getDefendingTown().getName());			
+			} catch (Exception e2) {
+				System.out.println("Problem evaluating siege outcome for a siege (could not read town name)");
+			}
+			e.printStackTrace();
 		}
-	}
+	} 
 }

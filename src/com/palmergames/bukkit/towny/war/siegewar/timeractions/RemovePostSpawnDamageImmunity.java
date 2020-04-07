@@ -18,21 +18,25 @@ public class RemovePostSpawnDamageImmunity {
 	 * It determines which players are currently damage immune, but have reached the immunity time limit - then removes the immunity
 	 */
     public static void removePostSpawnDamageImmunity() {
-    	try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Map<Player, Long> postSpawnDamageImmunityPlayerEndTimeMap = new HashMap<>(universe.getPostSpawnDamageImmunityPlayerEndTimeMap());
+		TownyUniverse universe = TownyUniverse.getInstance();
+		Map<Player, Long> postSpawnDamageImmunityPlayerEndTimeMap = new HashMap<>(universe.getPostSpawnDamageImmunityPlayerEndTimeMap());
 
-			for (Map.Entry<Player, Long> playerEndTimeEntry : postSpawnDamageImmunityPlayerEndTimeMap.entrySet()) {
-				/*
-				 * We are running in an Async thread so MUST verify all objects.
-				 */
+		for (Map.Entry<Player, Long> playerEndTimeEntry : postSpawnDamageImmunityPlayerEndTimeMap.entrySet()) {
+			/*
+			 * We are running in an Async thread so MUST verify all objects.
+			 */
+			try {
 				if (playerEndTimeEntry.getKey().isOnline() && System.currentTimeMillis() > playerEndTimeEntry.getValue()) {
 					universe.removeEntryFromPostSpawnDamageImmunityMap(playerEndTimeEntry.getKey());
 				}
+			} catch (Exception e) {
+				try {
+					TownyMessaging.sendErrorMsg("Problem removing post spawn damage immunity for player " + playerEndTimeEntry.getKey().getName());
+				} catch (Exception e2) {
+					TownyMessaging.sendErrorMsg("Problem removing post spawn damage immunity (could not read player name");
+				}
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Problem removing post spawn damage immunity");
-			e.printStackTrace();
 		}
     }
 }

@@ -87,12 +87,12 @@ public class SiegeWarDynmapUtil {
 	 * 3. Take Invisibility potion
 	 */
 	public static void evaluateTacticalVisibilityOfPlayers() {
-		try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Towny plugin = Towny.getPlugin();
+		TownyUniverse universe = TownyUniverse.getInstance();
+		Towny plugin = Towny.getPlugin();
 
-			for(Player player: BukkitTools.getOnlinePlayers()) {
+		for(Player player: BukkitTools.getOnlinePlayers()) {
 
+			try {
 				if (universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode())) {
 					//Visible on map
 					player.removeMetadata("tacticallyInvisible", plugin);
@@ -114,10 +114,14 @@ public class SiegeWarDynmapUtil {
 					//Visible on map
 					player.removeMetadata("tacticallyInvisible", plugin);
 				}
+			} catch (Exception e) {
+				try {
+					System.out.println("Problem evaluating tactical visibility for player " + player.getName());
+				} catch (Exception e2) {
+					System.out.println("Problem evaluating tactical visibility (could not read player name)");
+				}
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			System.out.println("Problem evaluating tactical visibility");
-			e.printStackTrace();
 		}
 	}
 }
