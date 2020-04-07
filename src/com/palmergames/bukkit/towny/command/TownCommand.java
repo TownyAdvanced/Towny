@@ -60,8 +60,8 @@ import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarRuinsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -3394,25 +3394,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
-				//If the claimer's town is under siege, they cannot claim any land
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarSiegeBesiegedTownClaimingDisabled()
-					&& town.hasSiege()
-					&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
-				{
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_claim"));
-				}
-
-				//If the land is too near any active siege zone, it cannot be claimed.
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarSiegeClaimingDisabledNearSiegeZones()) 
-				{
-					int claimDisableDistance = TownySettings.getWarSiegeClaimDisableDistanceBlocks();
-					for(SiegeZone siegeZone: townyUniverse.getDataSource().getSiegeZones()) {
-						if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
-							throw new TownyException(TownySettings.getLangString("msg_err_siege_claim_too_near_siege_zone"));
-						}
-					}
+				if(TownySettings.getWarSiegeEnabled()) {
+					SiegeWarClaimUtil.verifySiegeEffectsOnClaiming(player, town);
 				}
 
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
