@@ -92,7 +92,7 @@ public class SiegeWarBlockUtil {
 
 		while(location.getY() < 256)
 		{
-			if(!location.getBlock().getType().isAir())
+			if(!(location.getBlock().getType() == Material.AIR || location.getBlock().getType() == Material.CAVE_AIR || location.getBlock().getType() == Material.VOID_AIR))
 			{
 				return true;   //There is a non-air block above them
 			}
