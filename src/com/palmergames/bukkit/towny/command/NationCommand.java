@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
@@ -1335,9 +1336,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		Nation nation = null;
 		Nation remainingNation = null;
+		Resident resident;
 		try {
 			nation = universe.getDataSource().getNation(name);
 			remainingNation = universe.getDataSource().getResident(player.getName()).getTown().getNation();
+			resident = universe.getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException e) {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 		}
@@ -1350,7 +1353,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
 			}
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
-			ConfirmationHandler.addConfirmation(king, ConfirmationType.NATION_MERGE, remainingNation);
+			Confirmation confirmation = new Confirmation(king);
+			Nation finalRemainingNation = remainingNation;
+			confirmation.setHandler(() -> {
+				try {
+					Nation succumbingNation = resident.getTown().getNation();
+					Nation prevailingNation = finalRemainingNation;
+					TownyUniverse.getInstance().getDataSource().mergeNation(succumbingNation, prevailingNation);
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), succumbingNation, prevailingNation));
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
+			});
+			
+			ConfirmationHandler.registerConfirmation(confirmation);
 			TownyMessaging.sendConfirmationMessage(BukkitTools.getPlayer(king.getName()), null, null, null, null);			
 		}
 	}
@@ -1396,13 +1412,32 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().saveTown(town);
 		}
 	}
+	
+	public static class NationDeleteHandler implements Runnable {
+		
+		Nation nation;
+		
+		public NationDeleteHandler(Nation nation) {
+			this.nation = nation;
+		}
+
+		@Override
+		public void run() {
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+		}
+	}
 
 	public void nationDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0)
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATION_DELETE, null); // It takes the resident's town & nation, done finished
+				Nation nation = resident.getTown().getNation();
+				Confirmation confirmation = new Confirmation(resident);
+				confirmation.setHandler(new NationDeleteHandler(nation));
+				ConfirmationHandler.registerConfirmation(confirmation);
+				
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());

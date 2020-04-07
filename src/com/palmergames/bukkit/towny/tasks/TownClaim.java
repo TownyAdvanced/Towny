@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
@@ -134,14 +135,16 @@ public class TownClaim extends Thread {
 				return;
 			}
 			int townSize = town.getTownBlocks().size();
+			
 			// Send confirmation message,
-			try {
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIM_ALL, null);
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-			} catch (TownyException e) {
-				e.printStackTrace();
-				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
-			}
+			Confirmation confirmation = new Confirmation(resident);
+			confirmation.setHandler(() -> {
+				// Unclaim all land.
+				TownClaim.townUnclaimAll(plugin, town);
+			});
+			ConfirmationHandler.registerConfirmation(confirmation);
+			TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+			
 			if (TownySettings.getClaimRefundPrice() > 0.0) {
 				try {
 					town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");

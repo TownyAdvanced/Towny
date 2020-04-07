@@ -31,28 +31,14 @@ public class ConfirmCommand extends BukkitCommand {
 				return true;
 			}
 			if (resident != null) {
-				if (resident.getConfirmationType() != null) {
-					try {
-						ConfirmationHandler.handleConfirmation(resident, resident.getConfirmationType());
-						return true;
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-						return true;
-					}
-				} else {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("no_confirmations_open"));
-					return true;
-				}
+				ConfirmationHandler.handleConfirmation(resident);
+				return true;
+				
 			}
 		} else {
 			// Must be a console.
 			if (!ConfirmationHandler.consoleConfirmationType.equals(ConfirmationType.NULL)) {
-				try {
-					ConfirmationHandler.handleConfirmation(ConfirmationHandler.consoleConfirmationType);
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(Bukkit.getConsoleSender(), e.getMessage());
-					return true;
-				}
+				ConfirmationHandler.handleConfirmation(new Resident(""));
 				return true;
 			} else { 
 				TownyMessaging.sendMsg(TownySettings.getLangString("no_confirmations_open"));

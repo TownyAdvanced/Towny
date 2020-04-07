@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -2599,21 +2600,42 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 	}
+	
+	public static class TownDeleteHandler implements Runnable {
+		
+		Town town;
+		
+		public TownDeleteHandler(Town town) {
+			this.town = town;
+		}
+
+		@Override
+		public void run() {
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+			TownyUniverse.getInstance().getDataSource().removeTown(town);
+		}
+	}
 
 	public void townDelete(Player player, String[] split) {
 
-		Town town = null;
+		final Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+				Confirmation confirmation = new Confirmation(resident);
+				town = resident.getTown();
+				
+				confirmation.setHandler(() -> new TownDeleteHandler(town));
+				
+				ConfirmationHandler.registerConfirmation(confirmation);
+				
+				//ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
 			}
 		} else {
 			try {

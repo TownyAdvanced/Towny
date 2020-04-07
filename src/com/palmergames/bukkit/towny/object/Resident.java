@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
@@ -46,6 +47,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private double teleportCost = 0.0;
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
+	private transient Confirmation confirmation;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
 
@@ -799,6 +801,14 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
+	}
+
+	public Confirmation getConfirmation() {
+		return confirmation;
+	}
+
+	public void setConfirmation(Confirmation confirmation) {
+		this.confirmation = confirmation;
 	}
 }
 
