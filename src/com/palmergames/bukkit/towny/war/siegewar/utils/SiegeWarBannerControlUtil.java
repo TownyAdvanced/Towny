@@ -24,15 +24,19 @@ import org.bukkit.potion.PotionEffectType;
 public class SiegeWarBannerControlUtil {
 
 	public static void evaluateBannerControl(SiegeZone siegeZone) {
-		if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
-			try {
+		try {
+			if(siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				evaluateBannerControlEffects(siegeZone);
 				evaluateCurrentBannerControlSessions(siegeZone);
 				evaluateNewBannerControlSessions(siegeZone);
-			} catch (Exception e) {
-				System.out.println("Problem evaluating banner control for siege zone: " + siegeZone.getName());
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			try {
+				System.out.println("Problem evaluating banner control for siege zone: " + siegeZone.getName());
+			} catch (Exception e2) {
+				System.out.println("Problem evaluating banner control for siege zone: (could not read siegezone name)");
+			}
+			e.printStackTrace();
 		}
 	}
 
