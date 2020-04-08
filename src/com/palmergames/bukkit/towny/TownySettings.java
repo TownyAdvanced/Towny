@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
@@ -1114,11 +1115,7 @@ public class TownySettings {
 		} else
 			n += town.getNumResidents() * ratio;
 
-		if (town.hasNation())
-			try {
-				n += (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-			} catch (NotRegisteredException e) {
-			}
+		n += getNationBonusBlocks(town);
 
 		return n;
 	}
@@ -1142,8 +1139,10 @@ public class TownySettings {
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-
-		return (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
+		return calculationEvent.getBonusBlocks();
 	}
 
 	public static int getNationBonusBlocks(Town town) {
@@ -2598,6 +2597,11 @@ public class TownySettings {
 	public static int getTeleportWarmupTime() {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
+	}
+	
+	public static boolean isMovementCancellingSpawnWarmup() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
 	}
 	
 	public static int getSpawnCooldownTime() {

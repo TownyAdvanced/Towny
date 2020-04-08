@@ -787,9 +787,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						boolean b = plugin.parseOnOff(split[0]);
 
 						permChange = new TownyPermissionChange(TownyPermissionChange.Action.ALL_PERMS, b);
-
-						perm.change(permChange);
-						return permChange;
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
 						return null;

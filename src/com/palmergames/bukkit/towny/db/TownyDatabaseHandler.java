@@ -413,52 +413,34 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-
-		lock.lock();
-
+		String filteredName;
 		try {
-
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(name);
-			} catch (InvalidNameException e) {
-				throw new NotRegisteredException(e.getMessage());
-			}
-
-			if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-			universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
-			universe.getTownsTrie().addKey(filteredName);
-
-		} finally {
-			lock.unlock();
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
 		}
+
+		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+
+		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
+		universe.getTownsTrie().addKey(filteredName);
 	}
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-
-		lock.lock();
-
+		String filteredName;
 		try {
-
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(name);
-			} catch (InvalidNameException e) {
-				throw new NotRegisteredException(e.getMessage());
-			}
-
-			if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
-				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-			universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
-			universe.getNationsTrie().addKey(filteredName);
-
-		} finally {
-			lock.unlock();
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
 		}
+
+		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+
+		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
+		universe.getNationsTrie().addKey(filteredName);
 	}
 
 	@Override

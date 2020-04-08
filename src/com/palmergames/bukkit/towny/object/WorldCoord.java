@@ -58,12 +58,16 @@ public class WorldCoord extends Coord {
 		return parseWorldCoord(entity.getLocation());
 	}
 
+	public static WorldCoord parseWorldCoord(String worldName, int blockX, int blockZ) {
+		return new WorldCoord(worldName, toCell(blockX), toCell(blockZ));
+	}
+	
 	public static WorldCoord parseWorldCoord(Location loc) {
-		return new WorldCoord(loc.getWorld().getName(), parseCoord(loc));
+		return parseWorldCoord(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ());
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
-		return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
+		return parseWorldCoord(block.getWorld().getName(), block.getX(), block.getZ());
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {

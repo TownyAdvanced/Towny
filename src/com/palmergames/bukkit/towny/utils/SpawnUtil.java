@@ -2,13 +2,14 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import org.bukkit.Chunk;
+import com.palmergames.bukkit.towny.event.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import io.papermc.lib.PaperLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import com.earth2me.essentials.Teleport;
-import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -310,26 +311,28 @@ public class SpawnUtil {
 		} catch (EconomyException ignored) {
 		}
 
-		// Essentials tests.
-		boolean usingESS = plugin.isEssentials();
+//		// Essentials tests.
+//		boolean usingESS = plugin.isEssentials();
 
-		if (usingESS && !isTownyAdmin) {
-			try {
-				User essentialsUser = plugin.getEssentials().getUser(player);
-
-				// This jail check is specifically for essentials jails, not towny ones.
-				if (!essentialsUser.isJailed()) {
-
-					Teleport teleport = essentialsUser.getTeleport();
-					// Cause an essentials exception if in cooldown.
-					teleport.cooldown(true);
-					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
-				}
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
-				return;
-			}
-		}
+//		if (usingESS && !isTownyAdmin) {
+//			try {
+//				User essentialsUser = plugin.getEssentials().getUser(player);
+//
+//				// This jail check is specifically for essentials jails, not towny ones.
+//				if (!essentialsUser.isJailed()) {
+//
+//					Teleport teleport = essentialsUser.getTeleport();
+//					// Cause an essentials exception if in cooldown.
+//					teleport.cooldown(true);
+//					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
+//				}
+//			} catch (Exception e) {
+//				TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
+//				return;
+//			}
+//		}
+//TODO: Check if essentials jailing matters still.		
+		
 
 		// Actual taking of monies here.
 		if (!townyUniverse.getPermissionSource().has(player,
@@ -347,36 +350,55 @@ public class SpawnUtil {
 			}
 		}
 		
-		// Used later to make sure the chunk we teleport to is loaded.
-		Chunk chunk = spawnLoc.getChunk();
+		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {
+			return;
+		}
 
 		// If an Admin or Essentials teleport isn't being used, use our own.
 		if (isTownyAdmin) {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
-			if (!chunk.isLoaded())
-				chunk.load();
-			player.teleport(spawnLoc, TeleportCause.COMMAND);
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			return;
 		}
 
-		if (!usingESS) {
-			if (TownyTimerHandler.isTeleportWarmupRunning()) {
-				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
-						TownySettings.getTeleportWarmupTime()));
-				TownyAPI.getInstance().requestTeleport(player, spawnLoc);
-			} else {
-				// Don't use teleport warmup
-				if (player.getVehicle() != null)
-					player.getVehicle().eject();
-				if (!chunk.isLoaded())
-					chunk.load();
-				player.teleport(spawnLoc, TeleportCause.COMMAND);
-				if (TownySettings.getSpawnCooldownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
-			}
+		if (TownyTimerHandler.isTeleportWarmupRunning()) {
+			// Use teleport warmup
+			player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+		} else {
+			// Don't use teleport warmup
+			if (player.getVehicle() != null)
+				player.getVehicle().eject();
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			if (TownySettings.getSpawnCooldownTime() > 0)
+				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 		}
+	}
+	
+	public static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
+		switch (type) {
+			case TOWN:
+				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), spawnLoc);
+				Bukkit.getPluginManager().callEvent(townSpawnEvent);
+
+				if (townSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+			case NATION:
+				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
+				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
+
+				if (nationSpawnEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
+					return false;
+				}
+				break;
+		}
+		
+		return true;
 	}
 
 }

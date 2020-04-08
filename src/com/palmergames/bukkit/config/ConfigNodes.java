@@ -381,6 +381,10 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.movement_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
 			"global_town_settings.spawn_cooldown_time",
 			"30",

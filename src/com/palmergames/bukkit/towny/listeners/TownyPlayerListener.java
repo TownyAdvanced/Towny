@@ -24,8 +24,10 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
@@ -554,6 +556,21 @@ public class TownyPlayerListener implements Listener {
 		Location to = event.getTo();
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
+		Resident resident = null;
+		try {
+			resident = townyUniverse.getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException ignored) {
+		}
+		
+		if (TownyTimerHandler.isTeleportWarmupRunning() &&
+				resident != null 
+				&& TownySettings.getTeleportWarmupTime() > 0 
+				&& TownySettings.isMovementCancellingSpawnWarmup() 
+				&& !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN.getNode()) 
+				&& TeleportWarmupTimerTask.hasTeleportRequest(resident)) {
+			TeleportWarmupTimerTask.abortTeleportRequest(resident);
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_teleport_cancelled"));
+		}
 
 		try {
 			from = cache.getLastLocation();

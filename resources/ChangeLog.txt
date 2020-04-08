@@ -4379,3 +4379,32 @@ v0.92.0.11:
       - Maximum tax percentage allowed when taxing by percentages for towns.
   - Removed Config Option: economy.daily_taxes.max_tax_amount
     - Replaced by the above new config options.
+  - polish.yml added courtesy of Martinez.
+  - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
+  - Use Paperlib for Async Chunk Loading, courtesy of Siris with PR #3871.
+    - Servers using Paper will benefit from faster chunk loading when players are teleported via Towny.
+  - Fix regression in PVP world settings.
+    - It is now again possible to have PVP false in a world, but let the town/townblock override that.
+    - Closes #3863. 
+  - Fix for Nation&TownSpawnEvents causing titles/chunknotifications early, courtesy of Siris with PR #3872.
+  - API: Added NationBonusCalculationEvent, courtesy of Silverworldg11 with PR #3873.
+    - Allows plugins to modify the nation bonus returned by a nation.
+    - This is a particularly useful if plugins want to add nation bonus blocks based on their own specific criteria rather than what is determined by Towny config.
+  - New Feature: movement-cancels-spawn-warmup.
+    - Will not affect players with the towny.admin node.
+    - Removes essentials from the SpawnUtil.
+    - Closes #3619.    
+  - New Config Option: global_town_settings.movement_cancels_spawn_warmup
+    - Default: false
+    - When set to true, if players are currently in a spawn warmup, moving will cancel their spawn.
+  - Fix /plot set TYPE, always trying to pay into the closed_economy SERVER_ACCOUNT, even when closed_economy is false.
+    - Closes #3870.
+  - Fix onStructureGrow NPE seen in logs.
+  - Fix negative upkeep feature not working any longer.
+    - Closes #3874.
+0.96.1.3:
+  - Bump language files to 0.79.
+  - Fix some untranslatable strings in the PlayerCacheUtil.
+  - Fix /plot set perm on|off not giving feedback and saving.
+  - Fix for non-empty saving queues not finishing on shutdown, courtesy of Siris with PR #3877.
+    - Credit to Silverwolfg11 for finding above issue.

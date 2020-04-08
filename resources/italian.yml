@@ -1,5 +1,5 @@
 name: Towny
-version: 0.78
+version: 0.79
 language: italian
 author: Leomixer17
 website: 'http://townyadvanced.github.io/'
@@ -1105,3 +1105,10 @@ msg_reloaded_perms: '&2Permissions successfully reloaded.'
 msg_reloaded_db: '&2Database successfully reloaded'
 msg_reloaded_lang: '&2Language file successfully reloaded'
 msg_reset_config: '&2Config has been reset'
+msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
+
+# Added in 0.79
+msg_cache_block_error_plot_friends: 'friends'
+msg_cache_block_error_plot_allies: 'allies'
+msg_cache_block_error_plot_outsiders: 'outsiders'
+msg_cache_block_error_plot_town_members: 'town members'

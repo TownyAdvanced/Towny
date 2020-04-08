@@ -201,10 +201,10 @@ public class TownyAPI {
     }
     
     /**
-     * Check if the specified {@link Location} is in the wilderness.
+     * Check if the specified {@link WorldCoord} is in the wilderness.
      *
-     * @param location {@link Location} to test widlerness for.
-     * @return true if the {@link Location} is in the wilderness, false otherwise.
+     * @param worldCoord {@link WorldCoord} to test widlerness for.
+     * @return true if the {@link WorldCoord} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(WorldCoord worldCoord) {
         
@@ -237,7 +237,7 @@ public class TownyAPI {
      */
     public String getTownName(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(WorldCoord.parseWorldCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getName();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -270,7 +270,7 @@ public class TownyAPI {
      */
     public TownBlock getTownBlock(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(WorldCoord.parseWorldCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock();
         } catch (NotRegisteredException e) {
             // No data so return null

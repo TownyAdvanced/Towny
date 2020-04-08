@@ -169,13 +169,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 SQL_Task query = TownySQLSource.this.queryQueue.poll();
             
                 if (query.update) {
-                
                     TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
-                
                 } else {
-                
                     TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
-                
                 }
             
             }
@@ -184,10 +180,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public void cancelTask() {
+    public void finishTasks() {
+		// Cancel the repeating task as its not needed anymore.
+		task.cancel();
 
-        task.cancel();
-
+		// Make sure that *all* tasks are saved before shutting down.
+		while (!queryQueue.isEmpty()) {
+			SQL_Task query = TownySQLSource.this.queryQueue.poll();
+			
+			if (query.update) {
+				TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+			} else {
+				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+			}
+		}
     }
 
     /**
