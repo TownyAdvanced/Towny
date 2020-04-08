@@ -148,9 +148,6 @@ public class TownClaim extends Thread {
 				}
 			});
 			ConfirmationHandler.sendConfirmation(player, confirmation);
-//			TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-			
-
 		}
 
 		if (!towns.isEmpty()) {
