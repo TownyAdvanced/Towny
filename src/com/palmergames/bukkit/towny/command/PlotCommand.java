@@ -1334,6 +1334,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("create")) {
 
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			// Add the group to the new plot.
 			PlotGroup newGroup = null;
 
@@ -1378,7 +1381,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_put_into_group_x"), townBlock.getX(), townBlock.getZ(), newGroup.getName()));
 
 		} else if (split[0].equalsIgnoreCase("remove")) {
-
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_plot_not_associated_with_a_group"));
 				return false;
@@ -1395,7 +1400,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_removed_from_group_x"), townBlock.getX(), townBlock.getZ(), name));
 
 		} else if (split[0].equalsIgnoreCase("rename")) {
-
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_RENAME.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			String newName = split[1];
 
 			if (!townBlock.hasPlotObjectGroup()) {
@@ -1409,6 +1416,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_renamed_from_x_to_y"), oldName, newName));
 
 		} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			// This means the player wants to fs the plot group they are in.
 			PlotGroup group = townBlock.getPlotObjectGroup();
 			
@@ -1433,6 +1443,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_put_group_up_for_sale"), player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 			
 		} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			// This means the player wants to nfs the plot group they are in.
 			PlotGroup group = townBlock.getPlotObjectGroup();
 			
@@ -1449,7 +1462,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_made_group_not_for_sale"), player.getName(), group.getName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
-			
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TOGGLE.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
 			if (townBlock.getPlotObjectGroup() == null) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_plot_not_associated_with_a_group"));
 				return false;
@@ -1464,6 +1479,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_SET.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
 			// Check if group is present.
 			if (townBlock.getPlotObjectGroup() == null) {

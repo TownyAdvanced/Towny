@@ -4420,3 +4420,13 @@ v0.92.0.11:
   - New Permission Node: towny.command.nation.set.mapcolor
     - Child Node of towny.command.nation.set.*
     - Existing installs do not have to grant this node to Kings, they will already inherit it as long as they have the above node.
+  - Fix /plot group commands missing their permission nodes.
+  - New Permission Nodes: towny.command.plot.group.*
+    - Child Nodes:
+    - towny.command.plot.group.add: true
+    - towny.command.plot.group.remove: true
+    - towny.command.plot.group.rename: true
+    - towny.command.plot.group.set: true
+    - towny.command.plot.group.toggle: true
+    - towny.command.plot.group.forsale: true
+    - towny.command.plot.group.notforsale: true

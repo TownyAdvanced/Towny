@@ -191,6 +191,15 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_PLOT_SET_INN("towny.command.plot.set.inn"),
 			TOWNY_COMMAND_PLOT_SET_JAIL("towny.command.plot.set.jail"),
 		
+		TOWNY_COMMAND_PLOT_GROUP("towny.command.plot.group.*"),
+		    TOWNY_COMMAND_PLOT_GROUP_ADD("towny.command.plot.group.add"),
+		    TOWNY_COMMAND_PLOT_GROUP_REMOVE("towny.command.plot.group.remove"),
+		    TOWNY_COMMAND_PLOT_GROUP_RENAME("towny.command.plot.group.rename"),
+		    TOWNY_COMMAND_PLOT_GROUP_SET("towny.command.plot.group.set"),
+		    TOWNY_COMMAND_PLOT_GROUP_TOGGLE("towny.command.plot.group.toggle"),
+		    TOWNY_COMMAND_PLOT_GROUP_FORSALE("towny.command.plot.group.forsale"),
+		    TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE("towny.command.plot.group.notforsale"),
+		
 		TOWNY_COMMAND_PLOT_CLEAR("towny.command.plot.clear"),
 	
 	/*
