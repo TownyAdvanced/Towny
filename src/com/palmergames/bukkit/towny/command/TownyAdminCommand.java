@@ -1582,14 +1582,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
 			return;
 		}
-
-		final String[] days = {""};
+		String days = "";
 		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
-			days[0] += "townless";
+			days += "townless";
 		}
 
 		try {
-			days[0] += String.valueOf(split[0]);
+			days += String.valueOf(split[0]);
 		} catch (NumberFormatException e) {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
@@ -1605,8 +1604,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			Resident finalResident = resident;
-			String finalDays = days[0];
+			String finalDays = days;
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			
 			Runnable purgeHandler = () -> {
 				Player player = TownyAPI.getInstance().getPlayer(finalResident);
 				if (player == null) {
@@ -1646,7 +1646,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else { // isConsole
 			Confirmation confirmation = new Confirmation(sender);
 
-			final String finalDays = days[0];
+			final String finalDays = days;
 			confirmation.setHandler(() -> {
 				int numDays;
 				boolean townless = false;

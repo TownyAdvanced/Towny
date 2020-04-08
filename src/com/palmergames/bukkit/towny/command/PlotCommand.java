@@ -413,13 +413,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									continue;
 								}
 								
+								// Get all the townblocks part of the group.
+								final List<WorldCoord> groupSelection = new ArrayList<>();
+								block.getPlotObjectGroup().getTownBlocks().forEach((tb) -> {
+									groupSelection.add(tb.getWorldCoord());
+								});
+								
 								// Create confirmation.
 								Confirmation confirmation = new Confirmation(player);
-								List<WorldCoord> finalSelection = selection;
 								
 								// Setup handler.
 								confirmation.setHandler(() -> {
-									new PlotClaim(Towny.getPlugin(), player, resident, finalSelection, false, false, false).start();
+									new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start();
 								});
 
 								ConfirmationHandler.registerConfirmation(confirmation);

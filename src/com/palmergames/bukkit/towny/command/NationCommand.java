@@ -1333,33 +1333,31 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void mergeNation(Player player, String name) throws TownyException {
 		
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
-		Nation nation = null;
-		Nation remainingNation = null;
-		Resident resident;
+		Nation nation;
+		Nation remainingNation;
+		
 		try {
 			nation = universe.getDataSource().getNation(name);
 			remainingNation = universe.getDataSource().getResident(player.getName()).getTown().getNation();
-			resident = universe.getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException e) {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 		}
 		if (remainingNation.getName().equalsIgnoreCase(name))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-		if (nation !=null ) {
+		if (nation != null) {
 			Resident king = nation.getKing();
 			if (!BukkitTools.isOnline(king.getName())) {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
 			}
+			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
 			Confirmation confirmation = new Confirmation(player);
-			Nation finalRemainingNation = remainingNation;
+
 			confirmation.setHandler(() -> {
 				try {
-					Nation succumbingNation = resident.getTown().getNation();
-					Nation prevailingNation = finalRemainingNation;
-					TownyUniverse.getInstance().getDataSource().mergeNation(succumbingNation, prevailingNation);
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), succumbingNation, prevailingNation));
+					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), nation, remainingNation));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
