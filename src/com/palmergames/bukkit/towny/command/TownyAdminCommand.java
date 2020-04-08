@@ -8,8 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
+import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -44,6 +45,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -54,6 +56,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +240,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		switch (args[0].toLowerCase()) {
+			case "reload":
+				if (args.length > 1)
+					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms", "all"), args[1]);
 			case "set":
 				if (args.length > 1) {
 					switch (args[1].toLowerCase()) {
@@ -455,12 +461,40 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				giveBonus(StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("reload")) {
-
-				reloadTowny(false);
-
+				if (split.length == 2) {
+					switch (split[1]) {
+						case "db":
+						case "database":
+							reloadDatabase();
+							break;
+						case "config":
+							reloadConfig(false);
+							break;
+						case "perms":
+						case "townyperms":
+						case "permissions":
+							reloadPerms();
+							break;
+						case "language":
+						case "lang":
+							reloadLangs();
+							break;
+						case "all":
+							reloadConfig(false);
+							reloadLangs();
+							reloadDatabase();
+							reloadPerms();
+							break;
+						default:
+							showReloadHelp();
+					}
+				} else {
+					showReloadHelp();
+					return false;
+				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadTowny(true);
+				reloadConfig(true);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
@@ -880,8 +914,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					ConfirmationHandler.addConfirmation(ConfirmationType.TOWN_DELETE, town); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
+					Confirmation confirmation = new Confirmation(() -> {
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+						TownyUniverse.getInstance().getDataSource().removeTown(town);
+					});
+					ConfirmationHandler.sendConfirmation(sender, confirmation);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -1144,8 +1181,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					ConfirmationHandler.addConfirmation(ConfirmationType.NATION_DELETE, nation); // It takes the nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+					Confirmation confirmation = new Confirmation(() -> {
+						TownyUniverse.getInstance().getDataSource().removeNation(nation);
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+					});
+					ConfirmationHandler.sendConfirmation(sender, confirmation); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1460,24 +1500,68 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_too_many_npc"));
 		} while (true);
 	}
+	
+	public void reloadLangs() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		try {
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+			return;
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_lang"));
+	}
+	
+	public void reloadPerms() {
+		String rootFolder = TownyUniverse.getInstance().getRootFolder();
+		TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_perms"));
+	}
 
-	public void reloadTowny(Boolean reset) {
+	/**
+	 * Reloads only the config
+	 * 
+	 * @param reset Whether or not to reset the config.
+	 */
+	public void reloadConfig(boolean reset) {
 
 		if (reset) {
 			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
+			TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reset_config"));
 		}
+		
+		try {
+			String rootFolder = TownyUniverse.getInstance().getRootFolder();
+			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+		} catch (IOException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_reload_error"));
+			e.printStackTrace();
+			return;
+		}
+		
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_config"));
+	}
+
+	/**
+	 * Reloads both the database and the config. Used with a database reload command.
+	 *
+	 */
+	public void reloadDatabase() {
+		
 		if (plugin.load()) {
-			
+
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
-			
+
 			// Update permissions for all online players
 			TownyPerms.updateOnlinePerms();
-			
+
 		}
 
-		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded"));
-		// TownyMessaging.sendMsg(TownySettings.getLangString("msg_reloaded"));
+		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_db"));
 	}
 
 	/**
@@ -1495,7 +1579,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
 			return;
 		}
-		
 		String days = "";
 		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
 			days += "townless";
@@ -1510,25 +1593,58 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (!isConsole) {
 
-			Resident resident = null;
-			try {
-				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage());
-			}
-			
-			if (resident != null) {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
 				try {
-					ConfirmationHandler.addConfirmation(resident, ConfirmationType.PURGE, days); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-
+					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 			}
+
+			final String finalDays = days;
+
+			Runnable purgeHandler = () -> {
+				Player player = (Player) sender;
+				if (player == null) {
+					try {
+						throw new TownyException("Player could not be found!");
+					} catch (TownyException e) {
+						e.printStackTrace();
+					}
+				}
+
+				int numDays;
+				boolean townless = false;
+				if (finalDays.startsWith("townless")) {
+					townless = true;
+					numDays = Integer.parseInt(finalDays.substring(8));
+				} else {
+					numDays = Integer.parseInt(finalDays);
+				}
+
+				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), townless).start();
+			};
+			
+			if (sender != null) {
+				Confirmation confirmation = new Confirmation(purgeHandler);
+				ConfirmationHandler.sendConfirmation(sender, confirmation);
+			}
 		} else { // isConsole
-			ConfirmationHandler.addConfirmation(ConfirmationType.PURGE, days);
-			TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+			final String finalDays = days;
+			Confirmation confirmation = new Confirmation(() -> {
+				int numDays;
+				boolean townless = false;
+				if (finalDays.startsWith("townless")) {
+					townless = true;
+					numDays = Integer.parseInt(finalDays.substring(8));
+				} else {
+					numDays = Integer.parseInt(finalDays);
+				}
+
+				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
+			});
+			
+			ConfirmationHandler.sendConfirmation(sender, confirmation);
 		}
 	}
 
@@ -1909,6 +2025,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		return true;
+	}
+	
+	private void showReloadHelp() {
+		sender.sendMessage(ChatTools.formatTitle("/ta reload"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 	}
 
 }

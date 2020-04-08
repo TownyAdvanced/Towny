@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
@@ -116,9 +117,11 @@ public class TownyWorldListener implements Listener {
 		// to place them.
 		Coord coord = Coord.parseCoord(event.getLocation());
 		for (BlockState blockState : event.getBlocks()) {
-			Coord blockCoord = Coord.parseCoord(blockState.getLocation());
+			Location blockLocation = blockState.getLocation();
+			Coord blockCoord = Coord.parseCoord(blockLocation);
+
 			// Wilderness so continue.
-			if (TownyAPI.getInstance().isWilderness(blockState.getLocation())) {
+			if (TownyAPI.getInstance().isWilderness(blockLocation)) {
 				continue;
 			}
 
@@ -127,14 +130,15 @@ public class TownyWorldListener implements Listener {
 				continue;
 			}
 			
-			townBlock = TownyAPI.getInstance().getTownBlock(event.getLocation());
+			townBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
+
 			// Resident Owned Location
 			if (townBlock.hasResident()) {
 				try {
 					resident = townBlock.getResident();
 				} catch (NotRegisteredException e) {
 				}
-				otherTownBlock = TownyAPI.getInstance().getTownBlock(blockState.getLocation());
+				otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
 				try {
 					// if residents don't match.
 					if (otherTownBlock.hasResident() && otherTownBlock.getResident() != resident) {
@@ -157,7 +161,7 @@ public class TownyWorldListener implements Listener {
 				} catch (NotRegisteredException e) {
 				}
 				try {
-					otherTownBlock = TownyAPI.getInstance().getTownBlock(blockState.getLocation());
+					otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
 					otherTown = otherTownBlock.getTown();
 				} catch (NotRegisteredException e) {
 				}

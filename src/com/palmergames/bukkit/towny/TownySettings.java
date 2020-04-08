@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
@@ -1114,11 +1115,7 @@ public class TownySettings {
 		} else
 			n += town.getNumResidents() * ratio;
 
-		if (town.hasNation())
-			try {
-				n += (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-			} catch (NotRegisteredException e) {
-			}
+		n += getNationBonusBlocks(town);
 
 		return n;
 	}
@@ -1142,8 +1139,10 @@ public class TownySettings {
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-
-		return (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
+		return calculationEvent.getBonusBlocks();
 	}
 
 	public static int getNationBonusBlocks(Town town) {
@@ -1662,21 +1661,27 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_ENABLED);
 	}
 
-	public static double getMaxTax() {
+	public static double getMaxPlotTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_PLOT_TAX);
+	}
 
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
+	public static double getMaxTownTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TOWN_TAXES_MAX);
+	}
+
+	public static double getMaxNationTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_NATION_TAXES_MAX);
 	}
 	
 	public static double getMaxPlotPrice() {
 		
 		return getDouble(ConfigNodes.GTOWN_MAX_PLOT_PRICE_COST);
 	}
-
-	public static double getMaxTaxPercent() {
-
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX_PERCENT);
+	
+	public static double getMaxTownTaxPercent() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT);
 	}
-
+	
 	public static boolean isBackingUpDaily() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
@@ -2596,6 +2601,11 @@ public class TownySettings {
 	public static int getTeleportWarmupTime() {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
+	}
+	
+	public static boolean isMovementCancellingSpawnWarmup() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
 	}
 	
 	public static int getSpawnCooldownTime() {

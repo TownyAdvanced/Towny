@@ -8,8 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.confirmations.TownSpawnConfirmation;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
-import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -2604,27 +2603,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
-				Bukkit.getPluginManager().callEvent(townSpawnEvent);
-
-				if (townSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
-					return;
-				}
-
 			} else {
 				// split.length > 1
 				town = townyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
-
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), town.getSpawn());
-				Bukkit.getPluginManager().callEvent(townSpawnEvent);
-				
-				if (townSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
-					return;
-				}
-
 			}
 			
 			if (town.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations() && town.isPublic()) {
@@ -2645,18 +2627,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public void townDelete(Player player, String[] split) {
 
-		Town town = null;
+		final Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-
+				town = resident.getTown();
+				Confirmation confirmation = new Confirmation(() -> {
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				});
+				ConfirmationHandler.sendConfirmation(player, confirmation);
+				
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
 			}
 		} else {
 			try {

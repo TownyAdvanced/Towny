@@ -381,6 +381,10 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.movement_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
 			"global_town_settings.spawn_cooldown_time",
 			"30",
@@ -1339,14 +1343,22 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
-	ECO_DAILY_TAXES_MAX_TAX(
-			"economy.daily_taxes.max_tax_amount",
+	ECO_DAILY_TAXES_MAX_PLOT_TAX(
+			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed when using flat taxes"),
-	ECO_DAILY_TAXES_MAX_TAX_PERCENT(
-			"economy.daily_taxes.max_tax_percent",
+			"# Maximum tax amount allowed for townblocks sold to players."),
+	ECO_DAILY_TOWN_TAXES_MAX(
+			"economy.daily_taxes.max_town_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for towns when using flat taxes."),
+	ECO_DAILY_NATION_TAXES_MAX(
+			"economy.daily_taxes.max_nation_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for nations when using flat taxes."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
+			"economy.daily_taxes.max_town_tax_percent",
 			"25",
-			"# maximum tax percentage allowed when taxing by percentages"),
+			"# Maximum tax percentage allowed when taxing by percentages for towns."),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",
