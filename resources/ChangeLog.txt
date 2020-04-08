@@ -4406,3 +4406,5 @@ v0.92.0.11:
   - Bump language files to 0.79.
   - Fix some untranslatable strings in the PlayerCacheUtil.
   - Fix /plot set perm on|off not giving feedback and saving.
+  - Fix for non-empty saving queues not finishing on shutdown, courtesy of Siris with PR #3877.
+    - Credit to Silverwolfg11 for finding above issue.
