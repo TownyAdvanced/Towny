@@ -1593,31 +1593,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (!isConsole) {
 
-			Resident resident = null;
-			try {
-				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage());
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
+				try {
+					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
 			}
 
-			Resident finalResident = resident;
-			String finalDays = days;
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			
+			final String finalDays = days;
+
 			Runnable purgeHandler = () -> {
-				Player player = TownyAPI.getInstance().getPlayer(finalResident);
+				Player player = (Player) sender;
 				if (player == null) {
 					try {
 						throw new TownyException("Player could not be found!");
 					} catch (TownyException e) {
 						e.printStackTrace();
-					}
-				}
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
-					try {
-						throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
 				}
 
@@ -1633,8 +1625,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), townless).start();
 			};
 			
-			if (resident != null) {
-				
+			if (sender != null) {
 				Confirmation confirmation = new Confirmation(purgeHandler);
 				ConfirmationHandler.sendConfirmation(sender, confirmation);
 			}
