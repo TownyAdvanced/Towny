@@ -136,18 +136,21 @@ public class TownClaim extends Thread {
 			int townSize = town.getTownBlocks().size();
 			
 			// Send confirmation message,
-			Confirmation confirmation = new Confirmation(() -> TownClaim.townUnclaimAll(plugin, town));
-			ConfirmationHandler.sendConfirmation(player, confirmation);
-			TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-			
-			if (TownySettings.getClaimRefundPrice() > 0.0) {
-				try {
-					town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
-				} catch (EconomyException e) {
-					e.printStackTrace();
+			Confirmation confirmation = new Confirmation(() -> { 
+				TownClaim.townUnclaimAll(plugin, town);
+				if (TownySettings.getClaimRefundPrice() > 0.0) {
+					try {
+						town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
+					} catch (EconomyException e) {
+						e.printStackTrace();
+					}
 				}
-			}
+			});
+			ConfirmationHandler.sendConfirmation(player, confirmation);
+//			TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+			
+
 		}
 
 		if (!towns.isEmpty()) {
