@@ -230,7 +230,7 @@ public class Towny extends JavaPlugin {
 		
 		try {
 			// Shut down our saving task.
-			townyUniverse.getDataSource().cancelTask();
+			townyUniverse.getDataSource().finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
 		}
