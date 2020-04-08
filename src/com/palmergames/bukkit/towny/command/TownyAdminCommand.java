@@ -1646,15 +1646,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else { // isConsole
 			Confirmation confirmation = new Confirmation(sender);
 
-			final AtomicReference<String>[] finalDays = new AtomicReference[]{new AtomicReference<>(days[0])};
+			final String finalDays = days[0];
 			confirmation.setHandler(() -> {
 				int numDays;
 				boolean townless = false;
-				if (finalDays[0].get().startsWith("townless")) {
+				if (finalDays.startsWith("townless")) {
 					townless = true;
-					numDays = Integer.parseInt(finalDays[0].get().substring(8));
+					numDays = Integer.parseInt(finalDays.substring(8));
 				} else {
-					numDays = Integer.parseInt(finalDays[0].get());
+					numDays = Integer.parseInt(finalDays);
 				}
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
