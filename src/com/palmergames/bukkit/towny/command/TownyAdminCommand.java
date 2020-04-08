@@ -915,8 +915,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					Confirmation confirmation = new Confirmation(new Resident(""));
-					confirmation.setHandler(new TownCommand.TownDeleteHandler(town));
+					Confirmation confirmation = new Confirmation(sender, () -> {
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+						TownyUniverse.getInstance().getDataSource().removeTown(town);
+					});
 					ConfirmationHandler.registerConfirmation(confirmation);
 					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
 				}
@@ -1181,8 +1183,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					Confirmation confirmation = new Confirmation(new Resident(""));
-					confirmation.setHandler(new NationCommand.NationDeleteHandler(nation));
+					Confirmation confirmation = new Confirmation(sender, () -> {
+						TownyUniverse.getInstance().getDataSource().removeNation(nation);
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+					});
 					ConfirmationHandler.registerConfirmation(confirmation); // It takes the nation, an admin deleting another town has no confirmation.
 					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
 				}
@@ -1634,13 +1638,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			if (resident != null) {
 				
-				Confirmation confirmation = new Confirmation(resident);
+				Confirmation confirmation = new Confirmation(player);
 				confirmation.setHandler(purgeHandler);
 				ConfirmationHandler.registerConfirmation(confirmation);
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			}
 		} else { // isConsole
-			Confirmation confirmation = new Confirmation(new Resident(""));
+			Confirmation confirmation = new Confirmation(sender);
 
 			final AtomicReference<String>[] finalDays = new AtomicReference[]{new AtomicReference<>(days[0])};
 			confirmation.setHandler(() -> {

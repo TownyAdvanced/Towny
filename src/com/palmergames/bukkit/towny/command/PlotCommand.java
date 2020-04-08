@@ -9,8 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
-import com.palmergames.bukkit.towny.confirmations.GroupConfirmation;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -275,7 +273,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									PlotGroup group = block.getPlotObjectGroup();
 
 									// Add the confirmation for claiming a plot group.
-									Confirmation confirmation = new Confirmation(resident);
+									Confirmation confirmation = new Confirmation(player);
 									
 									// Set up the confirmation handler.
 									confirmation.setHandler(() -> {
@@ -416,7 +414,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 								
 								// Create confirmation.
-								Confirmation confirmation = new Confirmation(resident);
+								Confirmation confirmation = new Confirmation(player);
 								List<WorldCoord> finalSelection = selection;
 								
 								// Setup handler.
@@ -1484,7 +1482,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 			
-			Confirmation confirmation = new Confirmation(resident);
+			Confirmation confirmation = new Confirmation(player);
 			confirmation.setHandler(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
@@ -1526,7 +1524,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Mayor/Assistant of the town.
 				
 				// Create confirmation.
-				Confirmation confirmation = new Confirmation(resident);
+				Confirmation confirmation = new Confirmation(player);
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 				
 				confirmation.setHandler(() -> {

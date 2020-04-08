@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
@@ -2600,21 +2599,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 	}
-	
-	public static class TownDeleteHandler implements Runnable {
-		
-		Town town;
-		
-		public TownDeleteHandler(Town town) {
-			this.town = town;
-		}
-
-		@Override
-		public void run() {
-			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-			TownyUniverse.getInstance().getDataSource().removeTown(town);
-		}
-	}
 
 	public void townDelete(Player player, String[] split) {
 
@@ -2624,14 +2608,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				Confirmation confirmation = new Confirmation(resident);
 				town = resident.getTown();
-				
-				confirmation.setHandler(() -> new TownDeleteHandler(town));
-				
+				Confirmation confirmation = new Confirmation(player, () -> {
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				});
 				ConfirmationHandler.registerConfirmation(confirmation);
 				
-				//ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
 			} catch (TownyException x) {

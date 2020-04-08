@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -1353,7 +1352,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
 			}
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
-			Confirmation confirmation = new Confirmation(king);
+			Confirmation confirmation = new Confirmation(player);
 			Nation finalRemainingNation = remainingNation;
 			confirmation.setHandler(() -> {
 				try {
@@ -1412,21 +1411,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().saveTown(town);
 		}
 	}
-	
-	public static class NationDeleteHandler implements Runnable {
-		
-		Nation nation;
-		
-		public NationDeleteHandler(Nation nation) {
-			this.nation = nation;
-		}
-
-		@Override
-		public void run() {
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-		}
-	}
 
 	public void nationDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -1434,8 +1418,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Nation nation = resident.getTown().getNation();
-				Confirmation confirmation = new Confirmation(resident);
-				confirmation.setHandler(new NationDeleteHandler(nation));
+				Confirmation confirmation = new Confirmation(player, () -> {
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+				});
 				ConfirmationHandler.registerConfirmation(confirmation);
 				
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
