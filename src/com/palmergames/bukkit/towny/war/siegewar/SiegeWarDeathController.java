@@ -80,21 +80,32 @@ public class SiegeWarDeathController {
 				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 			) {
 				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
-					if (siegeZone.getDefendingTown().hasNation()
-						&& siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-						&& (deadResidentTown.getNation() == siegeZone.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
-					) {
-						boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
-							false,
-							deadPlayer,
-							deadResident,
-							siegeZone,
-							TownySettings.getLangString("msg_siege_war_defender_death"));
 
-						if(pointsAwarded)
-							keepInventory(playerDeathEvent);
+					try {
+						if (siegeZone.getDefendingTown().hasNation()
+							&& siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+							&& (deadResidentTown.getNation() == siegeZone.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
+						) {
+							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
+								false,
+								deadPlayer,
+								deadResident,
+								siegeZone,
+								TownySettings.getLangString("msg_siege_war_defender_death"));
 
-						return;
+							if (pointsAwarded)
+								keepInventory(playerDeathEvent);
+
+							return;
+						}
+
+					} catch (Exception e) {
+						try {
+							System.out.println("Problem reading siege zone for player death " + siegeZone.getName());
+						} catch (Exception e2) {
+							System.out.println("Problem reading siege zone for player death (could not read name");
+						}
+						e.printStackTrace();
 					}
 				}
 			}
@@ -104,24 +115,34 @@ public class SiegeWarDeathController {
 				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 			) {
 				for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
-					if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-						&& (deadResidentTown.getNation() == siegeZone.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getAttackingNation()))
-					) {
-						boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
-							true,
-							deadPlayer,
-							deadResident,
-							siegeZone,
-							TownySettings.getLangString("msg_siege_war_attacker_death"));
 
-						if(pointsAwarded)
-							keepInventory(playerDeathEvent);
+					try {
+						if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+							&& (deadResidentTown.getNation() == siegeZone.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siegeZone.getAttackingNation()))
+						) {
+							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
+								true,
+								deadPlayer,
+								deadResident,
+								siegeZone,
+								TownySettings.getLangString("msg_siege_war_attacker_death"));
 
-						return;
+							if(pointsAwarded)
+								keepInventory(playerDeathEvent);
+
+							return;
+						}
+					} catch (Exception e) {
+						try {
+							System.out.println("Problem reading siege zone for player death " + siegeZone.getName());
+						} catch (Exception e2) {
+							System.out.println("Problem reading siege zone for player death (could not read name");
+						}
+						e.printStackTrace();
 					}
 				}
 			}
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			System.out.println("Error evaluating siege player death");
 			e.printStackTrace();
 		}
