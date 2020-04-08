@@ -121,7 +121,7 @@ public class SiegeWarDeathController {
 					}
 				}
 			}
-		} catch (NotRegisteredException e) {
+		} catch (Throwable e) {
 			System.out.println("Error evaluating siege player death");
 			e.printStackTrace();
 		}
