@@ -273,22 +273,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									PlotGroup group = block.getPlotObjectGroup();
 
 									// Add the confirmation for claiming a plot group.
-									Confirmation confirmation = new Confirmation(player);
-									
-									// Set up the confirmation handler.
-									confirmation.setHandler(() -> {
+									Confirmation confirmation = new Confirmation(() -> {
 										ArrayList<WorldCoord> coords = new ArrayList<>();
-										
+
 										// Get worldcoords from plot group.
 										group.getTownBlocks().forEach((tb) -> coords.add(tb.getWorldCoord()));
 
 										// Execute the plot claim.
 										new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
 									});
-
+									
 									String title = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									confirmation.setTitle(title);
-									ConfirmationHandler.sendConfirmation(confirmation);
+									ConfirmationHandler.sendConfirmation(player, confirmation);
 									
 									return true;
 								}
@@ -419,16 +416,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								});
 								
 								// Create confirmation.
-								Confirmation confirmation = new Confirmation(player);
-								
-								// Setup handler.
-								confirmation.setHandler(() -> {
+								Confirmation confirmation = new Confirmation(() -> {
 									new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start();
 								});
 
 								String title = String.format(TownySettings.getLangString("msg_plot_group_unclaim_confirmation"), block.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 								confirmation.setTitle(title);
-								ConfirmationHandler.sendConfirmation(confirmation);
+								ConfirmationHandler.sendConfirmation(player, confirmation);
 								return true;
 
 							}
@@ -1486,15 +1480,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 			
-			Confirmation confirmation = new Confirmation(player);
-			confirmation.setHandler(() -> {
+			Confirmation confirmation = new Confirmation(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
 			});
 
 			String title = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 			confirmation.setTitle(title);
-			ConfirmationHandler.sendConfirmation(confirmation);
+			ConfirmationHandler.sendConfirmation(player, confirmation);
 			
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
@@ -1527,14 +1520,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Set plot level permissions (if the plot owner) or
 				// Mayor/Assistant of the town.
 				
-				// Create confirmation.
-				Confirmation confirmation = new Confirmation(player);
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 				
-				confirmation.setHandler(() -> {
+				Runnable permHandler = () -> {
 					// Test the waters
 					TownBlock tb = plotGroup.getTownBlocks().get(0);
-					
+
 					// setTownBlockPermissions returns a towny permission change object
 					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, tb, StringMgmt.remArgs(split, 2));
 					// If the perm change object is not null
@@ -1562,11 +1553,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((!perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
-				});
+				};
 
+				// Create confirmation.
+				Confirmation confirmation = new Confirmation(permHandler);
+				
 				String title = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(confirmation);
+				ConfirmationHandler.sendConfirmation(player, confirmation);
 				
 				return true;
 			}

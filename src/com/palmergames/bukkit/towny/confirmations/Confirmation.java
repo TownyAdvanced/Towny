@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.confirmations;
 
-import org.bukkit.command.CommandSender;
-
 /**
  * An object which stores information about confirmations.
  * 
@@ -9,37 +7,27 @@ import org.bukkit.command.CommandSender;
  */
 public class Confirmation {
 	
-	private CommandSender sender;
 	private Runnable handler;
 	private String title;
-
+	
 	/**
 	 * Creates a new confirmation object.
-	 * 
-	 * @param sender The sender the confirmation belongs to.
-	 */
-	public Confirmation(CommandSender sender) {
-		this.sender = sender;
-	}
-
-	/**
-	 * Creates a new confirmation object.
-	 * 
-	 * @param sender The sender the confirmation belongs to.
+	 *
 	 * @param handler The handler to run after accepting the command.
 	 */
-	public Confirmation(CommandSender sender, Runnable handler) {
-		this(sender);
+	public Confirmation(Runnable handler) {
 		this.setHandler(handler);
 	}
 
 	/**
-	 * Gets the {@link CommandSender} whom the confirmation is for.
-	 * 
-	 * @return The confirmation's respective sender.
+	 * Creates a new confirmation object.
+	 *
+	 * @param handler The handler to run after accepting the command.
+	 * @param title The title of the confirmation message.   
 	 */
-	public CommandSender getSender() {
-		return sender;
+	public Confirmation(Runnable handler, String title) {
+		this(handler);
+		this.title = title;
 	}
 
 	/**
@@ -61,10 +49,20 @@ public class Confirmation {
 		this.handler = handler;
 	}
 
+	/**
+	 * Gets the title of the confirmation message.
+	 * 
+	 * @return The title of the confirmation message.
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * Sets the title of the confirmation message.
+	 * 
+	 * @param title The title to change to.
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}

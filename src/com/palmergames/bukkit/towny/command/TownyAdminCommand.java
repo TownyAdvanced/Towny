@@ -914,11 +914,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					Confirmation confirmation = new Confirmation(sender, () -> {
+					Confirmation confirmation = new Confirmation(() -> {
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
 					});
-					ConfirmationHandler.sendConfirmation(confirmation);
+					ConfirmationHandler.sendConfirmation(sender, confirmation);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -1181,11 +1181,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					Confirmation confirmation = new Confirmation(sender, () -> {
+					Confirmation confirmation = new Confirmation(() -> {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 					});
-					ConfirmationHandler.sendConfirmation(confirmation); // It takes the nation, an admin deleting another town has no confirmation.
+					ConfirmationHandler.sendConfirmation(sender, confirmation); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1635,15 +1635,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			if (resident != null) {
 				
-				Confirmation confirmation = new Confirmation(player);
-				confirmation.setHandler(purgeHandler);
-				ConfirmationHandler.sendConfirmation(confirmation);
+				Confirmation confirmation = new Confirmation(purgeHandler);
+				ConfirmationHandler.sendConfirmation(sender, confirmation);
 			}
 		} else { // isConsole
-			Confirmation confirmation = new Confirmation(sender);
-
 			final String finalDays = days;
-			confirmation.setHandler(() -> {
+			Confirmation confirmation = new Confirmation(() -> {
 				int numDays;
 				boolean townless = false;
 				if (finalDays.startsWith("townless")) {
@@ -1655,7 +1652,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
 			});
-			ConfirmationHandler.sendConfirmation(confirmation);
+			
+			ConfirmationHandler.sendConfirmation(sender, confirmation);
 		}
 	}
 

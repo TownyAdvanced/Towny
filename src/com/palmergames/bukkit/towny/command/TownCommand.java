@@ -2609,11 +2609,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
-				Confirmation confirmation = new Confirmation(player, () -> {
+				Confirmation confirmation = new Confirmation(() -> {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
 				});
-				ConfirmationHandler.sendConfirmation(confirmation);
+				ConfirmationHandler.sendConfirmation(player, confirmation);
 				
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());

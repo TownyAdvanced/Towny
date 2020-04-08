@@ -40,21 +40,20 @@ public class ConfirmationHandler {
 	 * 
 	 * @param confirmation The confirmation to add.
 	 */
-	public static void sendConfirmation(Confirmation confirmation) {
+	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {
 		// Add the confirmation to the map.
-		confirmations.put(confirmation.getSender(), confirmation);
+		confirmations.put(sender, confirmation);
 		
 		// Send the confirmation message.
-		CommandSender sender = confirmation.getSender();
 		String title = confirmation.getTitle();
 		TownyMessaging.sendConfirmationMessage(sender, title, null, null, null);
 		
 		// Remove the confirmation after 20 seconds.
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			// Show cancel messages only if the confirmation exists.
-			if (hasConfirmation(confirmation.getSender())) {
-				confirmations.remove(confirmation.getSender());
-				TownyMessaging.sendErrorMsg(confirmation.getSender(), "Confirmation Timed out.");
+			if (hasConfirmation(sender)) {
+				confirmations.remove(sender);
+				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
 			}
 		}, 20L * 20);
 	}
