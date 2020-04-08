@@ -63,7 +63,14 @@ public class TownyCustomListener implements Listener {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-				String msg = chunkNotifier.getNotificationString(resident);
+				String msg = null;
+				try {
+					msg = chunkNotifier.getNotificationString(resident);
+				} catch (NullPointerException e) {
+					System.out.println("Chunk Notifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
+					System.out.println("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
+					e.printStackTrace();
+				}
 				
 				int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
 				if (seconds > 3) { // Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
@@ -76,9 +83,10 @@ public class TownyCustomListener implements Listener {
 					if (msg != null)
 						if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
 
+							final String message = msg;
 							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
 							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-								player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+								player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
 								remainingSeconds.getAndDecrement();
 								
 								if (remainingSeconds.get() == 0) {
