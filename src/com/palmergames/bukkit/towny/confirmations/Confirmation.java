@@ -9,6 +9,7 @@ public class Confirmation {
 	
 	private Runnable handler;
 	private String title;
+	private int duration = 20;
 	
 	/**
 	 * Creates a new confirmation object.
@@ -65,5 +66,23 @@ public class Confirmation {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * Gets the duration (in seconds) of this confirmation.
+	 * 
+	 * @return The duration in seconds.
+	 */
+	public int getDuration() {
+		return duration;
+	}
+
+	/**
+	 * Sets the duration (in seconds) of this confirmation.
+	 *
+	 * @param duration Duration in seconds.
+	 */
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 }

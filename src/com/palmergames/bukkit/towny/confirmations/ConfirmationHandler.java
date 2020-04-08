@@ -48,6 +48,8 @@ public class ConfirmationHandler {
 		String title = confirmation.getTitle();
 		TownyMessaging.sendConfirmationMessage(sender, title, null, null, null);
 		
+		int duration = confirmation.getDuration();
+		
 		// Remove the confirmation after 20 seconds.
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			// Show cancel messages only if the confirmation exists.
@@ -55,7 +57,7 @@ public class ConfirmationHandler {
 				confirmations.remove(sender);
 				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
 			}
-		}, 20L * 20);
+		}, 20L * duration);
 	}
 
 	/**
