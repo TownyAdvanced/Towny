@@ -1106,9 +1106,9 @@ msg_reset_config: '&2Config has been reset'
 msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
 
 # Added in 0.79
-msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
-msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
 msg_cache_block_error_plot_friends: 'friends'
 msg_cache_block_error_plot_allies: 'allies'
 msg_cache_block_error_plot_outsiders: 'outsiders'
 msg_cache_block_error_plot_town_members: 'town members'
+msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
+msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
