@@ -25,12 +25,14 @@ public class Confirmation {
 	 *
 	 * @param handler The handler to run after accepting the command.
 	 * @param title The title of the confirmation message.   
+	 *          
 	 */
-	public Confirmation(Runnable handler, String title) {
+	public Confirmation(Runnable handler, String title, int duration) {
 		this(handler);
 		this.title = title;
+		this.duration = duration;
 	}
-
+	
 	/**
 	 * Gets the handler that contains the code to run on
 	 * completion.
