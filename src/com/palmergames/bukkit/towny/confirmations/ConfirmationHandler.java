@@ -40,9 +40,14 @@ public class ConfirmationHandler {
 	 * 
 	 * @param confirmation The confirmation to add.
 	 */
-	public static void registerConfirmation(Confirmation confirmation) {
+	public static void sendConfirmation(Confirmation confirmation) {
 		// Add the confirmation to the map.
 		confirmations.put(confirmation.getSender(), confirmation);
+		
+		// Send the confirmation message.
+		CommandSender sender = confirmation.getSender();
+		String title = confirmation.getTitle();
+		TownyMessaging.sendConfirmationMessage(sender, title, null, null, null);
 		
 		// Remove the confirmation after 20 seconds.
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {

@@ -62,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -919,8 +918,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
 					});
-					ConfirmationHandler.registerConfirmation(confirmation);
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
+					ConfirmationHandler.sendConfirmation(confirmation);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -1187,8 +1185,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 					});
-					ConfirmationHandler.registerConfirmation(confirmation); // It takes the nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+					ConfirmationHandler.sendConfirmation(confirmation); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1640,8 +1637,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				Confirmation confirmation = new Confirmation(player);
 				confirmation.setHandler(purgeHandler);
-				ConfirmationHandler.registerConfirmation(confirmation);
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+				ConfirmationHandler.sendConfirmation(confirmation);
 			}
 		} else { // isConsole
 			Confirmation confirmation = new Confirmation(sender);
@@ -1659,7 +1655,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
 			});
-			TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+			ConfirmationHandler.sendConfirmation(confirmation);
 		}
 	}
 

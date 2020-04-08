@@ -11,6 +11,7 @@ public class Confirmation {
 	
 	private CommandSender sender;
 	private Runnable handler;
+	private String title;
 
 	/**
 	 * Creates a new confirmation object.
@@ -58,5 +59,13 @@ public class Confirmation {
 	 */
 	public void setHandler(Runnable handler) {
 		this.handler = handler;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

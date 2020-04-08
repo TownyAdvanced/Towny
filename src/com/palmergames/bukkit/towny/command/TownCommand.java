@@ -2613,10 +2613,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
 				});
-				ConfirmationHandler.registerConfirmation(confirmation);
+				ConfirmationHandler.sendConfirmation(confirmation);
 				
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}

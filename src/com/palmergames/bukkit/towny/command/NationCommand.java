@@ -1353,7 +1353,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
 			Confirmation confirmation = new Confirmation(player);
-
 			confirmation.setHandler(() -> {
 				try {
 					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
@@ -1363,8 +1362,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			});
 			
-			ConfirmationHandler.registerConfirmation(confirmation);
-			TownyMessaging.sendConfirmationMessage(BukkitTools.getPlayer(king.getName()), null, null, null, null);			
+			// Send confirmation.
+			ConfirmationHandler.sendConfirmation(confirmation);
 		}
 	}
 
@@ -1420,9 +1419,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyUniverse.getInstance().getDataSource().removeNation(nation);
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 				});
-				ConfirmationHandler.registerConfirmation(confirmation);
-				
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+				ConfirmationHandler.sendConfirmation(confirmation);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;

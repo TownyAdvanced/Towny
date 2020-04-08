@@ -141,7 +141,7 @@ public class TownClaim extends Thread {
 				// Unclaim all land.
 				TownClaim.townUnclaimAll(plugin, town);
 			});
-			ConfirmationHandler.registerConfirmation(confirmation);
+			ConfirmationHandler.sendConfirmation(confirmation);
 			TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			
 			if (TownySettings.getClaimRefundPrice() > 0.0) {
