@@ -191,6 +191,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
 					break;
 				case "claim":
+				case "unclaim":
 				case "notforsale":
 				case "nfs":
 					if (args.length == 2)

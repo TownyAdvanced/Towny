@@ -172,11 +172,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"rect"
 	);
 	
-	private static final List<String> townUnclaimTabCompletes = Arrays.asList(
+	public static final List<String> townUnclaimTabCompletes = Arrays.asList(
 		"circle",
 		"rect",
-		"all",
-		"outpost"
+		"all"
 	);
 	
 	private static List<String> townInviteTabCompletes = Arrays.asList(
@@ -3344,7 +3343,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "", TownySettings.getLangString("mayor_help_6")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "[circle/rect] [radius]", TownySettings.getLangString("mayor_help_7")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "all", TownySettings.getLangString("mayor_help_8")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "outpost", TownySettings.getLangString("mayor_help_9")));
 		} else {
 			Resident resident;
 			Town town;

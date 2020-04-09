@@ -4432,3 +4432,6 @@ v0.92.0.11:
     - towny.command.plot.group.notforsale: true
   - Allow for other plugins to modify the TownPreClaim cancellation message.
     - Closes #3814.
+  - Remove /town unclaim outpost from /town unclaim ?
+  - Add /ta unclaim & /plot unclaim tab completes.
+    - Closes #3883.
