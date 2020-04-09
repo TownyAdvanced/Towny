@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
@@ -19,6 +20,7 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     private Town town;
     private Player player;
     private boolean isCancelled = false;
+    private String cancelMessage = TownySettings.getLangString("msg_claim_error");
 
     @Override
     public HandlerList getHandlers() {
@@ -71,4 +73,24 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     public Player getPlayer() {
     	return player;
     }
+    
+    /** 
+     * Returns the cancelMessage for this event.
+     * 
+     * @return the cancelMessage.
+     */
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
+
+	/**
+	 * Message should requires two variables using %s placeholders, akin to the default message. 
+	 * 
+	 * Default message: &nbsp;&quot;&amp;cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.&quot;
+	 * 
+	 * @param cancelMessage the message which will be shown for cancelled events.
+	 */
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
+	}
 }

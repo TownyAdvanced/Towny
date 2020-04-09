@@ -4430,3 +4430,5 @@ v0.92.0.11:
     - towny.command.plot.group.toggle: true
     - towny.command.plot.group.forsale: true
     - towny.command.plot.group.notforsale: true
+  - Allow for other plugins to modify the TownPreClaim cancellation message.
+    - Closes #3814.
