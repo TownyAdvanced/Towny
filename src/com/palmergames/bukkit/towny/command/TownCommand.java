@@ -2610,9 +2610,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			
 			if (town.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations() && town.isPublic()) {
-				TownyMessaging.sendConfirmationMessage(player, String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())), null, null, null);
-				TownSpawnConfirmation townSpawnConfirmation = new TownSpawnConfirmation(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNY_SPAWN, townSpawnConfirmation);
+				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+				Confirmation confirmation = new Confirmation(() -> {
+					try {
+						SpawnUtil.sendToTownySpawn(player, split, town,
+							notAffordMSG, outpost, SpawnType.TOWN);
+					} catch (TownyException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+					}
+				});
+				
+				confirmation.setTitle(title);
+				ConfirmationHandler.sendConfirmation(player, confirmation);
 				return;
 			}
 			
