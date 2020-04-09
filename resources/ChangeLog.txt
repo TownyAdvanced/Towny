@@ -4435,3 +4435,5 @@ v0.92.0.11:
   - Remove /town unclaim outpost from /town unclaim ?
   - Add /ta unclaim & /plot unclaim tab completes.
     - Closes #3883.
+  - Add ignoreCancelled=true to onPlayerTakeLecternBookEvent to prevent Towny overriding plugins who've already stopped taking a book.
+    - Closes #3894.
