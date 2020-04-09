@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.towny.war.siegewar.locations.HeldItemsCombination;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -63,7 +64,9 @@ public class TownySettings {
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
-	
+	private static final List<HeldItemsCombination> tacticalVisibilityItems = new ArrayList<>();
+
+
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
@@ -2971,7 +2974,7 @@ public class TownySettings {
 		Map<String,String> nationColorsMap = new HashMap<>();
 		String[] keyValuePair;
 		for(String nationColor: nationColorsList) {
-			keyValuePair = nationColor.split(":");
+			keyValuePair = nationColor.trim().split(":");
 			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
 		}
 		return nationColorsMap;
@@ -3198,6 +3201,53 @@ public class TownySettings {
 
 	public static boolean getWarSiegeTacticalVisibilityEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TACTICAL_VISIBILITY_ENABLED);
+	}
+
+	public static List<HeldItemsCombination> getWarSiegeTacticalVisibilityItems() {
+		try {
+			if (tacticalVisibilityItems.isEmpty()) {
+				String itemsListAsString = getString(ConfigNodes.WAR_SIEGE_TACTICAL_VISIBILITY_ITEMS);
+				String[] itemsListAsArray = itemsListAsString.split(",");
+				String[] itemPair;
+				boolean ignoreOffHand;
+				boolean ignoreMainHand;
+				Material offHandItem;
+				Material mainHandItem;
+
+				for (String itemAsString : itemsListAsArray) {
+					itemPair = itemAsString.trim().split("\\|");
+
+					if(itemPair[0].equalsIgnoreCase("any")) {
+						ignoreOffHand = true;
+						offHandItem = null;
+					} else if (itemPair[0].equalsIgnoreCase("empty")){
+						ignoreOffHand = false;
+						offHandItem = Material.AIR;
+					} else{
+						ignoreOffHand = false;
+						offHandItem = Material.matchMaterial(itemPair[0]);
+					}
+
+					if(itemPair[1].equalsIgnoreCase("any")) {
+						ignoreMainHand = true;
+						mainHandItem = null;
+					} else if (itemPair[1].equalsIgnoreCase("empty")){
+						ignoreMainHand = false;
+						mainHandItem = Material.AIR;
+					} else{
+						ignoreMainHand = false;
+						mainHandItem = Material.matchMaterial(itemPair[1]);
+					}
+
+					tacticalVisibilityItems.add(
+						new HeldItemsCombination(offHandItem,mainHandItem,ignoreOffHand,ignoreMainHand));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Problem reading tactical visibility items list. The list is config.yml may be misconfigured.");
+			e.printStackTrace();
+		}
+		return tacticalVisibilityItems;
 	}
 
 	public static int getWarSiegeBannerControlSessionDurationMinutes() {
