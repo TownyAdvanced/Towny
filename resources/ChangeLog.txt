@@ -4405,5 +4405,3 @@ v0.92.0.11:
 0.96.1.3:
   - Bump language files to 0.79.
   - Fix some untranslatable strings in the PlayerCacheUtil.
-  - Allow for other plugins to modify the TownPreClaim cancellation message.
-    - Closes #3814.

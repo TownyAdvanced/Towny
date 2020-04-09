@@ -3303,19 +3303,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				//Check if other plugins have a problem with claiming this area
 				int blockedClaims = 0;
 
-				String cancelMessage = "";
 				for(WorldCoord coord : selection){
 					//Use the user's current world
 					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
-					if(preClaimEvent.isCancelled()) {
+					if(preClaimEvent.isCancelled())
 						blockedClaims++;
-						cancelMessage = preClaimEvent.getCancelMessage();
-					}
 				}
 
 				if(blockedClaims > 0){
-					throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
 				}
 				
 				try {					
