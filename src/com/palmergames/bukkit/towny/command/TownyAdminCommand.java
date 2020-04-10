@@ -390,6 +390,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return getTownyStartingWith(args[3], "t");
 				}
 				break;
+			case "unclaim":
+				if (args.length == 2)
+					return NameUtil.filterByStart(TownCommand.townUnclaimTabCompletes, args[1]);
 			default:
 				if (args.length == 1)
 					return NameUtil.filterByStart(adminTabCompletes, args[0]);

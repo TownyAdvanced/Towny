@@ -2947,5 +2947,16 @@ public class TownySettings {
 	public static boolean isNotificationsTownNamesVerbose() {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
 	}
+
+	public static Map<String,String> getNationColorsMap() {
+		List<String> nationColorsList = getStrArr(ConfigNodes.GNATION_SETTINGS_ALLOWED_NATION_COLORS);
+		Map<String,String> nationColorsMap = new HashMap<>();
+		String[] keyValuePair;
+		for(String nationColor: nationColorsList) {
+			keyValuePair = nationColor.split(":");
+			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
+		}
+		return nationColorsMap;
+	}
 }
 

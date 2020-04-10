@@ -1040,7 +1040,7 @@ public class TownyPlayerListener implements Listener {
 	 * Any player that can break the lectern will be able to get the book anyways.
 	 * @param event - PlayerTakeLecternBookEvent
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
 		
 		if (plugin.isError()) {

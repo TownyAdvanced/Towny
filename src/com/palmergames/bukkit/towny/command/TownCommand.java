@@ -173,11 +173,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"rect"
 	);
 	
-	private static final List<String> townUnclaimTabCompletes = Arrays.asList(
+	public static final List<String> townUnclaimTabCompletes = Arrays.asList(
 		"circle",
 		"rect",
-		"all",
-		"outpost"
+		"all"
 	);
 	
 	private static List<String> townInviteTabCompletes = Arrays.asList(
@@ -3337,16 +3336,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				//Check if other plugins have a problem with claiming this area
 				int blockedClaims = 0;
 
+				String cancelMessage = "";
 				for(WorldCoord coord : selection){
 					//Use the user's current world
 					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
-					if(preClaimEvent.isCancelled())
+					if(preClaimEvent.isCancelled()) {
 						blockedClaims++;
+						cancelMessage = preClaimEvent.getCancelMessage();
+					}
 				}
 
 				if(blockedClaims > 0){
-					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
+					throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
 				}
 				
 				try {					
@@ -3378,7 +3380,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "", TownySettings.getLangString("mayor_help_6")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "[circle/rect] [radius]", TownySettings.getLangString("mayor_help_7")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "all", TownySettings.getLangString("mayor_help_8")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "outpost", TownySettings.getLangString("mayor_help_9")));
 		} else {
 			Resident resident;
 			Town town;

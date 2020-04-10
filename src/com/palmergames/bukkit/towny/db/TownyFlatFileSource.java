@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -124,10 +125,22 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public void cancelTask() {
-
+	public void finishTasks() {
+		
+		// Cancel the repeating task as its not needed anymore.
 		task.cancel();
+		
+		// Make sure that *all* tasks are saved before shutting down.
+		while (!queryQueue.isEmpty()) {
+			FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
 
+			try {
+				FileMgmt.listToFile(query.list, query.path);
+			} catch (NullPointerException ex) {
+				if (query != null)
+					TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
+			}
+		}
 	}
 
 	@Override
@@ -1009,8 +1022,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						nation.setNationBoard("");
 					}
-				
-				
+
+				line = keys.get("mapColorHexCode");
+				if (line != null) {
+					try {
+						nation.setMapColorHexCode(line);
+					} catch (Exception e) {
+						nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+					}
+				} else {
+					nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+				}
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -1902,6 +1925,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("capital=" + nation.getCapital().getName());
 
 		list.add("nationBoard=" + nation.getNationBoard());
+
+		list.add("mapColorHexCode=" + nation.getMapColorHexCode());
 
 		if (nation.hasTag())
 			list.add("tag=" + nation.getTag());
