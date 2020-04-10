@@ -1624,6 +1624,10 @@ public class TownySettings {
 		}
 		return time;
 	}
+	
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
 

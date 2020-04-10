@@ -4452,3 +4452,7 @@ v0.92.0.11:
     - Do not set this value to an amount less than the global_town_settings.required_number_residents_create_nation.
     - This will not remove residents from nation-less towns that are already above the limit, they will not be able to invite more. 
     - Closes #3720.
+  - New Config Option: plugin.day_timer.delete_0_plot_towns
+    - Default: false
+    - Whether towns with no claimed townblocks should be deleted when the new day is run.
+    - Closes #3746.
