@@ -613,8 +613,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				boolean ignoreWarning = false;
 				
-				TownyMessaging.sendErrorMsg(Arrays.toString(split));
-				
 				if ((split.length > 1 && split[1].equals("-ignore")) || (split.length > 2 && split[2].equals("-ignore"))) {
 					ignoreWarning = true;
 				}
