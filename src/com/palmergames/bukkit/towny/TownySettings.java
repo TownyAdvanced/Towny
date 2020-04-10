@@ -2687,6 +2687,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
 	
+	public static int getMaxNumResidentsWithoutNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
+	}
+	
 	public static int getNumResidentsJoinNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);
 	}

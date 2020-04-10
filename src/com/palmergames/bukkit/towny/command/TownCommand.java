@@ -2709,6 +2709,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_resident_doesnt_meet_invite_cooldown"), newMember));
 					invited.remove(newMember);
+				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
+					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_unable_to_add_more_residents_without_nation"), TownySettings.getMaxNumResidentsWithoutNation()));
+					invited.remove(newMember);
 				} else {
 					town.addResidentCheck(newMember);
 					townInviteResident(name,town, newMember);
