@@ -1362,7 +1362,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			});
 			
 			// Send confirmation.
-			ConfirmationHandler.sendConfirmation(player, confirmation);
+			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(king.getName()), confirmation);
 		}
 	}
 
