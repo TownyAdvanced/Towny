@@ -111,7 +111,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"set",
 		"meta",
 		"deposit",
-		"withdraw"
+		"withdraw",
+		"outlaw"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -354,6 +355,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+						case "outlaw":
+							switch (args.length) {
+							case 4:
+								return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args[3]);
+							case 5:
+								switch (args[3].toLowerCase()) {
+									case "add":
+										return getTownyStartingWith(args[4], "r");
+									case "remove":
+										try {
+											return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(args[1]).getOutlaws()), args[4]);
+										} catch (TownyException ignore) {}
+								}
+							}
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
@@ -860,6 +875,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 			
 			return;
 		}
@@ -988,8 +1004,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				handleTownMetaCommand(player, town, split);
-			}
-			else if (split[1].equalsIgnoreCase("deposit")) {
+			} else if (split[1].equalsIgnoreCase("deposit")) {
 				int amount;
 				
 				// Handle incorrect number of arguments
@@ -1009,8 +1024,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
 				TownyMessaging.sendMessage(sender, depositMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
-			}
-			else if (split[1].equalsIgnoreCase("withdraw")) {
+			} else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
 
 				// Handle incorrect number of arguments
@@ -1030,6 +1044,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
 				TownyMessaging.sendMessage(sender, withdrawMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+			} else if (split[1].equalsIgnoreCase("outlaw")) {
+				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);				
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -1045,6 +1061,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 				
 				return;
 			}
