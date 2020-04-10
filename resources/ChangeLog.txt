@@ -4441,3 +4441,7 @@ v0.92.0.11:
     - %townyadvanced_town_ranks% - Displays either Mayor, or the various town ranks a player has or nothing if they have none.
     - %townyadvanced_nation_ranks% - Displays either Mayor, or the various nation ranks a player has or nothing if they have none.
     - Closes #3695.
+  - Revamped Confirmation system, courtesy of Siris with PR #3892.
+  - New Command: /ta town [town] outlaw [add|remove] [name]
+    - Allows admins to add/remove outlaws from a town.
+    - Closes #3778.

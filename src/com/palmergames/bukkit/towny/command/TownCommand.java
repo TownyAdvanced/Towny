@@ -831,7 +831,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-					parseTownOutlawCommand(player, newSplit);
+					parseTownOutlawCommand(player, newSplit, false, townyUniverse.getDataSource().getResident(player.getName()).getTown());
 				} else {
 					try {
 						final Town town = townyUniverse.getDataSource().getTown(split[0]);
@@ -1023,18 +1023,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 	}
 
-	private void parseTownOutlawCommand(Player player, String[] split) throws TownyException {
+	public static void parseTownOutlawCommand(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
 			// Help output.
-			player.sendMessage(ChatTools.formatTitle("/town outlaw"));
-			player.sendMessage(ChatTools.formatCommand("", "/town outlaw", "add/remove [name]", ""));
+			if (!admin) {
+				sender.sendMessage(ChatTools.formatTitle("/town outlaw"));
+				sender.sendMessage(ChatTools.formatCommand("", "/town outlaw", "add/remove [name]", ""));
+			} else {
+				sender.sendMessage(ChatTools.formatTitle("/ta town [town] outlaw"));
+				sender.sendMessage(ChatTools.formatCommand("", "/ta town [town] outlaw", "add/remove [name]", ""));
+			}
 
 		} else {
 
 			Resident resident, target;
-			Town town = null;
 			Town targetTown = null;
 
 			/*
@@ -1044,9 +1048,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException("Eg: /town outlaw add/remove [name]");
 
 			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
+				if (!admin)
+					resident = townyUniverse.getDataSource().getResident(sender.getName());
+				else
+					resident = town.getMayor();
 				target = townyUniverse.getDataSource().getResident(split[1]);
-				town = resident.getTown();
 			} catch (TownyException x) {
 				throw new TownyException(x.getMessage());
 			}
@@ -1064,16 +1070,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (targetTown != null)
 						if (targetTown == town){
 							townRemoveResident(town, target);
-							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_kicked_by"), player.getName()));
-							TownyMessaging.sendPrefixedTownMessage(town,String.format(TownySettings.getLangString("msg_kicked"), player.getName(), target.getName()));
+							String outlawer = (admin ? TownySettings.getLangString("admin_sing") : sender.getName());
+							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_kicked_by"), outlawer));
+							TownyMessaging.sendPrefixedTownMessage(town,String.format(TownySettings.getLangString("msg_kicked"), outlawer, target.getName()));
 						}
 					town.addOutlaw(target);
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_declared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_declared_an_outlaw"), target.getName(), town.getName()));
+					if (admin)
+						TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_you_have_declared_an_outlaw"), target.getName(), town.getName()));
 				} catch (AlreadyRegisteredException e) {
 					// Must already be an outlaw
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
+					TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
 					return;
 				} catch (EmptyTownException e) {
 					e.printStackTrace();
@@ -1085,14 +1094,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_undeclared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
+					if (admin)
+						TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
 				} catch (NotRegisteredException e) {
 					// Must already not be an outlaw
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_player_not_an_outlaw"));
+					TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_err_player_not_an_outlaw"));
 					return;
 				}
 
 			} else {
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 				return;
 			}
 
