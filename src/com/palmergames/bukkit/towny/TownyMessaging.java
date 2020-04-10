@@ -672,10 +672,10 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+	public static void sendConfirmationMessage(CommandSender sender, String firstline, String confirmline, String cancelline, String lastline) {
 		
-		if (Towny.isSpigot) {
-			TownySpigotMessaging.sendSpigotConfirmMessage(player, firstline, confirmline, cancelline, lastline);
+		if (Towny.isSpigot && sender instanceof Player) {
+			TownySpigotMessaging.sendSpigotConfirmMessage(sender, firstline, confirmline, cancelline, lastline);
 			return;
 		}
 		
@@ -690,13 +690,13 @@ public class TownyMessaging {
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
-			sendMessage(player, message);
+			sendMessage(sender, message);
 			return;
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			sendMessage(player, message);
+			sendMessage(sender, message);
 		}
 	}
 

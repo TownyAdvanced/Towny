@@ -4,8 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -134,22 +134,20 @@ public class TownClaim extends Thread {
 				return;
 			}
 			int townSize = town.getTownBlocks().size();
+			
 			// Send confirmation message,
-			try {
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIM_ALL, null);
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-			} catch (TownyException e) {
-				e.printStackTrace();
-				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
-			}
-			if (TownySettings.getClaimRefundPrice() > 0.0) {
-				try {
-					town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
-				} catch (EconomyException e) {
-					e.printStackTrace();
+			Confirmation confirmation = new Confirmation(() -> { 
+				TownClaim.townUnclaimAll(plugin, town);
+				if (TownySettings.getClaimRefundPrice() > 0.0) {
+					try {
+						town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
+					} catch (EconomyException e) {
+						e.printStackTrace();
+					}
 				}
-			}
+			});
+			ConfirmationHandler.sendConfirmation(player, confirmation);
 		}
 
 		if (!towns.isEmpty()) {
