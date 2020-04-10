@@ -4437,3 +4437,7 @@ v0.92.0.11:
     - Closes #3883.
   - Add ignoreCancelled=true to onPlayerTakeLecternBookEvent to prevent Towny overriding plugins who've already stopped taking a book.
     - Closes #3894.
+  - Add Placeholders:
+    - %townyadvanced_town_ranks% - Displays either Mayor, or the various town ranks a player has or nothing if they have none.
+    - %townyadvanced_nation_ranks% - Displays either Mayor, or the various nation ranks a player has or nothing if they have none.
+    - Closes #3695.
