@@ -1370,6 +1370,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				List<Town> towns = nation.getTowns();
+				towns.addAll(remainingNation.getTowns());
+				List<Town> removedTowns = remainingNation.recheckTownDistanceDryRun(towns);
+				if (!removedTowns.isEmpty()) {
+					TownyMessaging.sendMessage(nation.getKing(), String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", ")));
+					TownyMessaging.sendMessage(remainingNation.getKing(), String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", ")));
+				}
+			}
 			Confirmation confirmation = new Confirmation(() -> {
 				try {
 					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
