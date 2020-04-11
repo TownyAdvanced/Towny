@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -50,10 +52,12 @@ public class SpawnUtil {
 	 * @param notAffordMSG - Message shown when a player cannot afford their
 	 *                     teleport.
 	 * @param outpost      - Whether this is an outpost or not.
+	 * @param ignoreWarn   - Whether to show confirmation for payment or just pay 
+	 *                     without confirmation.
 	 * @param spawnType    - SpawnType.RESIDENT/TOWN/NATION
 	 * @throws TownyException - Thrown if any of the vital conditions are not met.
 	 */
-	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, SpawnType spawnType) throws TownyException {
+	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
@@ -300,7 +304,8 @@ public class SpawnUtil {
 			payee = nation.getAccount();
 			break;
 		}
-
+		if (!TownySettings.isTownSpawnPaidToTown())	payee = EconomyAccount.SERVER_ACCOUNT;
+		
 		// Check if need/can pay.
 		try {
 			if ((!townyUniverse.getPermissionSource().has(player,
@@ -311,71 +316,58 @@ public class SpawnUtil {
 		} catch (EconomyException ignored) {
 		}
 
-//		// Essentials tests.
-//		boolean usingESS = plugin.isEssentials();
-
-//		if (usingESS && !isTownyAdmin) {
-//			try {
-//				User essentialsUser = plugin.getEssentials().getUser(player);
-//
-//				// This jail check is specifically for essentials jails, not towny ones.
-//				if (!essentialsUser.isJailed()) {
-//
-//					Teleport teleport = essentialsUser.getTeleport();
-//					// Cause an essentials exception if in cooldown.
-//					teleport.cooldown(true);
-//					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
-//				}
-//			} catch (Exception e) {
-//				TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
-//				return;
-//			}
-//		}
-//TODO: Check if essentials jailing matters still.		
-		
-
-		// Actual taking of monies here.
-		if (!townyUniverse.getPermissionSource().has(player,
-				PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
-			if (!TownySettings.isTownSpawnPaidToTown())
-				payee = EconomyAccount.SERVER_ACCOUNT;
-			// Show message if we are using an Economy and are charging for spawn travel.
-			try {
-				if (travelCost > 0 && TownySettings.isUsingEconomy()
-						&& resident.getAccount().payTo(travelCost, payee, spawnPermission)) {
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"),
-							TownyEconomyHandler.getFormattedBalance(travelCost)));
-				}
-			} catch (EconomyException ignored) {
-			}
-		}
-		
+		// Allow for a cancellable event right before a player would actually pay.
 		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {
 			return;
 		}
-
-		// If an Admin or Essentials teleport isn't being used, use our own.
-		if (isTownyAdmin) {
-			if (player.getVehicle() != null)
-				player.getVehicle().eject();
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			return;
-		}
-
-		if (TownyTimerHandler.isTeleportWarmupRunning()) {
-			// Use teleport warmup
-			player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+		
+		// Cost to spawn, prompt with confirmation unless ignoreWarn is true.
+		if (TownySettings.isUsingEconomy() && travelCost > 0 && !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
+			final double finalCost = travelCost;
+			final EconomyAccount finalPayee = payee;
+			final String finalSpawnPerm = spawnPermission;
+			final Location finalLoc = spawnLoc;
+			
+			// Skipping the confirmation.
+			if (ignoreWarn) {
+				try {
+					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(finalCost)));
+						initiateSpawn(player, finalLoc, isTownyAdmin);
+					}
+				} catch (EconomyException ignored) {
+				}
+			} else {
+			// Sending the confirmation.
+				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(travelCost));
+				Confirmation confirmation = new Confirmation(() -> {		
+					// Actual taking of monies here.
+					// Show message if we are using an Economy and are charging for spawn travel.
+					try {
+						if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(finalCost)));
+							initiateSpawn(player, finalLoc, isTownyAdmin);
+						}
+					} catch (EconomyException ignored) {
+					}
+				});
+				confirmation.setTitle(title);
+				ConfirmationHandler.sendConfirmation(player, confirmation);
+			}
+		// No Cost so skip confirmation system.
 		} else {
-			// Don't use teleport warmup
-			if (player.getVehicle() != null)
-				player.getVehicle().eject();
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			if (TownySettings.getSpawnCooldownTime() > 0)
-				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
+			initiateSpawn(player, spawnLoc, isTownyAdmin);
 		}
 	}
 	
+	/**
+	 * Fires cancellable events before allowing someone to spawn.
+	 * 
+	 * @param player - Player being spawned to a Towny location.
+	 * @param type - SpawnType (RESIDENT, TOWN, NATION).
+	 * @param spawnLoc - Location being spawned to.
+	 * @return true if uncancelled.
+	 */
 	public static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
 		switch (type) {
 			case TOWN:
@@ -399,6 +391,37 @@ public class SpawnUtil {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Handles the final spawning for residents/towns/nations.
+	 * 
+	 * @param player - Player being spawned. 
+	 * @param spawnLoc - Location being spawned to.
+	 * @param admin - True if player has admin spawn nodes.
+	 */
+	private static void initiateSpawn(Player player, Location spawnLoc, boolean admin) {
+		// Handle admins without warmup or cooldown.
+		if (admin) {
+			if (player.getVehicle() != null)
+				player.getVehicle().eject();
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			return;
+		}
+
+		if (TownyTimerHandler.isTeleportWarmupRunning()) {
+			// Use teleport warmup
+			player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+		} else {
+			// Don't use teleport warmup
+			if (player.getVehicle() != null)
+				player.getVehicle().eject();
+			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			if (TownySettings.getSpawnCooldownTime() > 0)
+				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
+		}
+
 	}
 
 }

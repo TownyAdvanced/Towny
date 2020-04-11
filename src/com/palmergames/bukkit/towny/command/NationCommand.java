@@ -38,7 +38,6 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownSpawnLevel;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
@@ -2634,6 +2633,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
      *
      * @param player - Player.
      * @param split  - Current command arguments.
+     * @param ignoreWarning - Whether to ignore the cost
      * @throws TownyException - Exception.
      */
     public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
@@ -2668,24 +2668,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
             
-			if (nation.getSpawnCost() > 0 && !ignoreWarning && TownySettings.getSpawnWarnConfirmations()) {
-				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
-				Confirmation confirmation = new Confirmation(() -> {
-					try {
-						SpawnUtil.sendToTownySpawn(player, split, nation,
-							notAffordMSG, false, SpawnType.NATION);
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-					}
-				});
-				
-				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(player, confirmation);
-				
-				return;
-			}
-            
-			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, ignoreWarning, SpawnType.NATION);
 		} catch (NotRegisteredException e) {
 
             throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
