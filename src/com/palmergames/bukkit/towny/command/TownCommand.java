@@ -246,12 +246,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				case "reslist":
 				case "outlawlist":
 				case "plots":
-				case "spawn":
 				case "delete":
 				case "join":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
+				case "spawn":
+					if (args.length == 2) {
+						List<String> townOrIgnore = getTownyStartingWith(args[1], "t");
+						townOrIgnore.add("-ignore");						
+						return NameUtil.filterByStart(townOrIgnore, args[1]);
+					}
+					if (args.length == 3) {
+						List<String> ignore = Collections.singletonList("-ignore");
+						return ignore;
+					}
 				case "rank":
 					switch (args.length) {
 						case 2:

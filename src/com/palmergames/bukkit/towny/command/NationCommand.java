@@ -237,11 +237,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "online":
 				case "join":
 				case "delete":
-				case "spawn":
 				case "merge":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "n");
 					break;
+				case "spawn":
+					if (args.length == 2) {
+						List<String> nationOrIgnore = getTownyStartingWith(args[1], "n");
+						nationOrIgnore.add("-ignore");						
+						return NameUtil.filterByStart(nationOrIgnore, args[1]);
+					}
+					if (args.length == 3) {
+						List<String> ignore = Collections.singletonList("-ignore");
+						return ignore;
+					}
 				case "add":
 				case "kick":
 					return getTownyStartingWith(args[args.length - 1], "t");
