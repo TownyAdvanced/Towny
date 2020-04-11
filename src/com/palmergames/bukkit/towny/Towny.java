@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -202,7 +203,7 @@ public class Towny extends JavaPlugin {
 				}
 		}
 		// ------------------- TESTING CODE -------------------
-		DatabaseHandler databaseHandler = new DatabaseHandler();
+		DatabaseHandler databaseHandler = new FlatFileDatabaseHandler();
 		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get("world");
 		
 		Town test = TownyUniverse.getInstance().getDataSource().getTowns().get(0);

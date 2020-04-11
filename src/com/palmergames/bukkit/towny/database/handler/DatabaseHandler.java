@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
-import com.palmergames.util.FileMgmt;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -29,17 +28,28 @@ import java.nio.charset.StandardCharsets;
 import java.sql.JDBCType;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The object which is responsible for converting objects from one format to another and
+ * saving the mentioned format.
+ * 
+ * @author Suneet Tipirneni (Siris)
+ */
 @SuppressWarnings("unchecked")
-public class DatabaseHandler {
-	private ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
-	private static final HashMap<String,String> replacementKeys = new HashMap<>();
+public abstract class DatabaseHandler {
+	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
+	protected static final HashMap<String,String> replacementKeys = new HashMap<>();
 	
 	static {
 		replacementKeys.put("outpostSpawns", "outpostspawns");
+		replacementKeys.put("adminEnabledPVP", "adminEnabledPvP");
+		replacementKeys.put("adminDisabledPVP", "adminEnabledPvP");
+		replacementKeys.put("isTaxPercentage", "taxpercent");
+		replacementKeys.put("jailSpawns", "jailspawns");
 	}
 	
 	public DatabaseHandler() {
@@ -55,7 +65,7 @@ public class DatabaseHandler {
 		registerAdapter(TownBlock.class, new TownBlockHandler());
 	}
 	
-	private boolean isPrimitive(Type type) {
+	protected boolean isPrimitive(Type type) {
 		boolean primitive = type == int.class || type == Integer.class;
 		primitive |= type == boolean.class || type == Boolean.class;
 		primitive |= type == char.class || type == Character.class;
@@ -67,13 +77,19 @@ public class DatabaseHandler {
 		return primitive;
 	}
 	
-	public void save(Saveable obj) {
+	public Map<String, ObjectContext> getObjectMap(Saveable obj) {
+		
+		HashMap<String, ObjectContext> dataMap = new HashMap<>();
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
-		HashMap<String, String> saveMap = new HashMap<>();
+		
 		for (Field field : fields) {
-			Type type = field.getGenericType();
+			// Open field.
 			field.setAccessible(true);
 			
+			// Get field type
+			Type type = field.getGenericType();
+			
+			// Fetch field value.
 			Object value = null;
 			try {
 				value = field.get(obj);
@@ -81,18 +97,44 @@ public class DatabaseHandler {
 				e.printStackTrace();
 			}
 			
-			String valueStr = toFileString(value, type);
+			String fieldName = field.getName();
 			
-			String name = field.getName();
-			saveMap.put(name, valueStr);
+			if (replacementKeys.containsKey(fieldName)) {
+				fieldName = replacementKeys.get(fieldName);
+			}
+			
+			TownyMessaging.sendErrorMsg(fieldName + " " + type + "");
+			
+			// Place value into map.
+			dataMap.put(fieldName, new ObjectContext(value, type));
+			
+			// Close field up.
+			field.setAccessible(false);
 		}
 		
+		return dataMap;
+	}
+
+	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
+
+		HashMap<String, ObjectContext> saveMap = new HashMap<>();
+
 		// Get the save getters
 		for (Method method : obj.getClass().getMethods()) {
+
+			// Get the annotation from the method.
 			SaveGetter saveGetter = method.getDeclaredAnnotation(SaveGetter.class);
+
+			// Check if its present.
 			if (saveGetter != null) {
+
+				// Get the key name from the annotation.
 				String key = saveGetter.keyName();
+				
+				// Get type
 				Type type = method.getGenericReturnType();
+
+				// Try to fetch the return value.
 				Object value;
 				try {
 					value = method.invoke(obj);
@@ -100,14 +142,16 @@ public class DatabaseHandler {
 					TownyMessaging.sendErrorMsg(e.getMessage());
 					continue;
 				}
-				String valueStr = toFileString(value, type);
-				
-				saveMap.put(key, valueStr);
+
+				// Add to map.
+				saveMap.put(key, new ObjectContext(value, type));
 			}
 		}
-		
-		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory() + "test.data"));
+
+		return saveMap;
 	}
+	
+	public abstract void save(Saveable obj);
 	
 	public void saveSQL(Object obj) {
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
@@ -128,69 +172,7 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public <T> void load(File file, Class<T> clazz) {
-		Constructor<T> objConstructor = null;
-		try {
-			objConstructor = clazz.getConstructor(String.class);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-
-		T obj = null;
-		try {
-			assert objConstructor != null;
-			obj = objConstructor.newInstance("");
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-
-		assert obj != null;
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
-
-		HashMap<String, String> values = loadFileIntoHashMap(file);
-		for (Field field : fields) {
-			Type type = field.getGenericType();
-			field.setAccessible(true);
-
-			String fieldName = field.getName();
-			if (replacementKeys.containsKey(fieldName)) {
-				fieldName = replacementKeys.get(fieldName);
-			}
-			
-			if (values.get(fieldName) == null) {
-				continue;
-			}
-			
-			Object value;
-			
-			if (isPrimitive(type)) {
-				value = loadPrimitive(values.get(fieldName), type);
-			} else {
-				value = fromFileString(values.get(fieldName), type);
-			}
-			
-			if (value == null) {
-				// ignore it as another already allocated value may be there.
-				continue;
-			}
-			
-			LoadSetter loadSetter = field.getAnnotation(LoadSetter.class);
-			
-			try {
-
-				if (loadSetter != null) {
-					Method method = obj.getClass().getMethod(loadSetter.setterName(), field.getType());
-					method.invoke(obj, value);
-				} else {
-					field.set(obj, value);
-				}
-				
-				TownyMessaging.sendErrorMsg(field.getName() + "=" + field.get(obj));
-			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	public abstract <T> T load(File file, Class<T> clazz);
 	
 	public <T> String toFileString(Object obj, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
