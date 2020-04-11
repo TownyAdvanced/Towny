@@ -2174,12 +2174,51 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
-						townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-						oldWorld = town.getHomeblockWorld();
-						town.setHomeBlock(townBlock);
-						town.setSpawn(player.getLocation());
+						// Test whether towns will be removed from the nation
+						if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
+							// Do a dry-run of the proximity test.
+							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns());
+							
+							// Oh no, some the nation will lose at least one town, better make a confirmation.
+							if (!removedTowns.isEmpty()) {
+								final Town finalTown = town;
+								final Nation finalNation = nation;
+								final TownBlock finalTB = TownyAPI.getInstance().getTownBlock(player.getLocation());
+								oldWorld = town.getHomeblockWorld();
+								Confirmation confirmation = new Confirmation(() -> {
+									try {
+										// Set town homeblock and run the recheckTownDistance for real.
+										finalTown.setHomeBlock(finalTB);
+										finalTown.setSpawn(player.getLocation());
+										finalNation.recheckTownDistance();
+										TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
+									} catch (TownyException e) {
+										TownyMessaging.sendErrorMsg(player, e.getMessage());
+										return;
+									}
+								});
+								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
+								confirmation.setTitle(title);
+								ConfirmationHandler.sendConfirmation(player, confirmation);
 
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
+							// Phew, the nation won't lose any towns, let's do this.
+							} else {
+								townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+								oldWorld = town.getHomeblockWorld();
+								town.setHomeBlock(townBlock);
+								town.setSpawn(player.getLocation());		
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
+							}
+						// No nation to check proximity for/proximity isn't tested anyways.
+						} else {
+							townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+							oldWorld = town.getHomeblockWorld();
+							town.setHomeBlock(townBlock);
+							town.setSpawn(player.getLocation());
+	
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
+
+						}
 
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2187,12 +2226,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 
 				} else if (split[0].equalsIgnoreCase("spawn")) {
-
 					try {
 						town.setSpawn(player.getLocation());
-						if(town.isCapital()) {
-							nation.recheckTownDistance();
-						}
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_town_spawn"));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());

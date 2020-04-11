@@ -2309,9 +2309,42 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (split.length < 2)
 						TownyMessaging.sendErrorMsg(player, "Eg: /nation set capital {town name}");
 					else {
+						// Do proximity tests.
+						if (TownySettings.getNationRequiresProximity() > 0 ) {
+							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns());
+							
+							// There are going to be some towns removed from the nation, so we'll do a Confirmation.
+							if (!removedTowns.isEmpty()) {
+								final Nation finalNation = nation;
+								Confirmation confirmation = new Confirmation(() -> {
+									
+									try {
+										finalNation.setCapital(newCapital);										
+										finalNation.recheckTownDistance();
+										plugin.resetCache();
+										TownyMessaging.sendPrefixedNationMessage(finalNation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), finalNation.getName()));
+										
+									} catch (TownyException e) {
+										TownyMessaging.sendErrorMsg(player, e.getMessage());
+										return;
+									}
+								});
+								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
+								confirmation.setTitle(title);
+								ConfirmationHandler.sendConfirmation(player, confirmation);
+								
+							// No towns will be removed, skip the Confirmation.
+							} else {
+								nation.setCapital(newCapital);
+								plugin.resetCache();
+								TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+							}
+						// Proximity doesn't factor in.
+						} else {
 							nation.setCapital(newCapital);
 							plugin.resetCache();
 							TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+						}
 					}
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
