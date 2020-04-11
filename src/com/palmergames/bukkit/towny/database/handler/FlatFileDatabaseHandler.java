@@ -99,8 +99,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {
 		for (Map.Entry<String, ObjectContext> entry : from.entrySet()) {
-			TownyMessaging.sendErrorMsg(entry.getValue().getType() +"");
-			String valueStr = toFileString(entry.getValue(), entry.getValue().getType());
+			String valueStr = toFileString(entry.getValue().getValue(), entry.getValue().getType());
 			to.put(entry.getKey(), valueStr);
 		}
 	}

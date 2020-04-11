@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
@@ -102,8 +103,6 @@ public abstract class DatabaseHandler {
 			if (replacementKeys.containsKey(fieldName)) {
 				fieldName = replacementKeys.get(fieldName);
 			}
-			
-			TownyMessaging.sendErrorMsg(fieldName + " " + type + "");
 			
 			// Place value into map.
 			dataMap.put(fieldName, new ObjectContext(value, type));
