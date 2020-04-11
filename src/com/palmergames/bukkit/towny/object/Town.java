@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.LoadSetter;
+import com.palmergames.bukkit.towny.database.handler.SaveGetter;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
@@ -43,7 +44,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private transient List<Resident> residents = new ArrayList<>();
+	private List<Resident> residents = new ArrayList<>();
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
@@ -230,6 +231,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return residents;
 	}
 
+	@SaveGetter(keyName = "assistants")
 	public List<Resident> getAssistants() {
 
 		List<Resident> assistants = new ArrayList<>();
@@ -1537,5 +1539,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
 	}
-	
+
+	@Override
+	public File getSaveDirectory() {
+		return new File(Towny.getPlugin().getDataFolder() + "/towns");
+	}
+
+	@Override
+	public String getSQLTable() {
+		return "TOWNS";
+	}
 }

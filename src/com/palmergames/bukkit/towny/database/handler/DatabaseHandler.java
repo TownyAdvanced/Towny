@@ -10,8 +10,10 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Saveable;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import com.palmergames.util.FileMgmt;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -65,9 +67,9 @@ public class DatabaseHandler {
 		return primitive;
 	}
 	
-	public void save(Object obj) {
+	public void save(Saveable obj) {
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
-		
+		HashMap<String, String> saveMap = new HashMap<>();
 		for (Field field : fields) {
 			Type type = field.getGenericType();
 			field.setAccessible(true);
@@ -79,9 +81,32 @@ public class DatabaseHandler {
 				e.printStackTrace();
 			}
 			
-			String storedValue = toFileString(value, type);
-			TownyMessaging.sendErrorMsg(field.getName() + "=" + storedValue);
+			String valueStr = toFileString(value, type);
+			
+			String name = field.getName();
+			saveMap.put(name, valueStr);
 		}
+		
+		// Get the save getters
+		for (Method method : obj.getClass().getMethods()) {
+			SaveGetter saveGetter = method.getDeclaredAnnotation(SaveGetter.class);
+			if (saveGetter != null) {
+				String key = saveGetter.keyName();
+				Type type = method.getGenericReturnType();
+				Object value;
+				try {
+					value = method.invoke(obj);
+				} catch (IllegalAccessException | InvocationTargetException e) {
+					TownyMessaging.sendErrorMsg(e.getMessage());
+					continue;
+				}
+				String valueStr = toFileString(value, type);
+				
+				saveMap.put(key, valueStr);
+			}
+		}
+		
+		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory() + "test.data"));
 	}
 	
 	public void saveSQL(Object obj) {

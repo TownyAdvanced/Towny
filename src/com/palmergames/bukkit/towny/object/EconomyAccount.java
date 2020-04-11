@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
+import java.io.File;
+
 /**
  * Economy object which provides an interface with the Economy Handler.
  *
@@ -35,6 +37,16 @@ public class EconomyAccount extends TownyObject {
 
 	public World getWorld() {
 		return world;
+	}
+
+	@Override
+	public File getSaveDirectory() {
+		return null;
+	}
+
+	@Override
+	public String getSQLTable() {
+		return null;
 	}
 
 	private static final class TownyServerAccount extends EconomyAccount {

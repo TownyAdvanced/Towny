@@ -33,8 +33,14 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 	@Override
 	public String getFileString(SaveContext context, List<Resident> obj) {
 		StringBuilder retVal = new StringBuilder();
-		for (Resident resident : obj) {
-			retVal.append(context.toFileString(resident, Resident.class)).append(",");
+		for (int i = 0; i < obj.size(); i++) {
+			Resident resident = obj.get(i);
+			
+			retVal.append(context.toFileString(resident, Resident.class));
+
+			if (!(i == obj.size() - 1)) {
+				retVal.append(",");
+			}
 		}
 		
 		return retVal.toString();

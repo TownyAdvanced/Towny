@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -744,5 +745,15 @@ public class TownyWorld extends TownyObject {
 		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+	@Override
+	public File getSaveDirectory() {
+		return null;
+	}
+
+	@Override
+	public String getSQLTable() {
+		return null;
 	}
 }

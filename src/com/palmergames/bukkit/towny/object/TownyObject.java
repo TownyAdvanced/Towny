@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public abstract class TownyObject implements Nameable {
+public abstract class TownyObject implements Nameable, Saveable {
 	private String name;
 
 	private transient HashSet<CustomDataField<?>> metadata = null;

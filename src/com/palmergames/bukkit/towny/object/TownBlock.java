@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
+
+import java.io.File;
 import java.util.HashSet;
 
 public class TownBlock extends TownyObject {
@@ -466,5 +468,15 @@ public class TownBlock extends TownyObject {
 		} catch (NullPointerException e) {
 			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
 		}
+	}
+
+	@Override
+	public File getSaveDirectory() {
+		return null;
+	}
+
+	@Override
+	public String getSQLTable() {
+		return null;
 	}
 }

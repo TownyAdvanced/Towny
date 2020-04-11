@@ -212,7 +212,7 @@ public class Towny extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
-		databaseHandler.saveSQL(test);
+		databaseHandler.save(test);
 		// ------------------- TESTING CODE -------------------
 	}
 

@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -803,6 +804,16 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void setConfirmation(Confirmation confirmation) {
 		this.confirmation = confirmation;
+	}
+
+	@Override
+	public File getSaveDirectory() {
+		return null;
+	}
+
+	@Override
+	public String getSQLTable() {
+		return null;
 	}
 }
 

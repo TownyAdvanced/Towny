@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -817,5 +818,15 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
+	}
+
+	@Override
+	public File getSaveDirectory() {
+		return null;
+	}
+
+	@Override
+	public String getSQLTable() {
+		return null;
 	}
 }

@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -232,6 +233,19 @@ public class FileMgmt {
 			 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 			
 			bufferedWriter.write(source);
+			
+		} catch (IOException e) {
+			System.out.println("Exception ");
+		}
+	}
+	
+	public static void mapToFile(Map<String, String> source, File file) {
+		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			
+			for (Map.Entry<String, String> entry : source.entrySet()) {
+				bufferedWriter.write(entry.getKey() + "=" + entry.getValue() + System.getProperty("line.separator"));
+			}
 			
 		} catch (IOException e) {
 			System.out.println("Exception ");
