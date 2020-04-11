@@ -959,11 +959,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[1].equalsIgnoreCase("spawn")) {
 
-				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", false, SpawnType.TOWN);
+				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", false, false, SpawnType.TOWN);
 
 			} else if (split[1].equalsIgnoreCase("outpost")) {
 
-				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", true, SpawnType.TOWN);
+				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", true, false, SpawnType.TOWN);
 
 			} else if (split[1].equalsIgnoreCase("rank")) {
 				

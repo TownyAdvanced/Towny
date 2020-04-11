@@ -237,11 +237,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "online":
 				case "join":
 				case "delete":
-				case "spawn":
 				case "merge":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "n");
 					break;
+				case "spawn":
+					if (args.length == 2) {
+						List<String> nationOrIgnore = getTownyStartingWith(args[1], "n");
+						nationOrIgnore.add("-ignore");						
+						return NameUtil.filterByStart(nationOrIgnore, args[1]);
+					}
+					if (args.length == 3) {
+						List<String> ignore = Collections.singletonList("-ignore");
+						return ignore;
+					}
 				case "add":
 				case "kick":
 					return getTownyStartingWith(args[args.length - 1], "t");
@@ -610,7 +619,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			        Parse standard nation spawn command.
 			     */
 				String[] newSplit = StringMgmt.remFirstArg(split);
-				nationSpawn(player, newSplit);
+				boolean ignoreWarning = false;
+				
+				if ((split.length > 1 && split[1].equals("-ignore")) || (split.length > 2 && split[2].equals("-ignore"))) {
+					ignoreWarning = true;
+				}
+				
+				nationSpawn(player, newSplit, ignoreWarning);
             }
 			else if (split[0].equalsIgnoreCase("deposit")) {
 
@@ -2627,9 +2642,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
      *
      * @param player - Player.
      * @param split  - Current command arguments.
+     * @param ignoreWarning - Whether to ignore the cost
      * @throws TownyException - Exception.
      */
-    public static void nationSpawn(Player player, String[] split) throws TownyException {
+    public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
         try {
@@ -2661,7 +2677,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
             
-			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, SpawnType.NATION);
+			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, ignoreWarning, SpawnType.NATION);
 		} catch (NotRegisteredException e) {
 
             throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
