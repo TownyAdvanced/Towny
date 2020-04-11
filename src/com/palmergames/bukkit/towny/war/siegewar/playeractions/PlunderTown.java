@@ -66,45 +66,54 @@ public class PlunderTown {
 
             plunderTown(siege, townToBePlundered, siege.getAttackerWinner(), event);
             
-        } catch (TownyException x) {
+        } catch (TownyException e) {
             event.setBuild(false);
         	event.setCancelled(true);
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
-    }
-
-    private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation, BlockPlaceEvent event) {
-        siege.setTownPlundered(true);
-
-        double fullPlunderAmount =
-                TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
-					* defendingTown.getTownBlocks().size()
-					* SiegeWarMoneyUtil.getMoneyMultiplier(defendingTown);
-
-        try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			
-			if (defendingTown.getAccount().canPayFromHoldings(fullPlunderAmount)) {
-                defendingTown.getAccount().payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation, fullPlunderAmount);
-				universe.getDataSource().saveTown(defendingTown);
-            } else {
-                double actualPlunderAmount = defendingTown.getAccount().getHoldingBalance();
-                defendingTown.getAccount().payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation, actualPlunderAmount);
-                TownyMessaging.sendGlobalMessage(
-                	String.format(
-						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
-						defendingTown.getFormattedName(),
-						winnerNation.getFormattedName()));
-				universe.getDataSource().removeTown(defendingTown);
-            }
-        } catch (EconomyException x) {
+            TownyMessaging.sendErrorMsg(player, e.getMessage());
+        } catch (Exception e) {
 			event.setBuild(false);
 			event.setCancelled(true);
-            TownyMessaging.sendErrorMsg(x.getMessage());
-        }
+			TownyMessaging.sendErrorMsg("Problem plundering town. Contact server support team.");
+			System.out.println("Unexpected problem plundering town");
+			e.printStackTrace();
+		}
     }
+
+    private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation, BlockPlaceEvent event) throws Exception {
+		double actualPlunderAmount;
+		boolean townRuined;
+
+		double fullPlunderAmount =
+			TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
+				* defendingTown.getTownBlocks().size()
+				* SiegeWarMoneyUtil.getMoneyMultiplier(defendingTown);
+
+		if (defendingTown.getAccount().canPayFromHoldings(fullPlunderAmount)) {
+			actualPlunderAmount = fullPlunderAmount;
+			townRuined = false;
+		} else {
+			actualPlunderAmount = defendingTown.getAccount().getHoldingBalance();
+			townRuined = true;
+		}
+
+		//Pay plunder
+		defendingTown.getAccount().payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
+
+		//Set plunder flag, save town, & send plunder message
+		siege.setTownPlundered(true);
+		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
+		sendPlunderSuccessMessage(defendingTown, winnerNation, actualPlunderAmount);
+
+		//Ruin town and send ruined message if applicable
+		if (townRuined) {
+			TownyUniverse.getInstance().getDataSource().removeTown(defendingTown);
+			TownyMessaging.sendGlobalMessage(
+				String.format(
+					TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
+					defendingTown,
+					winnerNation.getFormattedName()));
+		}
+	}
 
     private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation, double plunderAmount) {
         //Same messages for now but may diverge in future (if we decide to track the original nation of the town)
@@ -124,5 +133,4 @@ public class PlunderTown {
 			));
         }
     }
-
 }

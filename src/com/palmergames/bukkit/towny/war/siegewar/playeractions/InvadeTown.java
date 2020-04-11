@@ -90,55 +90,67 @@ public class InvadeTown {
 			event.setBuild(false);
 			event.setCancelled(true);
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
+        } catch (Exception e) {
+			event.setBuild(false);
+			event.setCancelled(true);
+			TownyMessaging.sendErrorMsg("Problem invading town. Contact server support team.");
+			System.out.println("Unexpected problem invading town");
+			e.printStackTrace();
+		}
     }
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
 		TownyUniverse universe = TownyUniverse.getInstance();
-
-		siege.setTownInvaded(true);
-
-        //Reset revolt immunity, to prevent immediate revolt after invasion 
-        SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown);
+		Nation nationOfDefendingTown = null;
+		boolean nationTown = false;
+		boolean nationDefeated = false;
 		
         if(defendingTown.hasNation()) {
-            Nation nationOfDefendingTown = null;
             try {
+				nationTown = true;
                 nationOfDefendingTown = defendingTown.getNation();
             } catch (NotRegisteredException x) {
             }
 
 			//Remove town from nation (and nation itself if empty)
 			universe.getDataSource().removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
-
             universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
 
-            TownyMessaging.sendGlobalMessage(String.format(
-                    TownySettings.getLangString("msg_siege_war_nation_town_captured"),
-                    defendingTown.getFormattedName(),
-                    nationOfDefendingTown.getFormattedName(),
-                    attackingNation.getFormattedName()
-            ));
-
             if(nationOfDefendingTown.getTowns().size() == 0) {
-                TownyMessaging.sendGlobalMessage(String.format(
-                        TownySettings.getLangString("msg_siege_war_nation_defeated"),
-                        nationOfDefendingTown.getFormattedName()
-                ));
+               	nationDefeated = true;
             }
         } else {
             universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
-
-            TownyMessaging.sendGlobalMessage(String.format(
-                    TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
-                    defendingTown.getFormattedName(),
-                    attackingNation.getFormattedName()
-            ));
         }
 
-		defendingTown.setOccupied(true);
+        //Set flags to indicate success
+		siege.setTownInvaded(true);
+        defendingTown.setOccupied(true);
+		SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown); //Prevent immediate revolt
 
-		//Save the town to ensure data is saved even if only town/siege was updated
+		//Save town data
 		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
+
+		//Messaging
+		if(nationTown) {
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_nation_town_captured"),
+				defendingTown.getFormattedName(),
+				nationOfDefendingTown.getFormattedName(),
+				attackingNation.getFormattedName()
+			));
+		} else {
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
+				defendingTown.getFormattedName(),
+				attackingNation.getFormattedName()
+			));
+		}
+		if(nationDefeated) {
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_nation_defeated"),
+				nationOfDefendingTown.getFormattedName()
+			));
+		}
     }
 }
