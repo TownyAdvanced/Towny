@@ -8,15 +8,14 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
-import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
@@ -45,6 +44,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -113,7 +113,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"spawncost",
 		"title",
 		"surname",
-		"tag"
+		"tag",
+		"mapcolor"
 	);
 	
 	static final List<String> nationToggleTabCompletes = Arrays.asList(
@@ -1311,6 +1312,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
+		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		nation.addTown(town);
 		nation.setCapital(town);
 		nation.setUuid(UUID.randomUUID());
@@ -1334,8 +1336,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void mergeNation(Player player, String name) throws TownyException {
 		
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
-		Nation nation = null;
-		Nation remainingNation = null;
+		Nation nation;
+		Nation remainingNation;
+		
 		try {
 			nation = universe.getDataSource().getNation(name);
 			remainingNation = universe.getDataSource().getResident(player.getName()).getTown().getNation();
@@ -1345,14 +1348,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (remainingNation.getName().equalsIgnoreCase(name))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-		if (nation !=null ) {
+		if (nation != null) {
 			Resident king = nation.getKing();
 			if (!BukkitTools.isOnline(king.getName())) {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
 			}
+			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
-			ConfirmationHandler.addConfirmation(king, ConfirmationType.NATION_MERGE, remainingNation);
-			TownyMessaging.sendConfirmationMessage(BukkitTools.getPlayer(king.getName()), null, null, null, null);			
+			Confirmation confirmation = new Confirmation(() -> {
+				try {
+					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), nation, remainingNation));
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
+			});
+			
+			// Send confirmation.
+			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(king.getName()), confirmation);
 		}
 	}
 
@@ -1403,8 +1416,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATION_DELETE, null); // It takes the resident's town & nation, done finished
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+				Nation nation = resident.getTown().getNation();
+				Confirmation confirmation = new Confirmation(() -> {
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+				});
+				ConfirmationHandler.sendConfirmation(player, confirmation);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -2223,6 +2240,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawn", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawncost [$]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "mapcolor [color]", ""));
 		} else {
 			Resident resident;
 			try {
@@ -2477,6 +2495,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setNationBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);
 				}
+			} else if (split[0].equalsIgnoreCase("mapcolor")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_MAPCOLOR.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg(player, "Eg: /nation set mapcolor brown.");
+					return;
+				} else {
+					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
+					if (!TownySettings.getNationColorsMap().containsKey(line.toLowerCase())) {
+						String allowedColorsListAsString = TownySettings.getNationColorsMap().keySet().toString();
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_nation_map_color"), allowedColorsListAsString));
+						return;
+					}
+
+					nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase()));
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_map_color_changed"), line.toLowerCase()));
+				}
 			} else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 				return;
@@ -2616,26 +2654,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation = resident.getTown().getNation();
                 notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
-				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
-				
-				if (nationSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
-					return;
-				}
-
 			} else {
                 // split.length > 1
                 nation = townyUniverse.getDataSource().getNation(split[0]);
                 notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_nation"), nation.getName());
-
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), nation.getNationSpawn());
-				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
-
-				if (nationSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
-					return;
-				}
 
 			}
             

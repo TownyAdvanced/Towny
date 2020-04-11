@@ -8,8 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
+import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -44,6 +45,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -109,7 +111,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"set",
 		"meta",
 		"deposit",
-		"withdraw"
+		"withdraw",
+		"outlaw"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -352,6 +355,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+						case "outlaw":
+							switch (args.length) {
+							case 4:
+								return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args[3]);
+							case 5:
+								switch (args[3].toLowerCase()) {
+									case "add":
+										return getTownyStartingWith(args[4], "r");
+									case "remove":
+										try {
+											return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(args[1]).getOutlaws()), args[4]);
+										} catch (TownyException ignore) {}
+								}
+							}
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
@@ -388,6 +405,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return getTownyStartingWith(args[3], "t");
 				}
 				break;
+			case "unclaim":
+				if (args.length == 2)
+					return NameUtil.filterByStart(TownCommand.townUnclaimTabCompletes, args[1]);
 			default:
 				if (args.length == 1)
 					return NameUtil.filterByStart(adminTabCompletes, args[0]);
@@ -855,6 +875,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 			
 			return;
 		}
@@ -912,8 +933,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					ConfirmationHandler.addConfirmation(ConfirmationType.TOWN_DELETE, town); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
+					Confirmation confirmation = new Confirmation(() -> {
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+						TownyUniverse.getInstance().getDataSource().removeTown(town);
+					});
+					ConfirmationHandler.sendConfirmation(sender, confirmation);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -980,8 +1004,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				handleTownMetaCommand(player, town, split);
-			}
-			else if (split[1].equalsIgnoreCase("deposit")) {
+			} else if (split[1].equalsIgnoreCase("deposit")) {
 				int amount;
 				
 				// Handle incorrect number of arguments
@@ -1001,8 +1024,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				String depositMessage = String.format(TownySettings.getLangString("msg_xx_deposited_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
 				TownyMessaging.sendMessage(sender, depositMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
-			}
-			else if (split[1].equalsIgnoreCase("withdraw")) {
+			} else if (split[1].equalsIgnoreCase("withdraw")) {
 				int amount;
 
 				// Handle incorrect number of arguments
@@ -1022,6 +1044,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				String withdrawMessage = String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), (isConsole ? "Console" : player.getName()), amount,  TownySettings.getLangString("town_sing"));
 				TownyMessaging.sendMessage(sender, withdrawMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+			} else if (split[1].equalsIgnoreCase("outlaw")) {
+				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);				
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -1037,6 +1061,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] meta", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 				
 				return;
 			}
@@ -1176,8 +1201,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					ConfirmationHandler.addConfirmation(ConfirmationType.NATION_DELETE, nation); // It takes the nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+					Confirmation confirmation = new Confirmation(() -> {
+						TownyUniverse.getInstance().getDataSource().removeNation(nation);
+						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+					});
+					ConfirmationHandler.sendConfirmation(sender, confirmation); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1571,7 +1599,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
 			return;
 		}
-		
 		String days = "";
 		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
 			days += "townless";
@@ -1586,25 +1613,58 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (!isConsole) {
 
-			Resident resident = null;
-			try {
-				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage());
-			}
-			
-			if (resident != null) {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
 				try {
-					ConfirmationHandler.addConfirmation(resident, ConfirmationType.PURGE, days); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-					TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
-
+					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 			}
+
+			final String finalDays = days;
+
+			Runnable purgeHandler = () -> {
+				Player player = (Player) sender;
+				if (player == null) {
+					try {
+						throw new TownyException("Player could not be found!");
+					} catch (TownyException e) {
+						e.printStackTrace();
+					}
+				}
+
+				int numDays;
+				boolean townless = false;
+				if (finalDays.startsWith("townless")) {
+					townless = true;
+					numDays = Integer.parseInt(finalDays.substring(8));
+				} else {
+					numDays = Integer.parseInt(finalDays);
+				}
+
+				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), townless).start();
+			};
+			
+			if (sender != null) {
+				Confirmation confirmation = new Confirmation(purgeHandler);
+				ConfirmationHandler.sendConfirmation(sender, confirmation);
+			}
 		} else { // isConsole
-			ConfirmationHandler.addConfirmation(ConfirmationType.PURGE, days);
-			TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+			final String finalDays = days;
+			Confirmation confirmation = new Confirmation(() -> {
+				int numDays;
+				boolean townless = false;
+				if (finalDays.startsWith("townless")) {
+					townless = true;
+					numDays = Integer.parseInt(finalDays.substring(8));
+				} else {
+					numDays = Integer.parseInt(finalDays);
+				}
+
+				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
+			});
+			
+			ConfirmationHandler.sendConfirmation(sender, confirmation);
 		}
 	}
 

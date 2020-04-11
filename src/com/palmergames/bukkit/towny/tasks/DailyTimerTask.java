@@ -83,6 +83,18 @@ public class DailyTimerTask extends TownyTimerTask {
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly()).start();
 		}
 
+		if (TownySettings.isNewDayDeleting0PlotTowns()) {
+			List<String> deletedTowns = new ArrayList<>();
+			for (Town town : TownyUniverse.getInstance().getTownsMap().values()) {
+				if (town.getTownBlocks().size() == 0) {
+					deletedTowns.add(town.getName());
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				}
+			}
+			if (!deletedTowns.isEmpty())
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_the_following_towns_were_deleted_for_having_0_claims"), String.join(", ", deletedTowns)));
+		}
+		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		// Reduce jailed residents jail time

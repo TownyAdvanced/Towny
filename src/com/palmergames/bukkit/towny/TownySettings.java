@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
@@ -1114,11 +1115,7 @@ public class TownySettings {
 		} else
 			n += town.getNumResidents() * ratio;
 
-		if (town.hasNation())
-			try {
-				n += (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-			} catch (NotRegisteredException e) {
-			}
+		n += getNationBonusBlocks(town);
 
 		return n;
 	}
@@ -1142,8 +1139,10 @@ public class TownySettings {
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-
-		return (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
+		return calculationEvent.getBonusBlocks();
 	}
 
 	public static int getNationBonusBlocks(Town town) {
@@ -1624,6 +1623,10 @@ public class TownySettings {
 			return day;
 		}
 		return time;
+	}
+	
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
@@ -2600,6 +2603,11 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
 	}
 	
+	public static boolean isMovementCancellingSpawnWarmup() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
+	}
+	
 	public static int getSpawnCooldownTime() {
 		
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
@@ -2681,6 +2689,10 @@ public class TownySettings {
 	public static boolean isDisallowOneWayAlliance() {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
+	}
+	
+	public static int getMaxNumResidentsWithoutNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
 	}
 	
 	public static int getNumResidentsJoinNation() {
@@ -2938,6 +2950,17 @@ public class TownySettings {
 	
 	public static boolean isNotificationsTownNamesVerbose() {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
+	}
+
+	public static Map<String,String> getNationColorsMap() {
+		List<String> nationColorsList = getStrArr(ConfigNodes.GNATION_SETTINGS_ALLOWED_NATION_COLORS);
+		Map<String,String> nationColorsMap = new HashMap<>();
+		String[] keyValuePair;
+		for(String nationColor: nationColorsList) {
+			keyValuePair = nationColor.split(":");
+			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
+		}
+		return nationColorsMap;
 	}
 }
 
