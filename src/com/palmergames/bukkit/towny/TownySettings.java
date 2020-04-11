@@ -1624,6 +1624,10 @@ public class TownySettings {
 		}
 		return time;
 	}
+	
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
 
@@ -2689,6 +2693,10 @@ public class TownySettings {
 	public static boolean isDisallowOneWayAlliance() {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
+	}
+	
+	public static int getMaxNumResidentsWithoutNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
 	}
 	
 	public static int getNumResidentsJoinNation() {
