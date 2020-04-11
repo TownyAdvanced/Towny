@@ -4456,3 +4456,4 @@ v0.92.0.11:
     - Default: false
     - Whether towns with no claimed townblocks should be deleted when the new day is run.
     - Closes #3746.
+  - Add confirmation of cost for /plot claim command when plots are priced higher than 0.
