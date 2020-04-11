@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -101,12 +102,12 @@ public class TownyEntityListener implements Listener {
 			if(event.isCancelled())
 				return; //Already cancelled
 
-			if (event.getEntity() instanceof Player) {
-				if(TownyUniverse.getInstance().getPostSpawnDamageImmunityPlayerEndTimeMap().containsKey(event.getEntity())) {
-					event.setCancelled(true);
-					return;
-				}
+			if(TownySettings.getWarSiegeEnabled() 
+				&& !SiegeWarDamageUtil.canEntityBeDamaged(event.getEntity())) {
+				event.setCancelled(true);
+				return;
 			}
+
 		} catch (Exception e) {
 			System.out.println("Problem listening for entity damage");
 			e.printStackTrace();

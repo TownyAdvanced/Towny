@@ -66,7 +66,6 @@ public class TownyUniverse {
     private TownyPermissionSource permissionSource;
     private War warEvent;
     private final HashMap<Resident, Location> recentlyLoggedOutResidentLocationMap = new HashMap<>();
-	private final HashMap<Player, Long> postSpawnDamageImmunityPlayerEndTimeMap = new HashMap<>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -506,21 +505,5 @@ public class TownyUniverse {
 			}
 		}
 		return result;
-	}
-
-	public Map<Player, Long> getPostSpawnDamageImmunityPlayerEndTimeMap() {
-		return postSpawnDamageImmunityPlayerEndTimeMap;
-	}
-
-	public void addEntryToPostSpawnDamageImmunityMap(Player player, long endTime) {
-		synchronized (postSpawnDamageImmunityPlayerEndTimeMap) {
-			postSpawnDamageImmunityPlayerEndTimeMap.put(player, endTime);
-		}
-	}
-
-	public void removeEntryFromPostSpawnDamageImmunityMap(Player player) {
-		synchronized (postSpawnDamageImmunityPlayerEndTimeMap) {
-			postSpawnDamageImmunityPlayerEndTimeMap.remove(player);
-		}
 	}
 }

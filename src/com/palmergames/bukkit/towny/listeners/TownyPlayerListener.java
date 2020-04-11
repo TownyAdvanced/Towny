@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -149,19 +150,12 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-		
+
 		Player player = event.getPlayer();
 
-		//Set post-spawn damage immunity
+		//Activate post-spawn damage immunity
 		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
-			try {
-				long damageImmunityEndTime = System.currentTimeMillis() + (int)(TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS);
-				TownyUniverse.getInstance().addEntryToPostSpawnDamageImmunityMap(player,damageImmunityEndTime);
-			} catch(Exception e) {
-				System.out.println("Problem setting post spawn immunity");
-				TownyMessaging.sendErrorMsg(e.getMessage());
-				e.printStackTrace();
-			}
+			SiegeWarDamageUtil.grantPostSpawnImmunity(player);
 		}
 
 		if (!TownySettings.isTownRespawning())

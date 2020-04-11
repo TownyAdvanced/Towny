@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
@@ -161,14 +162,7 @@ public class CombatUtil {
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 					|| preventPvP(world, attackerTB)
 					|| preventPvP(world, defenderTB)
-					|| (TownySettings.getWarSiegeEnabled()
-							&& 
-							(
-								(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && TownyUniverse.getInstance().getPostSpawnDamageImmunityPlayerEndTimeMap().containsKey(attackingPlayer))
-					  			|| 
-								(TownySettings.getWarSiegeTownNeutralityEnabled() && isPlayerFromANeutralOrDesiredNeutralTown(attackingPlayer))
-							)
-					   )
+					|| (TownySettings.getWarSiegeEnabled() & SiegeWarDamageUtil.canPlayerDamageAnotherPlayer(attackingPlayer))
 					)
 				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
@@ -599,16 +593,5 @@ public class CombatUtil {
 		} catch (NotRegisteredException e) {
 			return false;
 		}
-	}
-
-	private static boolean isPlayerFromANeutralOrDesiredNeutralTown(Player player) {
-		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			if(resident.hasTown()) { 
-				return resident.getTown().isNeutral() || resident.getTown().getDesiredNeutralityValue();
-			} else {
-				return false;
-			}
-		} catch (NotRegisteredException e) { return false; }
 	}
 }
