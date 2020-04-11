@@ -418,6 +418,13 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
+			"global_town_settings.maximum_number_residents_without_nation",
+			"0",
+			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
+			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
@@ -682,7 +689,10 @@ public enum ConfigNodes {
 			"12h",
 			"# The time each \"day\", when taxes will be collected.",
 			"# MUST be less than day_interval. Default is 12h (midday)."),
-
+	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
+			"plugin.day_timer.delete_0_plot_towns",
+			"false",
+			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
