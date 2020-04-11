@@ -246,12 +246,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				case "reslist":
 				case "outlawlist":
 				case "plots":
-				case "spawn":
 				case "delete":
 				case "join":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
+				case "spawn":
+					if (args.length == 2) {
+						List<String> townOrIgnore = getTownyStartingWith(args[1], "t");
+						townOrIgnore.add("-ignore");						
+						return NameUtil.filterByStart(townOrIgnore, args[1]);
+					}
+					if (args.length == 3) {
+						List<String> ignore = Collections.singletonList("-ignore");
+						return ignore;
+					}
 				case "rank":
 					switch (args.length) {
 						case 2:
@@ -634,7 +643,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					/*
 					 * town spawn handles it's own perms.
 					 */
-					townSpawn(player, newSplit, false);
+					boolean ignoreWarning = false;
+					
+					if ((split.length > 2 && split[2].equals("-ignore"))) {
+						ignoreWarning = true;
+					}
+					
+					townSpawn(player, newSplit, false, ignoreWarning);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 					if (split.length >= 2) {
@@ -698,10 +713,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_must_belong_town"));
 							}
 						} else {
-							townSpawn(player, newSplit, true);
+							boolean ignoreWarning = false;
+
+							if (split.length == 2) {
+								if (split[1].equals("-ignore")) {
+									ignoreWarning = true;
+								}
+							}
+							townSpawn(player, newSplit, true, ignoreWarning);
 						}
 					} else {
-						townSpawn(player, newSplit, true);
+						townSpawn(player, newSplit, true, false);
 					}
 				} else if (split[0].equalsIgnoreCase("delete")) {
 
@@ -2575,9 +2597,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param outpost - Whether this in an outpost or not.
 	 * @throws TownyException - Exception.
 	 */
-	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException{
+	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
+		if ((split.length == 1 && split[0].equals("-ignore")) || (split.length > 1 && split[1].equals("-ignore"))) {
+			ignoreWarning = true;
+		}
+		
 		try {
 
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
@@ -2585,7 +2611,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String notAffordMSG;
 
 			// Set target town and affiliated messages.
-			if (split.length == 0 || outpost) {
+			if (split.length == 0 || outpost || split[0].equals("-ignore")) {
 
 				if (!resident.hasTown()) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
@@ -2601,7 +2627,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
 			}
 			
-			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
+			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, ignoreWarning, SpawnType.TOWN);
 		} catch (NotRegisteredException e) {
 
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
