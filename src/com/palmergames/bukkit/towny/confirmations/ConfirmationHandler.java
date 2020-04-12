@@ -31,8 +31,8 @@ public class ConfirmationHandler {
 	 * @param sender The sender to get the confirmation from.
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
-		confirmations.remove(sender);
 		Bukkit.getScheduler().cancelTask(confirmations.get(sender).getTaskID());
+		confirmations.remove(sender);
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
 
