@@ -33,7 +33,9 @@ public class ConfirmationHandler {
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
 		confirmations.remove(sender);
+		Bukkit.getScheduler().cancelTask(runningTasks.get(sender));
 		runningTasks.remove(sender);
+		
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
 
