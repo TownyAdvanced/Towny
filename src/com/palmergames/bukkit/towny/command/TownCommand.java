@@ -2194,7 +2194,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							// Oh no, some the nation will lose at least one town, better make a confirmation.
 							if (!removedTowns.isEmpty()) {
 								final Town finalTown = town;
-								final Nation finalNation = nation;
 								final TownBlock finalTB = TownyAPI.getInstance().getTownBlock(player.getLocation());
 								oldWorld = town.getHomeblockWorld();
 								Confirmation confirmation = new Confirmation(() -> {
@@ -2202,7 +2201,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 										// Set town homeblock and run the recheckTownDistance for real.
 										finalTown.setHomeBlock(finalTB);
 										finalTown.setSpawn(player.getLocation());
-										finalNation.recheckTownDistance();
 										TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
