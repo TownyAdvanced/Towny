@@ -20,7 +20,6 @@ public class ConfirmationHandler {
 	
 	private static Towny plugin;
 	public static Map<CommandSender, Confirmation> confirmations = new HashMap<>();
-	public static Map<CommandSender, Integer> runningTasks = new HashMap<>();
 
 	public static void initialize(Towny plugin) {
 		ConfirmationHandler.plugin = plugin;
@@ -33,9 +32,7 @@ public class ConfirmationHandler {
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
 		confirmations.remove(sender);
-		Bukkit.getScheduler().cancelTask(runningTasks.get(sender));
-		runningTasks.remove(sender);
-		
+		Bukkit.getScheduler().cancelTask(confirmations.get(sender).getTaskID());
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
 
@@ -71,7 +68,7 @@ public class ConfirmationHandler {
 		}, 20L * duration).getTaskId();
 		
 		// Cache task ID
-		runningTasks.put(sender, taskID);
+		confirmation.setTaskID(taskID);
 	}
 
 	/**
@@ -92,9 +89,8 @@ public class ConfirmationHandler {
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
 		
-		// Remove task ID.
-		Bukkit.getScheduler().cancelTask(runningTasks.get(sender));
-		runningTasks.remove(sender);
+		// Cancel task.
+		Bukkit.getScheduler().cancelTask(confirmation.getTaskID());
 	}
 	
 	public static boolean hasConfirmation(CommandSender sender) {
