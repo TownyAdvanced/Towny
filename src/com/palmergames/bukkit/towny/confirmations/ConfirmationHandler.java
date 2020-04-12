@@ -85,12 +85,13 @@ public class ConfirmationHandler {
 
 		// Execute handler.
 		handler.run();
+
+		// Cancel task.
+		Bukkit.getScheduler().cancelTask(confirmation.getTaskID());
 		
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
 		
-		// Cancel task.
-		Bukkit.getScheduler().cancelTask(confirmation.getTaskID());
 	}
 	
 	public static boolean hasConfirmation(CommandSender sender) {
