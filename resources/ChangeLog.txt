@@ -4459,4 +4459,8 @@ v0.92.0.11:
   - Add confirmation of cost for /plot claim command when plots are priced higher than 0.
   - Add confirmation of cost for spawn commands when costs are higher than 0, courtesy of Siris with PR #3861.
     - Closes #3828.
-     
+  - Fix: nation-requires-proximity feature should be working much better now.
+  - Added: For the nation-requires-proximity feature:
+    - Moving homeblocks will now tell the mayor if their town will leave their nation for moving too far from the homeblock.
+    - Moving homeblocks will now tell the king if any of their towns will leave their nation for moveing their homeblock too far away.
+    - Merging nations will now be made aware if any of the towns will leave the prevailing nation when the two nations merge.
