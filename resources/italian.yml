@@ -1120,3 +1120,4 @@ msg_err_unable_to_add_more_residents_without_nation: 'Your town cannot invite mo
 msg_the_following_towns_were_deleted_for_having_0_claims: 'The following towns were deleted for having 0 claims: %s'
 msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
 msg_confirm_purchase: 'Doing this will cost %s. Continue?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'The following towns will be removed from your nation: %s. Do you wish to continue?'
