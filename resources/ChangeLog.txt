@@ -4468,3 +4468,4 @@ v0.92.0.11:
   - New Command: /ta depositall [amount]
     - Adds amount to all towns' and all nations' banks.
     - Requires towny.command.townyadmin.depositall, which is a child node of towny.command.townyadmin.*.
+  - Add confirmations to /plot set type when costs are higher than 0.
