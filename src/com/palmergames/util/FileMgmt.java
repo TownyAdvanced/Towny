@@ -1,10 +1,13 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -241,7 +244,7 @@ public class FileMgmt {
 	
 	public static void mapToFile(Map<String, String> source, File file) {
 		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			FileWriter bufferedWriter = new FileWriter(file, false)) {
 			
 			for (Map.Entry<String, String> entry : source.entrySet()) {
 				bufferedWriter.write(entry.getKey() + "=" + entry.getValue() + System.getProperty("line.separator"));
@@ -261,6 +264,7 @@ public class FileMgmt {
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
 		File file = new File(targetLocation);
+		TownyMessaging.sendErrorMsg("WHAT");
 		try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 			

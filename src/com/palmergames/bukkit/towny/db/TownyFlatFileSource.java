@@ -90,26 +90,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 * Start our Async queue for pushing data to the database.
 		 */
-		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-			
-			while (!TownyFlatFileSource.this.queryQueue.isEmpty()) {
-				
-				FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
-				
-				try {
-					
-					FileMgmt.listToFile(query.list, query.path);
-					
-				} catch (NullPointerException ex) {
-					
-					if (query != null)
-						TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
-					
-				}
-				
-			}
-			
-		}, 5L, 5L);
+//		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+//			
+//			while (!TownyFlatFileSource.this.queryQueue.isEmpty()) {
+//				
+//				FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
+//				
+//				try {
+//					
+//					FileMgmt.listToFile(query.list, query.path);
+//					
+//				} catch (NullPointerException ex) {
+//					
+//					if (query != null)
+//						TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
+//					
+//				}
+//				
+//			}
+//			
+//		}, 5L, 5L);
+		
+		task = null;
 	}
 	
 	public enum elements {

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.database.handler;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.database.type.TypeContext;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -32,6 +34,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.sql.JDBCType;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -319,5 +322,25 @@ public abstract class DatabaseHandler {
 		}
 
 		return null;
+	}
+	
+	public void upgrade() {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
+		Collection<Nation> nations = townyUniverse.getNationsMap().values();
+		Collection<Town> towns = townyUniverse.getTownsMap().values();
+		Collection<TownBlock> townBlocks = townyUniverse.getTownBlocks().values();
+		
+		// MANUALLY Save older data items.
+		save(worlds);
+		save(nations);
+		save(towns);
+		save(townBlocks);
+	}
+	
+	public void save(Collection<? extends Saveable> objs) {
+		for (Saveable obj : objs) {
+			save(obj);
+		}
 	}
 }

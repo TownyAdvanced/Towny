@@ -213,9 +213,9 @@ public class Towny extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
-		databaseHandler.save(test);
+		//databaseHandler.save(test);
 		
-		databaseHandler.load(new File(getDataFolder() + "/data/towns/testDB.txt"), Town.class);
+		//databaseHandler.load(new File(getDataFolder() + "/data/towns/testDB.txt"), Town.class);
 		// ------------------- TESTING CODE -------------------
 	}
 
