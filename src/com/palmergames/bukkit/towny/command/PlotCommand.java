@@ -318,9 +318,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(cost)))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
-						// Start the claim task
-						new PlotClaim(plugin, player, resident, selection, true, false, false).start();
-
+						if (cost != 0) {
+							String title = String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost));
+							Confirmation confirmation = new Confirmation(() ->  {	
+								// Start the claim task
+								new PlotClaim(plugin, player, resident, selection, true, false, false).start();
+							});
+							confirmation.setTitle(title);
+							ConfirmationHandler.sendConfirmation(player, confirmation);
+						} else {
+							// Start the claim task
+							new PlotClaim(plugin, player, resident, selection, true, false, false).start();
+						}
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
