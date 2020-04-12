@@ -26,9 +26,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
+
+		TownyMessaging.sendErrorMsg(obj.getSaveDirectory() + File.separator + "testDB.txt");
 		
 		// Save
-		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory() + "test.data"));
+		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory() + File.separator + "testDB.txt"));
 	}
 
 	@Override

@@ -248,7 +248,7 @@ public class FileMgmt {
 			}
 			
 		} catch (IOException e) {
-			System.out.println("Exception ");
+			System.out.println(e.getMessage());
 		}
 	}
 

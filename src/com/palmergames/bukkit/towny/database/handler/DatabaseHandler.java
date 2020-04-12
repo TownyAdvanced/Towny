@@ -1,18 +1,23 @@
 package com.palmergames.bukkit.towny.database.handler;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import org.bukkit.Location;
 
@@ -51,6 +56,10 @@ public abstract class DatabaseHandler {
 		replacementKeys.put("adminDisabledPVP", "adminEnabledPvP");
 		replacementKeys.put("isTaxPercentage", "taxpercent");
 		replacementKeys.put("jailSpawns", "jailspawns");
+		replacementKeys.put("permissions", "protectionStatus");
+		replacementKeys.put("isPublic", "public");
+		replacementKeys.put("isOpen", "open");
+		replacementKeys.put("isConquered", "conquered");
 	}
 	
 	public DatabaseHandler() {
@@ -64,6 +73,10 @@ public abstract class DatabaseHandler {
 		registerAdapter(new TypeContext<List<Resident>>(){}.getType(), new ResidentListHandler());
 		registerAdapter(new TypeContext<List<Location>>(){}.getType(), new LocationListHandler());
 		registerAdapter(TownBlock.class, new TownBlockHandler());
+		registerAdapter(Nation.class, new NationHandler());
+		registerAdapter(TownyWorld.class, new TownyWorldHandler());
+		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
+		
 	}
 	
 	protected boolean isPrimitive(Type type) {
@@ -209,7 +222,7 @@ public abstract class DatabaseHandler {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
-			throw new UnsupportedOperationException("There is flatfile load adapter for " + type);
+			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type);
 		}
 		
 		if (str.equals("")) {

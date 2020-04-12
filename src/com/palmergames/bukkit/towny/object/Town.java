@@ -1542,7 +1542,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	@Override
 	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/towns");
+		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns");
 	}
 
 	@Override
