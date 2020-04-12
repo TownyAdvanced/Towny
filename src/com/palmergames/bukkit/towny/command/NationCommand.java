@@ -2251,7 +2251,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(resident, TownySettings.getLangString("msg_invalid_name"));
 	}
 
-	public static void nationSet(Player player, String[] split, boolean admin, Nation nation) throws TownyException, InvalidNameException {
+	public static void nationSet(Player player, String[] split, boolean admin, Nation nation) throws TownyException, InvalidNameException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation set"));
@@ -2425,22 +2425,32 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");
+					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");				
 				else {
+				    if(TownySettings.isUsingEconomy() && TownySettings.getNationRenameCost() > 0) {
+						if (!nation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost()))
+							throw new EconomyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
 
-				    if(TownySettings.getNationRenameCost() > 0) {
-                        try {
-                            if (TownySettings.isUsingEconomy() && !nation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", split[1])))
-                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
-                        } catch (EconomyException e) {
-                            throw new TownyException("Economy Error");
-                        }
+						final Nation finalNation = nation;
+                    	final String name = split[1];
+				    	Confirmation confirmation = new Confirmation(() -> {
+							try {
+								finalNation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
+							} catch (EconomyException ignored) {}
+								
+		                    if (!NameValidation.isBlacklistName(name))
+								nationRename(player, finalNation, name);
+							else
+								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+				    	});
+				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownySettings.getNationRenameCost()));
+                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+                    } else {
+						if (!NameValidation.isBlacklistName(split[1]))
+							nationRename(player, nation, split[1]);
+						else
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
                     }
-
-					if (!NameValidation.isBlacklistName(split[1]))
-						nationRename(player, nation, split[1]);
-					else
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				}
 
 			} else if (split[0].equalsIgnoreCase("tag")) {

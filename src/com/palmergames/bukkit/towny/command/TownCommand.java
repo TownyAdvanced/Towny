@@ -1759,7 +1759,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	}
 
-	public static void townSet(Player player, String[] split, boolean admin, Town town) throws TownyException {
+	public static void townSet(Player player, String[] split, boolean admin, Town town) throws TownyException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
@@ -2111,20 +2111,32 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 
-                    if(TownySettings.getTownRenameCost() > 0) {
-                        try {
-                            if (TownySettings.isUsingEconomy() && !town.getAccount().pay(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", split[1])))
-                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
-                        } catch (EconomyException e) {
-                            throw new TownyException("Economy Error");
-                        }
+                    if(TownySettings.isUsingEconomy() && TownySettings.getTownRenameCost() > 0) {
+                		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))							
+							throw new EconomyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
+
+                    	final Town finalTown = town;
+                    	final String name = split[1];
+                    	Confirmation confirmation = new Confirmation(() -> {
+                            try {
+								finalTown.getAccount().pay(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
+							} catch (EconomyException ignored) {
+							}
+
+	    					if (!NameValidation.isBlacklistName(name))
+	    						townRename(player, finalTown, name);
+	    					else
+	    						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+                    	});
+                    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownySettings.getTownRenameCost()));
+                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+                    	
+                    } else {
+						if (!NameValidation.isBlacklistName(split[1]))
+							townRename(player, town, split[1]);
+						else
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
                     }
-
-					if (!NameValidation.isBlacklistName(split[1]))
-						townRename(player, town, split[1]);
-					else
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
-
 				} else if (split[0].equalsIgnoreCase("tag")) {
 
 					if (split.length < 2)
