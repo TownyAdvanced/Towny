@@ -2344,15 +2344,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (split.length == 2) {
 						try {
 							townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
-						} catch (NumberFormatException e) {
-							throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
+						} catch (EconomyException ignored) {							
 						}
 					} else {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus #"));
 					}
 				}
-				
-				townyUniverse.getDataSource().saveTown(town);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
@@ -2365,10 +2362,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param town - Towm object.
 	 * @param inputN - Number of townblocks being bought.
 	 * @param player - Player.
-	 * @return The number of purchased bonus blocks.
 	 * @throws TownyException - Exception.
+	 * @throws EconomyException - If the town cannot pay.
 	 */
-	public static int townBuyBonusTownBlocks(Town town, int inputN, Object player) throws TownyException {
+	public static void townBuyBonusTownBlocks(Town town, int inputN, Object player) throws EconomyException, TownyException {
 
 		if (inputN < 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
@@ -2383,22 +2380,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 		if (n == 0)
-			return n;
+			return;
 		double cost = town.getBonusBlockCostN(n);
-		try {
-			boolean pay = town.getAccount().pay(cost, String.format("Town Buy Bonus (%d)", n));
-			if (TownySettings.isUsingEconomy() && !pay) {
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
-			} else if (TownySettings.isUsingEconomy() && pay) {
-				town.addPurchasedBlocks(n);
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
+		// Test if the town can pay and throw economy exception if not.
+		if (!town.getAccount().canPayFromHoldings(cost))
+			throw new EconomyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, TownySettings.getLangString("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+		
+		Confirmation confirmation = new Confirmation(() -> {
+			try {
+				town.getAccount().pay(cost, String.format("Town Buy Bonus (%d)", n));
+			} catch (EconomyException ignored) {
 			}
-
-		} catch (EconomyException e1) {
-			throw new TownyException("Economy Error");
-		}
-
-		return n;
+			town.addPurchasedBlocks(n);
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), n, TownySettings.getLangString("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			TownyUniverse.getInstance().getDataSource().saveTown(town);
+		});
+		confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), cost));
+		ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(player.toString()), confirmation);
 	}
 
 	/**
