@@ -284,7 +284,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_CHECKPERM("towny.command.townyadmin.checkperm"),
 	TOWNY_COMMAND_TOWNYADMIN_UNCLAIM("towny.command.townyadmin.unclaim"),
 	TOWNY_COMMAND_TOWNYADMIN_RESIDNET_DELETE("towny.command.townyadmin.resident.delete"),
-	
+	TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL("towny.command.townyadmin.depositall"),
 	
 	/*
 	 * Towny command permissions

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -93,7 +94,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"purge",
 		"mysqldump",
 		"tpplot",
-		"database"
+		"database",
+		"depositall"
 	);
 
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
@@ -567,6 +569,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				parseAdminTpPlotCommand(StringMgmt.remFirstArg(split));
 
+			} else if (split[0].equalsIgnoreCase("depositall")) {
+				
+				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
+				
 			}  else {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_sub"));
 				return false;
@@ -2054,6 +2060,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
 		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
 		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+	}
+	
+	private void parseAdminDepositAllCommand(String[] split) {
+		if (split.length == 0)
+			showDepositAllHelp();
+		else if (split.length > 1)
+			showDepositAllHelp();
+		else if (split.length == 1) {
+			String reason = "townyadmin depositall";
+			double amount = 0;
+			try {
+				amount = Double.parseDouble(split[0]);				
+			} catch (NumberFormatException e) {
+				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_num"));
+				return;
+			}
+			
+			for (Nation nation : TownyUniverse.getInstance().getNationsMap().values()) {
+				try {
+					nation.getAccount().collect(amount, reason);
+				} catch (EconomyException e) {
+				}
+			}
+			
+			for (Town town : TownyUniverse.getInstance().getTownsMap().values()) {
+				try {
+					town.getAccount().collect(amount, reason);
+				} catch (EconomyException e) {
+				}
+			}
+			TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_ta_deposit_all_success"), TownyEconomyHandler.getFormattedBalance(amount)));
+		}
+	}
+	
+	private void showDepositAllHelp() {
+		sender.sendMessage(ChatTools.formatTitle("/townyadmin depositall"));
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin depositall", "[amount]", ""));		
 	}
 
 }
