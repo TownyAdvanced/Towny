@@ -673,7 +673,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										 TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
 									 });
 									 // Set title.
-									 String title = String.format(TownySettings.getLangString("msg_warn_outpost_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
+									 String title = String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
 									 confirmation.setTitle(title);
 									 
 									 // Send the confirmation.
