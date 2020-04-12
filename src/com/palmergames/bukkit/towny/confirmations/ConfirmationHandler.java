@@ -20,6 +20,7 @@ public class ConfirmationHandler {
 	
 	private static Towny plugin;
 	public static Map<CommandSender, Confirmation> confirmations = new HashMap<>();
+	public static Map<CommandSender, Integer> runningTasks = new HashMap<>();
 
 	public static void initialize(Towny plugin) {
 		ConfirmationHandler.plugin = plugin;
@@ -32,6 +33,7 @@ public class ConfirmationHandler {
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
 		confirmations.remove(sender);
+		runningTasks.remove(sender);
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
 
@@ -41,6 +43,13 @@ public class ConfirmationHandler {
 	 * @param confirmation The confirmation to add.
 	 */
 	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {
+		
+		// Check if confirmation is already active and perform appropriate actions.
+		if (confirmations.containsKey(sender)) {
+			// Cancel prior Confirmation actions.
+			cancelConfirmation(sender);
+		}
+		
 		// Add the confirmation to the map.
 		confirmations.put(sender, confirmation);
 		
@@ -51,13 +60,16 @@ public class ConfirmationHandler {
 		int duration = confirmation.getDuration();
 		
 		// Remove the confirmation after 20 seconds.
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			// Show cancel messages only if the confirmation exists.
 			if (hasConfirmation(sender)) {
 				confirmations.remove(sender);
 				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
 			}
-		}, 20L * duration);
+		}, 20L * duration).getTaskId();
+		
+		// Cache task ID
+		runningTasks.put(sender, taskID);
 	}
 
 	/**
@@ -77,6 +89,10 @@ public class ConfirmationHandler {
 		
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
+		
+		// Remove task ID.
+		Bukkit.getScheduler().cancelTask(runningTasks.get(sender));
+		runningTasks.remove(sender);
 	}
 	
 	public static boolean hasConfirmation(CommandSender sender) {
