@@ -162,7 +162,7 @@ public class CombatUtil {
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 					|| preventPvP(world, attackerTB)
 					|| preventPvP(world, defenderTB)
-					|| (TownySettings.getWarSiegeEnabled() & SiegeWarDamageUtil.canPlayerDamageAnotherPlayer(attackingPlayer))
+					|| (TownySettings.getWarSiegeEnabled() && SiegeWarDamageUtil.isPlayerPreventedFromDamagingOtherPlayers(attackingPlayer))
 					)
 				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);

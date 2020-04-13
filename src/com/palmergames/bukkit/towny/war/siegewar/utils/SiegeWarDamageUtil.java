@@ -103,15 +103,15 @@ public class SiegeWarDamageUtil {
 	 * @param attackingPlayer
 	 * @return true if damage is prevented
 	 */
-	public static boolean canPlayerDamageAnotherPlayer(Player attackingPlayer) {
+	public static boolean isPlayerPreventedFromDamagingOtherPlayers(Player attackingPlayer) {
 		if(
 			(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && attackingPlayer.hasMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID))
 				|| 
 			(TownySettings.getWarSiegeTownNeutralityEnabled() && isPlayerFromANeutralOrDesiredNeutralTown(attackingPlayer))
 		) {
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
