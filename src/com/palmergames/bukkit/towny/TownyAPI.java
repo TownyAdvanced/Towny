@@ -255,7 +255,7 @@ public class TownyAPI {
     public UUID getTownUUID(Location location) {
         try {
             WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            return worldCoord.getTownBlock().getTown().getUuid();
+            return worldCoord.getTownBlock().getTown().getUniqueIdentifier();
         } catch (NotRegisteredException e) {
             // No data so return null
             return null;

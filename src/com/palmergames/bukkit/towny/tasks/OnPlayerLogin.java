@@ -63,7 +63,7 @@ public class OnPlayerLogin implements Runnable {
 					try {
 						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
 						town.addResident(resident);
-						universe.getDataSource().saveTown(town);
+						universe.getDatabaseHandler().save(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
 				}

@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -33,6 +34,7 @@ import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -45,6 +47,7 @@ import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
@@ -79,6 +82,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Towny Plugin for Bukkit
@@ -205,17 +209,21 @@ public class Towny extends JavaPlugin {
 		// ------------------- TESTING CODE -------------------
 		DatabaseHandler databaseHandler = new FlatFileDatabaseHandler();
 		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get("world");
+		Nation nation = new Nation(UUID.randomUUID(),"test");
+		Resident resident = new Resident(UUID.randomUUID(), "testUser");
+		Town town = new Town(UUID.randomUUID(), "Utopia");
 		
-		Town test = TownyUniverse.getInstance().getDataSource().getTowns().get(0);
 		try {
-			TownyMessaging.sendErrorMsg(test.getSpawn() + "");
-		} catch (Exception e) {
+			resident.setTown(town);
+		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
 		}
 		
-		//databaseHandler.save(test);
+		ReflectionUtil.dump(resident);
 		
-		//databaseHandler.load(new File(getDataFolder() + "/data/towns/testDB.txt"), Town.class);
+		Resident loadedResident = TownyUniverse.getInstance().getDatabaseHandler().getResidents().get(0);
+		ReflectionUtil.dump(loadedResident);
+		//ReflectionUtil.dump(loadedTown);
 		// ------------------- TESTING CODE -------------------
 	}
 

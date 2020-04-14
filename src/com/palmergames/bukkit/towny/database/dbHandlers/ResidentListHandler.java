@@ -1,24 +1,30 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.database.handler.SaveContext;
-import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
-import com.palmergames.bukkit.towny.database.handler.SQLData;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
-import java.sql.JDBCType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ResidentListHandler implements SerializationHandler<List<Resident>> {
+public class ResidentListHandler implements LoadHandler<List<Resident>> {
 	
 	@Override
 	public List<Resident> loadString(LoadContext context, String str) {
 		List<Resident> residents = new ArrayList<>();
-		String[] residentNames = str.split(",");
+		String strCopy;
+		strCopy = str.replace("[", "").replace("]", "");
+		String[] residentNames = strCopy.split(",");
 		
 		for (String residentName : residentNames) {
 			Resident loadedResident = context.fromFileString(residentName, Resident.class);
+			
+			if (loadedResident == null) {
+				continue;
+			}
+			
 			residents.add(loadedResident);
 		}
 		
@@ -28,31 +34,5 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 	@Override
 	public List<Resident> loadSQL(LoadContext context, Object result) {
 		return loadString(context, (String)result);
-	}
-
-	@Override
-	public String getFileString(SaveContext context, List<Resident> obj) {
-		StringBuilder retVal = new StringBuilder();
-		for (int i = 0; i < obj.size(); i++) {
-			Resident resident = obj.get(i);
-			
-			retVal.append(context.toFileString(resident, Resident.class));
-
-			if (!(i == obj.size() - 1)) {
-				retVal.append(",");
-			}
-		}
-		
-		return retVal.toString();
-	}
-
-	@Override
-	public SQLData getSQL(SaveContext context, List<Resident> obj) {
-		StringBuilder retVal = new StringBuilder();
-		for (Resident resident : obj) {
-			retVal.append(context.toFileString(resident, Resident.class)).append(",");
-		}
-		
-		return new SQLData(retVal, JDBCType.VARCHAR);
 	}
 }

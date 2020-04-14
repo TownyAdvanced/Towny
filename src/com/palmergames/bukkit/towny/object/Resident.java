@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
@@ -55,9 +57,13 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private TownyPermission permissions = new TownyPermission();
 
-	public Resident(String name) {
-		super(name);
+	public Resident(UUID uniqueIdentifier) {
+		super(uniqueIdentifier);
 		permissions.loadDefault(this);
+	}
+
+	public Resident(UUID id, String name) {
+		super(id, name);
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -808,7 +814,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public File getSaveDirectory() {
-		return null;
+		return new File(Towny.getPlugin().getDataFolder() + "/data/residents");
 	}
 
 	@Override

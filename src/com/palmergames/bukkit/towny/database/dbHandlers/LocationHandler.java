@@ -10,12 +10,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.sql.JDBCType;
+import java.util.Arrays;
 
 public class LocationHandler implements SerializationHandler<Location> {
 	@Override
 	public Location loadString(LoadContext context, String str) {
 		TownyMessaging.sendErrorMsg(str);
 		String[] tokens = str.split(",");
+		
+		TownyMessaging.sendErrorMsg(Arrays.toString(tokens));
 		
 		World world;
 		double x;

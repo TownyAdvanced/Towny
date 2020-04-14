@@ -223,8 +223,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							// Always has 1 town (capital) so ignore
 						} catch (NotRegisteredException ignored) {
 						}
-						townyUniverse.getDataSource().saveTown(town);
-						townyUniverse.getDataSource().saveNation(nation);
+						townyUniverse.getDatabaseHandler().save(town, nation);
 					}
 				} else
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
@@ -305,7 +304,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							
 							// reset this resident and remove him from the town.
 							resident.clear();
-							townyUniverse.getDataSource().saveTown(town);
+							townyUniverse.getDatabaseHandler().save(town);
 							
 						} catch (EmptyTownException e) {
 							

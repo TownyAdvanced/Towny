@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -121,8 +123,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveSnapshotList();
 
 	abstract public boolean saveResident(Resident resident);
-
-	abstract public boolean saveTown(Town town);
 	
 	abstract public boolean savePlotGroup(PlotGroup group);
 
@@ -241,8 +241,7 @@ public abstract class TownyDataSource {
 	public boolean saveTowns() {
 
 		TownyMessaging.sendDebugMsg("Saving Towns");
-		for (Town town : getTowns())
-			saveTown(town);
+		for (Town town : getTowns()){}//saveTown(town);
 		return true;
 	}
 
@@ -315,7 +314,7 @@ public abstract class TownyDataSource {
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
+	//abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 

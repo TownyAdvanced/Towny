@@ -31,12 +31,12 @@ public class NationType extends ChatType {
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			final UUID nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().getUuid();
+			final UUID nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().getUniqueIdentifier();
 
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
-				if(townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUuid().equals(nation)) {
+				if(townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUniqueIdentifier().equals(nation)) {
 					newRecipients.add(p);
 				}
 			}

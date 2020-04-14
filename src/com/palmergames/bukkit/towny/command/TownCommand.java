@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
@@ -1062,7 +1063,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							TownyMessaging.sendPrefixedTownMessage(town,String.format(TownySettings.getLangString("msg_kicked"), outlawer, target.getName()));
 						}
 					town.addOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					townyUniverse.getDatabaseHandler().save(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_declared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_declared_an_outlaw"), target.getName(), town.getName()));
 					if (admin)
@@ -1078,7 +1079,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					town.removeOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					townyUniverse.getDatabaseHandler().save(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_undeclared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
 					if (admin)
@@ -1098,7 +1099,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 
 		}
 
@@ -1604,7 +1605,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(town);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 			
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 		}
 	}
 
@@ -2219,8 +2220,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			}
 			
-			townyUniverse.getDataSource().saveTown(town);
-			townyUniverse.getDataSource().saveTownList();
+			townyUniverse.getDataSource().save(town);
 
 			if (nation != null) {
 				townyUniverse.getDataSource().saveNation(nation);
@@ -2285,7 +2285,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 				
-				townyUniverse.getDataSource().saveTown(town);
+				townyUniverse.getDatabaseHandler().save(town);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
@@ -2414,19 +2414,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
-		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
+		DatabaseHandler databaseHandler = TownyUniverse.getInstance().getDatabaseHandler();
 
-		townyDataSource.newTown(name);
-		Town town = townyDataSource.getTown(name);
+		databaseHandler.newTown(name);
+		Town town = databaseHandler.getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
-		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
+		TownBlock townBlock = new TownBlock(UUID.randomUUID(), key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
 
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
-		town.setUuid(UUID.randomUUID());
 		town.setRegistered(System.currentTimeMillis());
 
 		if (world.isUsingPlotManagementRevert()) {
@@ -2453,12 +2452,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 		
-		townyDataSource.saveResident(resident);
-		townyDataSource.saveTownBlock(townBlock);
-		townyDataSource.saveTown(town);
-		townyDataSource.saveWorld(world);
-		
-		townyDataSource.saveTownList();
+		databaseHandler.save(resident, townBlock, town, world);
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -2549,8 +2543,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 		
-		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		townyUniverse.getDatabaseHandler().save(resident, town);
 
 		// Reset everyones cache permissions as this player leaving could affect
 		// multiple areas
@@ -2738,7 +2731,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_invited_join_town"), name, msg.toString()));
 			TownyMessaging.sendPrefixedTownMessage(town, msg.toString());
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 		} else
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
 	}
@@ -2749,7 +2742,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		townyUniverse.getDatabaseHandler().save(town);
 	}
 
 	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
@@ -2799,7 +2792,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		townyUniverse.getDatabaseHandler().save(town);
 	}
 
 	
@@ -2857,7 +2850,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMessage(sender, msg.toString());
 			} catch (NotRegisteredException e) {
 			}
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 		} else {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
 		}
@@ -2881,8 +2874,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 						try {
 							town.getNation().removeTown(town);
-							townyUniverse.getDataSource().saveTown(town);
-							townyUniverse.getDataSource().saveNation(nation);
+							townyUniverse.getDatabaseHandler().save(town, nation);
 							TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_capital_not_enough_residents_left_nation"), town.getName()));
 						} catch (EmptyNationException e) {
 							e.printStackTrace();
@@ -2907,7 +2899,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_town_not_enough_residents_left_nation"), town.getName()));
 				town.getNation().removeTown(town);
-				townyUniverse.getDataSource().saveTown(town);
+				townyUniverse.getDatabaseHandler().save(town);
 				townyUniverse.getDataSource().saveNation(nation);
 			} catch (EmptyNationException e) {
 				e.printStackTrace();
@@ -3319,7 +3311,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				String cancelMessage = "";
 				for(WorldCoord coord : selection){
 					//Use the user's current world
-					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player);
+					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(UUID.randomUUID(),coord.getX(), coord.getZ(), world), player);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
 					if(preClaimEvent.isCancelled()) {
 						blockedClaims++;

@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.UUID;
 
 public class TownBlock extends TownyObject {
 
@@ -35,8 +36,8 @@ public class TownBlock extends TownyObject {
 	protected TownyPermission permissions = new TownyPermission();
 	protected boolean isChanged = false;
 	
-	public TownBlock(int x, int z, TownyWorld world) {
-		super("");
+	public TownBlock(UUID uniqueIdentifier, int x, int z, TownyWorld world) {
+		super(uniqueIdentifier);
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);

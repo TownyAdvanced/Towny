@@ -131,7 +131,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		} else if (TownySettings.isFakeResident(name)) {
 
-			Resident resident = new Resident(name);
+			Resident resident = new Resident(UUID.randomUUID(), name);
 			resident.setNPC(true);
 
 			return resident;
@@ -178,7 +178,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public Town getTown(UUID uuid) throws NotRegisteredException {
 		String name = null;
 		for (Town town : this.getTowns()) {
-			if (uuid.equals(town.getUuid())) {
+			if (uuid.equals(town.getUniqueIdentifier())) {
 				name = town.getName();
 			}
 		}
@@ -235,7 +235,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public Nation getNation(UUID uuid) throws NotRegisteredException {
 		String name = null;
 		for (Nation nation : this.getNations()) {
-			if (uuid.equals(nation.getUuid())) {
+			if (uuid.equals(nation.getUniqueIdentifier())) {
 				name = nation.getName();
 			}
 		}
@@ -305,7 +305,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				if (town.hasNation())
 					saveNation(town.getNation());
 
-				saveTown(town);
+				//saveTown(town);
 			}
 			resident.clear();
 			
@@ -321,7 +321,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Town townOutlaw : getTowns()) {
 				if (townOutlaw.hasOutlaw(resident)) {
 					townOutlaw.removeOutlaw(resident);
-					saveTown(townOutlaw);
+					//saveTown(townOutlaw);
 				}
 			}
 		} catch (NotRegisteredException e) {
@@ -407,11 +407,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
 			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
 
-		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
+		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(UUID.randomUUID(), filteredName));
 		universe.getResidentsTrie().addKey(filteredName);
 	}
-
-	@Override
+	
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
@@ -423,7 +422,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
 			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
+		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(UUID.randomUUID(), filteredName));
 		universe.getTownsTrie().addKey(filteredName);
 	}
 
@@ -439,7 +438,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
 			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
-		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
+		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(UUID.randomUUID(), filteredName));
 		universe.getNationsTrie().addKey(filteredName);
 	}
 
@@ -456,7 +455,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.getWorldMap().containsKey(name.toLowerCase()))
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
+		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(UUID.randomUUID(), name));
 	}
 
 	@Override
@@ -637,7 +636,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 			}
 
-			saveTown(town);
+			//saveTown(town);
 		}
 
 		plugin.resetCache();
@@ -730,7 +729,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					
 				} catch (EconomyException ignored) {
 				}
-			UUID oldUUID = town.getUuid();
+			UUID oldUUID = town.getUniqueIdentifier();
 			long oldregistration = town.getRegistered();
 
 			// Store the nation in case we have to update the capitol
@@ -763,7 +762,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (isCapital) {
 				nation.setCapital(town);
 			}
-			town.setUuid(oldUUID);
+			
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {
@@ -800,10 +799,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					pg.setTown(town);
 					savePlotGroup(pg);
 				}
-
-			saveTown(town);
-			saveTownList();
-			savePlotGroupList();
+			
+			//saveTown(town);
+			//saveTownList();
+			//savePlotGroupList();
 			saveWorld(town.getHomeblockWorld());
 
 			if (nation != null) {
@@ -857,7 +856,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (EconomyException ignored) {
 				}
 
-			UUID oldUUID = nation.getUuid();
+			UUID oldUUID = nation.getUniqueIdentifier();
 			long oldregistration = nation.getRegistered();
 
 			//Tidy up old files
@@ -882,19 +881,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					e.printStackTrace();
 				}
 			}
-
-			nation.setUuid(oldUUID);
+			
 			nation.setRegistered(oldregistration);
 
 			for (Town town : toSave) {
-				saveTown(town);
+				//saveTown(town);
 			}
 
 			saveNation(nation);
 			saveNationList();
 
 			//search and update all ally/enemy lists
-			Nation oldNation = new Nation(oldName);
+			Nation oldNation = new Nation(UUID.randomUUID(), oldName);
 			List<Nation> toSaveNation = new ArrayList<>(getNations());
 			for (Nation toCheck : toSaveNation)
 				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
@@ -1036,7 +1034,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveResidentList();
 			saveResident(resident);
 			if(town != null){
-			    saveTown(town);
+			    //saveTown(town);
 		    }
 			for(TownBlock tb: townBlocks){
 				saveTownBlock(tb);				
@@ -1044,7 +1042,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			//search and update all friends lists
 			//followed by outlaw lists
-			Resident oldResident = new Resident(oldName);
+			Resident oldResident = new Resident(UUID.randomUUID(), oldName);
 			List<Resident> toSaveResident = new ArrayList<>(getResidents());
 			for (Resident toCheck : toSaveResident){
 				if (toCheck.hasFriend(oldResident)) {
@@ -1070,8 +1068,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}					
 				}
 			}
-			for (Town toCheckTown : toSaveTown)
-				saveTown(toCheckTown);	
+			for (Town toCheckTown : toSaveTown){}
+				//saveTown(toCheckTown);	
 		
 		} finally {
 			lock.unlock();			
@@ -1109,13 +1107,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 				succumbingNation.removeTown(town);
 				prevailingNation.addTown(town);
-				saveTown(town);
+				//saveTown(town);
 			}
 		} catch (EconomyException ignored) {
 		} catch (EmptyNationException en) {
 			// This is the intended end-result of the merge.
 			prevailingNation.addTown(lastTown);
-			saveTown(lastTown);
+			//saveTown(lastTown);
 			String name = en.getNation().getName();
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);

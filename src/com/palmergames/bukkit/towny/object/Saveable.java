@@ -7,7 +7,7 @@ import java.io.File;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public interface Saveable extends Nameable {
+public interface Saveable extends Nameable, Identifiable {
 	/**
 	 * Gets the parent directory of the where this file will be saved.
 	 * 

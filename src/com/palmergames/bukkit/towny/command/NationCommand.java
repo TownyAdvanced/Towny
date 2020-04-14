@@ -1310,12 +1310,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().newNation(name);
+		townyUniverse.getDatabaseHandler().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		nation.addTown(town);
 		nation.setCapital(town);
-		nation.setUuid(UUID.randomUUID());
 		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			try {
@@ -1324,10 +1323,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-		townyUniverse.getDataSource().saveTown(town);
-		townyUniverse.getDataSource().saveNation(nation);
-		townyUniverse.getDataSource().saveNationList();
-
+		
+		townyUniverse.getDatabaseHandler().save(town, nation);
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
 
 		return nation;
@@ -1407,7 +1404,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().saveNationList();
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName()));
 		} finally {
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 		}
 	}
 
@@ -1640,7 +1637,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Town town : towns) {
 			if (!town.hasNation()) {
 				nation.addTown(town);
-				townyUniverse.getDataSource().saveTown(town);
+				townyUniverse.getDatabaseHandler().save(town);
 				TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_join_nation"), town.getName()));
 			}
 
@@ -1696,7 +1693,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						townyUniverse.getDataSource().saveResident(res);
 					}
 					
-					townyUniverse.getDataSource().saveTown(town);
+					townyUniverse.getDatabaseHandler().save(town);
 				} catch (NotRegisteredException e) {
 					remove.add(town);
 				} catch (EmptyNationException e) {

@@ -660,8 +660,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									 TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
 									 townBlock.setOutpost(true);
 									 town.addOutpostSpawn(player.getLocation());
-									 townyUniverse.getDataSource().saveTown(town);
-									 townyUniverse.getDataSource().saveTownBlock(townBlock);
+									 townyUniverse.getDatabaseHandler().save(town, townBlock);
 								 }
 								return true;
 							}
@@ -1037,7 +1036,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					p.sendMessage(TownySettings.getLangString("msg_plot_set_to_nfs"));
 					
 					// Since the groups are stored in towns we need to getString the town.
-					TownyUniverse.getInstance().getDataSource().saveTown(group.getTown());
+					TownyUniverse.getInstance().getDatabaseHandler().save(group.getTown());
 				}
 			} catch (NotRegisteredException e) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -1391,12 +1390,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 
-			townyUniverse.getDataSource().savePlotGroupList();
-
 			// Save changes.
-			townyUniverse.getDataSource().savePlotGroup(newGroup);
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(newGroup, townBlock, town);
 
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_put_into_group_x"), townBlock.getX(), townBlock.getZ(), newGroup.getName()));
 
@@ -1416,7 +1411,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.removePlotObjectGroup();
 
 			// Save
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDatabaseHandler().save(townBlock);
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_was_removed_from_group_x"), townBlock.getX(), townBlock.getZ(), name));
 
 		} else if (split[0].equalsIgnoreCase("rename")) {

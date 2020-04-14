@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -37,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Towny's class for internal API Methods
- * If you don't want to change the dataSource, war, permissions or similiar behavior
+ * If you don't want to change the dataSource, war, permissions or similar behavior
  * and only for example want to get Resident objects you should use {@link TownyAPI}
  *
  * @author Lukas Mansour (Articdive)
@@ -61,6 +64,7 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
+    private DatabaseHandler databaseHandler;
     
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -92,21 +96,24 @@ public class TownyUniverse {
         
         clearAll();
                 
-        long startTime = System.currentTimeMillis();
-        if (!loadDatabase(loadDbType)) {
-            System.out.println("[Towny] Error: Failed to loadString!");
-            return false;
-        }
-        long time = System.currentTimeMillis() - startTime;
-        System.out.println("[Towny] Database loaded in " + time + "ms.");
+//        long startTime = System.currentTimeMillis();
+//        if (!loadDatabase(loadDbType)) {
+//            System.out.println("[Towny] Error: Failed to loadString!");
+//            return false;
+//        }
+//        long time = System.currentTimeMillis() - startTime;
+//        System.out.println("[Towny] Database loaded in " + time + "ms.");
+
+		System.out.println("[Towny] Loading new Database...");
         
         try {
-            dataSource.cleanupBackups();
+           //dataSource.cleanupBackups();
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
                 case "ff":
                 case "flatfile": {
                     this.dataSource = new TownyFlatFileSource(towny, this);
+                    this.databaseHandler = new FlatFileDatabaseHandler();
                     break;
                 }
                 case "h2":
@@ -124,7 +131,7 @@ public class TownyUniverse {
                 dataSource.backup();
                 
                 if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    dataSource.deleteUnusedResidents();
+                    //dataSource.deleteUnusedResidents();
                 }
                 
             } catch (IOException e) {
@@ -140,6 +147,8 @@ public class TownyUniverse {
                 //Formats are different so getString ALL data.
                 dataSource.saveAll();
             }
+            
+            databaseHandler.loadAll();
             
         } catch (UnsupportedOperationException e) {
             System.out.println("[Towny] Error: Unsupported getString format!");
@@ -546,6 +555,8 @@ public class TownyUniverse {
 
 		return townBlocks.remove(worldCoord) != null;
 	}
-
 	
+	public DatabaseHandler getDatabaseHandler() {
+		return databaseHandler;
+	}
 }

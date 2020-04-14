@@ -624,8 +624,8 @@ public class War {
 					remove(attacker, defenderTown.getNation());
 				else
 					remove(attacker, defenderTown);
-				townyUniverse.getDataSource().saveTown(defenderTown);
-				townyUniverse.getDataSource().saveTown(attacker);
+				
+				townyUniverse.getDatabaseHandler().save(defenderTown, attacker);
 				return;
 			} else
 				TownyMessaging.sendPrefixedTownMessage(defenderTown, String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
@@ -658,8 +658,8 @@ public class War {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), defenderTown, count));
 			}				
 		}
-		townyUniverse.getDataSource().saveTown(defenderTown);
-		townyUniverse.getDataSource().saveTown(attacker);
+		
+		townyUniverse.getDatabaseHandler().save(defenderTown, attacker);
 	}
 
 	/** 
@@ -715,9 +715,7 @@ public class War {
 					attacker.getNation().addTown(town);
 				} catch (AlreadyRegisteredException e) {
 				}
-				townyUniverse.getDataSource().saveTown(town);
-				townyUniverse.getDataSource().saveNation(attacker.getNation());
-				townyUniverse.getDataSource().saveNation(losingNation);
+				townyUniverse.getDatabaseHandler().save(town, attacker.getNation(), losingNation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 			} catch (EmptyNationException e) {
 				// if losingNation was a one-town nation then this.
@@ -725,9 +723,7 @@ public class War {
 					attacker.getNation().addTown(town);
 				} catch (AlreadyRegisteredException e1) {
 				}
-				townyUniverse.getDataSource().saveTown(town);
-				townyUniverse.getDataSource().saveNation(attacker.getNation());
-				townyUniverse.getDataSource().removeNation(losingNation);
+				townyUniverse.getDatabaseHandler().save(town, attacker.getNation(), losingNation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 			}
 		}

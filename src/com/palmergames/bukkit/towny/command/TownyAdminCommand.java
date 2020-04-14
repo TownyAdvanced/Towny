@@ -712,7 +712,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} catch (NumberFormatException nfe) {
 				throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 			}
-			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDatabaseHandler().save(town);
 		} catch (TownyException e) {
 			throw new TownyException(e.getMessage());
 		}
@@ -993,7 +993,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					else 
 						town.setAdminEnabledPVP(true);
 					
-					townyUniverse.getDataSource().saveTown(town);
+					townyUniverse.getDatabaseHandler().save(town);
 					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_town_forcepvp_setting_set_to"), town.getName(), town.isAdminEnabledPVP()));
 					
 				} else
@@ -1372,7 +1372,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							e.printStackTrace();
 						}
 					}
-					townyUniverse.getDataSource().saveTown(town);
+					townyUniverse.getDatabaseHandler().save(town);
 					String[] msg = TownySettings.getNewMayorMsg(newMayor.getName());
 					TownyMessaging.sendPrefixedTownMessage(town, msg);
 					// TownyMessaging.sendMessage(player, msg);
@@ -1860,7 +1860,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_key_x_was_successfully_updated_to_x"), mdKey, cdf.getValue()));
 
 							// Save changes.
-							townyUniverse.getDataSource().saveTown(town);
+							townyUniverse.getDatabaseHandler().save(town);
 
 							return;
 						}

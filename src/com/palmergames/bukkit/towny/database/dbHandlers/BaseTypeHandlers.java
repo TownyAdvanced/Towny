@@ -3,6 +3,10 @@ package com.palmergames.bukkit.towny.database.dbHandlers;
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class BaseTypeHandlers {
@@ -44,6 +48,24 @@ public class BaseTypeHandlers {
 			
 			// Initialize it.
 			return UUID.fromString(uuidStr);
+		}
+	};
+	
+	public static final LoadHandler<List<String>> STRING_LIST_HANDLER = new LoadHandler<List<String>>() {
+		@Override
+		public List<String> loadString(LoadContext context, String str) {
+			
+			String strCopy = str.replace("[", "");
+			strCopy = strCopy.replace("]", "");
+			
+			String[] elements = strCopy.split(", ");
+			
+			return new ArrayList<>(Arrays.asList(elements));
+		}
+
+		@Override
+		public List<String> loadSQL(LoadContext context, Object result) {
+			return null;
 		}
 	};
 }

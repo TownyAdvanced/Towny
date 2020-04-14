@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
 
-	private HashMap<String, Town> towns = new HashMap<>();
+	private final transient HashMap<String, Town> towns = new HashMap<>();
 	private boolean isClaimable = true;
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
@@ -54,8 +56,12 @@ public class TownyWorld extends TownyObject {
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
 
-	public TownyWorld(String name) {
-		super(name);
+	public TownyWorld(UUID id) {
+		super(id);
+	}
+
+	public TownyWorld(UUID id, String name) {
+		super(id, name);
 	}
 
 	public HashMap<String, Town> getTowns() {
@@ -749,7 +755,7 @@ public class TownyWorld extends TownyObject {
 
 	@Override
 	public File getSaveDirectory() {
-		return null;
+		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds");
 	}
 
 	@Override

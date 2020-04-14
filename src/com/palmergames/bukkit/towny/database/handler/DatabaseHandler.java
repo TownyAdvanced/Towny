@@ -9,10 +9,14 @@ import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
@@ -21,20 +25,28 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.Trie;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.sql.JDBCType;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +65,23 @@ public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
 	protected static final HashMap<String,String> replacementKeys = new HashMap<>();
 	
+	protected final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
+	protected final Map<UUID, Nation> nations = new ConcurrentHashMap<>();
+	protected final Map<UUID, Town> towns = new ConcurrentHashMap<>();
+	protected final Map<UUID, TownBlock> townblocks = new ConcurrentHashMap<>();
+	protected final Map<UUID, Resident> residents = new ConcurrentHashMap<>();
+	
+	// While we are keying with respect to UUID, we still need to hash in objects,
+	// with name keys for accessibility and speed reasons. That being said, these
+	// objects should never be used to justify the relationship between two objects
+	// but instead, mainly for fetching operations where UUID isn't available.
+	protected final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
+	protected final Map<String, Nation> nationNameMap = new ConcurrentHashMap<>();
+	protected final Map<String, Town> townNameMap = new ConcurrentHashMap<>();
+	protected final Map<String, Resident> residentNameMap = new ConcurrentHashMap<>();
+
+	private final Trie townsTrie = new Trie();
+	
 	static {
 		replacementKeys.put("outpostSpawns", "outpostspawns");
 		replacementKeys.put("adminEnabledPVP", "adminEnabledPvP");
@@ -70,15 +99,18 @@ public abstract class DatabaseHandler {
 		registerAdapter(String.class, BaseTypeHandlers.STRING_HANDLER);
 		registerAdapter(UUID.class, BaseTypeHandlers.UUID_HANDLER);
 		registerAdapter(Integer.class, BaseTypeHandlers.INTEGER_HANDLER);
+		registerAdapter(new TypeContext<List<String>>(){}.getType(), BaseTypeHandlers.STRING_LIST_HANDLER);
 		
 		registerAdapter(Resident.class, new ResidentHandler());
 		registerAdapter(Location.class, new LocationHandler());
 		registerAdapter(new TypeContext<List<Resident>>(){}.getType(), new ResidentListHandler());
 		registerAdapter(new TypeContext<List<Location>>(){}.getType(), new LocationListHandler());
+		registerAdapter(new TypeContext<List<TownBlock>>(){}.getType(), new TownBlockListHandler());
 		registerAdapter(TownBlock.class, new TownBlockHandler());
 		registerAdapter(Nation.class, new NationHandler());
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
 		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
+		registerAdapter(Town.class, new TownHandler());
 		
 	}
 	
@@ -168,6 +200,12 @@ public abstract class DatabaseHandler {
 	
 	public abstract void save(Saveable obj);
 	
+	public void save(Saveable @NotNull ... objs) {
+		for (Saveable obj : objs) {
+			save(obj);
+		}
+	}
+	
 	public void saveSQL(Object obj) {
 		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 
@@ -228,7 +266,7 @@ public abstract class DatabaseHandler {
 			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type);
 		}
 		
-		if (str.equals("")) {
+		if (str.equals("") || str.equals("null")) {
 			return null;
 		}
 		
@@ -280,7 +318,7 @@ public abstract class DatabaseHandler {
 		return keys;
 	}
 	
-	public Object loadPrimitive(String str, Type type) {
+	public final Object loadPrimitive(String str, Type type) {
 		
 		if (!isPrimitive(type)) {
 			throw new UnsupportedOperationException(type + " is not primitive, cannot parse");
@@ -303,7 +341,7 @@ public abstract class DatabaseHandler {
 		return null;
 	}
 
-	private SQLData getPrimitiveSQL(Object object) {
+	private final SQLData getPrimitiveSQL(Object object) {
 		Class<?> type = object.getClass();
 		if (type == int.class || type == Integer.class) {
 			return new SQLData(object, JDBCType.INTEGER);
@@ -343,4 +381,158 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
+	
+	// These methods will differ greatly between inheriting classes,
+	// hence they are abstract.
+	public abstract Town loadTown(UUID id);
+	public abstract Resident loadResident(UUID id);
+	public abstract Nation loadNation(UUID id);
+	public abstract TownyWorld loadWorld(UUID id);
+	public abstract void loadAllResidents();
+	
+	public void loadAll() {
+		
+		// 1.) Load Residents
+		loadAllResidents();
+		
+		// 2.) Load Townblocks
+		
+	}
+
+	// ---------- Object Getters ----------
+
+	@Nullable
+	public final Resident getResident(@NotNull UUID uuid) {
+		residents.computeIfAbsent(uuid, (k) -> loadResident(uuid));
+		return residents.get(uuid);
+	}
+
+	@NotNull
+	public final List<Resident> getResidents() {
+		ArrayList<Resident> copy = new ArrayList<>(residents.values());
+		return Collections.unmodifiableList(copy);
+	}
+
+	/**
+	 * Fetches the {@link Town} from the memory cache, if not loaded in,
+	 * it will be loaded from the DB.
+	 * 
+	 * @param uuid The UUID of the town.
+	 * @return The town with the UUID, null otherwise.
+	 */
+	@Nullable
+	public final Town getTown(@NotNull UUID uuid) {
+		towns.computeIfAbsent(uuid, (k) -> loadTown(uuid));
+		return towns.get(uuid);
+	}
+
+	/**
+	 * Fetches the {@link Town} from the memory cache.
+	 * 
+	 * Note: This is fetch is not the most accurate, and 
+	 * should only be used when in the context of a command.
+	 *
+	 * @param name The name of the town.
+	 * @return The town with the name, null otherwise.
+	 */
+	@Nullable
+	public final Town getTown(@NotNull String name) {
+		return townNameMap.get(name);
+	}
+	
+	@NotNull
+	public final List<Town> getTowns() {
+		ArrayList<Town> copy = new ArrayList<>(towns.values());
+		return Collections.unmodifiableList(copy);
+	}
+
+	public final TownyWorld getWorld(@NotNull UUID id) {
+		return worlds.get(id);
+	}
+	
+	public final TownyWorld getWorld(@NotNull String name) { return worldNameMap.get(name); }
+	
+	@NotNull
+	public final List<TownyWorld> getWorlds() {
+		ArrayList<TownyWorld> copy = new ArrayList<>(worlds.values());
+		return Collections.unmodifiableList(copy);
+	}
+	
+	
+
+	// ---------- Object Getters ----------
+	
+	public abstract void load();
+
+	/**
+	 * Creates a new {@link Town} and saves it into the database.
+	 * 
+	 * @param name The name of the town.
+	 * @throws AlreadyRegisteredException When the name is taken.
+	 * @throws NotRegisteredException When the name is invalid.
+	 */
+	public final void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		
+		// Check if name is valid.
+		String filteredName = getFilteredName(name);
+		
+		// Check if name already exists.
+		if (townNameMap.containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+		
+		// Create new town and save it.
+		Town newTown = new Town(UUID.randomUUID(), name);
+		townsTrie.addKey(name);
+		
+		// Save town
+		save(newTown);
+		
+		// Add town to memory.
+		towns.put(newTown.getUniqueIdentifier(), newTown);
+	}
+	
+	public final void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		// Get filtered name.
+		String filteredName = getFilteredName(name);
+
+		if (nationNameMap.containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+
+		Nation newNation = new Nation(UUID.randomUUID(), name);
+		save(newNation);
+		
+		// Add nation to memory
+		nations.put(newNation.getUniqueIdentifier(), newNation);
+	}
+	
+	public final void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		// Get bukkit world.
+		World world = Bukkit.getWorld(name);
+		
+		if (world == null) {
+			throw new NotRegisteredException("World doesn't exist");
+		}
+
+		if (worldNameMap.containsKey(name.toLowerCase())) {
+			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
+		}
+		
+		UUID uuid = world.getUID();
+		TownyWorld newWorld = new TownyWorld(uuid, name);
+		save(newWorld);
+		
+	}
+	
+	protected final String getFilteredName(String name) throws NotRegisteredException {
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		return filteredName;
+	}
+	
+	
 }

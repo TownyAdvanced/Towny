@@ -50,6 +50,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
 	
+	@LoadSetter(setterName = "setMayor")
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
@@ -69,12 +70,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 	@LoadSetter(setterName = "forceSetHomeBlock")
 	private TownBlock homeBlock;
-	
 	private TownyWorld world;
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
-	private UUID uuid;
 	private long registered;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
@@ -84,9 +83,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private transient ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
 
-	public Town(String name) {
-		super(name);
+	public Town(UUID uniqueIdentifier) {
+		super(uniqueIdentifier);
 		permissions.loadDefault(this);
+	}
+
+	public Town(UUID uniqueIdentifier, String name) {
+		super(uniqueIdentifier, name);
 	}
 
 	/*
@@ -828,7 +831,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					setHomeBlock(null);
 			} catch (TownyException ignored) {}
 			removeTownBlockMap(townBlock);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			TownyUniverse.getInstance().getDatabaseHandler().save(this);
 		}
 	}
 
@@ -858,7 +861,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			TownyUniverse.getInstance().getDatabaseHandler().save(this);
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
@@ -919,7 +922,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				TownyUniverse.getInstance().getDatabaseHandler().save(this);
 			}
 		}
 	}
@@ -1106,7 +1109,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_jail_plot"));
 				
 			jailSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			TownyUniverse.getInstance().getDataSource().save(this);
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
@@ -1120,7 +1123,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				TownyUniverse.getInstance().getDatabaseHandler().save(this);
 			}
 		}
 	}
@@ -1216,18 +1219,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			outlaws.remove(resident);			
 	}
 
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public boolean hasValidUUID() {
-		return uuid != null;
-	}
-
 	public void setRegistered(long registered) {
 		this.registered = registered;
 	}
@@ -1314,14 +1305,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		TownyUniverse.getInstance().getDatabaseHandler().save(this);
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		TownyUniverse.getInstance().getDataSource().save(this);
 	}
 	
 	public void setConquered(boolean conquered) {

@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.LoadSetter;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
@@ -34,10 +36,10 @@ import java.util.UUID;
 
 public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
-	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
+	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	//private List<Resident> assistants = new ArrayList<Resident>();
-	private List<Town> towns = new ArrayList<>();
+	private transient List<Town> towns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
@@ -46,8 +48,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private String nationBoard = "/nation set board [msg]";
 	private String mapColorHexCode = "";
 	private String tag = "";
-	public UUID uuid;
 	private long registered;
+	
+	@LoadSetter(setterName = "setNationSpawn")
 	private Location nationSpawn;
 	private boolean isPublic = TownySettings.getNationDefaultPublic();
 	private boolean isOpen = TownySettings.getNationDefaultOpen();
@@ -56,8 +59,12 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private transient List<Invite> sentallyinvites = new ArrayList<>();
 	private transient EconomyAccount account;
 
-	public Nation(String name) {
-		super(name);
+	public Nation(UUID uniqueIdentifier) {
+		super(uniqueIdentifier);
+	}
+	
+	public Nation(UUID uniqueIdentifier, String name) {
+		super(uniqueIdentifier, name);
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -234,7 +241,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public boolean hasNationSpawn(){
 		return (nationSpawn != null);
 	}
-
+	
 	public void setNationSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
@@ -470,7 +477,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 		return neutral;
 	}
-
+	
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
@@ -563,18 +570,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return out;
-	}
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public boolean hasValidUUID() {
-		return uuid != null;
 	}
 
 	public long getRegistered() {
@@ -822,7 +817,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	@Override
 	public File getSaveDirectory() {
-		return null;
+		return new File(Towny.getPlugin().getDataFolder() + "/data/nations");
 	}
 
 	@Override

@@ -484,7 +484,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 int x = Integer.parseInt(rs.getString("x"));
                 int z = Integer.parseInt(rs.getString("z"));
 
-                TownBlock townBlock = new TownBlock(x, z, world);
+                TownBlock townBlock = new TownBlock(UUID.randomUUID(), x, z, world);
                 TownyUniverse.getInstance().addTownBlock(townBlock);
                 total++;
 
@@ -968,11 +968,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         }
                     }
                 }
-                try {
-                    town.setUuid(UUID.fromString(rs.getString("uuid")));
-                } catch (IllegalArgumentException | NullPointerException ee) {
-                    town.setUuid(UUID.randomUUID());
-                }
+                // This can only be done via reflection now.
+//                try {
+//                    town.setUuid(UUID.fromString(rs.getString("uuid")));
+//                } catch (IllegalArgumentException | NullPointerException ee) {
+//                    town.setUuid(UUID.randomUUID());
+//                }
 
                 line = rs.getString("conqueredDays");
                 if (line != null)
@@ -1086,11 +1087,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 nation.setTaxes(rs.getDouble("taxes"));
                 nation.setSpawnCost(rs.getFloat("spawnCost"));
                 nation.setNeutral(rs.getBoolean("neutral"));
-                try {
-                    nation.setUuid(UUID.fromString(rs.getString("uuid")));
-                } catch (IllegalArgumentException | NullPointerException ee) {
-                    nation.setUuid(UUID.randomUUID());
-                }
+//                try {
+//                    nation.setUuid(UUID.fromString(rs.getString("uuid")));
+//                } catch (IllegalArgumentException | NullPointerException ee) {
+//                    nation.setUuid(UUID.randomUUID());
+//                }
 
                 line = rs.getString("nationSpawn");
                 if (line != null) {
@@ -1574,76 +1575,76 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return false;
     }
 
-    @Override
-    public synchronized boolean saveTown(Town town) {
-    
-        TownyMessaging.sendDebugMsg("Saving town " + town.getName());
-        try {
-            HashMap<String, Object> twn_hm = new HashMap<>();
-            twn_hm.put("name", town.getName());
-            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
-            twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
-            twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
-            twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
-            twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
-            twn_hm.put("townBoard", town.getTownBoard());
-            twn_hm.put("tag", town.getTag());
-            twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
-            twn_hm.put("bonus", town.getBonusBlocks());
-            twn_hm.put("purchased", town.getPurchasedBlocks());
-            twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
-            twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
-            twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());
-            twn_hm.put("embassyPlotTax", town.getEmbassyPlotTax());
-            twn_hm.put("spawnCost", town.getSpawnCost());
-            twn_hm.put("plotPrice", town.getPlotPrice());
-            twn_hm.put("plotTax", town.getPlotTax());
-            twn_hm.put("taxes", town.getTaxes());
-            twn_hm.put("hasUpkeep", town.hasUpkeep());
-            twn_hm.put("taxpercent", town.isTaxPercentage());
-            twn_hm.put("open", town.isOpen());
-            twn_hm.put("public", town.isPublic());
-            twn_hm.put("conquered", town.isConquered());
-            twn_hm.put("conqueredDays", town.getConqueredDays());
-            twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
-            twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
-			if (town.hasMeta())
-				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
-			else
-				twn_hm.put("metadata", "");
-        
-            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
-            twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
-            twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#" + town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#" + town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw() : "");
-            // Outpost Spawns
-            StringBuilder outpostArray = new StringBuilder();
-            if (town.hasOutpostSpawn())
-                for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
-                    outpostArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
-                }
-            twn_hm.put("outpostSpawns", outpostArray.toString());
-            StringBuilder jailArray = new StringBuilder();
-            if (town.hasJailSpawn())
-                for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
-                    jailArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
-                }
-            twn_hm.put("jailSpawns", jailArray.toString());
-            if (town.hasValidUUID()) {
-                twn_hm.put("uuid", town.getUuid());
-            } else {
-                twn_hm.put("uuid", UUID.randomUUID());
-            }
-            twn_hm.put("registered", town.getRegistered());
-        
-            UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
-            return true;
-        
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    @Override
+//    public synchronized boolean saveTown(Town town) {
+//    
+//        TownyMessaging.sendDebugMsg("Saving town " + town.getName());
+//        try {
+//            HashMap<String, Object> twn_hm = new HashMap<>();
+//            twn_hm.put("name", town.getName());
+//            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
+//            twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
+//            twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
+//            twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
+//            twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
+//            twn_hm.put("townBoard", town.getTownBoard());
+//            twn_hm.put("tag", town.getTag());
+//            twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
+//            twn_hm.put("bonus", town.getBonusBlocks());
+//            twn_hm.put("purchased", town.getPurchasedBlocks());
+//            twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
+//            twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
+//            twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());
+//            twn_hm.put("embassyPlotTax", town.getEmbassyPlotTax());
+//            twn_hm.put("spawnCost", town.getSpawnCost());
+//            twn_hm.put("plotPrice", town.getPlotPrice());
+//            twn_hm.put("plotTax", town.getPlotTax());
+//            twn_hm.put("taxes", town.getTaxes());
+//            twn_hm.put("hasUpkeep", town.hasUpkeep());
+//            twn_hm.put("taxpercent", town.isTaxPercentage());
+//            twn_hm.put("open", town.isOpen());
+//            twn_hm.put("public", town.isPublic());
+//            twn_hm.put("conquered", town.isConquered());
+//            twn_hm.put("conqueredDays", town.getConqueredDays());
+//            twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
+//            twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
+//			if (town.hasMeta())
+//				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
+//			else
+//				twn_hm.put("metadata", "");
+//        
+//            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
+//            twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
+//            twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#" + town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#" + town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw() : "");
+//            // Outpost Spawns
+//            StringBuilder outpostArray = new StringBuilder();
+//            if (town.hasOutpostSpawn())
+//                for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
+//                    outpostArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
+//                }
+//            twn_hm.put("outpostSpawns", outpostArray.toString());
+//            StringBuilder jailArray = new StringBuilder();
+//            if (town.hasJailSpawn())
+//                for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
+//                    jailArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
+//                }
+//            twn_hm.put("jailSpawns", jailArray.toString());
+//            if (town.hasValidUUID()) {
+//                twn_hm.put("uuid", town.getUuid());
+//            } else {
+//                twn_hm.put("uuid", UUID.randomUUID());
+//            }
+//            twn_hm.put("registered", town.getRegistered());
+//        
+//            UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
+//            return true;
+//        
+//        } catch (Exception e) {
+//            TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
 	@Override
 	public synchronized boolean savePlotGroup(PlotGroup group) {
@@ -1683,11 +1684,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
             nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw() : "");
-            if (nation.hasValidUUID()){
-                nat_hm.put("uuid", nation.getUuid());
-            } else {
-                nat_hm.put("uuid", UUID.randomUUID());
-            }
+			nat_hm.put("uuid", nation.getUniqueIdentifier());
+            
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
@@ -1905,7 +1903,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try {
 			TownyWorld world = getWorld(worldName);
-			TownBlock townBlock = new TownBlock(x, z, world);
+			TownBlock townBlock = new TownBlock(UUID.randomUUID(),x, z, world);
 
 			return loadPlotData(townBlock);
 		} catch (NotRegisteredException e) {

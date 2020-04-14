@@ -9,6 +9,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Economy object which provides an interface with the Economy Handler.
@@ -17,36 +18,31 @@ import java.io.File;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public class EconomyAccount extends TownyObject {
+public class EconomyAccount implements Nameable {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private World world;
+	private String name;
+
+	protected EconomyAccount(String name) {
+		this.name = name;
+	}
 	
 	protected EconomyAccount(String name, World world) {
-		super(name);
+		this(name);
 		this.world = world;
 	}
 	
-	protected EconomyAccount(String name) {
-		super(name);
-	}
-
-	@Override
-	public String getSavePath() {
-		return null;
-	}
-
 	public World getWorld() {
 		return world;
 	}
 
 	@Override
-	public File getSaveDirectory() {
-		return null;
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	public String getSQLTable() {
-		return null;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	private static final class TownyServerAccount extends EconomyAccount {

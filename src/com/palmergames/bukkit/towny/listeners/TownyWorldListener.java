@@ -70,8 +70,8 @@ public class TownyWorldListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			townyUniverse.getDataSource().newWorld(worldName);
-			TownyWorld world = townyUniverse.getDataSource().getWorld(worldName);
+			townyUniverse.getDatabaseHandler().newWorld(worldName);
+			TownyWorld world = townyUniverse.getDatabaseHandler().getWorld(worldName);
 			if (dungeonWorld)
 				world.setUsingTowny(false);
 			

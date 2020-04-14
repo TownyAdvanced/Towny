@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -19,7 +21,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.MapUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -57,6 +58,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	private final Queue<FlatFile_Task> queryQueue = new ConcurrentLinkedQueue<>();
 	private final BukkitTask task;
+	private final FlatFileDatabaseHandler databaseHandler = new FlatFileDatabaseHandler();
 
 	private final String newLine = System.getProperty("line.separator");
 	
@@ -113,7 +115,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		task = null;
 	}
-	
+
+	public FlatFileDatabaseHandler getDatabaseHandler() {
+		return databaseHandler;
+	}
+
 	public enum elements {
 		VER, novalue;
 
@@ -277,7 +283,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String[] coords = townBlockFile.getName().split("_");
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
-	                TownBlock townBlock = new TownBlock(x, z, world);
+	                TownBlock townBlock = new TownBlock(UUID.randomUUID(), x, z, world);
 	                TownyUniverse.getInstance().addTownBlock(townBlock);
 					total++;
 				}
@@ -660,6 +666,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 	}
 	
+	public void loadNewTown(Town town) {
+		getDatabaseHandler().load(new File(town.getSaveDirectory() + "/" + town.getName() + ".txt"), Town.class);
+		TownyUniverse.getInstance().getTownsMap().put(town.getName(), town);
+	}
+	
 	@Override
 	public boolean loadTown(Town town) {
 		
@@ -950,14 +961,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				line = keys.get("uuid");
-				if (line != null) {
-					try {
-						town.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException ee) {
-						town.setUuid(UUID.randomUUID());
-					}
-				}
 				line = keys.get("registered");
 				if (line != null) {
 					try {
@@ -975,7 +978,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
 			} finally {
-				saveTown(town);
+				//saveTown(town);
 			}
 			return true;
 		} else {
@@ -1092,14 +1095,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				line = keys.get("uuid");
-				if (line != null) {
-					try {
-						nation.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException ee) {
-						nation.setUuid(UUID.randomUUID());
-					}
-				}
+				
 				line = keys.get("registered");
 				if (line != null) {
 					try {
@@ -1715,184 +1711,130 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveResident(Resident resident) {
-
-		List<String> list = new ArrayList<>();
-
-		// Last Online
-		list.add("lastOnline=" + resident.getLastOnline());
-		// Registered
-		list.add("registered=" + resident.getRegistered());
-		// isNPC
-		list.add("isNPC=" + resident.isNPC());
-		// isJailed
-		list.add("isJailed=" + resident.isJailed());
-		// JailSpawn
-		list.add("JailSpawn=" + resident.getJailSpawn());
-		// JailDays
-		list.add("JailDays=" + resident.getJailDays());
-		// JailTown
-		list.add("JailTown=" + resident.getJailTown());
-
-		// title
-		list.add("title=" + resident.getTitle());
-		// surname
-		list.add("surname=" + resident.getSurname());
-
-		if (resident.hasTown()) {
-			try {
-				list.add("town=" + resident.getTown().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ","));
-			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ","));
-		}
-
-		// Friends
-		list.add("friends=" + StringMgmt.join(resident.getFriends(), ","));
-		list.add("");
-
-		// Plot Protection
-		list.add("protectionStatus=" + resident.getPermissions().toString());
-
-		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (resident.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = resident.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFile_Task(list, getResidentFilename(resident)));
-
+		getDatabaseHandler().save(resident);
 		return true;
-
 	}
-
-	@Override
-	public boolean saveTown(Town town) {
-
-		List<String> list = new ArrayList<>();
-
-		// Name
-		list.add("name=" + town.getName());
-		// Residents
-		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
-		// Mayor
-		if (town.hasMayor())
-			list.add("mayor=" + town.getMayor().getName());
-		// Nation
-		if (town.hasNation())
-			try {
-				list.add("nation=" + town.getNation().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-
-		// Assistants
-		list.add("assistants=" + StringMgmt.join(town.getAssistants(), ","));
-
-		list.add(newLine);
-		// Town Board
-		list.add("townBoard=" + town.getTownBoard());
-		// tag
-		list.add("tag=" + town.getTag());
-		// Town Protection
-		list.add("protectionStatus=" + town.getPermissions().toString());
-		// Bonus Blocks
-		list.add("bonusBlocks=" + town.getBonusBlocks());
-		// Purchased Blocks
-		list.add("purchasedBlocks=" + town.getPurchasedBlocks());
-		// Taxpercent
-		list.add("taxpercent=" + town.isTaxPercentage());
-		// Taxes
-		list.add("taxes=" + town.getTaxes());
-		// Plot Price
-		list.add("plotPrice=" + town.getPlotPrice());
-		// Plot Tax
-		list.add("plotTax=" + town.getPlotTax());
-		// Commercial Plot Price
-		list.add("commercialPlotPrice=" + town.getCommercialPlotPrice());
-		// Commercial Tax
-		list.add("commercialPlotTax=" + town.getCommercialPlotTax());
-		// Embassy Plot Price
-		list.add("embassyPlotPrice=" + town.getEmbassyPlotPrice());
-		// Embassy Tax
-		list.add("embassyPlotTax=" + town.getEmbassyPlotTax());
-		// Town Spawn Cost
-		list.add("spawnCost=" + town.getSpawnCost());
-		// Upkeep
-		list.add("hasUpkeep=" + town.hasUpkeep());
-		// Open
-		list.add("open=" + town.isOpen());
-		// PVP
-		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
-		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
-		// Public
-		list.add("public=" + town.isPublic());
-		// Conquered towns setting + date
-		list.add("conquered=" + town.isConquered());
-		list.add("conqueredDays " + town.getConqueredDays());
-		if (town.hasValidUUID()){
-			list.add("uuid=" + town.getUuid());
-		} else {
-			list.add("uuid=" + UUID.randomUUID());
-		}
-        list.add("registered=" + town.getRegistered());
-        
-        // Home Block
-		if (town.hasHomeBlock())
-			try {
-				list.add("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + town.getHomeBlock().getX() + "," + town.getHomeBlock().getZ());
-			} catch (TownyException ignored) {
-			}
-
-		// Spawn
-		if (town.hasSpawn())
-			try {
-				list.add("spawn=" + town.getSpawn().getWorld().getName() + "," + town.getSpawn().getX() + "," + town.getSpawn().getY() + "," + town.getSpawn().getZ() + "," + town.getSpawn().getPitch() + "," + town.getSpawn().getYaw());
-			} catch (TownyException ignored) {
-			}
-
-		// Outpost Spawns
-		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
-		if (town.hasOutpostSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
-				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
-			}
-		list.add(outpostArray.toString());
-
-		// Jail Spawns
-		StringBuilder jailArray = new StringBuilder("jailspawns=");
-		if (town.hasJailSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
-				jailArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
-			}
-		list.add(jailArray.toString());
-
-		// Outlaws
-		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
-
-		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (town.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = town.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
-		
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
-
-		return true;
-
-	}
+	
+//	public boolean saveTown(Town town) {
+//
+//		List<String> list = new ArrayList<>();
+//
+//		// Name
+//		list.add("name=" + town.getName());
+//		// Residents
+//		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
+//		// Mayor
+//		if (town.hasMayor())
+//			list.add("mayor=" + town.getMayor().getName());
+//		// Nation
+//		if (town.hasNation())
+//			try {
+//				list.add("nation=" + town.getNation().getName());
+//			} catch (NotRegisteredException ignored) {
+//			}
+//
+//		// Assistants
+//		list.add("assistants=" + StringMgmt.join(town.getAssistants(), ","));
+//
+//		list.add(newLine);
+//		// Town Board
+//		list.add("townBoard=" + town.getTownBoard());
+//		// tag
+//		list.add("tag=" + town.getTag());
+//		// Town Protection
+//		list.add("protectionStatus=" + town.getPermissions().toString());
+//		// Bonus Blocks
+//		list.add("bonusBlocks=" + town.getBonusBlocks());
+//		// Purchased Blocks
+//		list.add("purchasedBlocks=" + town.getPurchasedBlocks());
+//		// Taxpercent
+//		list.add("taxpercent=" + town.isTaxPercentage());
+//		// Taxes
+//		list.add("taxes=" + town.getTaxes());
+//		// Plot Price
+//		list.add("plotPrice=" + town.getPlotPrice());
+//		// Plot Tax
+//		list.add("plotTax=" + town.getPlotTax());
+//		// Commercial Plot Price
+//		list.add("commercialPlotPrice=" + town.getCommercialPlotPrice());
+//		// Commercial Tax
+//		list.add("commercialPlotTax=" + town.getCommercialPlotTax());
+//		// Embassy Plot Price
+//		list.add("embassyPlotPrice=" + town.getEmbassyPlotPrice());
+//		// Embassy Tax
+//		list.add("embassyPlotTax=" + town.getEmbassyPlotTax());
+//		// Town Spawn Cost
+//		list.add("spawnCost=" + town.getSpawnCost());
+//		// Upkeep
+//		list.add("hasUpkeep=" + town.hasUpkeep());
+//		// Open
+//		list.add("open=" + town.isOpen());
+//		// PVP
+//		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
+//		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
+//		// Public
+//		list.add("public=" + town.isPublic());
+//		// Conquered towns setting + date
+//		list.add("conquered=" + town.isConquered());
+//		list.add("conqueredDays " + town.getConqueredDays());
+//		if (town.hasValidUUID()){
+//			list.add("uuid=" + town.getUuid());
+//		} else {
+//			list.add("uuid=" + UUID.randomUUID());
+//		}
+//        list.add("registered=" + town.getRegistered());
+//        
+//        // Home Block
+//		if (town.hasHomeBlock())
+//			try {
+//				list.add("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + town.getHomeBlock().getX() + "," + town.getHomeBlock().getZ());
+//			} catch (TownyException ignored) {
+//			}
+//
+//		// Spawn
+//		if (town.hasSpawn())
+//			try {
+//				list.add("spawn=" + town.getSpawn().getWorld().getName() + "," + town.getSpawn().getX() + "," + town.getSpawn().getY() + "," + town.getSpawn().getZ() + "," + town.getSpawn().getPitch() + "," + town.getSpawn().getYaw());
+//			} catch (TownyException ignored) {
+//			}
+//
+//		// Outpost Spawns
+//		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
+//		if (town.hasOutpostSpawn())
+//			for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
+//				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
+//			}
+//		list.add(outpostArray.toString());
+//
+//		// Jail Spawns
+//		StringBuilder jailArray = new StringBuilder("jailspawns=");
+//		if (town.hasJailSpawn())
+//			for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
+//				jailArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
+//			}
+//		list.add(jailArray.toString());
+//
+//		// Outlaws
+//		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
+//
+//		// Metadata
+//		StringBuilder md = new StringBuilder();
+//		if (town.hasMeta()) {
+//			HashSet<CustomDataField<?>> tdata = town.getMetadata();
+//			for (CustomDataField<?> cdf : tdata) {
+//				md.append(cdf.toString()).append(";");
+//			}
+//		}
+//		list.add("metadata=" + md.toString());
+//		
+//		/*
+//		 *  Make sure we only save in async
+//		 */
+//		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
+//
+//		return true;
+//
+//	}
 	
 	@Override
 	public boolean savePlotGroup(PlotGroup group) {
@@ -1946,12 +1888,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("spawnCost=" + nation.getSpawnCost());
 		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
-		if (nation.hasValidUUID()){
-			list.add("uuid=" + nation.getUuid());
-		} else {
-			list.add("uuid=" + UUID.randomUUID());
-		}
-        list.add("registered=" + nation.getRegistered());
+		list.add("uuid=" + nation.getUniqueIdentifier());
+		list.add("registered=" + nation.getRegistered());
         
         // Spawn
 		if (nation.hasNationSpawn()) {
@@ -2306,7 +2244,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		try {
 			TownyWorld world = getWorld(worldName);
-			TownBlock townBlock = new TownBlock(x, z, world);
+			TownBlock townBlock = new TownBlock(UUID.randomUUID(), x, z, world);
 
 			return loadPlotData(townBlock);
 		} catch (NotRegisteredException e) {

@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 public class ReflectionUtil {
 
@@ -43,5 +44,31 @@ public class ReflectionUtil {
 		}
 		
 		return fields;
+	}
+	
+	public static void dump(Object obj) {
+
+		System.out.println("================= " + obj + " =================");
+		
+		for (Field field : getAllFields(obj, true)) {
+			field.setAccessible(true);
+			Object value;
+			try {
+				value = field.get(obj);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				return;
+			}
+			
+			if (value instanceof String) {
+				value = "\"" + value + "\"";
+			}
+
+			field.setAccessible(false);
+
+			System.out.println(field.getName() + " = " + value);
+		}
+
+		System.out.println("================= " + obj + " =================");
 	}
 }

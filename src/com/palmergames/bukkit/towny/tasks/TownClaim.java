@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author ElgarL
@@ -152,7 +153,7 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				townyUniverse.getDataSource().saveTown(test);
+				townyUniverse.getDatabaseHandler().save(test);
 			}
 		}
 
@@ -182,7 +183,7 @@ public class TownClaim extends Thread {
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
 				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), "some town"));
 		else {
-			TownBlock townBlock = new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
+			TownBlock townBlock = new TownBlock(UUID.randomUUID(), worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
 			townBlock.setTown(town);
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
