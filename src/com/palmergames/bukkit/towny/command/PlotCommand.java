@@ -679,10 +679,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										}
 
 										//Make them pay, ignoring exception because we already know they can pay.
-										try {
-											town.getAccount().pay(TownySettings.getOutpostCost(), "Plot Set Outpost");
-										} catch (EconomyException ignored) {
-										}
+										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
+											try {
+												town.getAccount().pay(TownySettings.getOutpostCost(), "Plot Set Outpost");
+											} catch (EconomyException ignored) {
+											}
 										townyUniverse.getDataSource().saveTown(town);
 										townyUniverse.getDataSource().saveTownBlock(townBlock);
 										TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
