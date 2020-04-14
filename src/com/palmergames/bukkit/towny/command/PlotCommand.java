@@ -662,16 +662,40 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								boolean isAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
 								Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 								
-								 if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin, true)) {
-									 if (TownySettings.isUsingEconomy() && !town.getAccount().pay(TownySettings.getOutpostCost(), String.format("Plot Set Outpost"))) 
-										 throw new TownyException(TownySettings.getLangString("msg_err_cannot_afford_to_set_outpost"));
+								if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin, true)) {
+									// Test if they can pay.
+									if (TownySettings.isUsingEconomy() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
+										throw new TownyException(TownySettings.getLangString("msg_err_cannot_afford_to_set_outpost"));
+									 
+									// Create a confirmation for setting outpost.
+									Confirmation confirmation = new Confirmation(() -> {
+										townBlock.setOutpost(true);
+										 
+										try {
+											town.addOutpostSpawn(player.getLocation());
+										} catch (TownyException e) {
+											TownyMessaging.sendErrorMsg(e.getMessage());
+											return;
+										}
 
-									 TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
-									 townBlock.setOutpost(true);
-									 town.addOutpostSpawn(player.getLocation());
-									 townyUniverse.getDataSource().saveTown(town);
-									 townyUniverse.getDataSource().saveTownBlock(townBlock);
-								 }
+										//Make them pay, ignoring exception because we already know they can pay.
+										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
+											try {
+												town.getAccount().pay(TownySettings.getOutpostCost(), "Plot Set Outpost");
+											} catch (EconomyException ignored) {
+											}
+										townyUniverse.getDataSource().saveTown(town);
+										townyUniverse.getDataSource().saveTownBlock(townBlock);
+										TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
+									});
+									// Set title.
+									String title = String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
+									confirmation.setTitle(title);
+	
+									// Send the confirmation.
+									ConfirmationHandler.sendConfirmation(player, confirmation);
+	
+								}
 								return true;
 							}
 						} 
