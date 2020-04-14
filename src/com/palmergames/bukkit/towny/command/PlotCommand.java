@@ -145,13 +145,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 			Player player = (Player) sender;
-			try {
-				if (!TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).isUsingTowny()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_set_use_towny_off"));
-					return false;
-				}
-			} catch (NotRegisteredException e) {
-				// World not registered				
+
+			if (TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getUID()) == null) {
+				return false;
+			}
+
+			if (!TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getUID()).isUsingTowny()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_set_use_towny_off"));
+				return false;
 			}
 
 			if (args == null) {
