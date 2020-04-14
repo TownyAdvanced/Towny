@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.siegewar.utils;
+package com.palmergames.bukkit.towny.war.common.ruins;
 
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.command.TownCommand;
@@ -11,8 +11,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -20,7 +23,7 @@ import org.bukkit.entity.Player;
  *
  * @author Goosius
  */
-public class SiegeWarRuinsUtil {
+public class RuinsUtil {
 
 	/**
 	 * This method returns true if the given player's town is ruined
@@ -28,7 +31,7 @@ public class SiegeWarRuinsUtil {
 	 * @param player the player
 	 * @return true if ruined, false if not
 	 */
-	public static boolean isPlayerTownRuined(Player player) {
+	public static boolean isPlayersTownRuined(Player player) {
 		try {
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
@@ -49,12 +52,12 @@ public class SiegeWarRuinsUtil {
 	 * 2. Set mayor to NPC
 	 * 3. Enable all perms
 	 * 4. Now, the residents cannot run /plot commands, and some /t commands
-	 * 5. Later, Town will be deleted after 2 upkeep cycles
+	 * 5. Town will later be deleted full, unless it is reclaimed
 	 */
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if(town.isRuined())
+		if (town.isRuined())
 			return; //Town already ruined. Do not run code as it would reset ruin status to 888 (ie phase 1)
 
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
@@ -62,11 +65,12 @@ public class SiegeWarRuinsUtil {
 			if (town.hasNation()) {
 				Nation nation = town.getNation();
 				townyUniverse.getDataSource().removeTownFromNation(plugin, town, nation);
-				if(nation.getTowns().size() == 0) {
+				if (nation.getTowns().size() == 0) {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation));
 				}
 			}
-		} catch (NotRegisteredException e) {}
+		} catch (NotRegisteredException e) {
+		}
 
 		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
 		try {
@@ -77,10 +81,10 @@ public class SiegeWarRuinsUtil {
 		}
 
 		//Remove siege if any
-		if(town.hasSiege())
+		if (town.hasSiege())
 			townyUniverse.getDataSource().removeSiege(town.getSiege());
 
-		town.setRecentlyRuinedEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeRuinsRemovalDelayHours() * TimeMgmt.ONE_HOUR_IN_MILLIS));
+		town.setRuinDurationRemainingHours(TownySettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);
 		town.setOpen(false);
 
@@ -95,15 +99,14 @@ public class SiegeWarRuinsUtil {
 
 		//Set town level perms
 		try {
-			for (String element : new String[] { "residentBuild",
+			for (String element : new String[]{"residentBuild",
 				"residentDestroy", "residentSwitch",
 				"residentItemUse", "outsiderBuild",
 				"outsiderDestroy", "outsiderSwitch",
 				"outsiderItemUse", "allyBuild", "allyDestroy",
 				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
 				"nationSwitch", "nationItemUse",
-				"pvp", "fire", "explosion", "mobs"})
-			{
+				"pvp", "fire", "explosion", "mobs"}) {
 				town.getPermissions().set(element, true);
 			}
 		} catch (Exception e) {
@@ -131,37 +134,35 @@ public class SiegeWarRuinsUtil {
 	 * @param player the player
 	 */
 	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
+		Town town;
 		try {
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-			if(!resident.hasTown())
+			if (!resident.hasTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 
 			//Ensure town is in a standard ruined state (not active, or a zero-resident-ruin)
-			Town town = resident.getTown();
-			if(town.getRecentlyRuinedEndTime() < 1)
+			town = resident.getTown();
+			if (town.getRuinDurationRemainingHours() < 1)
 				throw new TownyException(TownySettings.getLangString("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
-			double townReclaimCost = TownySettings.getReclaimTownPrice();
+			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
 			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 
 			//Validate if player can remove at this time
-			long timeUntilDeletionMillis = town.getRecentlyRuinedEndTime() - System.currentTimeMillis();
-			long maximumRuinDurationMillis = (long)(TownySettings.getWarSiegeRuinsRemovalDelayHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
-			long estimatedRuinsDurationMillis = maximumRuinDurationMillis - timeUntilDeletionMillis;
-			long minimumRuinsDurationMillis = (long)(TownySettings.getWarSiegeMinimumRuinsDurationHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
-			if(estimatedRuinsDurationMillis < minimumRuinsDurationMillis) {
-				long remainingRuinsDurationMillis = minimumRuinsDurationMillis - estimatedRuinsDurationMillis;
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_reclaim_town_yet"), TimeMgmt.getFormattedTimeValue(remainingRuinsDurationMillis)));
+			int currentRuinDurationHours = TownySettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
+			if (currentRuinDurationHours < TownySettings.getWarCommonTownRuinsMinDurationHours()) {
+				int timeUntilReclaimAllowedHours =  TownySettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_reclaim_town_yet"), timeUntilReclaimAllowedHours));
 			}
 
 			//Recover Town now
 			resident.getAccount().pay(townReclaimCost, "Cost of town reclaim.");
-			town.setRecentlyRuinedEndTime(0);
-			
+			town.setRuinDurationRemainingHours(0);
+
 			//Set player as mayor (and remove npc)
 			//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
 			try {
@@ -170,18 +171,17 @@ public class SiegeWarRuinsUtil {
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
-		
+
 			//Set town level perms
 			try {
-				for (String element : new String[] { "residentBuild",
+				for (String element : new String[]{"residentBuild",
 					"residentDestroy", "residentSwitch",
 					"residentItemUse", "outsiderBuild",
 					"outsiderDestroy", "outsiderSwitch",
 					"outsiderItemUse", "allyBuild", "allyDestroy",
 					"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
 					"nationSwitch", "nationItemUse",
-					"pvp", "fire", "explosion", "mobs"})
-				{
+					"pvp", "fire", "explosion", "mobs"}) {
 					town.getPermissions().set(element, false);
 				}
 			} catch (Exception e) {
@@ -199,8 +199,42 @@ public class SiegeWarRuinsUtil {
 			plugin.resetCache();
 
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_reclaimed"), resident.getName(), town.getName()));
-		} catch (Exception e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player,e.getMessage());
+		} catch (EconomyException ex) {
+			TownyMessaging.sendErrorMsg(player,ex.getMessage());
 		}
 	}
+
+	/**
+	 * This method cycles through all towns
+	 * If a town is in ruins, its remaining_ruin_time_hours counter is decreased
+	 * If a counter hits 0, the town is deleted
+	 */
+    public static void evaluateRuinedTownRemovals() {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
+		ListIterator<Town> townItr = towns.listIterator();
+		Town town;
+
+		while (townItr.hasNext()) {
+			town = townItr.next();
+			/*
+			 * Only delete ruined town if it really still
+			 * exists.
+			 * We are running in an Async thread so MUST verify all objects.
+			 */
+			if (townyUniverse.getDataSource().hasTown(town.getName())) {
+
+				if (town.isRuined()) {
+					town.decrementRemainingRuinTimeHours();
+
+					if(town.getRuinDurationRemainingHours() < 1) {
+						//Ruin found & recently ruined end time reached. Delete town now.
+						townyUniverse.getDataSource().removeTown(town, false);
+					}
+				}
+			} 
+		}
+    }
 }

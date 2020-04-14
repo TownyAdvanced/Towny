@@ -82,7 +82,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private EconomyAccount account;
 	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
-	private long recentlyRuinedEndTime;
+	private int ruinDurationRemainingHours;
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
 	private Siege siege;
@@ -94,7 +94,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-		recentlyRuinedEndTime = 0;
+		ruinDurationRemainingHours = 0;
 		revoltImmunityEndTime = 0;
 		siegeImmunityEndTime = System.currentTimeMillis()
 			+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
@@ -1450,19 +1450,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isRuined() {
-		return (residents.size() == 0 || recentlyRuinedEndTime > 0);
-	}
-
-	/*
-	888 = just ruined.
-	999 = 1 upkeep cycle completed since being ruined.
-	 */
-	public void setRecentlyRuinedEndTime(long recentlyRuinedEndTime) {
-		this.recentlyRuinedEndTime = recentlyRuinedEndTime;
-	}
-
-	public long getRecentlyRuinedEndTime() {
-		return recentlyRuinedEndTime;
+		return (residents.size() == 0 || ruinDurationRemainingHours > 0);
 	}
 
 	public void setOccupied(boolean occupied) {
@@ -1703,5 +1691,16 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
 	}
-	
+
+	public int getRuinDurationRemainingHours() {
+		return ruinDurationRemainingHours;
+	}
+
+	public void decrementRemainingRuinTimeHours() {
+		ruinDurationRemainingHours--;
+	}
+
+	public void setRuinDurationRemainingHours(int i) {
+		ruinDurationRemainingHours = i;
+	}
 }

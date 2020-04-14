@@ -33,7 +33,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarRuinsUtil;
+import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -511,14 +511,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town) {
-		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval();
+		boolean delayFullRemoval = TownySettings.getWarCommonTownRuinsEnabled();
 		removeTown(town, delayFullRemoval);
 	}
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
 		if (delayFullRemoval) {
-			SiegeWarRuinsUtil.putTownIntoRuinedState(town, plugin);
+			RuinsUtil.putTownIntoRuinedState(town, plugin);
 			return;
 		}
 

@@ -1226,11 +1226,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_TOWN);
 	}
 
-	public static double getReclaimTownPrice() {
-
-		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_TOWN);
-	}
-
 	public static double getNewNationPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_NATION);
@@ -1662,6 +1657,24 @@ public class TownySettings {
 	
 	public static boolean isNewDayDeleting0PlotTowns() {
 		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
+
+	public static long getHourInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
+	}
+
+	public static long getShortInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
+	}
+
+	public static long getNewHourTime() {
+		long time = getSeconds(ConfigNodes.PLUGIN_NEWHOUR_TIME);
+		long hour = getHourInterval();
+		if (time > hour) {
+			setProperty(ConfigNodes.PLUGIN_NEWHOUR_TIME.getRoot(), hour);
+			return hour;
+		}
+		return time;
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
@@ -3047,10 +3060,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_EXPLOSIONS_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
 
-	public static boolean getWarSiegeDelayFullTownRemoval() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL);
-	}
-
 	public static boolean getWarSiegeClaimingDisabledNearSiegeZones() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES);
 	}
@@ -3061,10 +3070,6 @@ public class TownySettings {
 
 	public static int getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference() {
 		return getInt(ConfigNodes.WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE);
-	}
-
-	public static double getWarSiegeRuinsRemovalDelayHours() {
-		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_HOURS);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
@@ -3162,24 +3167,12 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT);
 	}
 
-	public static double getWarSiegeRuinsRemovalsTickIntervalMinutes() {
-		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVALS_TICK_INTERVAL_MINUTES);
-	}
-
 	public static boolean getWarSiegePostSpawnDamageImmunityEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_ENABLED);
 	}
 
 	public static int getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() {
 		return getInt(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS);
-	}
-
-	public static boolean getWarSiegeRuinsReclaimEnabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_RUINS_RECLAIM_ENABLED);
-	}
-
-	public static double getWarSiegeMinimumRuinsDurationHours() {
-		return getDouble(ConfigNodes.WAR_SIEGE_MINIMUM_RUINS_DURATION_HOURS);
 	}
 
 	public static double getWarSiegeMaximumPillageAmountPerPlot() {
@@ -3279,5 +3272,25 @@ public class TownySettings {
 
 	public static int getWarSiegeBannerControlSessionDurationMinutes() {
 		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_SESSION_DURATION_MINUTES);
+	}
+
+	public static boolean getWarCommonTownRuinsEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_TOWN_RUINS_ENABLED);
+	}
+
+	public static int getWarCommonTownRuinsMaxDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS);
+	}
+
+	public static int getWarCommonTownRuinsMinDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS);
+	}
+
+	public static boolean getWarCommonTownRuinsReclaimEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED);
+	}
+
+	public static double getEcoPriceReclaimTown() {
+		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
 	}
 }

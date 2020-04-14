@@ -7,7 +7,8 @@ import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTask;
+import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
+import com.palmergames.bukkit.towny.tasks.ShortTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
@@ -33,7 +34,8 @@ public class TownyTimerHandler{
 	
 	private static int townyRepeatingTask = -1;
 	private static int dailyTask = -1;
-	private static int siegeWarTask = -1;
+	private static int hourlyTask = -1;
+	private static int shortTask = -1;
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
@@ -52,6 +54,14 @@ public class TownyTimerHandler{
 			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		}
+	}
+
+	public static void newHour() {
+		if (!isHourlyTimerRunning())
+			toggleHourlyTimer(true);
+
+		if (BukkitTools.scheduleAsyncDelayedTask(new HourlyTimerTask(plugin),0L) == -1)
+			TownyMessaging.sendErrorMsg("Could not schedule new hour.");
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -83,12 +93,12 @@ public class TownyTimerHandler{
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
 			System.out.println("[Towny] Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-			
+
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			else
 				dailyTask = BukkitTools.scheduleSyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
-			
+
 			if (dailyTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
 		} else if (!on && isDailyTimerRunning()) {
@@ -97,23 +107,32 @@ public class TownyTimerHandler{
 		}
 	}
 
-	public static void toggleSiegeWarTimer(boolean on) {
+	public static void toggleHourlyTimer(boolean on) {
+		if (on && !isHourlyTimerRunning()) {
+			long timeUntilNextHourInSections = getTimeUntilNextHourInSeconds();
+			hourlyTask = BukkitTools.scheduleAsyncRepeatingTask(new HourlyTimerTask(plugin), timeUntilNextHourInSections, TimeTools.convertToTicks(TownySettings.getHourInterval()));
 
-		if(!TownySettings.getWarSiegeEnabled()) {
-			return;
+			if (hourlyTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule hourly timer.");
+
+		} else if (!on && isHourlyTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(hourlyTask);
+			hourlyTask = -1;
 		}
+	}
 
-		if (on && !isSiegeWarTimerRunning()) {
-			//Note this small delay is a safeguard against race conditions
+	public static void toggleShortTimer(boolean on) {
+		if (on && !isShortTimerRunning()) {
+			//This small delay is a safeguard against race conditions
 			long delayTicks = TimeTools.convertToTicks(60);
-			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new SiegeWarTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
+			shortTask = BukkitTools.scheduleAsyncRepeatingTask(new ShortTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
 
-			if (siegeWarTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule siege war timer.");
+			if (shortTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule short timer.");
 
 		} else if (!on && isDailyTimerRunning()) {
-			BukkitTools.getScheduler().cancelTask(siegeWarTask);
-			siegeWarTask = -1;
+			BukkitTools.getScheduler().cancelTask(shortTask);
+			shortTask = -1;
 		}
 	}
 
@@ -180,9 +199,14 @@ public class TownyTimerHandler{
 		return dailyTask != -1;
 	}
 
-	public static boolean isSiegeWarTimerRunning() {
+	public static boolean isHourlyTimerRunning() {
 
-		return siegeWarTask != -1;
+		return hourlyTask != -1;
+	}
+
+	public static boolean isShortTimerRunning() {
+
+		return shortTask != -1;
 	}
 
 	public static boolean isHealthRegenRunning() {
@@ -230,4 +254,10 @@ public class TownyTimerHandler{
 		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
 	}
 
+	public static Long getTimeUntilNextHourInSeconds() {
+		long timeSinceLastHourMillis = System.currentTimeMillis() % (1000 * 60 * 60);
+		long timeSinceLastHourSeconds = timeSinceLastHourMillis / 1000;
+		long timeUntilNextHourSeconds = (60 * 60) - timeSinceLastHourSeconds;
+		return timeUntilNextHourSeconds;
+	}
 }

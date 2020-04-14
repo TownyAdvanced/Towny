@@ -78,7 +78,7 @@ public class AttackTown {
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_banner_must_be_placed_above_ground"));
             
             if(defendingTown.isRuined())
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
+                throw new TownyException(TownySettings.getLangString("msg_err_cannot_attack_ruined_town"));
 
             if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, townBlock)) {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));

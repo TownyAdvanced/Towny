@@ -62,7 +62,7 @@ import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarRuinsUtil;
+import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -507,8 +507,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
-				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeRuinsReclaimEnabled()) {
-					SiegeWarRuinsUtil.processRuinedTownReclaimRequest(player, plugin);
+				if(TownySettings.getWarCommonTownRuinsReclaimEnabled()) {
+					RuinsUtil.processRuinedTownReclaimRequest(player, plugin);
 				} else {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				}
@@ -522,8 +522,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
-				if (SiegeWarRuinsUtil.isPlayerTownRuined(player)) {
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				if (RuinsUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
@@ -562,8 +562,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
-				if (SiegeWarRuinsUtil.isPlayerTownRuined(player)) {
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				if (RuinsUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
@@ -603,8 +603,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town deposit"));
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
-				if (SiegeWarRuinsUtil.isPlayerTownRuined(player)) {
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				if (RuinsUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTS.getNode()))
@@ -627,8 +627,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townPlots(player, town);
 
 			} else {
-				if (SiegeWarRuinsUtil.isPlayerTownRuined(player)) {
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_use_command_because_town_ruined"));
+				if (RuinsUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
@@ -2802,12 +2802,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
-					long durationMillis = (long)(TownySettings.getWarSiegeRuinsRemovalDelayHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
-					String durationFormatted = TimeMgmt.getFormattedTimeValue(durationMillis);
+				if(TownySettings.getWarCommonTownRuinsEnabled()) {
+					int durationHours =TownySettings.getWarCommonTownRuinsMaxDurationHours();
 					TownyMessaging.sendErrorMsg(player, String.format(
-						TownySettings.getLangString("msg_err_siege_war_delete_town_warning"),
-						durationFormatted));
+						TownySettings.getLangString("msg_warning_town_ruined_if_deleted"),
+						durationHours));
 				}
 
 				town = resident.getTown();

@@ -1040,15 +1040,29 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
 
-				line = keys.get("recentlyRuinedEndTime");
+				line = keys.get("ruinDurationRemainingHours");
 				if (line != null) {
 					try {
-						town.setRecentlyRuinedEndTime(Long.parseLong(line));
+						town.setRuinDurationRemainingHours(Integer.parseInt(line));
 					} catch (Exception e) {
-						town.setRecentlyRuinedEndTime(0);
+						town.setRuinDurationRemainingHours(0);
 					}
 				} else {
-					town.setRecentlyRuinedEndTime(0);
+					//Look for legacy data to migrate
+					//Todo refactor this logic after sw trial
+					line = keys.get("recentlyRuinedEndTime");
+					if(line != null){
+						try {
+							long endTimeMillis = Long.parseLong(line);
+							long timeRemainingMillis = endTimeMillis - System.currentTimeMillis();
+							int timeRemainingHours = timeRemainingMillis > 0 ? (int)(timeRemainingMillis / 1000 / 60 / 60) : 0;
+							town.setRuinDurationRemainingHours(timeRemainingHours);
+						} catch (Exception e) {
+							town.setRuinDurationRemainingHours(0);
+						}
+					} else {
+						town.setRuinDurationRemainingHours(0);
+					}
 				}
 
 				//Siege War related
@@ -2129,7 +2143,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 
-		list.add("recentlyRuinedEndTime=" + town.getRecentlyRuinedEndTime());
+		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
 
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());

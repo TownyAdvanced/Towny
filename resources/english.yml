@@ -1183,7 +1183,6 @@ msg_err_siege_besieged_town_cannot_recruit: "&6[War]&c Besieged towns cannot rec
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 msg_err_siege_besieged_town_cannot_claim: "&6[War]&c Besieged towns cannot claim new land."
 #Deleting
-msg_err_siege_war_delete_town_warning: "WARNING!!!: If you delete your town it will enter a ruined state for %s. In this state, all perms will be enabled & the town can be griefed."
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
 #Neutrality
 msg_err_siege_war_neutral_town_cannot_create_nation: "&cAs a neutral or declared-neutral town, you cannot create a nation."
@@ -1201,11 +1200,10 @@ msg_err_siege_war_action_not_a_town_member: '&6[War]&c You must be a member of a
 msg_err_siege_war_action_not_a_nation_member: '&6[War]&c You must be a member of a nation to do this action.'
 msg_err_siege_war_cannot_attack_own_town: '&6[War]&c You cannot attack your own town.'
 msg_err_siege_war_cannot_attack_town_in_own_nation: '&6[War]&c You cannot attack a town in your own nation.'
-msg_err_siege_war_cannot_attack_non_enemy_nation: '&6[War]&c You cannot attack a town unless the nation of that town is an enemy of your nation.'
+msg_err_siege_war_cannot_attack_nomsg_warning_town_ruined_if_deletedn_enemy_nation: '&6[War]&c You cannot attack a town unless the nation of that town is an enemy of your nation.'
 msg_err_siege_war_too_many_town_blocks_nearby: '&6[War]&c You cannot perform this action because the area is facing more than one town block. Try placing the item in a different area. '
 msg_err_siege_war_nation_already_attacking_town: '&6[War]&c Your nation is already attacking this town.'
 msg_err_siege_war_cannot_attack_siege_immunity: '&6[War]&c The target town has siege immunity. It cannot be attacked until the siege immunity expires.'
-msg_err_siege_war_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_siege_war_cannot_place_banner_far_above_town: 'The siege banner cannot be placed on a much higher elevation than the town. Try placing the banner at a lower elevation'
 msg_err_siege_war_cannot_join_siege: '&6[War]&c You cannot attack a town while it is under siege by another nation.'
 msg_err_siege_war_nation_has_too_many_active_siege_attacks: '&6[War]&c Your nation is at the maximum number of concurrent siege-attacks. To start another attack, one or more of the current attacks must finish.'
@@ -1235,8 +1233,6 @@ msg_err_siege_war_nation_zone_this_area_protected_but_besieged: '&6[War]&c This 
 msg_err_siege_war_banner_support_block_not_stable: "&6[War]&c You cannot place the banner on unstable ground e.g. sand or gravel."
 # Spawn
 msg_err_siege_war_cannot_spawn_into_besieged_town: '&6[War]&c You cannot spawn into %s while your nation, or an ally, is besieging it.'
-# Ruins
-msg_err_siege_war_cannot_use_command_because_town_ruined: "&6[War]&c You cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
 #Banner control
 msg_siege_war_banner_control_session_failure: "&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, going too far from the banner, going under a block, or going invisible/flying."
 
@@ -1270,8 +1266,13 @@ msg_nobody: '&aNobody'
 msg_attackers: '&aAttackers'
 msg_defenders: '&aDefenders'
 
-#Town Ruins reclaim
+#Town Ruins
+admin_panel_4: 'Run the new hour code'
+msg_newhour_success: 'newhour command executed successfully'
 town_help_12: 'Reclaim your town from a ruined state.'
+msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. In this state, all perms will be enabled & the town can be griefed."
 msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
-msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %s.'
+msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
 msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
+msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
+msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."

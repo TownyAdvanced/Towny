@@ -697,6 +697,21 @@ public enum ConfigNodes {
 			"plugin.day_timer.delete_0_plot_towns",
 			"false",
 			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
+	PLUGIN_HOUR_INTERVAL(
+			"plugin.hour_timer.hour_interval",
+			"60m",
+			"# The number of minutes in each \"day\".",
+			"# Default is 60m."),
+	PLUGIN_NEWHOUR_TIME(
+			"plugin.hour_timer.new_hour_time",
+			"30m",
+			"# The time each \"hour\", when the hourly timer ticks.",
+			"# MUST be less than hour_interval. Default is 30m."),
+	PLUGIN_SHORT_INTERVAL(
+			"plugin.hour_timer.short_interval",
+			"20s",
+			"# The interval of each \"short\" timer tick",
+			"# Default is 20s."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
@@ -1283,11 +1298,11 @@ public enum ConfigNodes {
 			"economy.new_expand.price_new_town",
 			"250.0",
 			"# How much it costs to start a town."),
-	ECO_PRICE_RECLAIM_TOWN(
-			"economy.new_expand.price_reclaim_town",
+	ECO_PRICE_RECLAIM_RUINED_TOWN(
+			"economy.new_expand.price_reclaim_ruined_town",
 			"200.0",
 			"# How much it costs to reclaim a ruined town.",
-			"# This is only applicable if the delay-town-removal & allow-town-reclaim features are enabled."),
+			"# This is only applicable if the town-ruins & town-reclaim features are enabled."),
 	ECO_PRICE_OUTPOST(
 			"economy.new_expand.price_outpost",
 			"500.0",
@@ -1880,19 +1895,6 @@ public enum ConfigNodes {
 			"true",
 			"# If true, then land cannot be claimed near a siege zone.",
 			"# This setting is generally considered critical, otherwise one side could wall off the siege zone."),
-	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
-			"war.siege.switches.delay_full_town_removal",
-			"true",
-			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
-			"# In this state, the town cannot be claimed, but can be looted",
-			"# This setting is generally considered critical,",
-			"# because it prevents mayors from avoiding sieges/occupation by ",
-		    "# deleting then quickly recreating their town."),
-	WAR_SIEGE_RUINS_RECLAIM_ENABLED(
-			"war.siege.switches.ruins_reclaim_enabled",
-			"true",
-			"# If this is true, then after a town has been ruined for a certain (configurable) duration,",
-			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price (configured in the eco section in this file)"),
 	WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED(
 			"war.siege.switches.attacker_spawn_into_besieged_town_disabled",
 			"true",
@@ -2066,15 +2068,6 @@ public enum ConfigNodes {
 			"# This value determines how long a town must wait before it can revolt against an occupying nation nation. The immunity time gets set to the given value if a town is captured, or if it revolts.",
 			"# If the value is too high, towns will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
-	WAR_SIEGE_RUINS_REMOVAL_DELAY_HOURS(
-			"war.siege.times.ruins_removal_delay_hours",
-			"72",
-			"# This setting determines the maximum delay between a town being ruined, and final deletion."),
-	WAR_SIEGE_MINIMUM_RUINS_DURATION_HOURS(
-			"war.siege.times.minimum_ruins_duration_hours",
-			"24",
-			"# This value determines the minimum duration for which a town must lie in ruins,",
-			"# before it can be reclaimed by a resident."),
 	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
 			"war.siege.times.zone_maximum_scoring_duration_minutes",
 			"15",
@@ -2087,10 +2080,6 @@ public enum ConfigNodes {
 			"# This value determines how long it takes to confirm a town neutrality status change.",
 			"# It is recommended to be relatively high, ",
 		    "# for use by genuinely neutral towns, not just towns which wish to quickly toggle on/off to reduce war costs."),
-	WAR_SIEGE_RUINS_REMOVALS_TICK_INTERVAL_MINUTES(
-			"war.siege.times.ruins_removals_tick_interval_minutes",
-			"30",
-			"# This value determines the interval between ruins removals ticks, in which ruins are checked for deletion."),
 	WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS(
 			"war.siege.times.post_spawn_damage_immunity_minimum_duration_seconds",
 			"30",
@@ -2216,7 +2205,45 @@ public enum ConfigNodes {
 			"# Example 1:  An entry with 'shield|diamond_sword' grants the feature to soldiers.",
 			"# Example 2:  An entry with 'compass|diamond_sword' grants the feature to scouts/explorers.",
 			"# Example 3:  An entry with 'compass|air' grants the feature to very peaceful explorers.",
-			"# Example 4:  An entry with 'compass|any' grants the feature to many players including builders/miners/lumberjacks.");
+			"# Example 4:  An entry with 'compass|any' grants the feature to many players including builders/miners/lumberjacks."),
+
+	WAR_COMMON(
+		"war.common",
+		"",
+		"############################################################",
+		"# +------------------------------------------------------+ #",
+		"# |                 Common War settings                  | #",
+		"# |                                                      | #",
+		"# |  These configs are common to multiple war systems.   | #",
+		"# |                                                      | #",
+		"# |  Note: The town ruins settings are here,             | #",
+		"# |  because town ruin is critical to many war systems   | #",
+		"# |  												      | #",
+		"# +------------------------------------------------------+ #",
+		"############################################################",
+		""),
+	WAR_COMMON_TOWN_RUINS_ENABLED(
+			"war.common.town_ruins.enabled",
+			"true",
+			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
+			"# In this state, the town cannot be claimed, but can be looted.",
+			"# The feature prevents mayors from escaping attack/occupation, ",
+			"# by deleting then quickly recreating their town."),
+	WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS(
+			"war.common.town_ruins.max_duration_hours",
+			"72",
+			"# This value determines the maximum duration in which a town can lie in ruins",
+			"# After this time is reached, the town will be completely deleted."),
+	WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS(
+			"war.common.town_ruins.min_duration_hours",
+			"24",
+			"# This value determines the minimum duration in which a town must lie in ruins,",
+			"# before it can be reclaimed by a resident."),
+	WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED(
+			"war.common.town_ruins.reclaim_enabled",
+			"true",
+			"# If this is true, then after a town has been ruined for the minimum configured time,",
+			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)");
 
 	private final String Root;
 	private final String Default;
