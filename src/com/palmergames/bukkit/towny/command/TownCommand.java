@@ -2395,7 +2395,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			town.addPurchasedBlocks(n);
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), n, TownySettings.getLangString("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			TownyUniverse.getInstance().getDatabaseHandler().save(town);
 		});
 		confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), cost));
 		ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(player.toString()), confirmation);
