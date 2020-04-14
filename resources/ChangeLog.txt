@@ -4439,7 +4439,7 @@ v0.92.0.11:
     - Closes #3894.
   - Add Placeholders:
     - %townyadvanced_town_ranks% - Displays either Mayor, or the various town ranks a player has or nothing if they have none.
-    - %townyadvanced_nation_ranks% - Displays either Mayor, or the various nation ranks a player has or nothing if they have none.
+    - %townyadvanced_nation_ranks% - Displays either King, or the various nation ranks a player has or nothing if they have none.
     - Closes #3695.
   - Revamped Confirmation system, courtesy of Siris with PR #3892.
   - New Command: /ta town [town] outlaw [add|remove] [name]
@@ -4462,7 +4462,7 @@ v0.92.0.11:
   - Fix: nation-requires-proximity feature should be working much better now.
   - Added: For the nation-requires-proximity feature:
     - Moving homeblocks will now tell the mayor if their town will leave their nation for moving too far from the homeblock.
-    - Moving homeblocks will now tell the king if any of their towns will leave their nation for moveing their homeblock too far away.
+    - Moving homeblocks will now tell the king if any of their towns will leave their nation for moving their homeblock too far away.
     - Merging nations will now be made aware if any of the towns will leave the prevailing nation when the two nations merge.
   - Add confirmations to town and nation renames if their costs are higher than 0.
   - New Command: /ta depositall [amount]
