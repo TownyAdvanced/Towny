@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -11,6 +13,8 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -287,17 +291,37 @@ public class TownBlock extends TownyObject {
 			cost = 0;
 		}
 		
-		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().pay(cost, String.format("Plot set to %s", type)))
+		// Test if we can pay first to throw an exception.
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
 			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
-		
-		if (cost > 0)
-			TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
 
-		if (this.isJail())
-			this.getTown().removeJailSpawn(this.getCoord());
+		// Handle payment via a confirmation to avoid suprise costs.
+		if (cost > 0 && TownySettings.isUsingEconomy()) {
+			Confirmation confirmation = new Confirmation(() -> {
 		
-		setType(type);
-		
+				try {
+					resident.getAccount().pay(cost, String.format("Plot set to %s", type));
+				} catch (EconomyException ignored) {
+				}					
+
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+			
+				if (this.isJail())
+					try {
+						this.getTown().removeJailSpawn(this.getCoord());
+					} catch (NotRegisteredException ignored) {
+					}
+				
+				setType(type);
+			});
+			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), cost));
+			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(resident.getName()), confirmation);
+		// No payment required so just change the type.
+		} else {
+			if (this.isJail())
+				this.getTown().removeJailSpawn(this.getCoord());
+			setType(type);
+		}
 	}
 
 	public boolean isHomeBlock() {

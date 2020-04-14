@@ -126,7 +126,7 @@ public class TownySpigotMessaging {
 			
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town));
+			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
 		}
@@ -183,7 +183,7 @@ public class TownySpigotMessaging {
 
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation));
+			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
 		}

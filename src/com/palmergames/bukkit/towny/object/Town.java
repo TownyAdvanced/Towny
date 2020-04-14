@@ -218,6 +218,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (nation == null) {
 			this.nation = null;
 			TownyPerms.updateTownPerms(this);
+			TownyUniverse.getInstance().getDataSource().saveTown(this);
 			return;
 		}
 		if (this.nation == nation)
@@ -226,6 +227,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			throw new AlreadyRegisteredException();
 		this.nation = nation;
 		TownyPerms.updateTownPerms(this);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	@Override
@@ -731,6 +733,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			e.printStackTrace();
 		}
 		residents.remove(resident);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public void setSpawn(Location spawn) throws TownyException {
