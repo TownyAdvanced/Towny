@@ -14,6 +14,11 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
  */
 public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 
+	final String nomad = TownySettings.getLangString("nomad_sing");
+	final String res = TownySettings.getLangString("res_sing");
+	final String mayor = TownySettings.getLangString("mayor_sing");
+	final String king = TownySettings.getLangString("king_sing");
+	
 	private Towny plugin;
 
 	/**
@@ -468,6 +473,18 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			else if (!resident.getNationRanks().isEmpty())
 				rank = StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", "));
 			return rank;
+		case "player_status": // %townyadvanced_player_status%
+			if (!resident.hasTown())
+				tag = nomad;
+			else {
+				if (resident.isKing())
+					tag = king;
+				else if (resident.isMayor())
+					tag = mayor;
+				else
+					tag = res;
+			}
+			return tag;
 		default:
 			return null;
 		}

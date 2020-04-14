@@ -1,5 +1,5 @@
 name: Towny
-version: 0.79
+version: 0.80
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1119,3 +1119,6 @@ msg_confirm_purchase: 'Doing this will cost %s. Continue?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'The following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
 bonus_townblocks: 'bonus townblocks'
+
+# Added in 0.80
+nomad_sing: 'Nomad'
