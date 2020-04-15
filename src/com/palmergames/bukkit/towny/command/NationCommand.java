@@ -66,7 +66,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -262,38 +261,32 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							case "add":
 								if (args[args.length - 1].startsWith("-")) {
 									// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
-									try {
-										return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
-											// Get names of sent invites
-											.stream()
-											.map(Invite::getReceiver)
-											.map(TownyInviteReceiver::getName)
-											// Collect sent invite names and check with the last arg without the hyphen
-											.collect(Collectors.toList()), args[args.length - 1].substring(1))
-											// Add the hyphen back to the beginning
-											.stream()
-											.map(e -> "-" + e)
-											.collect(Collectors.toList());
-									} catch (TownyException ignored) {}
+									return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getSentAllyInvites()
+										// Get names of sent invites
+										.stream()
+										.map(Invite::getReceiver)
+										.map(TownyInviteReceiver::getName)
+										// Collect sent invite names and check with the last arg without the hyphen
+										.collect(Collectors.toList()), args[args.length - 1].substring(1))
+										// Add the hyphen back to the beginning
+										.stream()
+										.map(e -> "-" + e)
+										.collect(Collectors.toList());
 								} else {
 									// Otherwise return possible nations to send invites to
 									return getTownyStartingWith(args[args.length - 1], "n");
 								}
 							case "remove":
 								// Return current allies to remove
-								try {
-									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
-								} catch (TownyException ignore) {}
+								return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getAllies()), args[args.length - 1]);
 							case "accept":
 							case "deny":
 								// Return sent ally invites to accept or deny
-								try {
-									return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
-									.stream()
-									.map(Invite::getSender)
-									.map(TownyInviteSender::getName)
-									.collect(Collectors.toList()), args[args.length - 1]);
-								} catch (TownyException ignore) {}
+								return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
+								.stream()
+								.map(Invite::getSender)
+								.map(TownyInviteSender::getName)
+								.collect(Collectors.toList()), args[args.length - 1]);
 						}
 					}
 					break;
@@ -305,11 +298,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							case "add":
 							case "remove":
 								if (args.length == 3) {
-									try {
-										return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), args[2]);
-									} catch (NotRegisteredException e) {
-										return Collections.emptyList();
-									}
+									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getResidents()), args[2]);
 								} else if (args.length == 4) {
 									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
 								}
@@ -325,18 +314,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[2], "n");
 							case "remove":
 								// Return enemies of nation
-								try {
-									return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
-								} catch (TownyException ignored) {}
+								return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getEnemies()), args[2]);
 						}
 					}
 					break;
 				case "set":
-					try {
-						return nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation(), args);
-					} catch (NotRegisteredException e) {
-						return Collections.emptyList();
-					}
+					return nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation(), args);
 				default:
 					if (args.length == 1) {
 						List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
@@ -437,14 +420,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (split.length == 0)
 				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-					try {
-						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-						Town town = resident.getTown();
-						Nation nation = town.getNation();
-						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
-					} catch (NotRegisteredException x) {
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-					}
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+					Town town = resident.getTown();
+					Nation nation = town.getNation();
+					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
 				});
 
 			else if (split[0].equalsIgnoreCase("?"))
@@ -942,14 +921,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
 		} else {
-			try {
-				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
-				Nation nation = town.getNation();
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
-			} catch (NotRegisteredException x) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-			}
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+			Town town = resident.getTown();
+			Nation nation = town.getNation();
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 		}
 	}
 
@@ -1434,19 +1409,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public void nationDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (split.length == 0)
-			try {
-				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				Nation nation = resident.getTown().getNation();
-				Confirmation confirmation = new Confirmation(() -> {
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
-					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-				});
-				ConfirmationHandler.sendConfirmation(player, confirmation);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
-			}
+		if (split.length == 0) {
+
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+			Nation nation = resident.getTown().getNation();
+			Confirmation confirmation = new Confirmation(() -> {
+				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+			});
+			ConfirmationHandler.sendConfirmation(player, confirmation);
+		}
 		else
 			try {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode()))
@@ -1488,21 +1460,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident;
 		Nation nation;
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-			nation = resident.getTown().getNation();
+		resident = townyUniverse.getDataSource().getResident(player.getName());
+		nation = resident.getTown().getNation();
 
-			if (TownySettings.getMaxTownsPerNation() > 0) {
-	        	if (nation.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
-	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
-	        	return;
-	        	}	
-	        }
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		if (TownySettings.getMaxTownsPerNation() > 0) {
+			if (nation.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
 			return;
+			}	
 		}
+
 		List<String> reslist = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
 		List<String> newreslist = new ArrayList<>();
@@ -1681,14 +1648,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident;
 		Nation nation;
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-			nation = resident.getTown().getNation();
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
+		resident = townyUniverse.getDataSource().getResident(player.getName());
+		nation = resident.getTown().getNation();
 
 		nationKick(player, resident, nation, townyUniverse.getDataSource().getTowns(names));
 	}
@@ -1757,14 +1718,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident;
 		Nation nation;
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-			nation = resident.getTown().getNation();
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
+		resident = townyUniverse.getDataSource().getResident(player.getName());
+		nation = resident.getTown().getNation();
 
 		ArrayList<Nation> list = new ArrayList<>();
 		ArrayList<Nation> remlist = new ArrayList<>();
@@ -2145,14 +2100,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-			nation = resident.getTown().getNation();
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
+		resident = townyUniverse.getDataSource().getResident(player.getName());
+		nation = resident.getTown().getNation();
 
 		ArrayList<Nation> list = new ArrayList<>();
 		Nation enemy;
@@ -2264,17 +2213,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "mapcolor [color]", ""));
 		} else {
 			Resident resident;
-			try {
-				if (!admin) {
-					resident = townyUniverse.getDataSource().getResident(player.getName());
-					nation = resident.getTown().getNation();
-				} else // treat resident as king for testing purposes.
-					resident = nation.getKing();
-
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
-			}
+			if (!admin) {
+				resident = townyUniverse.getDataSource().getResident(player.getName());
+				nation = resident.getTown().getNation();
+			} else // treat resident as king for testing purposes.
+				resident = nation.getKing();
 
 			if (split[0].equalsIgnoreCase("king")) {
 
@@ -2600,17 +2543,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			Resident resident;
 
-			try {
-				if (!admin) {
-					resident = townyUniverse.getDataSource().getResident(player.getName());
-					nation = resident.getTown().getNation();
-				} else  // Treat any resident tests as though the king were doing it.
-					resident = nation.getKing();
-				
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
-			}
+			if (!admin) {
+				resident = townyUniverse.getDataSource().getResident(player.getName());
+				nation = resident.getTown().getNation();
+			} else  // Treat any resident tests as though the king were doing it.
+				resident = nation.getKing();
 
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 

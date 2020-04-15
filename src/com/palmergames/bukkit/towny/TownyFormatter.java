@@ -183,12 +183,7 @@ public class TownyFormatter {
 		String line = TownySettings.getLangString("status_town");
 		if (!resident.hasTown())
 			line += TownySettings.getLangString("status_no_town");
-		else
-			try {
-				line += resident.getTown().getFormattedName();
-			} catch (TownyException e) {
-				line += "Error: " + e.getMessage();
-			}
+			line += resident.getTown().getFormattedName();
 		out.add(line);
 		
 		// Embassies in: Camelot, London, Tokyo
@@ -363,10 +358,8 @@ public class TownyFormatter {
 						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
-						try {
-							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-						} catch (NotRegisteredException ignored) {}
-						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+                        nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+                        out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? String.format(TownySettings.getLangString("status_town_outposts2"), nationBonus) : "")
 							   );
 						}
@@ -409,11 +402,9 @@ public class TownyFormatter {
 		out.addAll(ranklist);
 
 		// Nation: Azur Empire
-		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
-		} catch (TownyException ignored) {}
+        out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
 
-		// Residents [12]: James, Carry, Mason
+        // Residents [12]: James, Carry, Mason
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 		if (residents.length > 34) {

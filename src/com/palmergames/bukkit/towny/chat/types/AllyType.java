@@ -1,13 +1,15 @@
 package com.palmergames.bukkit.towny.chat.types;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import net.tnemc.tnc.core.common.chat.ChatType;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 
 /**
  * @author creatorfromhell
@@ -19,32 +21,47 @@ public class AllyType extends ChatType {
 
 	@Override
 	public boolean canChat(Player player) {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).hasTown() && TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().hasNation();
-		} catch(NotRegisteredException ignore) {
-
-		}
-		return false;
+		Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
+		
+		return Optional.ofNullable(resident)
+			.map(Resident::getTown)
+			.map(Town::hasNation)
+			.orElse(false);
 	}
 
 	@Override
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			final Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
-
-			Collection<Player> newRecipients = new HashSet<>();
-
-			for(Player p : recipients) {
-				if (!townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUniqueIdentifier().equals(nation.getUniqueIdentifier())
-						&& !townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().hasAlly(nation)) {
-					continue;
-				}
-				newRecipients.add(p);
-			}
-			return newRecipients;
-		} catch(NotRegisteredException ignore) {
+		Resident resident = townyUniverse.getDatabaseHandler().getResident(player.getUniqueId());
+		final Optional<Nation> optionalNation = Optional.ofNullable(resident)
+			.map(Resident::getTown)
+			.map(Town::getNation);
+		
+		if (!optionalNation.isPresent()) {
+			return recipients;
 		}
-		return recipients;
+		
+        final Nation nation = optionalNation.get();
+
+        Collection<Player> newRecipients = new HashSet<>();
+
+        for(Player p : recipients) {
+        	
+        	Resident playerResident = townyUniverse.getDatabaseHandler().getResident(p.getUniqueId());
+        	final Optional<Nation> optionalPlayerNation = Optional.ofNullable(playerResident)
+				.map(Resident::getTown)
+				.map(Town::getNation);
+        	
+        	if (!optionalPlayerNation.isPresent()) {
+        		continue;
+			}
+        	
+            if (!optionalPlayerNation.get().getUniqueIdentifier().equals(nation.getUniqueIdentifier())
+                    && !optionalPlayerNation.get().hasAlly(nation)) {
+                continue;
+            }
+            newRecipients.add(p);
+        }
+        return newRecipients;
 	}
 }

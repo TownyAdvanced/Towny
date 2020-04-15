@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -25,9 +26,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.Optional;
+
 public class FlagWarCustomListener implements Listener {
 
 	private final Towny plugin;
+	private final DatabaseHandler databaseHandler = TownyUniverse.getInstance().getDatabaseHandler();
 
 	public FlagWarCustomListener(Towny instance) {
 
@@ -67,33 +71,41 @@ public class FlagWarCustomListener implements Listener {
 		universe.removeWarZone(worldCoord);
 
 		plugin.updateCache(worldCoord);
+		Resident playerResident = null;
 
 		String playerName;
 		if (player == null) {
 			playerName = "Greater Forces";
+			
 		} else {
-			playerName = player.getName();
-			try {
-				playerName = universe.getDataSource().getResident(player.getName()).getFormattedName();
-			} catch (TownyException ignored) {
+			playerResident = databaseHandler.getResident(player.getUniqueId());
+			
+			if (playerResident == null) {
+				return;
 			}
-		}
+			
+			playerName = player.getName();
+            playerName = playerResident.getFormattedName();
+        }
 
 		plugin.getServer().broadcastMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_defended"), playerName, cell.getCellString()));
-
+		
 		// Defender Reward
 		// It doesn't entirely matter if the attacker can pay.
 		// Also doesn't take into account of paying as much as the attacker can afford (Eg: cost=10 and balance=9).
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
-				if (player != null) {
-					try {
-						defendingPlayer = universe.getDataSource().getResident(player.getName());
-					} catch (NotRegisteredException ignored) {
-					}
+				attackingPlayer = universe.getDatabaseHandler().getResident(cell.getNameOfFlagOwner());
+				
+				// Null check.
+				if (!Optional.ofNullable(attackingPlayer).map(Resident::getAccount).isPresent()) {
+					return;
 				}
+				
+				if (player != null) {
+                    defendingPlayer = universe.getDataSource().getResident(player.getName());
+                }
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
 				if (defendingPlayer == null) {
@@ -114,7 +126,7 @@ public class FlagWarCustomListener implements Listener {
 						}
 					}
 				}
-			} catch (EconomyException | NotRegisteredException e) {
+			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
 		}
@@ -130,7 +142,14 @@ public class FlagWarCustomListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			Resident attackingResident = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
+			Resident attackingResident = universe.getDatabaseHandler().getResident(cell.getNameOfFlagOwner());
+			
+			if (!Optional.ofNullable(attackingResident)
+				.map(Resident::getTown)
+				.map(Town::getNation).isPresent()) {
+				return;
+			}
+			
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
@@ -194,8 +213,8 @@ public class FlagWarCustomListener implements Listener {
 				}
 			} else {
 				
-				TownyMessaging.sendPrefixedTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
-				TownyMessaging.sendPrefixedTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(attackingTown, TownySettings.getLangString("msg_war_defender_keeps_claims"));
+				TownyMessaging.sendPrefixedTownMessage(defendingTown, TownySettings.getLangString("msg_war_defender_keeps_claims"));
 			}
 
 			// Cleanup

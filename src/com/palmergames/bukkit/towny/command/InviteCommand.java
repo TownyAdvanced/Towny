@@ -62,14 +62,12 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				switch (args[0].toLowerCase()) {
 					case "accept":
 					case "deny":
-						try {
-							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
-								.stream()
-								.map(Invite::getSender)
-								.map(TownyInviteSender::getName)
-								.collect(Collectors.toList()), args[1]);
-						} catch (TownyException ignored) {}
-				}
+                        return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
+                            .stream()
+                            .map(Invite::getSender)
+                            .map(TownyInviteSender::getName)
+                            .collect(Collectors.toList()), args[1]);
+                }
 		}
 		
 		return Collections.emptyList();
@@ -117,13 +115,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		// Now we check the size of the player invites, if there is more than 10 invites (not possible), We only displayed the first 10.
 		// /invite args[0] args[1}
 		Resident resident;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
-		String received = TownySettings.getLangString("player_received_invites")
+        resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+        String received = TownySettings.getLangString("player_received_invites")
 				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident))
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
@@ -154,13 +147,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
-		List<Invite> invites = resident.getReceivedInvites();
+        resident = townyUniverse.getDataSource().getResident(player.getName());
+        List<Invite> invites = resident.getReceivedInvites();
 
 		if (invites.size() == 0) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_no_invites"));
@@ -209,13 +197,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
-		List<Invite> invites = resident.getReceivedInvites();
+        resident = townyUniverse.getDataSource().getResident(player.getName());
+        List<Invite> invites = resident.getReceivedInvites();
 		if (invites.size() == 0) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_no_invites"));
 			return;
@@ -284,12 +267,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (name == null) {
 				name = "Console";
 			} else {
-				try {
-					name = TownyUniverse.getInstance().getDataSource().getResident(name).getName();
-				} catch (NotRegisteredException e) {
-					name = "Unknown";
-				}
-			}
+                name = TownyUniverse.getInstance().getDataSource().getResident(name).getName();
+            }
 			// If it's from the sender, do it differently
 			String output = null;
 			if (fromSender) {

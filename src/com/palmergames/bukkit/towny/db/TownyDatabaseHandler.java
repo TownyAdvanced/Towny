@@ -89,13 +89,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(Player player, String[] names) {
 
 		List<Resident> invited = new ArrayList<>();
-		for (String name : names)
-			try {
-				Resident target = getResident(name);
-				invited.add(target);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-			}
+		for (String name : names) {
+			Resident target = getResident(name);
+			invited.add(target);
+		}
+			
+			
 		return invited;
 	}
 
@@ -103,11 +102,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getResident(name));
-			} catch (NotRegisteredException ignored) {
-			}
+		for (String name : names) {
+			matches.add(getResident(name));
+		}
+			
 		return matches;
 	}
 
@@ -118,18 +116,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public Resident getResident(String name) throws NotRegisteredException {
+	public @org.jetbrains.annotations.Nullable Resident getResident(String name) {
 
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
 		} catch (InvalidNameException ignored) {
 		}
 
-		if (!hasResident(name)) {
-
-			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-
-		} else if (TownySettings.isFakeResident(name)) {
+		if (TownySettings.isFakeResident(name)) {
 
 			Resident resident = new Resident(UUID.randomUUID(), name);
 			resident.setNPC(true);
@@ -292,12 +286,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		Town town = null;
 
-		if (resident.hasTown())
-			try {
-				town = resident.getTown();
-			} catch (NotRegisteredException e1) {
-				e1.printStackTrace();
-			}
+		if (resident.hasTown()) {
+		}
+			town = resident.getTown();
 
 		try {
 			if (town != null) {

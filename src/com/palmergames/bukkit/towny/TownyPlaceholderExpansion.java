@@ -1,12 +1,18 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class will be registered through the register-method in the plugins
@@ -104,174 +110,121 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return "";
 		}
 		Resident resident;
-		try {
-			resident = TownyAPI.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e) {
+		resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
+		Optional<Resident> optionalResident = Optional.ofNullable(resident);
+		Optional<Town> optionalTown = optionalResident.map(Resident::getTown);
+		Optional<Nation> optionalNation = optionalTown.map(Town::getNation);
+		Optional<EconomyAccount> optionalTownAccount = optionalTown.map(Town::getAccount);
+		Optional<EconomyAccount> optionalNationAccount = optionalNation.map(Nation::getAccount);
+		
+		if (resident == null) {
 			return null;
 		}
-		String town = "";
-		String nation = "";
-		String balance = "";
+		
+		String town;
+		String nation;
+		String balance;
 		String tag = "";
 		String title = "";
 		String amount = "";
 		String name = "";
 		String rank = "";
-		Double cost = 0.0;
+		double cost = 0.0;
 
 		switch (identifier) {
 		case "town": // %townyadvanced_town%
-			try {
-				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return town;
+            town = String.format(TownySettings.getPAPIFormattingTown(), optionalTown.map(TownyObject::getName).orElse(""));
+            return town;
 		case "town_formatted": // %townyadvanced_town_formatted%
-			try {
-				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getFormattedName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return town;
+            town = String.format(TownySettings.getPAPIFormattingTown(), optionalTown.map(Town::getFormattedName).orElse(""));
+            return town;
 		case "nation": // %townyadvanced_nation%
-			try {
-				nation = String.format(TownySettings.getPAPIFormattingNation(),
-						resident.getTown().getNation().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return nation;
+            nation = String.format(TownySettings.getPAPIFormattingNation(), optionalNation.map(TownyObject::getName).orElse(""));
+            return nation;
 		case "nation_formatted": // %townyadvanced_nation_formatted%
-			try {
-				nation = String.format(TownySettings.getPAPIFormattingNation(),
-						resident.getTown().getNation().getFormattedName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return nation;
+            nation = String.format(TownySettings.getPAPIFormattingNation(),optionalNation.map(Nation::getFormattedName).orElse(""));
+            return nation;
 		case "town_balance": // %townyadvanced_town_balance%
-			try {
-				balance = resident.getTown().getAccount().getHoldingFormattedBalance();
-			} catch (NotRegisteredException ignored) {
-			}
-			return balance;
+            balance = optionalTownAccount.map(EconomyAccount::getHoldingFormattedBalance).orElse("");
+            return balance;
 		case "nation_balance": // %townyadvanced_nation_balance%
-			try {
-				balance = resident.getTown().getNation().getAccount().getHoldingFormattedBalance();
-			} catch (NotRegisteredException ignored) {
-			}
-			return balance;
+            balance = optionalNationAccount.map(EconomyAccount::getHoldingFormattedBalance).orElse("");
+            return balance;
 		case "town_tag": // %townyadvanced_town_tag%
-			try {
-				tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+            tag = String.format(TownySettings.getPAPIFormattingTown(), optionalTown.map(Town::getTag).orElse(""));
+            return tag;
 		case "town_tag_override": // %townyadvanced_town_tag_override%
-			try {
-				if (resident.getTown().hasTag())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
-				else
-					tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+			return String.format(TownySettings.getPAPIFormattingTown(), optionalTown
+				.map(Town::getTag)
+				.orElse(optionalTown.map(TownyObject::getName)
+					.orElse("")));
 		case "nation_tag": // %townyadvanced_nation_tag%
-			try {
-				tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getTag());
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+            tag = String.format(TownySettings.getPAPIFormattingNation(), optionalNation.map(Nation::getTag).orElse(""));
+            return tag;
 		case "nation_tag_override": // %townyadvanced_nation_tag_override%
-			try {
-				if (resident.getTown().getNation().hasTag())
-					tag = String.format(TownySettings.getPAPIFormattingNation(),
-							resident.getTown().getNation().getTag());
-				else
-					tag = String.format(TownySettings.getPAPIFormattingNation(),
-							resident.getTown().getNation().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+			return String.format(TownySettings.getPAPIFormattingNation(),
+				optionalNation.map(Nation::getTag)
+				.orElse(optionalNation.map(TownyObject::getName).orElse("")));
 		case "towny_tag": // %townyadvanced_towny_tag%
-			try {
-				if (resident.hasTown()) {
-					if (resident.getTown().hasTag())
-						town = resident.getTown().getTag();
-					if (resident.getTown().hasNation())
-						if (resident.getTown().getNation().hasTag())
-							nation = resident.getTown().getNation().getTag();
-				}
-				if (!nation.isEmpty())
-					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-				else if (!town.isEmpty())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			
+			town = optionalTown.map(Town::getTag).orElse("");
+			nation = optionalNation.map(Nation::getTag).orElse("");
+          
+            if (!nation.isEmpty())
+                tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+            else if (!town.isEmpty())
+                tag = String.format(TownySettings.getPAPIFormattingTown(), town);
 
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+            return tag;
 		case "towny_formatted": // %townyadvanced_towny_formatted%
-			try {
-				if (resident.hasTown()) {
-					town = resident.getTown().getFormattedName();
-					if (resident.getTown().hasNation())
-						nation = resident.getTown().getNation().getFormattedName();
-				}
-				if (!nation.isEmpty())
-					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-				else if (!town.isEmpty())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			town = optionalTown.map(Town::getFormattedName).orElse("");
+			nation = optionalNation.map(Nation::getFormattedName).orElse("");
+           
+            if (!nation.isEmpty())
+                tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+            else if (!town.isEmpty())
+                tag = String.format(TownySettings.getPAPIFormattingTown(), town);
 
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+            return tag;
 		case "towny_tag_formatted": // %townyadvanced_towny_tag_formatted%
-			try {
-				if (resident.hasTown()) {
-					if (resident.getTown().hasTag())
-						town = resident.getTown().getTag();
-					else
-						town = resident.getTown().getFormattedName();
-					if (resident.getTown().hasNation()) {
-						if (resident.getTown().getNation().hasTag())
-							nation = resident.getTown().getNation().getTag();
-						else
-							nation = resident.getTown().getNation().getFormattedName();
-					}
-				}
-				if (!nation.isEmpty())
-					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-				else if (!town.isEmpty())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+			town = optionalTown
+				.map(Town::getTag)
+				.orElse(optionalTown
+					.map(Town::getFormattedName)
+					.orElse(""));
+			
+			nation = optionalNation
+				.map(Nation::getTag)
+				.orElse(optionalNation
+					.map(TownyObject::getName)
+					.orElse(""));
+			
+            if (!nation.isEmpty())
+                tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+            else if (!town.isEmpty())
+                tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+            return tag;
 		case "towny_tag_override": // %townyadvanced_towny_tag_override%
-			try {
-				if (resident.hasTown()) {
-					if (resident.getTown().hasTag())
-						town = resident.getTown().getTag();
-					else
-						town = resident.getTown().getName();
-					if (resident.getTown().hasNation()) {
-						if (resident.getTown().getNation().hasTag())
-							nation = resident.getTown().getNation().getTag();
-						else
-							nation = resident.getTown().getNation().getName();
-					}
-				}
-				if (!nation.isEmpty())
-					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-				else if (!town.isEmpty())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+			
+			town = optionalTown.map(Town::getTag)
+				.orElse(optionalTown
+				.map(TownyObject::getName)
+				.orElse(""));
+			
+			nation = optionalNation.map(Nation::getTag)
+				.orElse(optionalNation
+				.map(TownyObject::getName)
+				.orElse(""));
+			
+            if (!nation.isEmpty())
+                tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+            else if (!town.isEmpty())
+                tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+            return tag;
 		case "title": // %townyadvanced_title%
-			if (resident.hasTitle())
-				title = resident.getTitle();
-			return title;
+			return optionalResident.map(Resident::getTitle).orElse("");
 		case "surname": // %townyadvanced_surname%
-			if (resident.hasSurname())
-				title = resident.getSurname();
-			return title;
+			return optionalResident.map(Resident::getSurname).orElse("");
 		case "towny_name_prefix": // %townyadvanced_towny_name_prefix%
 			if (resident.isMayor())
 				title = TownySettings.getMayorPrefix(resident);
@@ -318,143 +271,94 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return colour;
 		case "town_residents_amount": // %townyadvanced_town_residents_amount%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(resident.getTown().getNumResidents());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(resident.getTown().getNumResidents());
+            }
 			return amount;
 		case "town_residents_online": // %townyadvanced_town_residents_online%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(TownyAPI.getInstance().getOnlinePlayers(resident.getTown()).size());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(TownyAPI.getInstance().getOnlinePlayers(resident.getTown()).size());
+            }
 			return amount;
 		case "town_townblocks_used": // %townyadvanced_town_townblocks_used%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(resident.getTown().getTownBlocks().size());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(resident.getTown().getTownBlocks().size());
+            }
 			return amount;
 		case "town_townblocks_bought": // %townyadvanced_town_townblocks_bought%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(resident.getTown().getPurchasedBlocks());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(resident.getTown().getPurchasedBlocks());
+            }
 			return amount;
 		case "town_townblocks_bonus": // %townyadvanced_town_townblocks_bonus%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(resident.getTown().getBonusBlocks());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(resident.getTown().getBonusBlocks());
+            }
 			return amount;
 		case "town_townblocks_maximum": // %townyadvanced_town_townblocks_maximum%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()));
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()));
+            }
 			return amount;
 		case "town_townblocks_natural_maximum": // %townyadvanced_town_townblocks_natural_maximum%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()) - resident.getTown().getBonusBlocks() - resident.getTown().getPurchasedBlocks());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()) - resident.getTown().getBonusBlocks() - resident.getTown().getPurchasedBlocks());
+            }
 			return amount;
 		case "town_mayor": // %townyadvanced_town_mayor%
 			if (resident.hasTown()) {
-				try {
-					name = resident.getTown().getMayor().getName();
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                name = resident.getTown().getMayor().getName();
+            }
 			return name;
 		case "nation_king": // %townyadvanced_nation_king%
-			if (resident.hasTown()) {
-				try {
-					if (resident.getTown().hasNation())
-						name = resident.getTown().getNation().getKing().getName();
-				} catch (NotRegisteredException ignored) {
-				}
-			}
-			return name;
+			return optionalNation
+				.map(Nation::getKing)
+				.map(TownyObject::getName)
+				.orElse("");
 		case "resident_friends_amount": // %townyadvanced_resident_friends_amount%
 			amount = String.valueOf(resident.getFriends().size());
 			return amount;
 		case "nation_residents_amount": // %townyadvanced_nation_residents_amount%
-			if (resident.hasTown()) {
-				try {
-					if (resident.getTown().hasNation())
-						amount = String.valueOf(resident.getTown().getNation().getNumResidents());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
-			return amount;
+			return optionalNation
+				.map(Nation::getNumResidents)
+				.map(Objects::toString)
+				.orElse("");
 		case "nation_residents_online": // %townyadvanced_nation_residents_online%
-			if (resident.hasTown()) {
-				try {
-					if (resident.getTown().hasNation())
-						amount = String.valueOf(
-								TownyAPI.getInstance().getOnlinePlayers(resident.getTown().getNation()).size());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
-			return amount;
+			return optionalNation.map(value -> String.valueOf(TownyAPI.getInstance().getOnlinePlayers(value).size())).orElse(amount); 
 		case "nation_capital": // %townyadvanced_nation_capital%
-			if (resident.hasTown()) {
-				try {
-					if (resident.getTown().hasNation())
-						name = resident.getTown().getNation().getCapital().getName();
-				} catch (NotRegisteredException ignored) {
-				}
-			}
-			return name;
+			return optionalNation
+				.map(Nation::getCapital)
+				.map(TownyObject::getName)
+				.orElse("");
 		case "daily_town_upkeep": // %townyadvanced_daily_town_upkeep%
 			if (resident.hasTown()) {
-				try {
-					cost = TownySettings.getTownUpkeepCost(resident.getTown());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                cost = TownySettings.getTownUpkeepCost(resident.getTown());
+            }
 			return String.valueOf(cost);
 		case "daily_nation_upkeep": // %townyadvanced_daily_nation_upkeep%
 			if (resident.hasTown()) {
-				try {
-					if (resident.getTown().hasNation())
-						cost = TownySettings.getNationUpkeepCost(resident.getTown().getNation());
-				} catch (NotRegisteredException ignored) {
-				}
-			}
+                if (resident.getTown().hasNation())
+                    cost = TownySettings.getNationUpkeepCost(resident.getTown().getNation());
+            }
 			return String.valueOf(cost);
 		case "has_town": // %townyadvanced_has_town%
 			return String.valueOf(resident.hasTown());
 		case "has_nation": // %townyadvanced_has_nation%
 			return String.valueOf(resident.hasNation());
 		case "nation_tag_town_formatted": // %townyadvanced_nation_tag_town_formatted%
-			try {
-				if (resident.hasTown()) {
-					town = resident.getTown().getFormattedName();
-					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag())
-						nation = resident.getTown().getNation().getTag();
-				}
-				if (!nation.isEmpty())
-					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-				else if (!town.isEmpty())
-					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-			} catch (NotRegisteredException ignored) {
-			}
-			return tag;
+			
+			town = optionalTown
+				.map(Town::getFormattedName)
+				.orElse("");
+			
+			nation = optionalNation
+				.map(Nation::getTag)
+				.orElse("");
+			
+            if (!nation.isEmpty())
+                tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+            else if (!town.isEmpty())
+                tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+            return tag;
 		case "town_ranks": // %townyadvanced_town_ranks%
 			if (resident.isMayor())
 				rank = TownySettings.getLangString("mayor_sing");

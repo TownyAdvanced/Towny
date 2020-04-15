@@ -24,9 +24,12 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -205,12 +208,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		TownyPerms.assignPermissions(mayor, null);
 	}
 
-	public Nation getNation() throws NotRegisteredException {
-
-		if (hasNation())
-			return nation;
-		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_town_doesnt_belong_to_any_nation"));
+	@Nullable
+	public Nation getNation() {
+		return nation;
 	}
 
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -280,13 +280,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if (hasResident(resident))
 			throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), getFormattedName()));
-		else if (resident.hasTown())
-			try {
-				if (!resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
+		else if (resident.hasTown()) {
+		}
+			if (!resident.getTown().equals(this))
+				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
 	}
 
 	public boolean isMayor(Resident resident) {
@@ -667,8 +664,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			remove(resident);
 	}
 
-	private void remove(Resident resident) {
-		
+	private void remove(@NotNull Resident resident) {
+		Validate.notNull(resident);
 		resident.setTitle("");
 		resident.setSurname("");
 		resident.updatePerms();
@@ -729,7 +726,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			}
 			resident.setTown(null);
 		} catch (AlreadyRegisteredException ignored) {
-		} catch (IllegalStateException | NotRegisteredException e) {
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}
 		residents.remove(resident);
@@ -1205,13 +1202,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if (hasOutlaw(resident))
 			throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
-		else if (resident.hasTown())
-			try {
-				if (resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
+		else if (resident.hasTown()) {
+		}
+			if (resident.getTown().equals(this))
+				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
 	}
 	
 	public void removeOutlaw(Resident resident) throws NotRegisteredException {
@@ -1236,14 +1230,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isAlliedWith(Town othertown) {
 		if (this.hasNation() && othertown.hasNation()) {
-			try {
-				if (this.getNation().hasAlly(othertown.getNation())) {
-					return true;
-				} else {
-					return this.getNation().equals(othertown.getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
+			if (this.getNation().hasAlly(othertown.getNation())) {
+				return true;
+			} else {
+				return this.getNation().equals(othertown.getNation());
 			}
 		} else {
 			return false;

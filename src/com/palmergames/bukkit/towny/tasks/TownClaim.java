@@ -126,12 +126,8 @@ public class TownClaim extends Thread {
 			}
 
 			Resident resident = null;
-			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-			} catch (TownyException e) {
-				// Yeah the resident has to exist!
-			}
-			if (resident == null) {
+            resident = townyUniverse.getDataSource().getResident(player.getName());
+            if (resident == null) {
 				return;
 			}
 			int townSize = town.getTownBlocks().size();

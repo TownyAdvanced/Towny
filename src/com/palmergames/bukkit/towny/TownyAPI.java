@@ -377,13 +377,9 @@ public class TownyAPI {
         townyUniverse.setWarEvent(null);
     }
     public void requestTeleport(Player player, Location spawnLoc) {
-        
-        try {
-            TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
-        } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
-    }
+
+		TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
+	}
     
     public void abortTeleportRequest(Resident resident) {
         

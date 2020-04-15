@@ -759,14 +759,12 @@ public class War {
 	public void remove(Town town) {
 
 		// If a town is removed, is a capital, and the nation has not been removed, call remove(nation) instead.
-		try {
-			if (town.isCapital() && warringNations.contains(town.getNation())) {
-				remove(town.getNation());
-				return;
-			}
-		} catch (NotRegisteredException e) {}
-		
-		int fallenTownBlocks = 0;
+        if (town.isCapital() && warringNations.contains(town.getNation())) {
+            remove(town.getNation());
+            return;
+        }
+
+        int fallenTownBlocks = 0;
 		warringTowns.remove(town);
 		for (TownBlock townBlock : town.getTownBlocks())
 			if (warZone.containsKey(townBlock.getWorldCoord())){

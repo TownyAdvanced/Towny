@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 
 public class WarUtil {
@@ -17,16 +16,13 @@ public class WarUtil {
 	 */
 	public static boolean isPlayerNeutral(Player player) {
 		if (TownyAPI.getInstance().isWarTime()) {
-			try {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if (resident.isJailed())
-					return true;
-				if (resident.hasTown())
-					if (!War.isWarringTown(resident.getTown()))
-						return true;
-			} catch (NotRegisteredException e) {
-			}			
-		}		
+            Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+            if (resident.isJailed())
+                return true;
+            if (resident.hasTown())
+                if (!War.isWarringTown(resident.getTown()))
+                    return true;
+        }		
 		return false;
 	}
 }

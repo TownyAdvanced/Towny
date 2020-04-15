@@ -389,8 +389,16 @@ public abstract class DatabaseHandler {
 	public abstract Nation loadNation(UUID id);
 	public abstract TownyWorld loadWorld(UUID id);
 	public abstract void loadAllResidents();
+	public abstract void loadAllWorlds();
 	
 	public void loadAll() {
+		
+		// 1.) Load worlds
+		for (World world : Bukkit.getWorlds()) {
+			newWorld(world);
+		}
+		
+		loadAllWorlds();
 		
 		// 1.) Load Residents
 		loadAllResidents();
@@ -405,6 +413,11 @@ public abstract class DatabaseHandler {
 	public final Resident getResident(@NotNull UUID uuid) {
 		residents.computeIfAbsent(uuid, (k) -> loadResident(uuid));
 		return residents.get(uuid);
+	}
+	
+	@Nullable
+	public final Resident getResident(@NotNull String name) {
+		return residentNameMap.get(name);
 	}
 
 	@NotNull
@@ -471,7 +484,7 @@ public abstract class DatabaseHandler {
 	 * @throws AlreadyRegisteredException When the name is taken.
 	 * @throws NotRegisteredException When the name is invalid.
 	 */
-	public final void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+	public final void newTown(@NotNull String name) throws AlreadyRegisteredException, NotRegisteredException {
 		
 		// Check if name is valid.
 		String filteredName = getFilteredName(name);
@@ -505,25 +518,31 @@ public abstract class DatabaseHandler {
 		nations.put(newNation.getUniqueIdentifier(), newNation);
 	}
 	
-	public final void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		// Get bukkit world.
-		World world = Bukkit.getWorld(name);
+	public final void newResident(UUID uuid, String name) throws NotRegisteredException {
+		String filteredName = getFilteredName(name);
 		
-		if (world == null) {
-			throw new NotRegisteredException("World doesn't exist");
+		if (residentNameMap.containsKey(filteredName.toLowerCase())) {
+			return;
 		}
+		
+		Resident newResident = new Resident(uuid, name);
+		save(newResident);
+		
+		residents.put(newResident.getUniqueIdentifier(), newResident);
+	}
+	
+	public final void newWorld(@NotNull World world) {
 
-		if (worldNameMap.containsKey(name.toLowerCase())) {
-			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
+		if (worldNameMap.containsKey(world.getName().toLowerCase())) {
+			return;
 		}
 		
-		UUID uuid = world.getUID();
-		TownyWorld newWorld = new TownyWorld(uuid, name);
+		TownyWorld newWorld = new TownyWorld(world.getUID(), world.getName());
 		save(newWorld);
 		
 	}
 	
-	protected final String getFilteredName(String name) throws NotRegisteredException {
+	protected final String getFilteredName(@NotNull String name) throws NotRegisteredException {
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterName(name);

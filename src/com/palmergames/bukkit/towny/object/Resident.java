@@ -24,6 +24,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -268,11 +269,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public boolean isKing() {
 
-		try {
-			return getTown().getNation().isKing(this);
-		} catch (TownyException e) {
-			return false;
-		}
+		return getTown().getNation().isKing(this);
 	}
 
 	public boolean isMayor() {
@@ -290,12 +287,9 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return hasTown() && town.hasNation();
 	}
 
-	public Town getTown() throws NotRegisteredException {
-
-		if (hasTown())
-			return town;
-		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
+	@Nullable
+	public Town getTown() {
+		return town;
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -631,15 +625,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public boolean isAlliedWith(Resident otherresident) {
 		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
-			try {
-				if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
-					return true;
-				} else {
-					
-					return this.getTown().getNation().equals(otherresident.getTown().getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
+			if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
+				return true;
+			} else {
+				
+				return this.getTown().getNation().equals(otherresident.getTown().getNation());
 			}
 		} else {
 			return false;

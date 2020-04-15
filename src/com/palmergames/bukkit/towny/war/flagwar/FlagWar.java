@@ -242,15 +242,11 @@ public class FlagWar {
 		Nation landOwnerNation, attackingNation;
 		TownBlock townBlock;
 
-		try {
-			attackingResident = townyUniverse.getDataSource().getResident(player.getName());
-			attackingTown = attackingResident.getTown();
-			attackingNation = attackingTown.getNation();
-		} catch (NotRegisteredException e) {
-			throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_nation"));
-		}
-		
-		if (attackingTown.getTownBlocks().size() < 1)
+        attackingResident = townyUniverse.getDataSource().getResident(player.getName());
+        attackingTown = attackingResident.getTown();
+        attackingNation = attackingTown.getNation();
+
+        if (attackingTown.getTownBlocks().size() < 1)
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_your_town_has_no_claims"));
 
 		try {

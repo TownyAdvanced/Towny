@@ -69,26 +69,19 @@ public class TownyWorldListener implements Listener {
 		//String worldName = event.getWorld().getName();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		try {
-			townyUniverse.getDatabaseHandler().newWorld(worldName);
-			TownyWorld world = townyUniverse.getDatabaseHandler().getWorld(worldName);
-			if (dungeonWorld)
-				world.setUsingTowny(false);
-			
-			if (world == null)
-				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
-			else {
-				if (!dungeonWorld)
-					if (!townyUniverse.getDataSource().loadWorld(world)) {
-						// First time world has been noticed
-						townyUniverse.getDataSource().saveWorld(world);
-					}
-			}
-		} catch (AlreadyRegisteredException e) {
-			// Allready loaded			
-		} catch (NotRegisteredException e) {
+		//townyUniverse.getDatabaseHandler().newWorld(worldName);
+		TownyWorld world = townyUniverse.getDatabaseHandler().getWorld(worldName);
+		if (dungeonWorld)
+			world.setUsingTowny(false);
+
+		if (world == null)
 			TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
-			e.printStackTrace();
+		else {
+			if (!dungeonWorld)
+				if (!townyUniverse.getDataSource().loadWorld(world)) {
+					// First time world has been noticed
+					townyUniverse.getDataSource().saveWorld(world);
+				}
 		}
 	}
 	

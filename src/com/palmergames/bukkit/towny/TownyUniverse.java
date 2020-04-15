@@ -151,6 +151,7 @@ public class TownyUniverse {
             databaseHandler.loadAll();
             
         } catch (UnsupportedOperationException e) {
+        	e.printStackTrace();
             System.out.println("[Towny] Error: Unsupported getString format!");
             return false;
         }
@@ -204,7 +205,7 @@ public class TownyUniverse {
         try {
         	if (worldCoord.getTownyWorld().isWarAllowed())
             	worldCoord.getTownyWorld().addWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
+        } catch (Exception e) {
             // Not a registered world
         }
         towny.updateCache(worldCoord);
@@ -213,7 +214,7 @@ public class TownyUniverse {
     public void removeWarZone(WorldCoord worldCoord) {
         try {
             worldCoord.getTownyWorld().removeWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
+        } catch (Exception e) {
             // Not a registered world
         }
         towny.updateCache(worldCoord);
