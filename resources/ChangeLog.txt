@@ -4478,3 +4478,4 @@ v0.92.0.11:
     - Closes #3907.
   - Fix /t buy bonus command not working after cost confirmation added.
   - Fix some costs in confirmations not being formatted by the TownyEconomyHandler.
+  - Add cost confirmations to /t new and /n new commands.

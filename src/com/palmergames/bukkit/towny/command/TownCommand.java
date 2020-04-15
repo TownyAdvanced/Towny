@@ -2462,12 +2462,38 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
-
-			if (!noCharge && TownySettings.isUsingEconomy() && !resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? TownySettings.getLangString("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
 			
-			newTown(world, name, resident, key, player.getLocation(), player);
-			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+			// If the town isn't free to make, send a confirmation.
+			if (!noCharge && TownySettings.isUsingEconomy()) { 
+				// Test if the resident can afford the town.
+				if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? TownySettings.getLangString("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+
+				Confirmation confirmation = new Confirmation(() -> {			
+					try {
+						// Make the resident pay here.
+						resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
+					} catch (EconomyException ignored) {
+					}
+					
+					try {
+						// Make town.
+						newTown(world, name, resident, key, player.getLocation(), player);
+					} catch (TownyException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+						e.printStackTrace();
+					}
+					TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+				});
+				// Send confirmation.
+				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())));
+				ConfirmationHandler.sendConfirmation(player, confirmation);
+
+			// Or, if the town doesn't cost money to create, just make the Town.
+			} else {
+				newTown(world, name, resident, key, player.getLocation(), player);
+				TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+			}
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			// TODO: delete town data that might have been done
