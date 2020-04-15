@@ -1491,22 +1491,31 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					test = "town";
 					line = keys.get("town");
-					if (line != null)
+					if (line != null) {
 						if (line.isEmpty()) {
 							TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
+						Town town = null;
 						try {
-							Town town = getTown(line.trim());
-							townBlock.setTown(town);
+							town = getTown(line.trim());
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + ", deleting " + path);
+							TownyUniverse.getInstance().removeTownBlock(townBlock);
+							deleteTownBlock(townBlock);
+							continue;
+						}
+						townBlock.setTown(town);
+						try {
 							town.addTownBlock(townBlock);
 							TownyWorld townyWorld = townBlock.getWorld();
 							if (townyWorld != null && !townyWorld.hasTown(town))
 								townyWorld.addTown(town);
-						} catch (Exception ignored) {
+						} catch (AlreadyRegisteredException ignored) {
 						}
+					}
 
 					line = keys.get("name");
 					if (line != null)
@@ -2462,12 +2471,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public void deleteTownBlock(TownBlock townBlock) {
 
 		File file = new File(getTownBlockFilename(townBlock));
-		if (file.exists())
+		if (file.exists()) {
+			// TownBlocks can end up being deleted because they do not contain valid towns.
+			// This will move a deleted townblock to either: 
+			// towny\townblocks\worldname\deleted\townname folder, or the
+			// towny\townblocks\worldname\deleted\ folder if there is not valid townname.
+			String name = null;
 			try {
-				FileMgmt.moveTownBlockFile(file, "deleted", townBlock.getTown().getName());
-			} catch (NotRegisteredException e) {
-				file.delete();
+				name = townBlock.getTown().getName();
+			} catch (NotRegisteredException ignored) {
 			}
+			if (name != null)
+				FileMgmt.moveTownBlockFile(file, "deleted", name);
+			else
+				FileMgmt.moveTownBlockFile(file, "deleted", "");
+		}
 	}
 	
 	@Override

@@ -4481,3 +4481,6 @@ v0.92.0.11:
   - Add cost confirmations to /t new and /n new commands.
   - Added advice message to mayor when they create their town, advising them about upkeep, depositing money and when the next upkeep will be taken.
     - Closes #3843.
+  - Properly delete townblocks which belong to towns that no longer exist.
+    - This will clear up ghost-townblocks which appear as NPEs in ChunkNotifications, as well as make some townblocks un-claimable.
+    - Closes #3911, #3771.

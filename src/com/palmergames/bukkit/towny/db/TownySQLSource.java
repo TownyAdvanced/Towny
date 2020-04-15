@@ -1445,17 +1445,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         }
 
                     line = rs.getString("town");
-                    if (line != null)
+                    if (line != null) {
+                        Town town;
+						try {
+							town = getTown(line.trim());
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
+							TownyUniverse.getInstance().removeTownBlock(townBlock);
+							deleteTownBlock(townBlock);
+							continue;
+						}
+                        townBlock.setTown(town);
                         try {
-                            Town town = getTown(line.trim());
-                            townBlock.setTown(town);
-                            town.addTownBlock(townBlock);
-                            TownyWorld townyWorld = townBlock.getWorld();
-                            if (townyWorld != null && !townyWorld.hasTown(town))
-                            	townyWorld.addTown(town);
-                        } catch (Exception ignored) {
-                        }
-
+							town.addTownBlock(townBlock);
+							TownyWorld townyWorld = townBlock.getWorld();
+							if (townyWorld != null && !townyWorld.hasTown(town))
+								townyWorld.addTown(town);
+						} catch (AlreadyRegisteredException ignored) {
+						}
+                    }
                     line = rs.getString("resident");
                     if (line != null && !line.isEmpty())
                         try {
