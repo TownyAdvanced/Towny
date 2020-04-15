@@ -314,7 +314,7 @@ public class TownBlock extends TownyObject {
 				
 				setType(type);
 			});
-			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), cost));
+			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)));
 			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(resident.getName()), confirmation);
 		// No payment required so just change the type.
 		} else {

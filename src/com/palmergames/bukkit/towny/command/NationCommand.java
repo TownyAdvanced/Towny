@@ -1287,12 +1287,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-			if (!noCharge && TownySettings.isUsingEconomy() && !town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
+			// If it isn't free to make a nation, send a confirmation.
+			if (!noCharge && TownySettings.isUsingEconomy()) {
+				// Test if they can pay.
+				if (!town.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
+					throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
-			newNation(name, town);
+				Confirmation confirmation = new Confirmation(() -> {				
+					try {
+						// Town pays for nation here.
+						town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost");
+					} catch (EconomyException ignored) {
+					}
+					try {
+						// Actually make nation.
+						newNation(name, town);
+					} catch (AlreadyRegisteredException | NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+					}
+					TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
 
-			TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
+				});
+				// Send confirmation.
+				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
+				ConfirmationHandler.sendConfirmation(player, confirmation);
+			// Or, it is free, so just make the nation.
+			} else {
+				newNation(name, town);
+				TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
+			}
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
@@ -2383,7 +2406,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							else
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				    	});
-				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownySettings.getNationRenameCost()));
+				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
                     } else {
 						if (!NameValidation.isBlacklistName(split[1]))

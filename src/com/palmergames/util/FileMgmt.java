@@ -299,7 +299,10 @@ public class FileMgmt {
 
 		synchronized (sourceFile) {
 			if (sourceFile.isFile()) {
-				checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
+				if (!townDir.isEmpty())
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
+				else 
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted");
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
