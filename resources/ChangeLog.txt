@@ -4479,3 +4479,5 @@ v0.92.0.11:
   - Fix /t buy bonus command not working after cost confirmation added.
   - Fix some costs in confirmations not being formatted by the TownyEconomyHandler.
   - Add cost confirmations to /t new and /n new commands.
+  - Added advice message to mayor when they create their town, advising them about upkeep, depositing money and when the next upkeep will be taken.
+    - Closes #3843.

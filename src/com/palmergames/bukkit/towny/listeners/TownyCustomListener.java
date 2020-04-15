@@ -3,17 +3,23 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
+import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
+import com.palmergames.util.TimeMgmt;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -110,5 +116,20 @@ public class TownyCustomListener implements Listener {
 			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
 			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerCreateTown(NewTownEvent event) {
+		Town town = event.getTown();
+		Double upkeep = TownySettings.getTownUpkeepCost(town);
+		if (TownySettings.isTaxingDaily() && upkeep > 0) {
+			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
+			String time = TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime());
+			TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_new_town_advice"), cost, time));
+		}
+		//TODO: at some point it might be nice to have a written_book given to mayors 
+		// which could contain the above advice about depositing money, or containing
+		// links to the commands page on the wiki.
+		
 	}
 }
