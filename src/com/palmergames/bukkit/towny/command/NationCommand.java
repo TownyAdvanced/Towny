@@ -2443,7 +2443,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							else
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				    	});
-				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownySettings.getNationRenameCost()));
+				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
                     } else {
 						if (!NameValidation.isBlacklistName(split[1]))

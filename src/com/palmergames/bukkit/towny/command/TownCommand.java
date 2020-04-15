@@ -2128,7 +2128,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	    					else
 	    						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
                     	});
-                    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownySettings.getTownRenameCost()));
+                    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
                     	
                     } else {
@@ -2365,7 +2365,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @throws TownyException - Exception.
 	 * @throws EconomyException - If the town cannot pay.
 	 */
-	public static void townBuyBonusTownBlocks(Town town, int inputN, Object player) throws EconomyException, TownyException {
+	public static void townBuyBonusTownBlocks(Town town, int inputN, Player player) throws EconomyException, TownyException {
 
 		if (inputN < 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
@@ -2395,8 +2395,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), n, TownySettings.getLangString("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 			TownyUniverse.getInstance().getDataSource().saveTown(town);
 		});
-		confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), cost));
-		ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(player.toString()), confirmation);
+		confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)));
+		ConfirmationHandler.sendConfirmation(player, confirmation);
 	}
 
 	/**
