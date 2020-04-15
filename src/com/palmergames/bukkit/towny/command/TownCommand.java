@@ -2347,7 +2347,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						} catch (EconomyException ignored) {							
 						}
 					} else {
-						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus #"));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus"));
 					}
 				}
 			} catch (TownyException x) {
