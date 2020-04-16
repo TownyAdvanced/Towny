@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.chat.variables;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import net.tnemc.tnc.core.common.chat.ChatVariable;
 import org.bukkit.entity.Player;
 
@@ -15,6 +16,10 @@ public class NationVariable extends ChatVariable {
 
 	@Override
 	public String parse(Player player, String message) {
-        return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getName();
-    }
+		try {
+			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getName();
+		} catch(NotRegisteredException ignore) {
+			return "";
+		}
+	}
 }

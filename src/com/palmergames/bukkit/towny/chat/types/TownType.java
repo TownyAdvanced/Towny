@@ -1,15 +1,12 @@
 package com.palmergames.bukkit.towny.chat.types;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import net.tnemc.tnc.core.common.chat.ChatType;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,44 +19,31 @@ public class TownType extends ChatType {
 
 	@Override
 	public boolean canChat(Player player) {
-		Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
-        return Optional.ofNullable(resident)
-			.map(Resident::hasTown)
-			.orElse(false);
+		try {
+			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).hasTown();
+		} catch(NotRegisteredException ignore) {
+
+		}
+		return false;
 	}
 
 	@Override
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		Resident resident = townyUniverse.getDatabaseHandler().getResident(player.getUniqueId());
-		
-		final UUID town = Optional.ofNullable(resident)
-			.map(Resident::getTown)
-			.map(TownyObject::getUniqueIdentifier)
-			.orElse(null);
-		
-		if (town == null) {
-			return recipients;
-		}
-        
-        Collection<Player> newRecipients = new HashSet<>();
+		try {
+			final UUID town = townyUniverse.getDataSource().getResident(player.getName()).getTown().getUniqueIdentifier();
 
-        for(Player p : recipients) {
-        	Resident playerResident = townyUniverse.getDatabaseHandler().getResident(p.getUniqueId());
-        	final UUID ID = Optional.ofNullable(playerResident)
-				.map(Resident::getTown)
-				.map(TownyObject::getUniqueIdentifier)
-				.orElse(null);
-        	
-        	if (ID == null) {
-        		continue;
+			Collection<Player> newRecipients = new HashSet<>();
+
+			for(Player p : recipients) {
+				if(townyUniverse.getDataSource().getResident(p.getName()).getTown().getUniqueIdentifier().equals(town)) {
+					newRecipients.add(p);
+				}
 			}
-        	
-            if(ID.equals(town)) {
-                newRecipients.add(p);
-            }
-        }
-        return newRecipients;
+			return newRecipients;
+		} catch(NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		return recipients;
 	}
 }

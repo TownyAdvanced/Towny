@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -14,7 +16,6 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -269,7 +270,7 @@ public abstract class TownyDataSource {
 
 	abstract public List<Resident> getResidents(String[] names);
 
-	abstract public @Nullable Resident getResident(String name);
+	abstract public Resident getResident(String name) throws NotRegisteredException;
 
 	abstract public void removeResidentList(Resident resident);
 

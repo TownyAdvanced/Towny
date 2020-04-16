@@ -44,11 +44,16 @@ public class TownyAsciiMap {
 		boolean hasTown = false;
 		Resident resident;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-        resident = townyUniverse.getDataSource().getResident(player.getName());
-        if (resident.hasTown())
-            hasTown = true;
+		try {
+			resident = townyUniverse.getDataSource().getResident(player.getName());
+			if (resident.hasTown())
+				hasTown = true;
+		} catch (TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			return;
+		}
 
-        TownyWorld world;
+		TownyWorld world;
 		try {
 			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {

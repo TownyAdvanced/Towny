@@ -32,7 +32,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +42,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -462,48 +460,48 @@ public class TownySettings {
 			if (root.getComments().length > 0)
 				addComment(root.getRoot(), root.getComments());
 
-			if (root.getRoot().equals(ConfigNodes.LEVELS.getRoot())) {
+			if (root.getRoot() == ConfigNodes.LEVELS.getRoot()) {
 				
 				setDefaultLevels();
 				
-			} else if ((root.getRoot().equals(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+			} else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
 				
 				// Do nothing here as setDefaultLevels configured town and
 				// nation levels.
 				
-			} else if (root.getRoot().equals(ConfigNodes.VERSION.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), version);
-			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
-			} else if (root.getRoot().equals(ConfigNodes.PROT_ITEM_USE_MAT.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()) {
 				
 				/*
 				 * Update any Id's to Material names (where required).
 				 */
 				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
 				
-			} else if (root.getRoot().equals(ConfigNodes.PROT_SWITCH_MAT.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.PROT_SWITCH_MAT.getRoot()) {
 				
 				/*
 				 * Update any Id's to Material names (where required).
 				 */
 				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_SWITCH_MAT)));
 				
-			} else if (root.getRoot().equals(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE.getRoot()) {
 				
 				/*
 				 * Update any Id's to Material names (where required).
 				 */
 				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE)));
 				
-			} else if (root.getRoot().equals(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE.getRoot()) {
 				
 				/*
 				 * Update any Id's to Material names (where required).
 				 */
 				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE)));
 				
-			} else if (root.getRoot().equals(ConfigNodes.UNCLAIMED_ZONE_IGNORE.getRoot())) {
+			} else if (root.getRoot() == ConfigNodes.UNCLAIMED_ZONE_IGNORE.getRoot()) {
 				
 				/*
 				 * Update any Id's to Material names (where required).
@@ -947,18 +945,33 @@ public class TownySettings {
 
 	public static String getKingPrefix(Resident resident) {
 
-		return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_PREFIX);
+		try {
+			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_PREFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getKingPrefix.");
+			return "";
+		}
 	}
 
 	public static String getMayorPrefix(Resident resident) {
 
-		return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_PREFIX);
+		try {
+			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_PREFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getMayorPrefix.");
+			return "";
+		}
 	}
 
 	public static String getCapitalPostfix(Town town) {
 
-        return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
-    }
+		try {
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
+		} catch (NotRegisteredException e) {
+			sendError("getCapitalPostfix.");
+			return "";
+		}
+	}
 
 	public static String getTownPostfix(Town town) {
 
@@ -1002,17 +1015,32 @@ public class TownySettings {
 
 	public static String getCapitalPrefix(Town town) {
 
-        return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
-    }
+		try {
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
+		} catch (NotRegisteredException e) {
+			sendError("getCapitalPrefix.");
+			return "";
+		}
+	}
 
 	public static String getKingPostfix(Resident resident) {
 
-		return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_POSTFIX);
+		try {
+			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_POSTFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getKingPostfix.");
+			return "";
+		}
 	}
 
 	public static String getMayorPostfix(Resident resident) {
 
-		return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_POSTFIX);
+		try {
+			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_POSTFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getMayorPostfix.");
+			return "";
+		}
 	}
 
 	public static String getNPCPrefix() {
@@ -1096,10 +1124,12 @@ public class TownySettings {
 		
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
 		int nationOutposts = 0;
-		if (town.hasNation()) {
-        }
-            nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-        int n = townOutposts + nationOutposts;
+		if (town.hasNation())
+			try {
+				nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+			} catch (NotRegisteredException e) {
+			}
+		int n = townOutposts + nationOutposts;
 		return n;
 	}
 	
@@ -1115,8 +1145,15 @@ public class TownySettings {
 		return calculationEvent.getBonusBlocks();
 	}
 
-	public static int getNationBonusBlocks(@NotNull Town town) {
-		return getNationBonusBlocks(town.getNation());
+	public static int getNationBonusBlocks(Town town) {
+
+		if (town.hasNation())
+			try {
+				return getNationBonusBlocks(town.getNation());
+			} catch (NotRegisteredException e) {
+			}
+
+		return 0;
 	}
 
 	public static int getTownBlockRatio() {
@@ -1837,15 +1874,11 @@ public class TownySettings {
 			}
 		}
 		
-		if (!Optional.ofNullable(town).map(Town::getNation).isPresent()) {
-			return 0.0;
-		}
-		
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
 				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException|NotRegisteredException e) {
 				e.printStackTrace();
 			}
 			if (isUpkeepByPlot()) {
@@ -2103,8 +2136,11 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
-		// Assume
-		return !isTownyUpToDate(currentVersion);
+
+		if (isTownyUpToDate(currentVersion))
+			return false;
+		else
+			return true; // Assume
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
@@ -2160,7 +2196,9 @@ public class TownySettings {
 	}
 
 	public static int getMaxResidentOutposts(Resident resident) {
-		return TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
+
+		int maxOutposts = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
+		return maxOutposts;
 	}
 
 	public static boolean getPermFlag_Resident_Friend_Build() {
@@ -2704,27 +2742,27 @@ public class TownySettings {
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
-		return parseString(getLangString("msg_war_a_player_has_no_town"));
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_town")));
 	}
 	
 	public static String[] getWarAPlayerHasNoNationMsg() {
-		return parseString(getLangString("msg_war_a_player_has_no_nation"));
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_nation")));
 	}
 	
 	public static String[] getWarAPlayerHasANeutralNationMsg() {
-		return parseString(getLangString("msg_war_a_player_has_a_neutral_nation"));
+		return parseString(String.format(getLangString("msg_war_a_player_has_a_neutral_nation")));
 	}
 	
 	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
-		return parseString(getLangString("msg_war_a_player_has_been_removed_from_war"));
+		return parseString(String.format(getLangString("msg_war_a_player_has_been_removed_from_war")));
 	}
 	
 	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
-		return parseString(getLangString("msg_war_player_cant_be_jailed_plot_fallen"));
+		return parseString(String.format(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
 	}
 	
 	public static String[] getWarAPlayerIsAnAllyMsg() {
-		return parseString(getLangString("msg_war_a_player_is_an_ally"));
+		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally")));
 	}
 	
 	public static boolean isNotificationUsingTitles() {

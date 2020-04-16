@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -687,14 +688,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);
-							Resident resident = getResident(token);
-							if (resident != null) {
-								try {
-									town.addResident(resident);
-								} catch (AlreadyRegisteredException e) {
-									TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
+							try {
+								Resident resident = getResident(token);
+								if (resident != null) {
+									try {
+										town.addResident(resident);
+									} catch (AlreadyRegisteredException e) {
+										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+									}
 								}
+							} catch (NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
 							}
 						}
 					}
@@ -706,9 +711,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
-							Resident outlaw = getResident(token);
-							if (outlaw != null)
-								town.addOutlaw(outlaw);
+							try {
+								Resident outlaw = getResident(token);
+								if (outlaw != null)
+									town.addOutlaw(outlaw);
+							} catch (NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, removing from list...");
+							}
 						}
 					}
 				}

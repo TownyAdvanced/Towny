@@ -1,15 +1,12 @@
 package com.palmergames.bukkit.towny.chat.types;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import net.tnemc.tnc.core.common.chat.ChatType;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,44 +19,31 @@ public class NationType extends ChatType {
 
 	@Override
 	public boolean canChat(Player player) {
-		Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
-		
-		return Optional.ofNullable(resident)
-			.map(Resident::getTown)
-			.map(Town::hasNation)
-			.orElse(false);
+		try {
+			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).hasTown() && TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().hasNation();
+		} catch(NotRegisteredException ignore) {
+
+		}
+		return false;
 	}
 
 	@Override
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		final UUID nation = Optional.ofNullable(townyUniverse.getDatabaseHandler().getResident(player.getUniqueId()))
-			.map(Resident::getTown)
-			.map(Town::getNation)
-			.map(TownyObject::getUniqueIdentifier)
-			.orElse(null);
-       
-		if (nation == null) {
-			return recipients;
-		}
+		try {
+			final UUID nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().getUniqueIdentifier();
 
-        Collection<Player> newRecipients = new HashSet<>();
+			Collection<Player> newRecipients = new HashSet<>();
 
-        for(Player p : recipients) {
-        	
-        	Optional<UUID> optionalUUID = Optional.ofNullable(townyUniverse.getDatabaseHandler().getResident(p.getUniqueId()))
-				.map(Resident::getTown)
-				.map(Town::getNation)
-				.map(TownyObject::getUniqueIdentifier);
-        	
-        	if (!optionalUUID.isPresent()) {
-        		return recipients;
+			for(Player p : recipients) {
+				if(townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUniqueIdentifier().equals(nation)) {
+					newRecipients.add(p);
+				}
 			}
-            if(optionalUUID.get().equals(nation)) {
-                newRecipients.add(p);
-            }
-        }
-        
-        return newRecipients;
+			return newRecipients;
+		} catch(NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		return recipients;
 	}
 }

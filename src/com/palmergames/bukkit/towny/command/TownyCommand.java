@@ -239,10 +239,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						sendErrorMsg(player, x.getMessage());
 						return;
 					}
-				} else if (split.length == 1) {
-				}
-					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-					town = resident.getTown();
+				} else if (split.length == 1)
+					try {
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+						town = resident.getTown();
+					} catch (NotRegisteredException e) {
+					}
 
 				for (String line : getTownyPrices(town))
 					player.sendMessage(line);
@@ -470,11 +472,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = null;
 
 		if (town != null)
-			if (town.hasNation()) {
-            }
-                nation = town.getNation();
+			if (town.hasNation())
+				try {
+					nation = town.getNation();
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
 
-        output.add(ChatTools.formatTitle("Prices"));
+		output.add(ChatTools.formatTitle("Prices"));
 		output.add(Colors.Yellow + "[New] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
 		if (town != null) {
 			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));

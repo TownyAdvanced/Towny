@@ -390,7 +390,7 @@ public class TownyRegenAPI {
 							if (worldCoord.getTownyWorld().isPlotManagementDeleteIds(block.getType().name())) {
 								block.setType(Material.AIR);
 							}
-						} catch (Exception e) {
+						} catch (NotRegisteredException e) {
 							// Not a registered world
 						}
 						block = null;

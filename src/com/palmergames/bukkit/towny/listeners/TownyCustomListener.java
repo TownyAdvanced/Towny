@@ -67,12 +67,7 @@ public class TownyCustomListener implements Listener {
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
-				
-				if (resident == null) {
-					return;
-				}
-				
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				String msg = null;
 				try {
@@ -113,7 +108,7 @@ public class TownyCustomListener implements Listener {
 				} else 
 					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 			}
-		} catch (Exception e) {
+		} catch (NotRegisteredException e) {
 			// likely Citizens' NPC
 		}
 

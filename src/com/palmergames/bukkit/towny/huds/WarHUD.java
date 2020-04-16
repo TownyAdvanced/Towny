@@ -85,19 +85,25 @@ public class WarHUD {
 
 	public static void updateHomeTown(Player p) {
 		String homeTown;
-        homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
-        p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
+		try {
+			homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
+		} catch (NotRegisteredException e) {
+			homeTown = TownySettings.getLangString("war_hud_townless");
+		}
+		p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
 	}
 
 	public static void updateScore(Player p, War war) {
 		String score;
-        Town home = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-        Hashtable<Town, Integer> scores = war.getTownScores();
-        if (scores.containsKey(home))
-            score = scores.get(home) + "";
-        else
-            score = "";
-        p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score));
+		try {
+			Town home = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
+			Hashtable<Town, Integer> scores = war.getTownScores();
+			if (scores.containsKey(home))
+				score = scores.get(home) + "";
+			else
+				score = "";
+		} catch (NotRegisteredException e) {score = "";}
+		p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score));
 	}
 
 	public static void updateTopScores(Player p, String[] top) {

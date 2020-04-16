@@ -519,19 +519,15 @@ public class Towny extends JavaPlugin {
 	}
 
 	public PlayerCache newCache(Player player) {
-		
-		TownyWorld world = TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getName());
-		ReflectionUtil.dump(townyUniverse.getDatabaseHandler());
-		if (world == null) {
-			TownyMessaging.sendErrorMsg("Flag 1");
+
+		try {
+			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
+			playerCache.put(player.getName().toLowerCase(), cache);
+			return cache;
+		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
 			return null;
 		}
-		
-		PlayerCache cache = new PlayerCache(world, player);
-		playerCache.put(player.getName().toLowerCase(), cache);
-		TownyMessaging.sendErrorMsg("Flag 2");
-		return cache;
 
 	}
 
@@ -570,16 +566,10 @@ public class Towny extends JavaPlugin {
 	 * Resets all Online player caches, retaining their location info.
 	 */
 	public void resetCache() {
-		
+
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null) {
-				TownyMessaging.sendErrorMsg(player.toString());
-				PlayerCache cache = getCache(player);
-				
-				TownyMessaging.sendErrorMsg(cache.toString());
+			if (player != null)
 				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically
-			}
-				
 																														// resets
 																														// permissions.
 	}
@@ -645,15 +635,14 @@ public class Towny extends JavaPlugin {
 		if (player == null)
 			return;
 
-        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
-        
-        if (resident == null) {
-        	return;
-		}
-        
-        resident.setModes(modes, notify);
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			resident.setModes(modes, notify);
 
-    }
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+		}
+	}
 
 	/**
 	 * Remove ALL current modes (and set the defaults)
@@ -662,15 +651,15 @@ public class Towny extends JavaPlugin {
 	 */
 	public void removePlayerMode(Player player) {
 
-        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
-        
-        if (resident == null) {
-        	return;
-		}
-        
-        resident.clearModes();
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			resident.clearModes();
 
-    }
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+		}
+
+	}
 
 	/**
 	 * Fetch a list of all the players current modes.
@@ -680,20 +669,20 @@ public class Towny extends JavaPlugin {
 	 */
 	public List<String> getPlayerMode(Player player) {
 
-		return getPlayerMode(player.getUniqueId());
+		return getPlayerMode(player.getName());
 	}
 
-	public List<String> getPlayerMode(UUID id) {
+	public List<String> getPlayerMode(String name) {
 
-        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(id);
-        
-        if (resident == null) {
-        	return Collections.emptyList();
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
+			return resident.getModes();
+
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+			return null;
 		}
-        
-        return resident.getModes();
-
-    }
+	}
 
 	/**
 	 * Check if the player has a specific mode.
@@ -703,26 +692,20 @@ public class Towny extends JavaPlugin {
 	 * @return true if the mode is present.
 	 */
 	public boolean hasPlayerMode(Player player, String mode) {
-		return hasPlayerMode(player.getUniqueId(), mode);
+
+		return hasPlayerMode(player.getName(), mode);
 	}
 
-	public boolean hasPlayerMode(UUID id, String mode) {
-        Resident resident = getResident(id);
-        
-        if (resident == null) {
-        	return false;
+	public boolean hasPlayerMode(String name, String mode) {
+
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
+			return resident.hasMode(mode);
+
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+			return false;
 		}
-        
-        return resident.hasMode(mode);
-
-    }
-    
-    private Resident getResident(UUID id) {
-		return TownyUniverse.getInstance().getDatabaseHandler().getResident(id);
-	}
-    
-    private Resident getResident(Player player) {
-		return getResident(player.getUniqueId());
 	}
 
 	public String getConfigPath() {

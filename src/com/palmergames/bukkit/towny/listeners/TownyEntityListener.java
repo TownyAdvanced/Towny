@@ -158,37 +158,41 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 					return;
 				}
-                Town attackerTown = universe.getDataSource().getResident(attacker.getName()).getTown();
-                Town defenderTown = universe.getDataSource().getResident(defender.getName()).getTown();
-
-                //Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
-                if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
-                    TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoNationMsg());
-                    event.setCancelled(true);
-                    return;
-                }
-
-                //Cancel because one of the two player's nations is neutral.
-                if (attackerTown.getNation().isNeutral() || defenderTown.getNation().isNeutral() ) {
-                    TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasANeutralNationMsg());
-                    event.setCancelled(true);
-                    return;
-                }
-
-                //Cancel because one of the two players are no longer involved in the war.
-                if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
-                    TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasBeenRemovedFromWarMsg());
-                    event.setCancelled(true);
-                    return;
-                }
-
-                //Cancel because one of the two players considers the other an ally.
-                if ( ((attackerTown.getNation().hasAlly(defenderTown.getNation())) || (defenderTown.getNation().hasAlly(attackerTown.getNation()))) && !TownySettings.getFriendlyFire()){
-                    TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerIsAnAllyMsg());
-                    event.setCancelled(true);
-                    return;
-                }
-                if (CombatUtil.preventFriendlyFire((Player) attacker, (Player) defender)) {
+				try {
+					Town attackerTown = universe.getDataSource().getResident(attacker.getName()).getTown();
+					Town defenderTown = universe.getDataSource().getResident(defender.getName()).getTown();
+	
+					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
+					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
+						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoNationMsg());
+						event.setCancelled(true);
+						return;
+					}
+					
+					//Cancel because one of the two player's nations is neutral.
+					if (attackerTown.getNation().isNeutral() || defenderTown.getNation().isNeutral() ) {
+						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasANeutralNationMsg());
+						event.setCancelled(true);
+						return;
+					}
+					
+					//Cancel because one of the two players are no longer involved in the war.
+					if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
+						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasBeenRemovedFromWarMsg());
+						event.setCancelled(true);
+						return;
+					}
+					
+					//Cancel because one of the two players considers the other an ally.
+					if ( ((attackerTown.getNation().hasAlly(defenderTown.getNation())) || (defenderTown.getNation().hasAlly(attackerTown.getNation()))) && !TownySettings.getFriendlyFire()){
+						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerIsAnAllyMsg());
+						event.setCancelled(true);
+						return;
+					}
+				} catch (NotRegisteredException e) {
+					//One of the players has no nation.
+				}
+				if (CombatUtil.preventFriendlyFire((Player) attacker, (Player) defender)) {
 					// Remove the projectile here so no
 					// other events can fire to cause damage
 					if (attacker instanceof Projectile)
