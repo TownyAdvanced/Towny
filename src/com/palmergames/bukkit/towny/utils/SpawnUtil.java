@@ -411,7 +411,7 @@ public class SpawnUtil {
 
 		if (TownyTimerHandler.isTeleportWarmupRunning()) {
 			// Use teleport warmup
-			player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 		} else {
 			// Don't use teleport warmup

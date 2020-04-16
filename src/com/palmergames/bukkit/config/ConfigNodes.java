@@ -385,6 +385,10 @@ public enum ConfigNodes {
 			"global_town_settings.movement_cancels_spawn_warmup",
 			"false",
 			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
+	GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.damage_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
 			"global_town_settings.spawn_cooldown_time",
 			"30",

@@ -4484,3 +4484,9 @@ v0.92.0.11:
   - Properly delete townblocks which belong to towns that no longer exist.
     - This will clear up ghost-townblocks which appear as NPEs in ChunkNotifications, as well as make some townblocks un-claimable.
     - Closes #3911, #3771.
+0.96.1.5:
+  - Language files bumped to 0.81.
+  - New Config Option: global_town_settings.damage_cancels_spawn_warmup
+    - Default: false
+    - When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled.
+    - Closes #3916.

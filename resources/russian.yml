@@ -1,5 +1,5 @@
 name: Towny
-version: 0.80
+version: 0.81
 language: russian
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1123,3 +1123,6 @@ bonus_townblocks: 'bonus townblocks'
 # Added in 0.80
 nomad_sing: 'Nomad'
 msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
+
+# Added in 0.81
+msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'

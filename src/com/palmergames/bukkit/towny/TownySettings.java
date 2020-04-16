@@ -2612,6 +2612,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
 	}
 	
+	public static boolean isDamageCancellingSpawnWarmup() {
+		
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP);
+	}
+	
 	public static int getSpawnCooldownTime() {
 		
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
