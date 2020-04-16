@@ -26,6 +26,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 /**
  * Groups all the cache status and permissions in one place.
  * 
@@ -313,6 +315,10 @@ public class PlayerCacheUtil {
 		 */
 		Resident resident;
 		resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		
+		if (!Optional.ofNullable(resident).map(Resident::getTown).map(Town::getNation).map(Nation::isNeutral).isPresent()) {
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}       
 
 		// War Time switch rights
 		if (TownyAPI.getInstance().isWarTime()) {

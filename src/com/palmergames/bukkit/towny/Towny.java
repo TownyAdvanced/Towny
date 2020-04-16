@@ -645,7 +645,12 @@ public class Towny extends JavaPlugin {
 		if (player == null)
 			return;
 
-        Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
+        
+        if (resident == null) {
+        	return;
+		}
+        
         resident.setModes(modes, notify);
 
     }
@@ -657,7 +662,12 @@ public class Towny extends JavaPlugin {
 	 */
 	public void removePlayerMode(Player player) {
 
-        Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
+        
+        if (resident == null) {
+        	return;
+		}
+        
         resident.clearModes();
 
     }
@@ -670,12 +680,17 @@ public class Towny extends JavaPlugin {
 	 */
 	public List<String> getPlayerMode(Player player) {
 
-		return getPlayerMode(player.getName());
+		return getPlayerMode(player.getUniqueId());
 	}
 
-	public List<String> getPlayerMode(String name) {
+	public List<String> getPlayerMode(UUID id) {
 
-        Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
+        Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(id);
+        
+        if (resident == null) {
+        	return Collections.emptyList();
+		}
+        
         return resident.getModes();
 
     }
@@ -688,16 +703,27 @@ public class Towny extends JavaPlugin {
 	 * @return true if the mode is present.
 	 */
 	public boolean hasPlayerMode(Player player, String mode) {
-
-		return hasPlayerMode(player.getName(), mode);
+		return hasPlayerMode(player.getUniqueId(), mode);
 	}
 
-	public boolean hasPlayerMode(String name, String mode) {
-
-        Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
+	public boolean hasPlayerMode(UUID id, String mode) {
+        Resident resident = getResident(id);
+        
+        if (resident == null) {
+        	return false;
+		}
+        
         return resident.hasMode(mode);
 
     }
+    
+    private Resident getResident(UUID id) {
+		return TownyUniverse.getInstance().getDatabaseHandler().getResident(id);
+	}
+    
+    private Resident getResident(Player player) {
+		return getResident(player.getUniqueId());
+	}
 
 	public String getConfigPath() {
 

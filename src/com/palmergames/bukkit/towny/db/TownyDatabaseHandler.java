@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
@@ -116,7 +117,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public @org.jetbrains.annotations.Nullable Resident getResident(String name) {
+	public @Nullable Resident getResident(String name) {
 
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();

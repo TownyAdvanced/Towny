@@ -425,6 +425,14 @@ public abstract class DatabaseHandler {
 		ArrayList<Resident> copy = new ArrayList<>(residents.values());
 		return Collections.unmodifiableList(copy);
 	}
+	
+	public final Nation getNation(@NotNull UUID id) {
+		return nations.computeIfAbsent(id, (k) -> loadNation(id));
+	}
+	
+	public final Nation getNation(@NotNull String name) {
+		return nationNameMap.get(name);
+	}
 
 	/**
 	 * Fetches the {@link Town} from the memory cache, if not loaded in,

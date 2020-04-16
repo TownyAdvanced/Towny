@@ -148,7 +148,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public Nation loadNation(UUID id) {
-		return null;
+		File nationFile = getNationFile(id);
+		return load(nationFile, Nation.class);
 	}
 
 	@Override

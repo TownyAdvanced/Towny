@@ -26,6 +26,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -559,5 +560,13 @@ public class TownyUniverse {
 	
 	public DatabaseHandler getDatabaseHandler() {
 		return databaseHandler;
+	}
+	
+	public Resident getResident(UUID id) {
+		return databaseHandler.getResident(id);
+	}
+	
+	public Resident getResident(Player player) {
+		return getResident(player.getUniqueId());
 	}
 }

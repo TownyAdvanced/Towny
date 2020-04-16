@@ -66,7 +66,11 @@ public class TownyAPI {
      */
     public Location getNationSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+            Resident resident = townyUniverse.getResident(player.getUniqueId());
+            if (resident == null) {
+            	return null;
+			}
+            
             Nation nation = resident.getTown().getNation();
             return nation.getNationSpawn();
         } catch (TownyException x) {

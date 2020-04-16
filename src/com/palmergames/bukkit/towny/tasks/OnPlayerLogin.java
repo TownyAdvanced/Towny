@@ -84,33 +84,8 @@ public class OnPlayerLogin implements Runnable {
 			// Should never happen
 		}
 
-		if (!universe.getDataSource().hasResident(player.getName())) {
-			
-			
-			
-		} else {
-			/*
-			 * This resident is known so fetch the data and update it.
-			 */
-			resident = universe.getDataSource().getResident(player.getName());
-			if (TownySettings.isUsingEssentials()) {
-				Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-				/*
-				 * Don't update last online for a player who is vanished.
-				 */
-				if (!ess.getUser(player).isVanished())
-					resident.setLastOnline(System.currentTimeMillis());
-			} else
-				resident.setLastOnline(System.currentTimeMillis());
-
-			universe.getDataSource().saveResident(resident);
-
-		}
-
 		if (resident != null)
-			
 			TownyPerms.assignPermissions(resident, player);
-
 
         if (TownySettings.getShowTownBoardOnLogin()) {
             TownyMessaging.sendTownBoard(player, resident.getTown());
