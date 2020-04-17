@@ -4491,3 +4491,4 @@ v0.92.0.11:
     - When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled.
     - Closes #3916.
   - Fix mysql DB's nation's not loading their registered date or metadata, spotted by Silverwolfg11. 
+  - Fix mysql DB's towns losing residents on load.

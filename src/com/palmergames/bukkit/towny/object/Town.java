@@ -217,7 +217,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			throw new AlreadyRegisteredException();
 		this.nation = nation;
 		TownyPerms.updateTownPerms(this);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	@Override
