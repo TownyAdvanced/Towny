@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -667,7 +666,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public void loadNewTown(Town town) {
-		getDatabaseHandler().load(new File(town.getSaveDirectory() + "/" + town.getName() + ".txt"), Town.class);
+		getDatabaseHandler().load(new File(town.getSavePath() + "/" + town.getName() + ".txt"), Town.class);
 		TownyUniverse.getInstance().getTownsMap().put(town.getName(), town);
 	}
 	

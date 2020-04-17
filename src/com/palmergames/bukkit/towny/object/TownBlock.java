@@ -469,11 +469,6 @@ public class TownBlock extends TownyObject {
 		}
 	}
 
-	@Override
-	public String getSavePath() {
-		return null;
-	}
-
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }
 	
 	public PlotGroup getPlotObjectGroup() {
@@ -495,7 +490,7 @@ public class TownBlock extends TownyObject {
 	}
 
 	@Override
-	public File getSaveDirectory() {
+	public File getSavePath() {
 		return null;
 	}
 

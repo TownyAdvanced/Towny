@@ -1451,11 +1451,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
 	}
 
-	@Override
-	public String getSavePath() {
-		return Towny.getPlugin().getDataFolder() + File.separator + "towns" + File.separator + getName() + ".txt";
-	}
-
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
@@ -1535,7 +1530,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	@Override
-	public File getSaveDirectory() {
+	public File getSavePath() {
 		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns");
 	}
 

@@ -9,11 +9,11 @@ import java.io.File;
  */
 public interface Saveable extends Nameable, Identifiable {
 	/**
-	 * Gets the parent directory of the where this file will be saved.
+	 * Gets the path of the where this file will be saved.
 	 * 
-	 * @return The File of the parent directory
+	 * @return The path of the file.
 	 */
-	File getSaveDirectory();
+	File getSavePath();
 
 	/**
 	 * Gets the table for which this object will be saved in for SQL.

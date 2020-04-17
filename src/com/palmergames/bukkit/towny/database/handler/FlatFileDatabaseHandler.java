@@ -14,20 +14,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
@@ -41,10 +37,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
 
-		TownyMessaging.sendErrorMsg(obj.getSaveDirectory() + File.separator + obj.getUniqueIdentifier() + ".txt");
+		TownyMessaging.sendErrorMsg(obj.getSavePath().toString());
 		
 		// Save
-		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory() + File.separator + obj.getUniqueIdentifier() + ".txt"));
+		FileMgmt.mapToFile(saveMap, obj.getSavePath());
 	}
 
 	@Override

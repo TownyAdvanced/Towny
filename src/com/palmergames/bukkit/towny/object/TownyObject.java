@@ -104,8 +104,6 @@ public abstract class TownyObject implements Nameable, Saveable {
 			metadata.add(CustomDataField.load(object));
 		}
 	}
-	
-	public abstract String getSavePath();
 
 	/**
 	 * Code-reduction method for TownyObjects to save
@@ -117,5 +115,10 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@Override
 	public final @NotNull UUID getUniqueIdentifier() {
 		return uniqueIdentifier;
+	}
+	
+	@Override
+	public int hashCode() {
+		return uniqueIdentifier.hashCode();
 	}
 }

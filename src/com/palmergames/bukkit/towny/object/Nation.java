@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.LoadSetter;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
@@ -733,11 +732,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		save();
 	}
 
-	@Override
-	public String getSavePath() {
-		return null;
-	}
-
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 		save();
@@ -850,7 +844,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	@Override
-	public File getSaveDirectory() {
+	public File getSavePath() {
 		return new File(Towny.getPlugin().getDataFolder() + "/data/nations");
 	}
 
