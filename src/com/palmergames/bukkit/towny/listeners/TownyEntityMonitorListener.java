@@ -128,20 +128,20 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		try {
-			if (attackerPlayer != null && defenderPlayer != null && TownyAPI.getInstance().isWarTime()) 
+
+		if (attackerPlayer != null && defenderPlayer != null && TownyAPI.getInstance().isWarTime())
 			try {
-			if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
-				return;
+				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
+					return;
 
-			if (attackerResident.hasTown() && War.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && War.isWarringTown(defenderResident.getTown())) {
-				if (TownySettings.isRemovingOnMonarchDeath())
-					monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (attackerResident.hasTown() && War.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && War.isWarringTown(defenderResident.getTown())){
+					if (TownySettings.isRemovingOnMonarchDeath())
+						monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
-				if (TownySettings.getWarPointsForKill() > 0) {
-					TownyUniverse.getInstance().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
+					if (TownySettings.getWarPointsForKill() > 0){
+						TownyUniverse.getInstance().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
+					}
 				}
-			}
 			} catch (NotRegisteredException e) {
 			}
 	}

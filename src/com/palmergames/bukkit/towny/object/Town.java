@@ -639,7 +639,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (world != null)
 			return world;
 
-		return TownyUniverse.getInstance().getDatabaseHandler().getTownWorld(this);
+		return TownyUniverse.getInstance().getDataSource().getTownWorld(this.getName());
 	}
 
 	public boolean hasMayor() {

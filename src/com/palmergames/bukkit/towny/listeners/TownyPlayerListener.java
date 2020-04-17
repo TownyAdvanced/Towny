@@ -127,7 +127,6 @@ public class TownyPlayerListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			try {
 			Resident resident = universe.getResident(event.getPlayer().getName());
 			resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
@@ -135,15 +134,13 @@ public class TownyPlayerListener implements Listener {
 		} catch (NotRegisteredException ignored) {
 		}
 
+
 		// Remove from teleport queue (if exists)
-		try {
-			if (TownyTimerHandler.isTeleportWarmupRunning()) {
+		if (TownyTimerHandler.isTeleportWarmupRunning()) {
 			try {
 				TownyAPI.getInstance().abortTeleportRequest(universe.getResident(event.getPlayer().getName().toLowerCase()));
 			} catch (NotRegisteredException ignored) {
 			}
-			}
-		} catch (NotRegisteredException ignored) {
 		}
 
 		plugin.deleteCache(event.getPlayer());

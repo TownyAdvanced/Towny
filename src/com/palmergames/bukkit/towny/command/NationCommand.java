@@ -1169,7 +1169,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 		}
 		
-		List<Nation> nationsToSort = TownyUniverse.getInstance().getDatabaseHandler().getNations();
+		List<Nation> nationsToSort = TownyUniverse.getInstance().getNations();
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;

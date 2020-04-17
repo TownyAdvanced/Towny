@@ -299,7 +299,7 @@ public class PlayerCacheUtil {
 						if (distance <= nationZoneRadius) {
 							return TownBlockStatus.NATION_ZONE;
 						}
-					} catch (NotRegisteredException | NumberFormatException | NotRegisteredException ignored) {
+					} catch (NumberFormatException | NotRegisteredException ignored) {
 					}
 				}				
 			}

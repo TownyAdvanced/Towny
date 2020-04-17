@@ -239,7 +239,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			String world;
 
 			try {
-				resident = townyUniverse.getResident(player.getUniqueID());
+				resident = townyUniverse.getResident(player.getUniqueId());
 				world = player.getWorld().getName();
 				//resident.getTown();
 			} catch (TownyException x) {

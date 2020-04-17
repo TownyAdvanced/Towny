@@ -153,7 +153,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("Universe Stats:");
 		TownyMessaging.sendDebugMsg("    Residents: " + townyUniverse.getDatabaseHandler().getResidents().size());
 		TownyMessaging.sendDebugMsg("    Towns: " + townyUniverse.getDatabaseHandler().getTowns().size());
-		TownyMessaging.sendDebugMsg("    Nations: " + townyUniverse.getDatabaseHandler().getNations().size());
+		TownyMessaging.sendDebugMsg("    Nations: " + townyUniverse.getNations().size());
 		for (TownyWorld world : townyUniverse.getDatabaseHandler().getWorlds())
 			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + townyUniverse.getTownBlocks().size());
 
@@ -173,7 +173,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectNationTaxes() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		List<Nation> nations = new ArrayList<>(townyUniverse.getDatabaseHandler().getNations());
+		List<Nation> nations = townyUniverse.getNations();
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 
@@ -450,7 +450,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	public void collectNationCosts() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Nation> nations = new ArrayList<>(townyUniverse.getDatabaseHandler().getNations());
+		List<Nation> nations = universe.getNations();
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 

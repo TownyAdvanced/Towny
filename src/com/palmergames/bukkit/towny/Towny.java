@@ -656,11 +656,6 @@ public class Towny extends JavaPlugin {
 		} catch (NotRegisteredException e) {
 			// Resident doesn't exist
 		}
-
-		} catch (NotRegisteredException e) {
-			// Resident doesn't exist
-		}
-
 	}
 
 	/**
