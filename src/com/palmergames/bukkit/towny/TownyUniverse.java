@@ -24,6 +24,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -136,34 +137,34 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            try {
-                dataSource.backup();
-                
-                if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    //dataSource.deleteUnusedResidents();
-                }
-                
-            } catch (IOException e) {
-                System.out.println("[Towny] Error: Could not create backup.");
-                e.printStackTrace();
-                return false;
-            }
+//            try {
+//                dataSource.backup();
+//                
+//                if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
+//                    //dataSource.deleteUnusedResidents();
+//                }
+//                
+//            } catch (IOException e) {
+//                System.out.println("[Towny] Error: Could not create backup.");
+//                e.printStackTrace();
+//                return false;
+//            }
             
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
-                dataSource.saveAllWorlds();
+                //dataSource.saveAllWorlds(); // TODO: Replacement or not?
             } else {
                 //Formats are different so getString ALL data.
-                dataSource.saveAll();
+                //dataSource.saveAll(); // TODO: Replacement or not?
             }
             
             // Load all the world files in.
             databaseHandler.loadWorlds();
-            
             databaseHandler.loadAll();
             
         } catch (UnsupportedOperationException e) {
             System.out.println("[Towny] Error: Unsupported getString format!");
+            e.printStackTrace();
             return false;
         }
         
@@ -639,6 +640,25 @@ public class TownyUniverse {
 		return newGroup;
 	}
 
+	public final void newWorld(UUID id, String name) throws AlreadyRegisteredException, NotRegisteredException {
+		// Get bukkit world.
+		World world = Bukkit.getWorld(id);
+
+		if (world == null) {
+			throw new NotRegisteredException("World doesn't exist");
+		}
+
+		if (worlds.containsKey(id)) {
+			throw new AlreadyRegisteredException("The world with uuid " + id + " is already in use.");
+		}
+
+		UUID uuid = world.getUID();
+		TownyWorld newWorld = new TownyWorld(uuid, name);
+		newWorld.save();
+
+		worlds.put(uuid, newWorld);
+	}
+	
 	public UUID generatePlotGroupID() {
 		return UUID.randomUUID();
 	}

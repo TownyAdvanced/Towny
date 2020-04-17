@@ -30,6 +30,7 @@ import com.palmergames.util.Trie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -228,7 +230,7 @@ public abstract class DatabaseHandler {
 	public void loadWorlds() {
 		for (World world : Bukkit.getServer().getWorlds()) {
 			try {
-				newWorld(world.getName());
+				TownyUniverse.getInstance().newWorld(world.getUID(), world.getName());
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				e.printStackTrace();
 			}
@@ -399,6 +401,7 @@ public abstract class DatabaseHandler {
 	public abstract Nation loadNation(UUID id);
 	public abstract TownyWorld loadWorld(UUID id);
 	public abstract void loadAllResidents();
+	public abstract void loadAllWorlds();
 	
 	public void loadAll() {
 		
@@ -406,7 +409,7 @@ public abstract class DatabaseHandler {
 		loadAllResidents();
 		
 		// 2.) Load Townblocks
-		
+		loadAllWorlds();
 	}
 
 	// ---------- Object Getters ----------
@@ -523,23 +526,22 @@ public abstract class DatabaseHandler {
 		nations.put(newNation.getUniqueIdentifier(), newNation);
 	}
 	
-	public final void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		// Get bukkit world.
-		World world = Bukkit.getWorld(name);
-		
-		if (world == null) {
-			throw new NotRegisteredException("World doesn't exist");
-		}
-
-		if (worldNameMap.containsKey(name.toLowerCase())) {
-			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
-		}
-		
-		UUID uuid = world.getUID();
-		TownyWorld newWorld = new TownyWorld(uuid, name);
-		save(newWorld);
-		
+	public final void newResident(@NotNull Player player) throws AlreadyRegisteredException {
+		Objects.requireNonNull(player);
+		newResident(player.getUniqueId(), player.getName());
 	}
+	
+	public final void newResident(@NotNull UUID id, @NotNull String name) throws AlreadyRegisteredException {
+		Objects.requireNonNull(id, name);
+		
+		if (residents.containsKey(id)) {
+			throw new AlreadyRegisteredException("The resident id " + id + " is already in use.");
+		}
+		
+		Resident newResident = new Resident(id, name);
+		save(newResident);
+	}
+	
 	
 	protected final String getFilteredName(String name) throws NotRegisteredException {
 		String filteredName;

@@ -521,7 +521,7 @@ public class Towny extends JavaPlugin {
 	public PlayerCache newCache(Player player) {
 
 		try {
-			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getWorld(player.getWorld().getName()), player);
+			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getWorld(player.getWorld().getUID()), player);
 			playerCache.put(player.getName().toLowerCase(), cache);
 			return cache;
 		} catch (NotRegisteredException e) {
@@ -554,7 +554,6 @@ public class Towny extends JavaPlugin {
 		
 		if (cache == null) {
 			cache = newCache(player);
-			
 			if (cache != null)
 				cache.setLastTownBlock(WorldCoord.parseWorldCoord(player));
 		}

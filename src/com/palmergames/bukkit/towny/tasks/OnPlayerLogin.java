@@ -47,13 +47,13 @@ public class OnPlayerLogin implements Runnable {
 		
 		Resident resident = null;
 
-		if (!universe.getDataSource().hasResident(player.getName())) {
+		if (!universe.hasResident(player.getName())) {
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
 			 */
 			try {
-				universe.getDataSource().newResident(player.getName());
+				universe.getDatabaseHandler().newResident(player);
 				resident = universe.getResident(player.getUniqueId());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
@@ -89,7 +89,7 @@ public class OnPlayerLogin implements Runnable {
 				} else
 					resident.setLastOnline(System.currentTimeMillis());
 				
-				universe.getDataSource().saveResident(resident);
+				resident.save();
 				
 			} catch (NotRegisteredException ex) {
 				// Should never happen
@@ -99,8 +99,7 @@ public class OnPlayerLogin implements Runnable {
 		if (resident != null)
 			
 			TownyPerms.assignPermissions(resident, player);
-			
-			
+		
 			try {
 				if (TownySettings.getShowTownBoardOnLogin()) {
 					TownyMessaging.sendTownBoard(player, resident.getTown());

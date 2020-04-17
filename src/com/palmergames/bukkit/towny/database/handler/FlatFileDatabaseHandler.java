@@ -121,6 +121,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	public File getNationFile(UUID id) {
 		return new File(Towny.getPlugin().getDataFolder() + "/data/nations/" + id + ".txt");
 	}
+	
+	public File getWorldFile(UUID id) {
+		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds/" + id + ".txt");
+	}
 
 	// ---------- File Getters ----------
 	
@@ -146,7 +150,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public TownyWorld loadWorld(UUID id) {
-		return null;
+		File worldFile = getWorldFile(id);
+		return load(worldFile, TownyWorld.class);
 	}
 	
 	// ---------- Loaders ----------
@@ -167,6 +172,30 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			
 			// Cache name data.
 			residentNameMap.put(loadedResident.getName(), loadedResident);
+		}
+	}
+
+	@Override
+	public void loadAllWorlds() {
+		File worldsDir = new File(Towny.getPlugin().getDataFolder() + "/data/worlds");
+		String[] worldFiles = worldsDir.list((dir, name) -> name.endsWith(".txt"));
+		TownyMessaging.sendErrorMsg(Arrays.toString(worldFiles));
+		for (String fileName : worldFiles) {
+			TownyMessaging.sendErrorMsg(fileName);
+			String idStr = fileName.replace(".txt", "");
+			UUID id = UUID.fromString(idStr);
+			TownyWorld loadedWorld = loadWorld(id);
+			
+			if (loadedWorld == null) {
+				TownyMessaging.sendErrorMsg("Could not load" + fileName);
+				continue;
+			}
+
+			// Store data.
+			worlds.put(id, loadedWorld);
+
+			// Cache name data.
+			worldNameMap.put(loadedWorld.getName(), loadedWorld);
 		}
 	}
 
