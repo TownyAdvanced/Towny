@@ -34,7 +34,7 @@ public class AllyType extends ChatType {
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			final Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+			final Nation nation = townyUniverse.getResident(player.getName()).getTown().getNation();
 
 			Collection<Player> newRecipients = new HashSet<>();
 

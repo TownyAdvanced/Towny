@@ -86,7 +86,7 @@ public class WarHUD {
 	public static void updateHomeTown(Player p) {
 		String homeTown;
 		try {
-			homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
+			homeTown = TownyUniverse.getInstance().getResident(p.getName()).getTown().getName();
 		} catch (NotRegisteredException e) {
 			homeTown = TownySettings.getLangString("war_hud_townless");
 		}
@@ -96,7 +96,7 @@ public class WarHUD {
 	public static void updateScore(Player p, War war) {
 		String score;
 		try {
-			Town home = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
+			Town home = TownyUniverse.getInstance().getResident(p.getName()).getTown();
 			Hashtable<Town, Integer> scores = war.getTownScores();
 			if (scores.containsKey(home))
 				score = scores.get(home) + "";

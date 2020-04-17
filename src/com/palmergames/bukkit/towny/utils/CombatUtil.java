@@ -396,8 +396,8 @@ public class CombatUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(attackingResident);
-			Resident residentB = townyUniverse.getDataSource().getResident(defendingResident);
+			Resident residentA = townyUniverse.getResident(attackingResident);
+			Resident residentB = townyUniverse.getResident(defendingResident);
 			if (residentA.getTown() == residentB.getTown())
 				return true;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())

@@ -3638,7 +3638,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 */
 	public static void townDeposit(Player player, Town town, int amount) {
 		try {
-			Resident resident = TownyAPI.getInstance().getDataSource().getResident(player.getName());			
+			Resident resident = TownyUniverse.getInstance().getResident(player.getName());			
 			
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {

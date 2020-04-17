@@ -68,7 +68,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		Resident resident = null;
 		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getEntity().getName());
+			resident = TownyUniverse.getInstance().getResident(event.getEntity().getName());
 		} catch (NotRegisteredException e) {
 		}
 		if (resident != null && TeleportWarmupTimerTask.hasTeleportRequest(resident)) {

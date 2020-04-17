@@ -1070,7 +1070,7 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
+		if (!TownyUniverse.getInstance().getResident(event.getPlayer().getName()).isJailed())
 			return;
 				
 		String[] split = event.getMessage().substring(1).split(" ");

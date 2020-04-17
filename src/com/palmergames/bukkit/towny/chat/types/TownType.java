@@ -35,7 +35,7 @@ public class TownType extends ChatType {
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
-				if(townyUniverse.getDataSource().getResident(p.getName()).getTown().equals(residentTown)) {
+				if(townyUniverse.getResident(p.getName()).getTown().equals(residentTown)) {
 					newRecipients.add(p);
 				}
 			}

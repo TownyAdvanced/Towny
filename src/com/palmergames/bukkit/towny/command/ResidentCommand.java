@@ -365,7 +365,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 
 		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
+			resident = townyUniverse.getResident(player.getName());
 		} catch (NotRegisteredException e) {
 			// unknown resident
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));

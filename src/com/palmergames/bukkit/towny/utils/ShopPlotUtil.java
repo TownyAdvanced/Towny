@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,17 +32,13 @@ public class ShopPlotUtil {
 	 * @return true if the player owns the plot, and it is a Shop plot
 	 */
 	public static boolean doesPlayerOwnShopPlot(Player player, Location location) {
-		boolean owner = false;
+		boolean owner;
 		try {
-			owner = TownyAPI.getInstance().getTownBlock(location).getResident().equals(TownyAPI.getInstance().getDataSource().getResident(player.getName()));
-		} catch (NotRegisteredException e) {
-			return false;
-		} catch (NullPointerException npe) {
+			owner = TownyUniverse.getInstance().getTownBlock((WorldCoord)WorldCoord.parseCoord(location)).getResident().equals(TownyAPI.getInstance().getDataSource().getResident(player.getName()));
+		} catch (NotRegisteredException | NullPointerException e) {
 			return false;
 		}
-		if (owner && isShopPlot(location))
-			return true;
-		else return false;
+		return owner && isShopPlot(location);
 	}
 
 	/**

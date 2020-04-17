@@ -267,8 +267,7 @@ public class TownyUniverse {
 	public boolean hasResident(String name) {
     	return residentNamesMap.containsKey(name.toLowerCase());
 	}
-
-	@Nullable
+	
 	public Resident getResident(@NotNull String name) throws NotRegisteredException {
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
