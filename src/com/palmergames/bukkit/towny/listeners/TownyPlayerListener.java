@@ -127,6 +127,7 @@ public class TownyPlayerListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
+			try {
 			Resident resident = universe.getResident(event.getPlayer().getName());
 			resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
@@ -135,11 +136,14 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		// Remove from teleport queue (if exists)
-		if (TownyTimerHandler.isTeleportWarmupRunning()) {
+		try {
+			if (TownyTimerHandler.isTeleportWarmupRunning()) {
 			try {
 				TownyAPI.getInstance().abortTeleportRequest(universe.getResident(event.getPlayer().getName().toLowerCase()));
 			} catch (NotRegisteredException ignored) {
 			}
+			}
+		} catch (NotRegisteredException ignored) {
 		}
 
 		plugin.deleteCache(event.getPlayer());
@@ -561,7 +565,7 @@ public class TownyPlayerListener implements Listener {
 			resident = townyUniverse.getResident(player.getUniqueId());
 		} catch (NotRegisteredException ignored) {
 		}
-
+		
 		if (TownyTimerHandler.isTeleportWarmupRunning() &&
 				resident != null 
 				&& TownySettings.getTeleportWarmupTime() > 0 
@@ -774,7 +778,7 @@ public class TownyPlayerListener implements Listener {
 				System.out.print("Item: " + item.getType().name());
 			}
 
-		} catch (Exception e1) {
+		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			cancelState = true;
 			return cancelState;

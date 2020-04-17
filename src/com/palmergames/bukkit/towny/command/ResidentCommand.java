@@ -372,7 +372,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
 		}
 
-        if (newSplit.length == 0) {
+		} catch (NotRegisteredException e) {
+			// unknown resident
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
+		}
+
+		if (newSplit.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/res toggle"));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "pvp", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));

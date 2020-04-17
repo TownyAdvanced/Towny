@@ -36,7 +36,7 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private transient List<Coord> warZones = new ArrayList<>();
+	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();

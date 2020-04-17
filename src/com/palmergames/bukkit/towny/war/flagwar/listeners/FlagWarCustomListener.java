@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -26,12 +25,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.Optional;
-
 public class FlagWarCustomListener implements Listener {
 
 	private final Towny plugin;
-	private final DatabaseHandler databaseHandler = TownyUniverse.getInstance().getDatabaseHandler();
 
 	public FlagWarCustomListener(Towny instance) {
 
@@ -198,8 +194,8 @@ public class FlagWarCustomListener implements Listener {
 				}
 			} else {
 				
-				TownyMessaging.sendPrefixedTownMessage(attackingTown, TownySettings.getLangString("msg_war_defender_keeps_claims"));
-				TownyMessaging.sendPrefixedTownMessage(defendingTown, TownySettings.getLangString("msg_war_defender_keeps_claims"));
+				TownyMessaging.sendPrefixedTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
 			}
 
 			// Cleanup

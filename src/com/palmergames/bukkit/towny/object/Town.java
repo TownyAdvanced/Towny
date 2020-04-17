@@ -24,12 +24,9 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -670,8 +667,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			remove(resident);
 	}
 
-	private void remove(@NotNull Resident resident) {
-		Validate.notNull(resident);
+	private void remove(Resident resident) {
+		
 		resident.setTitle("");
 		resident.setSurname("");
 		resident.updatePerms();

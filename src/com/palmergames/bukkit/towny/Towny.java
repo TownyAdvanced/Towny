@@ -519,19 +519,15 @@ public class Towny extends JavaPlugin {
 	}
 
 	public PlayerCache newCache(Player player) {
-		
-		TownyWorld world = TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getName());
-		ReflectionUtil.dump(townyUniverse.getDatabaseHandler());
-		if (world == null) {
-			TownyMessaging.sendErrorMsg("Flag 1");
+
+		try {
+			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
+			playerCache.put(player.getName().toLowerCase(), cache);
+			return cache;
+		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
 			return null;
 		}
-		
-		PlayerCache cache = new PlayerCache(world, player);
-		playerCache.put(player.getName().toLowerCase(), cache);
-		TownyMessaging.sendErrorMsg("Flag 2");
-		return cache;
 
 	}
 
@@ -570,16 +566,10 @@ public class Towny extends JavaPlugin {
 	 * Resets all Online player caches, retaining their location info.
 	 */
 	public void resetCache() {
-		
+
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null) {
-				TownyMessaging.sendErrorMsg(player.toString());
-				PlayerCache cache = getCache(player);
-				
-				TownyMessaging.sendErrorMsg(cache.toString());
+			if (player != null)
 				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically
-			}
-				
 																														// resets
 																														// permissions.
 	}
@@ -663,6 +653,10 @@ public class Towny extends JavaPlugin {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			resident.clearModes();
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+		}
+
 		} catch (NotRegisteredException e) {
 			// Resident doesn't exist
 		}

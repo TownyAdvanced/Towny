@@ -182,7 +182,7 @@ public class AreaSelectionUtil {
 				} else {
 					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );					
 				}
-			} catch (Exception ignored) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}

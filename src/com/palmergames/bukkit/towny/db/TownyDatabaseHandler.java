@@ -90,10 +90,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		List<Resident> invited = new ArrayList<>();
 		for (String name : names)
-		{
-			Resident target = getResident(name);
-			invited.add(target);
-		}
+		try {
+				Resident target = getResident(name);
+				invited.add(target);
+			} catch (TownyException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
+			}
 		return invited;
 	}
 
@@ -102,8 +104,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		List<Resident> matches = new ArrayList<>();
 		for (String name : names)
-			matches.add(getResident(name));
-		
+			try {
+				matches.add(getResident(name));
+			} catch (NotRegisteredException ignored) {
+			}
 		return matches;
 	}
 
@@ -114,14 +118,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public @org.jetbrains.annotations.Nullable Resident getResident(String name) {
+	public Resident getResident(String name) throws NotRegisteredException {
 
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
 		} catch (InvalidNameException ignored) {
 		}
 
-		if (TownySettings.isFakeResident(name)) {
+		if (!hasResident(name)) {
+
+			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+
+		} else if (TownySettings.isFakeResident(name)) {
 
 			Resident resident = new Resident(UUID.randomUUID(), name);
 			resident.setNPC(true);

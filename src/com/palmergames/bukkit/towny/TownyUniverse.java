@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
@@ -160,7 +161,6 @@ public class TownyUniverse {
             databaseHandler.loadAll();
             
         } catch (UnsupportedOperationException e) {
-        	e.printStackTrace();
             System.out.println("[Towny] Error: Unsupported getString format!");
             return false;
         }
@@ -214,7 +214,7 @@ public class TownyUniverse {
         try {
         	if (worldCoord.getTownyWorld().isWarAllowed())
             	worldCoord.getTownyWorld().addWarZone(worldCoord);
-        } catch (Exception e) {
+        } catch (NotRegisteredException e) {
             // Not a registered world
         }
         towny.updateCache(worldCoord);
@@ -223,7 +223,7 @@ public class TownyUniverse {
     public void removeWarZone(WorldCoord worldCoord) {
         try {
             worldCoord.getTownyWorld().removeWarZone(worldCoord);
-        } catch (Exception e) {
+        } catch (NotRegisteredException e) {
             // Not a registered world
         }
         towny.updateCache(worldCoord);
@@ -711,5 +711,13 @@ public class TownyUniverse {
 	
 	public DatabaseHandler getDatabaseHandler() {
 		return databaseHandler;
+	}
+	
+	public Resident getResident(UUID id) {
+		return databaseHandler.getResident(id);
+	}
+	
+	public Resident getResident(Player player) {
+		return getResident(player.getUniqueId());
 	}
 }

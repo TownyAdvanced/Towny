@@ -236,7 +236,7 @@ public class PlayerCacheUtil {
 		try {
 			if (!worldCoord.getTownyWorld().isUsingTowny())
 				return TownBlockStatus.OFF_WORLD;
-		} catch (Exception ex) {
+		} catch (NotRegisteredException ex) {
 			// Not a registered world
 			return TownBlockStatus.NOT_REGISTERED;
 		}
@@ -275,7 +275,7 @@ public class PlayerCacheUtil {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
-					} catch (Exception e1) {
+					} catch (NotRegisteredException e1) {
 						// There will almost always be a town in any world where towny is enabled. 
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
@@ -299,7 +299,7 @@ public class PlayerCacheUtil {
 						if (distance <= nationZoneRadius) {
 							return TownBlockStatus.NATION_ZONE;
 						}
-					} catch (NotRegisteredException | NumberFormatException ignored) {
+					} catch (NotRegisteredException | NumberFormatException | NotRegisteredException ignored) {
 					}
 				}				
 			}
@@ -512,7 +512,7 @@ public class PlayerCacheUtil {
 						try {
 							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
-						} catch (Exception e) {
+						} catch (NotRegisteredException e) {
 						}
 
 					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY))) {		
@@ -537,7 +537,7 @@ public class PlayerCacheUtil {
 						try {
 							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
-						} catch (Exception e) {
+						} catch (NotRegisteredException e) {
 						}
 
 					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -562,7 +562,7 @@ public class PlayerCacheUtil {
 						try {
 							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
-						} catch (Exception e) {
+						} catch (NotRegisteredException e) {
 						}
 
 					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -588,7 +588,7 @@ public class PlayerCacheUtil {
 						try {
 							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
-						} catch (Exception e) {
+						} catch (NotRegisteredException e) {
 						}
 
 					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -627,7 +627,7 @@ public class PlayerCacheUtil {
 					try {
 						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
-					} catch (Exception e) {
+					} catch (NotRegisteredException e) {
 					}
 
 				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -660,7 +660,7 @@ public class PlayerCacheUtil {
 					try {
 						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
-					} catch (Exception e) {
+					} catch (NotRegisteredException e) {
 					}
 
 				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -695,7 +695,7 @@ public class PlayerCacheUtil {
 					try {
 						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
-					} catch (Exception e) {
+					} catch (NotRegisteredException e) {
 					}
 
 				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
@@ -727,7 +727,7 @@ public class PlayerCacheUtil {
 					try {
 						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
-					} catch (Exception ignored) {
+					} catch (NotRegisteredException ignored) {
 					}
 
 				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {

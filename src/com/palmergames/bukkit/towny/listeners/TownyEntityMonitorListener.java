@@ -129,8 +129,8 @@ public class TownyEntityMonitorListener implements Listener {
 
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		try {
-			if (attackerPlayer != null && defenderPlayer != null && TownyAPI.getInstance().isWarTime()) {
-			}
+			if (attackerPlayer != null && defenderPlayer != null && TownyAPI.getInstance().isWarTime()) 
+			try {
 			if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 				return;
 
@@ -142,9 +142,9 @@ public class TownyEntityMonitorListener implements Listener {
 					TownyUniverse.getInstance().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
 				}
 			}
-		} catch (NotRegisteredException ignore) {
-		}
-    }
+			} catch (NotRegisteredException e) {
+			}
+	}
 
 	private void monarchDeath(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
@@ -233,7 +233,7 @@ public class TownyEntityMonitorListener implements Listener {
 			TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_town_deathfunds"));
 		}
 
-        try {
+		try {
 			if (TownySettings.getDeathPriceNation() > 0) {
 				double price = TownySettings.getDeathPriceNation();
 
@@ -259,7 +259,7 @@ public class TownyEntityMonitorListener implements Listener {
 			TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_nation_deathfunds"));
 		}
 
-    }
+	}
 
 	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		
@@ -391,7 +391,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_town_deathfunds"));
 			}
 
-            try {
+			try {
 				if (TownySettings.getDeathPriceNation() > 0) {
 					double price = TownySettings.getDeathPriceNation();
 
@@ -423,7 +423,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_nation_deathfunds"));
 			}
 
-            if (attackerResident != null && !TownySettings.isEcoClosedEconomyEnabled()) {
+			if (attackerResident != null && !TownySettings.isEcoClosedEconomyEnabled()) {
 				TownyMessaging.sendMsg(attackerResident, String.format(TownySettings.getLangString("msg_you_gained_money_for_killing"),TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
 
 			}

@@ -238,11 +238,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Resident resident;
 			String world;
 
-            resident = townyUniverse.getResident(player.getName());
-            world = player.getWorld().getName();
-            //resident.getTown();
+			try {
+				resident = townyUniverse.getResident(player.getUniqueID());
+				world = player.getWorld().getName();
+				//resident.getTown();
+			} catch (TownyException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				return true;
+			}
 
-            try {
+			try {
 				if (split[0].equalsIgnoreCase("claim")) {
 
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))

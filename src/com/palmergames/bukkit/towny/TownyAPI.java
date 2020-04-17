@@ -66,7 +66,11 @@ public class TownyAPI {
      */
     public Location getNationSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getResident(player.getName());
+            Resident resident = townyUniverse.getResident(player.getUniqueId());
+            if (resident == null) {
+            	return null;
+			}
+            
             Nation nation = resident.getTown().getNation();
             return nation.getNationSpawn();
         } catch (TownyException x) {
@@ -377,9 +381,13 @@ public class TownyAPI {
         townyUniverse.setWarEvent(null);
     }
     public void requestTeleport(Player player, Location spawnLoc) {
-
-		TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
-	}
+        
+        try {
+            TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
+        } catch (TownyException x) {
+            TownyMessaging.sendErrorMsg(player, x.getMessage());
+        }
+    }
     
     public void abortTeleportRequest(Resident resident) {
         
