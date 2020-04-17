@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -355,7 +353,7 @@ public class TownyBlockListener implements Listener {
 		TownyWorld townyWorld;
 		List<Block> blocks = event.blockList();
 		int count = 0;
-		
+
 		try {
 			townyWorld = TownyUniverse.getInstance().getWorld(event.getBlock().getLocation().getWorld().getUID());
 		} catch (NotRegisteredException e) {
@@ -370,21 +368,8 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 			
-			if (TownyAPI.getInstance().isWilderness(block.getLocation())) {
-				if (townyWorld.isUsingTowny()) {
-					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert()) {
-							//TownyMessaging.sendDebugMsg("onCreateExplosion: Testing block: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
-							if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-								TownyRegenAPI.addProtectionRegenTask(task);
-								event.setYield((float) 0.0);
-								block.getDrops().clear();
-							}
-						}
-					}
-				}
+			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && townyWorld.isUsingPlotManagementWildRevert()) {
+				TownyRegenAPI.beginProtectionRegenTask(block, count);
 			}
 		}
 		
