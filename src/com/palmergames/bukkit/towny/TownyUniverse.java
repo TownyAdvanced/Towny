@@ -24,12 +24,9 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
-import com.sun.tools.corba.se.idl.constExpr.Not;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
@@ -67,9 +64,6 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     
     private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
-
-	
-
 	private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
