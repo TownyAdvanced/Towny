@@ -67,7 +67,7 @@ public class TownyCustomListener implements Listener {
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getInstance().getDatabaseHandler().getResident(player.getUniqueId());
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 				
 				if (resident == null) {
 					return;

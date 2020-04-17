@@ -152,8 +152,12 @@ public class BaseCommand implements TabCompleter{
 	 * @return the resident names that match str
 	 */
 	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
-        return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
-    }
+		try {
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getResidents()), str);
+		} catch (NotRegisteredException e) {
+			return Collections.emptyList();
+		}
+	}
 
 	/**
 	 * Returns the names a town's residents that start with a string
@@ -165,7 +169,7 @@ public class BaseCommand implements TabCompleter{
 
 	public static List<String> getResidentsOfTownStartingWith(String town, String str) {
 		try {
-			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(town).getResidents()), str);
+			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getTown(town).getResidents()), str);
 		} catch (NotRegisteredException e) {
 			return Collections.emptyList();
 		}

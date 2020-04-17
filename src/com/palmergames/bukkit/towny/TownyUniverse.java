@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -22,11 +21,15 @@ import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,12 +52,18 @@ public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
     
-    private final Map<String, Resident> residents = new ConcurrentHashMap<>();
+    private final Map<UUID, Resident> residents = new ConcurrentHashMap<>();
+	private final Map<String, Resident> residentNamesMap = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
-    private final Map<String, Town> towns = new ConcurrentHashMap<>();
+    
+    private final Map<UUID, Town> towns = new ConcurrentHashMap<>();
+	private final Map<String, Town> townNamesMap = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
-    private final Map<String, Nation> nations = new ConcurrentHashMap<>();
+    
+    private final Map<UUID, Nation> nations = new ConcurrentHashMap<>();
+	private final Map<String, Nation> nationNamesMap = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
+    
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -239,18 +248,60 @@ public class TownyUniverse {
     public String getRootFolder() {
         return rootFolder;
     }
+
+	// ---------- Resident Methods ----------
     
-    public Map<String, Nation> getNationsMap() {
-        return nations;
-    }
-    
-    public Trie getNationsTrie() {
-    	return nationsTrie;
+    public boolean hasResident(@NotNull UUID uuid) {
+    	return residents.containsKey(uuid);
 	}
 	
+	public Resident getResident(@NotNull UUID uuid) throws NotRegisteredException {
+    	Resident r = residents.get(uuid);
+    	
+    	if (r == null)
+			throw new NotRegisteredException(String.format("The resident with UUID '%s' is not registered.", uuid));
+    	
+    	return r;
+	}
+	
+	public boolean hasResident(String name) {
+    	return residentNamesMap.containsKey(name.toLowerCase());
+	}
+
+	@Nullable
+	public Resident getResident(@NotNull String name) throws NotRegisteredException {
+		try {
+			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
+		} catch (InvalidNameException ignored) {
+		}
+		
+		Resident resident = residentNamesMap.get(name);
+		
+		if (resident == null)
+			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+		else if (TownySettings.isFakeResident(name)) {
+			resident = new Resident(UUID.randomUUID(), name);
+			resident.setNPC(true);
+		}
+		
+		return resident;
+	}
+	
+    @Deprecated
     public Map<String, Resident> getResidentMap() {
-        return residents;
+        return residentNamesMap;
     }
+    
+    public void updateResidentNameMap(String oldName, String newName) {
+    	Resident resident = residentNamesMap.remove(oldName);
+    	if (resident != null)
+    		residentNamesMap.put(newName, resident);
+	}
+    
+    @NotNull
+    public List<Resident> getResidents() {
+    	return new ArrayList<>(residents.values()); 
+	}
 
 	public Trie getResidentsTrie() {
 		return residentsTrie;
@@ -259,13 +310,100 @@ public class TownyUniverse {
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
     }
+
+	// ---------- Town Methods ----------
     
+    public boolean hasTown(UUID town) {
+    	return towns.containsKey(town);
+	}
+    
+    public Town getTown(UUID town) throws NotRegisteredException {
+    	Town t = towns.get(town);
+    	
+    	if (t == null) 
+			throw new NotRegisteredException(String.format("The town with UUID '%s' is not registered.", town));;
+			
+    	return t;
+	}
+
+	public boolean hasTown(String name) {
+    	return townNamesMap.containsKey(name);
+	}
+	
+	public Town getTown(String name) throws NotRegisteredException {
+
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException ignored) {
+		}
+		
+		Town t = townNamesMap.get(name);
+		
+		if (t == null)
+			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
+		
+		return t;
+	}
+
+	public List<Town> getTowns() {
+		return new ArrayList<>(towns.values());
+	}
+    
+    @Deprecated
     public Map<String, Town> getTownsMap() {
-        return towns;
+        return townNamesMap;
     }
     
     public Trie getTownsTrie() {
     	return townsTrie;
+	}
+
+	// ---------- Nation Methods ----------
+
+	public boolean hasNation(UUID uuid) {
+    	return nations.containsKey(uuid);
+	}
+	
+	public Nation getNation(UUID uuid) throws NotRegisteredException {
+    	Nation n = nations.get(uuid);
+    	
+    	if (n == null)
+			throw new NotRegisteredException(String.format("The nation with UUID '%s' is not registered.", uuid));
+    	
+    	return n;
+	}
+
+	public boolean hasNation(String name) {
+		return nationNamesMap.containsKey(name.toLowerCase());
+	}
+	
+	public Nation getNation(String name) throws NotRegisteredException {
+
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return null;
+		}
+		
+		Nation n = nationNamesMap.get(name.toLowerCase());
+		
+		if (n == null)
+			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
+
+		return n;
+	}
+	
+	public List<Nation> getNations() {
+		return new ArrayList<>(nations.values());
+	}
+	
+	@Deprecated
+	public Map<String, Nation> getNationsMap() {
+		return nationNamesMap;
+	}
+
+	public Trie getNationsTrie() {
+		return nationsTrie;
 	}
 	
     public Map<String, TownyWorld> getWorldMap() {
@@ -404,21 +542,35 @@ public class TownyUniverse {
 		return groups;
 	}
 
+	/**
+	 * Gets the plot group from the town name and the plot group UUID 
+	 *
+	 * @param townID Town name
+	 * @param groupID UUID of the plot group
+	 * @return PlotGroup if found, null if none found.
+	 */
+	public PlotGroup getGroup(UUID townID, UUID groupID) {
+		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(townID);
+
+		if (t != null) {
+			return t.getObjectGroupFromID(groupID);
+		}
+
+		return null;
+	}
 
 	/**
+	 * @deprecated Use {@link TownyUniverse#getGroup(UUID, UUID)}
 	 * Gets the plot group from the town name and the plot group UUID 
 	 * 
 	 * @param townName Town name
 	 * @param groupID UUID of the plot group
 	 * @return PlotGroup if found, null if none found.
 	 */
+	@Deprecated
 	public PlotGroup getGroup(String townName, UUID groupID) {
-		Town t = null;
-		try {
-			t = TownyUniverse.getInstance().getDataSource().getTown(townName);
-		} catch (NotRegisteredException e) {
-			return null;
-		}
+		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(townName);
+
 		if (t != null) {
 			return t.getObjectGroupFromID(groupID);
 		}

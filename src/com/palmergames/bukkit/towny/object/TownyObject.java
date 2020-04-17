@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,6 +106,13 @@ public abstract class TownyObject implements Nameable, Saveable {
 	}
 	
 	public abstract String getSavePath();
+
+	/**
+	 * Code-reduction method for TownyObjects to save
+	 */
+	public void save() {
+		TownyUniverse.getInstance().getDatabaseHandler().save(this);
+	}
 
 	@Override
 	public final @NotNull UUID getUniqueIdentifier() {

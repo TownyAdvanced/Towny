@@ -238,7 +238,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Resident resident;
 			String world;
 
-            resident = townyUniverse.getDataSource().getResident(player.getName());
+            resident = townyUniverse.getResident(player.getName());
             world = player.getWorld().getName();
             //resident.getTown();
 
@@ -364,10 +364,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 								// Set the plot permissions to mirror the towns.
 								tb.setType(townBlock.getType());
-
-								townyUniverse.getDataSource().saveResident(owner);
+								
 								// Update the townBlock data file so it's no longer using custom settings.
-								townyUniverse.getDataSource().saveTownBlock(tb);
+								townyUniverse.getDatabaseHandler().save(owner, tb);
 							}
 							
 							player.sendMessage(String.format(TownySettings.getLangString("msg_plot_evict_group"), townBlock.getPlotObjectGroup().getName()));
@@ -380,9 +379,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Set the plot permissions to mirror the towns.
 						townBlock.setType(townBlock.getType());
 						
-						townyUniverse.getDataSource().saveResident(owner);
 						// Update the townBlock data file so it's no longer using custom settings.
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townyUniverse.getDatabaseHandler().save(owner, townBlock);
 						
 						player.sendMessage(TownySettings.getLangString("msg_plot_evict"));
 					}
@@ -550,7 +548,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 					} else {
 						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName())));
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getLocation().getWorld().getName())));
 						} else {
 							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
@@ -625,7 +623,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (split.length == 1) {
 								townBlock.setName("");
 								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_removed")));
-								townyUniverse.getDataSource().saveTownBlock(townBlock);
+								townBlock.save();
 								return true;
 							}
 							
@@ -634,7 +632,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 
 								//townBlock.setChanged(true);
-								townyUniverse.getDataSource().saveTownBlock(townBlock);
+								townBlock.save();
 
 								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_set_to"), townBlock.getName()));
 
@@ -742,7 +740,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 							
 
-						for (String material : townyUniverse.getDataSource().getWorld(world).getPlotManagementMayorDelete())
+						for (String material : townyUniverse.getDatabaseHandler().getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
 								player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
@@ -814,7 +812,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, false, townBlock);
 
 					perm.change(permChange);
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 
 					if (townBlockOwner instanceof Town)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
@@ -914,7 +912,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				perm.change(permChange);
 
 			townBlock.setChanged(true);
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
@@ -964,7 +962,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					town.addJailSpawn(p.getLocation());
 				}
 
-				townyUniverse.getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -987,7 +985,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				town.addJailSpawn(p.getLocation());
 			}
 			
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		
 		}
 		else
@@ -1031,7 +1029,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				// Save this townblock so the for sale status is remembered.
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -1159,7 +1157,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
 			
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		}
 	}
 
@@ -1241,7 +1239,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					Bukkit.getServer().getPluginManager().callEvent(event);
 					
 					// Save
-					townyUniverse.getDataSource().saveTownBlock(groupBlock);
+					groupBlock.save();
 				}
 				
 				// Finally send the message.
@@ -1354,7 +1352,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		resident = townyUniverse.getDataSource().getResident(player.getName());
+		resident = townyUniverse.getResident(player.getName());
 		world = player.getWorld().getName();
 		
 		TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
@@ -1481,8 +1479,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(price);
 			
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
+			TownyUniverse.getInstance().getDatabaseHandler().save(group);
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_put_group_up_for_sale"), player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 			
@@ -1501,8 +1498,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(-1);
 
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
+			TownyUniverse.getInstance().getDatabaseHandler().save(group);
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_made_group_not_for_sale"), player.getName(), group.getName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
@@ -1577,7 +1573,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							tb.getPermissions().change(permChange);
 
 							tb.setChanged(true);
-							townyUniverse.getDataSource().saveTownBlock(tb);
+							tb.save();
 
 							// Change settings event
 							TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(tb);

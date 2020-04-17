@@ -183,7 +183,12 @@ public class TownyFormatter {
 		String line = TownySettings.getLangString("status_town");
 		if (!resident.hasTown())
 			line += TownySettings.getLangString("status_no_town");
-			line += resident.getTown().getFormattedName();
+		else
+			try {
+				line += resident.getTown().getFormattedName();
+			} catch (TownyException e) {
+				line += "Error: " + e.getMessage();
+			}
 		out.add(line);
 		
 		// Embassies in: Camelot, London, Tokyo
@@ -317,7 +322,7 @@ public class TownyFormatter {
 			// We're going to supplant the first TownyWorld so that the forceexpl/forcefire/forcepvp tests below do not have trouble.
 			// While this is a bit of a dirty hack, the same commit as this one also stops players from unclaiming their homeblock,
 			// without moving it first so this should not occur too often.
-			world = TownyUniverse.getInstance().getDataSource().getWorlds().get(0);
+			world = TownyUniverse.getInstance().getDatabaseHandler().getWorlds().get(0);
 		}
 
 		// ___[ Raccoon City (PvP) (Open) ]___
@@ -358,8 +363,10 @@ public class TownyFormatter {
 						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
-                        nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-                        out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+						try {
+							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+						} catch (NotRegisteredException ignored) {}
+						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? String.format(TownySettings.getLangString("status_town_outposts2"), nationBonus) : "")
 							   );
 						}
@@ -402,9 +409,11 @@ public class TownyFormatter {
 		out.addAll(ranklist);
 
 		// Nation: Azur Empire
-        out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
+		try {
+			out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
+		} catch (TownyException ignored) {}
 
-        // Residents [12]: James, Carry, Mason
+		// Residents [12]: James, Carry, Mason
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 		if (residents.length > 34) {

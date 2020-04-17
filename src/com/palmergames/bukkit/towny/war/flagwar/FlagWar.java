@@ -242,7 +242,7 @@ public class FlagWar {
 		Nation landOwnerNation, attackingNation;
 		TownBlock townBlock;
 
-        attackingResident = townyUniverse.getDataSource().getResident(player.getName());
+        attackingResident = townyUniverse.getResident(player.getName());
         attackingTown = attackingResident.getTown();
         attackingNation = attackingTown.getNation();
 
@@ -357,7 +357,7 @@ public class FlagWar {
 		// Set yourself as target's enemy so they can retaliate.
 		if (!landOwnerNation.hasEnemy(attackingNation)) {
 			landOwnerNation.addEnemy(attackingNation);
-			townyUniverse.getDataSource().saveNation(landOwnerNation);
+			landOwnerNation.save();
 		}
 
 		// Update Cache

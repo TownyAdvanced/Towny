@@ -126,8 +126,12 @@ public class TownClaim extends Thread {
 			}
 
 			Resident resident = null;
-            resident = townyUniverse.getDataSource().getResident(player.getName());
-            if (resident == null) {
+			try {
+				resident = townyUniverse.getResident(player.getUniqueId());
+			} catch (TownyException e) {
+				// Yeah the resident has to exist!
+			}
+			if (resident == null) {
 				return;
 			}
 			int townSize = town.getTownBlocks().size();
@@ -155,7 +159,7 @@ public class TownClaim extends Thread {
 
 		if (!worlds.isEmpty()) {
 			for (TownyWorld test : worlds) {
-				townyUniverse.getDataSource().saveWorld(test);
+				townyUniverse.getDatabaseHandler().save(test);
 			}
 		}
 
@@ -200,7 +204,7 @@ public class TownClaim extends Thread {
 				}
 			}
 			
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDatabaseHandler().save(townBlock);
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));

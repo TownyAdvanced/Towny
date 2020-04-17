@@ -458,6 +458,32 @@ public abstract class DatabaseHandler {
 		ArrayList<Town> copy = new ArrayList<>(towns.values());
 		return Collections.unmodifiableList(copy);
 	}
+	
+	@Nullable
+	public final Nation getNation(@NotNull UUID uuid) {
+		nations.computeIfAbsent(uuid, (k) -> loadNation(uuid));
+		return nations.get(uuid);
+	}
+
+	/**
+	 * Fetches the {@link Nation} from the memory cache.
+	 *
+	 * Note: This is fetch is not the most accurate, and 
+	 * should only be used when in the context of a command.
+	 *
+	 * @param name The name of the nation.
+	 * @return The nation with the name, null otherwise.
+	 */
+	@Nullable
+	public final Nation getNation(@NotNull String name) {
+		return nationNameMap.get(name);
+	}
+
+	@NotNull
+	public final List<Nation> getNations() {
+		ArrayList<Nation> copy = new ArrayList<>(nations.values());
+		return Collections.unmodifiableList(copy);
+	}
 
 	public final TownyWorld getWorld(@NotNull UUID id) {
 		return worlds.get(id);
@@ -469,6 +495,18 @@ public abstract class DatabaseHandler {
 	public final List<TownyWorld> getWorlds() {
 		ArrayList<TownyWorld> copy = new ArrayList<>(worlds.values());
 		return Collections.unmodifiableList(copy);
+	}
+
+	public final TownyWorld getTownWorld(Town town) {
+		return getTownWorld(town.getUniqueIdentifier());
+	}
+	
+	public final TownyWorld getTownWorld(UUID townUUID) {
+		for (TownyWorld townyworld : worlds.values()) {
+			if (townyworld.hasTown(townUUID))
+				return townyworld;
+		}
+		return null;
 	}
 	
 	

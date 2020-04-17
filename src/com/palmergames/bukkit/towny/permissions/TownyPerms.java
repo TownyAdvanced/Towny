@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -91,13 +92,13 @@ public class TownyPerms {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (resident == null) {
-
-			resident = townyUniverse.getDatabaseHandler().getResident(player.getUniqueId());
-			
-			if (resident == null) {
+			try {
+				resident = townyUniverse.getResident(player.getUniqueId());
+			} catch (NotRegisteredException e) {
+				// failed to get resident
+				e.printStackTrace();
 				return;
 			}
-			
 		} else {
 			player = BukkitTools.getPlayer(resident.getName());
 		}
@@ -113,9 +114,12 @@ public class TownyPerms {
 		}
 
 		TownyWorld World;
-		World = townyUniverse.getDatabaseHandler().getWorld(player.getLocation().getWorld().getUID());
 
-		if (World == null) {
+		try {
+			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
+		} catch (NotRegisteredException e) {
+			// World not registered with Towny.
+			e.printStackTrace();
 			return;
 		}
 
@@ -244,7 +248,11 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			permList.addAll(getTownDefault(resident.getTown()));
+			try {
+				permList.addAll(getTownDefault(resident.getTown()));
+			} catch (NotRegisteredException e) {
+				// Not Possible!
+			}
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
 				
@@ -272,15 +280,19 @@ public class TownyPerms {
 		Boolean value = false;
 		for (String permission : playerPermArray) {			
 			if (permission.contains("{townname}")) {
-				if (resident.hasTown()) {
-				}
-					String placeholderPerm = permission.replace("{townname}", resident.getTown().getName().toLowerCase());
-					newPerms.put(placeholderPerm, true);
+				if (resident.hasTown())
+					try {
+						String placeholderPerm = permission.replace("{townname}", resident.getTown().getName().toLowerCase());
+						newPerms.put(placeholderPerm, true);
+					} catch (NotRegisteredException e) {
+					}
 			} else if (permission.contains("{nationname}")) {
-				if (resident.hasNation()) {
-				}
-					String placeholderPerm = permission.replace("{nationname}", resident.getTown().getNation().getName().toLowerCase());
-					newPerms.put(placeholderPerm, true);
+				if (resident.hasNation())
+					try {
+						String placeholderPerm = permission.replace("{nationname}", resident.getTown().getNation().getName().toLowerCase());
+						newPerms.put(placeholderPerm, true);
+					} catch (NotRegisteredException e) {
+					}
 			} else {
 				value = (!permission.startsWith("-"));
 				newPerms.put((value ? permission : permission.substring(1)), value);

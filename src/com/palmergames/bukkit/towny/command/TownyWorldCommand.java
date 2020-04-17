@@ -326,7 +326,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<String> formatedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
-		for (TownyWorld world : TownyUniverse.getInstance().getDataSource().getWorlds()) {
+		for (TownyWorld world : TownyUniverse.getInstance().getDatabaseHandler().getWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}
@@ -500,7 +500,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			townyUniverse.getDataSource().saveWorld(Globalworld);
+			Globalworld.save();
 			
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(Globalworld);
@@ -625,8 +625,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "world"));
 				return;
 			}
-
-			TownyUniverse.getInstance().getDataSource().saveWorld(Globalworld);
+			
+			Globalworld.save();
 		}
 	}
 

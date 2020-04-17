@@ -5,9 +5,9 @@ import com.palmergames.bukkit.towny.database.handler.SQLData;
 import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
-import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 import org.apache.commons.lang.Validate;
 
 import java.util.UUID;
@@ -16,7 +16,11 @@ public class ResidentHandler implements SerializationHandler<Resident> {
 
 	@Override
 	public Resident loadString(LoadContext context, String str) {
-		return ((TownyFlatFileSource)TownyUniverse.getInstance().getDataSource()).getDatabaseHandler().getResident(UUID.fromString(str));
+		try {
+			return TownyUniverse.getInstance().getResident(UUID.fromString(str));
+		} catch (NotRegisteredException ignore) {
+		}
+		return null;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -80,7 +79,7 @@ public class TownyWorldListener implements Listener {
 			if (!dungeonWorld)
 				if (!townyUniverse.getDataSource().loadWorld(world)) {
 					// First time world has been noticed
-					townyUniverse.getDataSource().saveWorld(world);
+					world.save();
 				}
 		}
 	}
@@ -182,7 +181,7 @@ public class TownyWorldListener implements Listener {
 			return;
 		}
 		try {
-			if (!TownyUniverse.getInstance().getDataSource().getWorld(event.getWorld().getName()).isUsingTowny()) {
+			if (!TownyUniverse.getInstance().getDatabaseHandler().getWorld(event.getWorld().getName()).isUsingTowny()) {
 				return;
 			}
 		} catch (Exception ignored) {}

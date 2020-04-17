@@ -222,7 +222,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
 		}
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		save();
 	}
 
 	public Town getCapital() {
@@ -360,7 +360,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 			boolean isCapital = town.isCapital();
 			remove(town);
-			TownyUniverse.getInstance().getDataSource().saveNation(this);
+			save();
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -400,7 +400,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 				res.setSurname("");
 			}
 			res.updatePermsForNationRemoval(); // Clears the nationRanks.
-			TownyUniverse.getInstance().getDataSource().saveResident(res);
+			save();
 		}
 		
 		towns.remove(town);
@@ -730,8 +730,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	@Override
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		save();
 	}
 
 	@Override
@@ -741,8 +740,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		save();
 	}
 
 	@Override
@@ -859,5 +857,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	@Override
 	public String getSQLTable() {
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj ||
+			((obj instanceof Nation) &&  this.getUniqueIdentifier().equals(((Nation) obj).getUniqueIdentifier()));
 	}
 }

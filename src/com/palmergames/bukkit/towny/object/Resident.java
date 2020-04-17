@@ -150,7 +150,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		save();
 	}
 
 	public void setJailed(Resident resident, Integer index, Town town) {
@@ -182,7 +182,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		save();
 	}
 	public boolean isJailed() {
 
@@ -269,7 +269,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public boolean isKing() {
 
-		return getTown().getNation().isKing(this);
+		try {
+			return getTown().getNation().isKing(this);
+		} catch (TownyException e) {
+			return false;
+		}
 	}
 
 	public boolean isMayor() {
@@ -287,9 +291,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return hasTown() && town.hasNation();
 	}
 
-	@Nullable
-	public Town getTown() {
-		return town;
+	public Town getTown() throws NotRegisteredException {
+
+		if (hasTown())
+			return town;
+		else
+			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -625,11 +632,15 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public boolean isAlliedWith(Resident otherresident) {
 		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
-			if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
-				return true;
-			} else {
-				
-				return this.getTown().getNation().equals(otherresident.getTown().getNation());
+			try {
+				if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
+					return true;
+				} else {
+					
+					return this.getTown().getNation().equals(otherresident.getTown().getNation());
+				}
+			} catch (NotRegisteredException e) {
+				return false;
 			}
 		} else {
 			return false;
@@ -659,14 +670,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void addMetaData(CustomDataField md) {
 		super.addMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		save();
 	}
 
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		save();
 	}
 
 	@Override
@@ -810,6 +819,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	@Override
 	public String getSQLTable() {
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj ||
+			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
 	}
 }
 

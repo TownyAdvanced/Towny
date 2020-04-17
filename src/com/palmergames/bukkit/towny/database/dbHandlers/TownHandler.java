@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.database.handler.SQLData;
 import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 
 import java.util.UUID;
@@ -17,12 +18,11 @@ public class TownHandler implements SerializationHandler<Town> {
 		UUID townID;
 		try {
 			townID = UUID.fromString(str);
+			return TownyUniverse.getInstance().getTown(townID);
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(e.getMessage());
 			return null;
 		}
-		
-		return ((TownyFlatFileSource)TownyUniverse.getInstance().getDataSource()).getDatabaseHandler().getTown(townID);
 	}
 
 	@Override

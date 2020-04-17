@@ -46,8 +46,7 @@ public class NationAllyNationInvite implements Invite {
 			TownyMessaging.sendPrefixedNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
 			receivernation.deleteReceivedInvite(this);
 			sendernation.deleteSentAllyInvite(this);
-			TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
-			TownyUniverse.getInstance().getDataSource().saveNation(sendernation);
+			TownyUniverse.getInstance().getDatabaseHandler().save(receivernation, sendernation);
 	}
 
 	@Override

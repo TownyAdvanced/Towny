@@ -947,18 +947,33 @@ public class TownySettings {
 
 	public static String getKingPrefix(Resident resident) {
 
-		return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_PREFIX);
+		try {
+			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_PREFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getKingPrefix.");
+			return "";
+		}
 	}
 
 	public static String getMayorPrefix(Resident resident) {
 
-		return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_PREFIX);
+		try {
+			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_PREFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getMayorPrefix.");
+			return "";
+		}
 	}
 
 	public static String getCapitalPostfix(Town town) {
 
-        return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
-    }
+		try {
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
+		} catch (NotRegisteredException e) {
+			sendError("getCapitalPostfix.");
+			return "";
+		}
+	}
 
 	public static String getTownPostfix(Town town) {
 
@@ -1002,17 +1017,32 @@ public class TownySettings {
 
 	public static String getCapitalPrefix(Town town) {
 
-        return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
-    }
+		try {
+			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
+		} catch (NotRegisteredException e) {
+			sendError("getCapitalPrefix.");
+			return "";
+		}
+	}
 
 	public static String getKingPostfix(Resident resident) {
 
-		return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_POSTFIX);
+		try {
+			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_POSTFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getKingPostfix.");
+			return "";
+		}
 	}
 
 	public static String getMayorPostfix(Resident resident) {
 
-		return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_POSTFIX);
+		try {
+			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_POSTFIX);
+		} catch (NotRegisteredException e) {
+			sendError("getMayorPostfix.");
+			return "";
+		}
 	}
 
 	public static String getNPCPrefix() {
@@ -1096,10 +1126,12 @@ public class TownySettings {
 		
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
 		int nationOutposts = 0;
-		if (town.hasNation()) {
-        }
-            nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-        int n = townOutposts + nationOutposts;
+		if (town.hasNation())
+			try {
+				nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+			} catch (NotRegisteredException e) {
+			}
+		int n = townOutposts + nationOutposts;
 		return n;
 	}
 	
@@ -1115,8 +1147,15 @@ public class TownySettings {
 		return calculationEvent.getBonusBlocks();
 	}
 
-	public static int getNationBonusBlocks(@NotNull Town town) {
-		return getNationBonusBlocks(town.getNation());
+	public static int getNationBonusBlocks(Town town) {
+
+		if (town.hasNation())
+			try {
+				return getNationBonusBlocks(town.getNation());
+			} catch (NotRegisteredException e) {
+			}
+
+		return 0;
 	}
 
 	public static int getTownBlockRatio() {
@@ -1837,15 +1876,11 @@ public class TownySettings {
 			}
 		}
 		
-		if (!Optional.ofNullable(town).map(Town::getNation).isPresent()) {
-			return 0.0;
-		}
-		
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
 				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException|NotRegisteredException e) {
 				e.printStackTrace();
 			}
 			if (isUpkeepByPlot()) {

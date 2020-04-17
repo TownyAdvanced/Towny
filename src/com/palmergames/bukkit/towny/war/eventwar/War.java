@@ -196,7 +196,7 @@ public class War {
 			}
 
 		//Gather all nations at war
-		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
+		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabaseHandler().getNations()) {
 			if (!nation.isNeutral()) {
 				add(nation);
 				if (warringNations.contains(nation))
@@ -466,7 +466,7 @@ public class War {
 		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
 		TownyMessaging.sendMessageToMode(townBlock.getTown(), healString, "");
 		for (Player p : wzd.getDefenders()) {
-			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown() != townBlock.getTown())
+			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(p.getName()).getTown() != townBlock.getTown())
 				TownyMessaging.sendMessage(p, healString);
 		}
 		launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
@@ -485,7 +485,7 @@ public class War {
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 
 		Player attackerPlayer = wzd.getRandomAttacker();
-		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(attackerPlayer.getName());
+		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(attackerPlayer.getName());
 		Town attacker = attackerResident.getTown();
 
 		//Health, messaging, fireworks..
@@ -611,7 +611,7 @@ public class War {
 		// We only change the townblocks over to the winning Town if the WinnerTakesOwnershipOfTown is false and WinnerTakesOwnershipOfTownblocks is true.
 		if (!TownySettings.getWarEventWinnerTakesOwnershipOfTown() && TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
 			townBlock.setTown(attacker);
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		}		
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -648,7 +648,7 @@ public class War {
 							if (resident.getJailTown().equals(defenderTown.toString())) 
 								if (Coord.parseCoord(defenderTown.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
-									townyUniverse.getDataSource().saveResident(resident);
+									resident.save();
 									count++;
 								}
 					} catch (TownyException e) {
@@ -759,12 +759,14 @@ public class War {
 	public void remove(Town town) {
 
 		// If a town is removed, is a capital, and the nation has not been removed, call remove(nation) instead.
-        if (town.isCapital() && warringNations.contains(town.getNation())) {
-            remove(town.getNation());
-            return;
-        }
-
-        int fallenTownBlocks = 0;
+		try {
+			if (town.isCapital() && warringNations.contains(town.getNation())) {
+				remove(town.getNation());
+				return;
+			}
+		} catch (NotRegisteredException e) {}
+		
+		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
 		for (TownBlock townBlock : town.getTownBlocks())
 			if (warZone.containsKey(townBlock.getWorldCoord())){

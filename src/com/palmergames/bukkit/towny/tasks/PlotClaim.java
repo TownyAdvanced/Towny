@@ -116,7 +116,7 @@ public class PlotClaim extends Thread {
 							worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
 							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 							
-							TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
+							TownyUniverse.getInstance().getDatabaseHandler().save(worldCoord.getTownBlock().getPlotObjectGroup());
 							break;
 						}
 					}
@@ -176,7 +176,7 @@ public class PlotClaim extends Thread {
 			}
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveResident(resident);
+		resident.save();
 		plugin.resetCache();
 
 	}
@@ -230,10 +230,9 @@ public class PlotClaim extends Thread {
 						// Set the plot permissions to mirror the new owners.
 						// TODO: Plot types for groups.
 						//group.setType(townBlock.getType());
-
-						townyUniverse.getDataSource().saveResident(owner);
-						townyUniverse.getDataSource().savePlotGroup(group);
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						
+						townyUniverse.getDatabaseHandler().save(owner, group, townBlock);
+						
 
 						if (i >= worldCoords.size() - 2) {
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"),resident.getName(), group.getName()));
@@ -252,11 +251,9 @@ public class PlotClaim extends Thread {
 
 						// Set the plot permissions to mirror the towns.
 						//townBlock.setType(townBlock.getType());
-
-						townyUniverse.getDataSource().saveResident(owner);
-						townyUniverse.getDataSource().savePlotGroup(group);
+						
 						// Update the townBlock data file so it's no longer using custom settings.
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townyUniverse.getDatabaseHandler().save(owner, group, townBlock);
 						
 					} else {
 						//Should never reach here.
@@ -274,7 +271,7 @@ public class PlotClaim extends Thread {
 
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 					
 				}
 			} catch (NotRegisteredException e) {
@@ -322,8 +319,7 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townyUniverse.getDatabaseHandler().save(owner, townBlock);
 
 					// Update any caches for this WorldCoord
 					plugin.updateCache(worldCoord);
@@ -341,9 +337,8 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the towns.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
 					// Update the townBlock data file so it's no longer using custom settings.
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townyUniverse.getDatabaseHandler().save(owner, townBlock);
 
 					return true;
 				} else {
@@ -371,7 +366,7 @@ public class PlotClaim extends Thread {
 
 				// Set the plot permissions to mirror the new owners.
 				townBlock.setType(townBlock.getType());
-				townyUniverse.getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 				return true;
 			}
@@ -390,7 +385,7 @@ public class PlotClaim extends Thread {
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 
 			plugin.updateCache(worldCoord);
 
@@ -433,7 +428,7 @@ public class PlotClaim extends Thread {
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(resident);
 			townBlock.setType(townBlock.getType());
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(resident.getName()), String.format(TownySettings.getLangString("msg_admin_has_given_you_a_plot"), worldCoord.toString()));
 		} catch (NotRegisteredException e) {

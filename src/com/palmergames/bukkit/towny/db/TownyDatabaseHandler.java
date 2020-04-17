@@ -89,12 +89,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(Player player, String[] names) {
 
 		List<Resident> invited = new ArrayList<>();
-		for (String name : names) {
+		for (String name : names)
+		{
 			Resident target = getResident(name);
 			invited.add(target);
 		}
-			
-			
 		return invited;
 	}
 
@@ -102,10 +101,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<>();
-		for (String name : names) {
+		for (String name : names)
 			matches.add(getResident(name));
-		}
-			
+		
 		return matches;
 	}
 
@@ -278,7 +276,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		// If this has failed the Town has no land claimed at all but should be given a world regardless.
-		return universe.getDataSource().getWorlds().get(0);
+		return universe.getDatabaseHandler().getWorlds().get(0);
 	}
 
 	@Override
@@ -286,9 +284,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		Town town = null;
 
-		if (resident.hasTown()) {
-		}
-			town = resident.getTown();
+		if (resident.hasTown())
+			try {
+				town = resident.getTown();
+			} catch (NotRegisteredException e1) {
+				e1.printStackTrace();
+			}
 
 		try {
 			if (town != null) {
@@ -973,8 +974,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			if (resident.isJailed()) {
 				try {
-					universe.getJailedResidentMap().remove(universe.getDataSource().getResident(oldName));
-					universe.getJailedResidentMap().add(universe.getDataSource().getResident(newName));
+					universe.getJailedResidentMap().remove(universe.getResident(oldName));
+					universe.getJailedResidentMap().add(universe.getResident(newName));
 				} catch (Exception ignored) {
 				}
 			}

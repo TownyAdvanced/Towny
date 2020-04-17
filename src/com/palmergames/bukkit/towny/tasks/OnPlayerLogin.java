@@ -47,82 +47,74 @@ public class OnPlayerLogin implements Runnable {
 		
 		Resident resident = null;
 
-		/*
-		 * No record of this resident exists
-		 * So create a fresh set of data.
-		 */
-		try {
-			universe.getDatabaseHandler().newResident(player.getUniqueId(), player.getName());
-			resident = universe.getDatabaseHandler().getResident(player.getUniqueId());
-
-			if (TownySettings.isShowingRegistrationMessage())
-				TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
-			resident.setRegistered(System.currentTimeMillis());
-			if (!TownySettings.getDefaultTownName().equals("")) {
-				try {
-					Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
-					town.addResident(resident);
-					universe.getDatabaseHandler().save(town);
-				} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
-				}
-			}
-
-			// Update resident data
-			if (TownySettings.isUsingEssentials()) {
-				Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-				/*
-				 * Don't update last online for a player who is vanished.
-				 */
-				if (!ess.getUser(player).isVanished())
-					resident.setLastOnline(System.currentTimeMillis());
-			} else
-				resident.setLastOnline(System.currentTimeMillis());
-			
-			universe.getDatabaseHandler().save(resident);
-			
-		} catch (NotRegisteredException ex) {
-			// Should never happen
-		}
-
 		if (!universe.getDataSource().hasResident(player.getName())) {
-			
-			
+			/*
+			 * No record of this resident exists
+			 * So create a fresh set of data.
+			 */
+			try {
+				universe.getDataSource().newResident(player.getName());
+				resident = universe.getResident(player.getUniqueId());
+				
+				if (TownySettings.isShowingRegistrationMessage())				
+					TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
+				resident.setRegistered(System.currentTimeMillis());
+				if (!TownySettings.getDefaultTownName().equals("")) {
+					try {
+						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
+						town.addResident(resident);
+						town.save();
+					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
+					}
+				}
+				
+				resident.save();
+			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
+				// Should never happen
+			}
 			
 		} else {
 			/*
 			 * This resident is known so fetch the data and update it.
 			 */
-			resident = universe.getDataSource().getResident(player.getName());
-			if (TownySettings.isUsingEssentials()) {
-				Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-				/*
-				 * Don't update last online for a player who is vanished.
-				 */
-				if (!ess.getUser(player).isVanished())
+			try {
+				resident = universe.getResident(player.getUniqueId());
+				if (TownySettings.isUsingEssentials()) {
+					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+					/*
+					 * Don't update last online for a player who is vanished.
+					 */
+					if (!ess.getUser(player).isVanished())
+						resident.setLastOnline(System.currentTimeMillis());
+				} else
 					resident.setLastOnline(System.currentTimeMillis());
-			} else
-				resident.setLastOnline(System.currentTimeMillis());
-
-			universe.getDataSource().saveResident(resident);
-
+				
+				universe.getDataSource().saveResident(resident);
+				
+			} catch (NotRegisteredException ex) {
+				// Should never happen
+			}
 		}
 
 		if (resident != null)
 			
 			TownyPerms.assignPermissions(resident, player);
+			
+			
+			try {
+				if (TownySettings.getShowTownBoardOnLogin()) {
+					TownyMessaging.sendTownBoard(player, resident.getTown());
+				}
+				if (TownySettings.getShowNationBoardOnLogin()) {
+					if (resident.getTown().hasNation()) {
+						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+					}
+				}
+				resident.getTown(); // Exception check, this does not do anything at all!
+			} catch (NotRegisteredException ignored) {
+			}
 
-
-        if (TownySettings.getShowTownBoardOnLogin()) {
-            TownyMessaging.sendTownBoard(player, resident.getTown());
-        }
-        if (TownySettings.getShowNationBoardOnLogin()) {
-            if (resident.getTown().hasNation()) {
-                TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
-            }
-        }
-        resident.getTown(); // Exception check, this does not do anything at all!
-
-        if (TownyAPI.getInstance().isWarTime()) {
+		if (TownyAPI.getInstance().isWarTime()) {
 			universe.getWarEvent().sendScores(player, 3);
 		}
 
@@ -144,38 +136,42 @@ public class OnPlayerLogin implements Runnable {
 
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 			if (resident.hasTown()) {
-                Town town = resident.getTown();
-                if (town.hasUpkeep()) {
-                    double upkeep = TownySettings.getTownUpkeepCost(town);
-                    try {
-                        if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
-                            /*
-                             *  Warn that the town is due to be deleted.
-                             */
-                            TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
-                        }
-                    } catch (EconomyException ex) {
-                        // Economy error, so ignore it and try to continue.
-                    }
-                }
-
-                if (town.hasNation()) {
-                    Nation nation = town.getNation();
-                    
-                    double upkeep = TownySettings.getNationUpkeepCost(nation);
-                    try {
-                        if ((upkeep > 0) && (!nation.getAccount().canPayFromHoldings(upkeep))) {
-                            /*
-                             *  Warn that the nation is due to be deleted.
-                             */
-                            TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), nation.getName()));
-                        }
-                    } catch (EconomyException ex) {
-                        // Economy error, so ignore it and try to continue.
-                    }
-                }
-
-            }
+				try {
+					Town town = resident.getTown();
+					if (town.hasUpkeep()) {
+						double upkeep = TownySettings.getTownUpkeepCost(town);
+						try {
+							if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
+								/*
+								 *  Warn that the town is due to be deleted.
+								 */
+								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
+							}
+						} catch (EconomyException ex) {
+							// Economy error, so ignore it and try to continue.
+						}
+					}
+						
+					if (town.hasNation()) {
+						Nation nation = town.getNation();
+						
+						double upkeep = TownySettings.getNationUpkeepCost(nation);
+						try {
+							if ((upkeep > 0) && (!nation.getAccount().canPayFromHoldings(upkeep))) {
+								/*
+								 *  Warn that the nation is due to be deleted.
+								 */
+								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), nation.getName()));
+							}
+						} catch (EconomyException ex) {
+							// Economy error, so ignore it and try to continue.
+						}
+					}
+					
+				} catch (NotRegisteredException ex) {
+					// Should never reach here as we tested it beforehand.
+				}
+			}
 		}
 		
 	}

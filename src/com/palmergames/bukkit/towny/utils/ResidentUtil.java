@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -63,14 +65,22 @@ public class ResidentUtil {
 				TownyMessaging.sendErrorMsg(sender, line.toString());
 			} else if (matches.size() == 1) {
 				// Match found online
-                Resident target = townyUniverse.getDataSource().getResident(matches.get(0).getName());
-                residents.add(target);
-            } else {
+				try {
+					Resident target = townyUniverse.getResident(matches.get(0).getName());
+					residents.add(target);
+				} catch (TownyException x) {
+					TownyMessaging.sendErrorMsg(sender, x.getMessage());
+				}
+			} else {
 				// No online matches so test for offline.
 				Resident target;
-                target = townyUniverse.getDataSource().getResident(name);
-                residents.add(target);
-            }
+				try {
+					target = townyUniverse.getResident(name);
+					residents.add(target);
+				} catch (NotRegisteredException x) {
+					TownyMessaging.sendErrorMsg(sender, x.getMessage());
+				}
+			}
 		}
 		return residents;
 	}

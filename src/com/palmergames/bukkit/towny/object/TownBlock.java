@@ -436,7 +436,7 @@ public class TownBlock extends TownyObject {
 			metadata = new HashSet<>();
 		
 		getMetadata().add(md);
-		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+		save();
 	}
 	
 	public void removeMetaData(CustomDataField md) {
@@ -447,8 +447,7 @@ public class TownBlock extends TownyObject {
 
 		if (getMetadata().size() == 0)
 			this.metadata = null;
-
-		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+		save();
 	}
 
 	public HashSet<CustomDataField<?>> getMetadata() {

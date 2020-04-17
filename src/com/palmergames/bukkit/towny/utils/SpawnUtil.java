@@ -60,7 +60,7 @@ public class SpawnUtil {
 	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+		Resident resident = townyUniverse.getResident(player.getName());
 		// Test if the resident is in a teleport cooldown.
 		if (TownySettings.getSpawnCooldownTime() > 0
 				&& CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
@@ -265,8 +265,8 @@ public class SpawnUtil {
 							String.format(TownySettings.getLangString("msg_err_x_spawn_disallowed_from_x"),
 									spawnType.getTypeName(), TownySettings.getLangString("msg_the_wilderness")));
 				if (inTown != null && resident.hasNation()
-						&& townyUniverse.getDataSource().getTown(inTown).hasNation()) {
-					Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
+						&& townyUniverse.getDatabaseHandler().getTown(inTown).hasNation()) {
+					Nation inNation = townyUniverse.getDatabaseHandler().getTown(inTown).getNation();
 					Nation playerNation = resident.getTown().getNation();
 					if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 						throw new TownyException(

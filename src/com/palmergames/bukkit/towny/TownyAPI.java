@@ -50,7 +50,7 @@ public class TownyAPI {
      */
     public Location getTownSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+            Resident resident = townyUniverse.getResident(player.getName());
             Town town = resident.getTown();
             return town.getSpawn();
         } catch (TownyException x) {
@@ -66,7 +66,7 @@ public class TownyAPI {
      */
     public Location getNationSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+            Resident resident = townyUniverse.getResident(player.getName());
             Nation nation = resident.getTown().getNation();
             return nation.getNationSpawn();
         } catch (TownyException x) {
@@ -285,7 +285,7 @@ public class TownyAPI {
      */
     public List<Resident> getActiveResidents() {
         List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getDataSource().getResidents()) {
+        for (Resident resident : townyUniverse.getDatabaseHandler().getResidents()) {
             if (isActiveResident(resident)) {
                 activeResidents.add(resident);
             }

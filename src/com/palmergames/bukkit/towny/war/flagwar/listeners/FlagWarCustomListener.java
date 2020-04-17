@@ -71,41 +71,33 @@ public class FlagWarCustomListener implements Listener {
 		universe.removeWarZone(worldCoord);
 
 		plugin.updateCache(worldCoord);
-		Resident playerResident = null;
 
 		String playerName;
 		if (player == null) {
 			playerName = "Greater Forces";
-			
 		} else {
-			playerResident = databaseHandler.getResident(player.getUniqueId());
-			
-			if (playerResident == null) {
-				return;
-			}
-			
 			playerName = player.getName();
-            playerName = playerResident.getFormattedName();
-        }
+			try {
+				playerName = universe.getResident(player.getUniqueId()).getFormattedName();
+			} catch (TownyException ignored) {
+			}
+		}
 
 		plugin.getServer().broadcastMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_defended"), playerName, cell.getCellString()));
-		
+
 		// Defender Reward
 		// It doesn't entirely matter if the attacker can pay.
 		// Also doesn't take into account of paying as much as the attacker can afford (Eg: cost=10 and balance=9).
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getDatabaseHandler().getResident(cell.getNameOfFlagOwner());
-				
-				// Null check.
-				if (!Optional.ofNullable(attackingPlayer).map(Resident::getAccount).isPresent()) {
-					return;
-				}
-				
+				attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
 				if (player != null) {
-                    defendingPlayer = universe.getDataSource().getResident(player.getName());
-                }
+					try {
+						defendingPlayer = universe.getResident(player.getUniqueId());
+					} catch (NotRegisteredException ignored) {
+					}
+				}
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
 				if (defendingPlayer == null) {
@@ -126,7 +118,7 @@ public class FlagWarCustomListener implements Listener {
 						}
 					}
 				}
-			} catch (EconomyException e) {
+			} catch (EconomyException | NotRegisteredException e) {
 				e.printStackTrace();
 			}
 		}
@@ -142,14 +134,7 @@ public class FlagWarCustomListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			Resident attackingResident = universe.getDatabaseHandler().getResident(cell.getNameOfFlagOwner());
-			
-			if (!Optional.ofNullable(attackingResident)
-				.map(Resident::getTown)
-				.map(Town::getNation).isPresent()) {
-				return;
-			}
-			
+			Resident attackingResident = universe.getResident(cell.getNameOfFlagOwner());
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
@@ -205,7 +190,7 @@ public class FlagWarCustomListener implements Listener {
 				// Attacker Claim Automatically
 				try {
 					townBlock.setTown(attackingTown);
-					TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 				} catch (Exception te) {
 					// Couldn't claim it.
 					TownyMessaging.sendErrorMsg(te.getMessage());

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
 
-	private final transient HashMap<String, Town> towns = new HashMap<>();
+	private final transient HashMap<UUID, Town> towns = new HashMap<>();
 	private boolean isClaimable = true;
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
@@ -63,25 +64,27 @@ public class TownyWorld extends TownyObject {
 	public TownyWorld(UUID id, String name) {
 		super(id, name);
 	}
-
-	public HashMap<String, Town> getTowns() {
-
-		return towns;
+	
+	public Collection<Town> getTowns() {
+		return towns.values();
 	}
 
 	public boolean hasTowns() {
-
 		return !towns.isEmpty();
 	}
 
+	@Deprecated
 	public boolean hasTown(String name) {
-
-		return towns.containsKey(name);
+		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(name);
+		return t != null && hasTown(t.getUniqueIdentifier());
 	}
 
 	public boolean hasTown(Town town) {
-
-		return hasTown(town.getName());
+		return hasTown(town.getUniqueIdentifier());
+	}
+	
+	public boolean hasTown(UUID townUUID) {
+		return towns.containsKey(townUUID);
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
@@ -89,7 +92,7 @@ public class TownyWorld extends TownyObject {
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
 		else {
-			towns.put(town.getName(), town);
+			towns.put(town.getUniqueIdentifier(), town);
 			town.setWorld(this);
 		}
 	}
@@ -614,7 +617,7 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTowns()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
@@ -653,7 +656,7 @@ public class TownyWorld extends TownyObject {
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
 
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTowns()) {
 			try {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
@@ -684,7 +687,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTowns()) {
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
@@ -709,7 +712,7 @@ public class TownyWorld extends TownyObject {
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		
 		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTowns()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
@@ -743,14 +746,12 @@ public class TownyWorld extends TownyObject {
 
 	public void addMetaData(CustomDataField md) {
 		super.addMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+		save();
 	}
 
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+		save();
 	}
 
 	@Override
