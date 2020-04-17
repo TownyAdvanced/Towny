@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.regen;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -12,7 +13,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -439,6 +439,28 @@ public class TownyRegenAPI {
 	/*
 	 * Protection Regen follows
 	 */
+	
+	/**
+	 * Called from various explosion listeners.
+	 * 
+	 * @param block - Block which is being exploded.
+	 * @param count - int for setting the delay to do one block at a time.
+	 */
+	public static void beginProtectionRegenTask(Block block, int count) {
+		if ((!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+			// Piston extensions which are broken by explosions ahead of the base block
+			// cause baseblocks to drop as items and no base block to be regenerated.
+			if (block.getType().equals(Material.PISTON_HEAD)) {
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
+				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
+				block = baseBlock;
+			}
+			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+			addProtectionRegenTask(task);
+			block.setType(Material.AIR);
+		}
+	}
 	
 	/**
 	 * Does a task for this block already exist?
