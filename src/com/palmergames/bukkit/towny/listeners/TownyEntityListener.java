@@ -15,9 +15,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
@@ -26,10 +24,8 @@ import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
@@ -61,7 +57,6 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.material.Attachable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
@@ -815,15 +810,9 @@ public class TownyEntityListener implements Listener {
 								continue;
 							}
 							if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
-								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-									TownyRegenAPI.addProtectionRegenTask(task);
-									event.setYield(0.0f);
-									block.getDrops().clear();
-								}
+								TownyRegenAPI.beginProtectionRegenTask(block, count);
 							}
-							// Break th)e block
+							// Break the block
 						} else {
 							event.blockList().remove(block);
 						}
@@ -839,17 +828,8 @@ public class TownyEntityListener implements Listener {
 							// Wilderness explosion regeneration
 
 							if (townyWorld.isExpl()) {
-								if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {										
-									//TownyMessaging.sendDebugMsg("onEntityExplode: Testing entity: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");										
-									if (townyWorld.isProtectingExplosionEntity(entity)) {
-										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-											TownyRegenAPI.addProtectionRegenTask(task);
-											event.setYield(0.0f);
-											block.getDrops().clear();
-										}
-									}
+								if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
+									TownyRegenAPI.beginProtectionRegenTask(block, count);
 								}
 							} else {
 								event.setCancelled(true);
@@ -877,71 +857,26 @@ public class TownyEntityListener implements Listener {
 				// Has to be in a town.
 				if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
 					townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());
-					Town town = null;
-					try {
-						town = townBlock.getTown();
-					} catch (NotRegisteredException ignored) {
-					}
 
 					// If explosions are off, or it's wartime and explosions are off
 					// and the towns has no nation
-					if (townyWorld.isUsingTowny() && !townyWorld.isForceExpl()) {
-						if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !town.hasNation() && !town.isBANG())) {
-							if (event.getEntity() != null){
-								TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
-								event.setCancelled(true); 
-								return;
-							}
+					if (!townyWorld.isForceExpl() && !townBlock.getPermissions().explosion) {
+						if (event.getEntity() != null){
+							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
+							event.setCancelled(true); 
+							return;
 						}
 					}
 				} else {
 					// Wilderness explosion regeneration
-					if (townyWorld.isUsingTowny())
-						if (townyWorld.isExpl()) {
-							if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
-								
-								if (townyWorld.isProtectingExplosionEntity(entity)) {
-									// Piston extensions which are broken by explosions ahead of the base 
-									// block cause baseblocks to drop as items and no base block to be regenerated.
-									if (block.getType().equals(Material.PISTON_HEAD)) {
-										org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
-										Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
-										block = baseBlock;
-										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-											TownyRegenAPI.addProtectionRegenTask(task);
-											event.setYield(0.0f);
-											block.getDrops().clear();
-										}
-									} else {
-										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-											TownyRegenAPI.addProtectionRegenTask(task);
-											event.setYield(0.0f);
-											block.getDrops().clear();
-											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
-											if (block.getState().getData() instanceof Attachable || 
-													Tag.SIGNS.isTagged(block.getType()) ||
-													Tag.WOODEN_PRESSURE_PLATES.isTagged(block.getType()) ||
-													block.getType().equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE) ||
-													block.getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) ||
-													block.getType().equals(Material.BEACON) ||
-													block.getType().equals(Material.PLAYER_HEAD) ||
-													block.getType().equals(Material.PLAYER_WALL_HEAD) ||													
-													block.getState() instanceof ShulkerBox) {
-												block.setType(Material.AIR);
-											}
-										}
-									}
-									
-								}
-							}
-						} else {
-							event.setCancelled(true);
-							return;
+					if (townyWorld.isExpl()) {
+						if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
+							TownyRegenAPI.beginProtectionRegenTask(block, count);
 						}
+					} else {
+						event.setCancelled(true);
+						return;
+					}
 				}
 			}
 			

@@ -4492,3 +4492,7 @@ v0.92.0.11:
     - Closes #3916.
   - Fix mysql DB's nation's not loading their registered date or metadata, spotted by Silverwolfg11. 
   - Fix mysql DB's towns losing residents on load.
+0.96.1.6:
+  - Unify code called when explosions are being reverted and ProtectionRegenTasks are created.
+  - Explosion code clean up.
+  - Should not be possible to duplicate any block ever again.
