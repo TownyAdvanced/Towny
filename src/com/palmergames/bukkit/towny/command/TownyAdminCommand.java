@@ -840,7 +840,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					final String town = resident.getJailTown();
 					final int index = resident.getJailSpawn();
 					try	{
-						final Location loc = Bukkit.getWorld(TownyAPI.getInstance().getDataSource().getTown(town).getHomeblockWorld().getName()).getSpawnLocation();
+						final Location loc = Bukkit.getWorld(TownyUniverse.getInstance().getTown(town).getHomeblockWorld().getName()).getSpawnLocation();
 
 						// Use teleport warmup
 						jailedPlayer.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
@@ -849,7 +849,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						resident.removeJailSpawn();
 						resident.setJailTown(" ");
 						TownyMessaging.sendMsg(player, "You have been freed from jail.");
-						TownyMessaging.sendPrefixedTownMessage(townyUniverse.getDatabaseHandler().getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
+						TownyMessaging.sendPrefixedTownMessage(townyUniverse.getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
 					} catch (TownyException e) {
 						e.printStackTrace();
 					}
@@ -858,8 +858,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}

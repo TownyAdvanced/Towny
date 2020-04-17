@@ -57,7 +57,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 			// Filter worlds not registered
 			try {
-				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(world.getName());
+				townyWorld = TownyUniverse.getInstance().getWorld(world.getUID());
 			} catch (NotRegisteredException | NullPointerException e) {
 				// World was not registered by Towny, so we skip all mobs in it.
 				continue;

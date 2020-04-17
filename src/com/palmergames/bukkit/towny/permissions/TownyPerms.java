@@ -116,7 +116,7 @@ public class TownyPerms {
 		TownyWorld World;
 
 		try {
-			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
+			World = townyUniverse.getWorld(player.getLocation().getWorld().getUID());
 		} catch (NotRegisteredException e) {
 			// World not registered with Towny.
 			e.printStackTrace();

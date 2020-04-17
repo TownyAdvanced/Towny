@@ -55,7 +55,7 @@ public class TownyAsciiMap {
 
 		TownyWorld world;
 		try {
-			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
+			world = townyUniverse.getWorld(player.getWorld().getUID());
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;

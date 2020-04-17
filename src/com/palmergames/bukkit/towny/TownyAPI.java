@@ -228,7 +228,7 @@ public class TownyAPI {
      */
     public boolean isTownyWorld(World world) {
     	try {
-			return townyUniverse.getDataSource().getWorld(world.getName()).isUsingTowny();
+			return townyUniverse.getWorld(world.getUID()).isUsingTowny();
 		} catch (NotRegisteredException e) {
 			return false;
 		}

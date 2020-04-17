@@ -282,7 +282,7 @@ public class TownyEntityListener implements Listener {
 		String damager = event.getDamager().getType().name();
 		
 		try {
-			townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+			townyWorld = townyUniverse.getWorld(entity.getWorld().getUID());
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
@@ -330,7 +330,7 @@ public class TownyEntityListener implements Listener {
 			if (event.getDamager() instanceof Projectile) {
 				
 				try {
-					townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+					townyWorld = townyUniverse.getWorld(entity.getWorld().getUID());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -391,7 +391,7 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld = null;
 		
 		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getWorld(loc.getWorld().getUID());
 		} catch (NotRegisteredException e) {
 			// Failed to fetch a world
 			return;
@@ -526,7 +526,7 @@ public class TownyEntityListener implements Listener {
 			TownyWorld townyWorld = null;
 
 			try {
-				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
+				townyWorld = TownyUniverse.getInstance().getWorld(loc.getWorld().getUID());
 			} catch (NotRegisteredException e) {
 				// Failed to fetch a world
 				return;
@@ -602,7 +602,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		try {
-			TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			TownyWorld townyWorld = townyUniverse.getWorld(block.getLocation().getWorld().getUID());
 			// Prevent creatures trampling crops
 			if (townyWorld.isDisableCreatureTrample()) {
 				if ((block.getType() == Material.FARMLAND) || (block.getType() == Material.WHEAT)) {
@@ -673,7 +673,7 @@ public class TownyEntityListener implements Listener {
 		case WITHER:
 
 			try {
-				TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getWorld(event.getBlock().getWorld().getUID());
 
 				if (!townyWorld.isUsingTowny())
 					return;
@@ -691,7 +691,7 @@ public class TownyEntityListener implements Listener {
 		case ENDERMAN:
 
 			try {
-				TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getWorld(event.getBlock().getWorld().getUID());
 
 				if (!townyWorld.isUsingTowny())
 					return;
@@ -764,7 +764,7 @@ public class TownyEntityListener implements Listener {
 		  once per explosion.
 		 */
 		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getWorld(event.getLocation().getWorld().getUID());
 
 			if (!townyWorld.isUsingTowny())
 				return;
@@ -1007,12 +1007,10 @@ public class TownyEntityListener implements Listener {
 		}
 
 		TownyWorld townyWorld = null;
-		String worldName = null;
 		Entity hanging = event.getEntity();		
 
 		try {
-			worldName = hanging.getWorld().getName();
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(worldName);
+			townyWorld = TownyUniverse.getInstance().getWorld(hanging.getWorld().getUID());
 
 			if (!townyWorld.isUsingTowny())
 				return;
@@ -1141,7 +1139,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		try {
-			if (!locationCanExplode(TownyAPI.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName()), event.getEntity().getLocation())) {
+			if (!locationCanExplode(TownyUniverse.getInstance().getWorld(event.getEntity().getWorld().getUID()), event.getEntity().getLocation())) {
 				event.setCancelled(true);
 			}
 		} catch (NotRegisteredException ignored) {

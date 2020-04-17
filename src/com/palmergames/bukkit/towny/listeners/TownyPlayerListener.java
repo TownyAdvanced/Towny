@@ -257,7 +257,7 @@ public class TownyPlayerListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			World = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			World = townyUniverse.getWorld(block.getLocation().getWorld().getUID());
 			if (!World.isUsingTowny())
 				return;
 
@@ -441,7 +441,7 @@ public class TownyPlayerListener implements Listener {
 			TownyWorld World = null;
 
 			try {
-				World = TownyUniverse.getInstance().getDataSource().getWorld(event.getPlayer().getWorld().getName());
+				World = TownyUniverse.getInstance().getWorld(event.getPlayer().getWorld().getUID());
 				if (!World.isUsingTowny())
 					return;
 
@@ -581,9 +581,9 @@ public class TownyPlayerListener implements Listener {
 		
 		if (WorldCoord.cellChanged(from, to)) {
 			try {
-				TownyWorld fromWorld = townyUniverse.getDataSource().getWorld(from.getWorld().getName());
+				TownyWorld fromWorld = townyUniverse.getWorld(from.getWorld().getUID());
 				WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
-				TownyWorld toWorld = townyUniverse.getDataSource().getWorld(to.getWorld().getName());
+				TownyWorld toWorld = townyUniverse.getWorld(to.getWorld().getUID());
 				WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
 				
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);

@@ -113,7 +113,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
 		} else
 			try {
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getWorld(player.getLocation().getWorld().getUID()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
 	}
 

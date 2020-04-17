@@ -323,7 +323,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+					if (TownyUniverse.getInstance().getWorld(player.getLocation().getWorld().getUID()).isUsingTowny())
 						player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
@@ -343,7 +343,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+					if (TownyUniverse.getInstance().getWorld(player.getLocation().getWorld().getUID()).isUsingTowny())
 						player.sendMessage(line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();

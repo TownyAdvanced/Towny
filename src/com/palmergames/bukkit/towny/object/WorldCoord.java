@@ -122,7 +122,7 @@ public class WorldCoord extends Coord {
 	 * @throws NotRegisteredException if unable to return a TownyWorld instance
 	 */
 	public TownyWorld getTownyWorld() throws NotRegisteredException {
-		return TownyUniverse.getInstance().getDataSource().getWorld(worldName);
+		return TownyUniverse.getInstance().getWorld(worldName);
 	}
 
 	/**

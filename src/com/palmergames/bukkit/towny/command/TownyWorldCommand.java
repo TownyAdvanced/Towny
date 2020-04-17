@@ -170,7 +170,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 			try {
-				Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(split[0].toLowerCase());
+				Globalworld = TownyUniverse.getInstance().getWorld(split[0].toLowerCase());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -188,7 +188,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 			try {
 				if (Globalworld == null)
-					Globalworld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
+					Globalworld = townyUniverse.getWorld(player.getWorld().getUID());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;

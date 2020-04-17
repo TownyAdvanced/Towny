@@ -106,7 +106,7 @@ public class TownyBlockListener implements Listener {
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownyWorld world = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
+			TownyWorld world = townyUniverse.getWorld(block.getWorld().getUID());
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
@@ -289,7 +289,7 @@ public class TownyBlockListener implements Listener {
 		TownyWorld townyWorld;
 
 		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getWorld(loc.getWorld().getUID());
 
 			if (!townyWorld.isUsingTowny())
 				return false;
@@ -357,7 +357,7 @@ public class TownyBlockListener implements Listener {
 		int count = 0;
 		
 		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getWorld(event.getBlock().getLocation().getWorld().getUID());
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			return;

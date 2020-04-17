@@ -24,6 +24,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
+import com.sun.tools.corba.se.idl.constExpr.Not;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +66,8 @@ public class TownyUniverse {
 	private final Map<String, Nation> nationNamesMap = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     
-    private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
@@ -404,8 +406,30 @@ public class TownyUniverse {
 	public Trie getNationsTrie() {
 		return nationsTrie;
 	}
+
+	// ---------- World Methods ----------
 	
-    public Map<String, TownyWorld> getWorldMap() {
+	public TownyWorld getWorld(String name) throws NotRegisteredException {
+		TownyWorld world = worldNameMap.get(name);
+    	if (world == null) {
+    		throw new NotRegisteredException(String.format("The world '%s' is not registered.", name));
+		}
+    	
+    	return world;
+	}
+	
+	public TownyWorld getWorld(UUID uuid) throws NotRegisteredException {
+    	TownyWorld world = worlds.get(uuid);
+    	if (world == null) {
+			throw new NotRegisteredException(String.format("The world with UUID '%s' is not registered.", uuid));
+		}
+    	
+    	return world;
+	}
+	
+	public List<TownyWorld> getWorlds() { return new ArrayList<>(worlds.values()); }
+	
+    public Map<UUID, TownyWorld> getWorldMap() {
         return worlds;
     }
     
