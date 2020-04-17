@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
@@ -172,7 +173,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			// Store data.
 			try {
 				TownyUniverse.getInstance().newResident(loadedResident.getUniqueIdentifier(), loadedResident.getName());
-			} catch (AlreadyRegisteredException e) {
+			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				e.printStackTrace();
 			}
 		}

@@ -2508,7 +2508,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		townyUniverse.getDatabaseHandler().newTown(name);
+		townyUniverse.newTown(name);
 		Town town = townyUniverse.getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);

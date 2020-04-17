@@ -595,12 +595,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendAdd(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+				residentFriendAdd(player, resident, townyUniverse.getResidents(player, names));
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendRemove(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+				residentFriendRemove(player, resident, townyUniverse.getResidents(player, names));
 			
 			} else if (split[0].equalsIgnoreCase("list")) {
 

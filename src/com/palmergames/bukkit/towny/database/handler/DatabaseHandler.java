@@ -413,59 +413,5 @@ public abstract class DatabaseHandler {
 	}
 	
 	public abstract void load();
-
-	/**
-	 * Creates a new {@link Town} and saves it into the database.
-	 * 
-	 * @param name The name of the town.
-	 * @throws AlreadyRegisteredException When the name is taken.
-	 * @throws NotRegisteredException When the name is invalid.
-	 */
-	public final void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		
-		// Check if name is valid.
-		String filteredName = getFilteredName(name);
-		
-		// Check if name already exists.
-		if (townNameMap.containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-		
-		// Create new town and save it.
-		Town newTown = new Town(UUID.randomUUID(), name);
-		townsTrie.addKey(name);
-		
-		// Save town
-		save(newTown);
-		
-		// Add town to memory.
-		towns.put(newTown.getUniqueIdentifier(), newTown);
-	}
-	
-	public final void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		// Get filtered name.
-		String filteredName = getFilteredName(name);
-
-		if (nationNameMap.containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-		Nation newNation = new Nation(UUID.randomUUID(), name);
-		save(newNation);
-		
-		// Add nation to memory
-		nations.put(newNation.getUniqueIdentifier(), newNation);
-	}
-	
-	
-	protected final String getFilteredName(String name) throws NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-		
-		return filteredName;
-	}
-	
 	
 }

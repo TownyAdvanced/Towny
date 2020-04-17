@@ -1349,7 +1349,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDatabaseHandler().newNation(name);
+		townyUniverse.newNation(name);
 		Nation nation = townyUniverse.getNation(name);
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		nation.addTown(town);
@@ -1539,11 +1539,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		names = newreslist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length >= 1) {
-			nationRevokeInviteTown(player,nation, townyUniverse.getDataSource().getTowns(namestoremove));
+			nationRevokeInviteTown(player,nation, townyUniverse.getTowns(namestoremove));
 		}
 
 		if (names.length >= 1) {
-			nationAdd(player, nation, townyUniverse.getDataSource().getTowns(names));
+			nationAdd(player, nation, townyUniverse.getTowns(names));
 		}
 	}
 
@@ -1706,7 +1706,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		nationKick(player, resident, nation, townyUniverse.getDataSource().getTowns(names));
+		nationKick(player, resident, nation, townyUniverse.getTowns(names));
 	}
 
 	public void nationKick(Player player, Resident resident, Nation nation, List<Town> kicking) {

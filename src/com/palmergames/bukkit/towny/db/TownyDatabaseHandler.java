@@ -33,6 +33,8 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
@@ -47,6 +49,7 @@ import java.util.UUID;
  * @author ElgarL
  * 
  */
+@Deprecated
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
 	final String dataFolderPath;
@@ -65,134 +68,57 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public boolean hasResident(String name) {
-
-		try {
-			return TownySettings.isFakeResident(name) || universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
-		} catch (InvalidNameException e) {
-			return false;
-		}
+		return universe.hasResident(name);
 	}
 
 	@Override
 	public boolean hasTown(String name) {
-
-		return universe.getTownsMap().containsKey(name.toLowerCase());
+		return universe.hasTown(name);
 	}
 
 	@Override
 	public boolean hasNation(String name) {
-
-		return universe.getNationsMap().containsKey(name.toLowerCase());
+		return universe.hasNation(name);
 	}
 
 	@Override
 	public List<Resident> getResidents(Player player, String[] names) {
-
-		List<Resident> invited = new ArrayList<>();
-		for (String name : names)
-		try {
-				Resident target = getResident(name);
-				invited.add(target);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-			}
-		return invited;
+		return universe.getResidents(player, names);
 	}
 
 	@Override
 	public List<Resident> getResidents(String[] names) {
-
-		List<Resident> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getResident(name));
-			} catch (NotRegisteredException ignored) {
-			}
-		return matches;
+		return universe.getResidents(names);
 	}
 
 	@Override
 	public List<Resident> getResidents() {
-
-		return new ArrayList<>(universe.getResidentMap().values());
+		return universe.getResidents();
 	}
 
 	@Override
 	public Resident getResident(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		if (!hasResident(name)) {
-
-			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-
-		} else if (TownySettings.isFakeResident(name)) {
-
-			Resident resident = new Resident(UUID.randomUUID(), name);
-			resident.setNPC(true);
-
-			return resident;
-
-		}
-
-		return universe.getResidentMap().get(name);
-
+		return universe.getResident(name);
 	}
 
 	@Override
 	public List<Town> getTowns(String[] names) {
-
-		List<Town> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getTown(name));
-			} catch (NotRegisteredException ignored) {
-			}
-		return matches;
+		return universe.getTowns(names);
 	}
 
 	@Override
 	public List<Town> getTowns() {
-
-		return new ArrayList<>(universe.getTownsMap().values());
+		return universe.getTowns();
 	}
 
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		if (!hasTown(name))
-			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
-
-		return universe.getTownsMap().get(name);
+		return universe.getTown(name);
 	}
 
 	@Override
 	public Town getTown(UUID uuid) throws NotRegisteredException {
-		String name = null;
-		for (Town town : this.getTowns()) {
-			if (uuid.equals(town.getUniqueIdentifier())) {
-				name = town.getName();
-			}
-		}
-
-		if (name == null) {
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		}
-		
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		return universe.getTownsMap().get(name);
+		return universe.getTown(uuid);
 	}
 	
 	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
@@ -201,72 +127,32 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<Nation> getNations(String[] names) {
-
-		List<Nation> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getNation(name));
-			} catch (NotRegisteredException ignored) {
-			}
-		return matches;
+		return universe.getNations(names);
 	}
 
 	@Override
 	public List<Nation> getNations() {
-
-		return new ArrayList<>(universe.getNationsMap().values());
+		return universe.getNations();
 	}
 
 	@Override
 	public Nation getNation(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		if (!hasNation(name))
-			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
-
-		return universe.getNationsMap().get(name.toLowerCase());
+		return universe.getNation(name);
 	}
 
 	@Override
 	public Nation getNation(UUID uuid) throws NotRegisteredException {
-		String name = null;
-		for (Nation nation : this.getNations()) {
-			if (uuid.equals(nation.getUniqueIdentifier())) {
-				name = nation.getName();
-			}
-		}
-
-		if (name == null) {
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		}
-		
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-		
-		return universe.getNationsMap().get(name);
+		return universe.getNation(uuid);
 	}
 
 	@Override
 	public TownyWorld getWorld(String name) throws NotRegisteredException {
-
-		TownyWorld world = universe.getWorldMap().get(name.toLowerCase());
-
-		if (world == null)
-			throw new NotRegisteredException("World not registered!");
-
-		return world;
+		return universe.getWorld(name);
 	}
 
 	@Override
 	public List<TownyWorld> getWorlds() {
-
-		return new ArrayList<>(universe.getWorldMap().values());
+		return universe.getWorlds();
 	}
 
 	/**
@@ -277,15 +163,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	@Override
 	public TownyWorld getTownWorld(String townName) {
-		List<TownyWorld> townyWorlds = universe.getWorlds();
-		
-		for (TownyWorld world : townyWorlds) {
-			if (world.hasTown(townName))
-				return world;
-		}
-
-		// If this has failed the Town has no land claimed at all but should be given a world regardless.
-		return townyWorlds.get(0);
+		return universe.getTownWorld(townName);
 	}
 
 	@Override
@@ -397,66 +275,29 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
-
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterPlayerName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
-
-		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(UUID.randomUUID(), filteredName));
-		universe.getResidentsTrie().addKey(filteredName);
+		// TODO Figure out how to fetch UUID from name
+		throw new UnsupportedOperationException("Cannot fetch resident UUID!");
 	}
 	
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(UUID.randomUUID(), filteredName));
-		universe.getTownsTrie().addKey(filteredName);
+		universe.newTown(name);
 	}
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(UUID.randomUUID(), filteredName));
-		universe.getNationsTrie().addKey(filteredName);
+		universe.newNation(name);
 	}
 
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException {
+		World world = Bukkit.getWorld(name);
 		
-		/*
-		 * try {
-		 * filteredName = checkAndFilterName(name);
-		 * } catch (InvalidNameException e) {
-		 * throw new NotRegisteredException(e.getMessage());
-		 * }
-		 */
-		if (universe.getWorldMap().containsKey(name.toLowerCase()))
-			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
-
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(UUID.randomUUID(), name));
+		if (world != null) {
+			try {
+				universe.newWorld(world.getUID(), world.getName());
+			} catch (NotRegisteredException ignore) {
+			}
+		}
 	}
 
 	@Override

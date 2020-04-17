@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
@@ -270,7 +271,11 @@ public class TownyUniverse {
 	}
 	
 	public boolean hasResident(String name) {
-    	return residentNamesMap.containsKey(name.toLowerCase());
+    	try {
+    		return residentNamesMap.containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
+		} catch (InvalidNameException ignored) {
+    		return false;
+		}
 	}
 	
 	public Resident getResident(@NotNull String name) throws NotRegisteredException {
@@ -291,16 +296,68 @@ public class TownyUniverse {
 		return resident;
 	}
 	
+	public List<Resident> getResidents(@NotNull String... residents) {
+    	return getResidents(null, residents);
+	}
+	
+	public List<Resident> getResidents(@Nullable Player errorReceiver, @NotNull String... residents) {
+    	Objects.requireNonNull(residents);
+    	
+    	List<Resident> residentList = new ArrayList<>(residents.length);
+    	
+		for (String residentName : residents) {
+			try {
+				residentList.add(getResident(residentName));
+			} catch (NotRegisteredException ex) {
+				if (errorReceiver != null)
+					TownyMessaging.sendErrorMsg(errorReceiver, ex.getMessage());
+			}
+		}
+    	return residentList;
+	}
+
+	public final Resident newResident(@NotNull Player player) throws AlreadyRegisteredException, NotRegisteredException {
+		Objects.requireNonNull(player);
+		return newResident(player.getUniqueId(), player.getName());
+	}
+
+	public final Resident newResident(@NotNull UUID id, @NotNull String name) throws AlreadyRegisteredException, NotRegisteredException {
+		Objects.requireNonNull(id, name);
+
+		if (residents.containsKey(id)) {
+			throw new AlreadyRegisteredException("The resident id " + id + " is already in use.");
+		}
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterPlayerName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+
+		Resident newResident = new Resident(id, filteredName);
+		newResident.save();
+
+		residents.put(id, newResident);
+		residentNamesMap.put(filteredName.toLowerCase(), newResident);
+		residentsTrie.addKey(filteredName);
+		
+		return newResident;
+	}
+
+	public void updateResidentName(String oldName, String newName) {
+		Resident resident = residentNamesMap.remove(oldName);
+		if (resident != null) {
+			residentsTrie.removeKey(oldName);
+			residentNamesMap.put(newName, resident);
+			residentsTrie.addKey(newName);
+		}
+	}
+	
     @Deprecated
     public Map<String, Resident> getResidentMap() {
         return residentNamesMap;
     }
-    
-    public void updateResidentNameMap(String oldName, String newName) {
-    	Resident resident = residentNamesMap.remove(oldName);
-    	if (resident != null)
-    		residentNamesMap.put(newName, resident);
-	}
     
     @NotNull
     public List<Resident> getResidents() {
@@ -357,6 +414,56 @@ public class TownyUniverse {
 		
 		return t;
 	}
+	
+	public List<Town> getTowns(@NotNull String... names) {
+		Objects.requireNonNull(names);
+		
+		List<Town> matches = new ArrayList<>(names.length);
+		for (String name : names) {
+			try {
+				matches.add(getTown(name));
+			} catch (NotRegisteredException ignored) {
+			}
+		}
+		
+		return matches;
+	}
+
+	/**
+	 * Creates a new {@link Town} and saves it into the database.
+	 *
+	 * @param name The name of the town.
+	 * @throws AlreadyRegisteredException When the name is taken.
+	 * @throws NotRegisteredException When the name is invalid.
+	 */
+	public final Town newTown(@NotNull String name) throws AlreadyRegisteredException, NotRegisteredException {
+		Objects.requireNonNull(name);
+		
+		// Check if name is valid.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		// Check if name already exists.
+		if (townNamesMap.containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+
+		// Create new town and save it.
+		Town newTown = new Town(UUID.randomUUID(), filteredName);
+
+		// Save town
+		newTown.save();
+
+		// Add town to memory.
+		towns.put(newTown.getUniqueIdentifier(), newTown);
+		townNamesMap.put(filteredName.toLowerCase(), newTown);
+		townsTrie.addKey(filteredName);
+		
+		return newTown;
+	}
 
 	public List<Town> getTowns() {
 		return new ArrayList<>(towns.values());
@@ -405,6 +512,46 @@ public class TownyUniverse {
 
 		return n;
 	}
+
+	public List<Nation> getNations(@NotNull String... names) { 
+		Objects.requireNonNull(names); 
+		
+		List<Nation> matches = new ArrayList<>(names.length);
+		for (String name : names) {
+			try {
+				matches.add(getNation(name));
+			} catch (NotRegisteredException ignored) {
+			}
+		}
+		return matches;
+	}
+
+	public Nation newNation(@NotNull String name) throws AlreadyRegisteredException, NotRegisteredException {
+		Objects.requireNonNull(name);
+		
+		// Validate name
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+
+		if (nationNamesMap.containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+
+		Nation newNation = new Nation(UUID.randomUUID(), filteredName);
+		
+		// Save nation
+		newNation.save();
+		
+		// Add nation to memory
+		nations.put(newNation.getUniqueIdentifier(), newNation);
+		nationNamesMap.put(filteredName.toLowerCase(), newNation);
+		nationsTrie.addKey(filteredName);
+		
+		return newNation;
+	}
 	
 	public List<Nation> getNations() {
 		return new ArrayList<>(nations.values());
@@ -437,6 +584,53 @@ public class TownyUniverse {
 		}
     	
     	return world;
+	}
+
+	public TownyWorld getTownWorld(Town town) {
+		TownyWorld firstWorld = null;
+		for (TownyWorld world : worlds.values()) {
+			if (firstWorld == null)
+				firstWorld = world;
+			
+			if (world.hasTown(town))
+				return world;
+		}
+
+		// If this has failed the Town has no land claimed at all but should be given a world regardless.
+		return firstWorld;
+	}
+	
+	public TownyWorld getTownWorld(String townName) {
+		try {
+			getTownWorld(getTown(townName));
+		} catch (NotRegisteredException ignore) {
+		}
+
+		// If this has failed the Town has no land claimed at all but should be given a world regardless.
+		for (TownyWorld value : worlds.values()) {
+			return value;
+		}
+		return null;
+	}
+
+	public final void newWorld(UUID id, String name) throws AlreadyRegisteredException, NotRegisteredException {
+		// Get bukkit world.
+		World world = Bukkit.getWorld(id);
+
+		if (world == null) {
+			throw new NotRegisteredException("World doesn't exist");
+		}
+
+		if (worlds.containsKey(id)) {
+			throw new AlreadyRegisteredException("The world with uuid " + id + " is already in use.");
+		}
+
+		UUID uuid = world.getUID();
+		TownyWorld newWorld = new TownyWorld(uuid, name);
+		newWorld.save();
+
+		worlds.put(uuid, newWorld);
+		worldNameMap.put(name, newWorld);
 	}
 	
 	public List<TownyWorld> getWorlds() { return new ArrayList<>(worlds.values()); }
@@ -646,45 +840,6 @@ public class TownyUniverse {
 		town.addPlotGroup(newGroup);
 		
 		return newGroup;
-	}
-
-	public final void newWorld(UUID id, String name) throws AlreadyRegisteredException, NotRegisteredException {
-		// Get bukkit world.
-		World world = Bukkit.getWorld(id);
-
-		if (world == null) {
-			throw new NotRegisteredException("World doesn't exist");
-		}
-
-		if (worlds.containsKey(id)) {
-			throw new AlreadyRegisteredException("The world with uuid " + id + " is already in use.");
-		}
-
-		UUID uuid = world.getUID();
-		TownyWorld newWorld = new TownyWorld(uuid, name);
-		newWorld.save();
-
-		worlds.put(uuid, newWorld);
-		worldNameMap.put(name, newWorld);
-	}
-
-	public final void newResident(@NotNull Player player) throws AlreadyRegisteredException {
-		Objects.requireNonNull(player);
-		newResident(player.getUniqueId(), player.getName());
-	}
-
-	public final void newResident(@NotNull UUID id, @NotNull String name) throws AlreadyRegisteredException {
-		Objects.requireNonNull(id, name);
-
-		if (residents.containsKey(id)) {
-			throw new AlreadyRegisteredException("The resident id " + id + " is already in use.");
-		}
-
-		Resident newResident = new Resident(id, name);
-		newResident.save();
-		
-		residents.put(id, newResident);
-		residentNamesMap.put(name.toLowerCase(), newResident);
 	}
 	
 	public UUID generatePlotGroupID() {

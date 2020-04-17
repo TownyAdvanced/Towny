@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -1199,7 +1200,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * "[Towny] InputError: This command was designed for use in game only."
 				 * ); return; }
 				 */
-				NationCommand.nationAdd(nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+				NationCommand.nationAdd(nation, townyUniverse.getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {
@@ -1339,9 +1340,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 					if (split[2].equalsIgnoreCase("npc")) {
 						String name = nextNpcName();
-						townyUniverse.getDataSource().newResident(name);
-
-						newMayor = townyUniverse.getResident(name);
+						newMayor = townyUniverse.newResident(UUID.randomUUID(), name);
 
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
