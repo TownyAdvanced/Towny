@@ -67,7 +67,10 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     
     private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
+
+	
+
+	private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
@@ -429,8 +432,8 @@ public class TownyUniverse {
 	
 	public List<TownyWorld> getWorlds() { return new ArrayList<>(worlds.values()); }
 	
-    public Map<UUID, TownyWorld> getWorldMap() {
-        return worlds;
+    public Map<String, TownyWorld> getWorldMap() {
+        return worldNameMap;
     }
     
     public TownyDataSource getDataSource() {
@@ -735,4 +738,9 @@ public class TownyUniverse {
 	public DatabaseHandler getDatabaseHandler() {
 		return databaseHandler;
 	}
+
+	public Map<String, TownyWorld> getWorldNameMap() {
+		return worldNameMap;
+	}
 }
+
