@@ -27,6 +27,7 @@ import com.palmergames.util.Trie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import javax.naming.InvalidNameException;
@@ -38,6 +39,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -657,6 +659,26 @@ public class TownyUniverse {
 		newWorld.save();
 
 		worlds.put(uuid, newWorld);
+		worldNameMap.put(name, newWorld);
+	}
+
+	public final void newResident(@NotNull Player player) throws AlreadyRegisteredException {
+		Objects.requireNonNull(player);
+		newResident(player.getUniqueId(), player.getName());
+	}
+
+	public final void newResident(@NotNull UUID id, @NotNull String name) throws AlreadyRegisteredException {
+		Objects.requireNonNull(id, name);
+
+		if (residents.containsKey(id)) {
+			throw new AlreadyRegisteredException("The resident id " + id + " is already in use.");
+		}
+
+		Resident newResident = new Resident(id, name);
+		newResident.save();
+		
+		residents.put(id, newResident);
+		residentNamesMap.put(name.toLowerCase(), newResident);
 	}
 	
 	public UUID generatePlotGroupID() {

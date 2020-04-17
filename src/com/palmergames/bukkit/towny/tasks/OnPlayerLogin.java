@@ -46,14 +46,15 @@ public class OnPlayerLogin implements Runnable {
 	public void run() {
 		
 		Resident resident = null;
-
+		TownyMessaging.sendErrorMsg(universe.getResidents().toString());
 		if (!universe.hasResident(player.getName())) {
+			TownyMessaging.sendErrorMsg("UH OH");
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
 			 */
 			try {
-				universe.getDatabaseHandler().newResident(player);
+				universe.newResident(player);
 				resident = universe.getResident(player.getUniqueId());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
@@ -79,6 +80,7 @@ public class OnPlayerLogin implements Runnable {
 			 */
 			try {
 				resident = universe.getResident(player.getUniqueId());
+				TownyMessaging.sendErrorMsg("Resdient = " + resident);
 				if (TownySettings.isUsingEssentials()) {
 					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 					/*
@@ -93,25 +95,25 @@ public class OnPlayerLogin implements Runnable {
 				
 			} catch (NotRegisteredException ex) {
 				// Should never happen
+				ex.printStackTrace();
 			}
 		}
 
-		if (resident != null)
-			
+		if (resident != null) {
 			TownyPerms.assignPermissions(resident, player);
+		}
 		
-			try {
-				if (TownySettings.getShowTownBoardOnLogin()) {
-					TownyMessaging.sendTownBoard(player, resident.getTown());
-				}
-				if (TownySettings.getShowNationBoardOnLogin()) {
-					if (resident.getTown().hasNation()) {
-						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
-					}
-				}
-				resident.getTown(); // Exception check, this does not do anything at all!
-			} catch (NotRegisteredException ignored) {
+		try {
+			if (TownySettings.getShowTownBoardOnLogin()) {
+				TownyMessaging.sendTownBoard(player, resident.getTown());
 			}
+			if (TownySettings.getShowNationBoardOnLogin()) {
+				if (resident.getTown().hasNation()) {
+					TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+				}
+			}
+				resident.getTown(); // Exception check, this does not do anything at all!
+		} catch (NotRegisteredException ignored) {}
 
 		if (TownyAPI.getInstance().isWarTime()) {
 			universe.getWarEvent().sendScores(player, 3);
