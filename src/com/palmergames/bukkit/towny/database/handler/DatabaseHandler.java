@@ -225,6 +225,16 @@ public abstract class DatabaseHandler {
 		}
 	}
 	
+	public void loadWorlds() {
+		for (World world : Bukkit.getServer().getWorlds()) {
+			try {
+				newWorld(world.getName());
+			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public abstract <T> T load(File file, Class<T> clazz);
 	
 	public <T> String toFileString(Object obj, Type type) {

@@ -157,6 +157,9 @@ public class TownyUniverse {
                 dataSource.saveAll();
             }
             
+            // Load all the world files in.
+            databaseHandler.loadWorlds();
+            
             databaseHandler.loadAll();
             
         } catch (UnsupportedOperationException e) {

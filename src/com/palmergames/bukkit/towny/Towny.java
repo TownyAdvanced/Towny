@@ -221,8 +221,8 @@ public class Towny extends JavaPlugin {
 		
 		ReflectionUtil.dump(resident);
 		
-		Resident loadedResident = TownyUniverse.getInstance().getDatabaseHandler().getResidents().get(0);
-		ReflectionUtil.dump(loadedResident);
+		//Resident loadedResident = TownyUniverse.getInstance().getDatabaseHandler().getResidents().get(0);
+		//ReflectionUtil.dump(loadedResident);
 		//ReflectionUtil.dump(loadedTown);
 		// ------------------- TESTING CODE -------------------
 	}
