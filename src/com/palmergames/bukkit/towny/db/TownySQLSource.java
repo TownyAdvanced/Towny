@@ -1117,28 +1117,28 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 nation.setPublic(rs.getBoolean("isPublic"));
                 
                 nation.setOpen(rs.getBoolean("isOpen"));
-            }
-            try {
-                line = rs.getString("registered");
-                if (line != null) {
-                    nation.setRegistered(Long.valueOf(line));
-                } else {
+
+                try {
+                    line = rs.getString("registered");
+                    if (line != null) {
+                        nation.setRegistered(Long.valueOf(line));
+                    } else {
+                        nation.setRegistered(0);
+                    }
+                } catch (SQLException ignored) {
+                } catch (NumberFormatException | NullPointerException e) {
                     nation.setRegistered(0);
                 }
-            } catch (SQLException ignored) {
-            } catch (NumberFormatException | NullPointerException e) {
-                nation.setRegistered(0);
+
+    			try {
+    				line = rs.getString("metadata");
+    				if (line != null && !line.isEmpty()) {
+    					nation.setMetadata(line);
+    				}
+    			} catch (SQLException ignored) {
+
+    			}
             }
-
-			try {
-				line = rs.getString("metadata");
-				if (line != null && !line.isEmpty()) {
-					nation.setMetadata(line);
-				}
-			} catch (SQLException ignored) {
-
-			}
-
             s.close();
             return true;
         } catch (SQLException e) {
