@@ -326,7 +326,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<String> formatedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
-		for (TownyWorld world : TownyUniverse.getInstance().getDatabaseHandler().getWorlds()) {
+		for (TownyWorld world : TownyUniverse.getInstance().getWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}

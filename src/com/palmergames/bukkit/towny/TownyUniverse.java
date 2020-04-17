@@ -333,7 +333,16 @@ public class TownyUniverse {
 	public boolean hasTown(String name) {
     	return townNamesMap.containsKey(name);
 	}
-	
+
+	/**
+	 * Fetches the {@link Town} from the memory cache.
+	 *
+	 * Note: This is fetch is not the most accurate, and 
+	 * should only be used when in the context of a command.
+	 *
+	 * @param name The name of the town.
+	 * @return The town with the name, null otherwise.
+	 */
 	public Town getTown(String name) throws NotRegisteredException {
 
 		try {
@@ -576,12 +585,11 @@ public class TownyUniverse {
 	 * @return PlotGroup if found, null if none found.
 	 */
 	public PlotGroup getGroup(UUID townID, UUID groupID) {
-		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(townID);
-
-		if (t != null) {
-			return t.getObjectGroupFromID(groupID);
+		try {
+			return getTown(townID).getObjectGroupFromID(groupID);
+		} catch (NotRegisteredException ignore) {
 		}
-
+		
 		return null;
 	}
 
@@ -595,10 +603,9 @@ public class TownyUniverse {
 	 */
 	@Deprecated
 	public PlotGroup getGroup(String townName, UUID groupID) {
-		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(townName);
-
-		if (t != null) {
-			return t.getObjectGroupFromID(groupID);
+		try {
+			return getTown(townName).getObjectGroupFromID(groupID);
+		} catch (NotRegisteredException ignore) {
 		}
 		
 		return null;
@@ -612,10 +619,9 @@ public class TownyUniverse {
 	 * @return the plot group if found, otherwise null
 	 */
 	public PlotGroup getGroup(String townName, String groupName) {
-		Town t = towns.get(townName);
-
-		if (t != null) {
-			return t.getPlotObjectGroupFromName(groupName);
+		try {
+			return getTown(townName).getPlotObjectGroupFromName(groupName);
+		} catch (NotRegisteredException ignore) {
 		}
 
 		return null;

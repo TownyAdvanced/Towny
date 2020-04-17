@@ -277,14 +277,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	@Override
 	public TownyWorld getTownWorld(String townName) {
-
-		for (TownyWorld world : universe.getWorldMap().values()) {
+		List<TownyWorld> townyWorlds = universe.getWorlds();
+		
+		for (TownyWorld world : townyWorlds) {
 			if (world.hasTown(townName))
 				return world;
 		}
 
 		// If this has failed the Town has no land claimed at all but should be given a world regardless.
-		return universe.getDatabaseHandler().getWorlds().get(0);
+		return townyWorlds.get(0);
 	}
 
 	@Override

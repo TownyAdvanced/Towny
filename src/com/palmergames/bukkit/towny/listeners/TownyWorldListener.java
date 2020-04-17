@@ -189,7 +189,7 @@ public class TownyWorldListener implements Listener {
 			return;
 		}
 		try {
-			if (!TownyUniverse.getInstance().getDatabaseHandler().getWorld(event.getWorld().getName()).isUsingTowny()) {
+			if (!TownyUniverse.getInstance().getWorld(event.getWorld().getName()).isUsingTowny()) {
 				return;
 			}
 		} catch (Exception ignored) {}

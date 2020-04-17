@@ -126,7 +126,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		
 		// Reduce conquered towns' conqueredDays
-		for (Town towns : TownyUniverse.getInstance().getDatabaseHandler().getTowns()) {
+		for (Town towns : TownyUniverse.getInstance().getTowns()) {
 			if (towns.isConquered()) {
 				if (towns.getConqueredDays() == 1) {
 					towns.setConquered(false);
@@ -151,10 +151,10 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
-		TownyMessaging.sendDebugMsg("    Residents: " + townyUniverse.getDatabaseHandler().getResidents().size());
-		TownyMessaging.sendDebugMsg("    Towns: " + townyUniverse.getDatabaseHandler().getTowns().size());
+		TownyMessaging.sendDebugMsg("    Residents: " + townyUniverse.getResidents().size());
+		TownyMessaging.sendDebugMsg("    Towns: " + townyUniverse.getTowns().size());
 		TownyMessaging.sendDebugMsg("    Nations: " + townyUniverse.getNations().size());
-		for (TownyWorld world : townyUniverse.getDatabaseHandler().getWorlds())
+		for (TownyWorld world : townyUniverse.getWorlds())
 			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + townyUniverse.getTownBlocks().size());
 
 		TownyMessaging.sendDebugMsg("Memory (Java Heap):");
@@ -246,7 +246,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectTownTaxes() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		List<Town> towns = new ArrayList<>(townyUniverse.getDatabaseHandler().getTowns());
+		List<Town> towns = new ArrayList<>(townyUniverse.getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -304,7 +304,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							
 							// reset this resident and remove him from the town.
 							resident.clear();
-							townyUniverse.getDatabaseHandler().save(town);
+							town.save();
 							
 						} catch (EmptyTownException e) {
 							
@@ -386,7 +386,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	public void collectTownCosts() throws EconomyException, TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Town> towns = new ArrayList<>(townyUniverse.getDatabaseHandler().getTowns());
+		List<Town> towns = new ArrayList<>(townyUniverse.getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 

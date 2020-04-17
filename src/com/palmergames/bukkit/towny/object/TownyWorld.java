@@ -74,8 +74,11 @@ public class TownyWorld extends TownyObject {
 
 	@Deprecated
 	public boolean hasTown(String name) {
-		Town t = TownyUniverse.getInstance().getDatabaseHandler().getTown(name);
-		return t != null && hasTown(t.getUniqueIdentifier());
+		try {
+			return hasTown(TownyUniverse.getInstance().getTown(name));
+		} catch (NotRegisteredException e) {
+		}
+		return false;
 	}
 
 	public boolean hasTown(Town town) {

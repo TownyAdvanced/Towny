@@ -193,7 +193,7 @@ public class TownyPlayerListener implements Listener {
 			Resident resident = townyUniverse.getResident(event.getPlayer().getName());
 			// If player is jailed send them to their jailspawn.
 			if (resident.isJailed()) {
-				Town respawnTown = townyUniverse.getDatabaseHandler().getTown(resident.getJailTown());
+				Town respawnTown = townyUniverse.getTown(resident.getJailTown());
 				respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
 				event.setRespawnLocation(respawn);
 			}
@@ -1021,10 +1021,10 @@ public class TownyPlayerListener implements Listener {
 				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 				if (title.contains("{wilderness}")) {
-					title = title.replace("{wilderness}", townyUniverse.getDatabaseHandler().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					title = title.replace("{wilderness}", townyUniverse.getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
 				}
 				if (subtitle.contains("{wilderness}")) {
-					subtitle = subtitle.replace("{wilderness}", townyUniverse.getDatabaseHandler().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					subtitle = subtitle.replace("{wilderness}", townyUniverse.getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
 				}
 				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 			}			

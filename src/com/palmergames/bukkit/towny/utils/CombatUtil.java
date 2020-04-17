@@ -48,7 +48,7 @@ public class CombatUtil {
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
 
 		try {
-			TownyWorld world = TownyUniverse.getInstance().getDatabaseHandler().getWorld(defender.getWorld().getName());
+			TownyWorld world = TownyUniverse.getInstance().getWorld(defender.getWorld().getName());
 
 			// World using Towny
 			if (!world.isUsingTowny())

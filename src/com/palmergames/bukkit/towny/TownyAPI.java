@@ -289,7 +289,7 @@ public class TownyAPI {
      */
     public List<Resident> getActiveResidents() {
         List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getDatabaseHandler().getResidents()) {
+        for (Resident resident : townyUniverse.getResidents()) {
             if (isActiveResident(resident)) {
                 activeResidents.add(resident);
             }

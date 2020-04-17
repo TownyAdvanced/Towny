@@ -145,12 +145,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 			Player player = (Player) sender;
+			
+			TownyWorld townyWorld;
 
-			if (TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getUID()) == null) {
+			try {
+				townyWorld = TownyUniverse.getInstance().getWorld(player.getWorld().getUID());
+			} catch (NotRegisteredException e) {
 				return false;
 			}
 
-			if (!TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getWorld().getUID()).isUsingTowny()) {
+			if (!townyWorld.isUsingTowny()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_set_use_towny_off"));
 				return false;
 			}
@@ -553,7 +557,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 					} else {
 						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDatabaseHandler().getWorld(player.getLocation().getWorld().getName())));
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getWorld(player.getLocation().getWorld().getName())));
 						} else {
 							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
@@ -745,7 +749,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 							
 
-						for (String material : townyUniverse.getDatabaseHandler().getWorld(world).getPlotManagementMayorDelete())
+						for (String material : townyUniverse.getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
 								player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
