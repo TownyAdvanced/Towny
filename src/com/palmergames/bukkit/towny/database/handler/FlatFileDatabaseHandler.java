@@ -219,12 +219,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
-
-			// Store data.
-			worlds.put(id, loadedWorld);
-
-			// Cache name data.
-			worldNameMap.put(loadedWorld.getName().toLowerCase(), loadedWorld);
 		}
 	}
 

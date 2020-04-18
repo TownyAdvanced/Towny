@@ -67,21 +67,6 @@ public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
 	protected static final HashMap<String,String> replacementKeys = new HashMap<>();
 	
-	protected final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
-	protected final Map<UUID, Nation> nations = new ConcurrentHashMap<>();
-	protected final Map<UUID, Town> towns = new ConcurrentHashMap<>();
-	protected final Map<UUID, TownBlock> townblocks = new ConcurrentHashMap<>();
-	protected final Map<UUID, Resident> residents = new ConcurrentHashMap<>();
-	
-	// While we are keying with respect to UUID, we still need to hash in objects,
-	// with name keys for accessibility and speed reasons. That being said, these
-	// objects should never be used to justify the relationship between two objects
-	// but instead, mainly for fetching operations where UUID isn't available.
-	protected final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
-	protected final Map<String, Nation> nationNameMap = new ConcurrentHashMap<>();
-	protected final Map<String, Town> townNameMap = new ConcurrentHashMap<>();
-	protected final Map<String, Resident> residentNameMap = new ConcurrentHashMap<>();
-
 	private final Trie townsTrie = new Trie();
 	
 	static {
