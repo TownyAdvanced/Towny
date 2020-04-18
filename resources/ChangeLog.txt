@@ -4499,3 +4499,5 @@ v0.92.0.11:
   - Fixed loading townblocks that do not use the config's current town_block_size.
     - These townblocks will not be loaded into memory, but will remain in the database in case someone switches their town_block_size without realizing what it would do.
     - Closes #3924.
+  - Fixed ChunkNotifications in the action_bar set to last for 3 or less seconds causing NPEs.
+    - Closes #3923.
