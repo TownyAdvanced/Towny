@@ -25,16 +25,12 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
-import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -45,13 +41,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.sql.JDBCType;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -186,6 +179,7 @@ public abstract class DatabaseHandler {
 	}
 	
 	public abstract void save(Saveable obj);
+	public abstract boolean delete(Saveable obj);
 	
 	public void save(Saveable @NotNull ... objs) {
 		for (Saveable obj : objs) {
@@ -221,8 +215,6 @@ public abstract class DatabaseHandler {
 			}
 		}
 	}
-	
-	public abstract <T> T load(File file, Class<T> clazz);
 	
 	public <T> String toFileString(Object obj, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);

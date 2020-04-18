@@ -51,6 +51,19 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
+	public boolean delete(Saveable obj) {
+		Validate.notNull(obj);
+		
+		File objFile = obj.getSavePath();
+		if (objFile.exists()) {
+			return objFile.delete();
+		} else {
+			TownyMessaging.sendErrorMsg("Cannot delete: " + objFile + ", it does not exist.");
+			return false;
+		}
+		
+	}
+	
 	@Nullable
 	public <T> T load(File file, @NotNull Class<T> clazz) {
 		Constructor<T> objConstructor = null;
