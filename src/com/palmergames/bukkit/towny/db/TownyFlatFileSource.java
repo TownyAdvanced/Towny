@@ -253,6 +253,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
 		File[] worldFolders = townblocksFolder.listFiles();
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
+		boolean mismatched = false;
+		int mismatchedCount = 0;
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
@@ -272,6 +274,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						continue;
 					}
 					String[] coords = townBlockFile.getName().split("_");
+					String[] size = coords[2].split("\\.");
+					// Do not load a townBlockFile if it does not use teh currently set town_block_size.
+					if (Integer.parseInt(size[0]) != TownySettings.getTownBlockSize()) {
+						mismatched = true;
+						mismatchedCount++;
+						continue;
+					}
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
 	                TownBlock townBlock = new TownBlock(x, z, world);
@@ -280,6 +289,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 				TownyMessaging.sendDebugMsg("World: " + worldName + " loaded " + total + " townblocks.");
 			}
+			if (mismatched)
+				TownyMessaging.sendDebugMsg(String.format("%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.", mismatchedCount));
+
 			return true;
 		} catch (Exception e1) {
 			e1.printStackTrace();

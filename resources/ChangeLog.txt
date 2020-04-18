@@ -4496,3 +4496,6 @@ v0.92.0.11:
   - Unify code called when explosions are being reverted and ProtectionRegenTasks are created.
   - Explosion code clean up.
   - Should not be possible to duplicate any block ever again.
+  - Fixed loading townblocks that do not use the config's current town_block_size.
+    - These townblocks will not be loaded into memory, but will remain in the database in case someone switches their town_block_size without realizing what it would do.
+    - Closes #3924.
