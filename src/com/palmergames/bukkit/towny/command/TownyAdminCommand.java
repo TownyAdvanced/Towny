@@ -63,7 +63,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -1335,12 +1334,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else
 				try {
-					Resident newMayor;
+					Resident newMayor = null;
 					Town town = townyUniverse.getTown(split[1]);
 
 					if (split[2].equalsIgnoreCase("npc")) {
 						String name = nextNpcName();
-						newMayor = townyUniverse.newResident(UUID.randomUUID(), name);
+						newMayor = townyUniverse.newNPC(name);
 
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);

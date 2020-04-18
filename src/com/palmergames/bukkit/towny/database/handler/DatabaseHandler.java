@@ -246,11 +246,19 @@ public abstract class DatabaseHandler {
 			return "null";
 		}
 		
+		if (obj.getClass().isEnum()) {
+			return ((Enum<?>) obj).name();
+		}
+		
 		if (adapter == null) {
 			return obj.toString();
 		}
 		
 		return adapter.getFileFormat((T) obj);
+	}
+	
+	public <T extends Enum<T>> String getEnumString(Enum<T> enumVal) {
+		return "" + enumVal.ordinal();
 	}
 	
 	public <T> SQLData toSQL(Object obj, Type type) {
@@ -379,7 +387,7 @@ public abstract class DatabaseHandler {
 		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
 		Collection<Nation> nations = townyUniverse.getNationsMap().values();
 		Collection<Town> towns = townyUniverse.getTownsMap().values();
-		Collection<TownBlock> townBlocks = townyUniverse.getTownBlocks().values();
+		Collection<TownBlock> townBlocks = townyUniverse.getTownBlocks();
 		
 		// MANUALLY Save older data items.
 		save(worlds);
@@ -400,16 +408,25 @@ public abstract class DatabaseHandler {
 	public abstract Resident loadResident(UUID id);
 	public abstract Nation loadNation(UUID id);
 	public abstract TownyWorld loadWorld(UUID id);
+	public abstract TownBlock loadTownBlock(UUID id);
 	public abstract void loadAllResidents();
 	public abstract void loadAllWorlds();
+	public abstract void loadAllTowns();
+	public abstract void loadAllTownBlocks();
 	
 	public void loadAll() {
-		
-		// 1.) Load Residents
-		loadAllResidents();
-		
-		// 2.) Load Townblocks
+
+		// 1.) Load Worlds
 		loadAllWorlds();
+
+		// 2.) Load Towns
+		loadAllTowns();
+		
+		// 3. Load TownBlocks
+		loadAllTownBlocks();
+
+		// 4.) Load Residents
+		loadAllResidents();
 	}
 	
 	public abstract void load();

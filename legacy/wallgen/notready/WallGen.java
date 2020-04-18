@@ -15,7 +15,7 @@ public class WallGen {
 	public static boolean deleteTownWall(TownyWorld world, Town town) {
 		BlockQueue blockQueue = BlockQueue.getInstance();
 		//Delete old wall
-		//ArrayList<TownBlock> townblocks = world.getTownBlocks(town);
+		//ArrayList<TownBlock> townblocks = world._getTownBlocks(town);
 		for (WallSection wb : town.wall.sections) {
 			for (int z = 0; z < 4; z++) {
 				//for (int y = 0; y < town.wall.walkwayHeight+topSection-(int)wb.p.y; y++) {

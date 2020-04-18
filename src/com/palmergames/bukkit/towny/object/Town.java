@@ -44,13 +44,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private List<Resident> residents = new ArrayList<>();
+	private transient List<Resident> residents = new ArrayList<>();
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
 	
-	@LoadSetter(setterName = "setMayor")
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
@@ -799,7 +798,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 //		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
 //			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
-//				world.removeTownBlocks(getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
+//				world.removeTownBlocks(_getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
 //				world.removeTown(this);
 //			}
 //		} catch (NotRegisteredException e) {
@@ -1070,7 +1069,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		out.add(getTreeDepth(depth + 1) + "Bonus: " + bonusBlocks);
 		out.add(getTreeDepth(depth + 1) + "TownBlocks (" + getTownBlocks().size() + "): " /*
 																						 * +
-																						 * getTownBlocks
+																						 * _getTownBlocks
 																						 * (
 																						 * )
 																						 */);
@@ -1531,7 +1530,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	@Override
 	public File getSavePath() {
-		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns");
+		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns" + File.separator + getUniqueIdentifier() + ".txt");
 	}
 
 	@Override

@@ -78,7 +78,6 @@ public enum TownBlockType {
 
 	@Override
 	public String toString() {
-
 		return name;
 	}
 

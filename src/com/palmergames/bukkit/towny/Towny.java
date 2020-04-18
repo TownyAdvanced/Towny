@@ -38,6 +38,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
@@ -221,8 +222,10 @@ public class Towny extends JavaPlugin {
 		
 		ReflectionUtil.dump(resident);
 		
-		//Resident loadedResident = TownyUniverse.getInstance().getDatabaseHandler().getResidents().get(0);
-		//ReflectionUtil.dump(loadedResident);
+		Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		TownBlock loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
+		ReflectionUtil.dump(loadedResident);
+		ReflectionUtil.dump(loadedTownBlock);
 		//ReflectionUtil.dump(loadedTown);
 		// ------------------- TESTING CODE -------------------
 	}

@@ -4,11 +4,11 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.util.FileMgmt;
@@ -32,6 +32,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	@Override
 	public void save(Saveable obj) {
+		// Validation safety
+		Validate.notNull(obj);
+		Validate.notNull(obj.getSavePath(), "You must specify a save path for class: " + obj.getClass().getName());
+		
 		HashMap<String, String> saveMap = new HashMap<>();
 
 		// Get field data.
@@ -53,6 +57,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
 		} catch (NoSuchMethodException e) {
+			TownyMessaging.sendErrorMsg("flag 1");
 			e.printStackTrace();
 		}
 
@@ -61,6 +66,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			Validate.isTrue(objConstructor != null);
 			obj = objConstructor.newInstance((Object) null);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			TownyMessaging.sendErrorMsg("flag 2");
 			e.printStackTrace();
 		}
 
@@ -70,6 +76,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		HashMap<String, String> values = loadFileIntoHashMap(file);
 		for (Field field : fields) {
 			Type type = field.getGenericType();
+			Class<?> classType = field.getType();
 			field.setAccessible(true);
 
 			String fieldName = field.getName();
@@ -78,10 +85,12 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				continue;
 			}
 
-			Object value;
+			Object value = null;
 
 			if (isPrimitive(type)) {
 				value = loadPrimitive(values.get(fieldName), type);
+			} else if (field.getType().isEnum()) {
+				value = loadEnum(values.get(fieldName), classType);
 			} else {
 				value = fromFileString(values.get(fieldName), type);
 			}
@@ -103,12 +112,17 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				}
 				
 			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+				TownyMessaging.sendErrorMsg("flag 3");
 				e.printStackTrace();
 				return null;
 			}
 		}
 		
 		return obj;
+	}
+	
+	private <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
+		return Enum.valueOf((Class<T>)type, str);
 	}
 	
 	// ---------- File Getters ----------
@@ -127,6 +141,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	public File getWorldFile(UUID id) {
 		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds/" + id + ".txt");
+	}
+	
+	public File getTownBlockFile(UUID id) {
+		return new File(Towny.getPlugin().getDataFolder() + "/data/townblocks/" + id + ".txt");
 	}
 
 	// ---------- File Getters ----------
@@ -161,19 +179,20 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	@Override
 	public void loadAllResidents() {
+		TownyMessaging.sendErrorMsg("Called");
 		File resDir = new File(Towny.getPlugin().getDataFolder() + "/data/residents");
 		String[] resFiles = resDir.list((dir, name) -> name.endsWith(".txt"));
-		TownyMessaging.sendErrorMsg(Arrays.toString(resFiles));
 		for (String fileName : resFiles) {
-			TownyMessaging.sendErrorMsg(fileName);
 			String idStr = fileName.replace(".txt", "");
 			UUID id = UUID.fromString(idStr);
 			Resident loadedResident = loadResident(id);
+			TownyMessaging.sendErrorMsg("Called 2");
 			
 			// Store data.
 			try {
-				TownyUniverse.getInstance().newResident(loadedResident.getUniqueIdentifier(), loadedResident.getName());
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg("Called 3");
+				TownyUniverse.getInstance().addResident(loadedResident);
+			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
 		}
@@ -194,13 +213,75 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				TownyMessaging.sendErrorMsg("Could not load" + fileName);
 				continue;
 			}
+			
+			try {
+				TownyUniverse.getInstance().addWorld(loadedWorld);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
 
 			// Store data.
 			worlds.put(id, loadedWorld);
 
 			// Cache name data.
-			worldNameMap.put(loadedWorld.getName(), loadedWorld);
+			worldNameMap.put(loadedWorld.getName().toLowerCase(), loadedWorld);
 		}
+	}
+
+	@Override
+	public void loadAllTowns() {
+		File worldsDir = new File(Towny.getPlugin().getDataFolder() + "/data/towns");
+		String[] townFiles = worldsDir.list((dir, name) -> name.endsWith(".txt"));
+		TownyMessaging.sendErrorMsg(Arrays.toString(townFiles));
+		for (String fileName : townFiles) {
+			TownyMessaging.sendErrorMsg(fileName);
+			String idStr = fileName.replace(".txt", "");
+			UUID id = UUID.fromString(idStr);
+			Town loadedTown = loadTown(id);
+
+			if (loadedTown == null) {
+				TownyMessaging.sendErrorMsg("Could not load" + fileName);
+				continue;
+			}
+
+			// Store data.
+			try {
+				TownyUniverse.getInstance().addTown(loadedTown);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void loadAllTownBlocks() {
+		File worldsDir = new File(Towny.getPlugin().getDataFolder() + "/data/townblocks");
+		String[] townblockFiles = worldsDir.list((dir, name) -> name.endsWith(".txt"));
+		TownyMessaging.sendErrorMsg(Arrays.toString(townblockFiles));
+		for (String fileName : townblockFiles) {
+			TownyMessaging.sendErrorMsg(fileName);
+			String idStr = fileName.replace(".txt", "");
+			UUID id = UUID.fromString(idStr);
+			TownBlock loadedTownBlock = loadTownBlock(id);
+
+			if (loadedTownBlock == null) {
+				TownyMessaging.sendErrorMsg("Could not load" + fileName);
+				continue;
+			}
+
+			// Store data.
+			try {
+				TownyUniverse.getInstance().addTownBlock(loadedTownBlock);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public TownBlock loadTownBlock(UUID id) {
+		File townblockFile = getTownBlockFile(id);
+		return load(townblockFile, TownBlock.class);
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {

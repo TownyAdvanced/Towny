@@ -1566,7 +1566,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
             res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
-            //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
+            //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident._getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
             
 			if (resident.hasMeta())
@@ -1621,7 +1621,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 //			else
 //				twn_hm.put("metadata", "");
 //        
-//            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
+//            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town._getTownBlocks())));
 //            twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
 //            twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#" + town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#" + town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw() : "");
 //            // Outpost Spawns

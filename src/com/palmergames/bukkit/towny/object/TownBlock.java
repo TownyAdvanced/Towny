@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -33,12 +34,16 @@ public class TownBlock extends TownyObject {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField<?>> metadata = null;
-	private PlotGroup plotGroup;
+	private transient HashSet<CustomDataField<?>> metadata = null;
+	private transient PlotGroup plotGroup;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
 	protected boolean isChanged = false;
+	
+	public TownBlock(UUID uniqueIdentifier) {
+		super(uniqueIdentifier);
+	}
 	
 	public TownBlock(UUID uniqueIdentifier, int x, int z, TownyWorld world) {
 		super(uniqueIdentifier);
@@ -491,7 +496,7 @@ public class TownBlock extends TownyObject {
 
 	@Override
 	public File getSavePath() {
-		return null;
+		return new File(Towny.getPlugin().getDataFolder() + "/data/townblocks/" + getUniqueIdentifier() + ".txt");
 	}
 
 	@Override
