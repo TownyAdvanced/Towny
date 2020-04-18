@@ -811,7 +811,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if(split[1].equalsIgnoreCase("rename"))	{
 				
 				if (!NameValidation.isBlacklistName(split[2])) {
-					townyUniverse.getDataSource().renamePlayer(resident, split[2]);
+					resident.rename(split[2]);
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
 				
@@ -956,7 +956,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if (!NameValidation.isBlacklistName(split[2])) {
-					townyUniverse.getDataSource().renameTown(town, split[2]);
+					String newFilteredName;
+					try {
+						newFilteredName = NameValidation.checkAndFilterName(split[2]);
+					} catch (InvalidNameException e) {
+						throw new NotRegisteredException(e.getMessage());
+					}
+
+					if (TownyUniverse.getInstance().hasTown(newFilteredName))
+						throw new AlreadyRegisteredException("The town " + newFilteredName + " is already in use.");
+					
+					town.rename(newFilteredName);
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 					TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 				} else {
@@ -1229,7 +1239,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (!NameValidation.isBlacklistName(split[2])) {
-					townyUniverse.getDataSource().renameNation(nation, split[2]);
+					String filteredNewName;
+
+					try {
+						filteredNewName = NameValidation.checkAndFilterName(split[2]);
+					} catch (InvalidNameException e) {
+						throw new NotRegisteredException(e.getMessage());
+					}
+
+					if (TownyUniverse.getInstance().hasNation(filteredNewName))
+						throw new AlreadyRegisteredException("The nation " + filteredNewName + " is already in use.");
+					
+					nation.rename(filteredNewName);
 					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));

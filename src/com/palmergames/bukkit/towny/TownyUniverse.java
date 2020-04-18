@@ -386,7 +386,7 @@ public class TownyUniverse {
 		Resident resident = residentNamesMap.remove(oldName);
 		if (resident != null) {
 			residentsTrie.removeKey(oldName);
-			residentNamesMap.put(newName, resident);
+			residentNamesMap.put(newName.toLowerCase(), resident);
 			residentsTrie.addKey(newName);
 		}
 	}
@@ -513,8 +513,18 @@ public class TownyUniverse {
 		// Store into memory.
 		towns.put(town.getUniqueIdentifier(), town);
 		townNamesMap.put(town.getName().toLowerCase(), town);
+		townsTrie.addKey(town.getName());
 		
 		return town;
+	}
+
+	public void updateTownName(String oldName, String newName) {
+		Town town = townNamesMap.remove(oldName);
+		if (town != null) {
+			townsTrie.removeKey(oldName);
+			townNamesMap.put(newName.toLowerCase(), town);
+			townsTrie.addKey(newName);
+		}
 	}
 
 	public List<Town> getTowns() {
@@ -603,6 +613,15 @@ public class TownyUniverse {
 		nationsTrie.addKey(filteredName);
 		
 		return newNation;
+	}
+
+	public void updateNationName(String oldName, String newName) {
+		Nation nation = nationNamesMap.remove(oldName);
+		if (nation != null) {
+			nationsTrie.removeKey(oldName);
+			nationNamesMap.put(newName.toLowerCase(), nation);
+			nationsTrie.addKey(newName);
+		}
 	}
 	
 	public List<Nation> getNations() {

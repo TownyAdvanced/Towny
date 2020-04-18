@@ -2563,8 +2563,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 		try {
-			townyUniverse.getDataSource().renameTown(town, newName);
-			town = townyUniverse.getTown(newName);
+			String newFilteredName;
+			try {
+				newFilteredName = NameValidation.checkAndFilterName(newName);
+			} catch (InvalidNameException e) {
+				throw new NotRegisteredException(e.getMessage());
+			}
+
+			if (TownyUniverse.getInstance().hasTown(newFilteredName))
+				throw new AlreadyRegisteredException("The town " + newFilteredName + " is already in use.");
+			
+			town.rename(newFilteredName);
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), player.getName(), town.getName()));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());

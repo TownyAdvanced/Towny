@@ -2,13 +2,16 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -236,6 +239,39 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	
 	public boolean hasJailDays() {
 		return this.jailDays > 0;
+	}
+
+	/**
+	 * Renames the resident to the specified new name.
+	 * NOTE: This method <b>does not</b> perform name validation checks!
+	 *
+	 * @param newName New filtered name of the resident.
+	 */
+	@Override
+	public void rename(String newName) {
+		String oldName = getName();
+		
+		setName(newName);
+		TownyUniverse.getInstance().updateResidentName(oldName, newName);
+
+		if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
+			try {
+				// Remove old account
+				double balance = getAccount().getHoldingBalance();
+				getAccount().removeAccount();
+				// Rename account
+				getAccount().setName(newName);
+				getAccount().setBalance(balance, "Rename Player - Transfer to new account");
+			} catch (EconomyException ignored) {
+			}
+		} else {
+			getAccount().setName(newName);
+		}
+		
+		// Save resident
+		save();
+
+		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, this));
 	}
 
 	public void setTitle(String title) {

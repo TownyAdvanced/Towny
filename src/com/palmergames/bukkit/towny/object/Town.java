@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.SaveGetter;
+import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
@@ -154,6 +155,41 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
+	}
+
+	/**
+	 * Renames the town to the specified new name.
+	 * NOTE: This method <b>does not</b> perform name validation checks!
+	 * 
+	 * @param newName New filtered name of the town.
+	 */
+	@Override
+	public void rename(String newName) {
+		String oldName = getName();
+		
+		TownyUniverse.getInstance().updateTownName(oldName, newName);
+		setName(newName);
+		
+		// Migrate economy account
+		if (TownySettings.isUsingEconomy()) {
+			try {
+				// Delete old account
+				double townBalance = getAccount().getHoldingBalance();
+				if (TownySettings.isEcoClosedEconomyEnabled()) {
+					getAccount().pay(townBalance, "Town Rename");
+				}
+				getAccount().removeAccount();
+				// Rename account
+				getAccount().setName(TownySettings.getTownAccountPrefix() + newName);
+				getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
+			} catch (EconomyException ignored) {
+			}
+		}
+		
+		// Save town
+		save();
+		
+		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, this));
 	}
 	
 	public void setTag(String text) throws TownyException {

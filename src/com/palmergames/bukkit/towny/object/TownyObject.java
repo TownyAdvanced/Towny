@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +32,11 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	// Certain towny objects will override this method
+	public void rename(String newName) {
+		setName(newName);
 	}
 
 	public List<String> getTreeString(int depth) {

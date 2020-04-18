@@ -5,10 +5,12 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.LoadSetter;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
+import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -64,6 +66,40 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	
 	public Nation(UUID uniqueIdentifier, String name) {
 		super(uniqueIdentifier, name);
+	}
+
+	/**
+	 * Renames the nation to the specified new name.
+	 * NOTE: This method <b>does not</b> perform name validation checks!
+	 *
+	 * @param newName New filtered name of the nation.
+	 */
+	@Override
+	public void rename(String newName) {
+		String oldName = getName();
+		
+		setName(newName);
+		TownyUniverse.getInstance().updateNationName(oldName, newName);
+		
+		// Migrate economy
+		if (TownySettings.isUsingEconomy()) {
+			try {
+				double nationBalance = getAccount().getHoldingBalance();
+				if (TownySettings.isEcoClosedEconomyEnabled()) {
+					getAccount().pay(nationBalance, "Nation Rename");
+				}
+				getAccount().removeAccount();
+				// Rename account
+				getAccount().setName(TownySettings.getNationAccountPrefix() + newName);
+				getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
+			} catch (EconomyException ignored) {
+			}
+		}
+		
+		// Save nation
+		save();
+
+		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, this));
 	}
 
 	public void setTag(String text) throws TownyException {

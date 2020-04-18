@@ -534,232 +534,37 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
-
-		lock.lock();
-		
-		String oldName;
-
+		// Perform legacy name checks because they were previously handled by this method.
+		String newFilteredName;
 		try {
-
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
-			} catch (InvalidNameException e) {
-				throw new NotRegisteredException(e.getMessage());
-			}
-
-			if (hasTown(filteredName))
-				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-			// TODO: Delete/rename any invites.
-
-			List<Resident> toSave = new ArrayList<>(town.getResidents());
-			boolean isCapital = false;
-			Nation nation = null;
-			double townBalance = 0.0;
-			oldName = town.getName();
-
-			// Save the towns bank balance to set in the new account.
-			// Clear accounts
-			if (TownySettings.isUsingEconomy())
-				try {
-					townBalance = town.getAccount().getHoldingBalance();					
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.getAccount().pay(townBalance, "Town Rename");
-					} 
-					town.getAccount().removeAccount();
-					
-				} catch (EconomyException ignored) {
-				}
-			UUID oldUUID = town.getUniqueIdentifier();
-			long oldregistration = town.getRegistered();
-
-			// Store the nation in case we have to update the capitol
-			if (town.hasNation()) {
-				nation = town.getNation();
-				isCapital = town.isCapital();
-			}
-
-			TownyWorld world = town.getHomeblockWorld();
-			world.removeTown(town);
-			/*
-			 * Tidy up old files.
-			 * Has to be done here else the town no longer exists
-			 * and the file move command may fail.
-			 */
-			deleteTown(town);
-
-			/*
-			 * Remove the old town from the townsMap
-			 * and rename to the new name
-			 */
-			universe.getTownsTrie().removeKey(town.getName());
-			universe.getTownsMap().remove(town.getName().toLowerCase());
-			town.setName(filteredName);
-			universe.getTownsMap().put(filteredName.toLowerCase(), town);
-			universe.getTownsTrie().addKey(filteredName);
-			world.addTown(town);
-
-			// If this was a nation capitol
-			if (isCapital) {
-				nation.setCapital(town);
-			}
-			
-			town.setRegistered(oldregistration);
-			if (TownySettings.isUsingEconomy()) {
-				try {
-					town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
-					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
-			}
-
-			for (Resident resident : toSave) {
-				saveResident(resident);
-			}
-
-			//search and update all resident's jailTown with new name.
-
-            for (Resident toCheck : getResidents()){
-                    if (toCheck.hasJailTown(oldName)) {
-                        toCheck.setJailTown(newName);
-                        
-                        saveResident(toCheck);
-                    }
-            }
-            
-			// Update all townBlocks with the new name
-
-			for (TownBlock townBlock : town.getTownBlocks()) {
-				//townBlock.setTown(town);
-				saveTownBlock(townBlock);
-			}
-			
-			if (town.hasObjectGroups())
-				for (PlotGroup pg : town.getPlotObjectGroups()) {
-					pg.setTown(town);
-					savePlotGroup(pg);
-				}
-			
-			//saveTown(town);
-			//saveTownList();
-			//savePlotGroupList();
-			saveWorld(town.getHomeblockWorld());
-
-			if (nation != null) {
-				saveNation(nation);
-			}
-
-		} finally {
-			lock.unlock();
+			newFilteredName = NameValidation.checkAndFilterName(newName);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
 		}
 
-		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
+		if (TownyUniverse.getInstance().hasTown(newFilteredName))
+			throw new AlreadyRegisteredException("The town " + newFilteredName + " is already in use.");
+		
+		town.rename(newFilteredName);
 	}
 		
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
-
-		lock.lock();
-
-		String oldName;
+		// Perform legacy name validation check
+		String filteredNewName;
 
 		try {
-
-			String filteredName;
-
-			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
-			} catch (InvalidNameException e) {
-				throw new NotRegisteredException(e.getMessage());
-			}
-
-			if (hasNation(filteredName))
-				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-			// TODO: Delete/rename any invites.
-
-			List<Town> toSave = new ArrayList<>(nation.getTowns());
-			double nationBalance = 0.0;
-
-			// Save the nations bank balance to set in the new account.
-			// Clear accounts
-			if (TownySettings.isUsingEconomy())
-				try {
-					nationBalance = nation.getAccount().getHoldingBalance();
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.getAccount().pay(nationBalance, "Nation Rename");
-					}
-					nation.getAccount().removeAccount();
-					
-				} catch (EconomyException ignored) {
-				}
-
-			UUID oldUUID = nation.getUniqueIdentifier();
-			long oldregistration = nation.getRegistered();
-
-			//Tidy up old files
-			deleteNation(nation);
-
-			/*
-			 * Remove the old nation from the nationsMap
-			 * and rename to the new name
-			 */
-			oldName = nation.getName();
-			universe.getNationsMap().remove(oldName.toLowerCase());
-			universe.getNationsTrie().removeKey(oldName);
-			nation.setName(filteredName);
-			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
-			universe.getNationsTrie().addKey(filteredName);
-
-			if (TownyEconomyHandler.isActive()) {
-				try {
-					nation.getAccount().setName(TownySettings.getNationAccountPrefix() + nation.getName());
-					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			nation.setRegistered(oldregistration);
-
-			for (Town town : toSave) {
-				//saveTown(town);
-			}
-
-			saveNation(nation);
-			saveNationList();
-
-			//search and update all ally/enemy lists
-			Nation oldNation = new Nation(UUID.randomUUID(), oldName);
-			List<Nation> toSaveNation = new ArrayList<>(getNations());
-			for (Nation toCheck : toSaveNation)
-				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
-					try {
-						if (toCheck.hasAlly(oldNation)) {
-							toCheck.removeAlly(oldNation);
-							toCheck.addAlly(nation);
-						} else {
-							toCheck.removeEnemy(oldNation);
-							toCheck.addEnemy(nation);
-						}
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}
-				} else
-					toSave.remove(toCheck);
-
-			for (Nation toCheck : toSaveNation)
-				saveNation(toCheck);
-
-		} finally {
-			lock.unlock();
+			filteredNewName = NameValidation.checkAndFilterName(newName);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
 		}
 
-		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
+		if (hasNation(filteredNewName))
+			throw new AlreadyRegisteredException("The nation " + filteredNewName + " is already in use.");
+		
+		nation.rename(filteredNewName);
 	}
 
 	@Override
@@ -777,147 +582,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException {
-		
-		lock.lock();
-		
-		String oldName = resident.getName();
-		
-		try {
-			
-			//data needed for a new resident
-			double balance = 0.0D;
-			Town town = null;
-			long registered;
-			long lastOnline;
-			boolean isMayor;
-			boolean isJailed;
-			boolean isNPC;
-			int JailSpawn;
-			
-			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
-				try {
-					balance = resident.getAccount().getHoldingBalance();
-					resident.getAccount().removeAccount();
-				} catch (EconomyException ignored) {
-				}				
-			} else {
-				resident.getAccount().setName(newName);
-			}
-			
-			//get data needed for resident
-			List<Resident> friends = resident.getFriends();
-			List<String> nationRanks = resident.getNationRanks();
-			TownyPermission permissions = resident.getPermissions();
-			String surname = resident.getSurname();
-			String title = resident.getTitle();
-			if (resident.hasTown()) {
-				town = resident.getTown();
-			}
-			List<TownBlock> townBlocks = resident.getTownBlocks();
-			List<String> townRanks = resident.getTownRanks();
-			registered = resident.getRegistered();			
-			lastOnline = resident.getLastOnline();
-			isMayor = resident.isMayor();
-			isNPC = resident.isNPC();
-			isJailed = resident.isJailed();			
-			JailSpawn = resident.getJailSpawn();
-			
-			if (resident.isJailed()) {
-				try {
-					universe.getJailedResidentMap().remove(universe.getResident(oldName));
-					universe.getJailedResidentMap().add(universe.getResident(newName));
-				} catch (Exception ignored) {
-				}
-			}
-				
-			
-			//delete the resident and tidy up files
-			deleteResident(resident);
-		
-			//remove old resident from residentsMap
-			//rename the resident
-			universe.getResidentMap().remove(oldName.toLowerCase());
-			universe.getResidentsTrie().removeKey(oldName);
-			resident.setName(newName);
-			universe.getResidentMap().put(newName.toLowerCase(), resident);
-			universe.getResidentsTrie().addKey(newName);
-			
-			//add everything back to the resident
-			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
-				try {
-					resident.getAccount().setName(resident.getName());
-					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}				
-			}
-			resident.setFriends(friends);
-			resident.setNationRanks(nationRanks);
-			resident.setPermissions(permissions.toString()); //not sure if this will work
-			resident.setSurname(surname);
-			resident.setTitle(title);
-			resident.setTown(town);
-			resident.setTownblocks(townBlocks);
-			resident.setTownRanks(townRanks);
-			resident.setRegistered(registered);
-			resident.setLastOnline(lastOnline);
-			if(isMayor){
-				try {
-					town.setMayor(resident);
-				} catch (TownyException ignored) {
-				}
-			}
-			if (isNPC)
-				resident.setNPC(true);
-			resident.setJailed(isJailed);
-			resident.setJailSpawn(JailSpawn);
-			
-			//getString stuff
-			saveResidentList();
-			saveResident(resident);
-			if(town != null){
-			    //saveTown(town);
-		    }
-			for(TownBlock tb: townBlocks){
-				saveTownBlock(tb);				
-			}
-			
-			//search and update all friends lists
-			//followed by outlaw lists
-			Resident oldResident = new Resident(UUID.randomUUID(), oldName);
-			List<Resident> toSaveResident = new ArrayList<>(getResidents());
-			for (Resident toCheck : toSaveResident){
-				if (toCheck.hasFriend(oldResident)) {
-					try {
-						toCheck.removeFriend(oldResident);
-						toCheck.addFriend(resident);
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			for (Resident toCheck : toSaveResident)
-				saveResident(toCheck);
-			
-			List<Town> toSaveTown = new ArrayList<>(getTowns());
-			for (Town toCheckTown : toSaveTown) {
-				if (toCheckTown.hasOutlaw(oldResident)) {
-					try {
-						toCheckTown.removeOutlaw(oldResident);
-						toCheckTown.addOutlaw(resident);
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}					
-				}
-			}
-			for (Town toCheckTown : toSaveTown){}
-				//saveTown(toCheckTown);	
-		
-		} finally {
-			lock.unlock();			
-		}
-		
-		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
+		resident.rename(newName);
 	}
 	
 	/** 

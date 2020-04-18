@@ -2669,7 +2669,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		try {
-			TownyUniverse.getInstance().getDataSource().renameNation(nation, newName);
+			String filteredNewName;
+
+			try {
+				filteredNewName = NameValidation.checkAndFilterName(newName);
+			} catch (InvalidNameException e) {
+				throw new NotRegisteredException(e.getMessage());
+			}
+
+			if (TownyUniverse.getInstance().hasNation(filteredNewName))
+				throw new AlreadyRegisteredException("The nation " + filteredNewName + " is already in use.");
+			
+			nation.rename(filteredNewName);
 			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), nation.getName()));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
