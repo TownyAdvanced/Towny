@@ -214,7 +214,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
 		}
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		//TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	public Town getCapital() {
@@ -367,6 +367,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 				if (tempCapital != null) {
 					setCapital(tempCapital);
+					TownyUniverse.getInstance().getDataSource().saveNation(this);
 				}
 
 			}
@@ -513,6 +514,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (!king.isMayor())
 			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	public boolean hasResident(Resident resident) {

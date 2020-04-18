@@ -4501,3 +4501,4 @@ v0.92.0.11:
     - Closes #3924.
   - Fixed ChunkNotifications in the action_bar set to last for 3 or less seconds causing NPEs.
     - Closes #3923.
+  - Fix mysql DB's nation's losing many of their settings.
