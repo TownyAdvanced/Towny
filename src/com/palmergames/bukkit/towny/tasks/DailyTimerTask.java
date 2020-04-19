@@ -88,7 +88,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Town town : TownyUniverse.getInstance().getTownsMap().values()) {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
-					TownyUniverse.getInstance().getDataSource().removeTown(town);
+					TownyUniverse.getInstance().removeTown(town);
 				}
 			}
 			if (!deletedTowns.isEmpty())
@@ -309,7 +309,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						} catch (EmptyTownException e) {
 							
 							// No mayor so remove the town.
-							townyUniverse.getDataSource().removeTown(town);
+							townyUniverse.removeTown(town);
 							
 						}
 						
@@ -409,7 +409,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (upkeep > 0) {
 						// Town is paying upkeep
 						if (!town.getAccount().pay(upkeep, "Town Upkeep")) {
-							townyUniverse.getDataSource().removeTown(town);
+							townyUniverse.removeTown(town);
 							removedTowns.add(town.getName());
 						}
 					} else if (upkeep < 0) {						
@@ -470,7 +470,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					// Town is paying upkeep
 
 					if (!nation.getAccount().pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
-						townyUniverse.getDataSource().removeNation(nation);
+						townyUniverse.removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {

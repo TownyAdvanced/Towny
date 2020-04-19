@@ -2635,7 +2635,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		try {
 			townRemoveResident(town, resident);
 		} catch (EmptyTownException et) {
-			townyUniverse.getDataSource().removeTown(et.getTown());
+			townyUniverse.removeTown(et.getTown());
 
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2717,7 +2717,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				Confirmation confirmation = new Confirmation(() -> {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-					TownyUniverse.getInstance().getDataSource().removeTown(town);
+					TownyUniverse.getInstance().removeTown(town);
 				});
 				ConfirmationHandler.sendConfirmation(player, confirmation);
 			} catch (TownyException x) {
@@ -2735,7 +2735,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				return;
 			}
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-			townyUniverse.getDataSource().removeTown(town);
+			townyUniverse.removeTown(town);
 		}
 
 	}
@@ -2987,7 +2987,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			TownyMessaging.sendPrefixedNationMessage(town.getNation(), String.format(TownySettings.getLangString("msg_nation_disbanded_town_not_enough_residents"), town.getName()));
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
-			townyUniverse.getDataSource().removeNation(town.getNation());
+			townyUniverse.removeNation(town.getNation());
 
 			if (TownySettings.isRefundNationDisbandLowResidents()) {
 				try {

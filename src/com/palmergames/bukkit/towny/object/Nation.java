@@ -435,7 +435,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 				res.setSurname("");
 			}
 			res.updatePermsForNationRemoval(); // Clears the nationRanks.
-			save();
+			res.save();
 		}
 		
 		towns.remove(town);

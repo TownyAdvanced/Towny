@@ -689,6 +689,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		} else {
 
 			remove(resident);
+			// Save town
+			save();
 
 			if (getNumResidents() == 0) {
 				throw new EmptyTownException(this);
@@ -706,6 +708,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		
 		resident.setTitle("");
 		resident.setSurname("");
+		resident.clearModes();
 		resident.updatePerms();
 
 		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
@@ -768,7 +771,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			e.printStackTrace();
 		}
 		residents.remove(resident);
-		TownyUniverse.getInstance().getDatabaseHandler().save(this);
+		resident.save();
 	}
 
 	public void setSpawn(Location spawn) throws TownyException {
