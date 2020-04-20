@@ -428,7 +428,6 @@ public class TownyUniverse {
 		// This should be called at the end, but to keep legacy behavior call it here.
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 		
-
 		// Remove the resident from resident friends
 		for (Resident toCheck : residents.values()) {
 			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
@@ -443,7 +442,7 @@ public class TownyUniverse {
 			}
 		}
 		// Delete the residents file.
-		// TODO Call database delete method
+		databaseHandler.delete(resident);
 		
 		// Remove the residents record from memory.
 		residents.remove(residentUUID);
@@ -657,7 +656,8 @@ public class TownyUniverse {
 		}
 		townyWorld.save();
 
-		// TODO Call database delete method
+		// Delete town from DB
+		databaseHandler.delete(town);
 		
 		towns.remove(townUUID);
 		townsTrie.removeKey(townName);
@@ -804,7 +804,8 @@ public class TownyUniverse {
 		// The clear method will also remove surnames/titles from residents as well
 		nation.clear();
 		
-		// TODO Call database delete method
+		// Remove nation from DB
+		databaseHandler.delete(nation);
 
 		// Remove from memory
 		nations.remove(nationUUID);
@@ -1221,7 +1222,8 @@ public class TownyUniverse {
 
 		removeTownBlock(townBlock);
 		
-		// TODO Call database delete method
+		// Delete townblock from DB
+		databaseHandler.delete(townBlock);
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
@@ -51,7 +52,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
-	public boolean delete(Saveable obj) {
+	public boolean delete(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 		
 		File objFile = obj.getSavePath();
@@ -288,7 +289,20 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	@Override
 	public TownBlock loadTownBlock(UUID id) {
 		File townblockFile = getTownBlockFile(id);
-		return load(townblockFile, TownBlock.class);
+		
+		TownBlock townBlock = load(townblockFile, TownBlock.class);
+		
+		if (townBlock == null) {
+			return null;
+		}
+		
+		// Attach any loose ends.
+		try {
+			townBlock.getTown().addTownBlock(townBlock);
+			townBlock.getResident().addTownBlock(townBlock);
+		} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
+
+		return townBlock;
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {
