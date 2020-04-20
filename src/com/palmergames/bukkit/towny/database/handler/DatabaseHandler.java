@@ -25,27 +25,21 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
-import com.palmergames.util.Trie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.sql.JDBCType;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,21 +52,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
-	protected static final HashMap<String,String> replacementKeys = new HashMap<>();
-	
-	private final Trie townsTrie = new Trie();
-	
-	static {
-		replacementKeys.put("outpostSpawns", "outpostspawns");
-		replacementKeys.put("adminEnabledPVP", "adminEnabledPvP");
-		replacementKeys.put("adminDisabledPVP", "adminEnabledPvP");
-		replacementKeys.put("isTaxPercentage", "taxpercent");
-		replacementKeys.put("jailSpawns", "jailspawns");
-		replacementKeys.put("permissions", "protectionStatus");
-		replacementKeys.put("isPublic", "public");
-		replacementKeys.put("isOpen", "open");
-		replacementKeys.put("isConquered", "conquered");
-	}
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -91,55 +70,6 @@ public abstract class DatabaseHandler {
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
 		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
 		registerAdapter(Town.class, new TownHandler());
-		
-	}
-	
-	protected boolean isPrimitive(Type type) {
-		boolean primitive = type == int.class || type == Integer.class;
-		primitive |= type == boolean.class || type == Boolean.class;
-		primitive |= type == char.class || type == Character.class;
-		primitive |= type == float.class || type == Float.class;
-		primitive |= type == double.class || type == Double.class;
-		primitive |= type == long.class || type == Long.class;
-		primitive |= type == byte.class || type == Byte.class;
-		
-		return primitive;
-	}
-	
-	public Map<String, ObjectContext> getObjectMap(Saveable obj) {
-		
-		HashMap<String, ObjectContext> dataMap = new HashMap<>();
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
-		
-		for (Field field : fields) {
-			// Open field.
-			field.setAccessible(true);
-			
-			// Get field type
-			Type type = field.getGenericType();
-			
-			// Fetch field value.
-			Object value = null;
-			try {
-				value = field.get(obj);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			String fieldName = field.getName();
-			
-			if (replacementKeys.containsKey(fieldName)) {
-				fieldName = replacementKeys.get(fieldName);
-			}
-			
-			// Place value into map.
-			dataMap.put(fieldName, new ObjectContext(value, type));
-			
-			// Close field up.
-			field.setAccessible(false);
-		}
-		
-		return dataMap;
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -178,34 +108,6 @@ public abstract class DatabaseHandler {
 		return saveMap;
 	}
 	
-	public abstract void save(Saveable obj);
-	public abstract boolean delete(Saveable obj);
-	
-	public void save(Saveable @NotNull ... objs) {
-		for (Saveable obj : objs) {
-			save(obj);
-		}
-	}
-	
-	public void saveSQL(Object obj) {
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
-
-		for (Field field : fields) {
-			Type type = field.getGenericType();
-			field.setAccessible(true);
-
-			Object value = null;
-			try {
-				value = field.get(obj);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			SQLData storedValue = toSQL(value, type);
-			TownyMessaging.sendErrorMsg(field.getName() + "=" + storedValue);
-		}
-	}
-	
 	public void loadWorlds() {
 		for (World world : Bukkit.getServer().getWorlds()) {
 			try {
@@ -234,10 +136,6 @@ public abstract class DatabaseHandler {
 		return adapter.getFileFormat((T) obj);
 	}
 	
-	public <T extends Enum<T>> String getEnumString(Enum<T> enumVal) {
-		return "" + enumVal.ordinal();
-	}
-	
 	public <T> SQLData toSQL(Object obj, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 		
@@ -245,7 +143,7 @@ public abstract class DatabaseHandler {
 			return null;
 		}
 		
-		if (isPrimitive(obj.getClass())) {
+		if (obj.getClass().isPrimitive()) {
 			return getPrimitiveSQL(obj);
 		}
 
@@ -256,7 +154,7 @@ public abstract class DatabaseHandler {
 		return adapter.getSQL((T) obj);
 	}
 	
-	public <T> T fromFileString(String str, Type type) {
+	public final <T> @Nullable T fromFileString(String str, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
@@ -270,7 +168,7 @@ public abstract class DatabaseHandler {
 		return adapter.fromFileFormat(str);
 	}
 	
-	public <T> T fromSQL(Object obj, Class<T> type) {
+	public final  <T> T fromSQL(Object obj, Class<T> type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
@@ -279,7 +177,16 @@ public abstract class DatabaseHandler {
 		
 		return adapter.fromSQL(null);
 	}
-	
+
+	/**
+	 * Registers an adapter to use with loading fields.
+	 * 
+	 * Note: Primitives are handled automatically.
+	 * 
+	 * @param type The type of the object.
+	 * @param typeAdapter The adapter to use with the object.
+	 * @param <T> The parameterized type.
+	 */
 	public <T> void registerAdapter(Type type, Object typeAdapter) {
 		
 		if (!(typeAdapter instanceof SaveHandler || typeAdapter instanceof LoadHandler)) {
@@ -298,26 +205,10 @@ public abstract class DatabaseHandler {
 	private TypeAdapter<?> getAdapter(Type type) {
 		return registeredAdapters.get(type);
 	}
-
-	public HashMap<String, String> loadFileIntoHashMap(File file) {
-		HashMap<String, String> keys = new HashMap<>();
-		try (FileInputStream fis = new FileInputStream(file);
-			 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-			Properties properties = new Properties();
-			properties.load(isr);
-			for (String key : properties.stringPropertyNames()) {
-				String value = properties.getProperty(key);
-				keys.put(key, String.valueOf(value));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return keys;
-	}
 	
-	public final Object loadPrimitive(String str, Type type) {
+	protected final Object loadPrimitive(String str, Type type) {
 		
-		if (!isPrimitive(type)) {
+		if (!ReflectionUtil.isPrimitive(type)) {
 			throw new UnsupportedOperationException(type + " is not primitive, cannot parse");
 		}
 		
@@ -372,7 +263,39 @@ public abstract class DatabaseHandler {
 		save(towns);
 		save(townBlocks);
 	}
-	
+
+	// ---------- DB operation Methods ----------
+
+	/**
+	 * Saves the given object to the DB.
+	 * 
+	 * @param obj The object to save.
+	 */
+	public abstract void save(Saveable obj);
+
+	/**
+	 * Removes the given object from the DB.
+	 * 
+	 * @param obj The object to delete.
+	 * @return A boolean indicating if successful or not.
+	 */
+	public abstract boolean delete(Saveable obj);
+
+	/**
+	 * Saves all given objects to the DB.
+	 * 
+	 * @param objs The objects to save.
+	 */
+	public void save(Saveable @NotNull ... objs) {
+		for (Saveable obj : objs) {
+			save(obj);
+		}
+	}
+	/**
+	 * Saves the objects to the database.
+	 * 
+	 * @param objs The objects to save.
+	 */
 	public void save(Collection<? extends Saveable> objs) {
 		for (Saveable obj : objs) {
 			save(obj);
@@ -381,16 +304,23 @@ public abstract class DatabaseHandler {
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.
+	
+	// ---------- Load Methods ----------
 	public abstract Town loadTown(UUID id);
 	public abstract Resident loadResident(UUID id);
 	public abstract Nation loadNation(UUID id);
 	public abstract TownyWorld loadWorld(UUID id);
 	public abstract TownBlock loadTownBlock(UUID id);
+
+	// ---------- Load All Methods ----------
 	public abstract void loadAllResidents();
 	public abstract void loadAllWorlds();
 	public abstract void loadAllTowns();
 	public abstract void loadAllTownBlocks();
-	
+
+	/**
+	 * Loads all neccesary objects for the database.
+	 */
 	public void loadAll() {
 
 		// 1.) Load Worlds
@@ -405,7 +335,5 @@ public abstract class DatabaseHandler {
 		// 4.) Load Residents
 		loadAllResidents();
 	}
-	
-	public abstract void load();
 	
 }

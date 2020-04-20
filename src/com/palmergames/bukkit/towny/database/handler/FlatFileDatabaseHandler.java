@@ -18,15 +18,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
 public class FlatFileDatabaseHandler extends DatabaseHandler {
@@ -40,7 +45,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		HashMap<String, String> saveMap = new HashMap<>();
 
 		// Get field data.
-		convertMapData(getObjectMap(obj), saveMap);
+		convertMapData(ReflectionUtil.getObjectMap(obj), saveMap);
 		
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
@@ -99,9 +104,9 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				continue;
 			}
 
-			Object value = null;
+			Object value;
 
-			if (isPrimitive(type)) {
+			if (ReflectionUtil.isPrimitive(type)) {
 				value = loadPrimitive(values.get(fieldName), type);
 			} else if (field.getType().isEnum()) {
 				value = loadEnum(values.get(fieldName), classType);
@@ -134,7 +139,24 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		return obj;
 	}
+
+	public HashMap<String, String> loadFileIntoHashMap(File file) {
+		HashMap<String, String> keys = new HashMap<>();
+		try (FileInputStream fis = new FileInputStream(file);
+			 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+			Properties properties = new Properties();
+			properties.load(isr);
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				keys.put(key, String.valueOf(value));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return keys;
+	}
 	
+	@SuppressWarnings("unchecked")
 	private <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
 		return Enum.valueOf((Class<T>)type, str);
 	}
@@ -310,10 +332,5 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			String valueStr = toFileString(entry.getValue().getValue(), entry.getValue().getType());
 			to.put(entry.getKey(), valueStr);
 		}
-	}
-
-	@Override
-	public void load() {
-		
 	}
 }
