@@ -1461,7 +1461,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = townyUniverse.getResident(player.getName());
 				Nation nation = resident.getTown().getNation();
 				Confirmation confirmation = new Confirmation(() -> {
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
+					TownyUniverse.getInstance().removeNation(nation);
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 				});
 				ConfirmationHandler.sendConfirmation(player, confirmation);
@@ -1476,7 +1476,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete_nation"));
 
 				Nation nation = townyUniverse.getNation(split[0]);
-				townyUniverse.getDataSource().removeNation(nation);
+				townyUniverse.removeNation(nation);
 				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());

@@ -228,9 +228,8 @@ public class TownClaim extends Thread {
 			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-
 				
-				townyUniverse.getDataSource().removeTownBlock(townBlock);
+				townyUniverse.unclaimTownBlock(townBlock);
 				
 			}, 1);
 			
@@ -244,8 +243,8 @@ public class TownClaim extends Thread {
 	public static void townUnclaimAll(Towny plugin, final Town town) {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-
-			TownyUniverse.getInstance().getDataSource().removeTownBlocks(town);
+			
+			TownyUniverse.getInstance().unclaimAllTownBlocks(town);
 			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
 
 		}, 1);

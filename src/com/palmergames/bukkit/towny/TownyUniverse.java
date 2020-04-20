@@ -5,7 +5,16 @@ import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
+import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
+import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
+import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -19,7 +28,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -382,6 +394,65 @@ public class TownyUniverse {
 		return resident;
 	}
 
+	public void removeResident(Resident resident) {
+    	String residentName = resident.getName();
+    	UUID residentUUID = resident.getUniqueIdentifier();
+    	
+    	// Check if resident was in a town
+		if (resident.hasTown()) {
+			try {
+				Town town = resident.getTown();
+				// Clear the resident (removes the resident from the town too)
+				try {
+					resident.clear();
+				} catch (EmptyTownException e) {
+					removeTown(town);
+				}
+			} catch (NotRegisteredException e1) {
+				// Should never get thrown
+				e1.printStackTrace();
+			}
+		}
+
+		// Remove the resident from outlaws in different towns
+		try {
+			for (Town townOutlaw : towns.values()) {
+				if (townOutlaw.hasOutlaw(resident)) {
+					townOutlaw.removeOutlaw(resident);
+				}
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
+		// This should be called at the end, but to keep legacy behavior call it here.
+		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
+		
+
+		// Remove the resident from resident friends
+		for (Resident toCheck : residents.values()) {
+			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
+			if (toCheck.hasFriend(resident)) {
+				try {
+					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
+					toCheck.removeFriend(resident);
+					toCheck.save();
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		// Delete the residents file.
+		// TODO Call database delete method
+		
+		// Remove the residents record from memory.
+		residents.remove(residentUUID);
+		residentNamesMap.remove(residentName.toLowerCase());
+		residentsTrie.removeKey(residentName);
+
+		Towny.getPlugin().deleteCache(residentName);
+	}
+
 	public void updateResidentName(String oldName, String newName) {
 		Resident resident = residentNamesMap.remove(oldName);
 		if (resident != null) {
@@ -527,6 +598,76 @@ public class TownyUniverse {
 		}
 	}
 
+	public void removeTown(Town town) {
+
+		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
+		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled())
+			return;
+		
+		String townName = town.getName();
+		UUID townUUID = town.getUniqueIdentifier();
+
+		unclaimAllTownBlocks(town);
+		
+		TownyWorld townyWorld = town.getHomeblockWorld();
+
+		// Remove town from nation
+		try {
+			if (town.hasNation()) {
+				Nation nation = town.getNation();
+				// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
+				if (nation.hasTown(town)) {
+					nation.removeTown(town);
+				}
+			}
+		} catch (EmptyNationException e) {
+			removeNation(e.getNation());
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			town.clear();
+		} catch (EmptyNationException ignored) {
+			// Will never get called
+		}
+
+		// Look for residents inside of this town's jail and free them
+		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
+			if (jailedRes.hasJailTown(town.getName())) {
+				jailedRes.setJailed(jailedRes, 0, town);
+				jailedRes.save();
+			}
+		}
+
+		if (TownyEconomyHandler.isActive())
+			try {
+				town.getAccount().payTo(town.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.getAccount().removeAccount();
+			} catch (Exception ignored) {
+			}
+
+		try {
+			townyWorld.removeTown(town);
+		} catch (NotRegisteredException e) {
+			// Must already be removed
+		}
+		townyWorld.save();
+
+		// TODO Call database delete method
+		
+		towns.remove(townUUID);
+		townsTrie.removeKey(townName);
+		townNamesMap.remove(townName);
+		
+		Towny.getPlugin().resetCache();
+
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+	}
+
 	public List<Town> getTowns() {
 		return new ArrayList<>(towns.values());
 	}
@@ -622,6 +763,58 @@ public class TownyUniverse {
 			nationNamesMap.put(newName.toLowerCase(), nation);
 			nationsTrie.addKey(newName);
 		}
+	}
+
+	public void removeNation(Nation nation) {
+
+		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation.getName());
+		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled())
+			return;
+		
+		String nationName = nation.getName();
+		UUID nationUUID = nation.getUniqueIdentifier();
+
+		// Search and remove from all ally/enemy lists
+		for (Nation toCheck : nations.values()) {
+			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
+				try {
+					if (toCheck.hasAlly(nation))
+						toCheck.removeAlly(nation);
+					else
+						toCheck.removeEnemy(nation);
+
+					toCheck.save();
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		// Transfer any money to the warchest.
+		if (TownyEconomyHandler.isActive()) {
+			try {
+				nation.getAccount().payTo(nation.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Nation");
+				nation.getAccount().removeAccount();
+			} catch (Exception ignored) {
+			}
+		}
+
+		// The clear method will also remove surnames/titles from residents as well
+		nation.clear();
+		
+		// TODO Call database delete method
+
+		// Remove from memory
+		nations.remove(nationUUID);
+		nationsTrie.removeKey(nationName);
+		nationNamesMap.remove(nationName.toLowerCase());
+		
+
+		Towny.getPlugin().resetCache();
+
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 	}
 	
 	public List<Nation> getNations() {
@@ -998,14 +1191,51 @@ public class TownyUniverse {
 			try {
 				if (townBlock.hasResident())
 					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
+
 				if (townBlock.hasTown())
 					townBlock.getTown().removeTownBlock(townBlock);
 			} catch (NotRegisteredException e) {
 			}
 		}
+	}
+	
+	public void unclaimAllTownBlocks(Town town) {
+		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks())) {
+			unclaimTownBlock(townBlock);
+		}
+	}
+
+	public void unclaimTownBlock(TownBlock townBlock) {
+		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
+		BukkitTools.getPluginManager().callEvent(event);
+
+		if (event.isCancelled())
+			return;
+
+		Town town = null;
+		
+		try {
+			town = townBlock.getTown();
+		} catch (NotRegisteredException ignored) {
+		}
+
+		removeTownBlock(townBlock);
+		
+		// TODO Call database delete method
+
+		if (townBlock.getWorld().isUsingPlotManagementDelete())
+			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
+
+		// Move the plot to be restored
+		if (townBlock.getWorld().isUsingPlotManagementRevert()) {
+			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
+			if (plotData != null && !plotData.getBlockList().isEmpty()) {
+				TownyRegenAPI.addPlotChunk(plotData, true);
+			}
+		}
+		
+		// Raise an event to signal the unclaim
+		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
 	}
 	
 	/**
