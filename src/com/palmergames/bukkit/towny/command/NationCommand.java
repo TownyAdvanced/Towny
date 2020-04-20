@@ -2342,12 +2342,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								nation.setCapital(newCapital);
 								plugin.resetCache();
 								TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+								TownyUniverse.getInstance().getDataSource().saveNation(nation);
 							}
 						// Proximity doesn't factor in.
 						} else {
 							nation.setCapital(newCapital);
 							plugin.resetCache();
 							TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+							TownyUniverse.getInstance().getDataSource().saveNation(nation);
 						}
 					}
 				} catch (TownyException e) {

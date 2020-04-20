@@ -814,7 +814,7 @@ msg_err_nation_spawn_nation_forbidden_peace: '&cSpawnreisen zu verbündeten Nati
 msg_err_public_nation_spawn_forbidden: '&cÖffentliche Spawnreisen zu anderen Nationen sind verboten.'
 msg_err_public_nation_spawn_forbidden_war: '&cÖffentliche Spawnreisen sind nur während des Krieges erlaubt.'
 msg_err_public_nation_spawn_forbidden_peace: '&cÖffentliche Spawnreisen sind während des Krieges verboten.'
-msg_spawn_cost_set_to: '&b% hat den Preis für /%s spawn auf %s gesetzt'
+msg_spawn_cost_set_to: '&b%s hat den Preis für /%s spawn auf %s gesetzt'
 msg_err_cannot_set_spawn_cost_more_than: '&cDu kannst die Spawnkosten nicht höher als %s einstellen.'
 msg_err_ally_isnt_public: '&cEure Alliierten, %s, haben Öffentliche Spawnreisen nicht aktiviert. Die Teleportation wurde verweigert.'
 msg_nation_changed_public: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'

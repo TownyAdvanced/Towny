@@ -4496,3 +4496,11 @@ v0.92.0.11:
   - Unify code called when explosions are being reverted and ProtectionRegenTasks are created.
   - Explosion code clean up.
   - Should not be possible to duplicate any block ever again.
+  - Fixed loading townblocks that do not use the config's current town_block_size.
+    - These townblocks will not be loaded into memory, but will remain in the database in case someone switches their town_block_size without realizing what it would do.
+    - Closes #3924.
+  - Fixed ChunkNotifications in the action_bar set to last for 3 or less seconds causing NPEs.
+    - Closes #3923.
+  - Fix mysql DB's nation's losing many of their settings.
+0.96.1.7:
+  - Fix german lang file.

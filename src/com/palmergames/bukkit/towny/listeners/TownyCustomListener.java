@@ -77,18 +77,17 @@ public class TownyCustomListener implements Listener {
 					System.out.println("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
 					e.printStackTrace();
 				}
-				
-				int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
-				if (seconds > 3) { // Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
-					// Cancel any older tasks running to prevent them from leaking over.
-					if (playerActionTasks.get(player) != null) {
-						Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-						playerActionTasks.remove(player);
-					}
+				if (msg != null) {
+					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
+						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
+						if (seconds > 3) {
+							// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
+							// Cancel any older tasks running to prevent them from leaking over.
+							if (playerActionTasks.get(player) != null) {
+								Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+								playerActionTasks.remove(player);
+							}
 					
-					if (msg != null)
-						if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
-
 							final String message = msg;
 							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
 							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
@@ -103,10 +102,12 @@ public class TownyCustomListener implements Listener {
 							
 							playerActionTasks.put(player, taskID);
 						} else {						
-							player.sendMessage(msg);
+							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 						}
-				} else 
-					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+					} else {
+						player.sendMessage(msg);
+					}
+				}
 			}
 		} catch (NotRegisteredException e) {
 			// likely Citizens' NPC
