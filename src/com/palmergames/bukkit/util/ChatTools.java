@@ -91,6 +91,15 @@ public class ChatTools {
 		out += center + line.substring(pivot + center.length() / 2);
 		return out;
 	}
+	
+	public static String formatPageFooter(String footer) {
+		String line = "__________________________________________________";
+		int pivot = line.length() / 2;
+		String center = ".[ " + Colors.Yellow + footer + Colors.Gold + " ].";
+		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		out += center + line.substring(pivot + center.length() / 2);
+		return out;
+	}
 
 	public static String formatCommand(String requirement, String command, String subCommand, String help) {
 

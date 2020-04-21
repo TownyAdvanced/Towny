@@ -1,5 +1,5 @@
 name: Towny
-version: 0.81
+version: 0.82
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1127,3 +1127,7 @@ msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
+
+# Added in 0.82
+msg_hover_next_page: 'Next Page'
+msg_hover_previous_page: 'Previous Page'
