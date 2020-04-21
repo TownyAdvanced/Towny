@@ -654,8 +654,8 @@ player_sing: 'Player'
 nation_zone_this_area_under_protection_of: 'This part of the %s is under the protection of %s'
 
 # Added in 0.42
-you_have_been_invited_to_join2: 'You have been invited to join %s'
-you_have_been_requested_to_ally2: 'You have been requested to ally %s'
+you_have_been_invited_to_join2: '&8[&7Invitation&8] &9You have been invited to join %s'
+you_have_been_requested_to_ally2: '&8[&7Invitation&8] &9You have been requested to ally %s'
 
 # Added in 0.43
 town_help_11: 'Create a new town. Use ''_'' and not spaces.'
