@@ -19,20 +19,20 @@ import java.util.List;
 public class TownySpigotMessaging {
 	public static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 				String secondline = "/t invite accept " + invite.getSender().getName();
 				String thirdline = "/t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
 				String secondline = "/n ally accept " + invite.getSender().getName();
 				String thirdline = "/n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
@@ -51,7 +51,7 @@ public class TownySpigotMessaging {
 	public static void sendSpigotConfirmMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
 
 		if (firstline == null) {
-			firstline = TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			firstline = TownySettings.getLangString("confirmation_prefix") + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = "/" + TownySettings.getConfirmCommand();
@@ -60,7 +60,7 @@ public class TownySpigotMessaging {
 			cancelline = "/" + TownySettings.getCancelCommand();
 		}
 		if (lastline == null) {
-			lastline = TownySettings.getLangString("this_message_will_expire");
+			lastline = TownySettings.getLangString("this_message_will_expire2");
 		} else {
 			lastline = "";
 		}

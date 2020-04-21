@@ -680,7 +680,7 @@ public class TownyMessaging {
 		}
 		
 		if (firstline == null) {
-			firstline = TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			firstline = TownySettings.getLangString("confirmation_prefix") + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
@@ -694,7 +694,7 @@ public class TownyMessaging {
 			return;
 		}
 		if (lastline == null) {
-			lastline = TownySettings.getLangString("this_message_will_expire");
+			lastline = TownySettings.getLangString("this_message_will_expire2");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
 			sendMessage(sender, message);
 		}
@@ -710,20 +710,20 @@ public class TownyMessaging {
 		}
 		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = ChatColor.GREEN +  "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /t invite accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
