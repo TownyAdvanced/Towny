@@ -4508,3 +4508,4 @@ v0.92.0.11:
     - Closes #3857.
   - Confirmation and invitations are now translatable, courtesy of v3Monsta with PR #3938.
   - Language files bumped to 0.82.
+  - Fix overlapping confirmations properly cancelling previous ones, courtesy of Siris with PR #3902.
