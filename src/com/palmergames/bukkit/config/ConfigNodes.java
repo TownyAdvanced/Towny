@@ -381,10 +381,23 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.movement_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
+	GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.damage_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
 			"global_town_settings.spawn_cooldown_time",
 			"30",
 			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_SPAWN_WARNINGS(
+		"global_town_settings.spawn_warnings",
+		"true",
+		"# Decides whether confirmations should appear if you spawn to an area with an associated cost."
+	),
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
@@ -409,6 +422,13 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
+			"global_town_settings.maximum_number_residents_without_nation",
+			"0",
+			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
+			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
@@ -589,6 +609,11 @@ public enum ConfigNodes {
             "global_nation_settings.default.open",
             "false",
             "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	GNATION_SETTINGS_ALLOWED_NATION_COLORS(
+			"global_nation_settings.allowed_map_colors",
+			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
+			"# This setting determines the list of allowed nation map colors.",
+			"# The color codes are in hex format."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -668,7 +693,10 @@ public enum ConfigNodes {
 			"12h",
 			"# The time each \"day\", when taxes will be collected.",
 			"# MUST be less than day_interval. Default is 12h (midday)."),
-
+	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
+			"plugin.day_timer.delete_0_plot_towns",
+			"false",
+			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
@@ -1334,14 +1362,22 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
-	ECO_DAILY_TAXES_MAX_TAX(
-			"economy.daily_taxes.max_tax_amount",
+	ECO_DAILY_TAXES_MAX_PLOT_TAX(
+			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed when using flat taxes"),
-	ECO_DAILY_TAXES_MAX_TAX_PERCENT(
-			"economy.daily_taxes.max_tax_percent",
+			"# Maximum tax amount allowed for townblocks sold to players."),
+	ECO_DAILY_TOWN_TAXES_MAX(
+			"economy.daily_taxes.max_town_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for towns when using flat taxes."),
+	ECO_DAILY_NATION_TAXES_MAX(
+			"economy.daily_taxes.max_nation_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for nations when using flat taxes."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
+			"economy.daily_taxes.max_town_tax_percent",
 			"25",
-			"# maximum tax percentage allowed when taxing by percentages"),
+			"# Maximum tax percentage allowed when taxing by percentages for towns."),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",

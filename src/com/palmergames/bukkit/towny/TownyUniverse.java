@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,14 +46,16 @@ public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
     
-    private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
+    private final Map<String, Resident> residents = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
-    private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
+    private final Map<String, Town> towns = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
-    private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
+    private final Map<String, Nation> nations = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
-    private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+    private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
+	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+    
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -227,7 +230,7 @@ public class TownyUniverse {
         return rootFolder;
     }
     
-    public ConcurrentHashMap<String, Nation> getNationsMap() {
+    public Map<String, Nation> getNationsMap() {
         return nations;
     }
     
@@ -235,7 +238,7 @@ public class TownyUniverse {
     	return nationsTrie;
 	}
 	
-    public ConcurrentHashMap<String, Resident> getResidentMap() {
+    public Map<String, Resident> getResidentMap() {
         return residents;
     }
 
@@ -247,7 +250,7 @@ public class TownyUniverse {
         return jailedResidents;
     }
     
-    public ConcurrentHashMap<String, Town> getTownsMap() {
+    public Map<String, Town> getTownsMap() {
         return towns;
     }
     
@@ -255,7 +258,7 @@ public class TownyUniverse {
     	return townsTrie;
 	}
 	
-    public ConcurrentHashMap<String, TownyWorld> getWorldMap() {
+    public Map<String, TownyWorld> getWorldMap() {
         return worlds;
     }
     
@@ -350,6 +353,7 @@ public class TownyUniverse {
         nations.clear();
         towns.clear();
         residents.clear();
+        townBlocks.clear();
     }
 
 	public boolean hasGroup(String townName, UUID groupID) {
@@ -429,7 +433,7 @@ public class TownyUniverse {
 		return null;
 	}
 
-	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+	public Map<String, CustomDataField> getRegisteredMetadataMap() {
 		return getRegisteredMetadata();
 	}
 
@@ -460,7 +464,88 @@ public class TownyUniverse {
 		
 	}
 	
-	public HashMap<String, CustomDataField> getRegisteredMetadata() {
+	public Map<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
+
+	/**
+	 * How to get a TownBlock for now.
+	 * 
+	 * @param worldCoord we are testing for a townblock.
+	 * @return townblock if it exists, otherwise null.
+	 * @throws NotRegisteredException
+	 */
+	public TownBlock getTownBlock(WorldCoord worldCoord) throws NotRegisteredException {
+		if (hasTownBlock(worldCoord))
+			return townBlocks.get(worldCoord);
+		else 
+			throw new NotRegisteredException();
+	}
+
+	/**
+	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
+	 * Populated at load time from townblocks folder's files.
+	 * 
+	 * 
+	 * @return townblocks hashmap read from townblock files.
+	 */	
+	public Map<WorldCoord, TownBlock> getTownBlocks() {
+		return townBlocks;
+	}
+	
+	public void addTownBlock(TownBlock townBlock) {
+		if (hasTownBlock(townBlock.getWorldCoord()))
+			return;
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+	}
+	/**
+	 * Does this WorldCoord have a TownBlock?
+	 * @param worldCoord - the coord for which we want to know if there is a townblock.
+	 * @return true if Coord is a townblock
+	 */	
+	public boolean hasTownBlock(WorldCoord worldCoord) {
+		return townBlocks.containsKey(worldCoord);
+	}
+
+	/**
+	 * Remove one townblock from the TownyUniverse townblock map.
+	 * @param townBlock to remove.
+	 */
+	public void removeTownBlock(TownBlock townBlock) {
+		
+		if (removeTownBlock(townBlock.getWorldCoord())) {
+			try {
+				if (townBlock.hasResident())
+					townBlock.getResident().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+			try {
+				if (townBlock.hasTown())
+					townBlock.getTown().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+		}
+	}
+	
+	/**
+	 * Remove a list of TownBlocks from the TownyUniverse townblock map.
+	 * @param townBlocks to remove.
+	 */
+	public void removeTownBlocks(List<TownBlock> townBlocks) {
+
+		for (TownBlock townBlock : new ArrayList<>(townBlocks))
+			removeTownBlock(townBlock);
+	}
+
+	/** 
+	 * Removes a townblock at the given worldCoord from the TownyUniverse townblock map.
+	 * @param worldCoord to remove.
+	 * @return whether the townblock was successfully removed   
+	 */
+	private boolean removeTownBlock(WorldCoord worldCoord) {
+
+		return townBlocks.remove(worldCoord) != null;
+	}
+
+	
 }
