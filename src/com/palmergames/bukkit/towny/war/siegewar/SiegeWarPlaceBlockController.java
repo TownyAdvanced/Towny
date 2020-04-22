@@ -12,14 +12,13 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
+import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -130,14 +129,14 @@ public class SiegeWarPlaceBlockController {
 			return false;
 
 		//Find the nearest siege zone to the player
-		SiegeZoneDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeZoneDistance(block);
+		SiegeDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeDistance(block);
 		
 		//If there are no nearby siege zones,then regular block request
 		if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize())
 			return false;
 		
 		AbandonAttack.processAbandonSiegeRequest(player,
-			nearestSiegeZoneDistance.getSiegeZone(),
+			nearestSiegeZoneDistance.getSiege(),
 			event);
 
 		return true;
@@ -186,7 +185,7 @@ public class SiegeWarPlaceBlockController {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
 			Nation nationOfResident = townOfResident.getNation();
-			if(town.hasSiege() && town.getSiege().getSiegeZones().containsKey(nationOfResident)) {
+			if(town.hasSiege() && town.getSiege().getAttackingNation() == nationOfResident) {
 
 				if (!TownySettings.getWarSiegeInvadeEnabled())
 					return false;

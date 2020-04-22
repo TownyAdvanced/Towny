@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
-import com.palmergames.bukkit.towny.war.siegewar.locations.HeldItemsCombination;
+import com.palmergames.bukkit.towny.war.siegewar.objects.HeldItemsCombination;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;

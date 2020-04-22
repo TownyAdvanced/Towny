@@ -1,19 +1,15 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.*;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -54,7 +50,7 @@ public class InvadeTown {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 
 			Nation nationOfInvadingResident = townOfInvadingResident.getNation();
-			Nation attackerWinner = siege.getAttackerWinner();
+			Nation attackerWinner = siege.getAttackingNation();
 			
 			if (nationOfInvadingResident != attackerWinner)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
@@ -106,11 +102,11 @@ public class InvadeTown {
 		boolean nationDefeated = false;
 		
         if(defendingTown.hasNation()) {
+			nationTown = true;
+			
             try {
-				nationTown = true;
                 nationOfDefendingTown = defendingTown.getNation();
-            } catch (NotRegisteredException x) {
-            }
+            } catch (NotRegisteredException x) {}
 
 			//Remove town from nation (and nation itself if empty)
 			universe.getDataSource().removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
@@ -126,11 +122,15 @@ public class InvadeTown {
         //Set flags to indicate success
 		siege.setTownInvaded(true);
         defendingTown.setOccupied(true);
-		SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown); //Prevent immediate revolt
 
-		//Save town data
+		//Save to db
+		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
-
+		TownyUniverse.getInstance().getDataSource().saveNation(attackingNation);
+		if(nationTown && !nationDefeated) {
+			TownyUniverse.getInstance().getDataSource().saveNation(nationOfDefendingTown);
+		}
+		
 		//Messaging
 		if(nationTown) {
 			TownyMessaging.sendGlobalMessage(String.format(

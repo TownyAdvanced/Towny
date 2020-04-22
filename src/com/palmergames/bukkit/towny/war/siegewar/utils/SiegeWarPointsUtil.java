@@ -10,8 +10,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -35,21 +34,15 @@ public class SiegeWarPointsUtil {
 	 * @return the winner of the siege
 	 */
 	public static TownyObject calculateSiegeWinner(Siege siege) {
-        TownyObject winner = siege.getDefendingTown();
-        int winningPoints = 0;
-
-        for(Map.Entry<Nation, SiegeZone> entry: siege.getSiegeZones().entrySet()) {
-            if(entry.getValue().getSiegePoints() > winningPoints) {
-                winner = entry.getKey();
-                winningPoints = entry.getValue().getSiegePoints();
-            }
-        }
-
-        return winner;
+		if(siege.getSiegePoints() > 0) {
+			return siege.getAttackingNation();
+		} else {
+			return siege.getDefendingTown();
+		}
     }
 
 	/**
-	 * This method determines if a players is in the 'timed point zone' of a siegezone
+	 * This method determines if a players is in the 'timed point zone' of a siege
 	 * 
 	 * - Must be in same world as flag
 	 * - Must be in wilderness  (This is important, otherwise the defender could create a 'safe space' 
@@ -57,13 +50,13 @@ public class SiegeWarPointsUtil {
 	 * - Must be within 1 townblock length of the flag
 	 *
 	 * @param player the player
-	 * @param siegeZone the siege zone
+	 * @param siege the siege
 	 * @return true if a player in in the timed point zone
 	 */
-	public static boolean isPlayerInTimedPointZone(Player player, SiegeZone siegeZone) {
-		return player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
+	public static boolean isPlayerInTimedPointZone(Player player, Siege siege) {
+		return player.getLocation().getWorld() == siege.getFlagLocation().getWorld()
 				&& !TownyAPI.getInstance().hasTownBlock(player.getLocation())
-				&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize();
+				&& player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getTownBlockSize();
 	}
 
 	/**
@@ -72,21 +65,21 @@ public class SiegeWarPointsUtil {
 	 *
 	 * @param player the player
 	 * @param resident the resident
-	 * @param siegeZone the siege zone
+	 * @param siege the siege zone
 	 * @return true if a player in in the death point zone
 	 */
-	private static boolean isPlayerInDeathPointZone(Player player, Resident resident, SiegeZone siegeZone) {
+	private static boolean isPlayerInDeathPointZone(Player player, Resident resident, Siege siege) {
 		if(player == null)
 			player = TownyAPI.getInstance().getPlayer(resident); //Gets player if online, null otherwise
 
 		if(player != null) {
 			//User location of online player
-			return player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
+			return player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
 		} else {
 			//Use location of logged out player
 			Map<Resident, Location> recentlyLoggedOutResidentLocationMap = TownyUniverse.getInstance().getRecentlyLoggedOutResidentLocationMap();
 			if(recentlyLoggedOutResidentLocationMap.containsKey(resident)) {
-				return recentlyLoggedOutResidentLocationMap.get(resident).distance(siegeZone.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
+				return recentlyLoggedOutResidentLocationMap.get(resident).distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks();
 			} else {
 				/*
 				 * We get here if the player is offline, and a server reboot has occurred since they logged off.
@@ -108,7 +101,7 @@ public class SiegeWarPointsUtil {
 	 */
 	public static void evaluateFighterRemovalPenalty(Town town, Resident resident, String unformattedErrorMessage) {
 		//Apply to town
-		Town townWhereResidentIsGuard =
+		boolean guardPenaltyApplied = 
 			SiegeWarPointsUtil.evaluateGuardRemovalPenalty(
 				town,
 				resident,
@@ -121,11 +114,11 @@ public class SiegeWarPointsUtil {
 			try {
 				nation = town.getNation();
 			} catch (NotRegisteredException e) { return; }
-
+			
 			SiegeWarPointsUtil.evaluateSoldierRemovalPenalty(
 				nation,
 				resident,
-				townWhereResidentIsGuard,
+				guardPenaltyApplied ? town : null,
 				unformattedErrorMessage);
 
 			//Apply to mutual allies
@@ -146,22 +139,20 @@ public class SiegeWarPointsUtil {
 	 * @param town the town which the player belongs to
 	 * @param resident the possible guard being removed
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
+	 * @return true if penalty was applied
 	 */
-	public static Town evaluateGuardRemovalPenalty(Town town,
+	public static boolean evaluateGuardRemovalPenalty(Town town,
 													  Resident resident,
 													  String unformattedErrorMessage) {
 
 		if(!(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS))
-			return null;
+			return false;
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
-			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
-				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siegeZone, unformattedErrorMessage);
-			}
-			return town;
+			return awardPointsIfPlayerIsInDeathPointZone(false, null, resident, town.getSiege(), unformattedErrorMessage);
 		} else {
-			return null;
+			return false;
 		}
 	}
 
@@ -180,13 +171,13 @@ public class SiegeWarPointsUtil {
 													  	String unformattedErrorMessage) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
-			//Apply penalty to siege-zones where the nation is attacking
-			for(SiegeZone siegeZone: nation.getActiveSiegeAttackZones()) {
-				awardPointsIfPlayerIsInDeathPointZone(true, null, resident, siegeZone, unformattedErrorMessage);
+			//Apply penalty to sieges where the nation is attacking
+			for(Siege siege: nation.getActiveAttackSieges()) {
+				awardPointsIfPlayerIsInDeathPointZone(true, null, resident, siege, unformattedErrorMessage);
 			}
-			//Apply penalty to siege-zones where the nation is defending
-			for(SiegeZone siegeZone: nation.getActiveSiegeDefenceZones(townToExclude)) {
-				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siegeZone, unformattedErrorMessage);
+			//Apply penalty to sieges where the nation is defending
+			for(Siege siege: nation.getActiveDefenceSieges(townToExclude)) {
+				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siege, unformattedErrorMessage);
 			}
 		}
 	}
@@ -198,34 +189,34 @@ public class SiegeWarPointsUtil {
 	 * @param residentIsAttacker is the resident an attacker or defender?
 	 * @param player the player who the penalty relates to
 	 * @param resident the resident who the penalty relates to
-	 * @param siegeZone to siegezone to apply the penalty to
+	 * @param siege the siege to apply the penalty to
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
 	 * @return true if points awarded
 	 */
 	public static boolean awardPointsIfPlayerIsInDeathPointZone(boolean residentIsAttacker,
 																Player player,
 																Resident resident,
-																SiegeZone siegeZone,
+																Siege siege,
 																String unformattedErrorMessage) {
 		//Return false if player is not in death point zone
-		if(!isPlayerInDeathPointZone(player, resident, siegeZone))
+		if(!isPlayerInDeathPointZone(player, resident, siege))
 			return false;
 
 		//Give siege points to opposing side
 		int siegePoints;
 		if (residentIsAttacker) {
 			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
-			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
-			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siegeZone);
-			siegeZone.adjustSiegePoints(siegePoints);
+			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siege);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
+			siege.adjustSiegePoints(siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
-			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siegeZone);
-			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siegeZone);
-			siegeZone.adjustSiegePoints(siegePoints);
+			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siege);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
+			siege.adjustSiegePoints(siegePoints);
 		}
 
-		TownyUniverse.getInstance().getDataSource().saveSiegeZone(siegeZone);
+		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 
 		//Send messages to siege participants
 		String residentInformationString;
@@ -243,11 +234,11 @@ public class SiegeWarPointsUtil {
 
 		String message = String.format(
 			unformattedErrorMessage,
-			siegeZone.getDefendingTown().getFormattedName(),
+			siege.getDefendingTown().getFormattedName(),
 			residentInformationString,
 			siegePoints);
 
-		SiegeWarNotificationUtil.informSiegeParticipants(siegeZone, message);
+		SiegeWarNotificationUtil.informSiegeParticipants(siege, message);
 
 		return true;
 	}
@@ -256,18 +247,18 @@ public class SiegeWarPointsUtil {
 	 * This method returns an altered siege point gain, depending on the current siege point balance
 	 *
 	 * @param baseSiegePointGain the base  siege point gain
-	 * @param siegeZone to siegezone where the gain will be applied
+	 * @param siege to siege where the gain will be applied
 	 * @return the altered gain
 	 */
-	public static int adjustSiegePointGainForCurrentSiegePointBalance(double baseSiegePointGain, SiegeZone siegeZone) {
+	public static int adjustSiegePointGainForCurrentSiegePointBalance(double baseSiegePointGain, Siege siege) {
 		//Reduce gain if you already have an advantage
 		if(TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage() > 0) {
 			if(
-				(siegeZone.getSiegePoints() > 0 && baseSiegePointGain > 0)
+				(siege.getSiegePoints() > 0 && baseSiegePointGain > 0)
 					||
-					(siegeZone.getSiegePoints() < 0 && baseSiegePointGain < 0)
+					(siege.getSiegePoints() < 0 && baseSiegePointGain < 0)
 			) {
-				int numThousands = Math.abs(siegeZone.getSiegePoints() / 1000);
+				int numThousands = Math.abs(siege.getSiegePoints() / 1000);
 				int percentageDecrease = numThousands * TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage();
 				double actualDecrease = baseSiegePointGain / 100 * percentageDecrease;
 				baseSiegePointGain -= actualDecrease;
@@ -278,11 +269,11 @@ public class SiegeWarPointsUtil {
 		//Increase gain if you already have a disadvantage
 		if(TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage() > 0) {
 			if(
-				(siegeZone.getSiegePoints() > 0 && baseSiegePointGain < 0)
+				(siege.getSiegePoints() > 0 && baseSiegePointGain < 0)
 					||
-					(siegeZone.getSiegePoints() < 0 && baseSiegePointGain > 0)
+					(siege.getSiegePoints() < 0 && baseSiegePointGain > 0)
 			) {
-				int numThousands = Math.abs(siegeZone.getSiegePoints() / 1000);
+				int numThousands = Math.abs(siege.getSiegePoints() / 1000);
 				int percentageIncrease = numThousands * TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage();
 				double actualIncrease = baseSiegePointGain / 100 * percentageIncrease;
 				baseSiegePointGain += actualIncrease;
@@ -297,7 +288,7 @@ public class SiegeWarPointsUtil {
 																	 double siegePoints,
 																	 Player player,
 																	 Resident resident,
-																	 SiegeZone siegeZone) {
+																	 Siege siege) {
 		try {
 			TownyUniverse universe = TownyUniverse.getInstance();
 
@@ -344,9 +335,9 @@ public class SiegeWarPointsUtil {
 
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
-									&& siegeZone.getDefendingTown().hasNation()
+									&& siege.getDefendingTown().hasNation()
 									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
-									&& (otherResident.getTown().getNation() == siegeZone.getDefendingTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(siegeZone.getDefendingTown().getNation()))
+									&& (otherResident.getTown().getNation() == siege.getDefendingTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getDefendingTown().getNation()))
 									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
 									hostileLeaderNearby = true;
 									continue;
@@ -360,7 +351,7 @@ public class SiegeWarPointsUtil {
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
 									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
-									&& (otherResident.getTown().getNation() == siegeZone.getAttackingNation() || otherResident.getTown().getNation().hasMutualAlly(siegeZone.getAttackingNation()))
+									&& (otherResident.getTown().getNation() == siege.getAttackingNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getAttackingNation()))
 									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
 									hostileLeaderNearby = true;
 									continue;

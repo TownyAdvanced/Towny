@@ -15,9 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
-import com.palmergames.bukkit.towny.war.siegewar.locations.BannerControlSession;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -454,30 +452,39 @@ public class TownyFormatter {
 							out.add(siegeStatus);
 
 							// > Banner XYZ: {2223,82,9877}
-							String bannerLocation = getBannerLocations(siege.getSiegeZones().values().toArray(new SiegeZone[0]))[0];
-							out.add(String.format(TownySettings.getLangString("status_town_siege_status_banner_xyz"), bannerLocation));
+							out.add(
+								String.format(
+								TownySettings.getLangString("status_town_siege_status_banner_xyz"),
+								siege.getFlagLocation().getBlockX(),
+								siege.getFlagLocation().getBlockY(),
+								siege.getFlagLocation().getBlockZ())
+							);
 
 							// > Attacker: Land of Empire (Nation) {+30}
-							String besieger = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]))[0];
-							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), besieger));
+							String sign;
+							int siegePoints = siege.getSiegePoints();
+							if(siegePoints > 0)
+								sign = "+" ;
+							else
+								sign = "";
+							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), siege.getAttackingNation().getFormattedName(), sign, siegePoints));
 
 							// >  Victory Timer: 5.3 hours
 							String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
 							out.add(victoryTimer);
 
 							// > Banner Control: Attackers [4] Killbot401x, NerfeyMcNerferson, WarCriminal80372
-							SiegeZone siegeZone = new ArrayList<>(town.getSiege().getSiegeZones().values()).get(0);
-							String[] bannerControllingResidents = getFormattedNames(siegeZone.getBannerControllingResidents());
-							if (bannerControllingResidents.length > 34) {
-								String[] entire = bannerControllingResidents;
-								bannerControllingResidents = new String[36];
-								System.arraycopy(entire, 0, bannerControllingResidents, 0, 35);
-								bannerControllingResidents[35] = TownySettings.getLangString("status_town_reslist_overlength");
-							}
-							if(siegeZone.getBannerControllingSide() == SiegeSide.NOBODY) {
-								out.add( String.format(TownySettings.getLangString("status_town_banner_control_nobody"), siegeZone.getBannerControllingSide().getFormattedName()));
+							if(siege.getBannerControllingSide() == SiegeSide.NOBODY) {
+								out.add( String.format(TownySettings.getLangString("status_town_banner_control_nobody"), siege.getBannerControllingSide().getFormattedName()));
 							} else {
-								out.addAll(ChatTools.listArr(bannerControllingResidents, String.format(TownySettings.getLangString("status_town_banner_control"), siegeZone.getBannerControllingSide().getFormattedName(), siegeZone.getBannerControllingResidents().size())));
+								String[] bannerControllingResidents = getFormattedNames(siege.getBannerControllingResidents());
+								if (bannerControllingResidents.length > 34) {
+									String[] entire = bannerControllingResidents;
+									bannerControllingResidents = new String[36];
+									System.arraycopy(entire, 0, bannerControllingResidents, 0, 35);
+									bannerControllingResidents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+								}
+								out.addAll(ChatTools.listArr(bannerControllingResidents, String.format(TownySettings.getLangString("status_town_banner_control"), siege.getBannerControllingSide().getFormattedName(), siege.getBannerControllingResidents().size())));
 							}
 						break;
 
@@ -646,9 +653,9 @@ public class TownyFormatter {
 			case IN_PROGRESS:
 				return TownySettings.getLangString("status_town_siege_status_in_progress");
 			case ATTACKER_WIN:
-				return String.format(TownySettings.getLangString("status_town_siege_status_attacker_win"), siege.getAttackerWinner().getFormattedName());
+				return String.format(TownySettings.getLangString("status_town_siege_status_attacker_win"), siege.getAttackingNation().getFormattedName());
 			case DEFENDER_SURRENDER:
-				return String.format(TownySettings.getLangString("status_town_siege_status_defender_surrender"), siege.getAttackerWinner().getFormattedName());
+				return String.format(TownySettings.getLangString("status_town_siege_status_defender_surrender"), siege.getAttackingNation().getFormattedName());
 			case DEFENDER_WIN:
 				return TownySettings.getLangString("status_town_siege_status_defender_win");
 			case ATTACKER_ABANDON:
@@ -822,30 +829,6 @@ public class TownyFormatter {
 		}
 		
 		return names.toArray(new String[0]);
-	}
-
-	public static String[] getFormattedNames(SiegeZone[] siegeZones) {
-		List<String> names = new ArrayList<String>();
-		for (SiegeZone siegeZone : siegeZones)
-			names.add(getFormattedName(siegeZone));
-		return names.toArray(new String[0]);
-	}
-	public static String[] getBannerLocations(SiegeZone[] siegeZones) {
-		List<String> locations = new ArrayList<String>();
-		for (SiegeZone siegeZone : siegeZones)
-			locations.add("{" + siegeZone.getFlagLocation().getBlockX() + "," + siegeZone.getFlagLocation().getBlockY() + ","+ siegeZone.getFlagLocation().getBlockZ() + "}");
-		return locations.toArray(new String[0]);
-	}
-	
-	public static String getFormattedName(SiegeZone siegeZone) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(siegeZone.getAttackingNation().getFormattedName());
-		builder.append(" {");
-		if(siegeZone.getSiegePoints() > 0)
-			builder.append("+");
-		builder.append(siegeZone.getSiegePoints());
-		builder.append("}");
-		return builder.toString();
 	}
 	
 	public static List<String> getExtraFields(TownyObject to) {

@@ -1,19 +1,16 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -31,11 +28,11 @@ public class AbandonAttack {
 	 * This method does some final checks and if they pass, the abandon is executed
 	 *
 	 * @param player the player who placed the abandon banner
-	 * @param siegeZone the siege zone
+	 * @param siege the siege
 	 * @param event the place block event
 	 */
     public static void processAbandonSiegeRequest(Player player, 
-												  SiegeZone siegeZone,
+												  Siege siege,
 												  BlockPlaceEvent event)  {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
@@ -52,12 +49,11 @@ public class AbandonAttack {
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
             
             //If the siege is not in progress, send error
-			Siege siege = siegeZone.getSiege();
 			if (siege.getStatus() != SiegeStatus.IN_PROGRESS)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_siege_over"));
 			
-			//If the player's nation does not own the nearby siegezone, send error
-            if(siegeZone.getAttackingNation() != townOfResident.getNation())
+			//If the player's nation is not attacking, send error
+            if(siege.getAttackingNation() != townOfResident.getNation())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
 			long timeUntilAbandonIsAllowedMillis = siege.getTimeUntilAbandonIsAllowedMillis();
@@ -67,7 +63,7 @@ public class AbandonAttack {
 				throw new TownyException(message);
 			}
 
-			attackerAbandon(siegeZone);
+			attackerAbandon(siege);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -76,25 +72,14 @@ public class AbandonAttack {
         }
     }
 
-    private static void attackerAbandon(SiegeZone siegeZone) {
-        //Here we simply remove the siege zone
-		TownyUniverse universe = TownyUniverse.getInstance();
-		universe.getDataSource().removeSiegeZone(siegeZone);
-        
+    private static void attackerAbandon(Siege siege) {
+		SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
+    	
+		SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
+
 		TownyMessaging.sendGlobalMessage(
 			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
-				siegeZone.getAttackingNation().getFormattedName(),
-        		siegeZone.getDefendingTown().getFormattedName()));
-		
-        if (siegeZone.getSiege().getSiegeZones().size() == 0) {
-            SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siegeZone.getSiege(),
-                    SiegeStatus.ATTACKER_ABANDON,
-                    null);
-			TownyMessaging.sendGlobalMessage(
-				String.format(TownySettings.getLangString("msg_siege_war_siege_abandon"),
-					siegeZone.getDefendingTown().getFormattedName()));
-		}
-
-		SiegeWarMoneyUtil.giveOneWarChestToWinnerTown(siegeZone, siegeZone.getDefendingTown());
-    }
+				siege.getAttackingNation().getFormattedName(),
+				siege.getDefendingTown().getFormattedName()));
+	}
 }

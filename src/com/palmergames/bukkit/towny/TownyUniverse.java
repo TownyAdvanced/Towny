@@ -18,8 +18,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
@@ -56,7 +55,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, SiegeZone> siegeZones = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Siege> sieges = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
@@ -239,8 +238,8 @@ public class TownyUniverse {
         return nations;
     }
 
-    public ConcurrentHashMap<String, SiegeZone> getSiegeZonesMap() {
-    	return siegeZones;
+    public ConcurrentHashMap<String, Siege> getSiegesMap() {
+    	return sieges;
 	}
 
     public Trie getNationsTrie() {
@@ -478,8 +477,8 @@ public class TownyUniverse {
 
 	public Set<Player> getPlayersInBannerControlSessions() {
 		Set<Player> result = new HashSet<>();
-		for(SiegeZone siegeZone: siegeZones.values()) {
-			result.addAll(siegeZone.getBannerControlSessions().keySet());
+		for(Siege siege: sieges.values()) {
+			result.addAll(siege.getBannerControlSessions().keySet());
 		}
 		return result;
 	}

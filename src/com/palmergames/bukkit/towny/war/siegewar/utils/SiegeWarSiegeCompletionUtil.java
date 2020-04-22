@@ -1,10 +1,8 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 
 /**
  * This class contains utility functions related to completing sieges
@@ -18,21 +16,19 @@ public class SiegeWarSiegeCompletionUtil {
 	 * 
 	 * @param siege siege
 	 * @param siegeStatus the new status of the siege
-	 * @param winnerNation the winner of the siege
 	 */
 	public static void updateSiegeValuesToComplete(Siege siege,
-												   SiegeStatus siegeStatus,
-												   Nation winnerNation) {
+												   SiegeStatus siegeStatus) {
+		//Update values
 		siege.setStatus(siegeStatus);
 		siege.setActualEndTime(System.currentTimeMillis());
-		siege.setAttackerWinner(winnerNation);
 		SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
+		if(siegeStatus == SiegeStatus.DEFENDER_SURRENDER || siegeStatus == SiegeStatus.ATTACKER_WIN) {
+			SiegeWarTimeUtil.activateRevoltImmunityTimer(siege.getDefendingTown()); //Prevent immediate revolt
+		}
 
 		//Save to db
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
-		for(SiegeZone siegeZone: siege.getSiegeZones().values()) {
-			townyUniverse.getDataSource().saveSiegeZone(siegeZone);
-		}
+		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+		TownyUniverse.getInstance().getDataSource().saveTown(siege.getDefendingTown());
 	}
 }

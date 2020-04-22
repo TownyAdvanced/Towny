@@ -1,14 +1,12 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -126,13 +124,13 @@ public class SiegeWarBlockUtil {
 			Location locationOfBlockAbove = block.getRelative(BlockFace.UP).getLocation();
 			Location locationOfSiegeBanner;
 			TownyUniverse universe = TownyUniverse.getInstance();
-			for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
+			for (Siege siege : universe.getDataSource().getSieges()) {
 
-				if (siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
+				if (siege.getStatus() != SiegeStatus.IN_PROGRESS) {
 					continue;
 				}
 
-				locationOfSiegeBanner = siegeZone.getFlagLocation();
+				locationOfSiegeBanner = siege.getFlagLocation();
 				if (locationOfBlock.equals(locationOfSiegeBanner) || locationOfBlockAbove.equals(locationOfSiegeBanner)) {
 					return true;
 				}

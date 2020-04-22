@@ -9,8 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemovePostSpawnDamageImmunity;
@@ -67,8 +66,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate banner control for all siege zones
 	 */
 	private void evaluateBannerControl() {
-		for (SiegeZone siegeZone : TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
-			SiegeWarBannerControlUtil.evaluateBannerControl(siegeZone);
+		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+			SiegeWarBannerControlUtil.evaluateBannerControl(siege);
 		}
 	}
 

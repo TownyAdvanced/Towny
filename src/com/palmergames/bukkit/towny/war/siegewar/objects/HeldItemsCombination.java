@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.siegewar.locations;
+package com.palmergames.bukkit.towny.war.siegewar.objects;
 
 import org.bukkit.Material;
 

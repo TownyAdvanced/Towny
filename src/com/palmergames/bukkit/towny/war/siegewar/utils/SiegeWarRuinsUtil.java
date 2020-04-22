@@ -88,7 +88,7 @@ public class SiegeWarRuinsUtil {
 			townBlock.setType(0);
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(null);
-			townBlock.setPlotObjectGroup(null);
+			townBlock.removePlotObjectGroup();
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 		}
 

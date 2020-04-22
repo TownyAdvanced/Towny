@@ -93,7 +93,6 @@ public class SQL_Schema {
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
-		columns.add("`siegeZones` mediumtext NOT NULL");
 		columns.add("`taxes` float NOT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
@@ -108,21 +107,29 @@ public class SQL_Schema {
 		return columns;
 	}
 	
-	private static String getSiegeZones() {
+	private static String getSieges() {
 
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "SIEGEZONES ("
-			+ "`siegeZoneName` VARCHAR(32) NOT NULL,"
-			+ "PRIMARY KEY (`siegeZoneName`)"
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "SIEGES ("
+			+ "`name` VARCHAR(32) NOT NULL,"
+			+ "PRIMARY KEY (`name`)"
 			+ ")";
 	}
 	
-	private static List<String> getSiegeZoneColumns(){
+	private static List<String> getSiegeColumns(){
 		List<String> columns = new ArrayList<>();
-		columns.add("`flagLocation` mediumtext NOT NULL");
 		columns.add("`attackingNation` mediumtext NOT NULL");
 		columns.add("`defendingTown` mediumtext NOT NULL");
+		columns.add("`flagLocation` mediumtext NOT NULL");
+		columns.add("`siegeStatus` mediumtext");
 		columns.add("`siegePoints` mediumtext NOT NULL");
 		columns.add("`warChestAmount` float NOT NULL");
+		columns.add("`townPlundered` bool NOT NULL DEFAULT '0'");
+		columns.add("`townInvaded` bool NOT NULL DEFAULT '0'");
+		columns.add("`actualStartTime` BIGINT");
+		columns.add("`scheduledEndTime` BIGINT");
+		columns.add("`actualEndTime` BIGINT");
+		columns.add("`totalPillageAmount` float NOT NULL");
+
 		return columns;
 	}
 	
@@ -170,22 +177,12 @@ public class SQL_Schema {
 		columns.add("`conqueredDays` mediumint");
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		columns.add("`recentlyRuinedEndTime` BIGINT");
-		columns.add("`revoltCooldownEndTime` BIGINT");
-		columns.add("`siegeCooldownEndTime` BIGINT");
-		columns.add("`siegeStatus` mediumtext");
-		columns.add("`siegeTownPlundered` bool NOT NULL DEFAULT '0'");
-		columns.add("`siegeTownInvaded` bool NOT NULL DEFAULT '0'");
-		columns.add("`siegeAttackerWinner` mediumtext");
-		columns.add("`siegeActualStartTime` BIGINT");
-		columns.add("`siegeScheduledEndTime` BIGINT");
-		columns.add("`siegeActualEndTime` BIGINT");
-		columns.add("`siegeZones` mediumtext");
-		columns.add("`siegeTotalPillageAmount` float NOT NULL");
+		columns.add("`revoltImmunityEndTime` BIGINT");
+		columns.add("`siegeImmunityEndTime` BIGINT");
 		columns.add("`occupied` bool NOT NULL DEFAULT '0'");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`desiredNeutralityValue` bool NOT NULL DEFAULT '0'");
 		columns.add("`neutralityChangeConfirmationCounterDays` int(11) DEFAULT 0");
-
 		return columns;
 	}
 
@@ -328,40 +325,40 @@ public class SQL_Schema {
 		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
 
 		/*
-		 *  Fetch SIEGEZONES Table schema.
+		 *  Fetch SIEGES Table schema.
 		 */
-		String siegeZones_create = SQL_Schema.getSiegeZones();
+		String sieges_create = SQL_Schema.getSieges();
 
 		try {
 
 			Statement s = cntx.createStatement();
-			s.executeUpdate(siegeZones_create);
-			TownyMessaging.sendDebugMsg("Table SIEGEZONES is ok!");
+			s.executeUpdate(sieges_create);
+			TownyMessaging.sendDebugMsg("Table SIEGES is ok!");
 
 		} catch (SQLException ee) {
 
-			TownyMessaging.sendErrorMsg("Error Creating table SIEGEZONES : " + ee.getMessage());
+			TownyMessaging.sendErrorMsg("Error Creating table SIEGES : " + ee.getMessage());
 
 		}
 		/*
-		 * Add columns to siegezones (if not already there)
+		 * Add columns to sieges (if not already there)
 		 */
-		String siegeZone_update;
-		List<String> siegeZoneColumns = getSiegeZoneColumns();
-		for (String column : siegeZoneColumns) {
+		String siege_update;
+		List<String> siegeColumns = getSiegeColumns();
+		for (String column : siegeColumns) {
 			try {
-				siegeZone_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "SIEGEZONES` "
+				siege_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "SIEGES` "
 					+ "ADD COLUMN " + column;
 
-				PreparedStatement ps = cntx.prepareStatement(siegeZone_update);
+				PreparedStatement ps = cntx.prepareStatement(siege_update);
 				ps.executeUpdate();
 
 			} catch (SQLException ee) {
 				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table SIEGEZONES :" + ee.getMessage());
+					TownyMessaging.sendErrorMsg("Error updating table SIEGES :" + ee.getMessage());
 			}
 		}
-		TownyMessaging.sendDebugMsg("Table SIEGEZONES is updated!");
+		TownyMessaging.sendDebugMsg("Table SIEGES is updated!");
 
 		
 

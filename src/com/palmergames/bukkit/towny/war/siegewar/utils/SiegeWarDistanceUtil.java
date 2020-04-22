@@ -3,8 +3,8 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZoneDistance;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -53,33 +53,33 @@ public class SiegeWarDistanceUtil {
 	}
 
 	/**
-	 * This method finds the nearest siegezone to the given block, 
+	 * This method finds the nearest siege to the given block, 
 	 *
 	 * @param block the given block
-	 * @return a SiegeZoneDistance object containing both the zone and distance. Null if not found.
+	 * @return a SiegeZoneDistance object containing both the siege and distance. Null if not found.
 	 */
-	public static SiegeZoneDistance findNearestSiegeZoneDistance(Block block) {
+	public static SiegeDistance findNearestSiegeDistance(Block block) {
 		//Find the nearest siege zone to the given block
-		SiegeZone nearestSiegeZone = null;
+		Siege nearestSiege = null;
 		double distanceToNearestSiegeZone = -1;
-		for(SiegeZone siegeZone: TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
+		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 
-			if (nearestSiegeZone == null) {
-				nearestSiegeZone = siegeZone;
-				distanceToNearestSiegeZone = block.getLocation().distance(nearestSiegeZone.getFlagLocation());
+			if (nearestSiege == null) {
+				nearestSiege = siege;
+				distanceToNearestSiegeZone = block.getLocation().distance(nearestSiege.getFlagLocation());
 			} else {
-				double distanceToNewTarget = block.getLocation().distance(siegeZone.getFlagLocation());
+				double distanceToNewTarget = block.getLocation().distance(siege.getFlagLocation());
 				if(distanceToNewTarget < distanceToNearestSiegeZone) {
-					nearestSiegeZone = siegeZone;
+					nearestSiege = siege;
 					distanceToNearestSiegeZone = distanceToNewTarget;
 				}
 			}
 		}
 	
-		if(nearestSiegeZone == null) {
+		if(nearestSiege == null) {
 			return null;
 		} else {
-			return new SiegeZoneDistance(nearestSiegeZone, distanceToNearestSiegeZone);
+			return new SiegeDistance(nearestSiege, distanceToNearestSiegeZone);
 		}
 	}
 	

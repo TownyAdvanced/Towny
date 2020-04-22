@@ -9,8 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
@@ -85,7 +84,7 @@ public class AttackTown {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
 
-            if(nationOfAttackingPlayer.getNumActiveSiegeAttacks() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
+            if(nationOfAttackingPlayer.getNumActiveAttackSieges() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
 
             //Setup attack
@@ -103,87 +102,40 @@ public class AttackTown {
 
 
     private static void attackTown(Block block, Nation attackingNation, Town defendingTown) throws TownyException {
-		Siege siege;
-		SiegeZone siegeZone;
-		boolean newSiege;
-
-		if (!defendingTown.hasSiege()) {
-			newSiege = true;
-
-			//Create Siege
-			siege = new Siege(defendingTown);
-			siege.setStatus(SiegeStatus.IN_PROGRESS);
-			siege.setTownPlundered(false);
-			siege.setTownInvaded(false);
-			siege.setAttackerWinner(null);
-			siege.setStartTime(System.currentTimeMillis());
-			siege.setScheduledEndTime(
-				(System.currentTimeMillis() +
-					((long) (TownySettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
-			siege.setActualEndTime(0);
-			defendingTown.setSiege(siege);
-
-		} else {
-			//Get Siege
-			newSiege = false;
-			siege = defendingTown.getSiege();
-		}
-
-		//Create siege zone
+		//Create Siege
+		String siegeName = attackingNation.getName() + "#vs#" + defendingTown.getName();
 		TownyUniverse universe = TownyUniverse.getInstance();
-		universe.getDataSource().newSiegeZone(
-			attackingNation.getName(),
-			defendingTown.getName());
-		siegeZone = universe.getDataSource().getSiegeZone(
-			SiegeZone.generateName(
-				attackingNation.getName(), 
-				defendingTown.getName()));
+		universe.getDataSource().newSiege(siegeName);
+		Siege siege = universe.getDataSource().getSiege(siegeName);
 		
-		siegeZone.setFlagLocation(block.getLocation());
-		siegeZone.setWarChestAmount(defendingTown.getSiegeCost());
-		siege.getSiegeZones().put(attackingNation, siegeZone);
-		attackingNation.addSiegeZone(siegeZone);
-
-		//Save siegezone, siege, nation, and town to DB
-		universe.getDataSource().saveSiegeZone(siegeZone);
-		universe.getDataSource().saveNation(attackingNation);
-		universe.getDataSource().saveTown(defendingTown);
-		universe.getDataSource().saveSiegeZoneList();
-
-		//Send global message;
-		if (newSiege) {
-			if (siege.getDefendingTown().hasNation()) {
-				TownyMessaging.sendGlobalMessage(String.format(
-					TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
-					attackingNation.getFormattedName(),
-					defendingTown.getNation().getFormattedName(),
-					defendingTown.getFormattedName()
-				));
-			} else {
-				TownyMessaging.sendGlobalMessage(String.format(
-					TownySettings.getLangString("msg_siege_war_siege_started_neutral_town"),
-					attackingNation.getFormattedName(),
-					defendingTown.getFormattedName()
-				));
-			}
-		} else {
-			TownyMessaging.sendGlobalMessage(String.format(
-				TownySettings.getLangString("msg_siege_war_siege_joined"),
-				attackingNation.getFormattedName(),
-				defendingTown.getFormattedName()
-			));
-		}
-
+		//Set values in siege object
+		siege.setAttackingNation(attackingNation);
+		siege.setDefendingTown(defendingTown);
+		siege.setStatus(SiegeStatus.IN_PROGRESS);
+		siege.setTownPlundered(false);
+		siege.setTownInvaded(false);
+		siege.setStartTime(System.currentTimeMillis());
+		siege.setScheduledEndTime(
+			(System.currentTimeMillis() +
+				((long) (TownySettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
+		siege.setActualEndTime(0);
+		siege.setFlagLocation(block.getLocation());
+		siege.setWarChestAmount(defendingTown.getSiegeCost());
+		
+		//Set values in town and nation objects
+		defendingTown.setSiege(siege);
+		attackingNation.addSiege(siege);
+		
+		//Pay into warchest
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				//Pay upfront cost into warchest now
-				attackingNation.getAccount().pay(siegeZone.getWarChestAmount(), "Cost of starting a siege.");
-
+				attackingNation.getAccount().pay(siege.getWarChestAmount(), "Cost of starting a siege.");
 				String moneyMessage =
 					String.format(
 						TownySettings.getLangString("msg_siege_war_attack_pay_war_chest"),
 						attackingNation.getFormattedName(),
-						TownyEconomyHandler.getFormattedBalance(siegeZone.getWarChestAmount()));
+						TownyEconomyHandler.getFormattedBalance(siege.getWarChestAmount()));
 
 				TownyMessaging.sendPrefixedNationMessage(attackingNation, moneyMessage);
 				TownyMessaging.sendPrefixedTownMessage(defendingTown, moneyMessage);
@@ -192,6 +144,27 @@ public class AttackTown {
 				e.printStackTrace();
 			}
 		}
-    }
 
+		//Save to DB
+		universe.getDataSource().saveSiege(siege);
+		universe.getDataSource().saveNation(attackingNation);
+		universe.getDataSource().saveTown(defendingTown);
+		universe.getDataSource().saveSiegeList();
+
+		//Send global message;
+		if (siege.getDefendingTown().hasNation()) {
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
+				attackingNation.getFormattedName(),
+				defendingTown.getNation().getFormattedName(),
+				defendingTown.getFormattedName()
+			));
+		} else {
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_siege_started_neutral_town"),
+				attackingNation.getFormattedName(),
+				defendingTown.getFormattedName()
+			));
+		}
+    }
 }

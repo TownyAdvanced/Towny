@@ -1,25 +1,19 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.ArrayList;
-
-import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
 /**
  * This class is responsible for processing requests to surrender towns
@@ -57,9 +51,6 @@ public class SurrenderTown {
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_siege_finished"));
 
-            if(siege.getSiegeZones().size() > 1)
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_multiple_attackers"));
-
             long timeUntilSurrenderIsAllowedMillis = siege.getTimeUntilSurrenderIsAllowedMillis();
             if(timeUntilSurrenderIsAllowedMillis > 0) {
 				String message = String.format(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_yet"), 
@@ -78,17 +69,13 @@ public class SurrenderTown {
     }
 
     private static void defenderSurrender(Siege siege) {
-    	Nation winnerNation = new ArrayList<>(siege.getSiegeZones().keySet()).get(0);
-    	
-        SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege,
-                                            SiegeStatus.DEFENDER_SURRENDER,
-											winnerNation);
+		SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
+		
+        SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_SURRENDER);
 
         TownyMessaging.sendGlobalMessage(String.format(
         	TownySettings.getLangString("msg_siege_war_town_surrender"),
 			siege.getDefendingTown().getFormattedName(),
-			siege.getAttackerWinner().getFormattedName()));
-
-		SiegeWarMoneyUtil.giveWarChestsToWinnerNation(siege, siege.getAttackerWinner());
+			siege.getAttackingNation().getFormattedName()));
     }
 }

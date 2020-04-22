@@ -20,9 +20,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -576,21 +575,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public boolean loadSiegeZoneList() {
+    public boolean loadSiegeList() {
 
-        String siegeZoneName;
+        String name;
         
         TownyMessaging.sendDebugMsg("Loading Siege zones List");
         if (!getContext())
             return false;
         try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT siegeZoneName FROM " + tb_prefix + "SIEGEZONES");
+			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "SIEGES");
 
             while (rs.next()) {
                 try {
-                    siegeZoneName = rs.getString("siegeZoneName").toLowerCase();
-                    newSiegeZone(siegeZoneName);
+                    name = rs.getString("name").toLowerCase();
+                    newSiege(name);
                 } catch (AlreadyRegisteredException e) {
                     e.printStackTrace();
                 }
@@ -1056,47 +1055,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
                 town.setRecentlyRuinedEndTime(rs.getLong("recentlyRuinedEndTime"));
-                town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
+
+				town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
                 town.setSiegeImmunityEndTime(rs.getLong("siegeCooldownEndTime"));
-
-                line = rs.getString("siegeStatus");
-                if(line != null && !line.isEmpty()) {
-                    Siege siege = new Siege(town);
-                    town.setSiege(siege);
-                    siege.setStatus(SiegeStatus.parseString(line));
-                } else {
-                    town.setSiege(null);
-                }
-
-                if(town.hasSiege()) {
-                    Siege siege = town.getSiege();
-
-                    siege.setTownPlundered(rs.getBoolean("siegeTownPlundered"));
-                    siege.setTownInvaded(rs.getBoolean("siegeTownInvaded"));
-
-                    line = rs.getString("siegeAttackerWinner");
-                    if(line != null && !line.isEmpty()) {
-                        siege.setAttackerWinner(getNation(rs.getString("siegeAttackerWinner")));
-                    } else {
-                        siege.setAttackerWinner(null);
-                    }
-
-                    siege.setStartTime(rs.getLong("siegeActualStartTime"));
-                    siege.setScheduledEndTime(rs.getLong("siegeScheduledEndTime"));
-                    siege.setActualEndTime(rs.getLong("siegeActualEndTime"));
-
-                    line = rs.getString("siegeZones");
-                    if(line != null && !line.isEmpty()) {
-						String[] siegeZoneNames = line.split(",");
-						SiegeZone siegeZone;
-						for (String siegeZoneName : siegeZoneNames) {
-							siegeZone = universe.getDataSource().getSiegeZone(siegeZoneName);
-							town.getSiege().getSiegeZones().put(siegeZone.getAttackingNation(), siegeZone);
-						}
-					}
-
-					siege.setTotalPillageAmount(rs.getDouble("siegeTotalPillageAmount"));
-				}
 				town.setOccupied(rs.getBoolean("occupied"));
 				town.setNeutral(rs.getBoolean("neutral"));
 				town.setDesiredNeutralityValue(rs.getBoolean("desiredNeutralityValue"));
@@ -1184,14 +1145,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     }
                 }
 
-                line = rs.getString("siegeZones");
+                line = rs.getString("sieges");
                 if (line != null) {
                     tokens = line.split(",");
                     for (String token : tokens) {
                         if (!token.isEmpty()) {
-                            SiegeZone siegeZone = getSiegeZone(token);
-                            if (siegeZone != null)
-                                nation.addSiegeZone(siegeZone);
+                            Siege siege = getSiege(token);
+                            if (siege != null)
+                                nation.addSiege(siege);
                         }
                     }
                 }
@@ -1263,18 +1224,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public boolean loadSiegeZone(SiegeZone siegeZone) {
+    public boolean loadSiege(Siege siege) {
 
         Statement s = null;
         ResultSet rs = null;
-        TownyMessaging.sendDebugMsg("Loading siege zone " + siegeZone.getName());
+        TownyMessaging.sendDebugMsg("Loading siege " + siege.getName());
 
         if (!getContext())
             return false;
         try {
             s = cntx.createStatement();
-            rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGEZONES " +
-                                             "WHERE siegeZoneName='" + siegeZone.getName() + "'");
+            rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES " +
+                                             "WHERE name='" + siege.getName() + "'");
 
             String line;
             String[] listEntries;
@@ -1284,30 +1245,31 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             double flagLocationZ;
 
             while (rs.next()) {
-                line = rs.getString("flagLocation");
-                
-                listEntries = line.split(",");
-                flagLocationWorld = BukkitTools.getWorld(listEntries[0]);
-                flagLocationX = Double.parseDouble(listEntries[1]);
-                flagLocationY = Double.parseDouble(listEntries[2]);
-                flagLocationZ = Double.parseDouble(listEntries[3]);
+				siege.setAttackingNation(getNation(rs.getString("attackingNation")));
+				siege.setDefendingTown(getTown(rs.getString("defendingTown")));
 
-                Location flagLocation = new Location(
-                        flagLocationWorld,
-                        flagLocationX,
-                        flagLocationY,
-                        flagLocationZ);
+				line = rs.getString("flagLocation");
+				listEntries = line.split(",");
+				flagLocationWorld = BukkitTools.getWorld(listEntries[0]);
+				flagLocationX = Double.parseDouble(listEntries[1]);
+				flagLocationY = Double.parseDouble(listEntries[2]);
+				flagLocationZ = Double.parseDouble(listEntries[3]);
+				Location flagLocation = new Location(
+					flagLocationWorld,
+					flagLocationX,
+					flagLocationY,
+					flagLocationZ);
+				siege.setFlagLocation(flagLocation);
 
-                siegeZone.setFlagLocation(flagLocation);
-
-                siegeZone.setAttackingNation(getNation(rs.getString("attackingNation")));
-                siegeZone.setDefendingTown(getTown(rs.getString("defendingTown")));
-                siegeZone.setSiegePoints(rs.getInt("siegePoints"));
-				siegeZone.setWarChestAmount(rs.getDouble("warChestAmount"));
-
-				//Player-scoretime maps are not saved/loaded
-                //As it is tricky but with no significant benefit
-
+				siege.setStatus(SiegeStatus.parseString(rs.getString("siegeStatus")));
+				siege.setSiegePoints(rs.getInt("siegePoints"));
+				siege.setWarChestAmount(rs.getDouble("warChestAmount"));
+				siege.setTownPlundered(rs.getBoolean("townPlundered"));
+				siege.setTownInvaded(rs.getBoolean("townInvaded"));
+				siege.setStartTime(rs.getLong("actualStartTime"));
+				siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
+				siege.setActualEndTime(rs.getLong("actualEndTime"));
+				siege.setTotalPillageAmount(rs.getDouble("totalPillageAmount"));
             }
 
             return true;
@@ -1816,35 +1778,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("registered", town.getRegistered());
             
             twn_hm.put("recentlyRuinedEndTime", Long.toString(town.getRecentlyRuinedEndTime()));
-            twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
-            twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 
-            if(town.hasSiege()) {
-                Siege siege = town.getSiege();
-                twn_hm.put("siegeStatus", siege.getStatus().toString());
-                twn_hm.put("siegeTownPlundered", siege.isTownPlundered());
-                twn_hm.put("siegeTownInvaded", siege.isTownInvaded());
-                if(siege.hasAttackerWinner()) {
-                    twn_hm.put("siegeAttackerWinner", siege.getAttackerWinner().getName());
-                } else {
-					twn_hm.put("siegeAttackerWinner", "");
-				}
-                twn_hm.put("siegeActualStartTime", siege.getStartTime());
-                twn_hm.put("siegeScheduledEndTime", siege.getScheduledEndTime());
-                twn_hm.put("siegeActualEndTime", siege.getActualEndTime());
-                twn_hm.put("siegeZones", StringMgmt.join(siege.getSiegeZoneNames(), ","));
-				twn_hm.put("siegeTotalPillageAmount", siege.getTotalPillageAmount());
-			} else {
-				twn_hm.put("siegeStatus", "");
-				twn_hm.put("siegeTownPlundered", false);
-				twn_hm.put("siegeTownInvaded", false);
-				twn_hm.put("siegeAttackerWinner", "");
-				twn_hm.put("siegeActualStartTime", 0);
-				twn_hm.put("siegeScheduledEndTime", 0);
-				twn_hm.put("siegeActualEndTime", 0);
-				twn_hm.put("siegeZones", "");
-				twn_hm.put("siegeTotalPillageAmount", 0d);
-			}
+			twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
+            twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 			twn_hm.put("occupied", town.isOccupied());
 			twn_hm.put("neutral=", town.isNeutral());
 			twn_hm.put("desiredNeutralityValue", town.getDesiredNeutralityValue());
@@ -1894,8 +1830,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-            nat_hm.put("siegeZones", StringMgmt.join(nation.getSiegeZoneNames(), ","));
-            nat_hm.put("taxes", nation.getTaxes());
+			nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
             nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw() : "");
@@ -1923,33 +1858,35 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public synchronized boolean saveSiegeZone(SiegeZone siegeZone) {
+    public synchronized boolean saveSiege(Siege siege) {
 
         TownyMessaging.sendDebugMsg(
-                "Saving siege zone " +siegeZone.getName());
+                "Saving siege " +siege.getName());
 
         try {
             HashMap<String, Object> sg_hm = new HashMap<>();
 
-            sg_hm.put("siegeZoneName", siegeZone.getName());
+            sg_hm.put("name", siege.getName());
+			sg_hm.put("attackingNation", siege.getAttackingNation().getName());
+			sg_hm.put("defendingTown", siege.getDefendingTown().getName());
+			sg_hm.put("flagLocation", siege.getFlagLocation().getWorld().getName()
+                    + "," + siege.getFlagLocation().getX()
+                    + "," + siege.getFlagLocation().getY()
+                    + "," + siege.getFlagLocation().getZ());
+			sg_hm.put("siegeStatus", siege.getStatus().toString());
+			sg_hm.put("siegePoints", siege.getSiegePoints());
+			sg_hm.put("warChestAmount", siege.getWarChestAmount());
+			sg_hm.put("townPlundered", false);
+			sg_hm.put("townInvaded", false);
+			sg_hm.put("actualStartTime", 0);
+			sg_hm.put("scheduledEndTime", 0);
+			sg_hm.put("actualEndTime", 0);
+			sg_hm.put("totalPillageAmount", 0d);
 
-			sg_hm.put("flagLocation", siegeZone.getFlagLocation().getWorld().getName()
-                    + "," + siegeZone.getFlagLocation().getX()
-                    + "," + siegeZone.getFlagLocation().getY()
-                    + "," + siegeZone.getFlagLocation().getZ());
-
-			sg_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
-			sg_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
-			sg_hm.put("siegePoints", siegeZone.getSiegePoints());
-			sg_hm.put("warChestAmount", siegeZone.getWarChestAmount());
-
-			//Player-scoretime maps are not saved/loaded
-            //As it is tricky but with no significant benefit
-
-            UpdateDB("SIEGEZONES", sg_hm, Collections.singletonList("siegeZoneName"));
+			UpdateDB("SIEGES", sg_hm, Collections.singletonList("name"));
 
         } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Save Siegezone unknown error");
+            TownyMessaging.sendErrorMsg("SQL: Save siege unknown error");
             e.printStackTrace();
         }
         return false;
@@ -2300,10 +2237,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
     
     @Override
-    public void deleteSiegeZone(SiegeZone siegeZone) {
-        HashMap<String, Object> siegeZones_hm = new HashMap<>();
-        siegeZones_hm.put("siegeZoneName", siegeZone.getName());
-        DeleteDB("SIEGEZONES", siegeZones_hm);
+    public void deleteSiege(Siege siege) {
+        HashMap<String, Object> sieges_hm = new HashMap<>();
+		sieges_hm.put("name", siege.getName());
+        DeleteDB("SIEGES", sieges_hm);
     }
 
     @Override
@@ -2507,7 +2444,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public boolean saveSiegeZoneList() {
+    public boolean saveSiegeList() {
 
         return true;
     }
