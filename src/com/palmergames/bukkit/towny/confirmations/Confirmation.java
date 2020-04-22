@@ -10,6 +10,7 @@ public class Confirmation {
 	private Runnable handler;
 	private String title;
 	private int duration = 20;
+	private int taskID;
 	
 	/**
 	 * Creates a new confirmation object.
@@ -86,5 +87,13 @@ public class Confirmation {
 	 */
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+	
+	protected void setTaskID(int taskID) {
+		this.taskID = taskID;
+	}
+	
+	protected int getTaskID() {
+		return taskID;
 	}
 }
