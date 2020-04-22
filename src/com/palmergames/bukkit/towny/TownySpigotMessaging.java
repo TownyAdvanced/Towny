@@ -136,7 +136,58 @@ public class TownySpigotMessaging {
 			sender.spigot().sendMessage(baseComponent);
 		}
 		
-		sender.sendMessage(TownySettings.getListPageMsg(page, total));
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("t", page, total);
+		sender.spigot().sendMessage(pageFooter);
+	}
+	
+	public static TextComponent getPageNavigationFooter(String prefix, int page, int total) {
+		TextComponent backButton = new TextComponent("<<<");
+		backButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page - 1)));
+		backButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_previous_page")).create()));
+		
+		TextComponent forwardButton = new TextComponent(">>>");
+		forwardButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
+		forwardButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_next_page")).create()));
+		
+		TextComponent pageText = new TextComponent("   " + TownySettings.getListPageMsg(page, total) + "   ");
+
+		TextComponent pageFooter = new TextComponent();
+		if (page < total && page > 1) {
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == 1 && page == total) {
+			backButton.setClickEvent(null);
+			backButton.setHoverEvent(null);
+			backButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+
+			forwardButton.setClickEvent(null);
+			forwardButton.setHoverEvent(null);
+			forwardButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == 1) {
+			backButton.setClickEvent(null);
+			backButton.setHoverEvent(null);
+			backButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == total) {
+			forwardButton.setClickEvent(null);
+			forwardButton.setHoverEvent(null);
+			forwardButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		}
+		
+		return pageFooter;
 	}
 	
 	public static void sendSpigotNationList(CommandSender sender, List<Nation> nations, int page, int total) {
@@ -193,6 +244,8 @@ public class TownySpigotMessaging {
 			sender.spigot().sendMessage(baseComponent);
 		}
 
-		sender.sendMessage(TownySettings.getListPageMsg(page, total));
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("n", page, total);
+		sender.spigot().sendMessage(pageFooter);
 	}
 }
