@@ -464,7 +464,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				formatedList.add(colour + resident.getName() + Colors.White);
 			}
 		}
-		for (String line : formatedList)
+		for (String line : ChatTools.list(formatedList))
 			player.sendMessage(line);
 	}
 	
@@ -482,7 +482,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				colour = Colors.White;
 			formatedList.add(colour + resident.getName() + Colors.White);
 		}
-		for (String line : formatedList)
+		for (String line : ChatTools.list(formatedList))
 			sender.sendMessage(line);
 	}
 
@@ -630,7 +630,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				colour = Colors.White;
 			formatedList.add(colour + friends.getName() + Colors.White);
 		}
-		for (String line : formatedList)
+		for (String line : ChatTools.list(formatedList))
 			player.sendMessage(line);
 	}
 
