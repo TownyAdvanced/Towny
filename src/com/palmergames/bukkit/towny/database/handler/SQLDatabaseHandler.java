@@ -87,7 +87,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				value = values.get(fieldName);
 			} else if (field.getType().isEnum()) {
 				// Assume value is a string
-				value = loadEnum((String) values.get(fieldName), classType);
+				value = ReflectionUtil.loadEnum((String) values.get(fieldName), classType);
 			} else {
 				value = fromFileString((String) values.get(fieldName), classType);
 			}
@@ -128,10 +128,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			columnMap.put(rsMD.getColumnName(i), rs.getObject(i));
 		}
 		return columnMap;
-	}
-
-	private <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
-		return Enum.valueOf((Class<T>)type, str.toUpperCase());
 	}
 
 	// Necessary?

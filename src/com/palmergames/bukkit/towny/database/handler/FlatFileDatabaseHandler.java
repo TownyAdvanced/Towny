@@ -109,7 +109,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			if (ReflectionUtil.isPrimitive(type)) {
 				value = loadPrimitive(values.get(fieldName), type);
 			} else if (field.getType().isEnum()) {
-				value = loadEnum(values.get(fieldName), classType);
+				value = ReflectionUtil.loadEnum(values.get(fieldName), classType);
 			} else {
 				value = fromFileString(values.get(fieldName), type);
 			}
@@ -154,11 +154,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			e.printStackTrace();
 		}
 		return keys;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
-		return Enum.valueOf((Class<T>)type, str.toUpperCase());
 	}
 	
 	// ---------- File Getters ----------

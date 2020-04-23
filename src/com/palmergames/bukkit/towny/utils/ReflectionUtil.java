@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -97,6 +98,10 @@ public class ReflectionUtil {
 		|| type == double.class || type == Double.class
 		|| type == long.class || type == Long.class
 		|| type == byte.class || type == Byte.class;
+	}
+
+	public static <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
+		return Enum.valueOf((Class<T>)type, str);
 	}
 	
 	public static void dump(Object obj) {
