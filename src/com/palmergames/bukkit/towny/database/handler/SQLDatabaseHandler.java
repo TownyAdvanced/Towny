@@ -129,33 +129,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 		return columnMap;
 	}
-
-	// Necessary?
-	
-	@Override
-	public Town loadTown(UUID id) {
-		return null;
-	}
-
-	@Override
-	public Resident loadResident(UUID id) {
-		return null;
-	}
-
-	@Override
-	public Nation loadNation(UUID id) {
-		return null;
-	}
-
-	@Override
-	public TownyWorld loadWorld(UUID id) {
-		return null;
-	}
-
-	@Override
-	public TownBlock loadTownBlock(UUID id) {
-		return null;
-	}
 	
 	// None of the methods below call their respective load functions
 	// because that would require an useless extra query

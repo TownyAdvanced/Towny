@@ -318,13 +318,6 @@ public abstract class DatabaseHandler {
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.
-	
-	// ---------- Load Methods ----------
-	public abstract Town loadTown(UUID id);
-	public abstract Resident loadResident(UUID id);
-	public abstract Nation loadNation(UUID id);
-	public abstract TownyWorld loadWorld(UUID id);
-	public abstract TownBlock loadTownBlock(UUID id);
 
 	// ---------- Load All Methods ----------
 	public abstract void loadAllResidents();

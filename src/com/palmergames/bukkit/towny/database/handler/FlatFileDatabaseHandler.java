@@ -182,28 +182,40 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	// ---------- Loaders ----------
 	
-	@Override
-	public Resident loadResident(UUID id) {
+	private Resident loadResident(UUID id) {
 		File residentFileFile = getResidentFile(id);
 		return load(residentFileFile, Resident.class);
 	}
 	
-	@Override
-	public Town loadTown(UUID id) {
+	private Town loadTown(UUID id) {
 		File townFile = getTownFile(id);
 		return load(townFile, Town.class);
 	}
-
-	@Override
-	public Nation loadNation(UUID id) {
+	
+	private Nation loadNation(UUID id) {
 		File nationFile = getNationFile(id);
 		return load(nationFile, Nation.class);
 	}
-
-	@Override
-	public TownyWorld loadWorld(UUID id) {
+	
+	private TownyWorld loadWorld(UUID id) {
 		File worldFile = getWorldFile(id);
 		return load(worldFile, TownyWorld.class);
+	}
+	
+	private TownBlock loadTownBlock(UUID id) {
+		File townblockFile = getTownBlockFile(id);
+
+		TownBlock townBlock = load(townblockFile, TownBlock.class);
+
+		if (townBlock != null) {
+			// Attach any loose ends.
+			try {
+				townBlock.getTown().addTownBlock(townBlock);
+				townBlock.getResident().addTownBlock(townBlock);
+			} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
+		}
+		
+		return townBlock;
 	}
 	
 	// ---------- Loaders ----------
@@ -301,25 +313,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public TownBlock loadTownBlock(UUID id) {
-		File townblockFile = getTownBlockFile(id);
-		
-		TownBlock townBlock = load(townblockFile, TownBlock.class);
-		
-		if (townBlock == null) {
-			return null;
-		}
-		
-		// Attach any loose ends.
-		try {
-			townBlock.getTown().addTownBlock(townBlock);
-			townBlock.getResident().addTownBlock(townBlock);
-		} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
-
-		return townBlock;
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {
