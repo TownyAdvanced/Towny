@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.sql.JDBCType;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,9 @@ public abstract class DatabaseHandler {
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
 		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
 		registerAdapter(Town.class, new TownHandler());
+		
+		// Loads all the bukkit worlds.
+		loadWorlds();
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -111,8 +115,14 @@ public abstract class DatabaseHandler {
 	public void loadWorlds() {
 		for (World world : Bukkit.getServer().getWorlds()) {
 			try {
-				TownyUniverse.getInstance().newWorld(world.getUID(), world.getName());
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				
+				TownyWorld wrappedWorld = new TownyWorld(world.getUID(), world.getName());
+				
+				TownyUniverse.getInstance().addWorld(wrappedWorld);
+				
+				// Save
+				save(wrappedWorld);
+			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
 		}
@@ -125,7 +135,7 @@ public abstract class DatabaseHandler {
 			return "null";
 		}
 		
-		if (obj.getClass().isEnum()) {
+		if (obj instanceof Enum<?>) {
 			return ((Enum<?>) obj).name();
 		}
 		
@@ -163,6 +173,10 @@ public abstract class DatabaseHandler {
 		
 		if (str.equals("") || str.equals("null")) {
 			return null;
+		}
+		
+		if (str.equals("[]")) {
+			return (T) Collections.emptyList();
 		}
 		
 		return adapter.fromFileFormat(str);

@@ -222,10 +222,10 @@ public class Towny extends JavaPlugin {
 		
 		ReflectionUtil.dump(resident);
 		
-		Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
-		TownBlock loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
-		ReflectionUtil.dump(loadedResident);
-		ReflectionUtil.dump(loadedTownBlock);
+		//Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		//TownBlock loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
+		//ReflectionUtil.dump(loadedResident);
+		//ReflectionUtil.dump(loadedTownBlock);
 		//ReflectionUtil.dump(loadedTown);
 		// ------------------- TESTING CODE -------------------
 	}
