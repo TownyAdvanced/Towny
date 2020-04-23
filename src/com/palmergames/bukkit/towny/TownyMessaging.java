@@ -12,6 +12,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -29,7 +30,6 @@ import java.util.List;
 public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
-	private static final String PREFIX = TownySettings.getLangString("default_towny_prefix");
 
 	/**
 	 * Sends an error message to the log
@@ -49,16 +49,15 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender instanceof Player) {
-			((Player) sender).sendMessage(PREFIX + ChatColor.RED + msg);
-		}
-
-		if (sender instanceof ConsoleCommandSender) {
-			((ConsoleCommandSender) sender).sendMessage(PREFIX + ChatColor.stripColor(msg));
-		}
-		
-		if (sender == null) {
-			System.out.print("Message called with null sender");
+		if (sender != null) {
+			CommandSender toSend = (CommandSender) sender;
+			if (toSend instanceof ConsoleCommandSender) {
+				toSend.sendMessage(ChatColor.stripColor(msg));
+			} else {
+				toSend.sendMessage(TownySettings.getLangString("default_towny_prefix") + ChatColor.RED + msg);
+			}
+		} else {
+			sendErrorMsg("Sender cannot be null!");
 		}
 		
 		sendDevMsg(msg);
@@ -98,26 +97,24 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(Object sender, String msg) {
-		// I don't fully understand the reason for the Resident check but I don't want to break something so...
-		if (sender instanceof Resident) {
-			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-			if (p == null)
-				return;
-			p.sendMessage(PREFIX + ChatColor.GREEN + msg);
+		if (sender != null) {
+			if (sender instanceof Resident) {
+				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
+				if (p != null) {
+					p.sendMessage(TownySettings.getLangString("default_towny_prefix") + ChatColor.GREEN + msg);
+				}
+			} else {
+				CommandSender toSend = (CommandSender) sender;
+				if (toSend instanceof ConsoleCommandSender) {
+					toSend.sendMessage(ChatColor.stripColor(msg));
+				} else {
+					toSend.sendMessage(TownySettings.getLangString("default_towny_prefix") + ChatColor.GREEN + msg);
+				}
+			}
+		} else {
+			sendErrorMsg("Sender cannot be null!");
 		}
 		
-		if (sender instanceof Player) {
-			((Player) sender).sendMessage(PREFIX + ChatColor.GREEN + msg);
-		}
-
-		if (sender instanceof ConsoleCommandSender) {
-			((ConsoleCommandSender) sender).sendMessage(PREFIX + ChatColor.stripColor(msg));
-		}
-
-		if (sender == null) {
-			System.out.print("Message called with null sender");
-		}
-
 		sendDevMsg(msg);
 	}
 
@@ -162,7 +159,7 @@ public class TownyMessaging {
 			if (townyDev == null) {
 				return;
 			}
-			townyDev.sendMessage(PREFIX + " DevMode: " + ChatColor.RED + msg);
+			townyDev.sendMessage(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + ChatColor.RED + msg);
 		}
 	}
 
@@ -299,7 +296,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
 				for (String line : lines) {
-					player.sendMessage(PREFIX + line);
+					player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 				}
 			}
 		}
@@ -317,7 +314,7 @@ public class TownyMessaging {
 			if (player != null)
 				try {
 					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
-						player.sendMessage(PREFIX + line);
+						player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -358,7 +355,7 @@ public class TownyMessaging {
 		if (player == null) {
 			throw new TownyException("Player could not be found!");
 		}
-		player.sendMessage(PREFIX + line);
+		player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
 
 	/**
@@ -406,7 +403,7 @@ public class TownyMessaging {
 	public static void sendTownMessagePrefixed(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour(line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(PREFIX + line);
+			player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
 
 	/**
