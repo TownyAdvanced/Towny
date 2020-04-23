@@ -49,7 +49,6 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		// todo: maybe check if it's already colored to avoid forcing red?
 		if (sender instanceof Player) {
 			((Player) sender).sendMessage(PREFIX + ChatColor.RED + msg);
 		}
@@ -99,12 +98,12 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(Object sender, String msg) {
-		// todo: maybe check if it's already colored to avoid forcing green?
 		// I don't fully understand the reason for the Resident check but I don't want to break something so...
 		if (sender instanceof Resident) {
 			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-			if (p == null) { return; }
-			p.sendMessage(PREFIX + ChatColor.stripColor(msg));
+			if (p == null)
+				return;
+			p.sendMessage(PREFIX + ChatColor.GREEN + msg);
 		}
 		
 		if (sender instanceof Player) {
@@ -246,7 +245,7 @@ public class TownyMessaging {
 				if (p == null) {
 					return;
 				}
-				p.sendMessage(PREFIX + Colors.strip(line));
+				p.sendMessage(Colors.strip(line));
 			}
 		}
 	}
