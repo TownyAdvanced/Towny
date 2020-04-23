@@ -27,8 +27,6 @@ public class ChatTools {
 
 	public static List<String> list(List<String> args, String prefix) {
 		if (args.size() > 0) {
-			args.forEach((line) -> ChatColor.translateAlternateColorCodes('&', line));
-			prefix = ChatColor.translateAlternateColorCodes('&', prefix);
 			List<String> out = new ArrayList<>();
 			out.add(prefix + String.join(", ", args));
 			return out;

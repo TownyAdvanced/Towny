@@ -440,9 +440,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedTowns != null) {
 			if (removedTowns.size() == 1)
-				TownyMessaging.sendGlobalMessage(removedTowns.get(0) + TownySettings.getLangString("msg_bankrupt_town2"));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"), removedTowns.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(String.format("%s%s", TownySettings.getLangString("msg_bankrupt_town_multiple"), String.join(", ", removedTowns)));
+				TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_bankrupt_town_multiple") + String.join(", ", removedTowns));
 		}	
 	}
 
@@ -495,9 +495,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedNations != null && !removedNations.isEmpty()) {
 			if (removedNations.size() == 1)
-				TownyMessaging.sendGlobalMessage(removedNations.get(0) + TownySettings.getLangString("msg_bankrupt_nation2"));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), removedNations.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(String.format("%s%s", TownySettings.getLangString("msg_bankrupt_nation_multiple"), String.join(", ", removedNations)));
+				TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_bankrupt_nation_multiple") + String.join(", ", removedNations));
 		}
 	}
 }
