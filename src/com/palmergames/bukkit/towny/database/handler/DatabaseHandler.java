@@ -70,6 +70,9 @@ public abstract class DatabaseHandler {
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
 		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
 		registerAdapter(Town.class, new TownHandler());
+		
+		// Loads all the bukkit worlds.
+		loadWorlds();
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -111,8 +114,14 @@ public abstract class DatabaseHandler {
 	public void loadWorlds() {
 		for (World world : Bukkit.getServer().getWorlds()) {
 			try {
-				TownyUniverse.getInstance().newWorld(world.getUID(), world.getName());
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				
+				TownyWorld wrappedWorld = new TownyWorld(world.getUID(), world.getName());
+				
+				TownyUniverse.getInstance().addWorld(wrappedWorld);
+				
+				// Save
+				save(wrappedWorld);
+			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
 		}
