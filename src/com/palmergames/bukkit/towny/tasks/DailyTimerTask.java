@@ -231,9 +231,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (localRemovedTowns != null) {
 				if (localRemovedTowns.size() == 1) 
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(localRemovedTowns), "nation"));
+					TownyMessaging.sendNationMessagePrefixed(nation, String.format("%s%s%s", TownySettings.getLangString("msg_couldnt_pay_tax"), String.join(", ", localRemovedTowns), "nation"));
 				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localRemovedTowns, TownySettings.getLangString("msg_couldnt_pay_nation_tax_multiple")));
+					TownyMessaging.sendNationMessagePrefixed(nation, String.format("%s%s", String.join(", ", localRemovedTowns), TownySettings.getLangString("msg_couldnt_pay_nation_tax_multiple")));
 			}
 		}
 
@@ -320,10 +320,10 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 			if (removedResidents != null) {
-				if (removedResidents.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(removedResidents), "town"));
+				if (removedResidents.size() == 1)
+					TownyMessaging.sendPrefixedTownMessage(town, String.format("%s%s%s", TownySettings.getLangString("msg_couldnt_pay_tax"), String.join(", ", removedResidents), "town"));
 				else
-					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(removedResidents, TownySettings.getLangString("msg_couldnt_pay_town_tax_multiple")));
+					TownyMessaging.sendPrefixedTownMessage(town, String.format("%s%s", String.join(", ", removedResidents), TownySettings.getLangString("msg_couldnt_pay_town_tax_multiple")));
 			}
 		}
 
@@ -373,10 +373,10 @@ public class DailyTimerTask extends TownyTimerTask {
 				
 			}
 			if (lostPlots != null) {
-				if (lostPlots.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), ChatTools.list(lostPlots)));
+				if (lostPlots.size() == 1)
+					TownyMessaging.sendPrefixedTownMessage(town, String.format("%s%s", TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), String.join(", ", lostPlots)));
 				else
-					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(lostPlots, TownySettings.getLangString("msg_couldnt_pay_plot_taxes_multiple")));
+					TownyMessaging.sendPrefixedTownMessage(town, String.format("%s%s", String.join(", ", lostPlots), TownySettings.getLangString("msg_couldnt_pay_plot_taxes_multiple")));
 			}
 		}
 	}
@@ -439,10 +439,10 @@ public class DailyTimerTask extends TownyTimerTask {
 			}			
 		}
 		if (removedTowns != null) {
-			if (removedTowns.size() == 1) 
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"), removedTowns.get(0)));
+			if (removedTowns.size() == 1)
+				TownyMessaging.sendGlobalMessage(removedTowns.get(0) + TownySettings.getLangString("msg_bankrupt_town2"));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));
+				TownyMessaging.sendGlobalMessage(String.format("%s%s", TownySettings.getLangString("msg_bankrupt_town_multiple"), String.join(", ", removedTowns)));
 		}	
 	}
 
@@ -493,11 +493,11 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
-		if (removedNations != null) {
-			if (removedNations.size() == 1) 
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), removedNations.get(0)));
+		if (removedNations != null && !removedNations.isEmpty()) {
+			if (removedNations.size() == 1)
+				TownyMessaging.sendGlobalMessage(removedNations.get(0) + TownySettings.getLangString("msg_bankrupt_nation2"));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, TownySettings.getLangString("msg_bankrupt_nation_multiple")));
+				TownyMessaging.sendGlobalMessage(String.format("%s%s", TownySettings.getLangString("msg_bankrupt_nation_multiple"), String.join(", ", removedNations)));
 		}
 	}
 }

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
+	private static final String PREFIX = TownySettings.getLangString("default_towny_prefix");
 
 	/**
 	 * Sends an error message to the log
@@ -47,22 +49,19 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		boolean isPlayer = false;
+		// todo: maybe check if it's already colored to avoid forcing red?
 		if (sender instanceof Player) {
-			isPlayer = true;
+			((Player) sender).sendMessage(PREFIX + ChatColor.RED + msg);
 		}
 
+		if (sender instanceof ConsoleCommandSender) {
+			((ConsoleCommandSender) sender).sendMessage(PREFIX + ChatColor.stripColor(msg));
+		}
+		
 		if (sender == null) {
 			System.out.print("Message called with null sender");
 		}
-
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg)) {
-			if (isPlayer) {
-				((Player) sender).sendMessage(line);
-			} else {
-				((CommandSender) sender).sendMessage(Colors.strip(line));
-			}
-		}
+		
 		sendDevMsg(msg);
 	}
 
@@ -75,17 +74,9 @@ public class TownyMessaging {
 	 * @param msg the message array being sent.
 	 */
 	public static void sendErrorMsg(Object sender, String[] msg) {
-		boolean isPlayer = false;
-		if (sender instanceof Player) {
-			isPlayer = true;
+		for (String line : msg) {
+			sendErrorMsg(sender, line);
 		}
-
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
-			if (isPlayer)
-				((Player) sender).sendMessage(line);
-			else
-				((CommandSender) sender).sendMessage(Colors.strip(line));
-		sendDevMsg(msg);
 	}
 
 	/**
@@ -108,22 +99,30 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(Object sender, String msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			if (sender instanceof Player) {
-				((Player) sender).sendMessage(line);
-			} else if (sender instanceof CommandSender) {
-				((CommandSender) sender).sendMessage(Colors.strip(line));
-			} else if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p == null) {
-					return;
-				}
-				p.sendMessage(Colors.strip(line));
-			}
+		// todo: maybe check if it's already colored to avoid forcing green?
+		// I don't fully understand the reason for the Resident check but I don't want to break something so...
+		if (sender instanceof Resident) {
+			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
+			if (p == null) { return; }
+			p.sendMessage(PREFIX + ChatColor.stripColor(msg));
 		}
+		
+		if (sender instanceof Player) {
+			((Player) sender).sendMessage(PREFIX + ChatColor.GREEN + msg);
+		}
+
+		if (sender instanceof ConsoleCommandSender) {
+			((ConsoleCommandSender) sender).sendMessage(PREFIX + ChatColor.stripColor(msg));
+		}
+
+		if (sender == null) {
+			System.out.print("Message called with null sender");
+		}
+
 		sendDevMsg(msg);
 	}
 
+	// todo: these two can probably be consolidated
 	/**
 	 * Sends a message (green) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
@@ -133,8 +132,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendMsg(Player player, String[] msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			player.sendMessage(line);
+		for (String line : msg) {
+			sendMsg(player, line);
 		}
 	}
 	
@@ -147,8 +146,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendMsg(Player player, List<String> msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			player.sendMessage(line);
+		for (String line : msg) {
+			sendMsg(player, line);
 		}
 	}
 
@@ -164,8 +163,7 @@ public class TownyMessaging {
 			if (townyDev == null) {
 				return;
 			}
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
-				townyDev.sendMessage(line);
+			townyDev.sendMessage(PREFIX + " DevMode: " + ChatColor.RED + msg);
 		}
 	}
 
@@ -176,12 +174,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendDevMsg(String[] msg) {
-		if (TownySettings.isDevMode()) {
-			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
-			if (townyDev == null)
-				return;
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
-				townyDev.sendMessage(line);
+		for (String line : msg) {
+			sendDevMsg(line);
 		}
 	}
 
@@ -252,7 +246,7 @@ public class TownyMessaging {
 				if (p == null) {
 					return;
 				}
-				p.sendMessage(Colors.strip(line));
+				p.sendMessage(PREFIX + Colors.strip(line));
 			}
 		}
 	}
@@ -306,7 +300,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
 				for (String line : lines) {
-					player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+					player.sendMessage(PREFIX + line);
 				}
 			}
 		}
@@ -324,7 +318,7 @@ public class TownyMessaging {
 			if (player != null)
 				try {
 					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
-						player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+						player.sendMessage(PREFIX + line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -365,7 +359,7 @@ public class TownyMessaging {
 		if (player == null) {
 			throw new TownyException("Player could not be found!");
 		}
-		player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+		player.sendMessage(PREFIX + line);
 	}
 
 	/**
@@ -413,7 +407,7 @@ public class TownyMessaging {
 	public static void sendTownMessagePrefixed(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour(line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+			player.sendMessage(PREFIX + line);
 	}
 
 	/**
@@ -571,9 +565,10 @@ public class TownyMessaging {
 	 * @param town the town for which to show it's board
 	 */
 	public static void sendTownBoard(Player player, Town town) {
-		for (String line : ChatTools.color(TownySettings.getLangString("townboard_message_colour_1") + "[" + town.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + town.getTownBoard())) {
-			player.sendMessage(line);
-		}
+		String tbColor1 = TownySettings.getLangString("townboard_message_colour_1");
+		String tbColor2 = TownySettings.getLangString("townboard_message_colour_2");
+		
+		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getTownBoard());
 	}
 	
 	/**
@@ -583,9 +578,10 @@ public class TownyMessaging {
 	 * @param nation the nation for which to show it's board
 	 */
 	public static void sendNationBoard(Player player, Nation nation) {
-		for (String line : ChatTools.color(TownySettings.getLangString("nationboard_message_colour_1") + "[" + nation.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + nation.getNationBoard())) {
-			player.sendMessage(line);
-		}
+		String nbColor1 = TownySettings.getLangString("nationboard_message_colour_1");
+		String nbColor2 = TownySettings.getLangString("nationboard_message_colour_2");
+
+		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getNationBoard());
 	}
 	
 	/**

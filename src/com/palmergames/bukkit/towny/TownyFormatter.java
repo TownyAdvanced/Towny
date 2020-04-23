@@ -20,6 +20,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -54,7 +55,6 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
 		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
@@ -334,7 +334,7 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.addAll(ChatTools.color(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard())));
+			out.add(TownySettings.getLangString("status_town_board") + town.getTownBoard());
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
