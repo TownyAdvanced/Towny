@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.sql.JDBCType;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,7 +135,7 @@ public abstract class DatabaseHandler {
 			return "null";
 		}
 		
-		if (obj.getClass().isEnum()) {
+		if (obj instanceof Enum<?>) {
 			return ((Enum<?>) obj).name();
 		}
 		
@@ -172,6 +173,10 @@ public abstract class DatabaseHandler {
 		
 		if (str.equals("") || str.equals("null")) {
 			return null;
+		}
+		
+		if (str.equals("[]")) {
+			return (T) Collections.emptyList();
 		}
 		
 		return adapter.fromFileFormat(str);

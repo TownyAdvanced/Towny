@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
 import com.palmergames.bukkit.towny.database.handler.SQLData;
 
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.sql.JDBCType;
 

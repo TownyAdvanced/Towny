@@ -53,7 +53,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
-	private transient EconomyAccount account = new EconomyAccount(getName());
+	private transient EconomyAccount account;
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
