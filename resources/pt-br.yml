@@ -1,5 +1,5 @@
 name: Towny
-version: 0.81
+version: 0.82
 language: português (Brasil)
 author: BannerGames
 website: 'http://townyadvanced.github.io/'
@@ -1130,3 +1130,10 @@ msg_new_town_advice: 'Parabéns por criar sua cidade! Sua cidade pagará uma tax
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: 'Seu teleporte foi cancelado ao tomar dano.'
+
+# Added in 0.82
+invitation_prefix: "&8[&7Convite&8] &9"
+confirmation_prefix: "&8[&7Confirmação&8] &9"
+this_message_will_expire2: '&9Irá espirar automaticamente em 20 segundos'
+msg_hover_next_page: 'Próxima página'
+msg_hover_previous_page: 'Página anterior'

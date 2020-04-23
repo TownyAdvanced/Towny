@@ -31,6 +31,7 @@ public class ConfirmationHandler {
 	 * @param sender The sender to get the confirmation from.
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
+		Bukkit.getScheduler().cancelTask(confirmations.get(sender).getTaskID());
 		confirmations.remove(sender);
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
@@ -41,6 +42,13 @@ public class ConfirmationHandler {
 	 * @param confirmation The confirmation to add.
 	 */
 	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {
+		
+		// Check if confirmation is already active and perform appropriate actions.
+		if (confirmations.containsKey(sender)) {
+			// Cancel prior Confirmation actions.
+			cancelConfirmation(sender);
+		}
+		
 		// Add the confirmation to the map.
 		confirmations.put(sender, confirmation);
 		
@@ -51,13 +59,16 @@ public class ConfirmationHandler {
 		int duration = confirmation.getDuration();
 		
 		// Remove the confirmation after 20 seconds.
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			// Show cancel messages only if the confirmation exists.
 			if (hasConfirmation(sender)) {
 				confirmations.remove(sender);
 				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
 			}
-		}, 20L * duration);
+		}, 20L * duration).getTaskId();
+		
+		// Cache task ID
+		confirmation.setTaskID(taskID);
 	}
 
 	/**
@@ -74,9 +85,13 @@ public class ConfirmationHandler {
 
 		// Execute handler.
 		handler.run();
+
+		// Cancel task.
+		Bukkit.getScheduler().cancelTask(confirmation.getTaskID());
 		
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
+		
 	}
 	
 	public static boolean hasConfirmation(CommandSender sender) {
