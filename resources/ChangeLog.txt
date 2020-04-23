@@ -4512,3 +4512,4 @@ v0.92.0.11:
   - Clickable navigation arrows on /n list and /t list pages, courtesy of Siris with PR #3937.
     - Requires using Spigot or Paper or equivalent.
     - Closes #3853.
+  - Make sure clickable texts are using the full command and not shortened versions.

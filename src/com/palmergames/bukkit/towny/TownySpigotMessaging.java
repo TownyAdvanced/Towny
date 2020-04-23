@@ -126,7 +126,7 @@ public class TownySpigotMessaging {
 			
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town + " -ignore"));
+			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/town spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
 		}
@@ -137,7 +137,7 @@ public class TownySpigotMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("t", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("town", page, total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 	
@@ -234,7 +234,7 @@ public class TownySpigotMessaging {
 
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation + " -ignore"));
+			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nation spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
 		}
@@ -245,7 +245,7 @@ public class TownySpigotMessaging {
 		}
 
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("n", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("nation", page, total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 }
