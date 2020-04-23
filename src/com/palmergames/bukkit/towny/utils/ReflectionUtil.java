@@ -90,17 +90,13 @@ public class ReflectionUtil {
 	}
 	
 	public static boolean isPrimitive(Type type) {
-		
-		boolean primitive = type == int.class || type == Integer.class;
-		primitive |= type == boolean.class || type == Boolean.class;
-		primitive |= type == char.class || type == Character.class;
-		primitive |= type == float.class || type == Float.class;
-		primitive |= type == double.class || type == Double.class;
-		primitive |= type == long.class || type == Long.class;
-		primitive |= type == byte.class || type == Byte.class;
-		
-		return primitive;
-		
+		return type == int.class || type == Integer.class
+		|| type == boolean.class || type == Boolean.class
+		|| type == char.class || type == Character.class
+		|| type == float.class || type == Float.class
+		|| type == double.class || type == Double.class
+		|| type == long.class || type == Long.class
+		|| type == byte.class || type == Byte.class;
 	}
 	
 	public static void dump(Object obj) {

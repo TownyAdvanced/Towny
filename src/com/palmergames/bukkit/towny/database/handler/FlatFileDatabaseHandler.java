@@ -158,7 +158,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	@SuppressWarnings("unchecked")
 	private <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
-		return Enum.valueOf((Class<T>)type, str);
+		return Enum.valueOf((Class<T>)type, str.toUpperCase());
 	}
 	
 	// ---------- File Getters ----------
