@@ -48,6 +48,9 @@ public class WarTimerTask extends TownyTimerTask {
 				TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 				try {
 					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (!resident.hasTown() || !warEvent.isWarringTown(resident.getTown()))
+						continue;
+					
 					if (resident.hasNation()) {
 						Nation nation = resident.getTown().getNation();
 						TownyMessaging.sendDebugMsg("[War]   hasNation");
