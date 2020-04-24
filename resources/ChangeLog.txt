@@ -4513,3 +4513,6 @@ v0.92.0.11:
     - Requires using Spigot or Paper or equivalent.
     - Closes #3853.
   - Make sure clickable texts are using the full command and not shortened versions.
+  - pt-br.yml updated to 0.82 courtesy of vsdepontes with PR #3930.
+  - Fix nations being able to kick towns from their nation during war.
+    - To prevent nations not having to defend all of their towns in war.

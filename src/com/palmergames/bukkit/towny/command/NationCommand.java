@@ -1708,6 +1708,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Nation nation;
 		try {
+			
+			if (TownyAPI.getInstance().isWarTime())
+				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+			
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
 
