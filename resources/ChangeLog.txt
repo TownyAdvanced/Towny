@@ -4517,3 +4517,4 @@ v0.92.0.11:
   - Fix nations being able to kick towns from their nation during war.
     - To prevent nations not having to defend all of their towns in war.
   - Fix non-warring Towns from still being able to be considered as attackers in Event war.
+  - Fix flying players being able to count as townblock attackers/defenders in Event war.
