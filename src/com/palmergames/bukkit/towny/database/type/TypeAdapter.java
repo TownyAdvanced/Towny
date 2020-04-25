@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 /**
  * A class which is used a method of transport for type translations. This object is 
  * referenced during loading and saving in order to process how to convert objects
- * from their respective storage formats to a code-ready one.
+ * from their respective storage formats to a code-ready one.<p>
  * 
  * @param <T> The object that is being adapted.
  * @author Suneet Tipirneni (Siris)

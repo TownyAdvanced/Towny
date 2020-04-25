@@ -44,7 +44,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 	
 	@Override
-	public void save(Saveable obj) {
+	public void save(@NotNull Saveable obj) {
 		// TODO Fill-in method with proper save algorithm
 		throw new UnsupportedOperationException("save() Stub");
 	}
@@ -99,7 +99,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
-	public boolean delete(Saveable obj) {
+	public boolean delete(@NotNull Saveable obj) {
 		return false;
 	}
 	

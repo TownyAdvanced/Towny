@@ -37,7 +37,7 @@ import java.util.UUID;
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	@Override
-	public void save(Saveable obj) {
+	public void save(@NotNull Saveable obj) {
 		// Validation safety
 		Validate.notNull(obj);
 		Validate.notNull(obj.getSavePath(), "You must specify a save path for class: " + obj.getClass().getName());

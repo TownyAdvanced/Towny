@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,7 +35,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.sql.JDBCType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -233,7 +233,7 @@ public abstract class DatabaseHandler {
 			return "BIT(8)";
 		}
 		
-		TypeAdapter typeAdapter = getAdapter(type);
+		TypeAdapter<?> typeAdapter = getAdapter(type);
 		
 		if (typeAdapter != null) {
 			return typeAdapter.getSQLColumnDefinition();
@@ -251,6 +251,7 @@ public abstract class DatabaseHandler {
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void upgrade() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
@@ -269,10 +270,10 @@ public abstract class DatabaseHandler {
 
 	/**
 	 * Saves the given object to the DB.
-	 * 
+	 *
 	 * @param obj The object to save.
 	 */
-	public abstract void save(Saveable obj);
+	public abstract void save(@NotNull Saveable obj);
 
 	/**
 	 * Removes the given object from the DB.
@@ -280,7 +281,7 @@ public abstract class DatabaseHandler {
 	 * @param obj The object to delete.
 	 * @return A boolean indicating if successful or not.
 	 */
-	public abstract boolean delete(Saveable obj);
+	public abstract boolean delete(@NotNull Saveable obj);
 
 	/**
 	 * Saves all given objects to the DB.
@@ -297,7 +298,9 @@ public abstract class DatabaseHandler {
 	 * 
 	 * @param objs The objects to save.
 	 */
-	public void save(Collection<? extends Saveable> objs) {
+	public void save(@NotNull Collection<? extends Saveable> objs) {
+		Validate.notNull(objs);
+		
 		for (Saveable obj : objs) {
 			save(obj);
 		}
@@ -313,7 +316,7 @@ public abstract class DatabaseHandler {
 	public abstract void loadAllTownBlocks();
 
 	/**
-	 * Loads all neccesary objects for the database.
+	 * Loads all necessary objects for the database.
 	 */
 	public void loadAll() {
 

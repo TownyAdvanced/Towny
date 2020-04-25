@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks if a field is a primary key for an SQL table.
+ * Marks if a field is a primary key for an SQL table.<p>
  * 
  * Note: Because you can only have one primary key, the first primary key
- * found within the field list, is considered the primary key.
+ * found within the field list, is considered the primary key. <p>
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
