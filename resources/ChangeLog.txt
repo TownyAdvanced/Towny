@@ -4518,3 +4518,6 @@ v0.92.0.11:
     - To prevent nations not having to defend all of their towns in war.
   - Fix non-warring Towns from still being able to be considered as attackers in Event war.
   - Fix flying players being able to count as townblock attackers/defenders in Event war.
+  - Fix resident's Town and Nation ranks being able to double up, which caused rare issues with TownyNameUpdater.
+    - Also catching the ConcurrentModificationException if it does somehow occur again.
+    - Closes #3912.

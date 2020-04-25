@@ -39,6 +39,7 @@ import javax.naming.InvalidNameException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -1018,7 +1019,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setTitle(title);
 			resident.setTown(town);
 			resident.setTownblocks(townBlocks);
-			resident.setTownRanks(townRanks);
+			try {
+				resident.setTownRanks(townRanks);
+			} catch (ConcurrentModificationException ignored) {
+				// If this gets tripped by TownyNameUpdater in the future we will at least not be deleting anyone, they just won't have their townranks.
+			}
 			resident.setRegistered(registered);
 			resident.setLastOnline(lastOnline);
 			if(isMayor){
