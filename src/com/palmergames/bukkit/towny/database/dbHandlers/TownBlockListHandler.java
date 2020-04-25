@@ -1,11 +1,7 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
-import com.palmergames.bukkit.towny.database.handler.SaveContext;
-import com.palmergames.bukkit.towny.database.handler.SQLData;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
 import java.util.ArrayList;
@@ -23,7 +19,7 @@ public class TownBlockListHandler implements LoadHandler<List<TownBlock>> {
 		
 		for (String townblock : townBlockStrs) {
 			
-			TownBlock tb = context.fromFileString(townblock, TownBlock.class);
+			TownBlock tb = context.fromStoredString(townblock, TownBlock.class);
 			
 			if (tb == null) {
 				continue;
@@ -33,10 +29,5 @@ public class TownBlockListHandler implements LoadHandler<List<TownBlock>> {
 		}
 		
 		return townBlocks;
-	}
-
-	@Override
-	public List<TownBlock> loadSQL(LoadContext context, Object result) {
-		return null;
 	}
 }

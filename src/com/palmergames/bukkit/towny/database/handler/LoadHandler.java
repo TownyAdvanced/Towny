@@ -16,13 +16,4 @@ public interface LoadHandler<T>  {
 	 * @return The object in its natural form.
 	 */
 	T loadString(LoadContext context, String str);
-
-	/**
-	 * Converts the given SQL object to a it's natural object form.
-	 * 
-	 * @param context The load context.
-	 * @param result The SQL-loaded object.
-	 * @return The object in it's natural state.
-	 */
-	T loadSQL(LoadContext context, Object result);
 }

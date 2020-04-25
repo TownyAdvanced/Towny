@@ -12,9 +12,4 @@ public class TownyPermissionsHandler implements LoadHandler<TownyPermission> {
 		townyPermission.load(str);
 		return townyPermission;
 	}
-
-	@Override
-	public TownyPermission loadSQL(LoadContext context, Object result) {
-		return null;
-	}
 }

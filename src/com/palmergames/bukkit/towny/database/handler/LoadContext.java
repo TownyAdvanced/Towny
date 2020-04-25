@@ -10,12 +10,8 @@ public class LoadContext {
 		this.handler = handler;
 	}
 	
-	public <T> T fromFileString(String str, Type type) {
-		return getHandler().fromFileString(str, type);
-	}
-
-	public <T> T fromSQL(Object obj, Class<T> type) {
-		return getHandler().fromSQL(obj, type);
+	public <T> T fromStoredString(String str, Type type) {
+		return getHandler().fromStoredString(str, type);
 	}
 
 	public DatabaseHandler getHandler() {

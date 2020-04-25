@@ -12,9 +12,4 @@ public class TownyPermsFlatFileHandler implements LoadHandler<TownyPermission> {
 
 		return townyPermission;
 	}
-
-	@Override
-	public TownyPermission loadSQL(LoadContext context, Object result) {
-		return null;
-	}
 }

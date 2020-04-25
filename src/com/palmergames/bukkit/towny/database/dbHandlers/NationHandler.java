@@ -15,9 +15,4 @@ public class NationHandler implements LoadHandler<Nation> {
 		}
 		return null;
 	}
-
-	@Override
-	public Nation loadSQL(LoadContext context, Object result) {
-		return null;
-	}
 }

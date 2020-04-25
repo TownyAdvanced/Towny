@@ -111,7 +111,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			} else if (field.getType().isEnum()) {
 				value = ReflectionUtil.loadEnum(values.get(fieldName), classType);
 			} else {
-				value = fromFileString(values.get(fieldName), type);
+				value = fromStoredString(values.get(fieldName), type);
 			}
 
 			if (value == null) {
@@ -317,7 +317,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {
 		for (Map.Entry<String, ObjectContext> entry : from.entrySet()) {
-			String valueStr = toFileString(entry.getValue().getValue(), entry.getValue().getType());
+			String valueStr = toStoredString(entry.getValue().getValue(), entry.getValue().getType());
 			to.put(entry.getKey(), valueStr);
 		}
 	}

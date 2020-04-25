@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Saveable;
@@ -128,7 +127,7 @@ public abstract class DatabaseHandler {
 		}
 	}
 	
-	public <T> String toFileString(Object obj, Type type) {
+	public <T> String toStoredString(Object obj, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 		
 		if (obj == null) {
@@ -143,28 +142,10 @@ public abstract class DatabaseHandler {
 			return obj.toString();
 		}
 		
-		return adapter.getFileFormat((T) obj);
+		return adapter.toStoredString((T) obj);
 	}
 	
-	public <T> SQLData toSQL(Object obj, Type type) {
-		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
-		
-		if (obj == null) {
-			return null;
-		}
-		
-		if (obj.getClass().isPrimitive()) {
-			return getPrimitiveSQL(obj);
-		}
-
-		if (adapter == null) {
-			return new SQLData(obj.toString(), JDBCType.VARCHAR);
-		}
-		
-		return adapter.getSQL((T) obj);
-	}
-	
-	public final <T> @Nullable T fromFileString(String str, Type type) {
+	public final <T> @Nullable T fromStoredString(String str, Type type) {
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
@@ -179,17 +160,7 @@ public abstract class DatabaseHandler {
 			return (T) Collections.emptyList();
 		}
 		
-		return adapter.fromFileFormat(str);
-	}
-	
-	public final  <T> T fromSQL(Object obj, Class<T> type) {
-		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
-
-		if (adapter == null) {
-			throw new UnsupportedOperationException("There is SQL load adapter for " + type);
-		}
-		
-		return adapter.fromSQL(null);
+		return adapter.fromStoredString(str);
 	}
 
 	/**
@@ -243,25 +214,41 @@ public abstract class DatabaseHandler {
 		return null;
 	}
 
-	private final SQLData getPrimitiveSQL(Object object) {
-		Class<?> type = object.getClass();
+	// This method is in this class because TypeAdapter is not exposed
+	protected final String getSQLColumnDefinition(Field field) {
+		Class<?> type = field.getType();
 		if (type == int.class || type == Integer.class) {
-			return new SQLData(object, JDBCType.INTEGER);
+			return "INTEGER";
 		} else if (type == boolean.class || type == Boolean.class) {
-			return new SQLData(object, JDBCType.BOOLEAN);
+			return "BOOLEAN NOT NULL DEFAULT '0'";
 		} else if (type == char.class || type == Character.class) {
-			return new SQLData(object, JDBCType.CHAR);
+			return "CHAR(1)";
 		} else if (type == float.class || type == Float.class) {
-			return new SQLData(object, JDBCType.FLOAT);
+			return "FLOAT";
 		} else if (type == double.class || type == Double.class) {
-			return new SQLData(object, JDBCType.DOUBLE);
+			return "DOUBLE";
 		} else if (type == long.class || type == Long.class) {
-			return new SQLData(object, JDBCType.BIGINT);
+			return "LONG";
 		} else if (type == byte.class || type == Byte.class) {
-			return new SQLData(object, JDBCType.VARBINARY);
+			return "BIT(8)";
 		}
+		
+		TypeAdapter typeAdapter = getAdapter(type);
+		
+		if (typeAdapter != null) {
+			return typeAdapter.getSQLColumnDefinition();
+		}
+		else if (type == String.class) {
+			SQLString sqlAnnotation = field.getAnnotation(SQLString.class);
 
-		return null;
+			if (sqlAnnotation != null) {
+				SQLStringType sqlType = sqlAnnotation.stringType();
+				return sqlType.getColumnName() +
+					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation + ")" : "");
+			}
+		}
+		
+		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
 	public void upgrade() {

@@ -18,9 +18,4 @@ public class TownyWorldHandler implements LoadHandler<TownyWorld> {
 			return null;
 		}
 	}
-
-	@Override
-	public TownyWorld loadSQL(LoadContext context, Object result) {
-		return null;
-	}
 }

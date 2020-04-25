@@ -8,12 +8,8 @@ public class SaveContext {
 		this.handler = handler;
 	}
 
-	public <T> String toFileString(T obj, Class<T> type) {
-		return handler.toFileString(obj, type);
-	}
-
-	public <T> SQLData toSQL(T obj, Class<T> type) {
-		return handler.toSQL(obj, type);
+	public <T> String toStoredString(T obj, Class<T> type) {
+		return handler.toStoredString(obj, type);
 	}
 	
 }
