@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -146,7 +147,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			}
 
 			LoadSetter loadSetter = field.getAnnotation(LoadSetter.class);
-
 			try {
 				if (loadSetter != null) {
 					Method method = obj.getClass().getMethod(loadSetter.setterName(), field.getType());
@@ -255,5 +255,20 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					}
 				}
 			});
+	}
+	
+	@Nullable
+	private Field fetchPrimaryKeyField(@NotNull Object obj) {
+		Validate.notNull(obj);
+		
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		
+		for (Field field : fields) {
+			if (field.getAnnotation(PrimaryKey.class) != null) {
+				return field;
+			}
+		}
+		
+		return null;
 	}
 }

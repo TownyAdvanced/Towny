@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.PrimaryKey;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,8 @@ import java.util.UUID;
 
 public abstract class TownyObject implements Nameable, Saveable {
 	private String name;
+	
+	@PrimaryKey
 	private final UUID uniqueIdentifier;
 
 	private transient HashSet<CustomDataField<?>> metadata = null;

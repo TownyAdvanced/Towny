@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -23,7 +24,8 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static List<Field> getAllFields(Object townyObject, boolean ignoreTransient) {
+	public static List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
+		Validate.notNull(townyObject);
 		
 		// Get the class object.
 		Class<?> type = townyObject.getClass();
