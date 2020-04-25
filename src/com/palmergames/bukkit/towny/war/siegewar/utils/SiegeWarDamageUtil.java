@@ -9,12 +9,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
 public class SiegeWarDamageUtil {
 
-	public static String TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID = "towny.post.spawn.immunity";
+	public static String TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID = "towny.post.spawn.damage.immunity";
 
 	/**
 	 * Grant post spawn immunity to a player
@@ -23,69 +24,11 @@ public class SiegeWarDamageUtil {
 	 */
 	public static void grantPostSpawnImmunity(Player player) {
 		try {
-			if (!player.hasMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID)) {
+			if (!player.hasMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID)) {
+				long immunityEndTime = System.currentTimeMillis() + 
+					(int) (TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS);
 
-				MetadataValue postSpawnDamageImmunity =
-					new MetadataValue() {
-						private long immunityEndTime =
-							System.currentTimeMillis() +
-								(int) (TownySettings.getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS);
-
-						@Override
-						public Object value() {
-							return null;
-						}
-
-						@Override
-						public int asInt() {
-							return 0;
-						}
-
-						@Override
-						public float asFloat() {
-							return 0;
-						}
-
-						@Override
-						public double asDouble() {
-							return 0;
-						}
-
-						@Override
-						public long asLong() {
-							return immunityEndTime;
-						}
-
-						@Override
-						public short asShort() {
-							return 0;
-						}
-
-						@Override
-						public byte asByte() {
-							return 0;
-						}
-
-						@Override
-						public boolean asBoolean() {
-							return true;
-						}
-
-						@Override
-						public String asString() {
-							return null;
-						}
-
-						@Override
-						public Plugin getOwningPlugin() {
-							return Towny.getPlugin();
-						}
-
-						@Override
-						public void invalidate() {
-						}
-					};
-				player.setMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID, postSpawnDamageImmunity);
+				player.setMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID, new FixedMetadataValue(Towny.getPlugin(),  immunityEndTime));
 			}
 		} catch (Exception e) {
 			try {
@@ -105,7 +48,7 @@ public class SiegeWarDamageUtil {
 	 */
 	public static boolean isPlayerPreventedFromDamagingOtherPlayers(Player attackingPlayer) {
 		if(
-			(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && attackingPlayer.hasMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID))
+			(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() && attackingPlayer.hasMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID))
 				|| 
 			(TownySettings.getWarSiegeTownNeutralityEnabled() && isPlayerFromANeutralOrDesiredNeutralTown(attackingPlayer))
 		) {
@@ -124,7 +67,7 @@ public class SiegeWarDamageUtil {
 	public static boolean canEntityBeDamaged(Entity entity) {
 		if(TownySettings.getWarSiegePostSpawnDamageImmunityEnabled() 
 			&& entity instanceof Player
-			&& entity.hasMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID)) {
+			&& entity.hasMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID)) {
 			return false;
 		} else {
 			return true;

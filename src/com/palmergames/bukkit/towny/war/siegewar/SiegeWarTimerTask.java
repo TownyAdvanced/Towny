@@ -58,7 +58,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 */
 	private void evaluateTacticalVisibility() {
 		if (TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
-			SiegeWarDynmapUtil.evaluateTacticalVisibilityOfPlayers();
+			SiegeWarDynmapUtil.evaluatePlayerTacticalInvisibility();
 		}
 	}
 

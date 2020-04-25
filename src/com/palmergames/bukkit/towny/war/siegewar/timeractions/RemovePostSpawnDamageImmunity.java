@@ -6,7 +6,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
-import static com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil.TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID;
+import static com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil.TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID;
 
 /**
  * This class is responsible for removing post spawn damage immunity
@@ -25,9 +25,9 @@ public class RemovePostSpawnDamageImmunity {
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			try {
-				if (player.isOnline() && player.hasMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID)) {
-					if(System.currentTimeMillis() > player.getMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID).get(0).asLong()) {
-						player.removeMetadata(TOWNY_POST_SPAWN_IMMUNITY_METADATA_ID, Towny.getPlugin());
+				if (player.isOnline() && player.hasMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID)) {
+					if(System.currentTimeMillis() > player.getMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID).get(0).asLong()) {
+						player.removeMetadata(TOWNY_POST_SPAWN_DAMAGE_IMMUNITY_METADATA_ID, Towny.getPlugin());
 					}
 				}
 			} catch (Exception e) {
