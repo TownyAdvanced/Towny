@@ -4521,3 +4521,6 @@ v0.92.0.11:
   - Fix resident's Town and Nation ranks being able to double up, which caused rare issues with TownyNameUpdater.
     - Also catching the ConcurrentModificationException if it does somehow occur again.
     - Closes #3912.
+  - REQUIRED CHANGE: at protection.item_use_ids
+    - add ,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE
+    - will prevent players from stripping logs in unwanted locations.
