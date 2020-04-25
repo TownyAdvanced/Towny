@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
+import com.palmergames.bukkit.towny.database.handler.SQLDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
@@ -144,8 +145,15 @@ public class TownyUniverse {
                     break;
                 }
                 case "h2":
+					this.databaseHandler = new SQLDatabaseHandler("h2");
+					this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
+					break;
                 case "sqlite":
+					this.databaseHandler = new SQLDatabaseHandler("sqlite");
+					this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
+					break;
                 case "mysql": {
+                	this.databaseHandler = new SQLDatabaseHandler("mysql");
                     this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
                     break;
                 }
