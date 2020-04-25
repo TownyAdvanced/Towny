@@ -461,13 +461,9 @@ public class TownyFormatter {
 							);
 
 							// > Attacker: Land of Empire (Nation) {+30}
-							String sign;
-							int siegePoints = siege.getSiegePoints();
-							if(siegePoints > 0)
-								sign = "+" ;
-							else
-								sign = "";
-							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), siege.getAttackingNation().getFormattedName(), sign, siegePoints));
+							int pointsInt = siege.getSiegePoints();
+							String pointsString = pointsInt > 0 ? "+" + pointsInt: "" + pointsInt;
+							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), siege.getAttackingNation().getFormattedName(), pointsString));
 
 							// >  Victory Timer: 5.3 hours
 							String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
