@@ -80,10 +80,17 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	private <T extends TownyObject> void createTownyObjectTable(String tableName, Class<T> objectClazz) {
 		tableName = tblPrefix() + tableName;
-		// TODO Make PK an annotation
+		
+		// Fetch primary field, and gather appropriate SQL.
+		Field primaryField = fetchPrimaryKeyField(objectClazz);
+		String pkStmt = "";
+		if (primaryField != null) {
+			pkStmt = ", PRIMARY KEY" + "(`" + primaryField.getName() + "`)";
+		}
+		
 		String createTableStmt = "CREATE TABLE IF NOT EXISTS " + tableName +" ("
-			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL,"
-			+ "PRIMARY KEY (`uniqueIdentifier`)"
+			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL"
+			+ pkStmt
 			+ ")";
 
 		String alterTableStmt = "ALTER TABLE " + tableName + " ADD COLUMN " + updateColumnsFromFields(objectClazz);
