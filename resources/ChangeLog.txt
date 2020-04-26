@@ -4524,3 +4524,5 @@ v0.92.0.11:
   - REQUIRED CHANGE: at protection.item_use_ids
     - add ,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE
     - will prevent players from stripping logs in unwanted locations.
+0.96.1.8:
+  - Add Essentials to soft-depends.
