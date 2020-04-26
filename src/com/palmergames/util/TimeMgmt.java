@@ -58,12 +58,12 @@ public class TimeMgmt {
 
 		String out = "";
 		if (l >= 3600) {
-			int h = (int) Math.floor(l / 3600);
+			int h = (int) (l / 3600.0);
 			out = h + TownySettings.getLangString("msg_hours");
 			l -= h * 3600;
 		}
 		if (l >= 60) {
-			int m = (int) Math.floor(l / 60);
+			int m = (int) (l / 60.0);
 			out += (out.length() > 0 ? ", " : "") + m + TownySettings.getLangString("msg_minutes");
 			l -= m * 60;
 		}

@@ -4,13 +4,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
@@ -172,9 +166,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
      */
     public List<Player> getOnlinePlayersAlliance(Nation nation) {
-    	ArrayList<Player> players = new ArrayList<>();
-    	
-        players.addAll(getOnlinePlayers(nation));
+		ArrayList<Player> players = new ArrayList<>(getOnlinePlayers(nation));
         if (!nation.getAllies().isEmpty()) {
 			for (Nation nations : nation.getAllies()) {
 				players.addAll(getOnlinePlayers(nations));
@@ -188,25 +180,9 @@ public class TownyAPI {
      *
      * @param block {@link Block} to test for.
      * @return true if the {@link Block} is in the wilderness, false otherwise.
-     * @deprecated Use {@link #isWilderness(Location)} with block.getLocation()
      */
-    @Deprecated
     public boolean isWilderness(Block block) {
-        WorldCoord worldCoord;
-        
-        try {
-            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(block.getWorld().getName()).getName(), Coord.parseCoord(block));
-        } catch (NotRegisteredException e) {
-            // No record so must be Wilderness
-            return true;
-        }
-        
-        try {
-            return worldCoord.getTownBlock().getTown() == null;
-        } catch (NotRegisteredException e) {
-            // Must be wilderness
-            return true;
-        }
+        return isWilderness(block.getLocation());
     }
     
     /**
@@ -216,14 +192,16 @@ public class TownyAPI {
      * @return true if the {@link Location} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(Location location) {
-        WorldCoord worldCoord;
-        
-        try {
-            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
-        } catch (NotRegisteredException e) {
-            // No record so must be Wilderness
-            return true;
-        }
+        return isWilderness(WorldCoord.parseWorldCoord(location));
+    }
+    
+    /**
+     * Check if the specified {@link WorldCoord} is in the wilderness.
+     *
+     * @param worldCoord {@link WorldCoord} to test widlerness for.
+     * @return true if the {@link WorldCoord} is in the wilderness, false otherwise.
+     */
+    public boolean isWilderness(WorldCoord worldCoord) {
         
         try {
             return worldCoord.getTownBlock().getTown() == null;
@@ -231,7 +209,7 @@ public class TownyAPI {
             // Must be wilderness
             return true;
         }
-    }
+    }    
     
     /**
      * Returns value of usingTowny for the given world.
@@ -247,15 +225,14 @@ public class TownyAPI {
 		}
     }
     
-    /**
-     * Get the name of a {@link Town} at a specific {@link Location}.
+    /**     * Get the name of a {@link Town} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} name for.
      * @return {@link String} containg the name of the {@link Town} at this location, or null for none.
      */
     public String getTownName(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getName();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -272,7 +249,7 @@ public class TownyAPI {
      */
     public UUID getTownUUID(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getUuid();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -288,7 +265,7 @@ public class TownyAPI {
      */
     public TownBlock getTownBlock(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -306,6 +283,10 @@ public class TownyAPI {
 		try {
 			return townyUniverse.getDataSource().getWorld(location.getWorld().getName()).hasTownBlock(Coord.parseCoord(location));
 		} catch (NotRegisteredException e) {
+			return false;
+		} catch (Exception e) {
+			System.out.println("Problem finding townblock");
+			e.printStackTrace();
 			return false;
 		}
 	}

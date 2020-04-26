@@ -19,20 +19,20 @@ import java.util.List;
 public class TownySpigotMessaging {
 	public static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
 				String secondline = "/t invite accept " + invite.getSender().getName();
 				String thirdline = "/t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
 				String secondline = "/n ally accept " + invite.getSender().getName();
 				String thirdline = "/n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
@@ -51,7 +51,7 @@ public class TownySpigotMessaging {
 	public static void sendSpigotConfirmMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
 
 		if (firstline == null) {
-			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			firstline = TownySettings.getLangString("confirmation_prefix") + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = "/" + TownySettings.getConfirmCommand();
@@ -60,7 +60,7 @@ public class TownySpigotMessaging {
 			cancelline = "/" + TownySettings.getCancelCommand();
 		}
 		if (lastline == null) {
-			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
+			lastline = TownySettings.getLangString("this_message_will_expire2");
 		} else {
 			lastline = "";
 		}
@@ -126,7 +126,7 @@ public class TownySpigotMessaging {
 			
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/t spawn " + town));
+			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/town spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
 		}
@@ -136,7 +136,58 @@ public class TownySpigotMessaging {
 			sender.spigot().sendMessage(baseComponent);
 		}
 		
-		sender.sendMessage(TownySettings.getListPageMsg(page, total));
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("town", page, total);
+		sender.spigot().sendMessage(pageFooter);
+	}
+	
+	public static TextComponent getPageNavigationFooter(String prefix, int page, int total) {
+		TextComponent backButton = new TextComponent("<<<");
+		backButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page - 1)));
+		backButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_previous_page")).create()));
+		
+		TextComponent forwardButton = new TextComponent(">>>");
+		forwardButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
+		forwardButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_next_page")).create()));
+		
+		TextComponent pageText = new TextComponent("   " + TownySettings.getListPageMsg(page, total) + "   ");
+
+		TextComponent pageFooter = new TextComponent();
+		if (page < total && page > 1) {
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == 1 && page == total) {
+			backButton.setClickEvent(null);
+			backButton.setHoverEvent(null);
+			backButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+
+			forwardButton.setClickEvent(null);
+			forwardButton.setHoverEvent(null);
+			forwardButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == 1) {
+			backButton.setClickEvent(null);
+			backButton.setHoverEvent(null);
+			backButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		} else if (page == total) {
+			forwardButton.setClickEvent(null);
+			forwardButton.setHoverEvent(null);
+			forwardButton.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+			pageFooter.addExtra(backButton);
+			pageFooter.addExtra(pageText);
+			pageFooter.addExtra(forwardButton);
+		}
+		
+		return pageFooter;
 	}
 	
 	public static void sendSpigotNationList(CommandSender sender, List<Nation> nations, int page, int total) {
@@ -183,7 +234,7 @@ public class TownySpigotMessaging {
 
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n spawn " + nation));
+			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nation spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
 		}
@@ -193,6 +244,8 @@ public class TownySpigotMessaging {
 			sender.spigot().sendMessage(baseComponent);
 		}
 
-		sender.sendMessage(TownySettings.getListPageMsg(page, total));
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("nation", page, total);
+		sender.spigot().sendMessage(pageFooter);
 	}
 }

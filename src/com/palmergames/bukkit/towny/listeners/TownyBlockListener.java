@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarBreakBlockController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
@@ -277,22 +275,10 @@ public class TownyBlockListener implements Listener {
 		
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
-		Coord coord = Coord.parseCoord(loc);
-		Coord coordTo = Coord.parseCoord(locTo);
-
-		TownyWorld townyWorld = null;
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
-			currentTownBlock = townyWorld.getTownBlock(coord);
-		} catch (NotRegisteredException e) {
-		}
-
-		try {
-			destinationTownBlock = townyWorld.getTownBlock(coordTo);
-		} catch (NotRegisteredException e1) {
-		}
+		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
+		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
 
 		if (currentTownBlock != destinationTownBlock) {
 			
@@ -354,7 +340,7 @@ public class TownyBlockListener implements Listener {
 				
 				boolean inWarringTown = false;
 				if (TownyAPI.getInstance().isWarTime()) {
-					if (townyWorld.hasTownBlock(coord))
+					if (!TownyAPI.getInstance().isWilderness(loc))
 						if (War.isWarringTown(townBlock.getTown()))
 							inWarringTown = true;
 				}
@@ -400,9 +386,11 @@ public class TownyBlockListener implements Listener {
 		TownyWorld townyWorld;
 		List<Block> blocks = event.blockList();
 		int count = 0;
-		
+
 		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
+			if (!townyWorld.isUsingTowny())
+				return; 
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			return;
@@ -415,21 +403,8 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 			
-			if (TownyAPI.getInstance().isWilderness(block.getLocation())) {
-				if (townyWorld.isUsingTowny()) {
-					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert()) {
-							//TownyMessaging.sendDebugMsg("onCreateExplosion: Testing block: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
-							if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-								TownyRegenAPI.addProtectionRegenTask(task);
-								event.setYield((float) 0.0);
-								block.getDrops().clear();
-							}
-						}
-					}
-				}
+			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && townyWorld.isUsingPlotManagementWildRevert()) {
+				TownyRegenAPI.beginProtectionRegenTask(block, count);
 			}
 		}
 		
@@ -457,19 +432,17 @@ public class TownyBlockListener implements Listener {
 		}
 		TownBlock townBlock = null;
 		boolean isNeutral = false;
-		try {
-			townBlock = world.getTownBlock(coord);
-			if (townBlock.hasTown())
-				if (!War.isWarZone(townBlock.getWorldCoord()))
-					isNeutral = true;
-		} catch (NotRegisteredException e1) {
-			if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
-				isNeutral = !world.isExpl();
-				if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
-					return false;				
-				if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
-					return true;	
-			}
+		townBlock = TownyAPI.getInstance().getTownBlock(target);
+		if (townBlock != null && townBlock.hasTown())
+			if (!War.isWarZone(townBlock.getWorldCoord()))
+				isNeutral = true;
+
+		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
+			isNeutral = !world.isExpl();
+			if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
+				return false;				
+			if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
+				return true;	
 		}
 		
 		try {			

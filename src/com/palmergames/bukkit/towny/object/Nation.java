@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -223,11 +224,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 		this.capital = capital;
 		try {
-			recheckTownDistance();
 			TownyPerms.assignPermissions(capital.getMayor(), null);
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
 		}
+		//TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	public Town getCapital() {
@@ -248,13 +249,10 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setNationSpawn(Location spawn) throws TownyException {
-		Coord spawnBlock = Coord.parseCoord(spawn);
-		TownBlock townBlock;
-		TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()); 
-		if (world.hasTownBlock(spawnBlock))
-			townBlock = world.getTownBlock(spawnBlock);
-		else 
+		if (TownyAPI.getInstance().isWilderness(spawn))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
+
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
 
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
@@ -382,6 +380,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 				SiegeWarMembershipController.evaluateNationRemoveTown(town);
 
 			remove(town);
+			TownyUniverse.getInstance().getDataSource().saveNation(this);
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -396,6 +395,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 				if (tempCapital != null) {
 					setCapital(tempCapital);
+					TownyUniverse.getInstance().getDataSource().saveNation(this);
 				}
 
 			}
@@ -453,7 +453,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setTaxes(double taxes) {
-		this.taxes = Math.min(taxes, TownySettings.getMaxTax());
+		this.taxes = Math.min(taxes, TownySettings.getMaxNationTax());
 	}
 
 	public double getTaxes() {
@@ -473,7 +473,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	/**
-	 * Method for rechecking town distances to a new nation capital/moved nation capital homeblock.
+	 * Method for rechecking town distances to a new nation capital/moved 
+	 * nation capital homeblock. Results in towns whose homeblocks are no 
+	 * longer close enough to the capital homeblock being removed from 
+	 * the nation.
+	 * 
 	 * @throws TownyException - Generic TownyException
 	 */
 	public void recheckTownDistance() throws TownyException {
@@ -491,13 +495,44 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
-						town.setNation(null);
+						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_left_nation"), this.getName()));
+						TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName()));
+						this.remove(town);
 						it.remove();
 					}
 				}
 			}
 		}
 	}
+	
+	/**
+	 * A dry-run method for rechecking town distances to a new nation capital/
+	 * moved nation capital homeblock.
+	 * 
+	 * @param - The list of towns to check.
+	 * @throws TownyException - Generic TownyException
+	 * @return removedTowns - A list of Towns which would be removed under a real recheckTownDistance().
+	 */
+	public List<Town> recheckTownDistanceDryRun(List<Town> towns) throws TownyException {
+		List<Town> removedTowns = new ArrayList<>();
+		if(capital != null) {
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				
+				for (Town town : towns) {
+					Coord townCoord = town.getHomeBlock().getCoord();
+					if (!capital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
+						continue;
+					}
+					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					if (distance > TownySettings.getNationRequiresProximity()) {
+						removedTowns.add(town);
+					}
+				}
+			}
+		}
+		return removedTowns;
+	}	
 
 	public void setNeutral(boolean neutral) throws TownyException {
 
@@ -525,6 +560,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (!king.isMayor())
 			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	public boolean hasResident(Resident resident) {

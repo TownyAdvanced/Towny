@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -17,7 +21,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import org.bukkit.Material;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -112,18 +115,8 @@ public class CombatUtil {
 			return false;
 
 		Coord coord = Coord.parseCoord(defendingEntity);
-		TownBlock defenderTB = null;
-		TownBlock attackerTB = null;
-
-		try {
-			attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-		} catch (NotRegisteredException ex) {
-		}
-
-		try {
-			defenderTB = world.getTownBlock(coord);
-		} catch (NotRegisteredException ex) {
-		}
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 
 		/*
 		 * We have an attacking player
@@ -136,7 +129,7 @@ public class CombatUtil {
 			 * The target is in a TownBlock and...
 			 * the target is a tame wolf and we are not it's owner
 			 */
-			if ((defendingPlayer != null) || ((defenderTB != null) && ((defendingEntity instanceof Wolf) && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals((AnimalTamer) attackingEntity)))) {
+			if ((defendingPlayer != null) || ((defenderTB != null) && ((defendingEntity instanceof Wolf) && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals(attackingEntity)))) {
 
 				/*
 				 * Defending player is in a warzone
@@ -294,12 +287,9 @@ public class CombatUtil {
 
 				/*
 				 * Check the attackers TownBlock and it's Town for their PvP
-				 * status
+				 * status. This will throw a NotRegisteredException right away 
+				 * if it is in the wilderness. 
 				 */
-				
-				if (!world.isPVP() && !world.isForcePVP())
-					return true;
-
 				if (townBlock.getTown().isAdminDisabledPVP())
 					return true;
 

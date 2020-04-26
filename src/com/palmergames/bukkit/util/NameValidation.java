@@ -4,8 +4,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 import javax.naming.InvalidNameException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -17,6 +18,13 @@ public class NameValidation {
 
 	private static Pattern namePattern = null;
 	private static Pattern stringPattern = null;
+	private static Collection<String> bannedNames;
+	
+	static {
+		bannedNames = new HashSet<>(
+			Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant",
+				          "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
+	}
 
 	/**
 	 * Check and perform getNameCheckRegex on any town/nation names
@@ -69,7 +77,6 @@ public class NameValidation {
 
 		return arr;
 	}
-
 	/**
 	 * Is this name in our blacklist?
 	 * If not a blacklist, call isValidName and
@@ -87,7 +94,6 @@ public class NameValidation {
 		  A list of all banned names (notably all sub commands like 'spawn'
 		  used in '/town spawn')
 		 */
-		ArrayList<String> bannedNames = new ArrayList<>(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
 		// Banned names
 		if (bannedNames.contains(name.toLowerCase()))
 			return true;

@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -46,7 +46,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
 	private List<String> modes = new ArrayList<>();
-	private transient ConfirmationType confirmationType;
+	private transient Confirmation confirmation;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
 
@@ -540,9 +540,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
 
 		if (this.hasTown() && TownyPerms.getTownRanks().contains(rank)) {
-			if (townRanks.contains(rank))
+			if (hasTownRank(rank))
 				throw new AlreadyRegisteredException();
 
+			rank = getTownRank(rank);
 			townRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -555,24 +556,42 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void setTownRanks(List<String> ranks) {
 		for (String rank : ranks) 
-			if (!this.hasTownRank(rank))
-				townRanks.add(rank);
+			if (!this.hasTownRank(rank)) {
+				rank = getTownRank(rank);
+				if (rank != null)
+					townRanks.add(rank);
+			}
 	}
 
+	// Sometimes databases might have mis-matched rank casing.
 	public boolean hasTownRank(String rank) {
-		return townRanks.contains(rank.toLowerCase());
+		for (String ownedRank : townRanks) {
+			if (ownedRank.equalsIgnoreCase(rank))
+				return true;
+		}
+		return false;
 	}
 
 	public List<String> getTownRanks() {
 		return townRanks;
 	}
+	
+	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change. 
+	private String getTownRank(String rank) {
+		for (String ownedRank : TownyPerms.getTownRanks()) {
+			if (ownedRank.equalsIgnoreCase(rank))
+				return ownedRank;
+		}
+		return null;
+	}
 
 	public boolean removeTownRank(String rank) throws NotRegisteredException {
-
+		
 		if(TownySettings.getWarSiegeEnabled())
 			SiegeWarRankController.evaluateTownRemoveRank(this, rank);
-
-		if (townRanks.contains(rank)) {
+		
+		if (hasTownRank(rank)) {
+			rank = getTownRank(rank);
 			townRanks.remove(rank);
 			if (BukkitTools.isOnline(this.getName())) {
 				TownyPerms.assignPermissions(this, null);
@@ -587,9 +606,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
 
 		if (this.hasNation() && TownyPerms.getNationRanks().contains(rank)) {
-			if (nationRanks.contains(rank))
+			if (hasNationRank(rank))
 				throw new AlreadyRegisteredException();
 
+			rank = getNationRank(rank);
 			nationRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -601,24 +621,42 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void setNationRanks(List<String> ranks) {
 		for (String rank : ranks)
-			if (!this.hasNationRank(rank))
-				nationRanks.add(rank);
+			if (!this.hasNationRank(rank)) {
+				rank = getNationRank(rank);
+				if (rank != null)
+					nationRanks.add(rank);
+			}
 	}
 
+	// Sometimes databases might have mis-matched rank casing.
 	public boolean hasNationRank(String rank) {
-		return nationRanks.contains(rank.toLowerCase());
+		for (String ownedRank : nationRanks) {
+			if (ownedRank.equalsIgnoreCase(rank))
+				return true;
+		}
+		return false;
 	}
 
 	public List<String> getNationRanks() {
 		return nationRanks;
 	}
 
+	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change.
+	private String getNationRank(String rank) {
+		for (String ownedRank : TownyPerms.getNationRanks()) {
+			if (ownedRank.equalsIgnoreCase(rank))
+				return ownedRank;
+		}
+		return null;
+	}
+	
 	public boolean removeNationRank(String rank) throws NotRegisteredException {
-
+		
 		if(TownySettings.getWarSiegeEnabled())
 			SiegeWarRankController.evaluateNationRemoveRank(this, rank);
-
-		if (nationRanks.contains(rank)) {
+		
+		if (hasNationRank(rank)) {
+			rank = getNationRank(rank);
 			nationRanks.remove(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -665,15 +703,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	@Override
 	public void deleteReceivedInvite(Invite invite) {
 		receivedinvites.remove(invite);
-	}
-
-
-	public void setConfirmationType(ConfirmationType confirmationType) {
-		this.confirmationType = confirmationType;
-	}
-
-	public ConfirmationType getConfirmationType() {
-		return confirmationType;
 	}
 
 	public void addMetaData(CustomDataField md) {
@@ -779,10 +808,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
-		if (!hasTownBlock(townBlock))
+		if (!townBlocks.remove(townBlock))
 			throw new NotRegisteredException();
-		else
-			townBlocks.remove(townBlock);
 	}
 
 	@Override
@@ -808,6 +835,14 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
+	}
+
+	public Confirmation getConfirmation() {
+		return confirmation;
+	}
+
+	public void setConfirmation(Confirmation confirmation) {
+		this.confirmation = confirmation;
 	}
 }
 

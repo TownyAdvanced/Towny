@@ -381,10 +381,23 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.movement_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
+	GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.damage_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
 			"global_town_settings.spawn_cooldown_time",
 			"30",
 			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_SPAWN_WARNINGS(
+		"global_town_settings.spawn_warnings",
+		"true",
+		"# Decides whether confirmations should appear if you spawn to an area with an associated cost."
+	),
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
@@ -409,6 +422,13 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
+			"global_town_settings.maximum_number_residents_without_nation",
+			"0",
+			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
+			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
@@ -673,7 +693,10 @@ public enum ConfigNodes {
 			"12h",
 			"# The time each \"day\", when taxes will be collected.",
 			"# MUST be less than day_interval. Default is 12h (midday)."),
-
+	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
+			"plugin.day_timer.delete_0_plot_towns",
+			"false",
+			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
@@ -785,7 +808,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE",
+			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -1344,14 +1367,22 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
-	ECO_DAILY_TAXES_MAX_TAX(
-			"economy.daily_taxes.max_tax_amount",
+	ECO_DAILY_TAXES_MAX_PLOT_TAX(
+			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed when using flat taxes"),
-	ECO_DAILY_TAXES_MAX_TAX_PERCENT(
-			"economy.daily_taxes.max_tax_percent",
+			"# Maximum tax amount allowed for townblocks sold to players."),
+	ECO_DAILY_TOWN_TAXES_MAX(
+			"economy.daily_taxes.max_town_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for towns when using flat taxes."),
+	ECO_DAILY_NATION_TAXES_MAX(
+			"economy.daily_taxes.max_nation_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for nations when using flat taxes."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
+			"economy.daily_taxes.max_town_tax_percent",
 			"25",
-			"# maximum tax percentage allowed when taxing by percentages"),
+			"# Maximum tax percentage allowed when taxing by percentages for towns."),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",

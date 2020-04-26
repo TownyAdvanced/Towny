@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
@@ -13,6 +14,11 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
  */
 public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 
+	final String nomad = TownySettings.getLangString("nomad_sing");
+	final String res = TownySettings.getLangString("res_sing");
+	final String mayor = TownySettings.getLangString("mayor_sing");
+	final String king = TownySettings.getLangString("king_sing");
+	
 	private Towny plugin;
 
 	/**
@@ -115,6 +121,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		String title = "";
 		String amount = "";
 		String name = "";
+		String rank = "";
 		Double cost = 0.0;
 
 		switch (identifier) {
@@ -451,6 +458,31 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				else if (!town.isEmpty())
 					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
 			} catch (NotRegisteredException ignored) {
+			}
+			return tag;
+		case "town_ranks": // %townyadvanced_town_ranks%
+			if (resident.isMayor())
+				rank = TownySettings.getLangString("mayor_sing");
+			else if (!resident.getTownRanks().isEmpty())
+				rank = StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", "));
+			return rank;
+			
+		case "nation_ranks": // %townyadvanced_nation_ranks%
+			if (resident.isKing())
+				rank = TownySettings.getLangString("king_sing");
+			else if (!resident.getNationRanks().isEmpty())
+				rank = StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", "));
+			return rank;
+		case "player_status": // %townyadvanced_player_status%
+			if (!resident.hasTown())
+				tag = nomad;
+			else {
+				if (resident.isKing())
+					tag = king;
+				else if (resident.isMayor())
+					tag = mayor;
+				else
+					tag = res;
 			}
 			return tag;
 		default:

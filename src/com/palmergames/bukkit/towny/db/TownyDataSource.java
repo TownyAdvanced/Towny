@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -61,7 +62,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean saveAll() {
-		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveSiegeList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveSieges() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveSiegeList() && saveResidentList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveSieges() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -74,7 +75,7 @@ public abstract class TownyDataSource {
 		return saveRegenList() && saveSnapshotList();
 	}
 
-	abstract public void cancelTask();
+	abstract public void finishTasks();
 
 	abstract public boolean loadTownBlockList();
 
@@ -107,8 +108,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadPlotGroupList();
 
 	abstract public boolean loadPlotGroups();
-
-	abstract public boolean saveTownBlockList();
 
 	abstract public boolean saveResidentList();
 
@@ -343,7 +342,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public List<TownBlock> getAllTownBlocks();
+	abstract public Collection<TownBlock> getAllTownBlocks();
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
@@ -873,10 +874,10 @@ public class TownySettings {
 
 		String townBlockName = "";
 		try {
-			Town fallenTown = ((TownBlock)fallenTownBlock).getTown();
-			townBlockName = "[" + fallenTown.getName() + "](" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+			Town fallenTown = fallenTownBlock.getTown();
+			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getCoord().toString() + ")";
 		} catch (NotRegisteredException e) {
-			townBlockName = "(" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
 		}
 		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
 	}
@@ -1144,11 +1145,7 @@ public class TownySettings {
 		} else
 			n += town.getNumResidents() * ratio;
 
-		if (town.hasNation())
-			try {
-				n += (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-			} catch (NotRegisteredException e) {
-			}
+		n += getNationBonusBlocks(town);
 
 		return n;
 	}
@@ -1172,8 +1169,10 @@ public class TownySettings {
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-
-		return (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
+		return calculationEvent.getBonusBlocks();
 	}
 
 	public static int getNationBonusBlocks(Town town) {
@@ -1660,6 +1659,10 @@ public class TownySettings {
 		}
 		return time;
 	}
+	
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
 
@@ -1687,27 +1690,37 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Reading disallowed town spawn zones. ");
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
+	
+	public static boolean getSpawnWarnConfirmations() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
+	}
 
 	public static boolean isTaxingDaily() {
 
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_ENABLED);
 	}
 
-	public static double getMaxTax() {
+	public static double getMaxPlotTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_PLOT_TAX);
+	}
 
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
+	public static double getMaxTownTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TOWN_TAXES_MAX);
+	}
+
+	public static double getMaxNationTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_NATION_TAXES_MAX);
 	}
 	
 	public static double getMaxPlotPrice() {
 		
 		return getDouble(ConfigNodes.GTOWN_MAX_PLOT_PRICE_COST);
 	}
-
-	public static double getMaxTaxPercent() {
-
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX_PERCENT);
+	
+	public static double getMaxTownTaxPercent() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT);
 	}
-
+	
 	public static boolean isBackingUpDaily() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
@@ -2629,6 +2642,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
 	}
 	
+	public static boolean isMovementCancellingSpawnWarmup() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
+	}
+	
+	public static boolean isDamageCancellingSpawnWarmup() {
+		
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP);
+	}
+	
 	public static int getSpawnCooldownTime() {
 		
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
@@ -2712,6 +2735,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
 	
+	public static int getMaxNumResidentsWithoutNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
+	}
+	
 	public static int getNumResidentsJoinNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);
 	}
@@ -2746,12 +2773,12 @@ public class TownySettings {
 	
 	public static String getListPageMsg(int page, int total) {
 		 
-	    return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	    return parseString(String.format(getLangString("LIST_PAGE"), page, total))[0];
 	}
 	
 	public static String getListNotEnoughPagesMsg(int max) {
 	 
-	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), max))[0];
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
