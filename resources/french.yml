@@ -1112,7 +1112,7 @@ msg_cache_block_error_plot_allies: 'alliés'
 msg_cache_block_error_plot_outsiders: 'étrangers'
 msg_cache_block_error_plot_town_members: 'membres de la ville'
 msg_err_invalid_nation_map_color: '&cCouleur de carte inconnue. Les couleurs autorisées sont: %s.'
-msg_nation_map_color_changed: '&bLa couleur de la carte de la nation a été changée à %s.'
+msg_nation_map_color_changed: '&bLa couleur de la nation sur la carte a été changée à %s.'
 msg_err_unable_to_add_more_residents_without_nation: 'Votre ville ne peut pas inviter plus de %s résidents sans avoir rejoint ou créée une nation.'
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Les villes suivantes n''avaient pas de claims et ont été supprimées: %s'
 msg_spawn_warn: 'Coût de téléportation: %s. Continuer ? Astuce: ajoutez -ignore pour éviter ces confirmations.'
@@ -1123,7 +1123,7 @@ bonus_townblocks: 'townblocks bonus'
 
 # Added in 0.80
 nomad_sing: 'Nomade'
-msg_new_town_advice: "Félicitations, vous devenez de fonder votre ville. Celle-ci va doit payer un coût d'entretien quotidien de %s. Vous pouvez déposer de l'argent dans la banque de votre ville en utilisant /town deposit <montant>. Sans argent pour payer ce coût d'entretien, la ville sera supprimée. Vous pouvez voir vos coûts à tout moment en utilisant /towny prices. Prochain paiement dans %s."
+msg_new_town_advice: "Félicitations, vous devenez de fonder votre ville. Celle-ci va devoir payer un coût d'entretien quotidien de %s. Vous pouvez déposer de l'argent dans la banque de votre ville en utilisant /town deposit <montant>. Sans argent pour payer ce coût d'entretien, la ville sera supprimée. Vous pouvez voir ces coûts à tout moment en utilisant /towny prices. Prochain paiement dans %s."
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: 'Vous avez reçu ou infligé des dégâts, la téléportation a été annulée.'
