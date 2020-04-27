@@ -1123,7 +1123,7 @@ bonus_townblocks: 'townblocks bonus'
 
 # Added in 0.80
 nomad_sing: 'Nomade'
-msg_new_town_advice: "Félicitations, vous devenez de fonder votre ville. Celle-ci va devoir payer un coût d'entretien quotidien de %s. Vous pouvez déposer de l'argent dans la banque de votre ville en utilisant /town deposit <montant>. Sans argent pour payer ce coût d'entretien, la ville sera supprimée. Vous pouvez voir ces coûts à tout moment en utilisant /towny prices. Prochain paiement dans %s."
+msg_new_town_advice: "Félicitations, vous venez de fonder votre ville. Celle-ci va devoir payer un coût d'entretien quotidien de %s. Vous pouvez déposer de l'argent dans la banque de votre ville en utilisant /town deposit <montant>. Sans argent pour payer ce coût d'entretien, la ville sera supprimée. Vous pouvez voir ces coûts à tout moment en utilisant /towny prices. Prochain paiement dans %s."
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: 'Vous avez reçu ou infligé des dégâts, la téléportation a été annulée.'
