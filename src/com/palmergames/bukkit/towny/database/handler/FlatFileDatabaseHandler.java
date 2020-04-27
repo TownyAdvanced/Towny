@@ -222,18 +222,15 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	@Override
 	public void loadAllResidents() {
-		TownyMessaging.sendErrorMsg("Called");
 		File resDir = new File(Towny.getPlugin().getDataFolder() + "/data/residents");
 		String[] resFiles = resDir.list((dir, name) -> name.endsWith(".txt"));
 		for (String fileName : resFiles) {
 			String idStr = fileName.replace(".txt", "");
 			UUID id = UUID.fromString(idStr);
 			Resident loadedResident = loadResident(id);
-			TownyMessaging.sendErrorMsg("Called 2");
 			
 			// Store data.
 			try {
-				TownyMessaging.sendErrorMsg("Called 3");
 				TownyUniverse.getInstance().addResident(loadedResident);
 			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();

@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtil {
+	
+	private static final Map<Type, List<Field>> fieldCaches = new ConcurrentHashMap<>();
 
 	/**
 	 * Fetches all the fields from the TownyObject.
@@ -24,12 +25,21 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
+	public static @NotNull List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
 		Validate.notNull(townyObject);
 		
 		// Get the class object.
 		Class<?> type = townyObject.getClass();
-		List<Field> fields = new ArrayList<>();
+		
+		// Check if cached.
+		List<Field> fields = fieldCaches.get(type);
+		
+		if (fields != null) {
+			return fields;
+		}
+		
+		// Else reflect the fields
+		fields = new ArrayList<>();
 
 		// Use a stack to evaluate classes in proper top-down hierarchy.
 		ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
@@ -49,6 +59,9 @@ public class ReflectionUtil {
 				fields.add(field);
 			}
 		}
+		
+		// Cache the results
+		fieldCaches.put(type, fields);
 		
 		return fields;
 	}
@@ -102,6 +115,7 @@ public class ReflectionUtil {
 		|| type == byte.class || type == Byte.class;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
 		return Enum.valueOf((Class<T>)type, str);
 	}
