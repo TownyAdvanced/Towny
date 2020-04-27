@@ -71,7 +71,7 @@ public class TownyEntityMonitorListener implements Listener {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getEntity().getName());
 		} catch (NotRegisteredException e) {
 		}
-		if (resident != null && TeleportWarmupTimerTask.hasTeleportRequest(resident)) {
+		if (resident != null && resident.getTeleportRequestTime() > 0) {
 			TeleportWarmupTimerTask.abortTeleportRequest(resident);
 			TownyMessaging.sendMsg(resident, ChatColor.RED + TownySettings.getLangString("msg_err_teleport_cancelled_damage"));
 		}

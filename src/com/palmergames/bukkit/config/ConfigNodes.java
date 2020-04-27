@@ -1249,7 +1249,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
 			"0.0",
-			"# Cost to use /town spawn"),
+			"# Cost to use /town spawn."),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION(
 			"economy.spawn_travel.price_town_nation_spawn_travel",
 			"5.0",
@@ -1261,7 +1261,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC(
 			"economy.spawn_travel.price_town_public_spawn_travel",
 			"10.0",
-			"# Cost to use /town spawn [town]",
+			"# Maximum cost to use /town spawn [town] that mayors can set using /t set spawncost.",
 			"# This is paid to the town you goto."),
 	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
 			"economy.spawn_travel.town_spawn_cost_paid_to_town",

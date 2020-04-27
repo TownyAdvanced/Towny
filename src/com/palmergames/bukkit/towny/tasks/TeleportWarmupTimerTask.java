@@ -78,6 +78,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	public static void abortTeleportRequest(Resident resident) {
 
 		if (resident != null && teleportQueue.contains(resident)) {
+			resident.clearTeleportRequest();
 			teleportQueue.remove(resident);
 			if ((resident.getTeleportCost() != 0) && (TownySettings.isUsingEconomy())) {
 				try {
@@ -93,9 +94,5 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 
 			}
 		}
-	}
-	
-	public static boolean hasTeleportRequest(Resident resident) {
-		return teleportQueue.contains(resident);
 	}
 }

@@ -4526,3 +4526,5 @@ v0.92.0.11:
     - will prevent players from stripping logs in unwanted locations.
 0.96.1.8:
   - Add Essentials to soft-depends.
+  - Fix movement-cancels-spawning showing cancel message when because you waited patiently and spawned.
+  - Fix out-dated comments in config re: spawning costs.
