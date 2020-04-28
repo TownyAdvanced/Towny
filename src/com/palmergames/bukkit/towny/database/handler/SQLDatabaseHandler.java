@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 public class SQLDatabaseHandler extends DatabaseHandler {
 	SQLHandler sqlHandler;
 	
+	// TODO Queue creation/saves/deletes and process them async
+	
 	public SQLDatabaseHandler(String databaseType) {
 		sqlHandler = new SQLHandler(databaseType);
 		sqlHandler.testConnection();
@@ -43,10 +45,32 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		createTownyObjectTable("RESIDENTS", Resident.class);
 	}
 	
+	// TODO Figure out how to handle insertions vs updates
 	@Override
 	public void save(@NotNull Saveable obj) {
-		// TODO Fill-in method with proper save algorithm
-		throw new UnsupportedOperationException("save() Stub");
+		Map<String, ObjectContext> contextMap = ReflectionUtil.getObjectMap(obj);
+
+		// Invoke all the specified save methods and merge the results into the context map
+		for (Map.Entry<String, ObjectContext> entry : getSaveGetterData(obj).entrySet()) {
+			contextMap.put(entry.getKey(), entry.getValue());
+		}
+		
+		Map<String, String> insertionMap = convertToInsertionMap(contextMap);
+		
+		StringBuilder stmtBuilder = new StringBuilder("UPDATE ").append(obj.getSQLTable().toUpperCase()).append(" SET ");
+		
+		// Convert the map into the statement
+		// Depending on performance, we may want to remove the stream
+		String valueBuilder = insertionMap.entrySet().stream()
+							.map(e -> e.getKey() + " = " + e.getValue())
+							.collect(Collectors.joining(", "));
+		
+		stmtBuilder.append(valueBuilder);
+		stmtBuilder.append(" WHERE uniqueIdentifier = '")
+					.append(obj.getUniqueIdentifier().toString())
+					.append("'");
+		
+		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
 	}
 	
 	private String tblPrefix() {
@@ -100,7 +124,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public boolean delete(@NotNull Saveable obj) {
-		return false;
+		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
 	
 	private <T> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {
@@ -277,5 +301,41 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 		
 		return null;
+	}
+	
+	private Map<String, String> convertToInsertionMap(Map<String, ObjectContext> contextMap) {
+		Map<String, String> insertionMap = new HashMap<>((contextMap.size() * 4) / 3);
+		for (Map.Entry<String, ObjectContext> entry : contextMap.entrySet()) {
+			String field = entry.getKey();
+			Type type = entry.getValue().getType();
+			Object value = entry.getValue().getValue();
+			String insertionValue;
+
+			if (ReflectionUtil.isPrimitive(type)) {
+				if (type == boolean.class || type == Boolean.class) { // Is this the right comparison??
+					// Booleans are 1 and 0 in SQL not true or false
+					insertionValue = ((boolean) value) ? "1" : "0";
+				}
+				// It's a primitive so to string should(tm) be fine.
+				else {
+					insertionValue = value.toString();
+				}
+			} else {
+				// toStoredString will call toString() on the object which on a String obj will wrap the "" inside the string which we don't want
+				if (value instanceof String) {
+					insertionValue = (String) value;
+				}
+				else {
+					insertionValue = toStoredString(value, type);
+				}
+				// Replace " with \"
+				insertionValue = insertionValue.replace("\"", "\\\"");
+				// Wrap with double quotes
+				insertionValue = "\"" + insertionValue + "\"";
+			}
+			
+			insertionMap.put(field, insertionValue);
+		}
+		return insertionMap;
 	}
 }

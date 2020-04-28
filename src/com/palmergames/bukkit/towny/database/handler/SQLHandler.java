@@ -116,19 +116,21 @@ public class SQLHandler {
 		}
 	}
 
-	public void executeUpdate(String updateStmt) {
-		executeUpdate(updateStmt, null);
+	public boolean executeUpdate(String updateStmt) {
+		return executeUpdate(updateStmt, null);
 	}
 	
-	public void executeUpdate(String updateStmt, @Nullable String errorMessage) {
+	public boolean executeUpdate(String updateStmt, @Nullable String errorMessage) {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(updateStmt);
+			return true;
 		} catch (SQLException ex) {
 			if (errorMessage != null) {
 				TownyMessaging.sendErrorMsg(errorMessage);
 				ex.printStackTrace();
 			}
+			return false;
 		}
 	}
 
