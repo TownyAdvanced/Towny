@@ -493,8 +493,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
-		if (removedNations != null) {
-			if (removedNations.size() == 1) 
+		if (removedNations != null && !removedNations.isEmpty()) {
+			if (removedNations.size() == 1)
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), removedNations.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, TownySettings.getLangString("msg_bankrupt_nation_multiple")));
