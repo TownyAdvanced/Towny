@@ -4529,3 +4529,4 @@ v0.92.0.11:
   - Fix movement-cancels-spawning showing cancel message when because you waited patiently and spawned.
   - Fix out-dated comments in config re: spawning costs.
   - French.yml updated to 0.82, courtesy of Yldales with PR #3958.
+  - Allow TownyMessaging to use more than 54 characters per line, courtesy of v3Monsta with PR #3946.
