@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.PrimaryKey;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 public abstract class TownyObject implements Nameable, Saveable {
 	private String name;
+	private boolean changed;
 	
 	@PrimaryKey
 	private final UUID uniqueIdentifier;
@@ -127,5 +129,15 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@Override
 	public int hashCode() {
 		return uniqueIdentifier.hashCode();
+	}
+
+	@Override
+	public boolean isChanged() {
+		return changed;
+	}
+	
+	@Override
+	public void setChanged(boolean changed) {
+		this.changed = changed;
 	}
 }

@@ -1,4 +1,7 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.database;
+
+import com.palmergames.bukkit.towny.object.Identifiable;
+import com.palmergames.bukkit.towny.object.Nameable;
 
 import java.io.File;
 
@@ -7,7 +10,7 @@ import java.io.File;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public interface Saveable extends Nameable, Identifiable {
+public interface Saveable extends Nameable, Identifiable, Changed {
 	/**
 	 * Gets the path of the where this file will be saved.
 	 * 

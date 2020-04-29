@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 import java.io.File;

@@ -39,7 +39,6 @@ public class TownBlock extends TownyObject {
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
-	protected boolean isChanged = false;
 	
 	public TownBlock(UUID uniqueIdentifier) {
 		super(uniqueIdentifier);
@@ -150,26 +149,6 @@ public class TownBlock extends TownyObject {
 		 * Return our perms
 		 */
 		return permissions;
-	}
-
-	/**
-	 * Have the permissions been manually changed.
-	 * 
-	 * @return the isChanged
-	 */
-	public boolean isChanged() {
-
-		return isChanged;
-	}
-
-	/**
-	 * Flag the permissions as changed.
-	 * 
-	 * @param isChanged the isChanged to set
-	 */
-	public void setChanged(boolean isChanged) {
-
-		this.isChanged = isChanged;
 	}
 
 	/**
