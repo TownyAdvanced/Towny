@@ -135,7 +135,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else
 			try {
 				parseResidentCommandForConsole(sender, args);
-			} catch (TownyException ignored) {
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 
 		return true;

@@ -402,6 +402,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				parseNationCommandForConsole(sender, args);
 			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 
 		return true;
