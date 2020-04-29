@@ -4530,3 +4530,6 @@ v0.92.0.11:
   - Fix out-dated comments in config re: spawning costs.
   - French.yml updated to 0.82, courtesy of Yldales with PR #3958.
   - Allow TownyMessaging to use more than 54 characters per line, courtesy of v3Monsta with PR #3946.
+0.96.1.9:
+  - Fix missing command-feedback when using some towny commands in the console, courtesy of Siris with PR #3961.
+    - Closes #3957. 
