@@ -417,7 +417,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		} else
 			try {
 				parseTownCommandForConsole(sender, args);
-			} catch (TownyException ignored) {
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 
 		return true;
