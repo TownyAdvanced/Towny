@@ -4536,3 +4536,12 @@ v0.92.0.11:
   - Fix newly-joined players not having their lastOnline value not set.
   - Fix residents.txt causing safemode for having a resident listed more than once.
     - Also removes doubled up residents from the residents.txt when saving.
+  - New Permission Node: towny.admin.spawn
+    - Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
+    - Child Node: towny.command.townyadmin.town.spawn.freecharge
+    - Is itself a childnode of towny.admin.
+    - Closes: #3936.
+  - Removed Permission Nodes: 
+    - towny.command.townyadmin.town.spawn
+    - towny.command.townyadmin.nation.spawn
+    - Replaced by the above towny.admin.spawn node.

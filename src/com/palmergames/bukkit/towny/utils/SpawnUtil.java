@@ -77,7 +77,7 @@ public class SpawnUtil {
 		Location spawnLoc = null;
 		TownSpawnLevel townSpawnPermission = null;
 		NationSpawnLevel nationSpawnPermission = null;
-		boolean isTownyAdmin = townyUniverse.getPermissionSource().has(player, spawnType.getNode());
+		boolean isTownyAdmin = townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN.getNode());
 
 		// Figure out which Town/NationSpawnLevel this is.
 		// Resolve where the spawnLoc will be.

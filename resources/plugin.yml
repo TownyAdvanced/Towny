@@ -58,6 +58,7 @@ permissions:
             towny.wild.*: true
             towny.claimed.*: true
             towny.admin.nation_zone: true
+            towny.admin.spawn: true
 
     towny.outlaw.jailer:
         description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
@@ -66,6 +67,12 @@ permissions:
     towny.town.resident:
         description: User is permitted to join towns.
         default: false
+
+    towny.admin.spawn:
+        description: Grants admin spawn, without cooldowns/warmups/spawncosts.
+        default: false
+        children:
+            towny.command.townyadmin.town.spawn.freecharge: true
 
     towny.town.spawn.*:
         description: Grants all Spawn travel nodes

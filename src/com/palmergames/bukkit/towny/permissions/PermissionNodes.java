@@ -251,8 +251,6 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME("towny.command.townyadmin.town.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TOGGLE("towny.command.townyadmin.town.toggle"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SET("towny.command.townyadmin.town.set"),
-		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER("towny.command.townyadmin.town.spawn"),
-		TOWNY_COMMAND_TOWNYADMIN_NATION_SPAWN_OTHER("towny.command.townyadmin.nation.spawn"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	
@@ -326,6 +324,8 @@ public enum PermissionNodes {
 
 	TOWNY_TOWN_RESIDENT("towny.town.resident"),
 
+	TOWNY_SPAWN_ADMIN("towny.admin.spawn"),
+	
 	TOWNY_SPAWN_ALL("towny.town.spawn.*"),
 
 	TOWNY_SPAWN_TOWN("towny.town.spawn.town"),
