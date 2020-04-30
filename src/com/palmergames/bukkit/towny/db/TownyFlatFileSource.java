@@ -349,21 +349,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
-		
+
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
-					newResident(line);
+					try {
+						newResident(line);
+					} catch (AlreadyRegisteredException e) {
+						TownyMessaging.sendDebugMsg("Duplicate resident '" + line + "' found in residents.txt, ignoring.");
+						continue;
+					}
 				}
 			}
-			
+
 			return true;
-			
-		} catch (AlreadyRegisteredException e) {
-			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", resident is possibly listed twice.");
-			e.printStackTrace();
-			return false;
 			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
@@ -1650,7 +1650,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			try {
 
-				list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
+				if (!list.contains(resident.getName()))
+					list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
 
 			} catch (InvalidNameException e) {
 

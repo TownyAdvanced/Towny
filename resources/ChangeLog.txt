@@ -4534,3 +4534,5 @@ v0.92.0.11:
   - Fix missing command-feedback when using some towny commands in the console, courtesy of Siris with PR #3961.
     - Closes #3957. 
   - Fix newly-joined players not having their lastOnline value not set.
+  - Fix residents.txt causing safemode for having a resident listed more than once.
+    - Also removes doubled up residents from the residents.txt when saving.
