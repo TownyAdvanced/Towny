@@ -69,7 +69,7 @@ permissions:
         default: false
 
     towny.admin.spawn:
-        description: Grants admin spawn, without cooldowns/warmups/spawncosts.
+        description: Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
         default: false
         children:
             towny.command.townyadmin.town.spawn.freecharge: true

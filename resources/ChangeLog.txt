@@ -4545,3 +4545,7 @@ v0.92.0.11:
     - towny.command.townyadmin.town.spawn
     - towny.command.townyadmin.nation.spawn
     - Replaced by the above towny.admin.spawn node.
+  - Fix min_distance_between_homeblocks likely not working very well.
+  - Changed: towns in the same nation now bypass the min_distance_from_town_homeblock & min_plot_distance_from_town_plot config values.
+    - Allows for nations to connect seamlessly while still keeping towns not in the same nation from claiming close to each other.
+    - Closes #3913.
