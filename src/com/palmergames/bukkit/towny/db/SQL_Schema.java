@@ -120,7 +120,7 @@ public class SQL_Schema {
 		columns.add("`attackingNation` mediumtext NOT NULL");
 		columns.add("`defendingTown` mediumtext NOT NULL");
 		columns.add("`flagLocation` mediumtext NOT NULL");
-		columns.add("`siegeStatus` mediumtext");
+		columns.add("`siegeStatus` mediumtext NOT NULL");
 		columns.add("`siegePoints` mediumtext NOT NULL");
 		columns.add("`warChestAmount` float NOT NULL");
 		columns.add("`townPlundered` bool NOT NULL DEFAULT '0'");
@@ -129,7 +129,7 @@ public class SQL_Schema {
 		columns.add("`scheduledEndTime` BIGINT");
 		columns.add("`actualEndTime` BIGINT");
 		columns.add("`totalPillageAmount` float NOT NULL");
-
+		columns.add("`residentTotalTimedPointsMap` mediumtext NOT NULL");
 		return columns;
 	}
 	

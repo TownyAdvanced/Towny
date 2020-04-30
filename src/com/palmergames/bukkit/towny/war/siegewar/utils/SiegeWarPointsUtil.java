@@ -206,12 +206,10 @@ public class SiegeWarPointsUtil {
 		int siegePoints;
 		if (residentIsAttacker) {
 			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
-			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siege);
 			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
 			siege.adjustSiegePoints(siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
-			siegePoints = adjustSiegePointGainForCurrentSiegePointBalance(siegePoints, siege);
 			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
 			siege.adjustSiegePoints(siegePoints);
 		}
@@ -241,47 +239,6 @@ public class SiegeWarPointsUtil {
 		SiegeWarNotificationUtil.informSiegeParticipants(siege, message);
 
 		return true;
-	}
-
-	/**
-	 * This method returns an altered siege point gain, depending on the current siege point balance
-	 *
-	 * @param baseSiegePointGain the base  siege point gain
-	 * @param siege to siege where the gain will be applied
-	 * @return the altered gain
-	 */
-	public static int adjustSiegePointGainForCurrentSiegePointBalance(double baseSiegePointGain, Siege siege) {
-		//Reduce gain if you already have an advantage
-		if(TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage() > 0) {
-			if(
-				(siege.getSiegePoints() > 0 && baseSiegePointGain > 0)
-					||
-					(siege.getSiegePoints() < 0 && baseSiegePointGain < 0)
-			) {
-				int numThousands = Math.abs(siege.getSiegePoints() / 1000);
-				int percentageDecrease = numThousands * TownySettings.getWarSiegePercentagePointsGainDecreasePer1000Advantage();
-				double actualDecrease = baseSiegePointGain / 100 * percentageDecrease;
-				baseSiegePointGain -= actualDecrease;
-				return (int)baseSiegePointGain;
-			}
-		}
-
-		//Increase gain if you already have a disadvantage
-		if(TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage() > 0) {
-			if(
-				(siege.getSiegePoints() > 0 && baseSiegePointGain < 0)
-					||
-					(siege.getSiegePoints() < 0 && baseSiegePointGain > 0)
-			) {
-				int numThousands = Math.abs(siege.getSiegePoints() / 1000);
-				int percentageIncrease = numThousands * TownySettings.getWarSiegePercentagePointsGainIncreasePer1000Disadvantage();
-				double actualIncrease = baseSiegePointGain / 100 * percentageIncrease;
-				baseSiegePointGain += actualIncrease;
-				return (int)baseSiegePointGain;
-			}
-		}
-
-		return (int)baseSiegePointGain;
 	}
 
 	private static int adjustSiegePenaltyPointsForMilitaryLeadership(boolean residentIsAttacker,

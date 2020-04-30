@@ -1664,7 +1664,7 @@ public class TownySettings {
 	}
 
 	public static long getShortInterval() {
-		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
+		return getSeconds(ConfigNodes.PLUGIN_SHORT_INTERVAL);
 	}
 
 	public static long getNewHourTime() {
@@ -3179,14 +3179,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_MAXIMUM_PILLAGE_AMOUNT_PER_PLOT);
 	}
 
-	public static int getWarSiegePercentagePointsGainDecreasePer1000Advantage() {
-		return getInt(ConfigNodes.WAR_SIEGE_PERCENTAGE_POINTS_GAIN_DECREASE_PER_1000_ADVANTAGE);
-	}
-
-	public static int getWarSiegePercentagePointsGainIncreasePer1000Disadvantage() {
-		return getInt(ConfigNodes.WAR_SIEGE_PERCENTAGE_POINTS_GAIN_INCREASE_PER_1000_DISADVANTAGE);
-	}
-
 	public static boolean getWarSiegeBesiegedTownRecruitmentDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED);
 	}
@@ -3292,5 +3284,9 @@ public class TownySettings {
 
 	public static double getEcoPriceReclaimTown() {
 		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
+	}
+
+	public static Integer getWarSiegeMaxTimedPointsPerPlayerPerSiege() {
+		return getInt(ConfigNodes.WAR_SIEGE_SCORING_MAX_TIMED_POINTS_PER_PLAYER_PER_SIEGE);
 	}
 }

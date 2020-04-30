@@ -1253,6 +1253,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
 				siege.setActualEndTime(rs.getLong("actualEndTime"));
 				siege.setTotalPillageAmount(rs.getDouble("totalPillageAmount"));
+
+				line = rs.getString("residentTotalTimedPointsMap");
+				if(line != null && line.length() > 0) {
+					String[] entries = line.split(",");
+					String[] keyValuePair;
+					Resident resident;
+					int totalPoints;
+					for (String entry : entries) {
+						keyValuePair = entry.split(":");
+						resident = getResident(keyValuePair[0]);
+						totalPoints = Integer.parseInt(keyValuePair[1]);
+						siege.getResidentTotalTimedPointsMap().put(resident, totalPoints);
+					}
+				}
             }
 
             return true;
@@ -1874,6 +1888,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			sg_hm.put("scheduledEndTime", 0);
 			sg_hm.put("actualEndTime", 0);
 			sg_hm.put("totalPillageAmount", 0d);
+			sg_hm.put("residentTotalTimedPointsMap", StringMgmt.join(siege.getResidentTotalTimedPointsMap(), ":" ,","));
 
 			UpdateDB("SIEGES", sg_hm, Collections.singletonList("name"));
 

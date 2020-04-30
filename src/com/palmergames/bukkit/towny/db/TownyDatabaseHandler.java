@@ -1180,7 +1180,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			for (Town toCheckTown : toSaveTown)
 				saveTown(toCheckTown);	
-		
+
+			//Save any siege files which contain the resident name
+			for(Siege siege: getSieges()) {
+				if(siege.getResidentTotalTimedPointsMap().containsKey(resident))
+					saveSiege(siege);
+			}
+
 		} finally {
 			lock.unlock();			
 		}
