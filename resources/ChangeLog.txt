@@ -4549,3 +4549,4 @@ v0.92.0.11:
   - Changed: towns in the same nation now bypass the min_distance_from_town_homeblock & min_plot_distance_from_town_plot config values.
     - Allows for nations to connect seamlessly while still keeping towns not in the same nation from claiming close to each other.
     - Closes #3913.
+  - Fix DrawSmokeFactory offset to move smoke puffs up from inside the blocks.
