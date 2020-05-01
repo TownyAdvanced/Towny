@@ -66,10 +66,10 @@ public class SiegeWarDeathController {
 					deadResidentTown.getSiege(),
 					TownySettings.getLangString("msg_siege_war_defender_death"));
 
-				if(pointsAwarded)
+				if(pointsAwarded) {
 					keepInventory(playerDeathEvent);
-
-				return;
+					return;
+				}
 			}
 
 			//If resident was a defending soldier, award siege points
@@ -90,10 +90,10 @@ public class SiegeWarDeathController {
 								siege,
 								TownySettings.getLangString("msg_siege_war_defender_death"));
 
-							if (pointsAwarded)
+							if (pointsAwarded) {
 								keepInventory(playerDeathEvent);
-
-							return;
+								return;
+							}
 						}
 
 					} catch (Exception e) {
@@ -124,10 +124,10 @@ public class SiegeWarDeathController {
 								siege,
 								TownySettings.getLangString("msg_siege_war_attacker_death"));
 
-							if(pointsAwarded)
+							if(pointsAwarded) {
 								keepInventory(playerDeathEvent);
-
-							return;
+								return;
+							}
 						}
 					} catch (Exception e) {
 						try {
