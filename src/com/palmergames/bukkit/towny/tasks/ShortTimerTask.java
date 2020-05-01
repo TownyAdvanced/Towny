@@ -24,6 +24,7 @@ public class ShortTimerTask extends TownyTimerTask {
 			SiegeWarTimerTaskController.evaluateBannerControl();
 			SiegeWarTimerTaskController.evaluatePostSpawnDamageImmunityRemovals();
 			SiegeWarTimerTaskController.evaluateTacticalVisibility();
+			SiegeWarTimerTaskController.evaluateTimedSiegeOutcomes();
 		}
 	}
 }

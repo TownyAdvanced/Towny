@@ -25,7 +25,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 		}
 
 		if(TownySettings.getWarSiegeEnabled()) {
-			SiegeWarTimerTaskController.evaluateTimedSiegeOutcomes();
+			SiegeWarTimerTaskController.updatePopulationBasedSiegePointModifiers();
 		}
 	}
 }

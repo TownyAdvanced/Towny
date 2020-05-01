@@ -1964,6 +1964,13 @@ public enum ConfigNodes {
 			"# Underdog sides in particularly, have significantly less to lose by counter attacking.",
 			"# The setting causes battles to be more aggressive/immediate.", 
 			"# The setting is recommended."),
+	WAR_SIEGE_POPULATION_BASED_POINT_BOOSTS_ENABLED(
+			"war.siege.switches.population_based_point_boosts_enabled",
+			"false",
+			"# If this setting is true, then the siege side with the lower population gets a boost to their siege point gains.",
+			"# The attacking side population consists of the residents of the attacking nation, and allies.",
+			"# The defending side population consists of the residents of the defending town, and nation + allies if applicable.",
+			"# The level of the boost is configured in separate configs. See the scoring section of this file."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -2170,6 +2177,24 @@ public enum ConfigNodes {
 			"# The setting is used to balance the system between casual players and dedicated players (i.e. those who spend a lot of time on the server).",
 			"# The higher the value, the more that dedicated players are favored.",
 			"# The lower the value, the more that casual players are favored."),
+	WAR_SIEGE_POPULATION_QUOTIENT_FOR_MAX_POINTS_BOOST(
+			"war.siege.scoring.population_quotient_for_max_points_boost",
+			"3.0",
+			"# This setting determines the population quotient which results in max points boots.",
+			"# Example:",
+			"# 1. Assume this value is set to 3.0.",
+		    "# 2. Assume a siege attacker has 3 times the population of a siege defender (counting allied populations too).",
+			"# 3. In this example, if the siege defender scores any siege points, the points will be boosted by the (separately configured) maximum.",
+            "# 4. In this example, the siege attacker will not get any points boosts."),
+	WAR_SIEGE_MAX_POPULATION_BASED_POINTS_BOOST(
+			"war.siege.scoring.max_population_based_points_boost",
+			"2.0",
+			"# This setting determines the maximum points boost which a siege side can get due to population.",
+			"# Example:",
+			"# 1. Assume this value is set to 2.0.",
+			"# 2. Assume that a siege attacker greatly outnumbers a siege defender in population. (also counting allies)",
+			"# 3. In this example, if the siege defender scores any siege points, the points will be multiplied by 2.",
+			"# 4. In this example, the siege attacker will not get any points boosts."),
 
 	//Tactical Visibility
 	//Todo - Eventually move this to another location as it works regardless of war system, or without.

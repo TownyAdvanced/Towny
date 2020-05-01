@@ -50,6 +50,8 @@ public class Siege {
 	private SiegeSide bannerControllingSide;
 	private Map<Player, BannerControlSession> bannerControlSessions;
 	private Map<Resident, Integer> residentTotalTimedPointsMap;  //The total timed siege-points earned by individual residents in this siege
+	private boolean attackerHasLowestPopulation;
+	private double siegePointModifierForSideWithLowestPopulation;
 
 	public Siege(String name) {
         this.name = name;
@@ -62,6 +64,8 @@ public class Siege {
 		bannerControllingSide = SiegeSide.NOBODY;
 		bannerControlSessions = new HashMap<>();
 		residentTotalTimedPointsMap = new HashMap<>();
+		attackerHasLowestPopulation = false;
+		siegePointModifierForSideWithLowestPopulation = 0;  //0 is the special starting value
     }
 
 	public Nation getAttackingNation() {
@@ -261,5 +265,21 @@ public class Siege {
 			int newPoints = residentTotalTimedPointsMap.get(resident) + timedPointsGain;
 			residentTotalTimedPointsMap.put(resident, newPoints);
 		}
+	}
+
+	public double getSiegePointModifierForSideWithLowestPopulation() {
+		return siegePointModifierForSideWithLowestPopulation;
+	}
+
+	public void setSiegePointModifierForSideWithLowestPopulation(double siegePointModifierForSideWithLowestPopulation) {
+		this.siegePointModifierForSideWithLowestPopulation = siegePointModifierForSideWithLowestPopulation;
+	}
+
+	public boolean isAttackerHasLowestPopulation() {
+		return attackerHasLowestPopulation;
+	}
+
+	public void setAttackerHasLowestPopulation(boolean attackerHasLowestPopulation) {
+		this.attackerHasLowestPopulation = attackerHasLowestPopulation;
 	}
 }

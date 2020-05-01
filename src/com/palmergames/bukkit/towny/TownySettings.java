@@ -3289,4 +3289,16 @@ public class TownySettings {
 	public static Integer getWarSiegeMaxTimedPointsPerPlayerPerSiege() {
 		return getInt(ConfigNodes.WAR_SIEGE_SCORING_MAX_TIMED_POINTS_PER_PLAYER_PER_SIEGE);
 	}
+
+	public static boolean getWarSiegePopulationBasedPointBoostsEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_POPULATION_BASED_POINT_BOOSTS_ENABLED);
+	}
+
+	public static double getWarSiegePopulationQuotientForMaxPointsBoost() {
+		return getDouble(ConfigNodes.WAR_SIEGE_POPULATION_QUOTIENT_FOR_MAX_POINTS_BOOST);
+	}
+
+	public static double getWarSiegeMaxPopulationBasedPointBoost() {
+		return getDouble(ConfigNodes.WAR_SIEGE_MAX_POPULATION_BASED_POINTS_BOOST);
+	}
 }

@@ -94,4 +94,10 @@ public class SiegeWarTimerTaskController {
 			RemovePostSpawnDamageImmunity.removePostSpawnDamageImmunity();
 		}
 	}
+
+	public static void updatePopulationBasedSiegePointModifiers() {
+		if(TownySettings.getWarSiegePopulationBasedPointBoostsEnabled()) {
+			SiegeWarPointsUtil.updatePopulationBasedSiegePointModifiers();
+		}
+	}
 }
