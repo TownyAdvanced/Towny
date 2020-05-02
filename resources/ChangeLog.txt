@@ -4550,3 +4550,4 @@ v0.92.0.11:
     - Allows for nations to connect seamlessly while still keeping towns not in the same nation from claiming close to each other.
     - Closes #3913.
   - Fix DrawSmokeFactory offset to move smoke puffs up from inside the blocks.
+  - Fix ghost townblocks that are missing a town not being deleted at startup.
