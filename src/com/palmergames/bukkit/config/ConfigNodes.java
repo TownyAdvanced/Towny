@@ -1383,7 +1383,7 @@ public enum ConfigNodes {
 	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT(
 		"economy.daily_taxes.max_town_tax_percent_amount",
 		"10000",
-		"# The maximum amount of money that can be taken from a balance when using a percent tax"
+		"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
 	),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",

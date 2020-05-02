@@ -54,6 +54,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private double commercialPlotTax = TownySettings.getTownDefaultShopTax();
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
+	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
 	private Nation nation;
 	private boolean hasUpkeep = true;
@@ -1529,5 +1530,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
 	}
-	
+
+	public double getMaxPercentTaxAmount() {
+		return maxPercentTaxAmount;
+	}
+
+	public void setMaxPercentTaxAmount(double maxPercentTaxAmount) {
+		// Max tax amount cannot go over amount defined in config.
+		this.maxPercentTaxAmount = Math.min(maxPercentTaxAmount, TownySettings.getMaxTownTaxPercentAmount());
+	}
 }

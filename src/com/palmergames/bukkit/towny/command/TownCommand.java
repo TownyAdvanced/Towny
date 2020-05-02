@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -141,7 +142,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"embassyprice",
 		"embassytax",
 		"title",
-		"surname"
+		"surname",
+		"taxMax"
 	);
 
 	static final List<String> townToggleTabCompletes = Arrays.asList(
@@ -1456,7 +1458,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Resident resident;
 
 			try {
-				
+
 				if (!admin) {
 					resident = townyUniverse.getDataSource().getResident(player.getName());
 					town = resident.getTown();
@@ -1479,11 +1481,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
-				
+
 				// Test to see if the pvp cooldown timer is active for the town.
-				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))					 
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
-				
+
 				boolean outsiderintown = false;
 				if (TownySettings.getOutsidersPreventPVPToggle()) {
 					for (Player target : Bukkit.getOnlinePlayers()) {
@@ -1851,6 +1853,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
 
+			} else if (split[0].equalsIgnoreCase("taxMax")) {
+				if (!town.isTaxPercentage()) {
+					// msg_max_tax_amount_only_for_percent
+					throw new TownyException(TownySettings.getLangString("msg_max_tax_amount_only_for_percent"));
+				}
+				
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg("Eg. /town set taxMax 10000");
+					return;
+				}
+				
+				double amount = Double.parseDouble(split[1]);
+				town.setMaxPercentTaxAmount(amount);
+
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax_max_percent_amount"), player.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
+				
 			} else if (split[0].equalsIgnoreCase("surname")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode()))
