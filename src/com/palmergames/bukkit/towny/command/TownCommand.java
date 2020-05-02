@@ -1779,6 +1779,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "title/surname [resident] [text]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxMax [amount]", ""));
 		} else {
 			Resident resident;
 
