@@ -4551,3 +4551,8 @@ v0.92.0.11:
     - Closes #3913.
   - Fix DrawSmokeFactory offset to move smoke puffs up from inside the blocks.
   - Fix ghost townblocks that are missing a town not being deleted at startup.
+0.96.1.10:
+  - Changed: Whether someone light a Nether Portal, they will now have to be able to build NETHER_PORTAL blocks rather than OBSIDIAN blocks.
+    - This means that servers who want players to be able to make nether portals to a world where they do not grant towny.wild permissions will be able to build a portal.
+    - The node required to build a portal that would connect into the wilderness would be towny.wild.build.NETHER_PORTAL.
+    - This means servers that do not grant wild permissions do not have to give towny.wild.build.OBSIDIAN, which would mean players could place obsidian anywhere in the wild.
