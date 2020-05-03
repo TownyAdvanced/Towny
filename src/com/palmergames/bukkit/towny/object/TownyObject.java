@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.Saveable;
-import com.palmergames.bukkit.towny.database.handler.PrimaryKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.jetbrains.annotations.NotNull;
 

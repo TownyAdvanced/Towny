@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.database.type;
 
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
-import com.palmergames.bukkit.towny.database.handler.SQLString;
+import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.SQLStringType;
 import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SaveHandler;

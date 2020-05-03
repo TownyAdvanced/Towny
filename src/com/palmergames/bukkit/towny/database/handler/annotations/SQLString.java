@@ -1,4 +1,6 @@
-package com.palmergames.bukkit.towny.database.handler;
+package com.palmergames.bukkit.towny.database.handler.annotations;
+
+import com.palmergames.bukkit.towny.database.handler.SQLStringType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

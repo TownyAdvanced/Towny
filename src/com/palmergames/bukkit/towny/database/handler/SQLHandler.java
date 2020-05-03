@@ -144,7 +144,15 @@ public class SQLHandler {
 			Statement stmt = con.createStatement();
 			
 			for (String update : updates) {
-				stmt.executeUpdate(update);
+				// Try-catch around update to prevent one failed update from stopping the rest.
+				try {
+					stmt.executeUpdate(update);
+				} catch (SQLException ex) {
+					if (errorMessage != null) {
+						TownyMessaging.sendErrorMsg(errorMessage);
+						ex.printStackTrace();
+					}
+				}
 			}
 		} catch (SQLException ex) {
 			if (errorMessage != null) {

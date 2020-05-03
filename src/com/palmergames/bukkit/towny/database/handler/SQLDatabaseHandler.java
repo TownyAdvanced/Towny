@@ -3,6 +3,9 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
+import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -24,9 +27,12 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -40,9 +46,15 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		sqlHandler = new SQLHandler(databaseType);
 		sqlHandler.testConnection();
 
+		// Create tables
 		createTownyObjectTable("TOWNS", Town.class);
 		createTownyObjectTable("NATIONS", Nation.class);
 		createTownyObjectTable("RESIDENTS", Resident.class);
+		
+		// Update/alter tables. Order of this matters!
+		alterTownyObjectTable("NATIONS", Nation.class);
+		alterTownyObjectTable("TOWNS", Town.class);
+		alterTownyObjectTable("RESIDENTS", Resident.class);
 	}
 	
 	// TODO Figure out how to handle insertions vs updates
@@ -77,7 +89,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return TownySettings.getSQLTablePrefix();
 	}
 	
-	private <T> String updateColumnsFromFields(Class<T> clazz) {
+	private <T> String[] alterColumnStatements(String tableName, Class<T> clazz, Collection<String> filter) {
 		Constructor<T> objConstructor = null;
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
@@ -98,28 +110,48 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		Validate.isTrue(obj != null);
 		
 		return ReflectionUtil.getAllFields(obj, true).stream()
-				.map(f -> f.getName() + " " + getSQLColumnDefinition(f))
-				.collect(Collectors.joining(", "));
+				.filter(f -> !filter.contains(f.getName()))
+				.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
+					f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
+				.toArray(String[]::new);
 	}
-	
+
 	private <T extends TownyObject> void createTownyObjectTable(String tableName, Class<T> objectClazz) {
 		tableName = tblPrefix() + tableName;
-		
+
 		// Fetch primary field, and gather appropriate SQL.
 		Field primaryField = fetchPrimaryKeyField(objectClazz);
 		String pkStmt = "";
 		if (primaryField != null) {
 			pkStmt = ", PRIMARY KEY" + "(`" + primaryField.getName() + "`)";
 		}
-		
+
 		String createTableStmt = "CREATE TABLE IF NOT EXISTS " + tableName +" ("
 			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL"
 			+ pkStmt
 			+ ")";
 
-		String alterTableStmt = "ALTER TABLE " + tableName + " ADD COLUMN " + updateColumnsFromFields(objectClazz);
+		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
+	}
+	
+	private <T extends TownyObject> void alterTownyObjectTable(String tableName, Class<T> objectClazz) {
+		// Set of column names that already exist in the table
+		Set<String> columnNames = new HashSet<>();
+		
+		// Fetch all the column names
+		sqlHandler.executeQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "'", 
+			"Could not get column names from " + tableName, 
+			rs -> {
+				while (rs.next()) {
+					columnNames.add(rs.getString("COLUMN_NAME"));
+				}
+			});
+		
+		// Returns a list of statements to create columns which are not already in the table.
+		// This should prevent an SQL error from being thrown
+		String[] columnStatements = alterColumnStatements(tableName, objectClazz, columnNames);
 
-		sqlHandler.executeUpdatesError("Error creating table " + tableName + "!" , createTableStmt, alterTableStmt);
+		sqlHandler.executeUpdatesError("Error creating table " + tableName + "!" , columnStatements);
 	}
 
 	@Override
@@ -301,6 +333,42 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 		
 		return null;
+	}
+	
+	private String getForeignKeyDefinition(Field field) {
+		ForeignKey fkAnnotation = field.getAnnotation(ForeignKey.class);
+		
+		if (fkAnnotation != null) {
+			// We have to create an instance of the reference class
+			// in order to get the sql table from the class.
+			Constructor<? extends Saveable> objConstructor = null;
+			try {
+				objConstructor = fkAnnotation.reference().getConstructor(UUID.class);
+			} catch (NoSuchMethodException e) {
+				TownyMessaging.sendErrorMsg("Unable to get constructor of " + fkAnnotation.reference().getName() + " for ForeignKey constraint!");
+				e.printStackTrace();
+				return "";
+			}
+
+			Saveable obj = null;
+			try {
+				Validate.isTrue(objConstructor != null);
+				obj = objConstructor.newInstance(null);
+			} catch (ReflectiveOperationException e) {
+				TownyMessaging.sendErrorMsg("Unable to construct instance of " + fkAnnotation.reference().getName() + " for ForeignKey constraint!");
+				e.printStackTrace();;
+				return "";
+			}
+
+			String keyConstraint = ", FOREIGN KEY (%s) REFERENCES %s(uniqueIdentifier)";
+			
+			if (fkAnnotation.cascadeOnDelete())
+				keyConstraint += " ON DELETE CASCADE";
+			
+			return String.format(keyConstraint, field.getName(), tblPrefix() + obj.getSQLTable());
+		}
+		
+		return "";
 	}
 	
 	private Map<String, String> convertToInsertionMap(Map<String, ObjectContext> contextMap) {

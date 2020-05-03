@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
+import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
+import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
