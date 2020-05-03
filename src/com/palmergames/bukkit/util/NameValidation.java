@@ -23,7 +23,7 @@ public class NameValidation {
 	static {
 		bannedNames = new HashSet<>(
 			Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant",
-				          "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
+				          "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create", "spawn"));
 	}
 
 	/**
