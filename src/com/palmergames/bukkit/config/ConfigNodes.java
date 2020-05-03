@@ -485,7 +485,8 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
 			"false",
-			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
+			"# Does not have any effect when Event War is active."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
@@ -1619,7 +1620,8 @@ public enum ConfigNodes {
 			"war.event.remove_on_monarch_death",
 			"false",
 			"",
-			"# If true and the monarch/king dies the nation is removed from the war."),
+			"# If true and the monarch/king dies the nation is removed from the war.",
+			"# Also removes a town from the war event when the mayor dies."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
 			"false",
