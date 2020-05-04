@@ -39,7 +39,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class, referenceField = "uniqueIdentifier", cascadeOnDelete = true)
-	private Town town = null;
+	private UUID townID = null;
 	private long lastOnline;
 	private long registered;
 	private boolean isNPC = false;
@@ -114,8 +114,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.removeJailSpawn();
 		this.setJailTown(" ");
 		if (!escaped) {
-			TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+			try {
+				TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
+				TownyMessaging.sendPrefixedTownMessage(getTown(), String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+			} catch (TownyException e) {
+				e.printStackTrace();
+			}
 		} else
 			try {
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getWorld(player.getLocation().getWorld().getUID()).getUnclaimedZoneName()));
@@ -315,47 +319,37 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public boolean isMayor() {
 
+		Town town;
+		try {
+			town = getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+
 		return hasTown() && town.isMayor(this);
 	}
 
 	public boolean hasTown() {
+		
+		try {
+			getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 
-		return town != null;
+		return true;
 	}
 
 	public boolean hasNation() {
 
-		return hasTown() && town.hasNation();
-	}
-
-	public Town getTown() throws NotRegisteredException {
-
-		if (hasTown())
-			return town;
-		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
-	}
-
-	public void setTown(Town town) throws AlreadyRegisteredException {
-
-		if (town == null) {
-			this.town = null;
-			setTitle("");
-			setSurname("");
-			updatePerms();
-			return;
+		Town town;
+		try {
+			town = getTown();
+		} catch (NotRegisteredException e) {
+			return false;
 		}
 
-		if (this.town == town)
-			return;
-
-		if (hasTown())
-			throw new AlreadyRegisteredException();
-
-		this.town = town;
-		setTitle("");
-		setSurname("");
-		updatePerms();
+		return hasTown() && town.hasNation();
 	}
 
 	public void setFriends(List<Resident> newFriends) {
@@ -404,7 +398,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 		if (hasTown())
 			try {
-				town.removeResident(this);
+				getTown().removeResident(this);
 				setTitle("");
 				setSurname("");
 				updatePerms();
@@ -581,7 +575,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 
-	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
+	public boolean addTownRank(String rank) throws AlreadyRegisteredException, NotRegisteredException {
 
 		if (this.hasTown() && TownyPerms.getTownRanks().contains(rank)) {
 			if (hasTownRank(rank))
@@ -591,6 +585,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			townRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
+			
+			Town town = getTown();
 			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
 		}
@@ -637,7 +633,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			if (BukkitTools.isOnline(this.getName())) {
 				TownyPerms.assignPermissions(this, null);
 			}
-			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
+			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, getTown()));
 			return true;
 		}
 
@@ -895,6 +891,34 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public boolean equals(Object obj) {
 		return this == obj ||
 			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
+	}
+
+	public void setTownID(UUID townID) throws AlreadyRegisteredException {
+		
+		if (townID != null) {
+			throw new AlreadyRegisteredException();
+		}
+
+		setTitle("");
+		setSurname("");
+		updatePerms();
+
+		this.townID = null;
+	}
+	
+	public void setTown(Town town) throws AlreadyRegisteredException {
+		
+		if (town == null) {
+			setTownID(null);
+			
+			return;
+		}
+		
+		setTownID(town.getUniqueIdentifier());
+	}
+	
+	public Town getTown() throws NotRegisteredException {
+		return TownyUniverse.getInstance().getTown(townID);
 	}
 }
 

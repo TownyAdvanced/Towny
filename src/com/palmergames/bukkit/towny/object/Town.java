@@ -60,7 +60,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
-	private Nation nation;
+	private UUID nationID;
 	private boolean hasUpkeep = true;
 	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
@@ -240,29 +240,26 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		TownyPerms.assignPermissions(mayor, null);
 	}
 
-	public Nation getNation() throws NotRegisteredException {
-
-		if (hasNation())
-			return nation;
-		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_town_doesnt_belong_to_any_nation"));
-	}
-
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
-
-		if (nation == null) {
-			this.nation = null;
-			TownyPerms.updateTownPerms(this);
-			TownyUniverse.getInstance().getDatabaseHandler().save(this);
-			return;
-		}
-		if (this.nation == nation)
-			return;
-		if (hasNation())
-			throw new AlreadyRegisteredException();
-		this.nation = nation;
-		TownyPerms.updateTownPerms(this);
-		TownyUniverse.getInstance().getDatabaseHandler().save(this);
+		
+		// TODO: Implement
+		
+		throw new UnsupportedOperationException("This has not been implemented");
+		
+//
+//		if (nation == null) {
+//			this.nation = null;
+//			TownyPerms.updateTownPerms(this);
+//			TownyUniverse.getInstance().getDatabaseHandler().save(this);
+//			return;
+//		}
+//		if (this.nation == nation)
+//			return;
+//		if (hasNation())
+//			throw new AlreadyRegisteredException();
+//		this.nation = nation;
+//		TownyPerms.updateTownPerms(this);
+//		TownyUniverse.getInstance().getDatabaseHandler().save(this);
 	}
 
 	@Override
@@ -330,8 +327,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasNation() {
+		
+		try {
+			getNation();
+		} catch (TownyException e) {
+			return false;
+		}
 
-		return nation != null;
+		return true;
 	}
 
 	public int getNumResidents() {
@@ -340,6 +343,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isCapital() {
+
+		Nation nation;
+		try {
+			nation = getNation();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 
 		return hasNation() && nation.isCapital(this);
 	}
@@ -1581,5 +1591,13 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public boolean equals(Object obj) {
 		return this == obj ||
 			((obj instanceof Town) &&  this.getUniqueIdentifier().equals(((Town) obj).getUniqueIdentifier()));
+	}
+	
+	public Nation getNation() throws NotRegisteredException {
+		return TownyUniverse.getInstance().getNation(nationID);
+	}
+
+	public void setNationID(UUID nationID) {
+		this.nationID = nationID;
 	}
 }

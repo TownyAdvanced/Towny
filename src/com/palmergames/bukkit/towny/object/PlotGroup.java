@@ -161,4 +161,14 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Saveable {
 	public @org.jetbrains.annotations.NotNull UUID getUniqueIdentifier() {
 		return uniqueIdentifier;
 	}
+
+	@Override
+	public boolean isChanged() {
+		return false;
+	}
+
+	@Override
+	public void setChanged(boolean changed) {
+
+	}
 }

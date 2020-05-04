@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashSet;
@@ -27,7 +29,7 @@ public class TownBlock extends TownyObject {
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
 	private TownyWorld world;
-	private Town town = null;
+	private UUID townID = null;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
@@ -50,28 +52,31 @@ public class TownBlock extends TownyObject {
 		this.z = z;
 		this.setWorld(world);
 	}
+	
+	public void setTownID(UUID townID) {
+		this.townID = townID;
+	}
 
-	public void setTown(Town town) {
-
-		if (hasTown())
-			this.town.removeTownBlock(this);
-		this.town = town;
-		try {
-			TownyUniverse.getInstance().addTownBlock(this);
-			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
+	public void setTown(@Nullable Town town) {
+		
+		if (town == null) {
+			setTownID(null);
+			return;
+		}
+		
+		setTownID(town.getUniqueIdentifier());
 	}
 
 	public Town getTown() throws NotRegisteredException {
-
-		if (!hasTown())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
-		return town;
+		return TownyUniverse.getInstance().getTown(townID);
 	}
 
 	public boolean hasTown() {
-
-		return town != null;
+		try {
+			return TownyUniverse.getInstance().getTown(townID) != null;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 	}
 
 	public void setResident(Resident resident) {
@@ -197,11 +202,14 @@ public class TownBlock extends TownyObject {
 			case BANK:
 
 				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-
-				if (this.hasResident()) {
+			if (this.hasResident()) {
 				setPermissions(this.resident.getPermissions().toString());
 			} else {
-				setPermissions(this.town.getPermissions().toString());
+				try {
+					setPermissions(getTown().getPermissions().toString());
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			break;
