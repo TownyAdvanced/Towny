@@ -357,21 +357,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
-		
+
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
-					newResident(line);
+					try {
+						newResident(line);
+					} catch (AlreadyRegisteredException e) {
+						TownyMessaging.sendDebugMsg("Duplicate resident '" + line + "' found in residents.txt, ignoring.");
+						continue;
+					}
 				}
 			}
-			
+
 			return true;
-			
-		} catch (AlreadyRegisteredException e) {
-			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", resident is possibly listed twice.");
-			e.printStackTrace();
-			return false;
 			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
@@ -1495,11 +1495,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
-				String test = null;
+
 				try {
 					HashMap<String, String> keys = loadFileIntoHashMap(fileTownBlock);			
 
-					test = "town";
 					line = keys.get("town");
 					if (line != null) {
 						if (line.isEmpty()) {
@@ -1525,6 +1524,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								townyWorld.addTown(town);
 						} catch (AlreadyRegisteredException ignored) {
 						}
+					} else {
+						// Town line is null, townblock is invalid.
+						TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);
+						TownyUniverse.getInstance().removeTownBlock(townBlock);
+						deleteTownBlock(townBlock);
+						continue;
 					}
 
 					line = keys.get("name");
@@ -1583,13 +1588,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-					
-					test = "metadata";
+
 					line = keys.get("metadata");
 					if (line != null && !line.isEmpty())
 						townBlock.setMetadata(line.trim());
-					
-					test = "groupID";
+
 					line = keys.get("groupID");
 					UUID groupID = null;
 					if (line != null && !line.isEmpty()) {
@@ -1602,12 +1605,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 				} catch (Exception e) {
-					if (test == "town") {
-						TownyMessaging.sendErrorMsg("TownBlock file missing Town, deleting " + path);
-						TownyUniverse.getInstance().removeTownBlock(townBlock);
-						deleteTownBlock(townBlock);
-						continue;
-					}
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
@@ -1648,7 +1645,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			try {
 
-				list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
+				if (!list.contains(resident.getName()))
+					list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
 
 			} catch (InvalidNameException e) {
 

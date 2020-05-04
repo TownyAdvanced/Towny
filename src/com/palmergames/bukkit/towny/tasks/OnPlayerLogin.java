@@ -60,6 +60,7 @@ public class OnPlayerLogin implements Runnable {
 				if (TownySettings.isShowingRegistrationMessage())				
 					TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
+				resident.setLastOnline(System.currentTimeMillis());
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());

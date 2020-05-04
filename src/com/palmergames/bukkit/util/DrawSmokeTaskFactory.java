@@ -19,7 +19,7 @@ public class DrawSmokeTaskFactory {
      */
     public static LocationRunnable sendToPlayer(final Player player) {
         return new LocationRunnable() {
-            Vector offset = new Vector(0.5, 0.5, 0.5);
+            Vector offset = new Vector(0.5, 1.5, 0.5);
 
             @Override
             public void run(Location loc) {

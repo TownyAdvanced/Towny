@@ -4533,3 +4533,26 @@ v0.92.0.11:
 0.96.1.9:
   - Fix missing command-feedback when using some towny commands in the console, courtesy of Siris with PR #3961.
     - Closes #3957. 
+  - Fix newly-joined players not having their lastOnline value not set.
+  - Fix residents.txt causing safemode for having a resident listed more than once.
+    - Also removes doubled up residents from the residents.txt when saving.
+  - New Permission Node: towny.admin.spawn
+    - Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
+    - Child Node: towny.command.townyadmin.town.spawn.freecharge
+    - Is itself a childnode of towny.admin.
+    - Closes: #3936.
+  - Removed Permission Nodes: 
+    - towny.command.townyadmin.town.spawn
+    - towny.command.townyadmin.nation.spawn
+    - Replaced by the above towny.admin.spawn node.
+  - Fix min_distance_between_homeblocks likely not working very well.
+  - Changed: towns in the same nation now bypass the min_distance_from_town_homeblock & min_plot_distance_from_town_plot config values.
+    - Allows for nations to connect seamlessly while still keeping towns not in the same nation from claiming close to each other.
+    - Closes #3913.
+  - Fix DrawSmokeFactory offset to move smoke puffs up from inside the blocks.
+  - Fix ghost townblocks that are missing a town not being deleted at startup.
+0.96.1.10:
+  - Changed: Whether someone light a Nether Portal, they will now have to be able to build NETHER_PORTAL blocks rather than OBSIDIAN blocks.
+    - This means that servers who want players to be able to make nether portals to a world where they do not grant towny.wild permissions will be able to build a portal.
+    - The node required to build a portal that would connect into the wilderness would be towny.wild.build.NETHER_PORTAL.
+    - This means servers that do not grant wild permissions do not have to give towny.wild.build.OBSIDIAN, which would mean players could place obsidian anywhere in the wild.
