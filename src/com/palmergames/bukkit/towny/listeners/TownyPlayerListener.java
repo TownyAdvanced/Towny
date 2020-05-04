@@ -252,29 +252,8 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
-		TownyWorld World = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		try {
-			World = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
-			if (!World.isUsingTowny())
-				return;
-
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
-		}
-		
-		// prevent players trampling crops
-
-		if ((event.getAction() == Action.PHYSICAL)) {
-			if ((block.getType() == Material.FARMLAND))				
-				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY)) {
-					event.setCancelled(true);
-					return;
-				}
-		}
 
 		if (event.hasItem()) {
 
@@ -283,7 +262,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
-				if (townyUniverse.getPermissionSource().isTownyAdmin(player)) {
+				if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 					if (event.getClickedBlock() != null) {
 
 						block = event.getClickedBlock();
@@ -333,7 +312,7 @@ public class TownyPlayerListener implements Listener {
 		if (!event.useItemInHand().equals(Event.Result.DENY))
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
-					onPlayerSwitchEvent(event, null, World);
+					onPlayerSwitchEvent(event, null);
 				}
 			}
 
@@ -787,16 +766,16 @@ public class TownyPlayerListener implements Listener {
 	/*
 	*  Switch protection handling
 	*/	
-	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg, TownyWorld world) {
+	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg) {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		
-		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg, world));
+		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg));
 
 	}
 
-	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
+	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg) {
 
 		if (!TownySettings.isSwitchMaterial(block.getType().name()))
 			return false;

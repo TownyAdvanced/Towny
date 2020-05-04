@@ -4556,3 +4556,8 @@ v0.92.0.11:
     - This means that servers who want players to be able to make nether portals to a world where they do not grant towny.wild permissions will be able to build a portal.
     - The node required to build a portal that would connect into the wilderness would be towny.wild.build.NETHER_PORTAL.
     - This means servers that do not grant wild permissions do not have to give towny.wild.build.OBSIDIAN, which would mean players could place obsidian anywhere in the wild.
+  - Fix MobRemovalTask not appreciating when a world's worldmobs setting is off.
+  - Fix Slimes trampling on crops not abiding a world's creaturetrampling setting.
+    - Also cleans up croptrampling code from out of the TownyPlayerListener & lets us drop the TownyWorld from the onPlayerSwitchEvent.
+  - Fix Ravagers breaking leaves/crops and what not when world's creaturetrampling setting is off.
+    - Closes #3975.
