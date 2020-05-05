@@ -94,7 +94,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
 		} catch (NoSuchMethodException e) {
-			TownyMessaging.sendErrorMsg("flag 1");
 			e.printStackTrace();
 		}
 
@@ -103,7 +102,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			Validate.isTrue(objConstructor != null);
 			obj = objConstructor.newInstance((Object) null);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			TownyMessaging.sendErrorMsg("flag 2");
 			e.printStackTrace();
 		}
 
@@ -164,7 +162,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
 		} catch (NoSuchMethodException e) {
-			TownyMessaging.sendErrorMsg("flag 1");
 			e.printStackTrace();
 		}
 
@@ -173,7 +170,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			Validate.isTrue(objConstructor != null);
 			obj = objConstructor.newInstance((Object) null);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			TownyMessaging.sendErrorMsg("flag 2");
 			e.printStackTrace();
 		}
 
@@ -219,7 +215,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				}
 
 			} catch (ReflectiveOperationException e) {
-				TownyMessaging.sendErrorMsg("flag 3");
 				e.printStackTrace();
 				return null;
 			}
@@ -341,7 +336,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		if (fkAnnotation != null) {
 			// We have to create an instance of the reference class
 			// in order to get the sql table from the class.
-			Constructor<? extends Saveable> objConstructor = null;
+			Constructor<? extends Saveable> objConstructor;
 			try {
 				objConstructor = fkAnnotation.reference().getConstructor(UUID.class);
 			} catch (NoSuchMethodException e) {
@@ -350,7 +345,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				return "";
 			}
 
-			Saveable obj = null;
+			Saveable obj;
 			try {
 				Validate.isTrue(objConstructor != null);
 				obj = objConstructor.newInstance(null);

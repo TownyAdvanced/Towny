@@ -493,11 +493,16 @@ public class TownyUniverse {
     	return towns.containsKey(town);
 	}
     
-    public Town getTown(UUID town) throws NotRegisteredException {
-    	Town t = towns.get(town);
+    public Town getTown(UUID townID) throws NotRegisteredException {
+    	
+    	if (townID == null) {
+			return null;
+		}
+    	
+    	Town t = towns.get(townID);
     	
     	if (t == null) 
-			throw new NotRegisteredException(String.format("The town with UUID '%s' is not registered.", town));;
+			throw new NotRegisteredException(String.format("The townID with UUID '%s' is not registered.", townID));;
 			
     	return t;
 	}

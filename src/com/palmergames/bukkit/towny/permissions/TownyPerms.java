@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -87,7 +88,7 @@ public class TownyPerms {
 	 * @param player - Player to register permission
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
-
+		TownyMessaging.sendErrorMsg("Flag 17");
 		PermissionAttachment playersAttachment;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
@@ -134,6 +135,7 @@ public class TownyPerms {
 			}
 
 		}
+		
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
 		 * will perform a recalculation of perms for each addition.
@@ -148,12 +150,14 @@ public class TownyPerms {
 				 * recalculating)
 				 */
 				orig.clear();
-
+				
 				if (World.isUsingTowny()) {
+					TownyMessaging.sendErrorMsg("Flag 18");
 					/*
 					 * Fill with the fresh perm nodes
 					 */
 					orig.putAll(TownyPerms.getResidentPerms(resident));
+					
 
 					// System.out.print("Perms set for: " + resident.getName());
 				}
@@ -245,7 +249,7 @@ public class TownyPerms {
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
 		// Start by adding the default perms everyone gets
 		Set<String> permList = new HashSet<>(getDefault());
-		
+		TownyMessaging.sendErrorMsg("Flag 19");
 		//Check for town membership
 		if (resident.hasTown()) {
 			try {

@@ -67,7 +67,6 @@ public class EconomyAccount implements Nameable {
 			if (payed) {
 				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
 			}
-				
 			return payed;
 		}
 	}

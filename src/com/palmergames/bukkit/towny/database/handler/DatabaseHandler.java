@@ -125,7 +125,7 @@ public abstract class DatabaseHandler {
 				// Save
 				save(wrappedWorld);
 			} catch (AlreadyRegisteredException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -335,5 +335,4 @@ public abstract class DatabaseHandler {
 		// 4.) Load Residents
 		loadAllResidents();
 	}
-	
 }

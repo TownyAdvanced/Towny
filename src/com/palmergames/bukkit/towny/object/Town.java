@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -124,6 +125,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			throw new AlreadyRegisteredException();
 		else {
 			addTownBlockMap(townBlock);
+			townBlock.setTown(this);
 			if (townBlocks.size() == 1 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
@@ -300,7 +302,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void addResident(Resident resident) throws AlreadyRegisteredException {
-
+		Validate.notNull(resident);
 		addResidentCheck(resident);
 		residents.add(resident);
 		resident.setTown(this);
@@ -327,14 +329,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasNation() {
-		
-		try {
-			getNation();
-		} catch (TownyException e) {
-			return false;
-		}
-
-		return true;
+		return nationID != null;
 	}
 
 	public int getNumResidents() {
@@ -1594,6 +1589,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public Nation getNation() throws NotRegisteredException {
+		
+		if (!hasNation()) {
+			throw new NotRegisteredException("This town has no nation");
+		}
+		
 		return TownyUniverse.getInstance().getNation(nationID);
 	}
 

@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -207,6 +208,7 @@ public class Towny extends JavaPlugin {
 					}
 				}
 		}
+		
 		// ------------------- TESTING CODE -------------------
 		DatabaseHandler databaseHandler = new FlatFileDatabaseHandler();
 		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get("world");
@@ -220,9 +222,14 @@ public class Towny extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
-		ReflectionUtil.dump(resident);
 		
-		//Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		try {
+			loadedResident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
+		} catch (EconomyException e) {
+			e.printStackTrace();
+		}
+
 		//TownBlock loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
 		//ReflectionUtil.dump(loadedResident);
 		//ReflectionUtil.dump(loadedTownBlock);

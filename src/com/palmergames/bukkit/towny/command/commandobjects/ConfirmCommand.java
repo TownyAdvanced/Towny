@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfirmCommand extends BukkitCommand {
 	public ConfirmCommand(String name) {
@@ -15,7 +16,7 @@ public class ConfirmCommand extends BukkitCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender commandSender, String s, String[] strings) {
+	public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, String[] strings) {
 		
 		// Check if confirmation is available.
 		if (!ConfirmationHandler.hasConfirmation(commandSender)) {

@@ -77,7 +77,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
 		} catch (NoSuchMethodException e) {
-			TownyMessaging.sendErrorMsg("flag 1");
 			e.printStackTrace();
 		}
 
@@ -86,7 +85,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			Validate.isTrue(objConstructor != null);
 			obj = objConstructor.newInstance((Object) null);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			TownyMessaging.sendErrorMsg("flag 2");
 			e.printStackTrace();
 		}
 
@@ -132,7 +130,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				}
 				
 			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-				TownyMessaging.sendErrorMsg("flag 3");
 				e.printStackTrace();
 				return null;
 			}
@@ -258,7 +255,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			try {
 				TownyUniverse.getInstance().addWorld(loadedWorld);
 			} catch (AlreadyRegisteredException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

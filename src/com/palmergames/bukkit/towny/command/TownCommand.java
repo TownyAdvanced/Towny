@@ -2472,14 +2472,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation confirmation = new Confirmation(() -> {			
 					try {
 						// Make the resident pay here.
+						System.out.println("resident = " + resident);
 						resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
-					} catch (EconomyException ignored) {
+					} catch (Exception e) {
+						TownyMessaging.sendErrorMsg("Flag 5");
+						e.printStackTrace();
 					}
 					
 					try {
 						// Make town.
 						newTown(world, name, resident, key, player.getLocation(), player);
-					} catch (TownyException e) {
+					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						e.printStackTrace();
 					}
@@ -2506,13 +2509,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
+		
 		townyUniverse.newTown(name);
 		Town town = townyUniverse.getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
+		
 		TownBlock townBlock = new TownBlock(UUID.randomUUID(), key.getX(), key.getZ(), world);
-		townBlock.setTown(town);
+		town.addTownBlock(townBlock);
+		
 
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
@@ -2534,6 +2539,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
 		}
+		
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
 			try {
@@ -2545,9 +2551,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		townyUniverse.getDatabaseHandler().save(resident, townBlock, town, world);
 
+		
+		
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
-
+		
 		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
 
 		return town;

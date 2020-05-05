@@ -25,9 +25,11 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -330,14 +332,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public boolean hasTown() {
-		
-		try {
-			getTown();
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-
-		return true;
+		return townID != null;
 	}
 
 	public boolean hasNation() {
@@ -409,6 +404,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		townRanks.clear();
 		nationRanks.clear();
 		TownyPerms.assignPermissions(this, null);
+		
 	}
 	
 	public void updatePermsForNationRemoval() {
@@ -752,7 +748,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	@Override
 	public EconomyAccount getAccount() {
 		if (account == null) {
-
+			
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);
 			World world;
 
@@ -893,21 +889,16 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
 	}
 
-	public void setTownID(UUID townID) throws AlreadyRegisteredException {
+	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
+		this.townID = townID;
 		
-		if (townID != null) {
-			throw new AlreadyRegisteredException();
-		}
-
 		setTitle("");
 		setSurname("");
 		updatePerms();
-
-		this.townID = null;
 	}
 	
 	public void setTown(Town town) throws AlreadyRegisteredException {
-		
+		Validate.notNull(town);
 		if (town == null) {
 			setTownID(null);
 			
@@ -918,6 +909,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 	
 	public Town getTown() throws NotRegisteredException {
+		
+		if (!hasTown()) {
+			throw new NotRegisteredException("Resident has no town");
+		}
+		
 		return TownyUniverse.getInstance().getTown(townID);
 	}
 }

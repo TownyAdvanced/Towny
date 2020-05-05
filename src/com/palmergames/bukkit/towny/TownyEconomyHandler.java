@@ -318,7 +318,7 @@ public class TownyEconomyHandler {
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
 				vaultEconomy.createPlayerAccount(accountName);
-
+			
 			BukkitTools.getPluginManager().callEvent(event);
 			return vaultEconomy.withdrawPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
 			
