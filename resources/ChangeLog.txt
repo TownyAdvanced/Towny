@@ -4561,3 +4561,7 @@ v0.92.0.11:
     - Also cleans up croptrampling code from out of the TownyPlayerListener & lets us drop the TownyWorld from the onPlayerSwitchEvent.
   - Fix Ravagers breaking leaves/crops and what not when world's creaturetrampling setting is off.
     - Closes #3975.
+  - New Config Option: town.min_distances_ignored_for_towns_in_same_nation
+    - default: true
+    - If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same.
+    - Closes #3983.
