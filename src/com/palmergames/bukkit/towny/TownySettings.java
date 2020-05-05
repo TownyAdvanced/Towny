@@ -3151,12 +3151,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_REFUND_INITIAL_NATION_COST_ON_DELETE);
 	}
 
-	public static boolean getWarSiegeTownNeutralityEnabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_ENABLED);
+	public static boolean getWarCommonPeacefulTownsEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_ENABLED);
 	}
 
-	public static int getWarSiegeTownNeutralityConfirmationRequirementDays() {
-		return getInt(ConfigNodes.WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS);
+	public static int getWarCommonPeacefulTownsConfirmationRequirementDays() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS);
+	}
+
+	public static int getWarCommonPeacefulTownsResidentPostLeavePeacefulnessDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS);
 	}
 
 	public static boolean getWarSiegePillagingEnabled() {
@@ -3167,12 +3171,12 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT);
 	}
 
-	public static boolean getWarSiegePostSpawnDamageImmunityEnabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_ENABLED);
+	public static boolean getWarCommonPostRespawnPeacefulnessEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED);
 	}
 
-	public static int getWarSiegePostSpawnDamageImmunityMinimumDurationSeconds() {
-		return getInt(ConfigNodes.WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS);
+	public static int getWarCommonPostRespawnPeacefulnessDurationSeconds() {
+		return getInt(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_DURATION_SECONDS);
 	}
 
 	public static double getWarSiegeMaximumPillageAmountPerPlot() {

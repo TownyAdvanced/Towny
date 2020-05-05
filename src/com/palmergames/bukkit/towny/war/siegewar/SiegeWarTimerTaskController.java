@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
-import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemovePostSpawnDamageImmunity;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBannerControlUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDynmapUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
@@ -83,15 +82,6 @@ public class SiegeWarTimerTaskController {
 	public static void evaluateBannerControl() {
 		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 			SiegeWarBannerControlUtil.evaluateBannerControl(siege);
-		}
-	}
-
-	/**
-	 * Evaluate post spawn damage immunity removals
-	 */
-	public static void evaluatePostSpawnDamageImmunityRemovals() {
-		if (TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
-			RemovePostSpawnDamageImmunity.removePostSpawnDamageImmunity();
 		}
 	}
 

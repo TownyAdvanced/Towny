@@ -146,8 +146,8 @@ public class SiegeWarBannerControlUtil {
 		if (!resident.hasTown())
 			return false; //Player is a nomad
 
-		if(resident.getTown().isOccupied() || resident.getTown().isNeutral())
-			return false; // Player is from occupied or neutral town
+		if(resident.getTown().isOccupied())
+			return false; // Player is from occupied town
 
 		if(player.isDead())
 			return false; // Player is dead
@@ -233,7 +233,7 @@ public class SiegeWarBannerControlUtil {
 				double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siege.getDefendingTown().getTownBlocks().size();
 				if(TownySettings.getWarSiegePillagingEnabled()
 					&& TownySettings.isUsingEconomy()
-					&& !siege.getDefendingTown().isNeutral()
+					&& !siege.getDefendingTown().isPeaceful()
 					&& siege.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount)
 				{
 					SiegeWarMoneyUtil.pillageTown(siege.getBannerControllingResidents(), siege.getAttackingNation(), siege.getDefendingTown());

@@ -47,20 +47,16 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
-import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.*;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.utils.NameUtil;
-import com.palmergames.bukkit.towny.utils.OutpostUtil;
-import com.palmergames.bukkit.towny.utils.ResidentUtil;
-import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
 import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -68,7 +64,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -78,6 +73,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
@@ -153,6 +150,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"explosion",
 		"fire",
 		"mobs",
+		"peaceful",
 		"public",
 		"pvp",
 		"taxpercent",
@@ -1481,7 +1479,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "taxpercent", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "open", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "jail [number] [resident]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "neutral", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "peaceful", ""));
 		} else {
 			Resident resident;
 
@@ -1648,39 +1646,46 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 				
-			} else if (split[0].equalsIgnoreCase("neutral")) {
+			} else if (split[0].equalsIgnoreCase("peaceful")) {
 
-				if(!(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled()))
+				if(!TownySettings.getWarCommonPeacefulTownsEnabled())
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-				//Cannot change neutrality status while in a nation
-				if(town.hasNation())
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_change_neutrality_while_in_nation"));
 
 				if(admin) {
-					town.setNeutralityChangeConfirmationCounterDays(1);
-					UpdateTownNeutralityCounters.updateTownNeutralityCounter(town);
+					town.setPeacefulnessChangeConfirmationCounterDays(1);
+					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
 				} else {
-					if (town.getNeutralityChangeConfirmationCounterDays() == 0) {
-						//Here, no countdown is in progress, and the town wishes to change neutrality status
-						town.setDesiredNeutralityValue(!town.isNeutral());
-						int counterValue = TownySettings.getWarSiegeTownNeutralityConfirmationRequirementDays();
-						town.setNeutralityChangeConfirmationCounterDays(counterValue);
+					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
+						
+						//Here, no countdown is in progress, and the town wishes to change peacefulness status
+						town.setDesiredPeacefulnessValue(!town.isPeaceful());
+						int counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
+						
 						//Send message to town
-						if (town.getDesiredNeutralityValue())
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_neutral"), counterValue));
+						if (town.getDesiredPeacefulnessValue())
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_peaceful"), counterValue));
 						else
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_declared_non_neutral"), counterValue));
-
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_non_peaceful"), counterValue));
+						
+						//Remove any military nation ranks of residents
+						for(Resident peacefulTownResident: town.getResidents()) {
+							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
+								if (townyUniverse.getPermissionSource().doesNationRankAllowPermissionNode(nationRank, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
+									resident.removeNationRank(nationRank);
+								}
+							}
+						}
+						
 					} else {
 						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
-						town.setDesiredNeutralityValue(town.isNeutral());
-						town.setNeutralityChangeConfirmationCounterDays(0);
+						town.setDesiredPeacefulnessValue(town.isPeaceful());
+						town.setPeacefulnessChangeConfirmationCounterDays(0);
 						//Send message to town
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_siege_war_town_neutrality_countdown_cancelled")));
+						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_peacefulness_countdown_cancelled")));
 					}
 				}
 			} else {
@@ -1723,10 +1728,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (split.contains("explosion")) {
 			if (town.getHomeblockWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
-
+			
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-				&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())
 				&& town.hasSiege()
 				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_explosions"));
@@ -1737,9 +1741,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (town.getHomeblockWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 
+			if(TownySettings.getWarCommonPeacefulTownsEnabled() 
+				&& (town.isPeaceful() || town.getDesiredPeacefulnessValue())) {
+				throw new TownyException(TownySettings.getLangString("msg_war_common_peaceful_town_cannot_toggle_pvp"));
+			}
+
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-				&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())
 				&& town.hasSiege()
 				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_pvp"));

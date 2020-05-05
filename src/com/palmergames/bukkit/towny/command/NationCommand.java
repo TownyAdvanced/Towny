@@ -828,13 +828,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!nation.isOpen())
 				throw new Exception(String.format(TownySettings.getLangString("msg_err_nation_not_open"), nation.getFormattedName()));
 
-			//Check that town is not neutral
-			if(TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegeTownNeutralityEnabled()
-				&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_join_nation"));
-			}
-			
 			if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation()))
 				throw new Exception(String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
 
@@ -1016,6 +1009,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("add")) {
+
+				//In Siegewar, if town or resident is peaceful, can't add military rank
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarCommonPeacefulTownsEnabled()
+					&& townyUniverse.getPermissionSource().doesNationRankAllowPermissionNode(rank, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)
+					&& (town.isPeaceful() || resident.isPostTownLeavePeacefulEnabled()))
+				{
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident"));
+					return;
+				}
+
 				try {
 					if (target.addNationRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
@@ -1309,13 +1313,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_already_nation"));
 
-			//Check that town is not neutral
-			if(TownySettings.getWarSiegeEnabled() 
-				&& TownySettings.getWarSiegeTownNeutralityEnabled()
-				&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_create_nation"));
-			}
-			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
 			try {
@@ -1638,14 +1635,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		        	continue;
 		        }
 
-				//Check that town is not neutral
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarSiegeTownNeutralityEnabled()
-					&& (town.isNeutral() || town.getDesiredNeutralityValue())) {
-					TownyMessaging.sendErrorMsg(player,String.format(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_invite_to_nation"), town.getName()));
-					continue;
-				}
-		        
 				if (TownySettings.getNationRequiresProximity() > 0) {
 					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 					Coord townCoord = town.getHomeBlock().getCoord();

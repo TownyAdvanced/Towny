@@ -805,6 +805,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
 				try {
+					resident.setPostTownLeavePeacefulEnabled(rs.getBoolean("postTownLeavePeacefulEnabled"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					resident.setPostTownLeavePeacefulHoursRemaining(rs.getInt("postTownLeavePeacefulHoursRemaining"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
 						resident.setMetadata(line);
@@ -1042,9 +1054,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
                 town.setSiegeImmunityEndTime(rs.getLong("siegeCooldownEndTime"));
 				town.setOccupied(rs.getBoolean("occupied"));
-				town.setNeutral(rs.getBoolean("neutral"));
-				town.setDesiredNeutralityValue(rs.getBoolean("desiredNeutralityValue"));
-				town.setNeutralityChangeConfirmationCounterDays(rs.getInt("neutralityChangeConfirmationCounterDays"));
+				town.setPeaceful(rs.getBoolean("peaceful"));
+				town.setDesiredPeacefulnessValue(rs.getBoolean("desiredPeacefulnessValue"));
+				town.setPeacefulnessChangeConfirmationCounterDays(rs.getInt("peacefulnessChangeConfirmationCounterDays"));
 
 				s.close();
                 return true;
@@ -1707,7 +1719,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-            
+
+			//Town-related Peacefulness
+			res_hm.put("postTownLeavePeacefulEnabled", resident.isPostTownLeavePeacefulEnabled());
+			res_hm.put("postTownLeavePeacefulHoursRemaining", resident.getPostTownLeavePeacefulHoursRemaining());
+
 			if (resident.hasMeta())
 				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
 			else
@@ -1788,9 +1804,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
             twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 			twn_hm.put("occupied", town.isOccupied());
-			twn_hm.put("neutral=", town.isNeutral());
-			twn_hm.put("desiredNeutralityValue", town.getDesiredNeutralityValue());
-			twn_hm.put("neutralityChangeConfirmationCounterDays", town.getNeutralityChangeConfirmationCounterDays());
+			twn_hm.put("peaceful", town.isPeaceful());
+			twn_hm.put("desiredPeacefulnessValue", town.getDesiredPeacefulnessValue());
+			twn_hm.put("peacefulnessChangeConfirmationCounterDays", town.getPeacefulnessChangeConfirmationCounterDays());
 
             UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
             return true;

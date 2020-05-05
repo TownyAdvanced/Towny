@@ -410,6 +410,7 @@ permissions:
             towny.command.town.toggle.public: true
             towny.command.town.toggle.pvp: true
             towny.command.town.toggle.taxpercent: true
+            towny.command.town.toggle.peaceful: true
 
     towny.command.town.unclaim.*:
         description: User can access all town unclaim related commands.

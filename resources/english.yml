@@ -1160,11 +1160,6 @@ msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins 
 msg_siege_war_town_ruined_from_pillage: '&6[War]&b %s has been reduced to ruins due to pillaging by the soldiers of %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!.'
 msg_siege_war_refund_initial_cost_on_nation_delete: '&b%s has been refunded %s of the initial nation cost.'
-msg_siege_war_town_declared_neutral: '&bNeutrality Declared!. The town will be confirmed as neutral in %d day(s).'
-msg_siege_war_town_declared_non_neutral: '&bNon-Neutrality Declared!. The town will be confirmed as non-neutral in %d day(s).'
-msg_siege_war_town_neutrality_countdown_cancelled: '&bThe neutrality status change countdown was cancelled.'
-msg_siege_war_town_became_neutral: '&b%s has been confirmed as Neutral. The town can no longer join a nation. The town residents can no longer inflict PVP damage. The town is now immune to material siege costs (e.g. pvp, plunder, and taxes).'
-msg_siege_war_town_became_non_neutral: '&b%s has been confirmed as not-neutral. The town can now join a nation. The town residents can now inflict PVP damange. The town is no longer immune to material siege costs (e.g. pvp, plunder, and taxes).'
 msg_siege_war_attacking_troops_at_siege_banner: '&6[War]&b Siege on %s > Attackers are at the siege banner.'
 msg_siege_war_defending_troops_at_siege_banner: '&6[War]&b Siege on %s > Town defenders are at the siege banner.'
 msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. If you remain outside the town, and within %d blocks of the siege-banner, for %s, you will gain banner control (or be added to the banner control list). Do not go invisible/flying/underground.'
@@ -1184,13 +1179,8 @@ msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a 
 msg_err_siege_besieged_town_cannot_claim: "&6[War]&c Besieged towns cannot claim new land."
 #Deleting
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s."
-#Neutrality
-msg_err_siege_war_neutral_town_cannot_create_nation: "&cAs a neutral or declared-neutral town, you cannot create a nation."
-msg_err_siege_war_neutral_town_cannot_join_nation: "&cAs a neutral or declared-neutral town, you cannot join a nation."
-msg_err_siege_war_neutral_town_cannot_invite_to_nation: "&cYou cannot invite %s to the nation while it is neutral or declared-neutral."
-msg_err_siege_war_cannot_change_neutrality_while_in_nation: "&cYou cannot change neutrality status while in a nation."
 #Plunder
-msg_err_siege_war_neutral_town_cannot_plunder: "&6[War]&c You cannot plunder a neutral town."
+msg_err_siege_war_peaceful_town_cannot_plunder: "&6[War]&c You cannot plunder a peaceful town."
 #Revolt
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."
 msg_err_siege_war_revolt_immunity_active: "&6[War]&c Your town has revolt immunity. It cannot revolt until the revolt immunity expires."
@@ -1238,8 +1228,6 @@ msg_siege_war_banner_control_session_failure: '&6[War]&c Banner control session 
 msg_siege_war_resident_exceeded_max_timed_points: '&6[War]&c Siege on %s > You have achieved maximum timed siege points. You can no longer gain or contribute to banner control in this siege.'
 
 #Town Info Siege Section
-status_town_title_neutral: '&b (NEUTRAL)'
-status_town_neutrality_status_change_timer: '&2Countdown To Neutrality Status Change: &a%d days'
 status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
 status_town_siege_status: '&2Siege: &a%s'
 status_town_siege_status_in_progress: 'In Progress'
@@ -1277,3 +1265,19 @@ msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d 
 msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
 msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
+
+#Town Peacefulness
+status_town_title_peaceful: '&b (PEACEFUL)'
+status_town_peacefulness_status_change_timer: '&2Countdown To Peacefulness Status Change: &a%d days'
+msg_war_common_town_declared_peaceful: '&bPeacefulness Declared!. The town will be confirmed as peaceful in %d day(s).'
+msg_war_common_town_declared_non_peaceful: '&bNon-Peacefulness Declared!. The town will be confirmed as non-peaceful in %d day(s).'
+msg_war_common_town_peacefulness_countdown_cancelled: '&bThe peacefulness status change countdown was cancelled.'
+msg_war_common_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is forced off, and residents can no longer inflict PVP damage.'
+msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off, and residents can inflict PVP damage.'
+msg_war_common_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, for %s.'
+msg_war_common_peaceful_town_cannot_toggle_pvp: '&cCannot toggle PVP in peaceful towns. It is forced off.'
+
+msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off, and residents can no longer inflict PVP damage or gain nation-military ranks. The town is now immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
+msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off, and residents can inflict PVP damage and gain nation-military ranks. The town is no longer immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
+msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, or gain nation-military ranks, for %s.'
+msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to add military rank to resident, because they are in a peaceful town, or recently left one.'

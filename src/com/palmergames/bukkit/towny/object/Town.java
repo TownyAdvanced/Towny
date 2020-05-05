@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -87,9 +88,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private long siegeImmunityEndTime;
 	private Siege siege;
 	private boolean occupied;
-	private boolean neutral;
-	private boolean desiredNeutralityValue;
-	private int neutralityChangeConfirmationCounterDays;
+	private boolean peaceful;
+	private boolean desiredPeacefulnessValue;
+	private int peacefulnessChangeConfirmationCounterDays;
 	
 	public Town(String name) {
 		super(name);
@@ -100,9 +101,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
 		siege = null;
 		occupied = false;
-		neutral = false;
-		desiredNeutralityValue = false;
-		neutralityChangeConfirmationCounterDays = 0;
+		peaceful = false;
+		desiredPeacefulnessValue = false;
+		peacefulnessChangeConfirmationCounterDays = 0;
 	}
 
 	/*
@@ -365,9 +366,15 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (isAdminDisabledPVP()) 
 			return false;
 
+		//Peaceful town
+		if (TownySettings.getWarCommonPeacefulTownsEnabled()
+			&& (isPeaceful() || getDesiredPeacefulnessValue())) {
+			return false;
+		}
+
+		//Under siege
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-			&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && isNeutral())
 			&& siege != null
 			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 			return true;
@@ -397,7 +404,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-			&& !(TownySettings.getWarSiegeTownNeutralityEnabled() && isNeutral())
+			&& !(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
 			&& siege != null
 			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 			return true;
@@ -684,6 +691,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			if(TownySettings.getWarSiegeEnabled())
 				SiegeWarMembershipController.evaluateTownRemoveResident(this, resident);
 
+			if(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
+				TownPeacefulnessUtil.grantPostTownLeavePeacefulnessToResident(resident);
+
 			remove(resident);
 
 			if (getNumResidents() == 0) {
@@ -699,7 +709,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	private void remove(Resident resident) {
-		
 		resident.setTitle("");
 		resident.setSurname("");
 		resident.updatePerms();
@@ -1602,40 +1611,40 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 
-	public boolean isNeutral() {
-		return neutral;
+	public boolean isPeaceful() {
+		return peaceful;
 	}
 
-	public int getNeutralityChangeConfirmationCounterDays() {
-		return neutralityChangeConfirmationCounterDays;
+	public int getPeacefulnessChangeConfirmationCounterDays() {
+		return peacefulnessChangeConfirmationCounterDays;
 	}
 
-	public void decrementNeutralityChangeConfirmationCounterDays() {
-		neutralityChangeConfirmationCounterDays--;
+	public void decrementPeacefulnessChangeConfirmationCounterDays() {
+		peacefulnessChangeConfirmationCounterDays--;
 	}
 
-	public void flipNeutral() {
-		neutral = !neutral;
+	public void flipPeaceful() {
+		peaceful = !peaceful;
 	}
 
-	public void flipDesiredNeutralityValue() {
-		desiredNeutralityValue = !desiredNeutralityValue;
+	public void flipDesiredPeacefulnessValue() {
+		desiredPeacefulnessValue = !desiredPeacefulnessValue;
 	}
 
-	public void setNeutralityChangeConfirmationCounterDays(int counterValueDays) {
-		neutralityChangeConfirmationCounterDays = counterValueDays;
+	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
+		peacefulnessChangeConfirmationCounterDays = counterValueDays;
 	}
 
-	public void setDesiredNeutralityValue(boolean value) {
-		desiredNeutralityValue = value;
+	public void setDesiredPeacefulnessValue(boolean value) {
+		desiredPeacefulnessValue = value;
 	}
 
-	public boolean getDesiredNeutralityValue() {
-		return desiredNeutralityValue;
+	public boolean getDesiredPeacefulnessValue() {
+		return desiredPeacefulnessValue;
 	}
 
-	public void setNeutral(boolean value) {
-		neutral = value;
+	public void setPeaceful(boolean value) {
+		peaceful = value;
 	}
 
 	/**

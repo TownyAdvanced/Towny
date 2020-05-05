@@ -1,5 +1,7 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 import java.util.regex.Pattern;
 
 /**
@@ -68,5 +70,18 @@ public class TimeTools {
 	public static long convertToTicks(long t) {
 
 		return t * 20;
+	}
+
+	/**
+	 * Converts Seconds to 'Short' Ticks
+	 *
+	 * These ticks are only relevant to the 'Short' Timer Task
+	 * 
+	 * Rounds half up
+	 *
+	 * @return ticks
+	 */
+	public static int convertToShortTicks(double timeSeconds) {
+		return (int)((timeSeconds / TownySettings.getShortInterval()) + 0.5);
 	}
 }

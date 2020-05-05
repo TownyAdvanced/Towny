@@ -708,6 +708,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setPermissions(line);
 
+				line = keys.get("postTownLeavePeacefulEnabled");
+				if (line != null)
+					resident.setPostTownLeavePeacefulEnabled(Boolean.parseBoolean(line));
+
+				line = keys.get("postTownLeavePeacefulHoursRemaining");
+				if (line != null)
+					resident.setPostTownLeavePeacefulHoursRemaining(Integer.parseInt(line));
+
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					resident.setMetadata(line.trim());
@@ -1100,26 +1108,55 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
-				line = keys.get("neutral");
-				if (line != null)
+				line = keys.get("peaceful");
+				if (line != null) {
 					try {
-						town.setNeutral(Boolean.parseBoolean(line));
+						town.setPeaceful(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				} else {
+					//Try to migrate  (delete this bit after sw trial)
+					line = keys.get("neutral");
+					if (line != null) {
+						try {
+							town.setPeaceful(Boolean.parseBoolean(line));
+						} catch (Exception ignored) {
+						}
+					}
+				}
 
-				line = keys.get("desiredNeutralityValue");
-				if (line != null)
+				line = keys.get("desiredPeacefulnessValue");
+				if (line != null) {
 					try {
-						town.setDesiredNeutralityValue(Boolean.parseBoolean(line));
+						town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				} else {
+					//Try to migrate  (delete this bit after sw trial)
+					line = keys.get("desiredNeutralityValue");
+					if (line != null) {
+						try {
+							town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
+						} catch (Exception ignored) {
+						}
+					}
+				}
 
-				line = keys.get("neutralityChangeConfirmationCounterDays");
-				if (line != null)
+				line = keys.get("peacefulnessChangeConfirmationCounterDays");
+				if (line != null) {
 					try {
-						town.setNeutralityChangeConfirmationCounterDays(Integer.parseInt(line));
+						town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));
 					} catch (Exception ignored) {
 					}
+				} else {
+					//Try to migrate  (delete this bit after sw trial)
+					line = keys.get("neutralityChangeConfirmationCounterDays");
+					if (line != null) {
+						try {
+							town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));						} catch (Exception ignored) {
+						}
+					}
+				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -2026,6 +2063,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
 
+		// Town-related Peacefulness
+		list.add("postTownLeavePeacefulEnabled=" + resident.isPostTownLeavePeacefulEnabled());
+		list.add("postTownLeavePeacefulHoursRemaining=" + resident.getPostTownLeavePeacefulHoursRemaining());
+
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (resident.hasMeta()) {
@@ -2162,9 +2203,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());
 		list.add("occupied=" + town.isOccupied());
-		list.add("neutral=" + town.isNeutral());
-		list.add("desiredNeutralityValue=" + town.getDesiredNeutralityValue());
-		list.add("neutralityChangeConfirmationCounterDays=" + town.getNeutralityChangeConfirmationCounterDays());
+		list.add("peaceful=" + town.isPeaceful());
+		list.add("desiredPeacefulnessValue=" + town.getDesiredPeacefulnessValue());
+		list.add("peacefulnessChangeConfirmationCounterDays=" + town.getPeacefulnessChangeConfirmationCounterDays());
 
 		/*
 		 *  Make sure we only save in async
@@ -2225,7 +2266,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("taxes=" + nation.getTaxes());
 		// Nation Spawn Cost
 		list.add("spawnCost=" + nation.getSpawnCost());
-		// Peaceful
+		// Neutral
 		list.add("neutral=" + nation.isNeutral());
 		if (nation.hasValidUUID()){
 			list.add("uuid=" + nation.getUuid());

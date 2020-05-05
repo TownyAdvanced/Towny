@@ -1906,17 +1906,6 @@ public enum ConfigNodes {
 			"# If this is true, then when a king deletes the nation,",
 			"# they will be refunded the initial new nation cost.",
 			"# This prevents the new nation cost becoming a sunken cost due to invasion."),
-	WAR_SIEGE_TOWN_NEUTRALITY_ENABLED(
-			"war.siege.switches.town_neutrality_enabled",
-			"true",
-			"# If this is true, then a town can toggle neutrality,",
-			"# After a countdown (usually in days), the new town status is confirmed.",
-			"# A neutral town is protected from siege-forced-pvp, plunder, and occupation taxes.",
-		    "# It can be captured, adding to an invading nation's town count, but the occupation is in-name only.",
-			"# This option may improve the server-play experience for: ",
-			"# - Towns who are (currently) in an otherwise-hopeless strategic position e.g. completely surrounded by much more powerful enemies,",
-			"# - Towns who are building strength and preparing for war, but not yet ready to handle plunder costs",
-			"# - Towns who prefer to influence world events and wars via subtle diplomatic methods rather than military strength"),
 	WAR_SIEGE_PILLAGING_ENABLED(
 			"war.siege.switches.pillaging_enabled",
 			"true",
@@ -1931,12 +1920,6 @@ public enum ConfigNodes {
 		    "#    Otherwise, attacking soldiers at the banner are toiling for a distant reward, and the reward. if it arrives after a long siege. will only be received by the mayor or king anyway.",
 			"# 2. Defenders are motivated to fight because of immediate financial danger.",
 			"#    Otherwise, there is no urgent motivation for defenders to come out and fight, and defenders will often be better off waiting passively for enemy soldiers to leave the area, coming out only then to gain timed points and ultimately win."),
-	WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_ENABLED(
-			"war.siege.switches.post_spawn_damage_immunity_enabled",
-			"true",
-			"# If this value is true, then spawn camping is prevented/reduced by the following automatic measure: ",
-			"# - After spawning, a player will be immune to damage (and cannot damage entities) for a short time (typically less than a minute).",
-			"# - Thus, during a siege, even if the enemy has breached the town walls, a spawning player has time to get to (or create) a safe location."),
 	WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED(
 			"war.siege.switches.besieged_town_recruitment_disabled",
 			"true",
@@ -2081,18 +2064,6 @@ public enum ConfigNodes {
 			"# This setting determines the maximum duration a player can continue to score siege points, while remaining in the siege zone.",
 			"# After this time, to resume scoring points, the player will need to exit then re-enter the siege zone.",
 			"# The setting is an important anti-afk'ing feature."),
-	WAR_SIEGE_TOWN_NEUTRALITY_CONFIRMATION_REQUIREMENT_DAYS(
-			"war.siege.times.town_neutrality_confirmation_requirement_days",
-			"7",
-			"# This value determines how long it takes to confirm a town neutrality status change.",
-			"# It is recommended to be relatively high, ",
-		    "# for use by genuinely neutral towns, not just towns which wish to quickly toggle on/off to reduce war costs."),
-	WAR_SIEGE_POST_SPAWN_DAMAGE_IMMUNITY_MINIMUM_DURATION_SECONDS(
-			"war.siege.times.post_spawn_damage_immunity_minimum_duration_seconds",
-			"30",
-			"# This value determines the minimum duration after spawning in which a player is immune to damage (and cannot damage entities).",
-			"# The actual value may be larger for each individual respawn - the max additional time is approximately equal to the siege war timer tick interval.",
-			"# Thus by default the actual value will be 30-60 seconds"),
 	WAR_SIEGE_BANNER_CONTROL_SESSION_DURATION_MINUTES (
 			"war.siege.times.banner_control_session_duration_minutes",
 			"10",
@@ -2244,6 +2215,8 @@ public enum ConfigNodes {
 		"# +------------------------------------------------------+ #",
 		"############################################################",
 		""),
+	
+	//Town Ruins
 	WAR_COMMON_TOWN_RUINS_ENABLED(
 			"war.common.town_ruins.enabled",
 			"true",
@@ -2265,7 +2238,59 @@ public enum ConfigNodes {
 			"war.common.town_ruins.reclaim_enabled",
 			"true",
 			"# If this is true, then after a town has been ruined for the minimum configured time,",
-			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)");
+			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)"),
+
+	//Peaceful towns
+	WAR_COMMON_PEACEFUL_TOWNS_ENABLED(
+			"war.common.peaceful_towns.enabled",
+			"true",
+			"# If this is true, then a town can toggle peacefulness,",
+			"# After a countdown (usually in days), the new town status is confirmed.",
+			"# The status has different effects depending on the war-system",
+			"# ",
+			"# Common:",
+			"# PVP is forced off in the town",
+			"# Residents cannot inflict pvp damage",
+			"# A resident who leaves such a town cannot inflict PVP for a (configured) number of hours.",
+			"# ",
+			"# Siegewar:", 
+			"# A peaceful town is protected from all material siege costs e.g. pillage, plunder, and occupier taxes.",
+			"# Residents cannot have nation-military-ranks (e.g. soldier)",
+			"# ",
+			"# PLAYER TIPS:",
+			"# If a town is in any of the following scenarios, it may find the feature useful:",
+			"# 1. Town is building strength and preparing for war, but not yet ready to handle war costs.",
+			"# 2. Town is currently in a hopeless geo-political position e.g. completely surrounded by much more powerful enemies,",
+			"# 3. Town is interested in politics, but prefers to influence world events via diplomatic/economic methods rather than military strength.",
+			"# 4. Town is not currently interested much in war/politics, and just wants to build in peace.",
+		    "# ",
+			"# SERVER TIPS",
+			"# This option is recommended as a 'safety valve'",
+			"# E.g. if something has been badly coded or misconfigured,", 
+			"# this option gives players an off-ramp from the system without flooding staff w/ tickets,"),
+	WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS(
+			"war.common.peaceful_towns.confirmation_requirement_days",
+			"7",
+			"# This value determines how long it takes to confirm a town peacefulness status change.",
+			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
+	WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS(
+			"war.common.peaceful_towns.resident_post_leave_peacefulness_duration_hours",
+			"72",
+			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town.",
+			"# In this time they cannot inflict PVP damage, or (in Siegewar) gain nation-military ranks."),
+
+	//Post-Respawn Peacefulness
+	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(
+			"war.common.post_respawn_peacefulness.enabled",
+			"true",
+			"# If this value is true, then spawn camping is prevented/reduced by the following automatic measure: ",
+			"# - After spawning, a player will be immune to all damage, and cannot inflict damage, for a short time (typically less than a minute).",
+			"# - Thus, during a siege, even if the enemy has breached the town walls, a spawning player has time to get to (or create) a safe location."),
+	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_DURATION_SECONDS(
+			"war.common.post_respawn_peacefulness.duration_seconds",
+			"40",
+			"# This value determines the minimum duration after spawning in which a player is marked peaceful.",
+			"# The value will not be this precise in practice, but limited by the short timer tick interval.");
 
 	private final String Root;
 	private final String Default;

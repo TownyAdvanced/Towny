@@ -54,6 +54,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private TownyPermission permissions = new TownyPermission();
+	private boolean postTownLeavePeacefulEnabled = false; 
+	private int postTownLeavePeacefulHoursRemaining = 0;
+	private boolean postRespawnPeacefulEnabled = false;
+	private int postRespawnPeacefulShortTicksRemaining = 0;
 
 	public Resident(String name) {
 		super(name);
@@ -843,6 +847,46 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void setConfirmation(Confirmation confirmation) {
 		this.confirmation = confirmation;
+	}
+
+	public boolean isPostTownLeavePeacefulEnabled() {
+		return postTownLeavePeacefulEnabled;
+	}
+
+	public void setPostTownLeavePeacefulEnabled(boolean postTownLeavePeacefulEnabled) {
+		this.postTownLeavePeacefulEnabled = postTownLeavePeacefulEnabled;
+	}
+
+	public int getPostTownLeavePeacefulHoursRemaining() {
+		return postTownLeavePeacefulHoursRemaining;
+	}
+
+	public void setPostTownLeavePeacefulHoursRemaining(int postTownLeavePeacefulHoursRemaining) {
+		this.postTownLeavePeacefulHoursRemaining = postTownLeavePeacefulHoursRemaining;
+	}
+
+	public boolean isPostRespawnPeacefulEnabled() {
+		return postRespawnPeacefulEnabled;
+	}
+
+	public void setPostRespawnPeacefulEnabled(boolean postRespawnPeacefulEnabled) {
+		this.postRespawnPeacefulEnabled = postRespawnPeacefulEnabled;
+	}
+
+	public int getPostRespawnPeacefulShortTicksRemaining() {
+		return postRespawnPeacefulShortTicksRemaining;
+	}
+
+	public void setPostRespawnPeacefulShortTicksRemaining(int postRespawnPeacefulShortTicksRemaining) {
+		this.postRespawnPeacefulShortTicksRemaining = postRespawnPeacefulShortTicksRemaining;
+	}
+
+	public void decrementPostRespawnPeacefulShortTicksRemaining() {
+		postRespawnPeacefulShortTicksRemaining--;
+	}
+
+	public void decrementPostTownLeavePeacefulHoursRemaining() {
+		postTownLeavePeacefulHoursRemaining--;
 	}
 }
 

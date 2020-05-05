@@ -90,6 +90,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"backup",
 		"checkperm",
 		"newday",
+		"newhour",
 		"unclaim",
 		"purge",
 		"mysqldump",

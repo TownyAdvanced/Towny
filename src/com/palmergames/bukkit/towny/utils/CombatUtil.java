@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -149,13 +148,16 @@ public class CombatUtil {
 				 * status, else the world.
 				 * Check the defenders TownBlock and it's Town for their PvP
 				 * status, else the world
-				 * Check if the attacker has 'post-spawn damage/attack immunity'
-				 * Check if the attacker is from a neutral town
+				 * Check if the attacker has respawn related peacefulness
+				 * Check if the attacker has town related peacefulness
 				 */
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 					|| preventPvP(world, attackerTB)
 					|| preventPvP(world, defenderTB)
-					|| (TownySettings.getWarSiegeEnabled() && SiegeWarDamageUtil.isPlayerPreventedFromDamagingOtherPlayers(attackingPlayer))
+					|| (TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()
+						&& PostRespawnPeacefulnessUtil.doesPlayerHavePostRespawnPeacefulness(attackingPlayer))
+					|| (TownySettings.getWarCommonPeacefulTownsEnabled()
+						&& TownPeacefulnessUtil.doesPlayerHaveTownRelatedPeacefulness(attackingPlayer))
 					)
 				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);

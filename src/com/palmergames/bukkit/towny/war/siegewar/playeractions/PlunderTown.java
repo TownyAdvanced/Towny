@@ -35,8 +35,8 @@ public class PlunderTown {
 			if(!TownySettings.isUsingEconomy())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_economy"));
 
-			if(TownySettings.getWarSiegeTownNeutralityEnabled() && townToBePlundered.isNeutral())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_neutral_town_cannot_plunder"));
+			if(TownySettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isPeaceful())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_peaceful_town_cannot_plunder"));
 			
 			TownyUniverse universe = TownyUniverse.getInstance();
 			Resident resident = universe.getDataSource().getResident(player.getName());

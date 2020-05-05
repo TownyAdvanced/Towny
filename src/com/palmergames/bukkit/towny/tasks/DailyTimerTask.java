@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.timeractions.UpdateTownNeutralityCounters;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -133,10 +133,11 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 		}
 
-		//Update town neutrality counters
-		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled()) 
-			UpdateTownNeutralityCounters.updateTownNeutralityCounters();	
-		
+		//Update town peacefulness counters
+		if (TownySettings.getWarCommonPeacefulTownsEnabled()) {
+			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
+		}
+
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
 
@@ -221,7 +222,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital()
 						|| !town.hasUpkeep()
 						|| town.isRuined()
-						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeTownNeutralityEnabled() && town.isNeutral())) {
+						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful())) {
 						continue;
 					}
 

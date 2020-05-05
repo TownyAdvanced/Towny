@@ -29,15 +29,14 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.PostRespawnPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDamageUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.util.TimeMgmt;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -156,8 +155,8 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 
 		//Activate post-spawn damage immunity
-		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegePostSpawnDamageImmunityEnabled()) {
-			SiegeWarDamageUtil.grantPostSpawnImmunity(player);
+		if(TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()) {
+			PostRespawnPeacefulnessUtil.grantPostRespawnPeacefulness(player);
 		}
 
 		if (!TownySettings.isTownRespawning())
