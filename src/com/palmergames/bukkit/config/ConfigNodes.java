@@ -1381,10 +1381,10 @@ public enum ConfigNodes {
 			"25",
 			"# Maximum tax percentage allowed when taxing by percentages for towns."),
 	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT(
-		"economy.daily_taxes.max_town_tax_percent_amount",
-		"10000",
-		"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
-	),
+			"economy.daily_taxes.max_town_tax_percent_amount",
+			"10000",
+			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
+			),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",

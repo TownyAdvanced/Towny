@@ -1453,6 +1453,15 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
 	}
 
+	public double getMaxPercentTaxAmount() {
+		return maxPercentTaxAmount;
+	}
+
+	public void setMaxPercentTaxAmount(double maxPercentTaxAmount) {
+		// Max tax amount cannot go over amount defined in config.
+		this.maxPercentTaxAmount = Math.min(maxPercentTaxAmount, TownySettings.getMaxTownTaxPercentAmount());
+	}
+	
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
@@ -1529,14 +1538,5 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	@Deprecated
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
-	}
-
-	public double getMaxPercentTaxAmount() {
-		return maxPercentTaxAmount;
-	}
-
-	public void setMaxPercentTaxAmount(double maxPercentTaxAmount) {
-		// Max tax amount cannot go over amount defined in config.
-		this.maxPercentTaxAmount = Math.min(maxPercentTaxAmount, TownySettings.getMaxTownTaxPercentAmount());
 	}
 }
