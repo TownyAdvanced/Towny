@@ -109,6 +109,12 @@ public enum ConfigNodes {
 			"town.town_limit",
 			"3000",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
+			"town.min_distances_ignored_for_towns_in_same_nation",
+			"true",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
 	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"town.min_plot_distance_from_town_plot",
 			"5",
@@ -485,7 +491,8 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
 			"false",
-			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
+			"# Does not have any effect when Event War is active."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
@@ -1624,7 +1631,8 @@ public enum ConfigNodes {
 			"war.event.remove_on_monarch_death",
 			"false",
 			"",
-			"# If true and the monarch/king dies the nation is removed from the war."),
+			"# If true and the monarch/king dies the nation is removed from the war.",
+			"# Also removes a town from the war event when the mayor dies."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
 			"false",

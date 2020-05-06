@@ -2179,6 +2179,11 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
 	}
+	
+	public static boolean isMinDistanceIgnoringTownsInSameNation() {
+
+		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS);
+	}
 
 	public static int getMaxDistanceBetweenHomeblocks() {
 
