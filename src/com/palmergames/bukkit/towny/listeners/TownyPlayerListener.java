@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -965,11 +966,11 @@ public class TownyPlayerListener implements Listener {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			if (title.contains("{townname}")) {
-				String replacement = title.replace("{townname}", to.getTownBlock().getTown().getName());
+				String replacement = title.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				title = replacement;
 			}
 			if (subtitle.contains("{townname}")) {
-				String replacement = subtitle.replace("{townname}", to.getTownBlock().getTown().getName());
+				String replacement = subtitle.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				subtitle = replacement;
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
@@ -999,10 +1000,10 @@ public class TownyPlayerListener implements Listener {
 				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 				if (title.contains("{wilderness}")) {
-					title = title.replace("{wilderness}", townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					title = title.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 				}
 				if (subtitle.contains("{wilderness}")) {
-					subtitle = subtitle.replace("{wilderness}", townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 				}
 				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 			}			

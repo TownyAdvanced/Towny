@@ -4565,3 +4565,5 @@ v0.92.0.11:
     - default: true
     - If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same.
     - Closes #3983.
+  - Fix underscores showing in title messages when entering and leaving towns, as well as in PAPI placeholders.
+    - Close #3985.

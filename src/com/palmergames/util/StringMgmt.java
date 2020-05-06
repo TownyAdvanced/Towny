@@ -135,6 +135,12 @@ public class StringMgmt {
 		return false;
 	}
 	
+	/**
+	 * Replaces underscores with spaces.
+	 * 
+	 * @param str - the string to change.
+	 * @return the string with spaces replacing underscores.
+	 */
 	public static String remUnderscore (String str) {
 		return str.replaceAll("_", " ");
 	}

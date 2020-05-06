@@ -130,27 +130,27 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
 			} catch (NotRegisteredException ignored) {
 			}
-			return town;
+			return StringMgmt.remUnderscore(town);
 		case "town_formatted": // %townyadvanced_town_formatted%
 			try {
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getFormattedName());
 			} catch (NotRegisteredException ignored) {
 			}
-			return town;
+			return StringMgmt.remUnderscore(town);
 		case "nation": // %townyadvanced_nation%
 			try {
 				nation = String.format(TownySettings.getPAPIFormattingNation(),
 						resident.getTown().getNation().getName());
 			} catch (NotRegisteredException ignored) {
 			}
-			return nation;
+			return StringMgmt.remUnderscore(nation);
 		case "nation_formatted": // %townyadvanced_nation_formatted%
 			try {
 				nation = String.format(TownySettings.getPAPIFormattingNation(),
 						resident.getTown().getNation().getFormattedName());
 			} catch (NotRegisteredException ignored) {
 			}
-			return nation;
+			return StringMgmt.remUnderscore(nation);
 		case "town_balance": // %townyadvanced_town_balance%
 			try {
 				balance = resident.getTown().getAccount().getHoldingFormattedBalance();
@@ -174,7 +174,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				if (resident.getTown().hasTag())
 					tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
 				else
-					tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
+					tag = StringMgmt.remUnderscore(String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName()));
 			} catch (NotRegisteredException ignored) {
 			}
 			return tag;
@@ -190,8 +190,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = String.format(TownySettings.getPAPIFormattingNation(),
 							resident.getTown().getNation().getTag());
 				else
-					tag = String.format(TownySettings.getPAPIFormattingNation(),
-							resident.getTown().getNation().getName());
+					tag = StringMgmt.remUnderscore(String.format(TownySettings.getPAPIFormattingNation(),
+							resident.getTown().getNation().getName()));
 			} catch (NotRegisteredException ignored) {
 			}
 			return tag;
@@ -254,12 +254,12 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					if (resident.getTown().hasTag())
 						town = resident.getTown().getTag();
 					else
-						town = resident.getTown().getName();
+						town = StringMgmt.remUnderscore(resident.getTown().getName());
 					if (resident.getTown().hasNation()) {
 						if (resident.getTown().getNation().hasTag())
 							nation = resident.getTown().getNation().getTag();
 						else
-							nation = resident.getTown().getNation().getName();
+							StringMgmt.remUnderscore(nation = resident.getTown().getNation().getName());
 					}
 				}
 				if (!nation.isEmpty())
@@ -420,7 +420,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			if (resident.hasTown()) {
 				try {
 					if (resident.getTown().hasNation())
-						name = resident.getTown().getNation().getCapital().getName();
+						name = StringMgmt.remUnderscore(resident.getTown().getNation().getCapital().getName());
 				} catch (NotRegisteredException ignored) {
 				}
 			}
