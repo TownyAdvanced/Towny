@@ -78,7 +78,7 @@ public enum ConfigNodes {
 			"# Default amount for town's plottax costs."),
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
-			"false",
+			"true",
 			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
 	TOWN_DEF_TAXES_MINIMUMTAX(
 			"town.default_taxes.minimumtax",
