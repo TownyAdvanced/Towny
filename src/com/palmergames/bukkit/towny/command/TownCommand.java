@@ -1457,7 +1457,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Resident resident;
 
 			try {
-
+				
 				if (!admin) {
 					resident = townyUniverse.getDataSource().getResident(player.getName());
 					town = resident.getTown();
@@ -1854,6 +1854,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
 
 			} else if (split[0].equalsIgnoreCase("taxpercentcap")) {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
 				if (!town.isTaxPercentage()) {
 					// msg_max_tax_amount_only_for_percent
 					throw new TownyException(TownySettings.getLangString("msg_max_tax_amount_only_for_percent"));
