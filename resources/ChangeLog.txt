@@ -4567,3 +4567,5 @@ v0.92.0.11:
     - Closes #3983.
   - Fix underscores showing in title messages when entering and leaving towns, as well as in PAPI placeholders.
     - Close #3985.
+  - Fix /ta town NAME toggle not being friendly towards many /t toggle subcommands.
+    - Additionally commands should display proper feedback.
