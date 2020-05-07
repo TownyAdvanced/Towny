@@ -6,7 +6,7 @@ package com.palmergames.bukkit.towny.object;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public interface EconomyHandler {
+public interface EconomyHandler extends Nameable {
 	/**
 	 * Gets the {@link EconomyAccount} associated with this object.
 	 * 

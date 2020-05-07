@@ -1036,20 +1036,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	@Override
-	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-
-		//if (!isMayor(resident))// && !hasAssistant(resident))
-		//	throw new TownyException("You don't have access to the town's bank.");
-
-		if (TownySettings.isUsingEconomy()) {
-			if (!getAccount().payTo(amount, resident, "Town Withdraw"))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
-		} else
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
-
-	}
-
-	@Override
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<>();

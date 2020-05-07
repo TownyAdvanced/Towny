@@ -1126,8 +1126,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			if (!resident.getAccount().payTo(amount, nation, "Nation Deposit"))
-				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
+			// Deposit into bank.
+			nation.depositToBank(resident, amount);
 
 			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));

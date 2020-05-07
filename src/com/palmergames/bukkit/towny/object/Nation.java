@@ -69,7 +69,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public String getTag() {
-
+		
 		return tag;
 	}
 
@@ -539,19 +539,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			this.getAccount().collect(amount, null);
 		}
 
-	}
-
-	@Override
-	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-
-		//if (!isKing(resident))// && !hasAssistant(resident))
-		//	throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
-
-		if (TownySettings.isUsingEconomy()) {
-			if (!getAccount().payTo(amount, resident, "Nation Withdraw"))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
-		} else
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
 	}
 
 	@Override
