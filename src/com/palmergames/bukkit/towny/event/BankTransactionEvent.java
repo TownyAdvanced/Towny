@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList;
 public class BankTransactionEvent extends Event {
 
 	private final Bank bank;
-	private final HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 	private final Transaction transaction;
 	
 	public BankTransactionEvent(Bank bank, Transaction transaction) {
@@ -24,6 +24,10 @@ public class BankTransactionEvent extends Event {
 	
 	@Override
 	public HandlerList getHandlers() {
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 
