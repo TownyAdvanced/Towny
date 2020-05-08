@@ -724,7 +724,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setMayor(getResident(line));
 				
-				town.setTownBoard(keys.get("townBoard"));
+				town.setBoard(keys.get("townBoard"));
 				
 				line = keys.get("tag");
 				if (line != null)
@@ -1030,9 +1030,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("nationBoard");
 				if (line != null)
 					try {
-						nation.setNationBoard(line);
+						nation.setBoard(line);
 					} catch (Exception e) {
-						nation.setNationBoard("");
+						nation.setBoard("");
 					}
 
 				line = keys.get("mapColorHexCode");
@@ -1812,7 +1812,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		list.add(newLine);
 		// Town Board
-		list.add("townBoard=" + town.getTownBoard());
+		list.add("townBoard=" + town.getBoard());
 		// tag
 		list.add("tag=" + town.getTag());
 		// Town Protection
@@ -1943,7 +1943,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
 
-		list.add("nationBoard=" + nation.getNationBoard());
+		list.add("nationBoard=" + nation.getBoard());
 
 		list.add("mapColorHexCode=" + nation.getMapColorHexCode());
 

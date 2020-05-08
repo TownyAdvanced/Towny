@@ -5,29 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class TownTagChangeEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
-
-    private Town town;
-    private String newTag;
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+public class TownTagChangeEvent extends TagChangeEvent {
+	private final Town town;
 
     public TownTagChangeEvent(String newTag, Town town) {
-        super(!Bukkit.getServer().isPrimaryThread());
-        this.newTag = newTag;
+        super(newTag);
         this.town = town;
-    }
-
-    public String getNewTag() {
-        return newTag;
     }
 
     public Town getTown() {

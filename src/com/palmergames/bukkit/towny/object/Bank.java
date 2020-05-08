@@ -18,14 +18,7 @@ public interface Bank extends EconomyHandler {
 	 * @throws EconomyException When there's a payment error.
 	 * @throws TownyException When an economy is not available.
 	 */
-	default void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
-		}
-		if (!getAccount().payTo(amount, resident, getName() + " - " + " Withdraw")) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
-		}
-	}
+	void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException;
 
 	/**
 	 * Takes money from the resident and puts it into the object's bank.
@@ -35,12 +28,5 @@ public interface Bank extends EconomyHandler {
 	 * @throws EconomyException When there's a payment error.
 	 * @throws TownyException When an economy is not available.
 	 */
-	default void depositToBank(Resident resident, int amount) throws EconomyException, TownyException {
-		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
-		}
-		if (!resident.getAccount().payTo(amount, getAccount(), "Territory - " + getName() + " deposit")) {
-			throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
-		}
-	}
+	void depositToBank(Resident resident, int amount) throws EconomyException, TownyException;
 }

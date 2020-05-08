@@ -1835,7 +1835,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 
-					town.setTownBoard(line);
+					town.setBoard(line);
 					TownyMessaging.sendTownBoard(player, town);
 				}
 			} else if (split[0].equalsIgnoreCase("title")) {

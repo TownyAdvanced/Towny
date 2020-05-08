@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
-import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -36,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
+public class Town extends Territory implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -49,31 +47,23 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
-	private double taxes = TownySettings.getTownDefaultTax();
 	private double plotTax= TownySettings.getTownDefaultPlotTax();
 	private double commercialPlotTax = TownySettings.getTownDefaultShopTax();
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
-	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
+	private double commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
 	private boolean hasUpkeep = true;
-	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String townBoard = "/town set board [msg]";
-	private String tag = "";
+	private String board = "/town set board [msg]";
 	private TownBlock homeBlock;
 	private TownyWorld world;
-	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
-	private long registered;
-	private transient List<Invite> receivedinvites = new ArrayList<>();
-	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private EconomyAccount account;
 	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
 
@@ -146,25 +136,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
 	}
-	
-	public void setTag(String text) throws TownyException {
 
-		if (text.length() > 4)
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
-		this.tag = text.toUpperCase();
-		if (this.tag.matches(" "))
-			this.tag = "";
-		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag, this));
-	}
-
-	public String getTag() {
-
-		return tag;
-	}
-
-	public boolean hasTag() {
-
-		return !tag.isEmpty();
+	@Override
+	public String getBoard() {
+		return board == null ? "/t set board [board]" : board;
 	}
 
 	public Resident getMayor() {
@@ -180,10 +155,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
+	@Override
 	public double getTaxes() {
-
-		setTaxes(taxes); //make sure the tax level is right.
-		return taxes;
+		setTaxes(taxes);
+		return taxes == -1 ? TownySettings.getTownDefaultTax() : taxes;
 	}
 
 	public void setMayor(Resident mayor) throws TownyException {
@@ -388,15 +363,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public boolean isFire() {
 
 		return this.permissions.fire;
-	}
-
-	public void setTownBoard(String townBoard) {
-
-		this.townBoard = townBoard;
-	}
-
-	public String getTownBoard() {
-		return townBoard;
 	}
 
 	public void setBonusBlocks(int bonusBlocks) {
@@ -966,16 +932,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		return embassyPlotPrice;
 	}
-	
-	public void setSpawnCost(double spawnCost) {
-
-		this.spawnCost = spawnCost;
-	}
-
-	public double getSpawnCost() {
-
-		return spawnCost;
-	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
 
@@ -1007,16 +963,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public double getEmbassyPlotTax() {
 
 		return embassyPlotTax;
-	}
-
-	public void setOpen(boolean isOpen) {
-
-		this.isOpen = isOpen;
-	}
-
-	public boolean isOpen() {
-
-		return isOpen;
 	}
 
 	public void collect(double amount) throws EconomyException {
@@ -1058,16 +1004,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		for (Resident resident : getResidents())
 			out.addAll(resident.getTreeString(depth + 2));
 		return out;
-	}
-
-	public void setPublic(boolean isPublic) {
-
-		this.isPublic = isPublic;
-	}
-
-	public boolean isPublic() {
-
-		return isPublic;
 	}
 	
 	public List<Location> getJailSpawns() {
@@ -1209,14 +1145,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return uuid != null;
 	}
 
-	public void setRegistered(long registered) {
-		this.registered = registered;
-	}
-
-	public long getRegistered() {
-		return registered;
-	}
-
 	public void setOutpostSpawns(List<Location> outpostSpawns) {
 		this.outpostSpawns = outpostSpawns;
 	}
@@ -1235,45 +1163,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
-	}
-
-	@Override
-	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
-			receivedinvites.add(invite);
-
-		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
-		}
-	}
-
-	@Override
-	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
-	}
-
-	@Override
-	public List<Invite> getSentInvites() {
-		return sentinvites;
-	}
-
-	@Override
-	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
-		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
-			sentinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
-		}
-	}
-
-	@Override
-	public void deleteSentInvite(Invite invite) {
-		sentinvites.remove(invite);
 	}
 
 	public int getOutpostLimit() {

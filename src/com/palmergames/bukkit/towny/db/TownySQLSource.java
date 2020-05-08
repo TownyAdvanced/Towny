@@ -833,7 +833,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 // }
                 // }
                 // }
-                town.setTownBoard(rs.getString("townBoard"));
+                town.setBoard(rs.getString("townBoard"));
                 line = rs.getString("tag");
                 if (line != null)
                     try {
@@ -1045,9 +1045,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 
                 line = rs.getString("nationBoard");
                 if (line != null)
-                    nation.setNationBoard(rs.getString("nationBoard"));
+                    nation.setBoard(rs.getString("nationBoard"));
                 else
-                	nation.setNationBoard("");
+                	nation.setBoard("");
 
 				line = rs.getString("mapColorHexCode");
 				if (line != null)
@@ -1593,7 +1593,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
             twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
-            twn_hm.put("townBoard", town.getTownBoard());
+            twn_hm.put("townBoard", town.getBoard());
             twn_hm.put("tag", town.getTag());
             twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
             twn_hm.put("bonus", town.getBonusBlocks());
@@ -1680,7 +1680,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("name", nation.getName());
             nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
-            nat_hm.put("nationBoard", nation.getNationBoard());
+            nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));

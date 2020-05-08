@@ -2589,7 +2589,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-					nation.setNationBoard(line);
+					nation.setBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);
 				}
 			} else if (split[0].equalsIgnoreCase("mapcolor")) {

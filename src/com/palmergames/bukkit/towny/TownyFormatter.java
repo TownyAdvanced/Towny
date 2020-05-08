@@ -333,7 +333,7 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
+			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getBoard()));
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
