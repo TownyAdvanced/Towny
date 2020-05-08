@@ -26,7 +26,7 @@ public class Confirmation {
 	 *
 	 * @param handler The handler to run after accepting the command.
 	 * @param title The title of the confirmation message.   
-	 *          
+	 * @param duration The amount of time before the expiration of the confirmation.
 	 */
 	public Confirmation(Runnable handler, String title, int duration) {
 		this(handler);

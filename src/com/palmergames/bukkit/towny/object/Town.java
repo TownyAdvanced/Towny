@@ -1510,6 +1510,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 	/**
 	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
+	 * 
+	 * @return The world this town resides in.
 	 */
 	@Deprecated
 	public TownyWorld getWorld() {
