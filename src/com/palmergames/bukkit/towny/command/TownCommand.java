@@ -141,7 +141,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"embassyprice",
 		"embassytax",
 		"title",
-		"surname"
+		"surname",
+		"taxpercentcap"
 	);
 
 	static final List<String> townToggleTabCompletes = Arrays.asList(
@@ -1799,6 +1800,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "title/surname [resident] [text]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxpercentcap [amount]", ""));
 		} else {
 			Resident resident;
 
@@ -1873,6 +1875,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
 
+			} else if (split[0].equalsIgnoreCase("taxpercentcap")) {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (!town.isTaxPercentage()) {
+					// msg_max_tax_amount_only_for_percent
+					throw new TownyException(TownySettings.getLangString("msg_max_tax_amount_only_for_percent"));
+				}
+				
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg("Eg. /town set taxMax 10000");
+					return;
+				}
+				
+				double amount = Double.parseDouble(split[1]);
+				town.setMaxPercentTaxAmount(amount);
+
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax_max_percent_amount"), player.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
+				
 			} else if (split[0].equalsIgnoreCase("surname")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode()))
