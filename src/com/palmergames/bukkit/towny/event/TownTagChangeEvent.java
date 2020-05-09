@@ -5,6 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @deprecated as of 0.96.2.10 use {@link TerritoryTagChangeEvent} instead.
+ */
+@Deprecated
 public class TownTagChangeEvent extends TagChangeEvent {
 	private final Town town;
 

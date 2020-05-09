@@ -7,19 +7,16 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
-import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -38,10 +35,10 @@ public class Town extends Territory implements ResidentList, TownyInviter, Objec
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private List<Resident> residents = new ArrayList<>();
-	private List<Resident> outlaws = new ArrayList<>();
+	private final List<Resident> residents = new ArrayList<>();
+	private final List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
-	private List<Location> jailSpawns = new ArrayList<>();
+	private final List<Location> jailSpawns = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
@@ -55,8 +52,6 @@ public class Town extends Territory implements ResidentList, TownyInviter, Objec
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
-	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String board = "/town set board [msg]";
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
@@ -64,8 +59,8 @@ public class Town extends Territory implements ResidentList, TownyInviter, Objec
 	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
 		super(name);
