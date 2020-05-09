@@ -1955,8 +1955,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							plugin.deleteCache(oldMayor);
 							plugin.deleteCache(newMayor.getName());
 							if (admin)
-								TownyMessaging.sendMessage(player, TownySettings.getNewMayorMsg(newMayor.getName()));
-							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getNewMayorMsg(newMayor.getName()));
+								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 							return;
@@ -2527,7 +2527,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						e.printStackTrace();
 					}
-					TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_town"), player.getName(), StringMgmt.remUnderscore(name)));
 				});
 				// Send confirmation.
 				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())));
@@ -2536,7 +2536,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
 				newTown(world, name, resident, key, player.getLocation(), player);
-				TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_town"), player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
