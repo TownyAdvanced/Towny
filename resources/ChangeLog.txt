@@ -4569,3 +4569,17 @@ v0.92.0.11:
     - Close #3985.
   - Fix /ta town NAME toggle not being friendly towards many /t toggle subcommands.
     - Additionally commands should display proper feedback.
+  - Taxpercent capping, courtesy of Siris with PR #3969.
+    - Closes #3967.
+  - New Command /town set taxpercentcap {amount}
+    - Mayor command to set the maximum amount that can be taken when taxpercent is enabled.
+  - New Permission Node: towny.command.town.set.taxpercentcap
+    - Child node of towny.command.town.set.*
+    - Required to use /town set taxpercentcap [amount]
+  - New Config Option: economy.daily_taxes.max_town_tax_percent_amount 
+    - Default: 10000
+    - Controls the highest amount of money that can be taken from a tax percentage on a resident.
+  - Changed Config Option: town.default_taxes.taxpercentage
+    - Default value changed from false to true.
+    - Will no affect existing configs.
+    - New config files will have taxpercentage on by default, which means new towns will start with taxpercent enabled.
