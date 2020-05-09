@@ -266,6 +266,7 @@ public class TownyPlayerListener implements Listener {
 			// World not registered with Towny.
 			e.printStackTrace();
 			return;
+		}
 
 		if (event.hasItem()) {
 
@@ -327,7 +328,6 @@ public class TownyPlayerListener implements Listener {
 					onPlayerSwitchEvent(event, null);
 				}
 			}
-
 	}
 
 	

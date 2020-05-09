@@ -1458,7 +1458,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				
 				if (!admin) {
-				resident = townyUniverse.getResident(player.getName());
+				resident = townyUniverse.getResident(sender.getName());
 					town = resident.getTown();
 				} else { // Admin actions will be carried out as the mayor of the town for the purposes of some tests.
 					resident = town.getMayor();
