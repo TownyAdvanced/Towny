@@ -1,5 +1,5 @@
 name: Towny
-version: 0.82
+version: 0.83
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK
 website: 'http://townyadvanced.github.io/'
@@ -1134,3 +1134,7 @@ confirmation_prefix: '&8[&7Confirmation&8] &9'
 this_message_will_expire2: '&9Cela expirera automatiquement dans 20 secondes.'
 msg_hover_next_page: 'Page Suivante'
 msg_hover_previous_page: 'Page Précédente'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
+msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."

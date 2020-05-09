@@ -1379,9 +1379,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							e.printStackTrace();
 						}
 					}
-					townyUniverse.getDataSource().saveTown(town);
-					String[] msg = TownySettings.getNewMayorMsg(newMayor.getName());
-					TownyMessaging.sendPrefixedTownMessage(town, msg);
+					townyUniverse.getDataSource().saveTown(town);					
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
 					// TownyMessaging.sendMessage(player, msg);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());

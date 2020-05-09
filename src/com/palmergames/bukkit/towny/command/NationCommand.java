@@ -1331,7 +1331,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
-					TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_nation"), player.getName(), StringMgmt.remUnderscore(name)));
 
 				});
 				// Send confirmation.
@@ -1340,7 +1340,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// Or, it is free, so just make the nation.
 			} else {
 				newNation(name, town);
-				TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_nation"), player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2327,7 +2327,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						nation.setKing(newKing);
 						plugin.deleteCache(oldKingsName);
 						plugin.deleteCache(newKing.getName());
-						TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newKing.getName(), nation.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_new_king"), newKing.getName(), nation.getName()));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
@@ -2359,7 +2359,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										finalNation.setCapital(newCapital);										
 										finalNation.recheckTownDistance();
 										plugin.resetCache();
-										TownyMessaging.sendPrefixedNationMessage(finalNation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), finalNation.getName()));
+										TownyMessaging.sendPrefixedNationMessage(finalNation, String.format(TownySettings.getLangString("msg_new_king"), newCapital.getMayor().getName(), finalNation.getName()));
 										
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2374,14 +2374,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							} else {
 								nation.setCapital(newCapital);
 								plugin.resetCache();
-								TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+								TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_new_king"), newCapital.getMayor().getName(), nation.getName()));
 								TownyUniverse.getInstance().getDataSource().saveNation(nation);
 							}
 						// Proximity doesn't factor in.
 						} else {
 							nation.setCapital(newCapital);
 							plugin.resetCache();
-							TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+							TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_new_king"),newCapital.getMayor().getName(), nation.getName()));
 							TownyUniverse.getInstance().getDataSource().saveNation(nation);
 						}
 					}

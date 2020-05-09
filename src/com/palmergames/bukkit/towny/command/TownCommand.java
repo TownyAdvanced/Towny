@@ -141,7 +141,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"embassyprice",
 		"embassytax",
 		"title",
-		"surname"
+		"surname",
+		"taxpercentcap"
 	);
 
 	static final List<String> townToggleTabCompletes = Arrays.asList(
@@ -1799,6 +1800,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "title/surname [resident] [text]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxpercentcap [amount]", ""));
 		} else {
 			Resident resident;
 
@@ -1873,6 +1875,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
 
+			} else if (split[0].equalsIgnoreCase("taxpercentcap")) {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (!town.isTaxPercentage()) {
+					// msg_max_tax_amount_only_for_percent
+					throw new TownyException(TownySettings.getLangString("msg_max_tax_amount_only_for_percent"));
+				}
+				
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg("Eg. /town set taxMax 10000");
+					return;
+				}
+				
+				double amount = Double.parseDouble(split[1]);
+				town.setMaxPercentTaxAmount(amount);
+
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax_max_percent_amount"), player.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
+				
 			} else if (split[0].equalsIgnoreCase("surname")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode()))
@@ -1934,8 +1955,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							plugin.deleteCache(oldMayor);
 							plugin.deleteCache(newMayor.getName());
 							if (admin)
-								TownyMessaging.sendMessage(player, TownySettings.getNewMayorMsg(newMayor.getName()));
-							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getNewMayorMsg(newMayor.getName()));
+								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 							return;
@@ -2506,7 +2527,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						e.printStackTrace();
 					}
-					TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_town"), player.getName(), StringMgmt.remUnderscore(name)));
 				});
 				// Send confirmation.
 				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())));
@@ -2515,7 +2536,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
 				newTown(world, name, resident, key, player.getLocation(), player);
-				TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_town"), player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());

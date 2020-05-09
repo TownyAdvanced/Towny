@@ -298,6 +298,11 @@ public class DailyTimerTask extends TownyTimerTask {
 						continue;
 					} else if (town.isTaxPercentage()) {
 						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						
+						// Make sure that the town percent tax doesn't remove above the
+						// allotted amount of cash.
+						cost = Math.min(cost, town.getMaxPercentTaxAmount());
+						
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
 						removedResidents.add(resident.getName());
