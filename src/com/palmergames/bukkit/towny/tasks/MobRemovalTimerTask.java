@@ -93,6 +93,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					// Check that Towny is removing this type of entity in unregistered plots.
 					if (!isRemovingWorldEntity(livingEntity))
 						continue;
+					
+					// Remove world mob.
+					livingEntitiesToRemove.add(livingEntity);
+					continue;
 				}
 
 				// The entity is inside of a town.

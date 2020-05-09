@@ -769,66 +769,6 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()));
 	}
 
-	public static String[] getRegistrationMsg(String name) {
-
-		return parseString(String.format(getLangString("MSG_REGISTRATION"), name));
-	}
-
-	public static String[] getNewTownMsg(String who, String town) {
-
-		return parseString(String.format(getLangString("MSG_NEW_TOWN"), who, town));
-	}
-
-	public static String[] getNewNationMsg(String who, String nation) {
-
-		return parseString(String.format(getLangString("MSG_NEW_NATION"), who, nation));
-	}
-
-	public static String[] getJoinTownMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_JOIN_TOWN"), who));
-	}
-
-	public static String[] getJoinNationMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_JOIN_NATION"), who));
-	}
-
-	public static String[] getNewMayorMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_NEW_MAYOR"), who));
-	}
-
-	public static String[] getNewKingMsg(String who, String nation) {
-
-		return parseString(String.format(getLangString("MSG_NEW_KING"), who, nation));
-	}
-
-	public static String[] getJoinWarMsg(TownyObject obj) {
-
-		return parseString(String.format(getLangString("MSG_WAR_JOIN"), obj.getName()));
-	}
-
-	public static String[] getWarTimeEliminatedMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_WAR_ELIMINATED"), who));
-	}
-
-	public static String[] getWarTimeForfeitMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_WAR_FORFEITED"), who));
-	}
-
-	public static String[] getWarTimeLoseTownBlockMsg(WorldCoord worldCoord, String town) {
-
-		return parseString(String.format(getLangString("MSG_WAR_LOSE_BLOCK"), worldCoord.toString(), town));
-	}
-
-	public static String[] getWarTimeScoreMsg(Town town, int n) {
-
-		return parseString(String.format(getLangString("MSG_WAR_SCORE"), town.getName(), n));
-	}
-	
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
@@ -1315,11 +1255,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_EVENT_HOME_BLOCK_HP);
 	}
 
-	public static String[] getWarTimeLoseTownBlockMsg(WorldCoord worldCoord) {
-
-		return getWarTimeLoseTownBlockMsg(worldCoord, "");
-	}
-
 	public static String getDefaultTownName() {
 
 		return getString(ConfigNodes.RES_SETTING_DEFAULT_TOWN_NAME);
@@ -1683,7 +1618,13 @@ public class TownySettings {
 	}
 	
 	public static double getMaxTownTaxPercent() {
+		
 		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT);
+	}
+	
+	public static double getMaxTownTaxPercentAmount() { 
+		
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT); 
 	}
 	
 	public static boolean isBackingUpDaily() {
@@ -2172,6 +2113,11 @@ public class TownySettings {
 	public static int getMinDistanceFromTownPlotblocks() {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
+	}
+	
+	public static boolean isMinDistanceIgnoringTownsInSameNation() {
+
+		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS);
 	}
 
 	public static int getMaxDistanceBetweenHomeblocks() {
