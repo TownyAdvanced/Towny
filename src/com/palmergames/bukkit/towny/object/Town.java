@@ -1385,5 +1385,14 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
 	}
-	
+
+	/**
+	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
+	 * 
+	 * @return getBoard()
+	 */
+	@Deprecated
+	public String getTownBoard() {
+		return getBoard();
+	}
 }
