@@ -2395,7 +2395,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				try{
-					nation.setNationSpawn(player.getLocation());
+					nation.setSpawn(player.getLocation());
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_nation_spawn"));
 				} catch (TownyException e){
 					TownyMessaging.sendErrorMsg(player, e.getMessage());

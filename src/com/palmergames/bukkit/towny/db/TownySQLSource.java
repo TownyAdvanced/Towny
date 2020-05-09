@@ -1689,7 +1689,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
-            nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw() : "");
+            nat_hm.put("nationSpawn", nation.hasSpawn() ? nation.getSpawn().getWorld().getName() + "#" + nation.getSpawn().getX() + "#" + nation.getSpawn().getY() + "#" + nation.getSpawn().getZ() + "#" + nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw() : "");
             if (nation.hasValidUUID()){
                 nat_hm.put("uuid", nation.getUuid());
             } else {

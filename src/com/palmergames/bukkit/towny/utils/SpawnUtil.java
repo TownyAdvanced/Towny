@@ -210,7 +210,7 @@ public class SpawnUtil {
 			break;
 		case NATION:
 			nation = (Nation) townyObject;
-			spawnLoc = nation.getNationSpawn();
+			spawnLoc = nation.getSpawn();
 
 			// Determine conditions
 			if (isTownyAdmin) {

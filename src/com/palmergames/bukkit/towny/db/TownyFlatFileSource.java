@@ -1970,9 +1970,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + nation.getRegistered());
         
         // Spawn
-		if (nation.hasNationSpawn()) {
+		if (nation.hasSpawn()) {
 			try {
-				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + nation.getNationSpawn().getX() + "," + nation.getNationSpawn().getY() + "," + nation.getNationSpawn().getZ() + "," + nation.getNationSpawn().getPitch() + "," + nation.getNationSpawn().getYaw());
+				list.add("nationSpawn=" + nation.getSpawn().getWorld().getName() + "," + nation.getSpawn().getX() + "," + nation.getSpawn().getY() + "," + nation.getSpawn().getZ() + "," + nation.getSpawn().getPitch() + "," + nation.getSpawn().getYaw());
 			} catch (TownyException ignored) { }
 		}
 

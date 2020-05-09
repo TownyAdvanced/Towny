@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, Bank {
+public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, Bank, SpawnLocation {
 	
 	protected EconomyAccount account;
 	protected Location spawn;

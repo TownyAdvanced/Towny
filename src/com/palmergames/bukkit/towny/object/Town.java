@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends Territory implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
+public class Town extends Territory implements ResidentList, ObjectGroupManageable<PlotGroup>, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -685,9 +685,9 @@ public class Town extends Territory implements ResidentList, TownyInviter, Objec
 		residents.remove(resident);
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
-
+	
+	@Override
 	public void setSpawn(Location spawn) throws TownyException {
-
 		if (!hasHomeBlock())
 			throw new TownyException(TownySettings.getLangString("msg_err_homeblock_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
@@ -703,36 +703,20 @@ public class Town extends Territory implements ResidentList, TownyInviter, Objec
 	 * @param spawn - Location to forcefully set as town spawn
 	 */
 	public void forceSetSpawn(Location spawn) {
-
 		this.spawn = spawn;
-
 	}
 
-	/**
-	 * Gets the Town's spawn location
-	 * 
-	 * @return Location of the town spawn
-	 * @throws TownyException if no town spawn has been set (null)
-	 */
+	@Override
 	public Location getSpawn() throws TownyException {
-
 		if (hasHomeBlock() && spawn != null) {
 			return spawn;
-		}
-
-		else {
+		} else {
 			this.spawn = null;
 			throw new TownyException(TownySettings.getLangString("msg_err_town_has_not_set_a_spawn_location"));
 		}
 	}
 
-	public boolean hasSpawn() {
-
-		return (hasHomeBlock() && spawn != null);
-	}
-
 	public boolean hasHomeBlock() {
-
 		return homeBlock != null;
 	}
 

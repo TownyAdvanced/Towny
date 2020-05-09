@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends Territory implements ResidentList, TownyInviter {
+public class Nation extends Territory implements ResidentList {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -198,7 +198,8 @@ public class Nation extends Territory implements ResidentList, TownyInviter {
 		return capital;
 	}
 
-	public Location getNationSpawn() throws TownyException {
+	@Override
+	public Location getSpawn() throws TownyException {
 		if(nationSpawn == null){
 			throw new TownyException(TownySettings.getLangString("msg_err_nation_has_not_set_a_spawn_location"));
 		}
@@ -206,11 +207,8 @@ public class Nation extends Territory implements ResidentList, TownyInviter {
 		return nationSpawn;
 	}
 
-	public boolean hasNationSpawn(){
-		return (nationSpawn != null);
-	}
-
-	public void setNationSpawn(Location spawn) throws TownyException {
+	@Override
+	public void setSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
 
