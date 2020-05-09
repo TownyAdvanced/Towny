@@ -800,6 +800,7 @@ public class Towny extends JavaPlugin {
 	 * @return the HUDManager
 	 */
 	public HUDManager getHUDManager() {
+		
 		return HUDManager;
 	}
 

@@ -721,4 +721,25 @@ public class Nation extends Territory implements ResidentList {
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
 	}
+	
+	/**
+	 * @deprecated As of 0.96.2.0, please use {@link #getSpawn()} instead.
+	 * 
+	 * @return getSpawn()
+	 * @throws TownyException
+	 */
+	@Deprecated
+	public Location getNationSpawn() throws TownyException {
+		return getSpawn();
+	}
+	
+	/**
+	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
+	 *  
+	 * @return getBoard()
+	 */
+	@Deprecated
+	public String getNationBoard() {
+		return getBoard();
+	}
 }
