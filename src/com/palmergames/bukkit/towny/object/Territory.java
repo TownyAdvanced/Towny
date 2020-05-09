@@ -77,13 +77,21 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 		return board;
 	}
 
-	public final void setPublic(boolean isPublic) { this.isPublic = isPublic; }
+	public final void setPublic(boolean isPublic) { 
+		this.isPublic = isPublic; 
+	}
 
-	public final boolean isPublic() { return isPublic; }
+	public final boolean isPublic() { 
+		return isPublic; 
+	}
 
-	public final void setOpen(boolean isOpen) { this.isOpen = isOpen; }
+	public final void setOpen(boolean isOpen) { 
+		this.isOpen = isOpen; 
+	}
 
-	public final boolean isOpen() { return isOpen; }
+	public final boolean isOpen() { 
+		return isOpen; 
+	}
 
 	public final void setRegistered(long registered) {
 		this.registered = registered;
@@ -93,7 +101,9 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 		return registered;
 	}
 
-	public final void setSpawnCost(double spawnCost) { this.spawnCost = spawnCost; }
+	public final void setSpawnCost(double spawnCost) { 
+		this.spawnCost = spawnCost; 
+	}
 
 	public final double getSpawnCost() {
 		return spawnCost;
@@ -135,6 +145,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 	}
 
 	public abstract void setTaxes(double taxes);
+	
 	public double getTaxes() {
 		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
