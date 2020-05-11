@@ -1134,7 +1134,6 @@ this_message_will_expire2: '&9This will auto-expire in 20 seconds'
 msg_hover_next_page: 'Next Page'
 msg_hover_previous_page: 'Previous Page'
 
-<<<<<<< HEAD
 # Added in ? (for siege war)
 #Siege war happy-path messages
 msg_siege_war_revolt: '&bThe people of %s, led by %s, have revolted against the occupying power of %s, and declared themselves free to choose their own destiny!'
