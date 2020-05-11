@@ -1481,7 +1481,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			sender.sendMessage(ChatTools.formatCommand("", "/town toggle", "taxpercent", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/town toggle", "open", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/town toggle", "jail [number] [resident]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "peaceful", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town toggle", "peaceful", ""));
 		} else {
 			Resident resident;
 
@@ -1675,7 +1675,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if(!TownySettings.getWarCommonPeacefulTownsEnabled())
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
+				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if(admin) {
