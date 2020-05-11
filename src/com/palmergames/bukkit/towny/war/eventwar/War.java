@@ -378,7 +378,7 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 		}
 		if (numTownBlocks > 0) {
-			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getJoinWarMsg(town));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_join"), town.getName()));
 			townScores.put(town, 0);
 			warringTowns.add(town);
 		}			
@@ -789,20 +789,20 @@ public class War {
 	}
 	
 	private void sendEliminateMessage(String name) {
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(name));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_eliminated"), name));
 	}
 	
 	public void nationLeave(Nation nation) {
 
 		remove(nation);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(nation.getName()));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("MSG_WAR_FORFEITED"), nation.getName()));
 		checkEnd();
 	}
 
 	public void townLeave(Town town) {
 
 		remove(town);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(town.getName()));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("MSG_WAR_FORFEITED"), town.getName()));
 		checkEnd();
 	}
 

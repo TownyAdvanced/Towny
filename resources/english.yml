@@ -1,5 +1,5 @@
 name: Towny
-version: 0.82
+version: 0.83
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -964,7 +964,7 @@ msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
 msg_save_success: 'Database saved.'
 msg_load_success: 'Database loaded.'
 msg_err_cannot_afford_to_set_outpost: 'Your town does not have enough funds to set this townblock to an outpost.'
-msg_too_close2: 'This area is too close to another town''s  %s.'
+msg_too_close2: 'This area is too close to another town''s %s.'
 homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'outpost'
@@ -1134,6 +1134,7 @@ this_message_will_expire2: '&9This will auto-expire in 20 seconds'
 msg_hover_next_page: 'Next Page'
 msg_hover_previous_page: 'Previous Page'
 
+<<<<<<< HEAD
 # Added in ? (for siege war)
 #Siege war happy-path messages
 msg_siege_war_revolt: '&bThe people of %s, led by %s, have revolted against the occupying power of %s, and declared themselves free to choose their own destiny!'
@@ -1286,3 +1287,8 @@ msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to
 
 #Nation Refund
 nation_help_11 : 'Claim all your nation refunds.'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
+msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
+

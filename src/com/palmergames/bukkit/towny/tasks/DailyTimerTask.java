@@ -318,6 +318,11 @@ public class DailyTimerTask extends TownyTimerTask {
 						continue;
 					} else if (town.isTaxPercentage()) {
 						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						
+						// Make sure that the town percent tax doesn't remove above the
+						// allotted amount of cash.
+						cost = Math.min(cost, town.getMaxPercentTaxAmount());
+						
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
 						removedResidents.add(resident.getName());
@@ -513,8 +518,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
-		if (removedNations != null) {
-			if (removedNations.size() == 1) 
+		if (removedNations != null && !removedNations.isEmpty()) {
+			if (removedNations.size() == 1)
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_nation2"), removedNations.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, TownySettings.getLangString("msg_bankrupt_nation_multiple")));

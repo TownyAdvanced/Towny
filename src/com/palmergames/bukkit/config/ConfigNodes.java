@@ -78,7 +78,7 @@ public enum ConfigNodes {
 			"# Default amount for town's plottax costs."),
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
-			"false",
+			"true",
 			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
 	TOWN_DEF_TAXES_MINIMUMTAX(
 			"town.default_taxes.minimumtax",
@@ -109,17 +109,25 @@ public enum ConfigNodes {
 			"town.town_limit",
 			"3000",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
+			"town.min_distances_ignored_for_towns_in_same_nation",
+			"true",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
 	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"town.min_plot_distance_from_town_plot",
 			"5",
 			"",
 			"# Minimum number of plots any towns plot must be from the next town's own plots.",
+			"# Does not affect towns which are in the same nation.",
 			"# This will prevent town encasement to a certain degree."),
 	TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"town.min_distance_from_town_homeblock",
 			"5",
 			"",
 			"# Minimum number of plots any towns home plot must be from the next town.",
+			"# Does not affect towns which are in the same nation.",
 			"# This will prevent someone founding a town right on your doorstep"),
     TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
     		"town.min_distance_for_outpost_from_plot",
@@ -483,7 +491,8 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
 			"false",
-			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
+			"# Does not have any effect when Event War is active."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
@@ -1264,7 +1273,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
 			"0.0",
-			"# Cost to use /town spawn"),
+			"# Cost to use /town spawn."),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION(
 			"economy.spawn_travel.price_town_nation_spawn_travel",
 			"5.0",
@@ -1276,7 +1285,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC(
 			"economy.spawn_travel.price_town_public_spawn_travel",
 			"10.0",
-			"# Cost to use /town spawn [town]",
+			"# Maximum cost to use /town spawn [town] that mayors can set using /t set spawncost.",
 			"# This is paid to the town you goto."),
 	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
 			"economy.spawn_travel.town_spawn_cost_paid_to_town",
@@ -1398,6 +1407,11 @@ public enum ConfigNodes {
 			"economy.daily_taxes.max_town_tax_percent",
 			"25",
 			"# Maximum tax percentage allowed when taxing by percentages for towns."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT(
+			"economy.daily_taxes.max_town_tax_percent_amount",
+			"10000",
+			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
+			),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",
@@ -1637,7 +1651,8 @@ public enum ConfigNodes {
 			"war.event.remove_on_monarch_death",
 			"false",
 			"",
-			"# If true and the monarch/king dies the nation is removed from the war."),
+			"# If true and the monarch/king dies the nation is removed from the war.",
+			"# Also removes a town from the war event when the mayor dies."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
 			"false",

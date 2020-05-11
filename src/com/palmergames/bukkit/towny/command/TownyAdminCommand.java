@@ -157,7 +157,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> adminResidentTabCompletes = Arrays.asList(
 		"rename",
-		"friend"
+		"friend",
+		"unjail"
 	);
 	
 	private static final List<String> adminResidentFriendTabCompletes = Arrays.asList(
@@ -1010,7 +1011,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_town_forcepvp_setting_set_to"), town.getName(), town.isAdminEnabledPVP()));
 					
 				} else
-					TownCommand.townToggle(player, StringMgmt.remArgs(split, 2), true, town);
+					TownCommand.townToggle(sender, StringMgmt.remArgs(split, 2), true, town);
 				
 			} else if (split[1].equalsIgnoreCase("set")) {
 				
@@ -1385,9 +1386,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							e.printStackTrace();
 						}
 					}
-					townyUniverse.getDataSource().saveTown(town);
-					String[] msg = TownySettings.getNewMayorMsg(newMayor.getName());
-					TownyMessaging.sendPrefixedTownMessage(town, msg);
+					townyUniverse.getDataSource().saveTown(town);					
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
 					// TownyMessaging.sendMessage(player, msg);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());

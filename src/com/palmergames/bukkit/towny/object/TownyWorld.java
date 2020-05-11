@@ -606,7 +606,9 @@ public class TownyWorld extends TownyObject {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
 						continue;
 				
 				if (!town.getHomeblockWorld().equals(this)) continue;
@@ -644,7 +646,9 @@ public class TownyWorld extends TownyObject {
 		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR 
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
