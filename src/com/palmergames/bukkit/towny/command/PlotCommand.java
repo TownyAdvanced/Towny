@@ -707,7 +707,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (townBlockType == null)
 								throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
 							
-							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock);
+							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (!preEvent.isCancelled()) {
