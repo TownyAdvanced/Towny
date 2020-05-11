@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ public class PlotPreChangeTypeEvent extends Event implements Cancellable {
     private TownBlockType newType;
     private TownBlock townBlock;
 	private String cancelMessage = "Sorry this event was cancelled";
+	private Resident resident;
 	private boolean isCancelled = false;
 
     @Override
@@ -27,11 +29,13 @@ public class PlotPreChangeTypeEvent extends Event implements Cancellable {
 	 * Changes a plot's TownBlockType
      * @param newType - New Type
 	 * @param townBlock - Plot to target
+	 * @param resident - The resident who led to this event   
      */
-    public PlotPreChangeTypeEvent(TownBlockType newType, TownBlock townBlock) {
+    public PlotPreChangeTypeEvent(TownBlockType newType, TownBlock townBlock, Resident resident) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.newType = newType;
         this.townBlock = townBlock;
+        this.resident = resident;
     }
 
     public TownBlockType getNewType() {
@@ -49,6 +53,10 @@ public class PlotPreChangeTypeEvent extends Event implements Cancellable {
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;
+	}
+
+	public Resident getResident() {
+		return resident;
 	}
 
 	@Override
