@@ -684,29 +684,37 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setTown(getTown(line));
 				
-				line = keys.get("town-ranks");
-				if (line != null)
-					resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-				
-				line = keys.get("nation-ranks");
-				if (line != null)
-					resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-				
-				line = keys.get("friends");
-				if (line != null) {
-					String[] tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident friend = getResident(token);
-							if (friend != null)
-								resident.addFriend(friend);
+				try {
+					line = keys.get("town-ranks");
+					if (line != null)
+						resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+				} catch (Exception e) {}
+
+				try {
+					line = keys.get("nation-ranks");
+					if (line != null)
+						resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+				} catch (Exception e) {}
+
+				try {
+					line = keys.get("friends");
+					if (line != null) {
+						String[] tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()) {
+								Resident friend = getResident(token);
+								if (friend != null)
+									resident.addFriend(friend);
+							}
 						}
 					}
-				}
-				
-				line = keys.get("protectionStatus");
-				if (line != null)
-					resident.setPermissions(line);
+				} catch (Exception e) {}
+
+				try {
+					line = keys.get("protectionStatus");
+					if (line != null)
+						resident.setPermissions(line);
+				} catch (Exception e) {}
 
 				line = keys.get("postTownLeavePeacefulEnabled");
 				if (line != null)
@@ -720,9 +728,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setNationRefundAmount(Integer.parseInt(line));
 
-				line = keys.get("metadata");
-				if (line != null && !line.isEmpty())
-					resident.setMetadata(line.trim());
+				try {
+					line = keys.get("metadata");
+					if (line != null && !line.isEmpty())
+						resident.setMetadata(line.trim());
+				} catch (Exception e) {}
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
