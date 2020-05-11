@@ -726,6 +726,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			} finally {
 				saveResident(resident);
