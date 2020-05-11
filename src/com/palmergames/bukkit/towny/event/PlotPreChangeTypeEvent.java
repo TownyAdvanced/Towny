@@ -9,7 +9,6 @@ import org.bukkit.event.HandlerList;
 
 public class PlotPreChangeTypeEvent extends Event implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
-    private TownBlockType oldType;
     private TownBlockType newType;
     private TownBlock townBlock;
 	private String cancelMessage = "Sorry this event was cancelled";
@@ -26,15 +25,12 @@ public class PlotPreChangeTypeEvent extends Event implements Cancellable {
 
     /**
 	 * Changes a plot's TownBlockType
-	 * 
-     * @param oldType- Old Type
      * @param newType - New Type
 	 * @param townBlock - Plot to target
      */
-    public PlotPreChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock) {
+    public PlotPreChangeTypeEvent(TownBlockType newType, TownBlock townBlock) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.newType = newType;
-        this.oldType = oldType;
         this.townBlock = townBlock;
     }
 
@@ -43,10 +39,7 @@ public class PlotPreChangeTypeEvent extends Event implements Cancellable {
     }
 
     public TownBlockType getOldType() {
-        if (oldType == null) {
-            return TownBlockType.WILDS; // Considering the further fact we know null is wilderness if there is no old type, it has to have been wilderness.
-        }
-        return oldType;
+        return townBlock.getType();
     }
 
     public TownBlock getTownBlock() {
