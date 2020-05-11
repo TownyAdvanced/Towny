@@ -687,18 +687,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownySettings.getWarSiegeEnabled()
 			&& TownySettings.isUsingEconomy()
 			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-			try {
-				//Refund the king with some of the initial nation setup cost
-				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-				king.getAccount().collect(amountToRefund, "Refund of Some of the Initial Nation Cost");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			TownyMessaging.sendGlobalMessage(
+
+			//Make the nation refund available
+			//The player can later do "/n claim refund" to receive the money
+			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+			king.addToNationRefundAmount(amountToRefund);
+			saveResident(king);
+
+			TownyMessaging.sendMsg(
+				king,
 				String.format(
-					TownySettings.getLangString("msg_siege_war_refund_initial_cost_on_nation_delete"),
-					king.getFormattedName(),
-					TownySettings.getWarSiegeNationCostRefundPercentageOnDelete() + "%"));
+					TownySettings.getLangString("msg_siege_war_nation_refund_available"),
+					TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));

@@ -4,11 +4,15 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -143,6 +147,30 @@ public class SiegeWarMoneyUtil {
 			return 1;
 		} else {
 			return 1 + ((extraMoneyPercentage / 100) * (TownySettings.calcTownLevelId(town) -1));
+		}
+	}
+
+	/**
+	 * If the player is due a nation refund, pays the refund to the player
+	 *
+	 * @param player
+	 */
+	public static void claimNationRefund(Player player) throws Exception {
+		if(!(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeRefundInitialNationCostOnDelete())) {
+			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+		}
+
+		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
+		Resident formerKing = townyDataSource.getResident(player.getName());
+
+		if(formerKing.getNationRefundAmount() != 0) {
+			int refundAmount = formerKing.getNationRefundAmount();
+			formerKing.getAccount().collect(refundAmount, "Nation Refund");
+			formerKing.setNationRefundAmount(0);
+			townyDataSource.saveResident(formerKing);
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_siege_war_nation_refund_claimed"), TownyEconomyHandler.getFormattedBalance(refundAmount)));
+		} else {
+			throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_refund_unavailable"));
 		}
 	}
 }

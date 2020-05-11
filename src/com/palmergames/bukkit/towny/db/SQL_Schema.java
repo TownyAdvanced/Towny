@@ -213,6 +213,7 @@ public class SQL_Schema {
 		columns.add("`postTownLeavePeacefulEnabled` bool NOT NULL DEFAULT '0'");
 		columns.add("`postTownLeavePeacefulHoursRemaining` int(11) DEFAULT 0");
 		columns.add("`friends` mediumtext");
+		columns.add("`nationRefundAmount` int(11) DEFAULT 0");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}

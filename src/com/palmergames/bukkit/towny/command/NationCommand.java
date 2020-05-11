@@ -48,6 +48,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -85,6 +86,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"withdraw",
 		"deposit",
 		"new",
+		"refund",
 		"rank",
 		"add",
 		"kick",
@@ -174,7 +176,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", "enemylist (nation)", ""));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", TownySettings.getLangString("nation_help_10")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "join (nation)", "Used to join open nations."));		
+		nation_help.add(ChatTools.formatCommand("", "/nation", "refund", TownySettings.getLangString("nation_help_11")));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "refund", "Used to join open nations."));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
@@ -639,7 +642,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					Nation tbNation = tb.getTown().getNation();
-					Nation pNation= townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					Nation pNation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -673,7 +676,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (split.length == 3) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
+
 					Town town = TownyAPI.getInstance().getDataSource().getTown(split[2]);
 					Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if (town != null) {
@@ -690,7 +693,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new NotRegisteredException();
 					}
 				}
-					
+
+			} else if (split[0].equalsIgnoreCase("refund")) {
+				SiegeWarMoneyUtil.claimNationRefund(player);
 
 			}  else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
@@ -1493,10 +1498,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0)
+
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				double amountToRefund = Math.round(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_delete_nation_warning"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
+
+				//If nation refund is enabled, warn the player that they will get a refund (and indicate how to claim it).
+				if(TownySettings.getWarSiegeEnabled() 
+					&& TownySettings.isUsingEconomy()
+					&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+					int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_delete_nation_warning"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
+				}
+
 				Nation nation = resident.getTown().getNation();
 				Confirmation confirmation = new Confirmation(() -> {
 					TownyUniverse.getInstance().getDataSource().removeNation(nation);

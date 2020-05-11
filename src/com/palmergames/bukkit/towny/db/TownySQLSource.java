@@ -817,6 +817,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				try {
+					resident.setNationRefundAmount(rs.getInt("nationRefundAmount"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
 						resident.setMetadata(line);
@@ -1723,6 +1729,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			//Town-related Peacefulness
 			res_hm.put("postTownLeavePeacefulEnabled", resident.isPostTownLeavePeacefulEnabled());
 			res_hm.put("postTownLeavePeacefulHoursRemaining", resident.getPostTownLeavePeacefulHoursRemaining());
+			res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
 
 			if (resident.hasMeta())
 				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));

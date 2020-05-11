@@ -49,6 +49,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private transient Confirmation confirmation;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
+	private int nationRefundAmount = 0;
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
@@ -887,6 +888,18 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void decrementPostTownLeavePeacefulHoursRemaining() {
 		postTownLeavePeacefulHoursRemaining--;
+	}
+
+	public int getNationRefundAmount() {
+		return nationRefundAmount;
+	}
+
+	public void setNationRefundAmount(int nationRefundAmount) {
+		this.nationRefundAmount = nationRefundAmount;
+	}
+
+	public void addToNationRefundAmount(int amountToRefund) {
+		this.nationRefundAmount += amountToRefund;
 	}
 }
 

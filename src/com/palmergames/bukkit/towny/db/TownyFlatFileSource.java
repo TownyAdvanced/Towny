@@ -716,6 +716,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setPostTownLeavePeacefulHoursRemaining(Integer.parseInt(line));
 
+				line = keys.get("nationRefundAmount");
+				if (line != null)
+					resident.setNationRefundAmount(Integer.parseInt(line));
+
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					resident.setMetadata(line.trim());
@@ -1094,7 +1098,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				} else {
 					/*
-					 * On first load of system, give each town a random immunity cooldown
+					 * On first load of system, give each existing town a random siege immunity cooldown
 					 * This should help prevent everyone killing each other 5 mins after system deployment
 					 */
 					long siegeImmunityDurationMillis = (long)(Math.random() * (TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() + 1) * TimeMgmt.ONE_HOUR_IN_MILLIS);
@@ -2066,6 +2070,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Town-related Peacefulness
 		list.add("postTownLeavePeacefulEnabled=" + resident.isPostTownLeavePeacefulEnabled());
 		list.add("postTownLeavePeacefulHoursRemaining=" + resident.getPostTownLeavePeacefulHoursRemaining());
+
+		//Nation refund amount
+		list.add("nationRefundAmount=" + resident.getNationRefundAmount());
 
 		// Metadata
 		StringBuilder md = new StringBuilder();
