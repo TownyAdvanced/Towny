@@ -365,6 +365,7 @@ public class TownyUniverse {
         towns.clear();
         residents.clear();
         townBlocks.clear();
+        sieges.clear();
     }
 
 	public boolean hasGroup(String townName, UUID groupID) {
