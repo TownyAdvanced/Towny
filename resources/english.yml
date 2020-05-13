@@ -1284,6 +1284,9 @@ msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful
 msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, or gain nation-military ranks, for %s.'
 msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to add military rank to resident, because they are in a peaceful town, or recently left one.'
 
+#Siege immunities
+msg_set_siege_immunities: 'All town siege immunities set to %d hours.'
+
 #Nation Refund
 nation_help_11 : 'Claim all your nation refunds.'
 

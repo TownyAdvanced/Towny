@@ -46,6 +46,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -173,7 +174,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"capital",
 		"title",
 		"surname",
-		"plot"
+		"plot",
+		"siegeimmunities"
 	);
 	
 
@@ -1326,7 +1328,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "title [resident] [title]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "surname [resident] [surname]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "plot [town]", ""));
-
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities [hours]", ""));
 			return;
 		}
 
@@ -1470,6 +1472,27 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
 				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
 			}
+
+		} else if (split[0].equalsIgnoreCase("siegeimmunities")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SIEGEIMMUNITIES.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+			int hoursRemaining;
+			long siegeImmunityEndTime;
+			try {
+				hoursRemaining = Integer.parseInt(split[1]);
+				siegeImmunityEndTime = System.currentTimeMillis() + (hoursRemaining * (int)TimeMgmt.ONE_HOUR_IN_MILLIS);
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set siegeimmunities 24");
+				return;
+			}
+
+			for(Town town: new ArrayList<>(townyUniverse.getDataSource().getTowns()))  {
+				town.setSiegeImmunityEndTime(siegeImmunityEndTime);
+				townyUniverse.getDataSource().saveTown(town);
+			}
+
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_set_siege_immunities"), hoursRemaining));
 
 		} else if (split[0].equalsIgnoreCase("plot")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode(split[0].toLowerCase())))

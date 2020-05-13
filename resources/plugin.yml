@@ -573,6 +573,7 @@ permissions:
             towny.command.townyadmin.set.plot: true
             towny.command.townyadmin.set.surname: true
             towny.command.townyadmin.set.title: true
+            towny.command.townyadmin.set.siegeimmunities: true
 
     towny.command.townyadmin.town.*:
         description: User can access the admin town commands.
