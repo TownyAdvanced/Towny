@@ -711,7 +711,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
+	public Account getAccount() {
 		if (account == null) {
 
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);

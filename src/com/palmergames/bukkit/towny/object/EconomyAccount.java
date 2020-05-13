@@ -15,7 +15,7 @@ import org.bukkit.World;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public class EconomyAccount extends TownyObject {
+public class EconomyAccount extends Account {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private World world;
 	
@@ -46,6 +46,7 @@ public class EconomyAccount extends TownyObject {
 	 * @return true if successful
 	 * @throws EconomyException if the transaction fails
 	 */
+	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
@@ -79,6 +80,7 @@ public class EconomyAccount extends TownyObject {
 	 * @return collected or pay to server account   
 	 * @throws EconomyException if transaction fails
 	 */
+	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return SERVER_ACCOUNT.payTo(amount, this, reason);
@@ -130,83 +132,83 @@ public class EconomyAccount extends TownyObject {
 		}
 	}
 
-	/**
-	 * Fetch the current world for this object
-	 *
-	 * @return Bukkit world for the object
-	 */
-	protected World getBukkitWorld() {
-		return BukkitTools.getWorlds().get(0);
-	}
-
-	/**
-	 * Set balance and log this action
-	 *
-	 * @param amount currency to transact
-	 * @param reason memo regarding transaction
-	 * @return true, or pay/collect balance for given reason
-	 * @throws EconomyException if transaction fails
-	 */
-	public boolean setBalance(double amount, String reason) throws EconomyException {
-		double balance = getHoldingBalance();
-		double diff = amount - balance;
-		if (diff > 0) {
-			// Adding to
-			return collect(diff, reason);
-		} else if (balance > amount) {
-			// Subtracting from
-			diff = -diff;
-			return pay(diff, reason);
-		} else {
-			// Same amount, do nothing.
-			return true;
-		}
-	}
-
-	/*
-	private boolean _setBalance(double amount) {
-		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
-	}
-	*/
-
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getName());
-		}
-	}
-
-	/**
-	 * Does this object have enough in it's economy account to pay?
-	 *
-	 * @param amount currency to check for
-	 * @return true if there is enough.
-	 * @throws EconomyException if failure
-	 */
-	public boolean canPayFromHoldings(double amount) throws EconomyException {
-		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
-	}
-
-	/**
-	 * Used To Get Balance of Players holdings in String format for printing
-	 *
-	 * @return current account balance formatted in a string.
-	 */
-	public String getHoldingFormattedBalance() {
-		try {
-			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
-		} catch (EconomyException e) {
-			return "Error Accessing Bank Account";
-		}
-	}
-
-	/**
-	 * Attempt to delete the economy account.
-	 */
-	public void removeAccount() {
-		TownyEconomyHandler.removeAccount(getName());
-	}
+//	/**
+//	 * Fetch the current world for this object
+//	 *
+//	 * @return Bukkit world for the object
+//	 */
+//	protected World getBukkitWorld() {
+//		return BukkitTools.getWorlds().get(0);
+//	}
+//
+//	/**
+//	 * Set balance and log this action
+//	 *
+//	 * @param amount currency to transact
+//	 * @param reason memo regarding transaction
+//	 * @return true, or pay/collect balance for given reason
+//	 * @throws EconomyException if transaction fails
+//	 */
+//	public boolean setBalance(double amount, String reason) throws EconomyException {
+//		double balance = getHoldingBalance();
+//		double diff = amount - balance;
+//		if (diff > 0) {
+//			// Adding to
+//			return collect(diff, reason);
+//		} else if (balance > amount) {
+//			// Subtracting from
+//			diff = -diff;
+//			return pay(diff, reason);
+//		} else {
+//			// Same amount, do nothing.
+//			return true;
+//		}
+//	}
+//
+//	/*
+//	private boolean _setBalance(double amount) {
+//		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
+//	}
+//	*/
+//
+//	public double getHoldingBalance() throws EconomyException {
+//		try {
+//			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+//		} catch (NoClassDefFoundError e) {
+//			e.printStackTrace();
+//			throw new EconomyException("Economy error getting holdings for " + getName());
+//		}
+//	}
+//
+//	/**
+//	 * Does this object have enough in it's economy account to pay?
+//	 *
+//	 * @param amount currency to check for
+//	 * @return true if there is enough.
+//	 * @throws EconomyException if failure
+//	 */
+//	public boolean canPayFromHoldings(double amount) throws EconomyException {
+//		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
+//	}
+//
+//	/**
+//	 * Used To Get Balance of Players holdings in String format for printing
+//	 *
+//	 * @return current account balance formatted in a string.
+//	 */
+//	public String getHoldingFormattedBalance() {
+//		try {
+//			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
+//		} catch (EconomyException e) {
+//			return "Error Accessing Bank Account";
+//		}
+//	}
+//
+//	/**
+//	 * Attempt to delete the economy account.
+//	 */
+//	public void removeAccount() {
+//		TownyEconomyHandler.removeAccount(getName());
+//	}
 
 }

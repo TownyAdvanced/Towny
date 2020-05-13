@@ -7,7 +7,7 @@ public class TownTransactionEvent extends BankTransactionEvent {
 	private final Town town;
 	
 	public TownTransactionEvent(Town town, Transaction transaction) {
-		super(town, transaction);
+		super(town.getAccount(), transaction);
 		this.town = town;
 	}
 

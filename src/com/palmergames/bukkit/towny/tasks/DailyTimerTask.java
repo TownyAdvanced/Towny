@@ -416,7 +416,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
-						if (!town.getAccount().pay(upkeep, "Town Upkeep")) {
+						if (!town.getAccount().subtract(upkeep, "Town Upkeep")) {
 							townyUniverse.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 						}
@@ -429,14 +429,14 @@ public class DailyTimerTask extends TownyTimerTask {
 
 							for (TownBlock townBlock : plots) {
 								if (townBlock.hasResident())
-									townBlock.getResident().getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									townBlock.getResident().getAccount().subtract((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 								else
-									town.getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									town.getAccount().subtract((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 							}
 
 						} else {
 							// Not paying plot owners so just pay the town
-							town.getAccount().pay(upkeep, "Negative Town Upkeep");
+							town.getAccount().subtract(upkeep, "Negative Town Upkeep");
 						}
 
 					}
@@ -477,12 +477,12 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (upkeep > 0) {
 					// Town is paying upkeep
 
-					if (!nation.getAccount().pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+					if (!nation.getAccount().subtract(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 						townyUniverse.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {
-						if (!nation.getAccount().pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
+						if (!nation.getAccount().subtract(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							try {
 								nation.setNeutral(false);
 							} catch (TownyException e) {
@@ -494,7 +494,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					
 				} else if (upkeep < 0) {
-					nation.getAccount().pay(upkeep, "Negative Nation Upkeep");
+					nation.getAccount().subtract(upkeep, "Negative Nation Upkeep");
 				}
 			}
 		}

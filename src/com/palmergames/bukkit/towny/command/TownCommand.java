@@ -2163,7 +2163,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
                     	final String name = split[1];
                     	Confirmation confirmation = new Confirmation(() -> {
                             try {
-								finalTown.getAccount().pay(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
+								finalTown.getAccount().subtract(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
 							} catch (EconomyException ignored) {
 							}
 
@@ -2432,7 +2432,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = new Confirmation(() -> {
 			try {
-				town.getAccount().pay(cost, String.format("Town Buy Bonus (%d)", n));
+				town.getAccount().subtract(cost, String.format("Town Buy Bonus (%d)", n));
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
@@ -2516,7 +2516,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation confirmation = new Confirmation(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
+						resident.getAccount().subtract(TownySettings.getNewTownPrice(), "New Town Cost");
 					} catch (EconomyException ignored) {
 					}
 					
@@ -3037,7 +3037,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
-					town.getAccount().pay(TownySettings.getNewNationPrice(), "nation refund");
+					town.getAccount().subtract(TownySettings.getNewNationPrice(), "nation refund");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -3480,7 +3480,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						blockCost = town.getTownBlockCostN(selection.size());
 
 					double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-					if (TownySettings.isUsingEconomy() && !town.getAccount().pay(blockCost, String.format("Town Claim (%d)", selection.size())))
+					if (TownySettings.isUsingEconomy() && !town.getAccount().subtract(blockCost, String.format("Town Claim (%d)", selection.size())))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim2"), selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");

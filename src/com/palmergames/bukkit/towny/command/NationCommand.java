@@ -1322,7 +1322,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation confirmation = new Confirmation(() -> {				
 					try {
 						// Town pays for nation here.
-						town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost");
+						town.getAccount().subtract(TownySettings.getNewNationPrice(), "New Nation Cost");
 					} catch (EconomyException ignored) {
 					}
 					try {
@@ -2465,7 +2465,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     	final String name = split[1];
 				    	Confirmation confirmation = new Confirmation(() -> {
 							try {
-								finalNation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
+								finalNation.getAccount().subtract(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 							} catch (EconomyException ignored) {}
 								
 		                    if (!NameValidation.isBlacklistName(name))
@@ -2654,7 +2654,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					boolean choice = !nation.isNeutral();
 					double cost = TownySettings.getNationNeutralityCost();
 
-					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().pay(cost, "Peaceful Nation Cost"))
+					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().subtract(cost, "Peaceful Nation Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_peaceful"));
 
 					nation.setNeutral(choice);

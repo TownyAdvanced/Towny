@@ -8,7 +8,7 @@ public class NationTransactionEvent extends BankTransactionEvent {
 	Nation nation;
 	
 	public NationTransactionEvent(Nation nation, Transaction transaction) {
-		super(nation, transaction);
+		super(nation.getAccount(), transaction);
 		this.nation = nation;
 	}
 

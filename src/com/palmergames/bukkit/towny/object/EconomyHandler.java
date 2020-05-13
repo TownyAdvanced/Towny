@@ -12,5 +12,5 @@ public interface EconomyHandler extends Nameable {
 	 * 
 	 * @return An {@link EconomyAccount} for this class.
 	 */
-	EconomyAccount getAccount();
+	Account getAccount();
 }

@@ -956,7 +956,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 				}
 			}
 			
-			getAccount().collect(amount, null);
+			getAccount().add(amount, null);
 		}
 
 	}
@@ -1280,8 +1280,8 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
-		if (account == null) {
+	public Bank getAccount() {
+		if (bank == null) {
 			
 			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 			World world;
@@ -1292,10 +1292,10 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 				world = BukkitTools.getWorlds().get(0);
 			}
 			
-			account = new EconomyAccount(accountName, world);
+			bank = new Bank(accountName, world, TownySettings.getTownBankCap());
 		}
 		
-		return account;
+		return bank;
 	}
 
 	@Override
@@ -1369,7 +1369,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
-			return getAccount()._pay(amount);
+			return getAccount().subtract(amount, null);
 		}
 	}
 
@@ -1383,7 +1383,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().collect(amount, reason);
+		return getAccount().add(amount, reason);
 	}
 	
 	/**

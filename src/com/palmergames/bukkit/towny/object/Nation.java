@@ -43,7 +43,6 @@ public class Nation extends Territory implements ResidentList {
 	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
-	private transient EconomyAccount account;
 
 	public Nation(String name) {
 		super(name);
@@ -504,7 +503,7 @@ public class Nation extends Territory implements ResidentList {
 				}
 			}
 			
-			this.getAccount().collect(amount, null);
+			this.getAccount().add(amount, null);
 		}
 
 	}
@@ -617,9 +616,9 @@ public class Nation extends Territory implements ResidentList {
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
+	public Bank getAccount() {
 
-		if (account == null) {
+		if (bank == null) {
 
 			String accountName = StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 			World world;
@@ -630,11 +629,11 @@ public class Nation extends Territory implements ResidentList {
 				world = BukkitTools.getWorlds().get(0);
 			}
 
-			account = new EconomyAccount(accountName, world);
+			bank = new Bank(accountName, world, TownySettings.getNationBankCap());
 		}
 
 		
-		return account;
+		return bank;
 	}
 
 	/**
@@ -698,7 +697,7 @@ public class Nation extends Territory implements ResidentList {
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
-		return getAccount().pay(amount, reason);
+		return getAccount().subtract(amount, reason);
 	}
 
 	/**
@@ -711,7 +710,7 @@ public class Nation extends Territory implements ResidentList {
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().collect(amount, reason);
+		return getAccount().add(amount, reason);
 	}
 
 	public String getMapColorHexCode() {

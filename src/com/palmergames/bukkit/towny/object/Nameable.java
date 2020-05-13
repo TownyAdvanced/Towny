@@ -11,4 +11,9 @@ public interface Nameable {
 	 * @return A String representing the name of the object.
 	 */
 	String getName();
+	
+	default String getFormattedName() {
+		return getName().replace('_', ' ');
+	}
+	
 }
