@@ -4587,3 +4587,4 @@ v0.92.0.11:
 0.96.1.11:
   - Fix case in TownyPlayerListener that could result in an NPE.
     - Closes #4002.
+  - russian.yml updated to 0.83 courtesy of Egor33345.
