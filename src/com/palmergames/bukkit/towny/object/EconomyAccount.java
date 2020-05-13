@@ -32,7 +32,7 @@ public class EconomyAccount extends Account {
 		return world;
 	}
 
-	private static final class TownyServerAccount extends EconomyAccount {
+	private static final class TownyServerAccount extends Account {
 		TownyServerAccount() {
 			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
 		}
