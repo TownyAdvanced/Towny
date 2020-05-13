@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
 public abstract class Account implements Nameable {
+	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	String name;
 	World world;
 	
@@ -17,19 +21,62 @@ public abstract class Account implements Nameable {
 		this.name = name;
 		this.world = world;
 	}
-	
+
+	/**
+	 * Adds money to the account.
+	 * 
+	 * @param amount The amount to add.
+	 * @param reason The reason for adding.
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
+	 */
 	public boolean add(double amount, String reason) throws EconomyException {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
-	
+
+	/**
+	 * Subtracts money to the account.
+	 *
+	 * @param amount The amount to subtract.
+	 * @param reason The reason for subtracting.
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
+	 */
 	public boolean subtract(double amount, String reason) throws EconomyException {
-		return TownyEconomyHandler.subtract(getName(), amount, world);
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return payTo(amount, SERVER_ACCOUNT, reason);
+		} else {
+			boolean payed = TownyEconomyHandler.subtract(getName(), amount, world);
+			if (payed) {
+				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+			}
+
+			return payed;
+		}
 	}
-	
+
+	/**
+	 * Pays another account the specified funds.
+	 *
+	 * @param amount The amount to pay.
+	 * @param collector The account to pay.
+	 * @param reason The reason for the pay. 
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
+	 */
 	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 
+	/**
+	 * Pays another account the specified funds.
+	 *
+	 * @param amount The amount to pay.
+	 * @param collector The account to pay.
+	 * @param reason The reason for the pay.
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
+	 */
 	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
 		
 		if (amount > getHoldingBalance()) {
@@ -75,12 +122,12 @@ public abstract class Account implements Nameable {
 		}
 	}
 
-	/*
-	private boolean _setBalance(double amount) {
-		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
-	}
-	*/
-
+	/**
+	 * Gets the current balance of this account.
+	 * 
+	 * @return The amount in this account.
+	 * @throws EconomyException On an economy error.
+	 */
 	public double getHoldingBalance() throws EconomyException {
 		try {
 			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
@@ -128,5 +175,11 @@ public abstract class Account implements Nameable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	private static final class TownyServerAccount extends Account {
+		TownyServerAccount() {
+			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
+		}
 	}
 }
