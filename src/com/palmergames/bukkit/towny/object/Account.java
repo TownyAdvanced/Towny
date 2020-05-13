@@ -31,7 +31,12 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean add(double amount, String reason) throws EconomyException {
-		return TownyEconomyHandler.add(getName(), amount, world);
+		if (TownyEconomyHandler.add(getName(), amount, world)) {
+			TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**
