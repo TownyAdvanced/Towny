@@ -1251,6 +1251,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
+<<<<<<< Upstream, based on origin/master
 	public double getBankCap() {
 		return TownySettings.getTownBankCap();
 	}
@@ -1259,10 +1260,30 @@ public class Town extends Government implements TownBlockOwner {
 		return hasWorld() ? BukkitTools.getWorld(getHomeblockWorld().getName()) :
 			BukkitTools.getWorlds().get(0);
 	}
+=======
+	public Bank getAccount() {
+		if (bank == null) {
+			
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+			World world;
+>>>>>>> 1dac9ed Add new Bank Object
 
+<<<<<<< Upstream, based on origin/master
 	@Override
 	public String getBankAccountPrefix() {
 		return ECONOMY_ACCOUNT_PREFIX;
+=======
+			if (hasWorld()) {
+				world = BukkitTools.getWorld(getHomeblockWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+			
+			bank = new Bank(accountName, world, TownySettings.getTownBankCap());
+		}
+		
+		return bank;
+>>>>>>> 1dac9ed Add new Bank Object
 	}
 
 	@Override
@@ -1336,7 +1357,11 @@ public class Town extends Government implements TownBlockOwner {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
+<<<<<<< Upstream, based on origin/master
 			return getAccount().withdraw(amount, null);
+=======
+			return getAccount().subtract(amount, null);
+>>>>>>> 1dac9ed Add new Bank Object
 		}
 	}
 
@@ -1350,7 +1375,21 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
+<<<<<<< Upstream, based on origin/master
 		return getAccount().deposit(amount, reason);
+=======
+		return getAccount().add(amount, reason);
+	}
+	
+	/**
+	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
+	 * 
+	 * @return The world this town resides in.
+	 */
+	@Deprecated
+	public TownyWorld getWorld() {
+		return getHomeblockWorld();
+>>>>>>> 1dac9ed Add new Bank Object
 	}
 
 	/**

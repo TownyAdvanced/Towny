@@ -13,9 +13,9 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, Bank, SpawnLocation {
+public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, SpawnLocation {
 	
-	protected EconomyAccount account;
+	protected Bank bank;
 	protected Location spawn;
 	protected String tag = "";
 	protected String board = null;
