@@ -4583,3 +4583,4 @@ v0.92.0.11:
     - Default value changed from false to true.
     - Will no affect existing configs.
     - New config files will have taxpercentage on by default, which means new towns will start with taxpercent enabled.
+  - Fix regression in DisablePlayerTrampling which prevented crop trampling being prevented.
