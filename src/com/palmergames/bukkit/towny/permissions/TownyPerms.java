@@ -4,6 +4,7 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -61,8 +62,9 @@ public class TownyPerms {
 	 * 
 	 * @param filepath - Path to townyperms.yml
 	 * @param defaultRes - Default townyperms.yml within the jar.
+	 * @throws TownyException - When permission file cannot be loaded.
 	 */
-	public static void loadPerms(String filepath, String defaultRes) {
+	public static void loadPerms(String filepath, String defaultRes) throws TownyException {
 
 		String fullPath = filepath + File.separator + defaultRes;
 
@@ -70,7 +72,8 @@ public class TownyPerms {
 		if (file != null) {
 			// read the (language).yml into memory
 			perms = new CommentedConfiguration(file);
-			perms.load();
+			if (!perms.load())
+				throw new TownyException("Could not read Townyperms.yml");
 		}
 		
 		/*

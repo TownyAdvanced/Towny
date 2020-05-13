@@ -1540,7 +1540,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_lang"));
 	}
 	
-	public void reloadPerms() {
+	public void reloadPerms() throws TownyException {
 		String rootFolder = TownyUniverse.getInstance().getRootFolder();
 		TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_perms"));
