@@ -253,7 +253,7 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
-		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 
 		if (event.hasItem()) {

@@ -4584,3 +4584,6 @@ v0.92.0.11:
     - Will no affect existing configs.
     - New config files will have taxpercentage on by default, which means new towns will start with taxpercent enabled.
   - Fix regression in DisablePlayerTrampling which prevented crop trampling being prevented.
+0.96.1.11:
+  - Fix case in TownyPlayerListener that could result in an NPE.
+    - Closes #4002.
