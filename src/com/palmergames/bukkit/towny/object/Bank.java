@@ -17,19 +17,18 @@ public class Bank extends Account {
 		this.cap = cap;
 	}
 	
-	boolean canAdd(double amount) throws EconomyException {
-		
+	private boolean canAdd(double amount) throws EconomyException {
 		if (cap == 0) {
 			return true;
 		}
-		
 		return !(getHoldingBalance() + amount > cap);
 	} 
 
 	@Override
 	public boolean add(double amount, String reason) throws EconomyException {
 		if (!canAdd(amount)) {
-			throw new EconomyException("Above cap");
+			// TODO: Lang String
+			throw new EconomyException("Cannot add above Bank Cap.");
 		}
 		return super.add(amount, reason);
 	}
