@@ -4599,3 +4599,5 @@ v0.92.0.11:
       name_check_regex: ^[\p{L}a-zA-Z0-9._\[\]-]*$
       string_check_regex: ^[a-zA-Z0-9 \s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
       name_remove_regex: '[^\P{M}a-zA-Z0-9\&._\[\]-]'
+  - API: new PlotPreChangeTypeEvent, courtesy of rebstew with PR #3995.
+    - Cancellable event that plugins can use to stop players from changing a plot type.
