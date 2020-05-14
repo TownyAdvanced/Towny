@@ -8,6 +8,14 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
+/**
+ * Used to facilitate transactions regarding money, 
+ * and the storage of funds.
+ * 
+ * @author Suneet Tipirneni (Siris)
+ * @see CappedAccount
+ * @see EconomyAccount
+ */
 public abstract class Account implements Nameable {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	String name;
@@ -23,7 +31,7 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * Adds money to the account.
+	 * Attempts to add money to the account.
 	 * 
 	 * @param amount The amount to add.
 	 * @param reason The reason for adding.
@@ -40,7 +48,7 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * Subtracts money to the account.
+	 * Attempts to subtract money from the account.
 	 *
 	 * @param amount The amount to subtract.
 	 * @param reason The reason for subtracting.

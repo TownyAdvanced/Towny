@@ -3,16 +3,20 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import org.bukkit.World;
 
-public class Bank extends Account {
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * A variant of an account that implements
+ * a checked cap on it's balance.
+ */
+public class CappedAccount extends Account {
 	
 	double cap;
+	Map<Date, Transaction> audits = new HashMap<>();
 	
-	Bank(String name, double cap) {
-		super(name);
-		this.cap = cap;
-	}
-
-	Bank(String name, World world, double cap) {
+	CappedAccount(String name, World world, double cap) {
 		super(name, world);
 		this.cap = cap;
 	}
@@ -28,7 +32,7 @@ public class Bank extends Account {
 	public boolean add(double amount, String reason) throws EconomyException {
 		if (!canAdd(amount)) {
 			// TODO: Lang String
-			throw new EconomyException("Cannot add above Bank Cap.");
+			throw new EconomyException("Cannot add above Account Cap.");
 		}
 		return super.add(amount, reason);
 	}

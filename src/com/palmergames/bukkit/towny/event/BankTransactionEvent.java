@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.object.Bank;
+import com.palmergames.bukkit.towny.object.Account;
+import com.palmergames.bukkit.towny.object.CappedAccount;
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -12,14 +13,14 @@ import org.bukkit.event.HandlerList;
  */
 public class BankTransactionEvent extends Event {
 
-	private final Bank bank;
+	private final Account account;
 	private static final HandlerList handlers = new HandlerList();
 	private final Transaction transaction;
 	
-	public BankTransactionEvent(Bank bank, Transaction transaction) {
+	public BankTransactionEvent(Account account, Transaction transaction) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.transaction = transaction;
-		this.bank = bank;
+		this.account = account;
 	}
 	
 	@Override
@@ -31,8 +32,8 @@ public class BankTransactionEvent extends Event {
 		return handlers;
 	}
 
-	public Bank getBank() {
-		return bank;
+	public Account getAccount() {
+		return account;
 	}
 
 	public Transaction getTransaction() {

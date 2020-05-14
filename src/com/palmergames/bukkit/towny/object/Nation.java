@@ -616,9 +616,9 @@ public class Nation extends Territory implements ResidentList {
 	}
 
 	@Override
-	public Bank getAccount() {
+	public Account getAccount() {
 
-		if (bank == null) {
+		if (account == null) {
 
 			String accountName = StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 			World world;
@@ -629,11 +629,11 @@ public class Nation extends Territory implements ResidentList {
 				world = BukkitTools.getWorlds().get(0);
 			}
 
-			bank = new Bank(accountName, world, TownySettings.getNationBankCap());
+			account = new CappedAccount(accountName, world, TownySettings.getNationBankCap());
 		}
 
 		
-		return bank;
+		return account;
 	}
 
 	/**

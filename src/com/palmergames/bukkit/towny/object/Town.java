@@ -1280,8 +1280,8 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	}
 
 	@Override
-	public Bank getAccount() {
-		if (bank == null) {
+	public Account getAccount() {
+		if (account == null) {
 			
 			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 			World world;
@@ -1292,10 +1292,10 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 				world = BukkitTools.getWorlds().get(0);
 			}
 			
-			bank = new Bank(accountName, world, TownySettings.getTownBankCap());
+			account = new CappedAccount(accountName, world, TownySettings.getTownBankCap());
 		}
 		
-		return bank;
+		return account;
 	}
 
 	@Override
