@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
+import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -698,14 +699,28 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 								return true;
 							}
-						} 
-
-						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
-
-						setPlotType(resident, worldCoord, split[0]);
-
-						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+						}
 						
+						try {
+							TownBlockType townBlockType = TownBlockType.lookup(split[0]);
+
+							if (townBlockType == null)
+								throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+							
+							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
+							BukkitTools.getPluginManager().callEvent(preEvent);
+
+							if (!preEvent.isCancelled()) {
+								setPlotType(resident, townBlock.getWorldCoord(), split[0]);
+								player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+							} else {
+								player.sendMessage(preEvent.getCancelMessage());
+							}
+						} catch (NotRegisteredException nre) {
+							player.sendMessage(TownySettings.getLangString("msg_err_not_part_town"));
+						} catch (TownyException te){
+							player.sendMessage(te.getLocalizedMessage());
+						}
 
 					} else {
 
