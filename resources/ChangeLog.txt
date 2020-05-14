@@ -4589,4 +4589,13 @@ v0.92.0.11:
     - Closes #4002.
   - russian.yml updated to 0.83 courtesy of Egor33345.
   - Fix cost confirmation showing when new town or new nation prices are set to 0.
-  - zh-tw.yml updated by shou692199 with PR #3999. 
+  - zh-tw.yml updated by shou692199 with PR #3999.
+  - Allow only language unicode, courtesy of Siris with PR #3943.
+    - Stop players using emojis in their town and nation names. 
+    - New Configs will have the following regex, which you can add manually or have Towny add it by itself by removing the regex section of your config.yml.
+    - New Default:
+    regex:
+      name_filter_regex: '[\\\/]'
+      name_check_regex: ^[\p{L}a-zA-Z0-9._\[\]-]*$
+      string_check_regex: ^[a-zA-Z0-9 \s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
+      name_remove_regex: '[^\P{M}a-zA-Z0-9\&._\[\]-]'
