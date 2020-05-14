@@ -4588,4 +4588,5 @@ v0.92.0.11:
   - Fix case in TownyPlayerListener that could result in an NPE.
     - Closes #4002.
   - russian.yml updated to 0.83 courtesy of Egor33345.
-  - Fix cost confirmation showing when new town or new nation prices are set to 0. 
+  - Fix cost confirmation showing when new town or new nation prices are set to 0.
+  - zh-tw.yml updated by shou692199 with PR #3999. 
