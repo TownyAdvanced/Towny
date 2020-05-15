@@ -368,8 +368,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			return false;
 
 		//Peaceful town
-		if (TownySettings.getWarCommonPeacefulTownsEnabled()
-			&& (isPeaceful() || getDesiredPeacefulnessValue())) {
+		if (TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful()) {
 			return false;
 		}
 
