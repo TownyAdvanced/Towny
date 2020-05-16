@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -18,8 +17,10 @@ import org.bukkit.World;
  */
 public abstract class Account implements Nameable {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
+	private static final AccountObserver observer = new AccountAuditor();
 	String name;
 	World world;
+	
 	
 	Account(String name) {
 		this.name = name;
@@ -28,6 +29,22 @@ public abstract class Account implements Nameable {
 	Account(String name, World world) {
 		this.name = name;
 		this.world = world;
+	}
+	
+	boolean canAdd(double amount) throws EconomyException {
+		return true;
+	}
+	
+	boolean canSubtract(double amount) throws EconomyException {
+		return !(amount > getHoldingBalance());
+	}
+	
+	private boolean addMoney(double amount) throws EconomyException {
+		return TownyEconomyHandler.add(getName(), amount, world);
+	}
+	
+	private boolean subtractMoney(double amount) throws EconomyException {
+		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 
 	/**
@@ -38,9 +55,9 @@ public abstract class Account implements Nameable {
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public boolean add(double amount, String reason) throws EconomyException {
-		if (TownyEconomyHandler.add(getName(), amount, world)) {
-			TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+	public final boolean add(double amount, String reason) throws EconomyException {
+		if (canAdd(amount) && addMoney(amount)) {
+			observer.deposited(this, amount, reason);
 			return true;
 		}
 		
@@ -55,16 +72,16 @@ public abstract class Account implements Nameable {
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public boolean subtract(double amount, String reason) throws EconomyException {
+	public final boolean subtract(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
-			boolean payed = TownyEconomyHandler.subtract(getName(), amount, world);
-			if (payed) {
-				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
+			if (canSubtract(amount) && subtractMoney(amount)) {
+				observer.withdrew(this, amount, reason);
+				return true;
 			}
 
-			return payed;
+			return false;
 		}
 	}
 
