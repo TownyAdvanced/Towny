@@ -15,14 +15,7 @@ import java.util.List;
 public interface TownBlockOwner extends Permissible {
 
 	/**
-	 * Sets the townblocks
-	 * 
-	 * @param townBlocks the townblocks to set.
-	 */
-	void setTownblocks(List<TownBlock> townBlocks);
-
-	/**
-	 * Gets the townblocks.
+	 * Gets the unmodifiable list of townblocks.
 	 * 
 	 * @return The townblocks this object contains.
 	 */

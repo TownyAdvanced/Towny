@@ -102,8 +102,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner {
 		if (townBlocks != null)
 			townBlocks.remove(townBlock);
 	}
-
-	@Override
+	
 	public void setTownblocks(List<TownBlock> townBlocks) {
 		this.townBlocks = townBlocks;
 	}

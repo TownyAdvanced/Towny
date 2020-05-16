@@ -68,15 +68,6 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 		permissions.loadDefault(this);
 	}
 
-	/*
-	 * Not used but required to Implement TownBlockOwner (non-Javadoc)
-	 * @see com.palmergames.bukkit.towny.object.TownBlockOwner#setTownblocks(java.util.List)
-	 */
-	@Override
-	public void setTownblocks(List<TownBlock> townblocks) {
-		//this.townBlocks = townblocks;
-	}
-
 	@Override
 	public List<TownBlock> getTownBlocks() {
 		List<TownBlock> townBlockList = new ArrayList<>();
@@ -192,8 +183,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 
 	@Override
 	public List<Resident> getResidents() {
-
-		return residents;
+		return Collections.unmodifiableList(residents);
 	}
 
 	public List<Resident> getAssistants() {
@@ -204,7 +194,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 			if (assistant.hasTownRank("assistant"))
 				assistants.add(assistant);
 		}
-		return assistants;
+		return Collections.unmodifiableList(assistants);
 	}
 
 	@Override
@@ -1069,8 +1059,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 
 	@Override
 	public List<Resident> getOutlaws() {
-
-		return outlaws;
+		return Collections.unmodifiableList(outlaws);
 	}
 	
 	public boolean hasOutlaw (String name) {
@@ -1231,11 +1220,10 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	// Abstract to collection in case we want to change structure in the future
 	@Override
 	public Collection<PlotGroup> getObjectGroups() {
-		
 		if (plotGroups == null)
 			return null;
 		
-		return plotGroups.values();
+		return Collections.unmodifiableCollection(plotGroups.values());
 	}
 
 	// Method is inefficient compared to getting the group from name.

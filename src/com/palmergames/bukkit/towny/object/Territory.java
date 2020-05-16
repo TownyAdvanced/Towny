@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, SpawnLocation {
@@ -33,7 +34,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 
 	@Override
 	public final List<Invite> getReceivedInvites() {
-		return receivedInvites;
+		return Collections.unmodifiableList(receivedInvites);
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 
 	@Override
 	public final List<Invite> getSentInvites() {
-		return sentInvites;
+		return Collections.unmodifiableList(sentInvites);
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -130,8 +131,7 @@ public class Nation extends Territory implements ResidentList {
 	}
 
 	public List<Town> getTowns() {
-
-		return towns;
+		return Collections.unmodifiableList(towns);
 	}
 
 	public boolean isKing(Resident resident) {
@@ -581,7 +581,7 @@ public class Nation extends Territory implements ResidentList {
 	}
 	
 	public List<Invite> getSentAllyInvites() {
-		return sentAllyInvites;
+		return Collections.unmodifiableList(sentAllyInvites);
 	}
 	
 	public int getNumTownblocks() {
