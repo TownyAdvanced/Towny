@@ -12,7 +12,7 @@ import java.util.Map;
  * A variant of an account that implements
  * a checked cap on it's balance.
  */
-public class CappedAccount extends Account implements AccountObserver {
+public class CappedAccount extends Account {
 	
 	double cap;
 	
@@ -26,15 +26,5 @@ public class CappedAccount extends Account implements AccountObserver {
 			return true;
 		}
 		return !(getHoldingBalance() + amount > cap);
-	}
-
-	@Override
-	public void withdrew(Account account, double amount, String reason) {
-		
-	}
-
-	@Override
-	public void deposited(Account account, double amount, String reason) {
-
 	}
 }
