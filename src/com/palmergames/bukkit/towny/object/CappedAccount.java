@@ -1,12 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import org.bukkit.World;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A variant of an account that implements
