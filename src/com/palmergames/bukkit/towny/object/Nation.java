@@ -630,6 +630,7 @@ public class Nation extends Territory implements ResidentList {
 			}
 
 			account = new CappedAccount(accountName, world, TownySettings.getNationBankCap());
+			account.addAuditor(new NationAccountAuditor(getName()));
 		}
 
 		

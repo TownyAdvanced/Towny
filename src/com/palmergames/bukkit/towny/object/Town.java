@@ -1281,6 +1281,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 			}
 			
 			account = new CappedAccount(accountName, world, TownySettings.getTownBankCap());
+			account.addAuditor(new TownAccountAuditor(getName()));
 		}
 		
 		return account;
