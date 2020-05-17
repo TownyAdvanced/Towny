@@ -7,6 +7,10 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Used to facilitate transactions regarding money, 
  * and the storage of funds.
@@ -17,7 +21,8 @@ import org.bukkit.World;
  */
 public abstract class Account implements Nameable {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
-	private static final AccountObserver observer = new AccountAuditor();
+	private static final AccountObserver ACCOUNT_OBSERVER = new AccountAuditor();
+	private final List<AccountObserver> auditors = new ArrayList<>();
 	String name;
 	World world;
 	
@@ -29,6 +34,10 @@ public abstract class Account implements Nameable {
 	Account(String name, World world) {
 		this.name = name;
 		this.world = world;
+		
+		// ALL account transactions will route auditing data through this
+		// central auditor.
+		auditors.add(ACCOUNT_OBSERVER);
 	}
 	
 	boolean canAdd(double amount) throws EconomyException {
@@ -57,7 +66,7 @@ public abstract class Account implements Nameable {
 	 */
 	public final boolean add(double amount, String reason) throws EconomyException {
 		if (canAdd(amount) && addMoney(amount)) {
-			observer.deposited(this, amount, reason);
+			notifyAuditorsDeposit(this, amount, reason);
 			return true;
 		}
 		
@@ -77,7 +86,7 @@ public abstract class Account implements Nameable {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
 			if (canSubtract(amount) && subtractMoney(amount)) {
-				observer.withdrew(this, amount, reason);
+				notifyAuditorsWithdraw(this, amount, reason);
 				return true;
 			}
 
@@ -205,6 +214,30 @@ public abstract class Account implements Nameable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<AccountObserver> getAuditors() {
+		return Collections.unmodifiableList(auditors);
+	}
+	
+	private final void notifyAuditorsDeposit(Account account, double amount, String reason) {
+		for (AccountObserver observer : getAuditors()) {
+			observer.deposited(account, amount, reason);
+		}
+	}
+
+	private final void notifyAuditorsWithdraw(Account account, double amount, String reason) {
+		for (AccountObserver observer : getAuditors()) {
+			observer.withdrew(account, amount, reason);
+		}
+	}
+	
+	public final void addAuditor(AccountObserver auditor) {
+		auditors.add(auditor);
+	}
+	
+	public final void removeAuditor(AccountObserver auditor) {
+		auditors.remove(auditor);
 	}
 
 	private static final class TownyServerAccount extends Account {
