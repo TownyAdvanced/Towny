@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import org.bukkit.World;
@@ -11,7 +11,7 @@ public class CappedAccount extends Account {
 	
 	double cap;
 	
-	CappedAccount(String name, World world, double cap) {
+	public CappedAccount(String name, World world, double cap) {
 		super(name, world);
 		this.cap = cap;
 	}

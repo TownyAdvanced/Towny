@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.object.Account;
-import com.palmergames.bukkit.towny.object.CappedAccount;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;

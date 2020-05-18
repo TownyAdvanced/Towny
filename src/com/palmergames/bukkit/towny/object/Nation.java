@@ -15,6 +15,11 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
+import com.palmergames.bukkit.towny.object.economy.AccountObserver;
+import com.palmergames.bukkit.towny.object.economy.CappedAccount;
+import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -44,6 +49,7 @@ public class Nation extends Territory implements ResidentList {
 	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
+	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor(getName());
 
 	public Nation(String name) {
 		super(name);
@@ -630,7 +636,7 @@ public class Nation extends Territory implements ResidentList {
 			}
 
 			account = new CappedAccount(accountName, world, TownySettings.getNationBankCap());
-			account.addAuditor(new NationAccountAuditor(getName()));
+			account.setAuditor(accountAuditor);
 		}
 
 		
@@ -741,5 +747,10 @@ public class Nation extends Territory implements ResidentList {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
+	}
+
+	@Override
+	public AccountObserver getAuditor() {
+		return accountAuditor;
 	}
 }

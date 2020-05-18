@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyLogger;
 
@@ -6,18 +6,17 @@ import com.palmergames.bukkit.towny.TownyLogger;
  * A class which performs audits on ALL account transactions.
  * 
  * @author Suneet Tipirneni (Siris)
- * @see TownAccountAuditor
- * @see NationAccountAuditor
+ * @see AccountAuditor
  */
-public class AccountAuditor implements AccountObserver {
+public final class GlobalAccountObserver implements AccountObserver {
 
 	@Override
-	public void withdrew(Account account, double amount, String reason) {
+	public final void withdrew(Account account, double amount, String reason) {
 		TownyLogger.getInstance().logMoneyTransaction(account, amount, null, reason);
 	}
 
 	@Override
-	public void deposited(Account account, double amount, String reason) {
+	public final void deposited(Account account, double amount, String reason) {
 		TownyLogger.getInstance().logMoneyTransaction(account, amount, null, reason);
 	}
 }

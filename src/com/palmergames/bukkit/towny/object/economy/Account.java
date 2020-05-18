@@ -1,9 +1,12 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.EconomyHandler;
+import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
@@ -21,24 +24,28 @@ import java.util.List;
  */
 public abstract class Account implements Nameable {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
-	private static final AccountObserver ACCOUNT_OBSERVER = new AccountAuditor();
-	private final List<AccountObserver> auditors = new ArrayList<>();
+	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
+	private final List<AccountObserver> observers = new ArrayList<>();
+	private AccountAuditor auditor;
+	
 	String name;
 	World world;
 	
-	
-	Account(String name) {
+	public Account(String name) {
 		this.name = name;
+		observers.add(GLOBAL_OBSERVER);
 	}
 	
-	Account(String name, World world) {
+	public Account(String name, World world) {
 		this.name = name;
 		this.world = world;
 		
 		// ALL account transactions will route auditing data through this
 		// central auditor.
-		auditors.add(ACCOUNT_OBSERVER);
+		observers.add(GLOBAL_OBSERVER);
 	}
+	
+	// Template methods
 	
 	boolean canAdd(double amount) throws EconomyException {
 		return true;
@@ -48,11 +55,11 @@ public abstract class Account implements Nameable {
 		return !(amount > getHoldingBalance());
 	}
 	
-	private boolean addMoney(double amount) throws EconomyException {
+	private boolean addMoney(double amount) {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 	
-	private boolean subtractMoney(double amount) throws EconomyException {
+	private boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 
@@ -66,7 +73,7 @@ public abstract class Account implements Nameable {
 	 */
 	public final boolean add(double amount, String reason) throws EconomyException {
 		if (canAdd(amount) && addMoney(amount)) {
-			notifyAuditorsDeposit(this, amount, reason);
+			notifyObserversDeposit(this, amount, reason);
 			return true;
 		}
 		
@@ -86,7 +93,7 @@ public abstract class Account implements Nameable {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
 			if (canSubtract(amount) && subtractMoney(amount)) {
-				notifyAuditorsWithdraw(this, amount, reason);
+				notifyObserversWithdraw(this, amount, reason);
 				return true;
 			}
 
@@ -216,28 +223,60 @@ public abstract class Account implements Nameable {
 		this.name = name;
 	}
 
-	public List<AccountObserver> getAuditors() {
-		return Collections.unmodifiableList(auditors);
+	public List<AccountObserver> getObservers() {
+		return Collections.unmodifiableList(observers);
 	}
 	
-	private final void notifyAuditorsDeposit(Account account, double amount, String reason) {
-		for (AccountObserver observer : getAuditors()) {
+	private void notifyObserversDeposit(Account account, double amount, String reason) {
+		for (AccountObserver observer : getObservers()) {
 			observer.deposited(account, amount, reason);
 		}
 	}
 
-	private final void notifyAuditorsWithdraw(Account account, double amount, String reason) {
-		for (AccountObserver observer : getAuditors()) {
+	private void notifyObserversWithdraw(Account account, double amount, String reason) {
+		for (AccountObserver observer : getObservers()) {
 			observer.withdrew(account, amount, reason);
 		}
 	}
-	
-	public final void addAuditor(AccountObserver auditor) {
-		auditors.add(auditor);
+
+	/**
+	 * Adds an account observer that listens to account changes.
+	 * 
+	 * @param observer The observer to add.
+	 */
+	public final void addObserver(AccountObserver observer) {
+		observers.add(observer);
 	}
-	
-	public final void removeAuditor(AccountObserver auditor) {
-		auditors.remove(auditor);
+
+	/**
+	 * Removes an account observer that listens to account changes.
+	 *
+	 * @param observer The observer to remove.
+	 */
+	public final void removeObserver(AccountObserver observer) {
+		observers.remove(observer);
+	}
+
+	/**
+	 * Gets the auditor that audits this account.
+	 * 
+	 * @return The auditor tracking this account.
+	 */
+	public final AccountAuditor getAuditor() {
+		return auditor;
+	}
+
+	/**
+	 * Sets the auditor that audits this account, and
+	 * adds it as an observer.
+	 *
+	 * @param auditor The auditor to track this account.
+	 */
+	public final void setAuditor(AccountAuditor auditor) {
+		this.auditor = auditor;
+		
+		// Add the auditor to the observer list.
+		addObserver(auditor);
 	}
 
 	private static final class TownyServerAccount extends Account {

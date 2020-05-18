@@ -13,6 +13,11 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
+import com.palmergames.bukkit.towny.object.economy.AccountObserver;
+import com.palmergames.bukkit.towny.object.economy.CappedAccount;
+import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -62,6 +67,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
+	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor(getName());
 
 	public Town(String name) {
 		super(name);
@@ -1281,7 +1287,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 			}
 			
 			account = new CappedAccount(accountName, world, TownySettings.getTownBankCap());
-			account.addAuditor(new TownAccountAuditor(getName()));
+			account.setAuditor(accountAuditor);
 		}
 		
 		return account;
@@ -1393,5 +1399,10 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
+	}
+
+	@Override
+	public AccountObserver getAuditor() {
+		return accountAuditor;
 	}
 }

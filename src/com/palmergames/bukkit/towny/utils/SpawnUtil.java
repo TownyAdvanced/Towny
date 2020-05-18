@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
-import com.palmergames.bukkit.towny.object.Account;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
