@@ -13,7 +13,7 @@ import java.util.List;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockOwner extends Permissible, Iterable<TownBlock> {
+public interface TownBlockOwner extends Permissible, Iterable<TownyObject> {
 
 	/**
 	 * Gets the unmodifiable list of townblocks.
@@ -45,14 +45,4 @@ public interface TownBlockOwner extends Permissible, Iterable<TownBlock> {
 	 * @throws NotRegisteredException Thrown when the townblock given is not in the list.
 	 */
 	void removeTownBlock(TownBlock townBlock) throws NotRegisteredException;
-
-	/**
-	 * Retrieves all of the townblocks and
-	 * represents them as a iterator.
-	 * 
-	 * @return An {@code Iterator<TownBlock>}
-	 */
-	default Iterator<TownBlock> iterator() {
-		return getTownBlocks().iterator();
-	}
 }

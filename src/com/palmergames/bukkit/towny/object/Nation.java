@@ -49,7 +49,7 @@ public class Nation extends Territory implements ResidentList {
 	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
-	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor(getName());
+	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
 
 	public Nation(String name) {
 		super(name);

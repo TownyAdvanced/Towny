@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,7 +68,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor(getName());
+	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
 
 	public Town(String name) {
 		super(name);
@@ -1404,5 +1405,10 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	@Override
 	public AccountObserver getAuditor() {
 		return accountAuditor;
+	}
+
+	@Override
+	public Iterator<TownyObject> iterator() {
+		return null;
 	}
 }
