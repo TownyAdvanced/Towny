@@ -260,9 +260,10 @@ public class Siege {
 		return residentTotalTimedPointsMap;
 	}
 
-	public void increaseResidentTotalTimedPoints(List<Resident> residentsEarningTimedPoints, int timedPointsGain) {
+	public void increaseResidentTotalTimedPoints(List<Resident> residentsEarningTimedPoints, int timedPointsGainForTeam) {
+		int timedPointsGainPerIndividual = timedPointsGainForTeam / residentsEarningTimedPoints.size();
 		for(Resident resident: residentsEarningTimedPoints) {
-			int newPoints = residentTotalTimedPointsMap.get(resident) + timedPointsGain;
+			int newPoints = residentTotalTimedPointsMap.get(resident) + timedPointsGainPerIndividual;
 			residentTotalTimedPointsMap.put(resident, newPoints);
 		}
 	}
