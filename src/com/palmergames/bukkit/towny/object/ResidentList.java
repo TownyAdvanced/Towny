@@ -1,8 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.Iterator;
 import java.util.List;
 
-public interface ResidentList {
+public interface ResidentList extends Iterable<Resident> {
 	/**
 	 * Returns an unmodifiable list of residents.
 	 * 
@@ -24,4 +25,15 @@ public interface ResidentList {
 	 * @return The list of outlaws in this object.
 	 */
 	List<Resident> getOutlaws();
+
+	/**
+	 * Retrieves all of the residents and
+	 * represents them as a iterator.
+	 *
+	 * @return An {@code Iterator<Resident>}
+	 */
+	@Override
+	default Iterator<Resident> iterator() {
+		return getResidents().iterator();
+	}
 }
