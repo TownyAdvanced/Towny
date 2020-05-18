@@ -313,4 +313,22 @@ public abstract class Account implements Nameable {
 	public boolean pay(double amount, String reason) throws EconomyException {
 		return withdraw(amount, reason);
 	}
+	
+	// Legacy Compatibility Methods.
+
+	/**
+	 * @deprecated As of 0.96.11.0, use {@link #deposit(double, String)} instead.
+	 */
+	@Deprecated
+	public boolean collect(double amount, String reason) throws EconomyException {
+		return deposit(amount, reason);
+	}
+
+	/**
+	 * @deprecated As of 0.96.11.0, use {@link #withdraw(double, String)} instead.
+	 */
+	@Deprecated
+	public boolean pay(double amount, String reason) throws EconomyException {
+		return withdraw(amount, reason);
+	}
 }

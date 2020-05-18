@@ -104,7 +104,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 							currentPath += "." + line.substring(whiteSpace, index);
 							depth++;
 						} else if (whiteSpace / 2 < depth) {
-							// Path is shallower, calculate current depth from whitespace (whitespace / 2) and subtract that many levels from the currentPath
+							// Path is shallower, calculate current depth from whitespace (whitespace / 2) and withdraw that many levels from the currentPath
 							int newDepth = whiteSpace / 2;
 							for (int i = 0; i < depth - newDepth; i++) {
 								currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
