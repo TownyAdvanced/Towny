@@ -251,18 +251,16 @@ public class SiegeWarBannerControlUtil {
 				TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 			break;
 			default:
-			break;
+			return;
 		}
 
 		//Check if any residents have exceeded max timed pts/player
-		if(siege.getBannerControllingSide() != SiegeSide.NOBODY) {
-			for(Resident resident: siege.getBannerControllingResidents()) {
-				if(siege.getResidentTotalTimedPointsMap().containsKey(resident)
-					&& siege.getResidentTotalTimedPointsMap().get(resident) > TownySettings.getWarSiegeMaxTimedPointsPerPlayerPerSiege()) {
-					//Resident has exceeded max timed pts/player. Remove from banner control
-					siege.removeBannerControllingResident(resident);
-					TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("msg_siege_war_resident_exceeded_max_timed_points"), siege.getDefendingTown().getFormattedName()));
-				}
+		for(Resident resident: siege.getBannerControllingResidents()) {
+			if(siege.getResidentTotalTimedPointsMap().containsKey(resident)
+				&& siege.getResidentTotalTimedPointsMap().get(resident) > TownySettings.getWarSiegeMaxTimedPointsPerPlayerPerSiege()) {
+				//Resident has exceeded max timed pts/player. Remove from banner control
+				siege.removeBannerControllingResident(resident);
+				TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("msg_siege_war_resident_exceeded_max_timed_points"), siege.getDefendingTown().getFormattedName()));
 			}
 		}
 
@@ -279,6 +277,7 @@ public class SiegeWarBannerControlUtil {
 		}
 		if(bannerControlLost) {
 			siege.setBannerControllingSide(SiegeSide.NOBODY);
+			siege.clearBannerControllingResidents();
 		}
 	}
 }
