@@ -4601,3 +4601,5 @@ v0.92.0.11:
       name_remove_regex: '[^\P{M}a-zA-Z0-9\&._\[\]-]'
   - API: new PlotPreChangeTypeEvent, courtesy of rebstew with PR #3995.
     - Cancellable event that plugins can use to stop players from changing a plot type.
+  - Fix plot groups not showing the correct pvp setting when /plot group set perm command is used.
+    - Closes #4000. 
