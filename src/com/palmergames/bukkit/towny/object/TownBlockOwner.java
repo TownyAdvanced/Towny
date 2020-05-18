@@ -44,4 +44,14 @@ public interface TownBlockOwner extends Permissible, Nameable {
 	 * @throws NotRegisteredException Thrown when the townblock given is not in the list.
 	 */
 	void removeTownBlock(TownBlock townBlock) throws NotRegisteredException;
+
+	/**
+	 * Retrieves all of the townblocks and
+	 * represents them as a iterator.
+	 * 
+	 * @return An {@code Iterator<TownBlock>}
+	 */
+	default Iterator<TownBlock> iterator() {
+		return getTownBlocks().iterator();
+	}
 }
