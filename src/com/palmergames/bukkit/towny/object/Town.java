@@ -1406,9 +1406,4 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	public AccountObserver getAuditor() {
 		return accountAuditor;
 	}
-
-	@Override
-	public Iterator<TownyObject> iterator() {
-		return null;
-	}
 }

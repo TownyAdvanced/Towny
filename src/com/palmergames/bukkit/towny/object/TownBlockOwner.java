@@ -13,7 +13,7 @@ import java.util.List;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockOwner extends Permissible, Iterable<TownyObject> {
+public interface TownBlockOwner extends Permissible {
 
 	/**
 	 * Gets the unmodifiable list of townblocks.
