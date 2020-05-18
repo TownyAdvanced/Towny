@@ -1053,11 +1053,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-<<<<<<< Upstream, based on origin/master
 	public Collection<Resident> getOutlaws() {
-=======
-	public List<Resident> getOutlaws() {
->>>>>>> c9ed4c6 Make most objects return unmodifiable lists, this will prevent untracked and dangerous writes to objects.
 		return Collections.unmodifiableList(outlaws);
 	}
 	
@@ -1209,12 +1205,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	// Abstract to collection in case we want to change structure in the future
-<<<<<<< Upstream, based on origin/master
 	public Collection<PlotGroup> getPlotGroups() {
-=======
-	@Override
-	public Collection<PlotGroup> getObjectGroups() {
->>>>>>> c9ed4c6 Make most objects return unmodifiable lists, this will prevent untracked and dangerous writes to objects.
 		if (plotGroups == null)
 			return null;
 		

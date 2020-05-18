@@ -7,6 +7,8 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.AccountObserver;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -140,7 +142,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 		if (!TownySettings.isUsingEconomy()) {
 			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
 		}
-		if (!resident.getAccount().payTo(amount, getAccount(), "Territory - " + getName() + " deposit")) {
+		if (!resident.getAccount().payTo(amount, getAccount(), "Deposit from " + resident.getName())) {
 			throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 		}
 	}
@@ -151,5 +153,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
+	
+	public abstract AccountObserver getAuditor();
 	
 }

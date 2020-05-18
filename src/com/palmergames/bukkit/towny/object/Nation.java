@@ -751,4 +751,9 @@ public class Nation extends Government {
 	public String getNationBoard() {
 		return getBoard();
 	}
+
+	@Override
+	public AccountObserver getAuditor() {
+		return accountAuditor;
+	}
 }
