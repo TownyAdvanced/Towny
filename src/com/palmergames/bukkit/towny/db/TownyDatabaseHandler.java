@@ -725,7 +725,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				try {
 					townBalance = town.getAccount().getHoldingBalance();					
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.getAccount().add(townBalance, "Town Rename");
+						town.getAccount().deposit(townBalance, "Town Rename");
 					} 
 					town.getAccount().removeAccount();
 					
@@ -851,7 +851,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.getAccount().subtract(nationBalance, "Nation Rename");
+						nation.getAccount().withdraw(nationBalance, "Nation Rename");
 					}
 					nation.getAccount().removeAccount();
 					

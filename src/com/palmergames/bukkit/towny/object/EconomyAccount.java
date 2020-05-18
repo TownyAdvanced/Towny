@@ -98,39 +98,39 @@ public class EconomyAccount extends Account {
 		return TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
 	}
 
-	/**
-	 * When one account is paying another account(Taxes/Plot Purchasing)
-	 *
-	 * @param amount currency to be collected
-	 * @param collector recipient of transaction
-	 * @param reason memo regarding transaction
-	 * @return true if successfully payed amount to collector.
-	 * @throws EconomyException if transaction fails
-	 */
-	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
-		return payTo(amount, collector.getAccount(), reason);
-	}
-	
-	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
-		boolean payed = _payTo(amount, collector);
-		if (payed) {
-			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
-		}
-		return payed;
-	} 
-
-	private boolean _payTo(double amount, EconomyAccount collector) throws EconomyException {
-		if (_pay(amount)) {
-			if (!collector._collect(amount)) {
-				_collect(amount); //Transaction failed. Refunding amount.
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
+//	/**
+//	 * When one account is paying another account(Taxes/Plot Purchasing)
+//	 *
+//	 * @param amount currency to be collected
+//	 * @param collector recipient of transaction
+//	 * @param reason memo regarding transaction
+//	 * @return true if successfully payed amount to collector.
+//	 * @throws EconomyException if transaction fails
+//	 */
+//	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
+//		return payTo(amount, collector.getAccount(), reason);
+//	}
+//	
+//	public boolean payTo(double amount, EconomyAccount collector, String reason) throws EconomyException {
+//		boolean payed = _payTo(amount, collector);
+//		if (payed) {
+//			TownyLogger.getInstance().logMoneyTransaction(this, amount, collector, reason);
+//		}
+//		return payed;
+//	} 
+//
+//	private boolean _payTo(double amount, EconomyAccount collector) throws EconomyException {
+//		if (_pay(amount)) {
+//			if (!collector._collect(amount)) {
+//				_collect(amount); //Transaction failed. Refunding amount.
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		} else {
+//			return false;
+//		}
+//	}
 
 //	/**
 //	 * Fetch the current world for this object

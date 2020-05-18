@@ -683,7 +683,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										//Make them pay, ignoring exception because we already know they can pay.
 										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
 											try {
-												town.getAccount().subtract(TownySettings.getOutpostCost(), "Plot Set Outpost");
+												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
 											}
 										townyUniverse.getDataSource().saveTown(town);

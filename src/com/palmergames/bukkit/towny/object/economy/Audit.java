@@ -1,16 +1,15 @@
 package com.palmergames.bukkit.towny.object.economy;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
+/**
+ * An object that stores a record of when
+ * and why a transaction occurred.
+ */
 public class Audit extends Transaction {
 	
 	private final Date date;
@@ -31,23 +30,5 @@ public class Audit extends Transaction {
 
 	public String getReason() {
 		return reason;
-	}
-
-	@Override
-	public String toString() {
-
-		String pattern = "MM/dd/yy";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		
-		switch (getType()) {
-			case ADD:
-			case DEPOSIT:
-				return ChatColor.DARK_GREEN + "+" + TownyEconomyHandler.getFormattedBalance(getAmount()) + ChatColor.RESET + " - " + simpleDateFormat.format(date);
-			case SUBTRACT:
-			case WITHDRAW:
-				return ChatColor.RED + "-" + TownyEconomyHandler.getFormattedBalance(getAmount());
-		}
-		
-		return "null";
 	}
 }

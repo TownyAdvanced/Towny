@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -953,7 +952,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 				}
 			}
 			
-			getAccount().add(amount, null);
+			getAccount().deposit(amount, null);
 		}
 
 	}
@@ -1365,7 +1364,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
-			return getAccount().subtract(amount, null);
+			return getAccount().withdraw(amount, null);
 		}
 	}
 
@@ -1379,7 +1378,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().add(amount, reason);
+		return getAccount().deposit(amount, reason);
 	}
 	
 	/**

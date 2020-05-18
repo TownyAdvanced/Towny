@@ -509,7 +509,7 @@ public class Nation extends Territory implements ResidentList {
 				}
 			}
 			
-			this.getAccount().add(amount, null);
+			this.getAccount().deposit(amount, null);
 		}
 
 	}
@@ -704,7 +704,7 @@ public class Nation extends Territory implements ResidentList {
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
-		return getAccount().subtract(amount, reason);
+		return getAccount().withdraw(amount, reason);
 	}
 
 	/**
@@ -717,7 +717,7 @@ public class Nation extends Territory implements ResidentList {
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().add(amount, reason);
+		return getAccount().deposit(amount, reason);
 	}
 
 	public String getMapColorHexCode() {

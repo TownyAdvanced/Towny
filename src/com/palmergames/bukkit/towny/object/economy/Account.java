@@ -71,7 +71,7 @@ public abstract class Account implements Nameable {
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public final boolean add(double amount, String reason) throws EconomyException {
+	public final boolean deposit(double amount, String reason) throws EconomyException {
 		if (canAdd(amount) && addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
 			return true;
@@ -81,14 +81,14 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * Attempts to subtract money from the account.
+	 * Attempts to withdraw money from the account.
 	 *
-	 * @param amount The amount to subtract.
+	 * @param amount The amount to withdraw.
 	 * @param reason The reason for subtracting.
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public final boolean subtract(double amount, String reason) throws EconomyException {
+	public final boolean withdraw(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
@@ -129,10 +129,10 @@ public abstract class Account implements Nameable {
 			throw new EconomyException("Not enough money");
 		}
 		
-		if (!subtract(amount, reason)) {
+		if (!withdraw(amount, reason)) {
 			return false;
 		}
-		return collector.add(amount, reason);
+		return collector.deposit(amount, reason);
 	}
 
 	/**
@@ -157,11 +157,11 @@ public abstract class Account implements Nameable {
 		double diff = amount - balance;
 		if (diff > 0) {
 			// Adding to
-			return add(diff, reason);
+			return deposit(diff, reason);
 		} else if (balance > amount) {
 			// Subtracting from
 			diff = -diff;
-			return subtract(diff, reason);
+			return withdraw(diff, reason);
 		} else {
 			// Same amount, do nothing.
 			return true;
@@ -283,5 +283,23 @@ public abstract class Account implements Nameable {
 		TownyServerAccount() {
 			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
 		}
+	}
+	
+	// Legacy Compatibility Methods.
+
+	/**
+	 * @deprecated As of 0.96.11.0, use {@link #deposit(double, String)} instead.
+	 */
+	@Deprecated
+	public boolean collect(double amount, String reason) throws EconomyException {
+		return deposit(amount, reason);
+	}
+
+	/**
+	 * @deprecated As of 0.96.11.0, use {@link #withdraw(double, String)} instead.
+	 */
+	@Deprecated
+	public boolean pay(double amount, String reason) throws EconomyException {
+		return withdraw(amount, reason);
 	}
 }
