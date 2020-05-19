@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.type;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.SQLStringType;
@@ -77,7 +78,8 @@ public class TypeAdapter<T> {
 					return type.getColumnName() +
 						(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation + ")" : "");
 				}
-			} catch (ReflectiveOperationException Ignore) {
+			} catch (ReflectiveOperationException exception) {
+				TownyMessaging.sendErrorMsg(exception.getMessage());
 			}
 		}
 		

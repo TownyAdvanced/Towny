@@ -897,8 +897,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		updatePerms();
 	}
 	
-	public void setTown(Town town) throws AlreadyRegisteredException {
-		Validate.notNull(town);
+	public void setTown(@Nullable Town town) throws AlreadyRegisteredException {
 		if (town == null) {
 			setTownID(null);
 			

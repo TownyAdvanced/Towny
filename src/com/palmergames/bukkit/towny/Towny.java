@@ -222,8 +222,15 @@ public class Towny extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
+		Resident loadedResident = null;
+		if (TownyUniverse.getInstance().getResidents().size() > 0) {
+			loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		}
 		
-		Resident loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+		if (loadedResident == null) {
+			return;
+		}
+		
 		try {
 			loadedResident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
 		} catch (EconomyException e) {

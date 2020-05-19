@@ -646,6 +646,16 @@ public class TownyUniverse {
 		} catch (EmptyNationException ignored) {
 			// Will never get called
 		}
+		
+		// Remove residents
+		for (Resident res : town.getResidents()) {
+			try {
+				res.setTown(null);
+				res.save();
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
+		}
 
 		// Look for residents inside of this town's jail and free them
 		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {

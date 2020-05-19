@@ -54,7 +54,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Type, Field[]> cachedFields = new ConcurrentHashMap<>();
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -323,16 +322,20 @@ public abstract class DatabaseHandler {
 	 */
 	public void loadAll() {
 
-		// 1.) Load Worlds
-		loadAllWorlds();
+		// 1.) Load Residents
+		loadAllResidents();
 
-		// 2.) Load Towns
-		loadAllTowns();
-		
-		// 3. Load TownBlocks
+		// 2. Load TownBlocks
 		loadAllTownBlocks();
 
-		// 4.) Load Residents
-		loadAllResidents();
+		// 2.) Load Worlds
+		loadAllWorlds();
+
+		// 3.) Load Towns
+		loadAllTowns();
+		
+		
+
+		
 	}
 }
