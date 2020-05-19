@@ -13,11 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.economy.Account;
-import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
-import com.palmergames.bukkit.towny.object.economy.AccountObserver;
-import com.palmergames.bukkit.towny.object.economy.CappedAccount;
-import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -30,7 +25,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,7 +62,6 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
 
 	public Town(String name) {
 		super(name);
@@ -77,9 +70,7 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 
 	@Override
 	public List<TownBlock> getTownBlocks() {
-		List<TownBlock> townBlockList = new ArrayList<>();
-		townBlockList.addAll(townBlocks.values());
-		return townBlockList;
+		return Collections.unmodifiableList(new ArrayList<>(townBlocks.values()));
 	}
 
 	@Override
@@ -1275,23 +1266,21 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	}
 
 	@Override
-	public Account getAccount() {
-		if (account == null) {
-			
-			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-			World world;
-
-			if (hasWorld()) {
-				world = BukkitTools.getWorld(getHomeblockWorld().getName());
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
-			
-			account = new CappedAccount(accountName, world, TownySettings.getTownBankCap());
-			account.setAuditor(accountAuditor);
+	public double getBankCap() {
+		return TownySettings.getTownBankCap();
+	}
+	
+	public World getWorld() {
+		if (hasWorld()) {
+			return BukkitTools.getWorld(getHomeblockWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
 		}
-		
-		return account;
+	}
+
+	@Override
+	public String getEconomyPrefix() {
+		return ECONOMY_ACCOUNT_PREFIX;
 	}
 
 	@Override
@@ -1381,16 +1370,6 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	public boolean collect(double amount, String reason) throws EconomyException {
 		return getAccount().deposit(amount, reason);
 	}
-	
-	/**
-	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
-	 * 
-	 * @return The world this town resides in.
-	 */
-	@Deprecated
-	public TownyWorld getWorld() {
-		return getHomeblockWorld();
-	}
 
 	/**
 	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
@@ -1400,10 +1379,5 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
-	}
-
-	@Override
-	public AccountObserver getAuditor() {
-		return accountAuditor;
 	}
 }

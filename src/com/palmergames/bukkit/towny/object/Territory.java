@@ -8,15 +8,21 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.AccountObserver;
+import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
+import com.palmergames.bukkit.towny.object.economy.CappedAccount;
+import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
+import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Territory extends TownyObject implements EconomyHandler, ResidentList, TownyInviter, SpawnLocation {
+public abstract class Territory extends TownyObject implements BankEconomyHandler, ResidentList, TownyInviter, SpawnLocation {
 	
 	protected Account account;
 	protected Location spawn;
@@ -29,6 +35,7 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 	private long registered;
 	private double spawnCost;
 	protected double taxes = -1;
+	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
 	
 	protected Territory(String name) {
 		super(name);
@@ -147,13 +154,24 @@ public abstract class Territory extends TownyObject implements EconomyHandler, R
 		}
 	}
 
+	@Override
+	public Account getAccount() {
+		if (account == null) {
+			String accountName = StringMgmt.trimMaxLength(getEconomyPrefix() + getName(), 32);
+			World world = getWorld();
+			account = new CappedAccount(accountName, world, getBankCap());
+			account.setAuditor(accountAuditor);
+		}
+
+		return account;
+	}
+
 	public abstract void setTaxes(double taxes);
+	public abstract World getWorld();
 	
 	public double getTaxes() {
 		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
-	
-	public abstract AccountObserver getAuditor();
 	
 }

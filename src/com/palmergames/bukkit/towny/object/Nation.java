@@ -15,10 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
-import com.palmergames.bukkit.towny.object.economy.AccountObserver;
-import com.palmergames.bukkit.towny.object.economy.CappedAccount;
 import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -622,25 +619,22 @@ public class Nation extends Territory implements ResidentList {
 	}
 
 	@Override
-	public Account getAccount() {
-
-		if (account == null) {
-
-			String accountName = StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-			World world;
-
-			if (hasCapital() && getCapital().hasWorld()) {
-				world = BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
-
-			account = new CappedAccount(accountName, world, TownySettings.getNationBankCap());
-			account.setAuditor(accountAuditor);
+	public World getWorld() {
+		if (hasCapital() && getCapital().hasWorld()) {
+			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
 		}
+	}
 
-		
-		return account;
+	@Override
+	public String getEconomyPrefix() {
+		return ECONOMY_ACCOUNT_PREFIX;
+	}
+
+	@Override
+	public double getBankCap() {
+		return TownySettings.getNationBankCap();
 	}
 
 	/**
@@ -747,10 +741,5 @@ public class Nation extends Territory implements ResidentList {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
-	}
-
-	@Override
-	public AccountObserver getAuditor() {
-		return accountAuditor;
 	}
 }
