@@ -491,13 +491,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_NEW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				boolean noCharge = TownySettings.getNewTownPrice() == 0.0 || !TownySettings.isUsingEconomy();
 
 				if (split.length == 1) {
 					throw new TownyException(TownySettings.getLangString("msg_specify_name"));
 				} else if (split.length >= 2) {
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String townName = String.join("_", newSplit);
-					newTown(player, townName, player.getName(), false);			
+					
+					newTown(player, townName, player.getName(), noCharge);
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {
@@ -2505,7 +2508,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
-			
+
 			// If the town isn't free to make, send a confirmation.
 			if (!noCharge && TownySettings.isUsingEconomy()) { 
 				// Test if the resident can afford the town.

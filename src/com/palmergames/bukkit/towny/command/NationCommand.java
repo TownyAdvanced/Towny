@@ -548,9 +548,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!resident.isMayor() && !resident.getTown().hasAssistant(resident))
 						throw new TownyException(TownySettings.getLangString("msg_peasant_right"));
 					
+					boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownySettings.isUsingEconomy();
+					
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String nationName = String.join("_", newSplit);
-					newNation(player, nationName, resident.getTown().getName(), false);
+					newNation(player, nationName, resident.getTown().getName(), noCharge);
 
 				}
 			} else if (split[0].equalsIgnoreCase("join")) {

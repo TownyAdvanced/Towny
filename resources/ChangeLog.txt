@@ -4583,3 +4583,23 @@ v0.92.0.11:
     - Default value changed from false to true.
     - Will no affect existing configs.
     - New config files will have taxpercentage on by default, which means new towns will start with taxpercent enabled.
+  - Fix regression in DisablePlayerTrampling which prevented crop trampling being prevented.
+0.96.1.11:
+  - Fix case in TownyPlayerListener that could result in an NPE.
+    - Closes #4002.
+  - russian.yml updated to 0.83 courtesy of Egor33345.
+  - Fix cost confirmation showing when new town or new nation prices are set to 0.
+  - zh-tw.yml updated by shou692199 with PR #3999.
+  - Allow only language unicode, courtesy of Siris with PR #3943.
+    - Stop players using emojis in their town and nation names. 
+    - New Configs will have the following regex, which you can add manually or have Towny add it by itself by removing the regex section of your config.yml.
+    - New Default:
+    regex:
+      name_filter_regex: '[\\\/]'
+      name_check_regex: ^[\p{L}a-zA-Z0-9._\[\]-]*$
+      string_check_regex: ^[a-zA-Z0-9 \s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
+      name_remove_regex: '[^\P{M}a-zA-Z0-9\&._\[\]-]'
+  - API: new PlotPreChangeTypeEvent, courtesy of rebstew with PR #3995.
+    - Cancellable event that plugins can use to stop players from changing a plot type.
+  - Fix plot groups not showing the correct pvp setting when /plot group set perm command is used.
+    - Closes #4000. 

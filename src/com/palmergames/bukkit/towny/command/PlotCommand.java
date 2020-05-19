@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
+import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -32,6 +33,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -700,14 +702,28 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 								return true;
 							}
-						} 
-
-						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
-
-						setPlotType(resident, worldCoord, split[0]);
-
-						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+						}
 						
+						try {
+							TownBlockType townBlockType = TownBlockType.lookup(split[0]);
+
+							if (townBlockType == null)
+								throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+							
+							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
+							BukkitTools.getPluginManager().callEvent(preEvent);
+
+							if (!preEvent.isCancelled()) {
+								setPlotType(resident, townBlock.getWorldCoord(), split[0]);
+								player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+							} else {
+								player.sendMessage(preEvent.getCancelMessage());
+							}
+						} catch (NotRegisteredException nre) {
+							player.sendMessage(TownySettings.getLangString("msg_err_not_part_town"));
+						} catch (TownyException te){
+							player.sendMessage(te.getLocalizedMessage());
+						}
 
 					} else {
 
@@ -1595,7 +1611,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((!perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
 				};
 

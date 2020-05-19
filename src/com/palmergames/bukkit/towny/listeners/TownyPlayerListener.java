@@ -258,7 +258,7 @@ public class TownyPlayerListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			World = townyUniverse.getWorld(block.getLocation().getWorld().getUID());
+			World = townyUniverse.getWorld(event.getPlayer().getLocation().getWorld().getUID());
 			if (!World.isUsingTowny())
 				return;
 
