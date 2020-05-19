@@ -317,7 +317,7 @@ public abstract class Account implements Nameable {
 	// Legacy Compatibility Methods.
 
 	/**
-	 * @deprecated As of 0.96.11.0, use {@link #deposit(double, String)} instead.
+	 * @deprecated As of 0.96.1.11, use {@link #deposit(double, String)} instead.
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
@@ -325,7 +325,7 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * @deprecated As of 0.96.11.0, use {@link #withdraw(double, String)} instead.
+	 * @deprecated As of 0.96.1.11, use {@link #withdraw(double, String)} instead.
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
