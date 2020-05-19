@@ -277,7 +277,7 @@ public class PlayerCacheUtil {
 						if(TownySettings.getWarSiegeEnabled()
 							&& TownySettings.getNationZonesWarDisables()
 							&& nearestTown.hasSiege()
-							&& nearestTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)	{
+							&& nearestTown.getSiege().getStatus().isActive())	{
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
 
@@ -468,10 +468,10 @@ public class PlayerCacheUtil {
 							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
 							Nation nearestNation = nearestTown.getNation();
 
-							//During an in-progress siege, nobody can alter the nation zone
+							//During an active siege, nobody can alter the nation zone
 							if(TownySettings.getWarSiegeEnabled()
 								&& nearestTown.hasSiege()
-								&& nearestTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS ) {
+								&& nearestTown.getSiege().getStatus().isActive()) {
 								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_nation_zone_this_area_protected_but_besieged"), pos.getTownyWorld().getUnclaimedZoneName(), nearestNation.getName()));
 								return false;
 							}

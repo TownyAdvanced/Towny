@@ -783,7 +783,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public List<Siege> getActiveAttackSieges() {
 		List<Siege> result = new ArrayList<>();
 		for(Siege siege: sieges) {
-			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			if(siege.getStatus().isActive()) {
 				result.add(siege);
 			}
 		}
@@ -796,7 +796,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			if(town == townToExclude)
 				continue;
 
-			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+			if(town.hasSiege() && town.getSiege().getStatus().isActive()) {
 				result.add(town.getSiege());
 			}
 		}
@@ -806,7 +806,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public int getNumActiveAttackSieges() {
 		int result = 0;
 		for(Siege siege: sieges) {
-			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) 
+			if(siege.getStatus().isActive()) 
 				result++;
 		}
 		return result;
@@ -814,7 +814,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public boolean isNationAttackingTown(Town town) {
 		return town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+				&& town.getSiege().getStatus().isActive()
 				&& town.getSiege().getAttackingNation() == this;
 	}
 

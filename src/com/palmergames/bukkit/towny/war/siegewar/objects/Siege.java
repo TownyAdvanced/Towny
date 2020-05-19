@@ -149,11 +149,11 @@ public class Siege {
 		return System.currentTimeMillis() - startTime;
 	}
 
-	public long getTimeUntilSurrenderIsAllowedMillis() {
+	public long getTimeUntilSurrenderConfirmationMillis() {
 		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
 
-	public long getTimeUntilAbandonIsAllowedMillis() {
+	public long getTimeUntilAbandonConfirmationMillis() {
 		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
 
@@ -283,4 +283,15 @@ public class Siege {
 	public void setAttackerHasLowestPopulation(boolean attackerHasLowestPopulation) {
 		this.attackerHasLowestPopulation = attackerHasLowestPopulation;
 	}
+
+	public String getFormattedTimeUntilDefenderSurrender() {
+		double timeMillis = (TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
+		return TimeMgmt.getFormattedTimeValue(timeMillis);
+	}
+
+	public String getFormattedTimeUntilAttackerAbandon() {
+		double timeMillis = (TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
+		return TimeMgmt.getFormattedTimeValue(timeMillis);
+	}
+
 }

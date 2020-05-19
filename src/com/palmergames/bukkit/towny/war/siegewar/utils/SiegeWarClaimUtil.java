@@ -27,7 +27,7 @@ public class SiegeWarClaimUtil {
 		//If the claimer's town is under siege, they cannot claim any land
 		if (TownySettings.getWarSiegeBesiegedTownClaimingDisabled()
 			&& town.hasSiege()
-			&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+			&& town.getSiege().getStatus().isActive()) {
 			throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_claim"));
 		}
 
@@ -39,7 +39,7 @@ public class SiegeWarClaimUtil {
 			int claimDisableDistance = TownySettings.getWarSiegeClaimDisableDistanceBlocks();
 			for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 				try {
-					if (siege.getStatus() == SiegeStatus.IN_PROGRESS && siege.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
+					if (siege.getStatus().isActive() && siege.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
 						nearActiveSiegeZone = true;
 						break;
 					}

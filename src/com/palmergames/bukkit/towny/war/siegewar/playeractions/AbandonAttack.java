@@ -56,13 +56,6 @@ public class AbandonAttack {
             if(siege.getAttackingNation() != townOfResident.getNation())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
-			long timeUntilAbandonIsAllowedMillis = siege.getTimeUntilAbandonIsAllowedMillis();
-			if(timeUntilAbandonIsAllowedMillis > 0) {
-				String message = String.format(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_yet"),
-					TimeMgmt.getFormattedTimeValue(timeUntilAbandonIsAllowedMillis));
-				throw new TownyException(message);
-			}
-
 			attackerAbandon(siege);
 
         } catch (TownyException x) {
@@ -73,13 +66,25 @@ public class AbandonAttack {
     }
 
     private static void attackerAbandon(Siege siege) {
-		SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
-    	
-		SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
+		long timeUntilOfficialAbandon = siege.getTimeUntilAbandonConfirmationMillis();
 
-		TownyMessaging.sendGlobalMessage(
-			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
-				siege.getAttackingNation().getFormattedName(),
-				siege.getDefendingTown().getFormattedName()));
+		if(timeUntilOfficialAbandon > 0) {
+			//Pending abandon
+			siege.setStatus(SiegeStatus.PENDING_ATTACKER_ABANDON);
+			TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+			TownyMessaging.sendGlobalMessage(
+				String.format(TownySettings.getLangString("msg_siege_war_pending_attacker_abandon"),
+					siege.getAttackingNation().getFormattedName(),
+					siege.getDefendingTown().getFormattedName(),
+					TimeMgmt.getFormattedTimeValue(timeUntilOfficialAbandon)));
+		} else {
+			//Immediate abandon
+			SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
+			SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
+			TownyMessaging.sendGlobalMessage(
+				String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
+					siege.getAttackingNation().getFormattedName(),
+					siege.getDefendingTown().getFormattedName()));
+		}
 	}
 }

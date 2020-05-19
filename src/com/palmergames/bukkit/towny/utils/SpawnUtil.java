@@ -109,7 +109,7 @@ public class SpawnUtil {
 				&& resident.hasTown()
 				&& resident.getTown().hasNation()
 				&& town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+				&& town.getSiege().getStatus().isActive()
  				&& 	(
  						resident.getTown().getNation() == town.getSiege().getAttackingNation()
 				    	|| 

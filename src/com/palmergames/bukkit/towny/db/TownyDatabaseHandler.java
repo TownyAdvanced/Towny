@@ -642,8 +642,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			toSave.add(siege.getDefendingTown());  //Prepare to save town
 			siege.getDefendingTown().setSiege(null); //Remove siege from town
 
-			//If the siege was in progress, initiate siege immunity for the town
-			if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			//If the siege was active, initiate siege immunity for the town
+			if (siege.getStatus().isActive()) {
 				siege.setActualEndTime(System.currentTimeMillis());
 				SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
 			}

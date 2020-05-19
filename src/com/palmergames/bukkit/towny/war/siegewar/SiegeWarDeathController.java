@@ -56,7 +56,7 @@ public class SiegeWarDeathController {
 
 			//If resident was a defending guard, award siege points
 			if(deadResidentTown.hasSiege()
-				&& deadResidentTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
+				&& deadResidentTown.getSiege().getStatus().isActive()
 				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
 			) {
 				boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
@@ -80,7 +80,7 @@ public class SiegeWarDeathController {
 
 					try {
 						if (siege.getDefendingTown().hasNation()
-							&& siege.getStatus() == SiegeStatus.IN_PROGRESS
+							&& siege.getStatus().isActive()
 							&& (deadResidentTown.getNation() == siege.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siege.getDefendingTown().getNation()))
 						) {
 							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
@@ -114,7 +114,7 @@ public class SiegeWarDeathController {
 				for (Siege siege : universe.getDataSource().getSieges()) {
 
 					try {
-						if (siege.getStatus() == SiegeStatus.IN_PROGRESS
+						if (siege.getStatus().isActive()
 							&& (deadResidentTown.getNation() == siege.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siege.getAttackingNation()))
 						) {
 							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(

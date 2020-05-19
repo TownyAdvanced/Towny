@@ -376,7 +376,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 			&& siege != null
-			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			&& siege.getStatus().isActive()) {
 			return true;
 		}
 
@@ -406,7 +406,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
 			&& !(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
 			&& siege != null
-			&& siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			&& siege.getStatus().isActive()) {
 			return true;
 		}
 
@@ -1071,7 +1071,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 			&& hasSiege()
-			&& getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+			&& getSiege().getStatus().isActive())
 		{
 			return false;
 		}
@@ -1406,7 +1406,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isSiegeImmunityActive() {
-		if(hasSiege() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
+		if(hasSiege() && siege.getStatus().isActive())
 			return false; //Cooldown always off until the siege has finished
 
 		if(System.currentTimeMillis() < siegeImmunityEndTime) {

@@ -1580,7 +1580,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if(TownySettings.getWarSiegeEnabled()
 					&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 					&& town.hasSiege()
-					&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+					&& town.getSiege().getStatus().isActive())
 				{
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_open_off"));
 				}
@@ -1756,7 +1756,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
 				&& town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
+				&& town.getSiege().getStatus().isActive())  {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_explosions"));
 			}
 		}
@@ -1773,7 +1773,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 				&& town.hasSiege()
-				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)  {
+				&& town.getSiege().getStatus().isActive())  {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_pvp"));
 			}
 		}
@@ -3275,7 +3275,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			&& TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 			&& town.hasSiege()
-			&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+			&& town.getSiege().getStatus().isActive())
 		{
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_siege_besieged_town_cannot_recruit"));
 			return;

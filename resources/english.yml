@@ -1151,7 +1151,9 @@ msg_siege_war_town_leave_nation: '&6[War]&b Siege on %s > A town left a nation w
 msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully driven off all attacking armies. The siege has failed!'
 msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s. The siege is over!'
 msg_siege_war_attacker_abandon: '&6[War]&b An army belonging to %s has abandoned its attack on %s. The defenders are victorious!'
-msg_siege_war_town_surrender: '&6[War]&b %s has surrendered to an army belonging to %s. The siege is over!'
+msg_siege_war_pending_attacker_abandon: '&6[War]&b An army belonging to %s has abandoned its attack on %s. Defender victory will be confirmed in %s!'
+msg_siege_war_town_surrender: '&6[War]&b %s has surrendered to an army belonging to %s. The attackers are victorious!'
+msg_siege_war_pending_town_surrender: '&6[War]&b %s has surrendered to an army belonging to %s. Attacker victory will be confirmed in %s!'
 msg_siege_war_neutral_town_captured: '&6[War]&b %s has been captured by %s!'
 msg_siege_war_nation_town_captured: '&6[War]&b %s, previously belonging to %s, has been captured by %s!'
 msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered of %s by %s!'
@@ -1203,7 +1205,6 @@ msg_err_siege_war_nation_has_too_many_active_siege_attacks: '&6[War]&c Your nati
 msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks: '&6[War]&c You cannot abandon because there are no active siege banners nearby.'
 msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon because your nation is not attacking in this area.'
 msg_err_siege_war_cannot_abandon_siege_over: '&6[War]&c You cannot abandon because the siege is over.'
-msg_err_siege_war_cannot_abandon_yet: '&6[War]&c You cannot abandon for another %s.'
 #Invade
 msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot capture your own town.'
 msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot capture the town unless your nation is victorious in the siege."
@@ -1218,7 +1219,6 @@ msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been 
 #Surrender
 msg_err_siege_war_cannot_surrender_not_your_town: '&6[War]&c You cannot surrender because this is not your town.'
 msg_err_siege_war_cannot_surrender_siege_finished: '&6[War]&c You cannot surrender because the siege is over.'
-msg_err_siege_war_cannot_surrender_yet: '&6[War]&c You cannot surrender for another %s.'
 #Block change
 msg_err_siege_war_cannot_destroy_siege_banner: "&6[War]&c While the siege is in progress you cannot destroy the siege banner or the block it is attached to."
 msg_err_siege_war_nation_zone_this_area_protected_but_besieged: '&6[War]&c This part of the %s is under the protection of %s, and also cannot be altered while the nearby town is under siege.'
@@ -1234,9 +1234,12 @@ status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
 status_town_siege_status: '&2Siege: &a%s'
 status_town_siege_status_in_progress: 'In Progress'
 status_town_siege_status_attacker_win: 'Attacker Victory - %s'
-status_town_siege_status_attacker_abandon: 'Attacker Retreat'
 status_town_siege_status_defender_win: 'Town Victory'
+status_town_siege_status_attacker_abandon: 'Attacker Retreat'
 status_town_siege_status_defender_surrender: 'Town Surrender - to %s'
+status_town_siege_status_pending_attacker_abandon: 'Attacker Retreat Pending, in %s'
+status_town_siege_status_pending_defender_surrender: 'Town Surrender Pending, in %s'
+
 status_town_siege_status_besieger: '&2 > Besieger: &a%s {%s}'
 status_town_siege_status_banner_xyz: '&2 > Banner XYZ: &a%d,%d,%d'
 status_town_siege_immunity_timer: '&2 > Immunity Timer: &a%s'

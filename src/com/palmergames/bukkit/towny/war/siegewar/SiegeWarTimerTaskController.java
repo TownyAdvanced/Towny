@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBannerControlUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDynmapUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
+import com.palmergames.util.TimeMgmt;
 
 /**
  * This class intercepts siege related instructions coming from timer tasks.
@@ -39,30 +41,40 @@ public class SiegeWarTimerTaskController {
 	private static void evaluateTimedSiegeOutcome(Siege siege) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 
-		//Process active siege
-		if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+		switch(siege.getStatus()) {
+			case IN_PROGRESS:
+				//If scheduled end time has arrived, choose winner
+				if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
+					TownyObject siegeWinner = SiegeWarPointsUtil.calculateSiegeWinner(siege);
+					if (siegeWinner instanceof Town) {
+						DefenderWin.defenderWin(siege, (Town) siegeWinner);
+					} else {
+						AttackerWin.attackerWin(siege, (Nation) siegeWinner);
+					}
 
-			//If scheduled end time has arrived, choose winner
-			if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
-				TownyObject siegeWinner = SiegeWarPointsUtil.calculateSiegeWinner(siege);
-				if (siegeWinner instanceof Town) {
-					DefenderWin.defenderWin(siege, (Town) siegeWinner);
-				} else {
-					AttackerWin.attackerWin(siege, (Nation) siegeWinner);
+					//Save changes to db
+					universe.getDataSource().saveTown(siege.getDefendingTown());
 				}
+				break;
 
-				//Save changes to db
-				com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
-				townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
-			}
+			case PENDING_DEFENDER_SURRENDER:
+				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
+					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_SURRENDER);
+				}
+				break;
 
-		} else {
+			case PENDING_ATTACKER_ABANDON:
+				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
+					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
+				}
+				break;
 
-			//Siege is finished.
-			//Wait for siege immunity timer to end then delete siege
-			if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
-				universe.getDataSource().removeSiege(siege);
-			}
+			default:
+				//Siege is inactive
+				//Wait for siege immunity timer to end then delete siege
+				if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
+					universe.getDataSource().removeSiege(siege);
+				}
 		}
 	}
 

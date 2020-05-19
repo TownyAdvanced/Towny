@@ -502,6 +502,12 @@ public class TownyFormatter {
 							out.add(siegeStatus);
 							out.add(siegeImmunityTimer);
 						break;
+
+						case PENDING_DEFENDER_SURRENDER:
+						case PENDING_ATTACKER_ABANDON:
+							siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+							out.add(siegeStatus);
+						break;
 					}
 				} else {
 					if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
@@ -655,6 +661,10 @@ public class TownyFormatter {
 				return TownySettings.getLangString("status_town_siege_status_defender_win");
 			case ATTACKER_ABANDON:
 				return TownySettings.getLangString("status_town_siege_status_attacker_abandon");
+			case PENDING_DEFENDER_SURRENDER:
+				return String.format(TownySettings.getLangString("status_town_siege_status_pending_defender_surrender"), siege.getFormattedTimeUntilDefenderSurrender());
+			case PENDING_ATTACKER_ABANDON:
+				return String.format(TownySettings.getLangString("status_town_siege_status_pending_attacker_abandon"), siege.getFormattedTimeUntilAttackerAbandon());
 			default:
 				return "???";
 		}

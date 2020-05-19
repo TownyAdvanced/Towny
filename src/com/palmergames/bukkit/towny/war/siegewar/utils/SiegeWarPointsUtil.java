@@ -147,7 +147,7 @@ public class SiegeWarPointsUtil {
 													  Resident resident,
 													  String unformattedErrorMessage) {
 
-		if(!(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS))
+		if(!(town.hasSiege() && town.getSiege().getStatus().isActive()))
 			return false;
 
 		TownyUniverse universe = TownyUniverse.getInstance();

@@ -68,7 +68,7 @@ public class AttackTown {
             if (defendingTown.isSiegeImmunityActive())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_siege_immunity"));
 
-			if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+			if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_join_siege"));
 
             if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.getAccount().canPayFromHoldings(defendingTown.getSiegeCost()))

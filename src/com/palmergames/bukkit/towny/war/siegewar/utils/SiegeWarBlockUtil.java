@@ -126,7 +126,7 @@ public class SiegeWarBlockUtil {
 			TownyUniverse universe = TownyUniverse.getInstance();
 			for (Siege siege : universe.getDataSource().getSieges()) {
 
-				if (siege.getStatus() != SiegeStatus.IN_PROGRESS) {
+				if (!siege.getStatus().isActive()) {
 					continue;
 				}
 
