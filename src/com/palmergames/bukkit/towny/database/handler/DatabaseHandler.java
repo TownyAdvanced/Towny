@@ -328,14 +328,11 @@ public abstract class DatabaseHandler {
 		// 2. Load TownBlocks
 		loadAllTownBlocks();
 
-		// 2.) Load Worlds
-		loadAllWorlds();
-
 		// 3.) Load Towns
 		loadAllTowns();
-		
-		
 
+		// 4.) Load Worlds
+		loadAllWorlds();
 		
 	}
 }
