@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -39,6 +40,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 
@@ -86,12 +88,16 @@ public class TownyBlockListener implements Listener {
 				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 				event.setCancelled(true);
+				if(TownySettings.isBlockGlitchingPreventionEnabled())
+					PaperLib.teleportAsync(player, cache.getLastLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
 			}
 			return;
 		}
 
 		event.setCancelled(true);
+		if(TownySettings.isBlockGlitchingPreventionEnabled())
+			PaperLib.teleportAsync(player, cache.getLastLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
 		/* 
 		 * display any error recorded for this plot
@@ -154,19 +160,25 @@ public class TownyBlockListener implements Listener {
 
 				event.setBuild(false);
 				event.setCancelled(true);
+				if(TownySettings.isBlockGlitchingPreventionEnabled())
+					PaperLib.teleportAsync(player, cache.getLastLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-			// Event War piggy backing on flag war's EditableMaterialInWarZone 
+				// Event War piggy backing on flag war's EditableMaterialInWarZone 
 			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
 					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
 					event.setCancelled(true);
+					if(TownySettings.isBlockGlitchingPreventionEnabled())
+						PaperLib.teleportAsync(player, cache.getLastLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
 				}
 				return;
 			} else {
 				event.setBuild(false);
 				event.setCancelled(true);
+				if(TownySettings.isBlockGlitchingPreventionEnabled())
+					PaperLib.teleportAsync(player, cache.getLastLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 			}
 
 			/* 

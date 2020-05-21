@@ -3251,4 +3251,8 @@ public class TownySettings {
 	public static double getWarSiegeMaxPopulationBasedPointBoost() {
 		return getDouble(ConfigNodes.WAR_SIEGE_MAX_POPULATION_BASED_POINTS_BOOST);
 	}
+
+	public static boolean isBlockGlitchingPreventionEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED);
+	}
 }

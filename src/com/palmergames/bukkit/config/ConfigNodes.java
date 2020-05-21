@@ -2306,7 +2306,17 @@ public enum ConfigNodes {
 			"war.common.post_respawn_peacefulness.duration_seconds",
 			"40",
 			"# This value determines the minimum duration after spawning in which a player is marked peaceful.",
-			"# The value will not be this precise in practice, but limited by the short timer tick interval.");
+			"# The value will not be this precise in practice, but limited by the short timer tick interval."),
+
+	//Block glitching prevention
+	WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED(
+			"war.common.block_glitching_prevention.enabled",
+			"true",
+			"# If this value is true, then block glitching is prevented.",
+			"# Block glitching refers to the practice of exploting lag to",
+			"# A. Quickly place_blocks in an otherwise perm-protected plot, to get over walls, or",
+			"# B. Quickly destroy blocks in an otherwise perm-protected plot, to get through walls.",
+			"# If the value is true, then the lag is used against the exploiter, by 'rubber banding' them back to the cached pre-block-interaction player position.");
 
 	private final String Root;
 	private final String Default;
