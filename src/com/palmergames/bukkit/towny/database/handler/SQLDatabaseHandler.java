@@ -351,7 +351,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				obj = objConstructor.newInstance(null);
 			} catch (ReflectiveOperationException e) {
 				TownyMessaging.sendErrorMsg("Unable to construct instance of " + fkAnnotation.reference().getName() + " for ForeignKey constraint!");
-				e.printStackTrace();;
+				e.printStackTrace();
 				return "";
 			}
 

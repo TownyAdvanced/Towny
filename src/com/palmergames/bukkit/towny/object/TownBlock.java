@@ -482,8 +482,8 @@ public class TownBlock extends TownyObject {
 	}
 
 	@Override
-	public File getSavePath() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/townblocks/" + getUniqueIdentifier() + ".txt");
+	public File getSaveDirectory() {
+		return new File(Towny.getPlugin().getDataFolder() + "/data/townblocks/");
 	}
 
 	@Override

@@ -678,7 +678,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public void loadNewTown(Town town) {
-		getDatabaseHandler().load(new File(town.getSavePath() + "/" + town.getName() + ".txt"), Town.class);
+		getDatabaseHandler().load(new File(town.getSaveDirectory() + "/" + town.getName() + ".txt"), Town.class);
 		TownyUniverse.getInstance().getTownsMap().put(town.getName(), town);
 	}
 	

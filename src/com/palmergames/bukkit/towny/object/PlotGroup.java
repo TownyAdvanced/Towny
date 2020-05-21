@@ -148,7 +148,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Saveable {
 	}
 
 	@Override
-	public File getSavePath() {
+	public File getSaveDirectory() {
 		return null;
 	}
 

@@ -882,8 +882,8 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	@Override
-	public File getSavePath() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/nations");
+	public File getSaveDirectory() {
+		return new File(Towny.getPlugin().getDataFolder() + "/data/nations/");
 	}
 
 	@Override

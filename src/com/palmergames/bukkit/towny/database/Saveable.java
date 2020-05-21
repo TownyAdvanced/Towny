@@ -16,7 +16,7 @@ public interface Saveable extends Nameable, Identifiable, Changed {
 	 * 
 	 * @return The path of the file.
 	 */
-	File getSavePath();
+	File getSaveDirectory();
 
 	/**
 	 * Gets the table for which this object will be saved in for SQL.

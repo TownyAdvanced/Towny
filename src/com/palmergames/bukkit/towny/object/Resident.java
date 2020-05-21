@@ -874,7 +874,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public File getSavePath() {
+	public File getSaveDirectory() {
 		return new File(Towny.getPlugin().getDataFolder() + "/data/residents/" + getUniqueIdentifier() + ".txt");
 	}
 

@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class SQLHandler {
 	
+	@FunctionalInterface
 	public interface ResultSetConsumer {
 		void accept(ResultSet rs) throws SQLException;
 	}
