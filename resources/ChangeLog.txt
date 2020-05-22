@@ -4603,3 +4603,4 @@ v0.92.0.11:
     - Cancellable event that plugins can use to stop players from changing a plot type.
   - Fix plot groups not showing the correct pvp setting when /plot group set perm command is used.
     - Closes #4000. 
+  - Fix getTownBlockStatus that affect Citizens2 NPCs from displaying "Failed to fetch resident: name" in the log.

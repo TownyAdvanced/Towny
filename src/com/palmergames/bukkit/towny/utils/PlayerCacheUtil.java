@@ -22,6 +22,8 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 
+import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -311,12 +313,19 @@ public class PlayerCacheUtil {
 		/*
 		 * Find the resident data for this player.
 		 */
-		Resident resident;
+		Resident resident = null;
 		try {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (TownyException e) {
-			System.out.print("Failed to fetch resident: " + player.getName());
-			return TownBlockStatus.NOT_REGISTERED;
+			// Check if entity is a Citizens NPC
+			if (plugin.isCitizens2()) {
+				if (CitizensAPI.getNPCRegistry().isNPC(player))
+					return TownBlockStatus.NOT_REGISTERED;
+			} else {
+				// If not an NPC then there is likely some sort of problem that should be logged.
+				System.out.print("Failed to fetch resident: " + player.getName());
+				return TownBlockStatus.NOT_REGISTERED;
+			}
 		}
 
 		try {
