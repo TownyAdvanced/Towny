@@ -2907,6 +2907,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
 	}
 
+	public static boolean isBlockGlitchingPreventionEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED);
+	}
+
 	public static Map<String,String> getNationColorsMap() {
 		List<String> nationColorsList = getStrArr(ConfigNodes.GNATION_SETTINGS_ALLOWED_NATION_COLORS);
 		Map<String,String> nationColorsMap = new HashMap<>();
