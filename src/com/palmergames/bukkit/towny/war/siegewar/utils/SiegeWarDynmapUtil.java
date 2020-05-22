@@ -16,7 +16,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class SiegeWarDynmapUtil {
 
 	public static String TACTICAL_INVISIBILITY_METADATA_ID = "tacticallyInvisible";
-
+	public static FixedMetadataValue TACTICAL_INVISIBILITY_FIXED_METADATA_VALUE = new FixedMetadataValue(Towny.getPlugin(), true);
+	
 	/**
 	 * Evaluate players to see if they are 'tactically' invisible
 	 * 
@@ -28,7 +29,6 @@ public class SiegeWarDynmapUtil {
 	 */
 	public static void evaluatePlayerTacticalInvisibility() {
 		TownyUniverse universe = TownyUniverse.getInstance();
-		Towny plugin = Towny.getPlugin();
 		boolean invisibleOnDynmap = false;
 
 		for(Player player: BukkitTools.getOnlinePlayers()) {
@@ -55,11 +55,11 @@ public class SiegeWarDynmapUtil {
 
 				if(invisibleOnDynmap) {
 					if(!player.hasMetadata(TACTICAL_INVISIBILITY_METADATA_ID)) {
-						player.setMetadata(TACTICAL_INVISIBILITY_METADATA_ID, new FixedMetadataValue(plugin, true));
+						player.setMetadata(TACTICAL_INVISIBILITY_METADATA_ID, TACTICAL_INVISIBILITY_FIXED_METADATA_VALUE);
 					}
 				} else {
 					if (player.hasMetadata(TACTICAL_INVISIBILITY_METADATA_ID)) {
-						player.removeMetadata(TACTICAL_INVISIBILITY_METADATA_ID, plugin);
+						player.removeMetadata(TACTICAL_INVISIBILITY_METADATA_ID, Towny.getPlugin());
 					}
 				}
 
