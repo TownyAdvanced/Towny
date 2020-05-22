@@ -29,11 +29,14 @@ public class SiegeWarDynmapUtil {
 	 */
 	public static void evaluatePlayerTacticalInvisibility() {
 		TownyUniverse universe = TownyUniverse.getInstance();
-		boolean invisibleOnDynmap = false;
+		boolean invisibleOnDynmap;
 
 		for(Player player: BukkitTools.getOnlinePlayers()) {
 			try {
-				//Check if player is not in banner control session
+				//Player is visible by default
+				invisibleOnDynmap = false;
+
+				//Check if player is invisible
 				if (!universe.getPlayersInBannerControlSessions().contains(player)) {
 
 					//Check item combinations
