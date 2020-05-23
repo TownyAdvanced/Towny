@@ -290,7 +290,7 @@ public abstract class DatabaseHandler {
 	 * 
 	 * @param objs The objects to save.
 	 */
-	public void save(Saveable @NotNull ... objs) {
+	public final void save(Saveable @NotNull ... objs) {
 		for (Saveable obj : objs) {
 			save(obj);
 		}
@@ -300,7 +300,7 @@ public abstract class DatabaseHandler {
 	 * 
 	 * @param objs The objects to save.
 	 */
-	public void save(@NotNull Collection<? extends Saveable> objs) {
+	public final void save(@NotNull Collection<? extends Saveable> objs) {
 		Validate.notNull(objs);
 		
 		for (Saveable obj : objs) {
@@ -314,13 +314,14 @@ public abstract class DatabaseHandler {
 	// ---------- Load All Methods ----------
 	public abstract void loadAllResidents();
 	public abstract void loadAllWorlds();
+	public abstract void loadAllNations();
 	public abstract void loadAllTowns();
 	public abstract void loadAllTownBlocks();
 
 	/**
 	 * Loads all necessary objects for the database.
 	 */
-	public void loadAll() {
+	public final void loadAll() {
 
 		// 1.) Load Residents
 		loadAllResidents();

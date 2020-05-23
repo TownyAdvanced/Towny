@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.SQLDatabaseHandler;
@@ -585,8 +586,7 @@ public class TownyUniverse {
 		return newTown;
 	}
 	
-	@Contract("_ -> param1")
-	public final @NotNull Town addTown(Town town) throws AlreadyRegisteredException {
+	public final @NotNull Town addTown(@NotNull Town town) throws AlreadyRegisteredException {
 		Objects.requireNonNull(town);
 		
 		if (towns.containsKey(town.getUniqueIdentifier())) {
@@ -599,6 +599,21 @@ public class TownyUniverse {
 		townsTrie.addKey(town.getName());
 		
 		return town;
+	}
+	
+	public final @NotNull Nation addNation(@NotNull Nation nation) throws AlreadyRegisteredException {
+		Objects.requireNonNull(nation);
+		
+		if (nations.containsKey(nation.getUniqueIdentifier())) {
+			throw new AlreadyRegisteredException("The nation " + nation.getName() + " is already in use.");
+		}
+
+		// Store into memory.
+		nations.put(nation.getUniqueIdentifier(), nation);
+		nationNamesMap.put(nation.getName().toLowerCase(), nation);
+		townsTrie.addKey(nation.getName());
+		
+		return nation;
 	}
 
 	public void updateTownName(String oldName, String newName) {

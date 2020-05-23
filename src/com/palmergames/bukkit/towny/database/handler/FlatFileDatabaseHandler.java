@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.Saveable;
@@ -33,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
@@ -52,8 +52,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
-
-		TownyMessaging.sendErrorMsg(obj.getSaveDirectory().toString());
 		
 		// Save
 		FileMgmt.mapToFile(saveMap, obj.getSaveDirectory());
@@ -78,12 +76,12 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 		Saveable saveable;
 		if (!hasUUIDConstructor) {
-			saveable = ReflectionUtil.unsafeNewInstance(type);
-		} else {
 			// If there is no UUID constructor we need to rely
 			// on unsafe allocation to bypass any defined constructors
+			saveable = ReflectionUtil.unsafeNewInstance(type);
+		} else {
 			try {
-				saveable = objConstructor.newInstance(null);
+				saveable = objConstructor.newInstance((Object) null);
 			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
 				e.printStackTrace();
 				return null;
@@ -197,145 +195,91 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return keys;
 	}
 	
-	private <T extends Saveable> @Nullable File getObjectFile(Class<T> clazz, UUID uuid) {
-		File dir = getFlatFileDirectory(clazz);
-		
-		if (dir == null) {
-			return null;
-		}
-		
-		return new File(dir.getPath() + uuid + ".txt");
-	}
-	
-	// ---------- Loaders ----------
-	
-	private Resident loadResident(UUID id) {
-		File residentFileFile = getObjectFile(Resident.class, id);
-		return load(residentFileFile, Resident.class);
-	}
-	
-	private Town loadTown(UUID id) {
-		File townFile = getObjectFile(Town.class, id);
-		return load(townFile, Town.class);
-	}
-	
-	private Nation loadNation(UUID id) {
-		File nationFile = getObjectFile(Nation.class, id);
-		return load(nationFile, Nation.class);
-	}
-	
-	private TownyWorld loadWorld(UUID id) {
-		File worldFile = getObjectFile(Nation.class, id);
-		return load(worldFile, TownyWorld.class);
-	}
-	
-	private TownBlock loadTownBlock(UUID id) {
-		File townblockFile = getObjectFile(TownBlock.class, id);
-
-		TownBlock townBlock = load(townblockFile, TownBlock.class);
-
-		if (townBlock != null) {
-			// Attach any loose ends.
-			try {
-				townBlock.getTown().addTownBlock(townBlock);
-				townBlock.getResident().addTownBlock(townBlock);
-			} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
-		}
-		
-		return townBlock;
-	}
-	
 	// ---------- Loaders ----------
 	
 	@Override
 	public void loadAllResidents() {
-		for (String fileName : listFiles(Resident.class)) {
-			String idStr = fileName.replace(".txt", "");
-			UUID id = UUID.fromString(idStr);
-			Resident loadedResident = loadResident(id);
-			
+		loadFiles(Resident.class, (resident -> {
 			// Store data.
 			try {
-				TownyUniverse.getInstance().addResident(loadedResident);
+				TownyUniverse.getInstance().addResident(resident);
 			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
-		}
+		}));
 	}
 
 	@Override
 	public void loadAllWorlds() {
-		for (String fileName : listFiles(TownyWorld.class)) {
-			TownyMessaging.sendErrorMsg(fileName);
-			String idStr = fileName.replace(".txt", "");
-			UUID id = UUID.fromString(idStr);
-			TownyWorld loadedWorld = loadWorld(id);
-			
-			if (loadedWorld == null) {
-				TownyMessaging.sendErrorMsg("Could not load" + fileName);
-				continue;
-			}
-			
+		loadFiles(TownyWorld.class, (world) -> {
+			// Store data.
 			try {
-				TownyUniverse.getInstance().addWorld(loadedWorld);
+				TownyUniverse.getInstance().addWorld(world);
 			} catch (AlreadyRegisteredException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
-		}
+		});
+	}
+
+	@Override
+	public void loadAllNations() {
+		loadFiles(Nation.class, (nation -> {
+			// Store data.
+			try {
+				TownyUniverse.getInstance().addNation(nation);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
+		}));
 	}
 
 	@Override
 	public void loadAllTowns() {
-		for (String fileName : listFiles(Town.class)) {
-			TownyMessaging.sendErrorMsg(fileName);
-			String idStr = fileName.replace(".txt", "");
-			UUID id = UUID.fromString(idStr);
-			Town loadedTown = loadTown(id);
-
-			if (loadedTown == null) {
-				TownyMessaging.sendErrorMsg("Could not load" + fileName);
-				continue;
-			}
-
+		loadFiles(Town.class, town -> {
 			// Store data.
 			try {
-				TownyUniverse.getInstance().addTown(loadedTown);
+				TownyUniverse.getInstance().addTown(town);
 			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
-		}
+		});
 	}
 
 	@Override
 	public void loadAllTownBlocks() {
-		for (String fileName : listFiles(TownBlock.class)) {
-			TownyMessaging.sendErrorMsg(fileName);
-			String idStr = fileName.replace(".txt", "");
-			UUID id = UUID.fromString(idStr);
-			TownBlock loadedTownBlock = loadTownBlock(id);
-
-			if (loadedTownBlock == null) {
-				TownyMessaging.sendErrorMsg("Could not load" + fileName);
-				continue;
-			}
-
+		loadFiles(TownBlock.class, (tb -> {
 			// Store data.
 			try {
-				TownyUniverse.getInstance().addTownBlock(loadedTownBlock);
+				TownyUniverse.getInstance().addTownBlock(tb);
 			} catch (AlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
-		}
+		}));
 	}
+
+	// ---------- Loaders ----------
 	
-	private <T extends Saveable> String[] listFiles(Class<T> clazz) {
+	private <T extends Saveable> void loadFiles(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer) {
 		File dir = getFlatFileDirectory(clazz);
 		
+		// This must be non-null
 		if (dir == null) {
-			return new String[0];
+			throw new UnsupportedOperationException("Directory does not exist");
 		}
-		
-		return dir.list(filenameFilter);
+
+		// Iterate through all files
+		for (File file : dir.listFiles(filenameFilter)) {
+			T loadedObj = load(file, clazz);
+			
+			// Log any errors but continue loading.
+			if (loadedObj == null) {
+				TownyMessaging.sendErrorMsg("Could not load " + file.getName());
+				continue;
+			}
+			
+			// Consume the loaded object.
+			consumer.accept(loadedObj);
+		}
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {

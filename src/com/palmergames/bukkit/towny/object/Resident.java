@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -54,15 +53,15 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
-	private List<String> modes = new ArrayList<>();
+	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
-	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private final transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient EconomyAccount account;
 
-	private List<String> townRanks = new ArrayList<>();
-	private List<String> nationRanks = new ArrayList<>();
+	private final List<String> townRanks = new ArrayList<>();
+	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(UUID uniqueIdentifier) {
 		super(uniqueIdentifier);
@@ -889,7 +888,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
 	}
 
-	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
+	public void setID(@Nullable UUID townID) throws AlreadyRegisteredException {
 		this.townID = townID;
 		
 		setTitle("");
@@ -899,12 +898,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	
 	public void setTown(@Nullable Town town) throws AlreadyRegisteredException {
 		if (town == null) {
-			setTownID(null);
+			setID(null);
 			
 			return;
 		}
 		
-		setTownID(town.getUniqueIdentifier());
+		setID(town.getUniqueIdentifier());
 	}
 	
 	public Town getTown() throws NotRegisteredException {

@@ -280,6 +280,11 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
+	public void loadAllNations() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void loadAllTowns() {
 		loadNormalTownyObject("TOWNS", Town.class, (town -> {
 			try {
