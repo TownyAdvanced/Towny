@@ -2346,7 +2346,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         String value;
         
         if (isFile(fileName)) {
-            PlotBlockData plotBlockData = new PlotBlockData(townBlock);
+            PlotBlockData plotBlockData = null;
+			try {
+				plotBlockData = new PlotBlockData(townBlock);
+			} catch (NullPointerException e1) {
+				TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+				return null;
+			}
             List<String> blockArr = new ArrayList<>();
             int version = 0;
             
