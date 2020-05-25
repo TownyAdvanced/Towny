@@ -22,19 +22,29 @@ public class ReflectionUtil {
 
 	/**
 	 * Fetches all the fields from the TownyObject.
-	 * 
+	 *
 	 * @param townyObject The TownyObject to get the fields from.
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
 	public static @NotNull List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
 		Validate.notNull(townyObject);
-		
+
 		// Get the class object.
 		Class<?> type = townyObject.getClass();
-		
+		return getAllFields(type, ignoreTransient);
+	}
+	
+	/**
+	 * Fetches all the fields from the passed in class.
+	 * 
+	 * @param objType The class to get the fields from
+	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
+	 * @return A list of Fields from the class passed in.
+	 */
+	public static @NotNull List<Field> getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
 		// Check if cached.
-		List<Field> fields = fieldCaches.get(type);
+		List<Field> fields = fieldCaches.get(objType);
 		
 		if (fields != null) {
 			return fields;
@@ -47,7 +57,7 @@ public class ReflectionUtil {
 		ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
 		
 		// Iterate through superclasses.
-		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+		for (Class<?> c = objType; c != null; c = c.getSuperclass()) {
 			classStack.push(c);
 		}
 		
@@ -63,7 +73,7 @@ public class ReflectionUtil {
 		}
 		
 		// Cache the results
-		fieldCaches.put(type, fields);
+		fieldCaches.put(objType, fields);
 		
 		return fields;
 	}

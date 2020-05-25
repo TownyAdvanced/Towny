@@ -3,13 +3,13 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
@@ -38,7 +38,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLDatabaseHandler extends DatabaseHandler {
-	SQLHandler sqlHandler;
+	private SQLHandler sqlHandler;
+	
+	// This map allows us to cache a stub object for quicker loading.
+	private Map<Class<?>, String> tableNameCache = new HashMap<>();
 	
 	// TODO Queue creation/saves/deletes and process them async
 	
@@ -47,14 +50,14 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		sqlHandler.testConnection();
 
 		// Create tables
-		createTownyObjectTable("TOWNS", Town.class);
-		createTownyObjectTable("NATIONS", Nation.class);
-		createTownyObjectTable("RESIDENTS", Resident.class);
+		createTownyObjectTable(Town.class);
+		createTownyObjectTable(Nation.class);
+		createTownyObjectTable(Resident.class);
 		
 		// Update/alter tables. Order of this matters!
-		alterTownyObjectTable("NATIONS", Nation.class);
-		alterTownyObjectTable("TOWNS", Town.class);
-		alterTownyObjectTable("RESIDENTS", Resident.class);
+		alterTownyObjectTable(Nation.class);
+		alterTownyObjectTable(Town.class);
+		alterTownyObjectTable(Resident.class);
 	}
 	
 	// TODO Figure out how to handle insertions vs updates
@@ -89,33 +92,20 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return TownySettings.getSQLTablePrefix();
 	}
 	
-	private <T> String[] alterColumnStatements(String tableName, Class<T> clazz, Collection<String> filter) {
-		Constructor<T> objConstructor = null;
-		try {
-			objConstructor = clazz.getConstructor(UUID.class);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+	private <T extends Saveable> String[] alterColumnStatements(Class<T> clazz, Collection<String> filter) {
+		String tableName = getTableName(clazz);
+		Validate.notNull(tableName);
 
-		T obj = null;
-		try {
-			Validate.isTrue(objConstructor != null);
-			obj = objConstructor.newInstance((Object) null);
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-
-		Validate.isTrue(obj != null);
-		
-		return ReflectionUtil.getAllFields(obj, true).stream()
+		return ReflectionUtil.getAllFields(clazz, true).stream()
 				.filter(f -> !filter.contains(f.getName()))
 				.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
 					f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
 				.toArray(String[]::new);
 	}
 
-	private <T extends TownyObject> void createTownyObjectTable(String tableName, Class<T> objectClazz) {
-		tableName = tblPrefix() + tableName;
+	private <T extends TownyObject> void createTownyObjectTable(Class<T> objectClazz) {
+		final String tableName = getTableName(objectClazz);
+		Validate.notNull(tableName);
 
 		// Fetch primary field, and gather appropriate SQL.
 		Field primaryField = fetchPrimaryKeyField(objectClazz);
@@ -132,7 +122,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
 	}
 	
-	private <T extends TownyObject> void alterTownyObjectTable(String tableName, Class<T> objectClazz) {
+	private <T extends TownyObject> void alterTownyObjectTable(Class<T> objectClazz) {
+		final String tableName = getTableName(objectClazz);
+		Validate.notNull(tableName);
+		
 		// Set of column names that already exist in the table
 		Set<String> columnNames = new HashSet<>();
 		
@@ -147,7 +140,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		
 		// Returns a list of statements to create columns which are not already in the table.
 		// This should prevent an SQL error from being thrown
-		String[] columnStatements = alterColumnStatements(tableName, objectClazz, columnNames);
+		String[] columnStatements = alterColumnStatements(objectClazz, columnNames);
 
 		sqlHandler.executeUpdatesError("Error creating table " + tableName + "!" , columnStatements);
 	}
@@ -238,8 +231,11 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	// None of the methods below call their respective load functions
 	// because that would require an useless extra query
 	
-	private <T extends TownyObject> void loadNormalTownyObject(String tableName, final Class<T> objectClazz, final Consumer<T> consumer) {
-		sqlHandler.executeQuery("SELECT * from " + TownySettings.getSQLTablePrefix() + tableName,
+	private <T extends TownyObject> void loadNormalTownyObject(final Class<T> objectClazz, final Consumer<T> consumer) {
+		final String tableName = getTableName(objectClazz);
+		Validate.notNull(tableName);
+		
+		sqlHandler.executeQuery("SELECT * from " + tableName,
 			"Error loading" + tableName + "from SQL",
 			(rs) -> {
 				while (rs.next()) {
@@ -258,7 +254,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	@Override
 	public void loadAllResidents() {
-		loadNormalTownyObject("RESIDENTS", Resident.class, (res -> {
+		loadNormalTownyObject(Resident.class, (res -> {
 			try {
 				TownyUniverse.getInstance().addResident(res);
 			} catch (AlreadyRegisteredException ex) {
@@ -270,7 +266,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void loadAllWorlds() {
-		loadNormalTownyObject("WORLDS", TownyWorld.class, (tw -> {
+		loadNormalTownyObject(TownyWorld.class, (tw -> {
 			try {
 				TownyUniverse.getInstance().addWorld(tw);
 			} catch (AlreadyRegisteredException ex) {
@@ -286,7 +282,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void loadAllTowns() {
-		loadNormalTownyObject("TOWNS", Town.class, (town -> {
+		loadNormalTownyObject(Town.class, (town -> {
 			try {
 				TownyUniverse.getInstance().addTown(town);
 			} catch (AlreadyRegisteredException ex) {
@@ -297,7 +293,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void loadAllTownBlocks() {
-		sqlHandler.executeQuery("SELECT * from " + TownySettings.getSQLTablePrefix() + "TOWNBLOCKS",
+		final String tableName = getTableName(TownBlock.class);
+		sqlHandler.executeQuery("SELECT * from " + tableName,
 			"Error loading townblocks from SQL",
 			(rs) -> {
 				while (rs.next()) {
@@ -319,6 +316,43 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				}
 			});
 	}
+
+	// Returns the SQL table name from a savable object.
+	@Nullable
+	private <T extends Saveable> String getTableName(@NotNull Class<T> type) {
+
+		String cachedObj = tableNameCache.get(type);
+		
+		if (cachedObj != null) {
+			return cachedObj;
+		}
+		
+		T saveable = null;
+		// First try the natural constructor
+		try {
+			final Constructor<T> objConstructor = type.getConstructor(UUID.class);
+
+			try {
+				saveable = objConstructor.newInstance((Object) null);
+			} catch (ReflectiveOperationException e) {
+				e.printStackTrace();
+			}
+		} catch (NoSuchMethodException e) {
+			// If there is no UUID constructor we need to rely
+			// on unsafe allocation to bypass any defined constructors.
+			saveable = ReflectionUtil.unsafeNewInstance(type);
+		}
+
+		if (saveable == null) {
+			return null;
+		}
+		
+		String tableName = tblPrefix() + saveable.getSQLTable();
+		
+		tableNameCache.putIfAbsent(type, tableName);
+		
+		return tableName;
+	}
 	
 	@Nullable
 	private Field fetchPrimaryKeyField(@NotNull Object obj) {
@@ -339,33 +373,15 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		ForeignKey fkAnnotation = field.getAnnotation(ForeignKey.class);
 		
 		if (fkAnnotation != null) {
-			// We have to create an instance of the reference class
-			// in order to get the sql table from the class.
-			Constructor<? extends Saveable> objConstructor;
-			try {
-				objConstructor = fkAnnotation.reference().getConstructor(UUID.class);
-			} catch (NoSuchMethodException e) {
-				TownyMessaging.sendErrorMsg("Unable to get constructor of " + fkAnnotation.reference().getName() + " for ForeignKey constraint!");
-				e.printStackTrace();
-				return "";
-			}
-
-			Saveable obj;
-			try {
-				Validate.isTrue(objConstructor != null);
-				obj = objConstructor.newInstance(null);
-			} catch (ReflectiveOperationException e) {
-				TownyMessaging.sendErrorMsg("Unable to construct instance of " + fkAnnotation.reference().getName() + " for ForeignKey constraint!");
-				e.printStackTrace();
-				return "";
-			}
-
+			final String tableName = getTableName(fkAnnotation.reference());
+			Validate.notNull(tableName);
+			
 			String keyConstraint = ", FOREIGN KEY (%s) REFERENCES %s(uniqueIdentifier)";
 			
 			if (fkAnnotation.cascadeOnDelete())
 				keyConstraint += " ON DELETE CASCADE";
 			
-			return String.format(keyConstraint, field.getName(), tblPrefix() + obj.getSQLTable());
+			return String.format(keyConstraint, field.getName(), tableName);
 		}
 		
 		return "";
