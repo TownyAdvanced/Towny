@@ -29,6 +29,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
 	
-	private Resident mayor;
+	private UUID mayorID;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
 	private double taxes = TownySettings.getTownDefaultTax();
@@ -215,9 +216,20 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return !tag.isEmpty();
 	}
 
+	@Nullable
 	public Resident getMayor() {
-
-		return mayor;
+		
+		if (mayorID == null) {
+			return null;
+		}
+		
+		try {
+			return TownyUniverse.getInstance().getResident(mayorID);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	public void setTaxes(double taxes) {
@@ -238,7 +250,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if (!hasResident(mayor))
 			throw new TownyException(TownySettings.getLangString("msg_err_mayor_doesnt_belong_to_town"));
-		this.mayor = mayor;
+		this.mayorID = mayor.getUniqueIdentifier();
 		
 		TownyPerms.assignPermissions(mayor, null);
 	}
@@ -334,7 +346,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isMayor(Resident resident) {
 
-		return resident == mayor;
+		return resident == getMayor();
 	}
 
 	public boolean hasNation() {
@@ -692,8 +704,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasMayor() {
-
-		return mayor != null;
+		return mayorID != null;
 	}
 
 	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
@@ -842,7 +853,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		//Cleanup
 		removeAllResidents();
-		mayor = null;
+		mayorID = null;
 		residents.clear();
 		outlaws.clear();
 		homeBlock = null;

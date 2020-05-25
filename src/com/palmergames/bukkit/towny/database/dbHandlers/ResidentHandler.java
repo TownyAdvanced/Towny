@@ -22,7 +22,8 @@ public class ResidentHandler implements SerializationHandler<Resident> {
 		
 		try {
 			return TownyUniverse.getInstance().getResident(id);
-		} catch (NotRegisteredException ignore) {
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

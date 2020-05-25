@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
@@ -40,7 +39,6 @@ import java.util.function.Consumer;
 
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
-	private static final FilenameFilter filenameFilter = (dir, name) -> name.endsWith(".txt");
 	private final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
 
 	@Override
