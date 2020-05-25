@@ -75,6 +75,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private EconomyAccount account;
+	private EconomyAccount debtAccount; //Applies if town is bankrupt
 	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
 
@@ -1017,6 +1018,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isOpen() {
 
+		if(TownySettings.isTownBankruptsyEnabled() && isBankrupt()) {
+			return false;
+		}
+
 		return isOpen;
 	}
 
@@ -1444,6 +1449,24 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return account;
 	}
 
+	public EconomyAccount getDebtAccount() {
+		if (debtAccount == null) {
+
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + TownySettings.getDebtAccountPrefix() + getName(), 32);
+			World world;
+
+			if (hasWorld()) {
+				world = BukkitTools.getWorld(getHomeblockWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+
+			debtAccount = new EconomyAccount(accountName, world);
+		}
+
+		return debtAccount;
+	}
+
 	@Override
 	public String getFormattedName() {
 		if (this.isCapital()) {
@@ -1538,5 +1561,39 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	@Deprecated
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
+	}
+
+	/**
+	 * Increase Town Debt
+	 * 
+	 * Debt cannot increase beyond a certain threshold
+	 * (determined by the estimated value of the town)
+	 *
+	 * @param requestedNewDebtAmount The new debt requested
+	 * @param reason The reason for the debt
+	 */
+	public void increaseTownDebt(double requestedNewDebtAmount, String reason) throws EconomyException {
+		double actualNewDebtAmount;
+		double maximumDebtAmount = getEstimatedValueOfTown();
+
+		if(requestedNewDebtAmount + getDebtAccount().getHoldingBalance() < maximumDebtAmount) {
+			actualNewDebtAmount = requestedNewDebtAmount;
+		} else {
+			actualNewDebtAmount = maximumDebtAmount - getDebtAccount().getHoldingBalance();
+		}
+
+		getDebtAccount().collect(actualNewDebtAmount, reason);
+	}
+
+	private double getEstimatedValueOfTown() {
+		return TownySettings.getNewTownPrice() + (getTownBlocks().size() * TownySettings.getClaimPrice());
+	}
+
+	public boolean isBankrupt() {
+		try {
+			return getDebtAccount().getHoldingBalance() > 0;
+		} catch (EconomyException e) {
+			return  false;
+		}
 	}
 }

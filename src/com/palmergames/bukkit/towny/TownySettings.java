@@ -2578,6 +2578,11 @@ public class TownySettings {
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
 	}
 
+	public static String getDebtAccountPrefix() {
+
+		return getString(ConfigNodes.ECO_DEBT_PREFIX);
+	}
+
 	public static String getNationAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_NATION_PREFIX);
@@ -2916,6 +2921,10 @@ public class TownySettings {
 			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
 		}
 		return nationColorsMap;
+	}
+
+	public static boolean isTownBankruptsyEnabled() {
+		return getBoolean(ConfigNodes.TOWN_BANKRUPTSY_ENABLED);
 	}
 }
 
