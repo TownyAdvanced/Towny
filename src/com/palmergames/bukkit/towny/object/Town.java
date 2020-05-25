@@ -62,6 +62,8 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
+	private EconomyAccount account;
+	private EconomyAccount debtAccount; //Applies if town is bankrupt
 
 	public Town(String name) {
 		super(name);
@@ -1265,6 +1267,24 @@ public class Town extends Government implements TownBlockOwner {
 		return ECONOMY_ACCOUNT_PREFIX;
 	}
 
+	public EconomyAccount getDebtAccount() {
+		if (debtAccount == null) {
+
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + TownySettings.getDebtAccountPrefix() + getName(), 32);
+			World world;
+
+			if (hasWorld()) {
+				world = BukkitTools.getWorld(getHomeblockWorld().getName());
+			} else {
+				world = BukkitTools.getWorlds().get(0);
+			}
+
+			debtAccount = new EconomyAccount(accountName, world);
+		}
+
+		return debtAccount;
+	}
+
 	@Override
 	public String getFormattedName() {
 		if (this.isCapital()) {
@@ -1361,5 +1381,39 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
+	}
+
+	/**
+	 * Increase Town Debt
+	 * 
+	 * Debt cannot increase beyond a certain threshold
+	 * (determined by the estimated value of the town)
+	 *
+	 * @param requestedNewDebtAmount The new debt requested
+	 * @param reason The reason for the debt
+	 */
+	public void increaseTownDebt(double requestedNewDebtAmount, String reason) throws EconomyException {
+		double actualNewDebtAmount;
+		double maximumDebtAmount = getEstimatedValueOfTown();
+
+		if(requestedNewDebtAmount + getDebtAccount().getHoldingBalance() < maximumDebtAmount) {
+			actualNewDebtAmount = requestedNewDebtAmount;
+		} else {
+			actualNewDebtAmount = maximumDebtAmount - getDebtAccount().getHoldingBalance();
+		}
+
+		getDebtAccount().collect(actualNewDebtAmount, reason);
+	}
+
+	private double getEstimatedValueOfTown() {
+		return TownySettings.getNewTownPrice() + (getTownBlocks().size() * TownySettings.getClaimPrice());
+	}
+
+	public boolean isBankrupt() {
+		try {
+			return getDebtAccount().getHoldingBalance() > 0;
+		} catch (EconomyException e) {
+			return  false;
+		}
 	}
 }

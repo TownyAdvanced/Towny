@@ -386,10 +386,12 @@ public class TownyFormatter {
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
 		// | Bank: 534 coins
-		String bankString = "";
-		if (TownySettings.isUsingEconomy()) {
-			if (TownyEconomyHandler.isActive()) {
-				bankString = Translation.of("status_bank", town.getAccount().getHoldingFormattedBalance());
+		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
+			String bankString = "";
+			if(TownySettings.isTownBankruptsyEnabled() && town.isBankrupt()) {
+				bankString = String.format(TownySettings.getLangString("status_bank_bankrupt"), town.getDebtAccount().getHoldingFormattedBalance());
+			} else {
+				bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
 				if (town.hasUpkeep())
 					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())

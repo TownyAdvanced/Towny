@@ -181,6 +181,7 @@ public enum ConfigNodes {
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
+<<<<<<< Upstream, based on origin/master
 	
 	NATION("nation", "", "", "",
 			"############################################################",
@@ -203,6 +204,18 @@ public enum ConfigNodes {
 			"",
 			"# Default nation board"),
 	
+=======
+	TOWN_BANKRUPTSY_ENABLED(
+			"town.bankruptsy_enabled",
+			"false",
+			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
+			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
+			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
+			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
+			"# The debt can be repaid using /t deposit x.", 
+			"# Once all debt is repaid, the town immediately returns to a normal state."),
+
+>>>>>>> a637b09 Added bankrupt towns feature
 	NWS(
 			"new_world_settings",
 			"",
@@ -1449,6 +1462,10 @@ public enum ConfigNodes {
 			"",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
+	ECO_DEBT_PREFIX(
+			"economy.debt_prefix",
+			"debt-",
+			"# Prefix to apply to all debt type accounts."),
 	ECO_TOWN_PREFIX(
 			"economy.town_prefix",
 			"town-",

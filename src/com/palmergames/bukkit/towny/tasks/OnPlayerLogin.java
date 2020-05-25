@@ -152,9 +152,14 @@ public class OnPlayerLogin implements Runnable {
 						try {
 							if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
 								/*
-								 *  Warn that the town is due to be deleted.
+								 *  Warn that the town is due to be deleted/bankrupted.
 								 */
-								TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
+								if(TownySettings.isTownBankruptsyEnabled()) {
+									if (!town.isBankrupt()) //Is town already bankrupt?
+										TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_bankrupt"), town.getName()));
+								} else {
+									TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
+								}
 							}
 						} catch (EconomyException ex) {
 							// Economy error, so ignore it and try to continue.
