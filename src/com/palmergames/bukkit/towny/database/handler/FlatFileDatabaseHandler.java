@@ -54,7 +54,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		convertMapData(getSaveGetterData(obj), saveMap);
 		
 		// Save
-		FileMgmt.mapToFile(saveMap, obj.getSaveDirectory());
+		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory().getPath() + "/" + obj.getUniqueIdentifier() + ".txt"));
 	}
 
 	private <T extends Saveable> @Nullable File getFlatFileDirectory(@NotNull Class<T> type) {
@@ -265,6 +265,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		// This must be non-null
 		if (dir == null) {
 			throw new UnsupportedOperationException("Directory does not exist");
+		}
+		
+		// Make sure that a file wasn't given instead of a directory
+		if (!dir.isDirectory()) {
+			throw new UnsupportedOperationException("Object of type: " + clazz + " has save path is not a directory.");
 		}
 
 		// Iterate through all files

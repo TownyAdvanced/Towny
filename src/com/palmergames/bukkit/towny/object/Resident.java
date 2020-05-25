@@ -331,7 +331,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public boolean hasTown() {
-		return townID != null;
+		return getTownID() != null;
 	}
 
 	public boolean hasNation() {
@@ -829,8 +829,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
 		if (hasTownBlock(townBlock))
 			throw new AlreadyRegisteredException();
-		else
+		else {
+			townBlock.setResident(this);
 			townBlocks.add(townBlock);
+		}
 	}
 
 	@Override
@@ -874,7 +876,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/residents/" + getUniqueIdentifier() + ".txt");
+		return new File(Towny.getPlugin().getDataFolder() + "/data/residents/");
 	}
 
 	@Override
@@ -888,7 +890,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
 	}
 
-	public void setID(@Nullable UUID townID) throws AlreadyRegisteredException {
+	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
 		this.townID = townID;
 		
 		setTitle("");
@@ -898,12 +900,12 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	
 	public void setTown(@Nullable Town town) throws AlreadyRegisteredException {
 		if (town == null) {
-			setID(null);
+			setTownID(null);
 			
 			return;
 		}
 		
-		setID(town.getUniqueIdentifier());
+		setTownID(town.getUniqueIdentifier());
 	}
 	
 	public Town getTown() throws NotRegisteredException {
@@ -912,7 +914,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			throw new NotRegisteredException("Resident has no town");
 		}
 		
-		return TownyUniverse.getInstance().getTown(townID);
+		return TownyUniverse.getInstance().getTown(getTownID());
+	}
+
+	public UUID getTownID() {
+		return townID;
 	}
 }
 

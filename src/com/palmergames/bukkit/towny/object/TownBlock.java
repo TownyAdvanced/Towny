@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -30,7 +29,7 @@ public class TownBlock extends TownyObject {
 	// private List<Group> groups;
 	private TownyWorld world;
 	private UUID townID = null;
-	private Resident resident = null;
+	private UUID residentID = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
 	private double plotPrice = -1;
@@ -51,6 +50,7 @@ public class TownBlock extends TownyObject {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+		this.setName("");
 	}
 	
 	public void setTownID(UUID townID) {
@@ -68,47 +68,47 @@ public class TownBlock extends TownyObject {
 	}
 
 	public Town getTown() throws NotRegisteredException {
-		return TownyUniverse.getInstance().getTown(townID);
+		return TownyUniverse.getInstance().getTown(getTownID());
 	}
 
 	public boolean hasTown() {
 		try {
-			return TownyUniverse.getInstance().getTown(townID) != null;
+			return TownyUniverse.getInstance().getTown(getTownID()) != null;
 		} catch (NotRegisteredException e) {
 			return false;
 		}
 	}
 
 	public void setResident(Resident resident) {
-		boolean successful;
+		if (resident == null) {
+			residentID = null;
+			return;
+		}
+		
 		try {
 			if (hasResident())
-				this.resident.removeTownBlock(this);
+				getResident().removeTownBlock(this);
 		} catch (NotRegisteredException ignored) {}
-		this.resident = resident;
+		
+		residentID = resident.getUniqueIdentifier();
+
 		try {
-			resident.addTownBlock(this);
-			successful = true;
-		} catch (AlreadyRegisteredException | NullPointerException e) {
-			successful = false;
+			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(getResident(), resident, this));
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
 		}
-		if (successful) { //Should not cause a NPE, is checkingg if resident is null and
-			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
-			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
-		}
-		this.resident = resident;
 	}
 
 	public Resident getResident() throws NotRegisteredException {
-
-		if (!hasResident())
+		Resident resident = TownyUniverse.getInstance().getResident(residentID);
+		if (resident == null)
 			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
 		return resident;
 	}
 
 	public boolean hasResident() {
 
-		return resident != null;
+		return residentID != null;
 	}
 
 	public boolean isOwner(TownBlockOwner owner) {
@@ -203,7 +203,11 @@ public class TownBlock extends TownyObject {
 
 				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
 			if (this.hasResident()) {
-				setPermissions(this.resident.getPermissions().toString());
+				try {
+					setPermissions(getResident().getPermissions().toString());
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
 			} else {
 				try {
 					setPermissions(getTown().getPermissions().toString());
@@ -489,5 +493,9 @@ public class TownBlock extends TownyObject {
 	@Override
 	public String getSQLTable() {
 		return null;
+	}
+
+	public UUID getTownID() {
+		return townID;
 	}
 }

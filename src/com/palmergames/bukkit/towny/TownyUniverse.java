@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.SQLDatabaseHandler;
@@ -42,7 +41,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,7 +84,7 @@ public class TownyUniverse {
     private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
 	private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private Map<UUID, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -387,7 +385,7 @@ public class TownyUniverse {
     	return npc;
 	}
 
-	public final @NotNull Resident addResident(Resident resident) throws AlreadyRegisteredException {
+	public final void addResident(Resident resident) throws AlreadyRegisteredException {
 		Objects.requireNonNull(resident);
 		UUID residentID = resident.getUniqueIdentifier();
 		String residentName = resident.getName();
@@ -400,7 +398,13 @@ public class TownyUniverse {
 		residentNamesMap.put(residentName.toLowerCase(), resident);
 		residentsTrie.addKey(residentName);
 		
-		return resident;
+		// Attach connections.
+		try {
+			resident.getTown().addResident(resident);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void removeResident(Resident resident) {
@@ -1205,11 +1209,29 @@ public class TownyUniverse {
 	
 	public void addTownBlock(@NotNull TownBlock townBlock) throws AlreadyRegisteredException {
 		
-		if (townBlocks.containsKey(townBlock.getUniqueIdentifier())) {
+		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
 			throw new AlreadyRegisteredException("Town block " + townBlock + " already exists");
 		}
-		
-		townBlocks.put(townBlock.getUniqueIdentifier(), townBlock);
+
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+
+		Town town;
+		Resident resident;
+		try {
+			// Attach town.
+			if (townBlock.hasTown()) {
+				town = townBlock.getTown();
+				town.addTownBlock(townBlock);
+			}
+			
+			// Attach Resident
+			if (townBlock.hasResident()) {
+				resident = townBlock.getResident();
+				resident.addTownBlock(townBlock);
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Does this WorldCoord have a TownBlock?
@@ -1233,8 +1255,7 @@ public class TownyUniverse {
 
 				if (townBlock.hasTown())
 					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
+			} catch (NotRegisteredException ignored) {}
 		}
 	}
 	

@@ -757,7 +757,7 @@ public class TownyWorld extends TownyObject {
 
 	@Override
 	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds/" + getUniqueIdentifier() + ".txt");
+		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds/");
 	}
 
 	@Override

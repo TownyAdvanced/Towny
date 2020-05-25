@@ -322,18 +322,10 @@ public abstract class DatabaseHandler {
 	 * Loads all necessary objects for the database.
 	 */
 	public final void loadAll() {
-
-		// 1.) Load Residents
-		loadAllResidents();
-
-		// 2. Load TownBlocks
-		loadAllTownBlocks();
-
-		// 3.) Load Towns
-		loadAllTowns();
-
-		// 4.) Load Worlds
 		loadAllWorlds();
-		
+		loadAllNations();
+		loadAllTowns();
+		loadAllTownBlocks();
+		loadAllResidents();
 	}
 }

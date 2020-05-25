@@ -2562,9 +2562,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		town.setMayor(resident);
 		
 		TownBlock townBlock = new TownBlock(UUID.randomUUID(), key.getX(), key.getZ(), world);
+		TownyUniverse.getInstance().addTownBlock(townBlock);
 		town.addTownBlock(townBlock);
+		resident.addTownBlock(townBlock);
 		
-
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
@@ -2596,8 +2597,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		townyUniverse.getDatabaseHandler().save(resident, townBlock, town, world);
-
-		
 		
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
