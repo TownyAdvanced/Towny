@@ -61,52 +61,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory().getPath() + "/" + obj.getUniqueIdentifier() + ".txt"));
 	}
 
-	private <T extends Saveable> @Nullable File getFlatFileDirectory(@NotNull Class<T> type) {
-		
-		// Check the cache
-		File cached = fileDirectoryCache.get(type);
-		if (fileDirectoryCache.get(type) != null) {
-			return cached;
-		}
-
-		boolean hasUUIDConstructor = true;
-		Constructor<T> objConstructor = null;
-		// First try the natural constructor
-		try {
-			objConstructor = type.getConstructor(UUID.class);
-		} catch (NoSuchMethodException e) {
-			hasUUIDConstructor = false;
-		}
-
-		Saveable saveable;
-		if (!hasUUIDConstructor) {
-			// If there is no UUID constructor we need to rely
-			// on unsafe allocation to bypass any defined constructors
-			saveable = ReflectionUtil.unsafeNewInstance(type);
-		} else {
-			try {
-				saveable = objConstructor.newInstance((Object) null);
-			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		if (saveable == null) {
-			return null;
-		}
-		
-		// Cache result.
-		fileDirectoryCache.computeIfAbsent(type, (t) -> saveable.getSaveDirectory());
-
-		return saveable.getSaveDirectory();
-	}
-
 	@Override
 	public boolean delete(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 		
-		File objFile = getFlatFileDirectory(obj.getClass());
+		File objFile = getFlatFile(obj.getClass(), obj.getUniqueIdentifier());
 		
 		if (objFile == null) {
 			TownyMessaging.sendErrorMsg("Cannot delete: " + objFile + ", it does not exist.");
@@ -312,5 +271,59 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			String valueStr = toStoredString(entry.getValue().getValue(), entry.getValue().getType());
 			to.put(entry.getKey(), valueStr);
 		}
+	}
+
+	private <T extends Saveable> @Nullable File getFlatFile(@NotNull Class<T> type, UUID id) {
+		Validate.notNull(type);
+
+		File dir = getFlatFileDirectory(type);
+
+		if (dir == null) {
+			return null;
+		}
+
+		return new File(dir.getPath() + "/" + id + ".txt");
+	}
+
+	private <T extends Saveable> @Nullable File getFlatFileDirectory(@NotNull Class<T> type) {
+		Validate.notNull(type);
+
+		// Check the cache
+		File cached = fileDirectoryCache.get(type);
+		if (fileDirectoryCache.get(type) != null) {
+			return cached;
+		}
+
+		boolean hasUUIDConstructor = true;
+		Constructor<T> objConstructor = null;
+		// First try the natural constructor
+		try {
+			objConstructor = type.getConstructor(UUID.class);
+		} catch (NoSuchMethodException e) {
+			hasUUIDConstructor = false;
+		}
+
+		Saveable saveable;
+		if (!hasUUIDConstructor) {
+			// If there is no UUID constructor we need to rely
+			// on unsafe allocation to bypass any defined constructors
+			saveable = ReflectionUtil.unsafeNewInstance(type);
+		} else {
+			try {
+				saveable = objConstructor.newInstance((Object) null);
+			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		if (saveable == null) {
+			return null;
+		}
+
+		// Cache result.
+		fileDirectoryCache.computeIfAbsent(type, (t) -> saveable.getSaveDirectory());
+
+		return saveable.getSaveDirectory();
 	}
 }
