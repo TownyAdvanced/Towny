@@ -225,6 +225,7 @@ public class Towny extends JavaPlugin {
 		Resident loadedResident = null;
 		if (TownyUniverse.getInstance().getResidents().size() > 0) {
 			loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+			ReflectionUtil.dump(loadedResident);
 		}
 		
 		TownBlock loadedTownBlock;

@@ -60,7 +60,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
-	private List<TownBlock> townBlocks = new ArrayList<>();
+	private transient List<TownBlock> townBlocks = new ArrayList<>();
 	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(UUID uniqueIdentifier) {
@@ -831,6 +831,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			throw new AlreadyRegisteredException();
 		else {
 			townBlock.setResident(this);
+			TownyMessaging.sendErrorMsg(townBlocks.getClass() + "");
 			townBlocks.add(townBlock);
 		}
 	}

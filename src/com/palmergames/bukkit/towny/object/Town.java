@@ -308,6 +308,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		residents.add(resident);
 		resident.setTown(this);
 		
+		if (resident.isMayor()) {
+			try {
+				this.setMayor(resident);
+			} catch (TownyException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
 

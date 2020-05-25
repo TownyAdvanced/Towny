@@ -37,6 +37,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -159,7 +160,7 @@ public abstract class DatabaseHandler {
 		}
 		
 		if (str.equals("[]")) {
-			return (T) Collections.emptyList();
+			return (T) new ArrayList<>();
 		}
 		
 		return adapter.fromStoredString(str);
@@ -322,10 +323,11 @@ public abstract class DatabaseHandler {
 	 * Loads all necessary objects for the database.
 	 */
 	public final void loadAll() {
+		loadAllResidents();
 		loadAllWorlds();
 		loadAllNations();
 		loadAllTowns();
 		loadAllTownBlocks();
-		loadAllResidents();
+		
 	}
 }

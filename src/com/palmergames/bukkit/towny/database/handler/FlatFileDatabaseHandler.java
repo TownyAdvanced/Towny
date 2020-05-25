@@ -27,6 +27,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +106,13 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	public boolean delete(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 		
-		File objFile = obj.getSaveDirectory();
+		File objFile = getFlatFileDirectory(obj.getClass());
+		
+		if (objFile == null) {
+			TownyMessaging.sendErrorMsg("Cannot delete: " + objFile + ", it does not exist.");
+			return false;
+		}
+		
 		if (objFile.exists()) {
 			return objFile.delete();
 		} else {
@@ -260,6 +270,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	// ---------- Loaders ----------
 	
 	private <T extends Saveable> void loadFiles(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer) {
+		Validate.notNull(clazz);
+		Validate.notNull(consumer);
 		File dir = getFlatFileDirectory(clazz);
 		
 		// This must be non-null
@@ -272,18 +284,26 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			throw new UnsupportedOperationException("Object of type: " + clazz + " has save path is not a directory.");
 		}
 
-		// Iterate through all files
-		for (File file : dir.listFiles(filenameFilter)) {
-			T loadedObj = load(file, clazz);
-			
-			// Log any errors but continue loading.
-			if (loadedObj == null) {
-				TownyMessaging.sendErrorMsg("Could not load " + file.getName());
-				continue;
+		Path path = Paths.get(dir.getPath());
+		
+		// We have a LOT of files in our directories so lets use a directory stream to 
+		// make iterating over them a lot faster.
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.txt")) {
+			for (Path p : stream) {
+				T loadedObj = load(p.toFile(), clazz);
+
+				// Log any errors but continue loading.
+				if (loadedObj == null) {
+					TownyMessaging.sendErrorMsg("Could not load " + p);
+					continue;
+				}
+
+				// Consume the loaded object.
+				consumer.accept(loadedObj);
 			}
-			
-			// Consume the loaded object.
-			consumer.accept(loadedObj);
+		} catch (IOException e) {
+			// An I/O problem has occurred
+			e.printStackTrace();
 		}
 	}
 

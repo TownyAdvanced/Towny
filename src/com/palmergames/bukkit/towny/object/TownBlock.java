@@ -100,6 +100,11 @@ public class TownBlock extends TownyObject {
 	}
 
 	public Resident getResident() throws NotRegisteredException {
+		
+		if (residentID == null) {
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
+		}
+		
 		Resident resident = TownyUniverse.getInstance().getResident(residentID);
 		if (resident == null)
 			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));

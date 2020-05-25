@@ -204,6 +204,7 @@ public class TownClaim extends Thread {
 				}
 			}
 			
+			TownyUniverse.getInstance().addTownBlock(townBlock);
 			TownyUniverse.getInstance().getDatabaseHandler().save(townBlock);
 			
 			// Raise an event for the claim

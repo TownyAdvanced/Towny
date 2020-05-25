@@ -35,6 +35,7 @@ public abstract class TownyObject implements Nameable, Saveable {
 	}
 	
 	@Override
+	@NotNull
 	public String getName() {
 		if (name == null) {
 			return "";

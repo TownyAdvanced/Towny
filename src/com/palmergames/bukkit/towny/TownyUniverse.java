@@ -400,7 +400,9 @@ public class TownyUniverse {
 		
 		// Attach connections.
 		try {
-			resident.getTown().addResident(resident);
+			Town town = resident.getTown();
+			town.addResident(resident);
+			
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}

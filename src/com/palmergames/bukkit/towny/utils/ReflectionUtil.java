@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.google.gson.internal.UnsafeAllocator;
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
