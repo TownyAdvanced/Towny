@@ -55,6 +55,7 @@ import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -2521,7 +2522,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						System.out.println("resident = " + resident);
 						resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
 					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg("Flag 5");
 						e.printStackTrace();
 					}
 					
@@ -2595,8 +2595,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				e.printStackTrace();
 			}
 		}
+
+		ReflectionUtil.dump(town);
 		
-		townyUniverse.getDatabaseHandler().save(resident, townBlock, town, world);
+		townyUniverse.getDatabaseHandler().save(
+			resident,
+			townBlock,
+			town,
+			world
+		);
 		
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -3658,7 +3665,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		Resident resident;
 		Town town;
 		try {
-			resident = TownyUniverse.getInstance().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			town = resident.getTown();
 
 			double bankcap = TownySettings.getTownBankCap();

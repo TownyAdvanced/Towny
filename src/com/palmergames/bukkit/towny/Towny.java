@@ -234,6 +234,12 @@ public class Towny extends JavaPlugin {
 			ReflectionUtil.dump(loadedTownBlock);
 		}
 		
+		Town loadedTown;
+		if (TownyUniverse.getInstance().getTowns().size() > 0) {
+			loadedTown = TownyUniverse.getInstance().getTowns().get(0);
+			ReflectionUtil.dump(loadedTown);
+		}
+		
 		if (loadedResident == null) {
 			return;
 		}

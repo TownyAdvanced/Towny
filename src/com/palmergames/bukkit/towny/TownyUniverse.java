@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -403,7 +404,11 @@ public class TownyUniverse {
 			Town town = resident.getTown();
 			town.addResident(resident);
 			
-		} catch (NotRegisteredException e) {
+			if (resident.isMayor()) {
+				town.setMayor(resident);
+			}
+			
+		} catch (TownyException e) {
 			e.printStackTrace();
 		}
 

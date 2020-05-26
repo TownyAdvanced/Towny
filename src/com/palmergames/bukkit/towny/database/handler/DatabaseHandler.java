@@ -39,7 +39,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -323,11 +322,10 @@ public abstract class DatabaseHandler {
 	 * Loads all necessary objects for the database.
 	 */
 	public final void loadAll() {
-		loadAllResidents();
 		loadAllWorlds();
 		loadAllNations();
 		loadAllTowns();
+		loadAllResidents();
 		loadAllTownBlocks();
-		
 	}
 }
