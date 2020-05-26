@@ -1139,5 +1139,5 @@ msg_hover_next_page: 'Próxima página'
 msg_hover_previous_page: 'Página anterior'
 
 # Added in 0.83
-msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
-msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
+msg_max_tax_amount_only_for_percent: "Limites de taxas apenas podem ser definidos para cidades com porcentagens de taxas."
+msg_town_set_tax_max_percent_amount: "%s mudou o valor da taxa máxima para %s."
