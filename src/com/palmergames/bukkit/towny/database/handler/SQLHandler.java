@@ -124,8 +124,9 @@ public class SQLHandler {
 	public boolean executeUpdate(String updateStmt, @Nullable String errorMessage) {
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate(updateStmt);
-			return true;
+			int rowsAffected = stmt.executeUpdate(updateStmt);
+			// Return whether the update actually updated anything
+			return rowsAffected > 0;
 		} catch (SQLException ex) {
 			if (errorMessage != null) {
 				TownyMessaging.sendErrorMsg(errorMessage);
@@ -141,8 +142,7 @@ public class SQLHandler {
 	
 	public void executeUpdatesError(@Nullable String errorMessage, @NotNull String... updates) {
 		Objects.requireNonNull(updates);
-		try {
-			Statement stmt = con.createStatement();
+		try (Statement stmt = con.createStatement();) {
 			
 			for (String update : updates) {
 				// Try-catch around update to prevent one failed update from stopping the rest.
