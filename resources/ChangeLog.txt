@@ -4605,3 +4605,8 @@ v0.92.0.11:
     - Closes #4000. 
   - Fix getTownBlockStatus that affect Citizens2 NPCs from displaying "Failed to fetch resident: name" in the log.
   - Fix bad PlotBlockData preventing a town from being deleted.
+  - Fix Leash_Hitches entities being unprotected from right-click-removals.
+    - Allowed outsiders to steal animals.
+    - Closes #4028.
+  - REQUIRED CONFIG CHANGE: add ,LEAD to the end of the protection.switch_ids list.
+  
