@@ -59,6 +59,25 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		alterTownyObjectTable(Town.class);
 		alterTownyObjectTable(Resident.class);
 	}
+
+	private <T extends TownyObject> void createTownyObjectTable(Class<T> objectClazz) {
+		final String tableName = getTableName(objectClazz);
+		Validate.notNull(tableName);
+
+		// Fetch primary field, and gather appropriate SQL.
+		Field primaryField = fetchPrimaryKeyField(objectClazz);
+		String pkStmt = "";
+		if (primaryField != null) {
+			pkStmt = ", PRIMARY KEY" + "(`" + primaryField.getName() + "`)";
+		}
+
+		String createTableStmt = "CREATE TABLE IF NOT EXISTS " + tableName +" ("
+			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL"
+			+ pkStmt
+			+ ")";
+
+		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
+	}
 	
 	// TODO Figure out how to handle insertions vs updates
 	@Override
@@ -87,39 +106,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
 	}
-	
-	private String tblPrefix() {
-		return TownySettings.getSQLTablePrefix();
-	}
-	
-	private <T extends Saveable> String[] alterColumnStatements(Class<T> clazz, Collection<String> filter) {
-		String tableName = getTableName(clazz);
-		Validate.notNull(tableName);
 
-		return ReflectionUtil.getAllFields(clazz, true).stream()
-				.filter(f -> !filter.contains(f.getName()))
-				.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
-					f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
-				.toArray(String[]::new);
-	}
-
-	private <T extends TownyObject> void createTownyObjectTable(Class<T> objectClazz) {
-		final String tableName = getTableName(objectClazz);
-		Validate.notNull(tableName);
-
-		// Fetch primary field, and gather appropriate SQL.
-		Field primaryField = fetchPrimaryKeyField(objectClazz);
-		String pkStmt = "";
-		if (primaryField != null) {
-			pkStmt = ", PRIMARY KEY" + "(`" + primaryField.getName() + "`)";
-		}
-
-		String createTableStmt = "CREATE TABLE IF NOT EXISTS " + tableName +" ("
-			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL"
-			+ pkStmt
-			+ ")";
-
-		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
+	@Override
+	public boolean delete(@NotNull Saveable obj) {
+		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
 	
 	private <T extends TownyObject> void alterTownyObjectTable(Class<T> objectClazz) {
@@ -145,9 +135,15 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		sqlHandler.executeUpdatesError("Error creating table " + tableName + "!" , columnStatements);
 	}
 
-	@Override
-	public boolean delete(@NotNull Saveable obj) {
-		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
+	private <T extends Saveable> String[] alterColumnStatements(Class<T> clazz, Collection<String> filter) {
+		String tableName = getTableName(clazz);
+		Validate.notNull(tableName);
+
+		return ReflectionUtil.getAllFields(clazz, true).stream()
+			.filter(f -> !filter.contains(f.getName()))
+			.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
+				f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
+			.toArray(String[]::new);
 	}
 	
 	private <T> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {
@@ -353,7 +349,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			return null;
 		}
 		
-		String tableName = tblPrefix() + saveable.getSQLTable();
+		String tableName = TownySettings.getSQLTablePrefix() + saveable.getSQLTable();
 		
 		tableNameCache.putIfAbsent(type, tableName);
 		
