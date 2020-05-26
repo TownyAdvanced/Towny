@@ -3360,14 +3360,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			}
 
-			// Propagate perms to all unchanged, town owned, townblocks
+			// Propagate perms to all unchanged townblocks
 			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 					}
-				}
+				} else if (townBlockOwner instanceof Resident)
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
 			}
 
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));

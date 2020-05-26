@@ -4616,3 +4616,4 @@ v0.92.0.11:
     - This step is being taken because under certain circumstances it would cause Towny to harm it's own database when loading.
   - Fix Towny not refreshing the permissions of online players when /ta reload perms is used.
   - Fix issue where a badly configured townyperms.yml causes DB failure, courtesy of Goosius1 with PR #4003.
+  - Fix /res set perm command not applying the new /res perm line to all unchanged resident-owned townblocks.
