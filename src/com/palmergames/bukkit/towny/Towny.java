@@ -448,7 +448,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * @param error the error to set
 	 */
-	protected void setError(boolean error) {
+	public void setError(boolean error) {
 
 		this.error = error;
 	}

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -75,7 +76,7 @@ public class TownyUniverse {
             TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
-        } catch (IOException e) {
+        } catch (IOException | TownyException e) {
             e.printStackTrace();
             return false;
         }
