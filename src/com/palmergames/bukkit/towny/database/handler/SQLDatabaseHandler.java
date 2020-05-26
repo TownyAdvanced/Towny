@@ -53,11 +53,15 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		createTownyObjectTable(Town.class);
 		createTownyObjectTable(Nation.class);
 		createTownyObjectTable(Resident.class);
+		createTownyObjectTable(TownyWorld.class);
+		createTownyObjectTable(TownBlock.class);
 		
 		// Update/alter tables. Order of this matters!
+		createTownyObjectTable(TownyWorld.class);
 		alterTownyObjectTable(Nation.class);
 		alterTownyObjectTable(Town.class);
 		alterTownyObjectTable(Resident.class);
+		alterTownyObjectTable(TownBlock.class);
 	}
 
 	private <T extends TownyObject> void createTownyObjectTable(Class<T> objectClazz) {
