@@ -277,7 +277,13 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void loadAllNations() {
-		throw new UnsupportedOperationException();
+		loadNormalTownyObject(Nation.class, nation -> {
+			try {
+				TownyUniverse.getInstance().addNation(nation);	
+			} catch (AlreadyRegisteredException e) {
+				TownyMessaging.sendErrorMsg("Nation " + nation.getName() + " is already registered!");
+			}
+		});
 	}
 
 	@Override
