@@ -4609,4 +4609,4 @@ v0.92.0.11:
     - Allowed outsiders to steal animals.
     - Closes #4028.
   - REQUIRED CONFIG CHANGE: add ,LEAD to the end of the protection.switch_ids list.
-  
+  - pt-br.yml updated to 0.83, courtesy of vsdepontes with PR #4029.
