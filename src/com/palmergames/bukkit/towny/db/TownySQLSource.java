@@ -739,7 +739,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					line = rs.getString("town-ranks");
 					if ((line != null) && (!line.isEmpty())) {
 						search = (line.contains("#")) ? "#" : ",";
-						resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
+						resident.setTownRanks(Arrays.asList((line.split(search))));
 						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 					}
 				} catch (Exception e) {}
@@ -748,7 +748,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					line = rs.getString("nation-ranks");
 					if ((line != null) && (!line.isEmpty())) {
 						search = (line.contains("#")) ? "#" : ",";
-						resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
+						resident.setNationRanks(Arrays.asList((line.split(search))));
 						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
 					}
 				} catch (Exception e) {}

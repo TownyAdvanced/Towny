@@ -631,13 +631,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				try {
 					line = keys.get("town-ranks");
 					if (line != null)
-						resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+						resident.setTownRanks(Arrays.asList((line.split(","))));
 				} catch (Exception e) {}
 
 				try {
 					line = keys.get("nation-ranks");
 					if (line != null)
-						resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+						resident.setNationRanks(Arrays.asList((line.split(","))));
 				} catch (Exception e) {}
 
 				line = keys.get("friends");
