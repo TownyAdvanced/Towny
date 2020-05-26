@@ -736,19 +736,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
                 }
 
-                line = rs.getString("town-ranks");
-                if ((line != null) && (!line.isEmpty())) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
-                }
+				try {
+					line = rs.getString("town-ranks");
+					if ((line != null) && (!line.isEmpty())) {
+						search = (line.contains("#")) ? "#" : ",";
+						resident.setTownRanks(Arrays.asList((line.split(search))));
+						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
+					}
+				} catch (Exception e) {}
 
-                line = rs.getString("nation-ranks");
-                if ((line != null) && (!line.isEmpty())) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
-                }
+				try {
+					line = rs.getString("nation-ranks");
+					if ((line != null) && (!line.isEmpty())) {
+						search = (line.contains("#")) ? "#" : ",";
+						resident.setNationRanks(Arrays.asList((line.split(search))));
+						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
+					}
+				} catch (Exception e) {}
 
                 try {
                     line = rs.getString("friends");
@@ -1935,7 +1939,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         String value;
         
         if (isFile(fileName)) {
-            PlotBlockData plotBlockData = new PlotBlockData(townBlock);
+            PlotBlockData plotBlockData = null;
+			try {
+				plotBlockData = new PlotBlockData(townBlock);
+			} catch (NullPointerException e1) {
+				TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+				return null;
+			}
             List<String> blockArr = new ArrayList<>();
             int version = 0;
             

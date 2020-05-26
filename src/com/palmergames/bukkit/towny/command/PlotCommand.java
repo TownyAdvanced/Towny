@@ -705,7 +705,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 						
 						try {
-							TownBlockType townBlockType = TownBlockType.lookup(split[0]);
+							String plotTypeName = split[0];
+							
+							// Handle type being reset
+							if (plotTypeName.equalsIgnoreCase("reset"))
+								plotTypeName = "default";
+							
+							TownBlockType townBlockType = TownBlockType.lookup(plotTypeName);
 
 							if (townBlockType == null)
 								throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
@@ -714,8 +720,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (!preEvent.isCancelled()) {
-								setPlotType(resident, townBlock.getWorldCoord(), split[0]);
-								player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+								setPlotType(resident, townBlock.getWorldCoord(), townBlockType);
+								player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), plotTypeName));
 							} else {
 								player.sendMessage(preEvent.getCancelMessage());
 							}
@@ -965,56 +971,27 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException - Exception.
 	 * @throws EconomyException - Exception thrown if error with economy.
 	 */
-	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException, EconomyException {
+	private void setPlotType(Resident resident, WorldCoord worldCoord, TownBlockType type) throws TownyException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		if (resident.hasTown())
-			try {
-				TownBlock townBlock = worldCoord.getTownBlock();
 
-				// Test we are allowed to work on this plot
-				plotTestOwner(resident, townBlock); // ignore the return as we
-				// are only checking for an
-				// exception
+		TownBlock townBlock = worldCoord.getTownBlock();
 
-				townBlock.setType(type, resident);		
-				Town town = resident.getTown();
-				if (townBlock.isJail()) {
-					Player p = TownyAPI.getInstance().getPlayer(resident);
-					if (p == null) {
-						throw new NotRegisteredException();
-					}
-					town.addJailSpawn(p.getLocation());
-				}
+		// Test we are allowed to work on this plot
+		plotTestOwner(resident, townBlock); // ignore the return as we
+		// are only checking for an
+		// exception
 
-				townBlock.save();
-
-			} catch (NotRegisteredException e) {
+		townBlock.setType(type, resident);
+		Town town = resident.getTown();
+		if (townBlock.isJail()) {
+			Player p = TownyAPI.getInstance().getPlayer(resident);
+			if (p == null) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}
-		else if (!resident.hasTown()) {
-			
-			TownBlock townBlock = worldCoord.getTownBlock();
-
-			// Test we are allowed to work on this plot
-			plotTestOwner(resident, townBlock); // ignore the return as we
-												// are only checking for an
-												// exception
-			townBlock.setType(type, resident);		
-			Town town = resident.getTown();
-			if (townBlock.isJail()) {
-				Player p = TownyAPI.getInstance().getPlayer(resident);
-				if (p == null) {
-					throw new TownyException("Player could not be found.");
-				}
-				town.addJailSpawn(p.getLocation());
-			}
-			
-			townBlock.save();
-		
+			town.addJailSpawn(p.getLocation());
 		}
-		else
-			throw new TownyException(TownySettings.getLangString("msg_err_must_belong_town"));
+
+		townBlock.save();
 	}
 
 	/**
@@ -1624,21 +1601,40 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				return true;
 			}
+			String plotTypeName = split[1];
+
 			// Stop setting plot groups to Jail plot, because that would set a spawn point for each plot in the location of the player.			
-			if (split[1].equalsIgnoreCase("jail")) {
+			if (plotTypeName.equalsIgnoreCase("jail")) {
 				throw new TownyException(TownySettings.getLangString(TownySettings.getLangString("msg_err_cannot_set_group_to_jail")));
 			}
+
+			// Handle type being reset
+			if (plotTypeName.equalsIgnoreCase("reset"))
+				plotTypeName = "default";
+
+			TownBlockType townBlockType = TownBlockType.lookup(plotTypeName);
+
+			if (townBlockType == null)
+				throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
 				
 			for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 				try {
-					setPlotType(resident, tb.getWorldCoord(), split[1]);
+					// Allow for PlotPreChangeTypeEvent to trigger
+					PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, tb, resident);
+					BukkitTools.getPluginManager().callEvent(preEvent);
+
+					if (!preEvent.isCancelled()) {
+						setPlotType(resident, tb.getWorldCoord(), townBlockType);
+					} else {
+						player.sendMessage(preEvent.getCancelMessage());
+					}
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_could_not_set_group_type") + e.getMessage());
 					return false;
 				}
 			}
 
-			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_group_type_to_x"), split[1]));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_group_type_to_x"), plotTypeName));
 			
 		} else {
 

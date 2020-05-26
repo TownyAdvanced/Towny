@@ -107,7 +107,7 @@ public class TownyUniverse {
             TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
-        } catch (IOException e) {
+        } catch (IOException | TownyException e) {
             e.printStackTrace();
             return false;
         }

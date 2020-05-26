@@ -1555,8 +1555,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	public void reloadPerms() {
 		String rootFolder = TownyUniverse.getInstance().getRootFolder();
-		TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+		try {
+			TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+		} catch (TownyException e) {
+			// Place Towny in Safe Mode while the townyperms.yml is unreadable.
+			plugin.setError(true);
+			TownyMessaging.sendErrorMsg(sender, "Error Loading townyperms.yml!");
+			return;
+		}
+		// If Towny is in Safe Mode (hopefully because of townyperms only) turn off Safe Mode.
+		// TODO: Potentially do a full towny reload via the normal TownyUniverse.loadSettings() so that we would know if there would be a reason to have safe mode remain on. 
+		if (plugin.isError())
+			plugin.setError(false);
+		
+		// Update everyone who is online with the changes made.
+		TownyPerms.updateOnlinePerms();
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded_perms"));
+		
 	}
 
 	/**

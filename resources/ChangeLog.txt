@@ -4603,3 +4603,17 @@ v0.92.0.11:
     - Cancellable event that plugins can use to stop players from changing a plot type.
   - Fix plot groups not showing the correct pvp setting when /plot group set perm command is used.
     - Closes #4000. 
+  - Fix getTownBlockStatus that affect Citizens2 NPCs from displaying "Failed to fetch resident: name" in the log.
+  - Fix bad PlotBlockData preventing a town from being deleted.
+  - Fix Leash_Hitches entities being unprotected from right-click-removals.
+    - Allowed outsiders to steal animals.
+    - Closes #4028.
+  - REQUIRED CONFIG CHANGE: add ,LEAD to the end of the protection.switch_ids list.
+  - pt-br.yml updated to 0.83, courtesy of vsdepontes with PR #4029.
+  - Fix for /plot set reset, courtesy of Silverwolfg11 with PR #4026.
+  - Fix Towny loading bad townyperms.yml files.
+    - Towny will now enter safe mode if the townyperms.yml file will not load correctly.
+    - This step is being taken because under certain circumstances it would cause Towny to harm it's own database when loading.
+  - Fix Towny not refreshing the permissions of online players when /ta reload perms is used.
+  - Fix issue where a badly configured townyperms.yml causes DB failure, courtesy of Goosius1 with PR #4003.
+  - Fix /res set perm command not applying the new /res perm line to all unchanged resident-owned townblocks.

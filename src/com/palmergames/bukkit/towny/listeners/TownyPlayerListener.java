@@ -375,6 +375,14 @@ public class TownyPlayerListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 				break;
+				
+			case LEASH_HITCH:
+
+				TownyMessaging.sendDebugMsg("Leash Hitch Right Clicked");
+				block = Material.LEAD;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
+				break;				
 			
 			default:
 				break;
@@ -453,6 +461,11 @@ public class TownyPlayerListener implements Listener {
 					
 				case PAINTING:
 					block = Material.PAINTING;
+					actionType = ActionType.DESTROY;
+					break;
+					
+				case LEASH_HITCH:
+					block = Material.LEAD;
 					actionType = ActionType.DESTROY;
 					break;
 					

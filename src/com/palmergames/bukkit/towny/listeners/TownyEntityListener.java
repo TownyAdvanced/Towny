@@ -948,7 +948,6 @@ public class TownyEntityListener implements Listener {
 		
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
-			
 			Object remover = evt.getRemover();
 			
 			/*
@@ -960,10 +959,24 @@ public class TownyEntityListener implements Listener {
 
 			if (remover instanceof Player) {
 				Player player = (Player) remover;
+				Material mat = null;
+				switch (event.getEntity().getType()) {
+				case PAINTING:
+					mat = Material.PAINTING;
+					break;
+				case LEASH_HITCH:
+					mat = Material.LEAD;
+					break;
+				case ITEM_FRAME:
+					mat = Material.ITEM_FRAME;
+					break;
+				default:
+					mat = Material.GRASS_BLOCK;
+				}
+					
 
 				// Get destroy permissions (updates if none exist)
-				//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.DESTROY);
-				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.DESTROY);
+				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), mat, TownyPermission.ActionType.DESTROY);
 
 				// Allow the removal if we are permitted
 				if (bDestroy)

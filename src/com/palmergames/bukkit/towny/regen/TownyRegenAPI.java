@@ -161,10 +161,14 @@ public class TownyRegenAPI {
 	 * Loads a Plot Chunk snapshot from the data source
 	 * 
 	 * @param townBlock - TownBlock to get
-	 * @return loads the PlotData for the given townBlock   
+	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		PlotBlockData data = TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		if (data != null) 
+			return data;
+		else
+			return null;
 	}
 
 	/**
