@@ -627,15 +627,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("town");
 				if (line != null)
 					resident.setTown(getTown(line));
-				
-				line = keys.get("town-ranks");
-				if (line != null)
-					resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-				
-				line = keys.get("nation-ranks");
-				if (line != null)
-					resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-				
+
+				try {
+					line = keys.get("town-ranks");
+					if (line != null)
+						resident.setTownRanks(Arrays.asList((line.split(","))));
+				} catch (Exception e) {}
+
+				try {
+					line = keys.get("nation-ranks");
+					if (line != null)
+						resident.setNationRanks(Arrays.asList((line.split(","))));
+				} catch (Exception e) {}
+
 				line = keys.get("friends");
 				if (line != null) {
 					String[] tokens = line.split(",");
