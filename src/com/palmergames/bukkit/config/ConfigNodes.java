@@ -2308,6 +2308,22 @@ public enum ConfigNodes {
 			"# This value determines the minimum duration after spawning in which a player is marked peaceful.",
 			"# The value will not be this precise in practice, but limited by the short timer tick interval."),
 
+	//Player Health Regain Limiter
+	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED(
+			"war.common.player_health_regain_limiter.enabled",
+			"false",
+			"# If this value is true,",
+			"# then player health regain is limited to a configured max per short-tick.",
+			"# This setting is useful to nerf the effect of health potions:",
+			"# 1. Pro-pvp'ers tend to become near-immortal",
+			"# 2. Unless opposed by similarly skilled players, a handful of these players can waffle-stomp and entire server",
+			"# 3. If opposed as indicated, high intensity close quarter melees can go on for hours without pause,",
+			"#    which might not be a healthy experience to be delivering"),
+	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK(
+			"war.common.player_health_regain_limiter.max_amount_per_short_tick",
+			"10.0",
+			"# The value determines the max health regain amount per short tick."),
+
 	//Block glitching prevention
 	WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED(
 			"war.common.block_glitching_prevention.enabled",

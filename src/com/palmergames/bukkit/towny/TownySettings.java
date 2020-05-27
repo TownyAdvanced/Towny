@@ -3255,4 +3255,12 @@ public class TownySettings {
 	public static boolean isBlockGlitchingPreventionEnabled() {
 		return getBoolean(ConfigNodes.WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED);
 	}
+
+	public static boolean isPlayerHealthRegainLimiterEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED);
+	}
+
+	public static double getPlayerHealthRegainLimiterMaxAmountPerShortTick() {
+		return getDouble(ConfigNodes.WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK);
+	}
 }
