@@ -2311,7 +2311,7 @@ public enum ConfigNodes {
 	//Player Health Regain Limiter
 	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED(
 			"war.common.player_health_regain_limiter.enabled",
-			"false",
+			"true",
 			"# If this value is true,",
 			"# then player health regain is limited to a configured max per short-tick.",
 			"# This setting is useful to nerf the effect of health potions:",
