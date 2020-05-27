@@ -77,7 +77,7 @@ public class TownyEconomyHandler {
 	 * 
 	 * @return true if successful.
 	 */
-	public static Boolean setupEconomy() {
+	public static boolean setupEconomy() {
 
 		Plugin economyProvider = null;
 
