@@ -2923,8 +2923,8 @@ public class TownySettings {
 		return nationColorsMap;
 	}
 
-	public static boolean isTownBankruptsyEnabled() {
-		return getBoolean(ConfigNodes.TOWN_BANKRUPTSY_ENABLED);
+	public static boolean isTownBankruptcyEnabled() {
+		return getBoolean(ConfigNodes.TOWN_BANKRUPTCY_ENABLED);
 	}
 }
 

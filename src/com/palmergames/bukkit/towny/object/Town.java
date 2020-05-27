@@ -1018,11 +1018,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isOpen() {
 
-		if(TownySettings.isTownBankruptsyEnabled() && isBankrupt()) {
-			return false;
-		}
-
-		return isOpen;
+		return isBankrupt() ? false : isOpen;
 	}
 
 	public void collect(double amount) throws EconomyException {
@@ -1591,7 +1587,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public boolean isBankrupt() {
 		try {
-			return getDebtAccount().getHoldingBalance() > 0;
+			return TownySettings.isTownBankruptcyEnabled() && getDebtAccount().getHoldingBalance() > 0;
 		} catch (EconomyException e) {
 			return  false;
 		}
