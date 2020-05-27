@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
-import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.economy.Economy;
 import net.tnemc.core.Reserve;
 
@@ -193,6 +192,7 @@ public class TownyEconomyHandler {
 	 */
 	public static double getBalance(String accountName, World world) {
 		checkNewAccount(accountName);
+
 		return economy.getBalance(accountName, world);
 	}
 
@@ -205,6 +205,7 @@ public class TownyEconomyHandler {
 	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, double amount, World world) {
+
 		return getBalance(accountName, world) >= amount;
 	}
 	
@@ -265,6 +266,8 @@ public class TownyEconomyHandler {
 		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
+		
+		checkNewAccount(accountName);
 
 		if (economy.add(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
