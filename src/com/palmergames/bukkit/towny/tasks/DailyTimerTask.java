@@ -210,7 +210,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
 					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-						if(TownySettings.isTownBankruptsyEnabled()) {
+
+						if(TownySettings.isTownBankruptcyEnabled()) {
 							//Add debt to town
 							if(town.isBankrupt()) {
 								town.increaseTownDebt(nation.getTaxes() - town.getAccount().getHoldingBalance(), "Town Upkeep");
@@ -238,7 +239,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 
-			if(TownySettings.isTownBankruptsyEnabled()) {
+			if(TownySettings.isTownBankruptcyEnabled()) {
 				//Towns go into the bankrupt state
 				if (townsWhichCannotAffordTax != null) {
 					if (townsWhichCannotAffordTax.size() == 1)
@@ -426,7 +427,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Town is paying upkeep
 
 						if(!town.getAccount().pay(upkeep, "Town Upkeep")) {
-							if (TownySettings.isTownBankruptsyEnabled()) {
+							if (TownySettings.isTownBankruptcyEnabled()) {
 								//Add debt to town
 								if(town.isBankrupt()) {
 									town.increaseTownDebt(upkeep - town.getAccount().getHoldingBalance(), "Town Upkeep");
@@ -466,7 +467,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			}			
 		}
 
-		if(TownySettings.isTownBankruptsyEnabled()) {
+		if(TownySettings.isTownBankruptcyEnabled()) {
 			plugin.resetCache(); //Allow perms change to take effect immediately
 			//Towns go into the bankrupt state
 			if (bankruptTowns != null) {

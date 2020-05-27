@@ -1411,7 +1411,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean isBankrupt() {
 		try {
-			return getDebtAccount().getHoldingBalance() > 0;
+			return TownySettings.isTownBankruptcyEnabled() && getDebtAccount().getHoldingBalance() > 0;
 		} catch (EconomyException e) {
 			return  false;
 		}

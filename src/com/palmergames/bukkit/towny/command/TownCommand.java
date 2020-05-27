@@ -1491,8 +1491,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
 
-				if(TownySettings.isTownBankruptsyEnabled() && town.isBankrupt())
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_open"));
+				if(town.isBankrupt())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_toggle_open"));
 
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -3103,8 +3103,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 
-		if(TownySettings.isTownBankruptsyEnabled() && town.isBankrupt())
-			throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_invite"));
+		if(town.isBankrupt())
+			throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_invite"));
 
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
@@ -3343,7 +3343,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
-				if (TownySettings.isTownBankruptsyEnabled() && town.isBankrupt()) {
+				if (town.isBankrupt()) {
 					throw new TownyException(TownySettings.getLangString("msg_err_bankrupt_town_cannot_claim"));
 				}
 

@@ -385,7 +385,7 @@ public class PlayerCacheUtil {
 		//If town is bankrupt, nobody can build
 		TownBlock townBlock = null;
 		Town targetTown = null;
-		if(TownySettings.isTownBankruptsyEnabled() && action == ActionType.BUILD) {
+		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
 			try {
 				townBlock = pos.getTownBlock();
 				targetTown = townBlock.getTown();

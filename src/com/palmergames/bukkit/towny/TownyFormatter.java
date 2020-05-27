@@ -388,7 +388,7 @@ public class TownyFormatter {
 		// | Bank: 534 coins
 		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 			String bankString = "";
-			if(TownySettings.isTownBankruptsyEnabled() && town.isBankrupt()) {
+			if(town.isBankrupt()) {
 				bankString = String.format(TownySettings.getLangString("status_bank_bankrupt"), town.getDebtAccount().getHoldingFormattedBalance());
 			} else {
 				bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());

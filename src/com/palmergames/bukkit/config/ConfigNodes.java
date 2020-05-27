@@ -181,7 +181,6 @@ public enum ConfigNodes {
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
-<<<<<<< Upstream, based on origin/master
 	
 	NATION("nation", "", "", "",
 			"############################################################",
@@ -204,9 +203,8 @@ public enum ConfigNodes {
 			"",
 			"# Default nation board"),
 	
-=======
-	TOWN_BANKRUPTSY_ENABLED(
-			"town.bankruptsy_enabled",
+	TOWN_BANKRUPTCY_ENABLED(
+			"town.bankruptcy_enabled",
 			"false",
 			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
 			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
@@ -215,7 +213,6 @@ public enum ConfigNodes {
 			"# The debt can be repaid using /t deposit x.", 
 			"# Once all debt is repaid, the town immediately returns to a normal state."),
 
->>>>>>> a637b09 Added bankrupt towns feature
 	NWS(
 			"new_world_settings",
 			"",
