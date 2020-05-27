@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
-import com.palmergames.bukkit.towny.object.economy.AccountObserver;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.CappedAccount;
 import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
