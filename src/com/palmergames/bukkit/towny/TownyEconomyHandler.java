@@ -9,6 +9,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
+import net.tnemc.core.economy.currency.Currency;
 import net.tnemc.core.economy.ExtendedEconomyAPI;
 
 import org.bukkit.Bukkit;
@@ -38,7 +39,9 @@ public class TownyEconomyHandler {
 	private static EcoType Type = EcoType.NONE;
 
 	private static String version = "";
-
+	
+	private static boolean shouldCheckCurrency = false;
+	
 	public enum EcoType {
 		NONE, VAULT, RESERVE
 	}
@@ -121,6 +124,14 @@ public class TownyEconomyHandler {
 			reserveEconomy = ((Reserve) economyProvider).economy();
 			setVersion(String.format("%s %s", reserveEconomy.name(), "via Reserve" ));
 			Type = EcoType.RESERVE;
+			
+			final String currencyName = TownySettings.getCurrencyName();
+			if (currencyName != null) {
+				if (!(reserveEconomy instanceof ExtendedEconomyAPI))
+					TownyMessaging.sendMsg("A custom currency was configured, but the Reserve economy does not implemented ExtendedEconomyAPI. This can cause errors later on.");
+			}
+			
+			shouldCheckCurrency = true;
 			return true;
 		}
 
@@ -128,6 +139,56 @@ public class TownyEconomyHandler {
 		 * No compatible Economy system found.
 		 */
 		return false;
+	}
+
+	/**
+	 * Checks whether the currency is configured right.
+	 */
+	private static void checkCurrency() {
+		if (shouldCheckCurrency) {
+			shouldCheckCurrency = false;
+			final String currencyName = TownySettings.getCurrencyName();
+			
+			if (currencyName != null && !reserveEconomy.hasCurrency(currencyName))
+				TownyMessaging.sendErrorMsg("The currency configured for Towny to use does not exist.");
+		}
+	}
+
+	/**
+	 * Gets the currency Towny is configured to use. Reserve must be the economy API in-use. 
+	 *
+	 * When the currency does not exist, returns null. When Reserve isn't loaded, the behaviour is undefined.
+	 *
+	 * @return Returns the currency Towny is configured to use, or null if it does not exist..
+	 */
+	private static Currency getCurrency() {
+		final String currencyName = TownySettings.getCurrencyName();
+		
+		if (currencyName != null)
+			return getCurrency(currencyName);
+
+		if (reserveEconomy instanceof ExtendedEconomyAPI)
+			return ((ExtendedEconomyAPI)reserveEconomy).getDefault();
+		else
+			// Default to returning null.
+			return null;
+	}
+	
+	/**
+	 * Gets a currency from its name. Reserve must be the economy API in-use. 
+	 * 
+	 * When the currency does not exist, returns null. When Reserve isn't loaded, the behaviour is undefined.
+	 * 
+	 * @param currencyName The name of the currency.
+	 * @return Returns the currency if it exists, or null otherwise.
+	 */
+	private static Currency getCurrency(final String currencyName) {
+		if (!(reserveEconomy instanceof ExtendedEconomyAPI)) {
+			TownyMessaging.sendErrorMsg("Tried to get Currency, but the Reserve economy provider does not support it.");
+			return null;
+		}
+		
+		return ((ExtendedEconomyAPI)reserveEconomy).getCurrency(currencyName);
 	}
 
 	/**
@@ -250,8 +311,12 @@ public class TownyEconomyHandler {
 			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
 				if(!reserveEconomy.createAccountDetail(accountName).success()) return 0.0;
 			}
-
-			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
+			
+			final String currencyName = TownySettings.getCurrencyName();
+			final BigDecimal holdings = currencyName == null
+				? reserveEconomy.getHoldings(accountName, world.getName())
+				: reserveEconomy.getHoldings(accountName, world.getName(), currencyName);
+			return holdings.doubleValue();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -313,7 +378,12 @@ public class TownyEconomyHandler {
 			}
 			
 			BukkitTools.getPluginManager().callEvent(event);
-			return reserveEconomy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+
+			final String currencyName = TownySettings.getCurrencyName();
+			
+			return currencyName == null
+				? reserveEconomy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success()
+				: reserveEconomy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName(), currencyName).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -360,7 +430,12 @@ public class TownyEconomyHandler {
 			}
 
 			BukkitTools.getPluginManager().callEvent(event);
-			return reserveEconomy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+
+			final String currencyName = TownySettings.getCurrencyName();
+
+			return currencyName == null
+				? reserveEconomy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success()
+				: reserveEconomy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName(), currencyName).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -386,7 +461,11 @@ public class TownyEconomyHandler {
 				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
 			}
 
-			return reserveEconomy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+			final String currencyName = TownySettings.getCurrencyName();
+
+			return currencyName == null
+				? reserveEconomy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success()
+				: reserveEconomy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName(), currencyName).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -409,12 +488,22 @@ public class TownyEconomyHandler {
 	 * @return string containing the formatted balance
 	 */
 	public static String getFormattedBalance(double balance) {
-
 		try {
 			switch (Type) {
 
 			case RESERVE:
-				return reserveEconomy.format(new BigDecimal(balance));
+				checkCurrency();
+				
+				final Currency currency = getCurrency();
+				
+				if (currency == null) {
+					return reserveEconomy.format(new BigDecimal(balance));
+				} else if (!(reserveEconomy instanceof ExtendedEconomyAPI)) {
+					TownyMessaging.sendErrorMsg("The Reserve economy does not support ExtendedEconomyAPI.");
+					return reserveEconomy.format(new BigDecimal(balance));
+				} else {
+					return ((ExtendedEconomyAPI) reserveEconomy).format(new BigDecimal(balance), currency);
+				}
 
 			case VAULT:
 				return vaultEconomy.format(balance);
@@ -430,7 +519,4 @@ public class TownyEconomyHandler {
 		return String.format("%.2f", balance);
 
 	}
-
-
-
 }

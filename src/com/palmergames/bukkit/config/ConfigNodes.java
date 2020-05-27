@@ -690,6 +690,12 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
+	PLUGIN_CURRENCY_NAME(
+		"plugin.interfacing.currency_name",
+		"",
+		"",
+		"# When Reserve is used, the currency to use in Reserve for towny-related transactions.",
+		"# If set to an empty string, or when not using Reserve, it lets the economy plugin decide what currency to use."),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(

@@ -1116,6 +1116,15 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
 	}
 
+	/**
+	 * Returns the currency name, or null when the name is up to the Economy provider to determine.
+	 * @return The currency name, or null.
+	 */
+	public static String getCurrencyName() {
+		final String currencyNameValue = getString(ConfigNodes.PLUGIN_CURRENCY_NAME);
+		return currencyNameValue.equals("") ? null : currencyNameValue;
+	}
+
 	public static boolean isFakeResident(String name) {
 
 		return getString(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS).toLowerCase().contains(name.toLowerCase());
