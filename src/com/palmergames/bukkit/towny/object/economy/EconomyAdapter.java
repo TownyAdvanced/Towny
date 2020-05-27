@@ -66,7 +66,7 @@ public interface EconomyAdapter {
 	 * @param world The world this account is in.
 	 * @return A boolean indicating success.
 	 */
-	boolean setBalance(String accountName, Double amount, World world);
+	boolean setBalance(String accountName, double amount, World world);
 
 	/**
 	 * Get's the proper formatting for a given balance.

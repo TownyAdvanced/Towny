@@ -45,7 +45,7 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public boolean setBalance(String accountName, Double amount, World world) {
+	public boolean setBalance(String accountName, double amount, World world) {
 		return economy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 	}
 

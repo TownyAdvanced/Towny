@@ -47,7 +47,7 @@ public class VaultEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public boolean setBalance(String accountName, Double amount, World world) {
+	public boolean setBalance(String accountName, double amount, World world) {
 		return economy.depositPlayer(accountName, (amount - economy.getBalance(accountName))).type == EconomyResponse.ResponseType.SUCCESS;
 	}
 
