@@ -200,7 +200,7 @@ public class TownyEconomyHandler {
 	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
-	public static boolean hasEnough(String accountName, Double amount, World world) {
+	public static boolean hasEnough(String accountName, double amount, World world) {
 		TownyMessaging.sendErrorMsg(getBalance(accountName, world) + "");
 		return getBalance(accountName, world) >= amount;
 	}
@@ -213,10 +213,10 @@ public class TownyEconomyHandler {
 	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtract(String accountName, Double amount, World world) {
+	public static boolean subtract(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
-		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount.intValue());
+		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
 		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
@@ -245,10 +245,10 @@ public class TownyEconomyHandler {
 	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean add(String accountName, Double amount, World world) {
+	public static boolean add(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
-		Transaction transaction = new Transaction(TransactionType.ADD, player, amount.intValue());
+		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
 		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
@@ -269,7 +269,7 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	public static boolean setBalance(String accountName, Double amount, World world) {
+	public static boolean setBalance(String accountName, double amount, World world) {
 		checkNewAccount(accountName);
 		return economy.setBalance(accountName, amount, world);
 	}
