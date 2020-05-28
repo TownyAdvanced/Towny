@@ -496,13 +496,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_NEW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				boolean noCharge = TownySettings.getNewTownPrice() == 0.0 || !TownySettings.isUsingEconomy();
 
 				if (split.length == 1) {
 					throw new TownyException(TownySettings.getLangString("msg_specify_name"));
 				} else if (split.length >= 2) {
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String townName = String.join("_", newSplit);
-					newTown(player, townName, player.getName(), false);			
+					
+					newTown(player, townName, player.getName(), noCharge);
 				}
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
@@ -1585,6 +1588,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_toggle_open_off"));
 				}
 
+				if(town.isBankrupt())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_toggle_open"));
+
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_open"), town.isOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 				if (admin)
@@ -2603,7 +2609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
-			
+
 			// If the town isn't free to make, send a confirmation.
 			if (!noCharge && TownySettings.isUsingEconomy()) { 
 				// Test if the resident can afford the town.
@@ -3263,7 +3269,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					town = specifiedTown;
 			}
-
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
@@ -3280,6 +3285,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_siege_besieged_town_cannot_recruit"));
 			return;
 		}
+
+		if(town.isBankrupt())
+			throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_invite"));
 
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
@@ -3474,14 +3482,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			}
 
-			// Propagate perms to all unchanged, town owned, townblocks
+			// Propagate perms to all unchanged townblocks
 			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 					}
-				}
+				} else if (townBlockOwner instanceof Resident)
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
 			}
 
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
@@ -3514,9 +3526,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
-				if(TownySettings.getWarSiegeEnabled()) {
+				if(TownySettings.getWarSiegeEnabled())
 					SiegeWarClaimUtil.verifySiegeEffectsOnClaiming(player, town);
-				}
+
+				if (town.isBankrupt())
+					throw new TownyException(TownySettings.getLangString("msg_err_bankrupt_town_cannot_claim"));
 
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
@@ -3795,7 +3809,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			
 			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
-			
+
+			//If town is bankrupt, clear some debt
+			if(town.isBankrupt()) {
+				if(amount >= town.getDebtAccount().getHoldingBalance()) {
+					//Full debt repayment
+					town.getAccount().setBalance(amount - town.getDebtAccount().getHoldingBalance(), "Debt repayment");
+					town.getDebtAccount().setBalance(0, "Debt Repayment");
+					plugin.resetCache(); //Allow perms change to take effect immediately
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_debts_cleared"), town.getFormattedName()));
+				} else {
+					//Partial debt repayment
+					town.getDebtAccount().pay(amount, "Debt repayment");
+					town.getAccount().setBalance(0, "Debt repayment");
+				}
+			}
+
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {

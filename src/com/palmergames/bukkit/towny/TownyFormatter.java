@@ -383,16 +383,15 @@ public class TownyFormatter {
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
 		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-			TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-			TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+		TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
+		TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
-		//Only show the following bits if the town is not ruined
-		if(!town.isRuined()) {
-			
 			// | Bank: 534 coins
-			String bankString = "";
-			if (TownySettings.isUsingEconomy()) {
-				if (TownyEconomyHandler.isActive()) {
+			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive() && !town.isRuined()) {
+				String bankString = "";
+				if (town.isBankrupt()) {
+					bankString = String.format(TownySettings.getLangString("status_bank_bankrupt"), town.getDebtAccount().getHoldingFormattedBalance());
+				} else {
 					bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
 					if (town.hasUpkeep())
 						bankString += String.format(TownySettings.getLangString("status_bank_town2"), BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
@@ -402,10 +401,10 @@ public class TownyFormatter {
 				}
 				out.add(bankString);
 			}
-	
+
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
-	
+
 			// Assistants [2]: Sammy, Ginger
 			List<String> ranklist = new ArrayList<>();
 			getRanks(town, ranklist);
@@ -518,7 +517,6 @@ public class TownyFormatter {
 					}
 				}
 			}
-		}
 
 		out.addAll(getExtraFields(town));
 

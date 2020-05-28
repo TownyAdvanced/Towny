@@ -21,8 +21,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -321,12 +321,19 @@ public class PlayerCacheUtil {
 		/*
 		 * Find the resident data for this player.
 		 */
-		Resident resident;
+		Resident resident = null;
 		try {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (TownyException e) {
-			System.out.print("Failed to fetch resident: " + player.getName());
-			return TownBlockStatus.NOT_REGISTERED;
+			// Check if entity is a Citizens NPC
+			if (plugin.isCitizens2()) {
+				if (CitizensAPI.getNPCRegistry().isNPC(player))
+					return TownBlockStatus.NOT_REGISTERED;
+			} else {
+				// If not an NPC then there is likely some sort of problem that should be logged.
+				System.out.print("Failed to fetch resident: " + player.getName());
+				return TownBlockStatus.NOT_REGISTERED;
+			}
 		}
 
 		try {
@@ -412,6 +419,25 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
+		// Allow admins to have ALL permissions
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
+			return true;
+
+		//If town is bankrupt, nobody can build
+		TownBlock townBlock = null;
+		Town targetTown = null;
+		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
+			try {
+				townBlock = pos.getTownBlock();
+				targetTown = townBlock.getTown();
+				if(targetTown.isBankrupt())  {
+					cacheBlockErrMsg(player, TownySettings.getLangString("msg_err_bankrupt_town_cannot_build"));
+					return false;
+				}
+			} catch (NotRegisteredException e) {
+			}
+		}
 
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
@@ -429,19 +455,17 @@ public class PlayerCacheUtil {
 			return false;
 		}
 
-		TownBlock townBlock = null;
 		Town playersTown = null;
-		Town targetTown = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		try {
 			playersTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 		} catch (NotRegisteredException e) {
 		}
 
 		try {
-			townBlock = pos.getTownBlock();
-			targetTown = townBlock.getTown();
+			if(townBlock == null)
+				townBlock = pos.getTownBlock();
+			if(targetTown == null)
+				targetTown = townBlock.getTown();
 		} catch (NotRegisteredException e) {
 
 			try {
@@ -501,13 +525,7 @@ public class PlayerCacheUtil {
 				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 				return false;
 			}
-
 		}
-
-		// Allow admins to have ALL permissions over towns.
-		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
-			return true;
-
 
 		// Plot Permissions
 
