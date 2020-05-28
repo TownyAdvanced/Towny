@@ -10,15 +10,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtil {
 	
-	private static final Map<Type, List<Field>> fieldCaches = new ConcurrentHashMap<>();
+	private static final Map<Type, Field[]> fieldCaches = new ConcurrentHashMap<>();
 
 	/**
 	 * Fetches all the fields from the TownyObject.
@@ -27,7 +25,7 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static @NotNull List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
+	public static @NotNull Field[] getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
 		Validate.notNull(townyObject);
 
 		// Get the class object.
@@ -42,25 +40,27 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the class passed in.
 	 */
-	public static @NotNull List<Field> getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
+	public static @NotNull Field[] getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
 		// Check if cached.
-		List<Field> fields = fieldCaches.get(objType);
+		Field[] fields = fieldCaches.get(objType);
 		
 		if (fields != null) {
 			return fields;
 		}
-		
-		// Else reflect the fields
-		fields = new ArrayList<>();
 
 		// Use a stack to evaluate classes in proper top-down hierarchy.
 		ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
 		
 		// Iterate through superclasses.
+		int fieldCount = 0;
 		for (Class<?> c = objType; c != null; c = c.getSuperclass()) {
 			classStack.push(c);
+			fieldCount += c.getDeclaredFields().length;
 		}
 		
+		fields = new Field[fieldCount];
+
+		int curIndex = 0;
 		for (Class<?> classType : classStack) {
 			for (Field field : classType.getDeclaredFields()) {
 				// Ignore transient fields.
@@ -68,7 +68,8 @@ public class ReflectionUtil {
 					continue;
 				}
 				
-				fields.add(field);
+				fields[curIndex] = field;
+				curIndex++;
 			}
 		}
 		
@@ -88,7 +89,7 @@ public class ReflectionUtil {
 	public static Map<String, ObjectContext> getObjectMap(Object obj) {
 
 		HashMap<String, ObjectContext> dataMap = new HashMap<>();
-		List<Field> fields = getAllFields(obj, true);
+		Field[] fields = getAllFields(obj, true);
 
 		for (Field field : fields) {
 			// Open field.

@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -143,7 +144,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		String tableName = getTableName(clazz);
 		Validate.notNull(tableName);
 
-		return ReflectionUtil.getAllFields(clazz, true).stream()
+		return Arrays.stream(ReflectionUtil.getAllFields(clazz, true))
 			.filter(f -> !filter.contains(f.getName()))
 			.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
 				f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
@@ -167,7 +168,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		Field[] fields = ReflectionUtil.getAllFields(obj, true);
 
 		Map<String, Object> values = rowToMap(rs);
 		for (Field field : fields) {
@@ -364,7 +365,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	private Field fetchPrimaryKeyField(@NotNull Object obj) {
 		Validate.notNull(obj);
 		
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		Field[] fields = ReflectionUtil.getAllFields(obj, true);
 		
 		for (Field field : fields) {
 			if (field.getAnnotation(PrimaryKey.class) != null) {

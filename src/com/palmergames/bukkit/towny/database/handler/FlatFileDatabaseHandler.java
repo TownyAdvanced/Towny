@@ -97,7 +97,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		Field[] fields = ReflectionUtil.getAllFields(obj, true);
 
 		HashMap<String, String> values = loadFileIntoHashMap(file);
 		for (Field field : fields) {
