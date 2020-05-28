@@ -92,25 +92,25 @@ public class SiegeWarMoneyUtil {
 				|| town.getTownBlocks().size() == 0) 
 			return;
 
-			double fullPillageAmountForAllResidents =
+			double fullPillageAmountForAllAttackingSoldiers =
 				TownySettings.getWarSiegePillageAmountPerPlot()
 					* town.getTownBlocks().size()
 					* getMoneyMultiplier(town);
 
 			//Take money from town
-			if(town.getAccount().pay(fullPillageAmountForAllResidents,"Pillage")) {
+			if(town.getAccount().pay(fullPillageAmountForAllAttackingSoldiers,"Pillage")) {
 				//Town can afford payment
-				actualPillageAmount = fullPillageAmountForAllResidents;
+				actualPillageAmount = fullPillageAmountForAllAttackingSoldiers;
 			} else {
 				//Town cannot afford payment
 				if (TownySettings.isTownBankruptcyEnabled()) {
 					//Take from town
 					if(town.isBankrupt()) {
-						actualPillageAmount = town.increaseTownDebt(nation.getTaxes(), "Pillage by soldiers of " + nation.getName());
+						actualPillageAmount = town.increaseTownDebt(fullPillageAmountForAllAttackingSoldiers, "Pillage by soldiers of " + nation.getName());
 					} else {
 						double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
 						town.getAccount().setBalance(0, "Pillage by soldiers of " + nation.getName());
-						double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes() - prePaymentTownBankBalance, "Pillage by soldiers of " + nation.getName());
+						double actualDebtIncrease = town.increaseTownDebt(fullPillageAmountForAllAttackingSoldiers - prePaymentTownBankBalance, "Pillage by soldiers of " + nation.getName());
 						actualPillageAmount = prePaymentTownBankBalance + actualDebtIncrease;
 						townNewlyBankrupted = true;
 					}

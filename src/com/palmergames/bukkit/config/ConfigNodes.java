@@ -2341,7 +2341,7 @@ public enum ConfigNodes {
 	//Block glitching prevention
 	WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED(
 			"war.common.block_glitching_prevention.enabled",
-			"true",
+			"false",
 			"# If this value is true, then block glitching is prevented.",
 			"# Block glitching refers to the practice of exploting lag to",
 			"# A. Quickly place_blocks in an otherwise perm-protected plot, to get over walls, or",

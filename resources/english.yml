@@ -1285,7 +1285,7 @@ msg_defenders: '&aDefenders'
 admin_panel_4: 'Run the new hour code'
 msg_newhour_success: 'newhour command executed successfully'
 town_help_12: 'Reclaim your town from a ruined state.'
-msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. In this state, all perms will be enabled & the town can be griefed."
+msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. After this time full deletion will occur. In the ruined state, all perms are enabled, the town can be griefed, and the town can be reclaimed by any resident using '/t reclaim.'"
 msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
 msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
 msg_town_reclaimed: '&b%s has reclaimed the town of %s.'

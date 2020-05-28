@@ -60,6 +60,12 @@ public class RuinsUtil {
 		if (town.isRuined())
 			return; //Town already ruined. Do not run code as it would reset ruin status to 888 (ie phase 1)
 
+		//Clear debts
+		try {
+			town.getDebtAccount().setBalance(0, "Debts cleared by town ruin");
+		} catch (EconomyException e) {
+		}
+
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
 		try {
 			if (town.hasNation()) {
