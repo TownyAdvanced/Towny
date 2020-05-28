@@ -1389,20 +1389,22 @@ public class Town extends Government implements TownBlockOwner {
 	 * Debt cannot increase beyond a certain threshold
 	 * (determined by the estimated value of the town)
 	 *
-	 * @param requestedNewDebtAmount The new debt requested
+	 * @param requestedDebtIncrease The debt increase
 	 * @param reason The reason for the debt
+	 * @return the actual debt increase
 	 */
-	public void increaseTownDebt(double requestedNewDebtAmount, String reason) throws EconomyException {
-		double actualNewDebtAmount;
+	public double increaseTownDebt(double requestedDebtIncrease, String reason) throws EconomyException {
+		double actualDebtIncrease;
 		double maximumDebtAmount = getEstimatedValueOfTown();
 
-		if(requestedNewDebtAmount + getDebtAccount().getHoldingBalance() < maximumDebtAmount) {
-			actualNewDebtAmount = requestedNewDebtAmount;
+		if(requestedDebtIncrease + getDebtAccount().getHoldingBalance() < maximumDebtAmount) {
+			actualDebtIncrease = requestedDebtIncrease;
 		} else {
-			actualNewDebtAmount = maximumDebtAmount - getDebtAccount().getHoldingBalance();
+			actualDebtIncrease = maximumDebtAmount - getDebtAccount().getHoldingBalance();
 		}
 
-		getDebtAccount().collect(actualNewDebtAmount, reason);
+		getDebtAccount().collect(actualDebtIncrease, reason);
+		return actualDebtIncrease;
 	}
 
 	private double getEstimatedValueOfTown() {
