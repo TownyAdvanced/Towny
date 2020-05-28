@@ -2088,12 +2088,6 @@ public enum ConfigNodes {
 			"# This value determines how long a town must wait before it can revolt against an occupying nation nation. The immunity time gets set to the given value if a town is captured, or if it revolts.",
 			"# If the value is too high, towns will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
-	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
-			"war.siege.times.zone_maximum_scoring_duration_minutes",
-			"15",
-			"# This setting determines the maximum duration a player can continue to score siege points, while remaining in the siege zone.",
-			"# After this time, to resume scoring points, the player will need to exit then re-enter the siege zone.",
-			"# The setting is an important anti-afk'ing feature."),
 	WAR_SIEGE_BANNER_CONTROL_SESSION_DURATION_MINUTES (
 			"war.siege.times.banner_control_session_duration_minutes",
 			"10",
@@ -2102,9 +2096,9 @@ public enum ConfigNodes {
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
 			"war.siege.distances.claim_disable_distance_blocks",
-			"100",
+			"250",
 			"# This is the distance in regular blocks from a siege banner in which claims are disabled.",
-			"# It is recommended to have this over 60, or else siege-zone-walling may not be adequetely discouraged."),
+			"# It is recommended to have this over 60, or else siege-zone-walling may not be adequately discouraged."),
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
 			"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
 			"15",
@@ -2113,7 +2107,7 @@ public enum ConfigNodes {
 		     "# This setting prevents the banner being placed on a platform high in the air."),
 	WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS(
 			"war.siege.distances.zone_death_radius_blocks",
-			"100",
+			"250",
 			"# If a siege zone participant dies within this distance of the siege banner,",
 			"# their opponents are awarded siege points."),
 	WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS(
@@ -2153,15 +2147,6 @@ public enum ConfigNodes {
 			"# The points are given to all attacking nations.",
 			"# The higher this value is, compared to the occupation value, the more cautious and tactical your battles will be.",
 			"# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be."),
-	WAR_SIEGE_MAX_PLAYERS_PER_SIDE_FOR_TIMED_POINTS(
-			"war.siege.scoring.max_players_per_side_for_timed_points",
-			"3",
-			"# This setting determines the maximum number of players at a time, per side, who can score timed siege points.",
-			"# If the value is too high, then too many players may be drawn into siege zone banner occupation.",
-			"# - This takes time from other activities e.g. building, trading.",
-			"# - Also siege-zone occupation can sometimes be boring if one side is avoiding meeting the other in direct combat.",
-			"# If the value is too low, then too few players can be involved in siege zone banner occupation.",
-			"# - Thus, some players in a town, nation, or allies may not be able to contribute as much to wars as they might wish."),
 	WAR_SIEGE_POINTS_PERCENTAGE_ADJUSTMENT_FOR_LEADER_PROXIMITY(
 			"war.siege.scoring.percentage_adjustment_for_leader_proximity",
 			"10",
@@ -2300,7 +2285,7 @@ public enum ConfigNodes {
 			"# this option gives players an off-ramp from the system without flooding staff w/ tickets,"),
 	WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS(
 			"war.common.peaceful_towns.confirmation_requirement_days",
-			"7",
+			"4",
 			"# This value determines how long it takes to confirm a town peacefulness status change.",
 			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
 	WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS(

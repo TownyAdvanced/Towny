@@ -3082,14 +3082,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS);
 	}
 
-	public static double getWarSiegeZoneMaximumScoringDurationMinutes() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES);
-	}
-
-	public static int getWarSiegeMaxPlayersPerSideForTimedPoints() {
-		return getInt(ConfigNodes.WAR_SIEGE_MAX_PLAYERS_PER_SIDE_FOR_TIMED_POINTS);
-	}
-
 	public static boolean getWarSiegeAttackerSpawnIntoBesiegedTownDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED);
 	}
