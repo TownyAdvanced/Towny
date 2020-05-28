@@ -157,7 +157,7 @@ public enum ConfigNodes {
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
 	TOWN_BANKRUPTCY_ENABLED(
 			"town.bankruptcy_enabled",
-			"false",
+			"true",
 			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
 			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
 			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
