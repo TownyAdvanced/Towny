@@ -247,18 +247,21 @@ public class TownBlock extends TownyObject {
 
 		setType(TownBlockType.lookup(typeId));
 	}
-
+	
 	public void setType(String typeName, Resident resident) throws TownyException, EconomyException {
-
 		if (typeName.equalsIgnoreCase("reset"))
-			typeName = "default";					
-		
+			typeName = "default";
+
 		TownBlockType type = TownBlockType.lookup(typeName);
-		
+
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+		
+		setType(type, resident);
+	}
 
-		double cost;
+	public void setType(TownBlockType type, Resident resident) throws TownyException, EconomyException {
+				double cost;
 		switch (type) {
 		case COMMERCIAL:
 			cost = TownySettings.getPlotSetCommercialCost();
