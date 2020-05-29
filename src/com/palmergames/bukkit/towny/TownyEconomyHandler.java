@@ -32,10 +32,13 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
 	private static String version = "";
-	private static final String SERVER_ACCOUNT = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
-
+	
 	public enum EcoType {
 		NONE, VAULT, RESERVE
+	}
+	
+	public static String getServerAccount() {
+		return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
 	}
 
 	public static void initialize(Towny plugin) {
@@ -303,7 +306,7 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean addToServer(double amount, World world) {
-		return add(SERVER_ACCOUNT, amount, world);
+		return add(getServerAccount(), amount, world);
 	}
 	
 	private static void checkNewAccount(String accountName) {
