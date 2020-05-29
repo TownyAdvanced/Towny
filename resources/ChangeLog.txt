@@ -4619,3 +4619,5 @@ v0.92.0.11:
   - Fix /res set perm command not applying the new /res perm line to all unchanged resident-owned townblocks.
   - Fix board messages being able to set to strings longer than TownyFormatter can display.
     - Closes #4039. 
+  - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
+    - Closes #4032.
