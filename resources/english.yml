@@ -1201,7 +1201,7 @@ msg_err_siege_besieged_town_cannot_recruit: "&6[War]&c Besieged towns cannot rec
 #Claiming/Unclaiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 msg_err_siege_besieged_town_cannot_claim: "&6[War]&c Besieged towns cannot claim new land."
-msg_err_siege_besieged_town_cannot_unclaim: "&6[War]&c Besieged towns cannot un-claim land."
+msg_err_siege_besieged_town_cannot_unclaim: "&6[War]&c Besieged towns (or towns which recently lost a siege) cannot un-claim land."
 msg_err_war_common_occupied_town_cannot_unclaim: "&6[War]&c Occupied towns cannot un-claim land."
 #Nation Delete
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s. This can be claimed later by using '/n refund'."

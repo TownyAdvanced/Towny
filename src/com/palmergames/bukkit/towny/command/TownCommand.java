@@ -3659,8 +3659,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if(TownySettings.getWarSiegeEnabled()
 					&& TownySettings.getWarSiegeBesiegedTownUnClaimingDisabled()
 					&& town.hasSiege()
-					&& town.getSiege().getStatus().isActive()) 
+					&& (
+						town.getSiege().getStatus().isActive()
+						|| town.getSiege().getStatus() == SiegeStatus.ATTACKER_WIN
+						|| town.getSiege().getStatus() == SiegeStatus.DEFENDER_SURRENDER
+						)
+					)
+				{
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_unclaim"));
+				}
 
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
