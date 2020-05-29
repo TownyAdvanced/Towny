@@ -3138,6 +3138,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_CLAIMING_DISABLED);
 	}
 
+	public static boolean getWarSiegeBesiegedTownUnClaimingDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_UNCLAIMING_DISABLED);
+	}
+
 	public static boolean getWarSiegePenaltyPointsEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PENALTY_POINTS_ENABLED);
 	}
@@ -3259,5 +3263,9 @@ public class TownySettings {
 
 	public static double getPlayerHealthRegainLimiterMaxAmountPerShortTick() {
 		return getDouble(ConfigNodes.WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK);
+	}
+
+	public static boolean getWarCommonOccupiedTownUnClaimingDisabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED);
 	}
 }

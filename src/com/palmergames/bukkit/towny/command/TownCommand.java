@@ -3653,6 +3653,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 					throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 
+				if (TownySettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
+					throw new TownyException(TownySettings.getLangString("msg_err_war_common_occupied_town_cannot_unclaim"));
+
+				if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeBesiegedTownUnClaimingDisabled()
+					&& town.hasSiege()
+					&& town.getSiege().getStatus().isActive()) 
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_besieged_town_cannot_unclaim"));
+
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))

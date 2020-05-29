@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
@@ -21,6 +20,7 @@ public class SiegeWarClaimUtil {
 	 * Throws a towny exception if not allowed
 	 *
 	 * @param player the player doing the claiming
+	 * @param town the town doing the claiming   
 	 * */
 	public static void verifySiegeEffectsOnClaiming(Player player, Town town) throws TownyException{
 

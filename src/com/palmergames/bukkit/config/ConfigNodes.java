@@ -1960,6 +1960,11 @@ public enum ConfigNodes {
 			"true",
 			"# If this value is true, then a town under active siege cannot claim new plots.",
 			"#  This setting is recommended because it helps discourage 'fake' sieges just for the purpose of of gifting immunity."),
+	WAR_SIEGE_BESIEGED_TOWN_UNCLAIMING_DISABLED(
+			"war.siege.switches.besieged_town_unclaiming_disabled",
+			"true",
+			"# If this value is true, then a town under active siege cannot unclaim.",
+			"#  This setting is recommended if invasion/occupation is enabled, to avoid occupation escape exploits."),
 	WAR_SIEGE_PENALTY_POINTS_ENABLED(
 			"war.siege.switches.penalty_points_enabled",
 			"true",
@@ -2321,7 +2326,13 @@ public enum ConfigNodes {
 	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK(
 			"war.common.player_health_regain_limiter.max_amount_per_short_tick",
 			"10.0",
-			"# The value determines the max health regain amount per short tick.");
+			"# The value determines the max health regain amount per short tick."),
+
+	WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED(
+			"war.common.occupied_town_unclaiming_disabled",
+			"true",
+			"# If this value is true, then a town under occupation cannot unclaim.",
+			"#  This setting is recommended, to avoid occupation escape exploits.");
 
 	private final String Root;
 	private final String Default;
