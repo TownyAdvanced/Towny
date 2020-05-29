@@ -31,7 +31,6 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
 	private static String version = "";
-	
 	public enum EcoType {
 		NONE, VAULT, RESERVE
 	}
@@ -266,8 +265,6 @@ public class TownyEconomyHandler {
 		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
-		
-		checkNewAccount(accountName);
 
 		if (economy.add(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
