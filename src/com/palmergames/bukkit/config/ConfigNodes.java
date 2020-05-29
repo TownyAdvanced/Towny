@@ -2321,17 +2321,7 @@ public enum ConfigNodes {
 	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK(
 			"war.common.player_health_regain_limiter.max_amount_per_short_tick",
 			"10.0",
-			"# The value determines the max health regain amount per short tick."),
-
-	//Block glitching prevention
-	WAR_COMMON_BLOCK_GLITCHING_PREVENTION_ENABLED(
-			"war.common.block_glitching_prevention.enabled",
-			"false",
-			"# If this value is true, then block glitching is prevented.",
-			"# Block glitching refers to the practice of exploting lag to",
-			"# A. Quickly place_blocks in an otherwise perm-protected plot, to get over walls, or",
-			"# B. Quickly destroy blocks in an otherwise perm-protected plot, to get through walls.",
-			"# If the value is true, then the lag is used against the exploiter, by 'rubber banding' them back to the cached pre-block-interaction player position.");
+			"# The value determines the max health regain amount per short tick.");
 
 	private final String Root;
 	private final String Default;
