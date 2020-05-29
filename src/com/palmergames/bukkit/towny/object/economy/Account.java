@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
@@ -24,7 +23,6 @@ import java.util.List;
  * @see EconomyAccount
  */
 public abstract class Account implements Nameable {
-	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
@@ -48,11 +46,11 @@ public abstract class Account implements Nameable {
 	
 	// Template methods
 	
-	boolean canAdd(double amount) throws EconomyException {
+	public boolean canAdd(double amount) throws EconomyException {
 		return true;
 	}
 	
-	boolean canSubtract(double amount) throws EconomyException {
+	public boolean canSubtract(double amount) throws EconomyException {
 		return !(amount > getHoldingBalance());
 	}
 	
@@ -72,7 +70,7 @@ public abstract class Account implements Nameable {
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public final boolean deposit(double amount, String reason) throws EconomyException {
+	public boolean deposit(double amount, String reason) throws EconomyException {
 		if (canAdd(amount) && addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
 			return true;
@@ -89,9 +87,9 @@ public abstract class Account implements Nameable {
 	 * @return boolean indicating success.
 	 * @throws EconomyException On an economy error.
 	 */
-	public final boolean withdraw(double amount, String reason) throws EconomyException {
+	public boolean withdraw(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return payTo(amount, SERVER_ACCOUNT, reason);
+			return payToServer(amount, reason);
 		} else {
 			if (canSubtract(amount) && subtractMoney(amount)) {
 				notifyObserversWithdraw(this, amount, reason);
@@ -112,6 +110,14 @@ public abstract class Account implements Nameable {
 	 */
 	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
 		return payTo(amount, collector.getAccount(), reason);
+	}
+	
+	private boolean payToServer(double amount, String reason) throws EconomyException {
+		// Take money out.
+		withdraw(amount, reason);
+		
+		// Put it back into the server.
+		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 
 	/**
@@ -278,12 +284,6 @@ public abstract class Account implements Nameable {
 		
 		// Add the auditor to the observer list.
 		addObserver(auditor);
-	}
-
-	private static final class TownyServerAccount extends Account {
-		TownyServerAccount() {
-			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
-		}
 	}
 	
 	// Legacy Compatibility Methods.

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
 import com.palmergames.bukkit.towny.object.ReserveEconomyAdapter;
@@ -31,6 +32,7 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
 	private static String version = "";
+	private static final String SERVER_ACCOUNT = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
 
 	public enum EcoType {
 		NONE, VAULT, RESERVE
@@ -79,7 +81,7 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean setupEconomy() {
 
-		Plugin economyProvider = null;
+		Plugin economyProvider;
 
 		/*
 		 * Attempt to find Vault for Economy handling
@@ -95,7 +97,7 @@ public class TownyEconomyHandler {
 				Type = EcoType.VAULT;
 				return true;
 			}
-		} catch (NoClassDefFoundError ex) {
+		} catch (NoClassDefFoundError ignored) {
 		}
 
 		/*
@@ -204,6 +206,20 @@ public class TownyEconomyHandler {
 		TownyMessaging.sendErrorMsg(getBalance(accountName, world) + "");
 		return getBalance(accountName, world) >= amount;
 	}
+	
+	private static boolean runPreChecks(Transaction transaction, String accountName) {
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
+		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(transaction.getPlayer(), preEvent.getCancelMessage());
+			return false;
+		}
+
+		checkNewAccount(accountName);
+		return true;
+	}
+	
 
 	/**
 	 * Attempts to remove an amount from an account
@@ -218,16 +234,10 @@ public class TownyEconomyHandler {
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
-
-		BukkitTools.getPluginManager().callEvent(preEvent);
-
-		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+		
+		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
-
-		checkNewAccount(accountName);
 		
 		if (economy.subtract(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
@@ -250,16 +260,10 @@ public class TownyEconomyHandler {
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
-		BukkitTools.getPluginManager().callEvent(preEvent);
-		
-		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
-		
-		checkNewAccount(accountName);
 
 		if (economy.add(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
@@ -291,7 +295,17 @@ public class TownyEconomyHandler {
 
 	}
 
-
+	/**
+	 * Adds money to the server account (used for towny closed economy.
+	 * 
+	 * @param amount The amount to deposit.
+	 * @param world The world of the deposit.
+	 * @return A boolean indicating success.
+	 */
+	public static boolean addToServer(double amount, World world) {
+		return add(SERVER_ACCOUNT, amount, world);
+	}
+	
 	private static void checkNewAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
