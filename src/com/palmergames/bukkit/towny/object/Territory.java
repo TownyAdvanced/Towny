@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
-import com.palmergames.bukkit.towny.object.economy.CappedAccount;
+import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public abstract class Territory extends TownyObject implements BankEconomyHandler, ResidentList, TownyInviter, SpawnLocation {
 	
-	protected Account account;
+	protected BankAccount account;
 	protected Location spawn;
 	protected String tag = "";
 	protected String board = null;
@@ -154,11 +154,11 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 	}
 
 	@Override
-	public Account getAccount() {
+	public BankAccount getAccount() {
 		if (account == null) {
 			String accountName = StringMgmt.trimMaxLength(getEconomyPrefix() + getName(), 32);
 			World world = getWorld();
-			account = new CappedAccount(accountName, world, getBankCap());
+			account = new BankAccount(accountName, world, getBankCap());
 			account.setAuditor(accountAuditor);
 		}
 

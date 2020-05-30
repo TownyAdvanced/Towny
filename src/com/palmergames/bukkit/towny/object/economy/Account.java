@@ -19,7 +19,7 @@ import java.util.List;
  * and the storage of funds.
  * 
  * @author Suneet Tipirneni (Siris)
- * @see CappedAccount
+ * @see BankAccount
  * @see EconomyAccount
  */
 public abstract class Account implements Nameable {
@@ -51,14 +51,15 @@ public abstract class Account implements Nameable {
 	}
 	
 	public boolean canSubtract(double amount) throws EconomyException {
-		return !(amount > getHoldingBalance());
+		//return !(amount > getHoldingBalance());
+		return true;
 	}
 	
-	private boolean addMoney(double amount) {
+	public boolean addMoney(double amount) {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 	
-	private boolean subtractMoney(double amount) {
+	public boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 
@@ -131,15 +132,18 @@ public abstract class Account implements Nameable {
 	 */
 	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
 		
-		if (amount > getHoldingBalance()) {
-			throw new EconomyException("Not enough money");
-		}
+//		if (amount > getHoldingBalance()) {
+//			throw new EconomyException("Not enough money");
+//		}
+//		
+//		
+//		if (!withdraw(amount, reason)) {
+//			return false;
+//		}
+//		
+//		return collector.deposit(amount, reason);
 		
-		if (!withdraw(amount, reason)) {
-			return false;
-		}
-		
-		return collector.deposit(amount, reason);
+		return TownyEconomyHandler.setBalance(collector.getName(), -10, null);
 	}
 
 	/**
