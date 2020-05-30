@@ -2563,6 +2563,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_string_nationboard_not_set"));
 						return;
 					}
+					// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
+					if (line.length() > 159)
+						line = line.substring(0, 159);
 
 					nation.setNationBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);

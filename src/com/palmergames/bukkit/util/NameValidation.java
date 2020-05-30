@@ -123,16 +123,23 @@ public class NameValidation {
 		}
 		
 	}
-	public static boolean isValidString(String name) {
+	
+	/**
+	 * Used in validating the strings saved for town and nation boards.
+	 * 
+	 * @param message - String needing validation.
+	 * @return approved message.
+	 */
+	public static boolean isValidString(String message) {
 		
-		if (name.contains("'") || name.contains("`")) {
+		if (message.contains("'") || message.contains("`")) {
 			return false;
 		}
 
 		try {
 			if (stringPattern == null)
 				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
-			return stringPattern.matcher(name).find();
+			return stringPattern.matcher(message).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
 			return false;
