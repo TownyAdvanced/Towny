@@ -58,6 +58,12 @@ Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) 
 If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
 If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
+
+___
+
+### Video Tutorials
+Courtesy of Major_Graft, we have a new series of Tutorial Videos [available on the Towny website.](https://townyadvanced.github.io/tutorials.html)
+
 ___
 
 ### Contributing
@@ -66,7 +72,6 @@ If you'd like to contribute to the Towny code, see the [Contributing.md](https:/
 ___
 
 ### Licensing
-
 Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](http://creativecommons.org/licenses/by-nc-nd/3.0/)
 
 We don't object to you making your own forks and builds but we do object to people being selfish, which is why we specify No Derivative Works.
@@ -74,7 +79,14 @@ If you want to modify the code to add some nice feature the least you can do is 
 
 ___
 
-### Building
+### Importing Towny for API use
+[![](https://jitpack.io/v/TownyAdvanced/Towny.svg)](https://jitpack.io/#TownyAdvanced/Towny)
+
+Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+
+___
+
+### Building Towny
 If you would like to build from a specific branch yourself, you can do so with either [Apache Ant](https://ant.apache.org/) or [Apache Maven](http://maven.apache.org/), depending on the age of the branch.
 
 For building, open your terminal / command prompt and navigate to the Towny Directory (either extracted, or cloned).
@@ -82,7 +94,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 - **Maven**
 
     - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
-    - Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+
 
 - **Ant** (_Deprecated_)
 
