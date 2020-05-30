@@ -2626,9 +2626,9 @@ public class TownySettings {
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
 	}
 
-	public static String getDebtAccountPrefix() {
+	public static String getTownDebtAccountPrefix() {
 
-		return getString(ConfigNodes.ECO_DEBT_PREFIX);
+		return getString(ConfigNodes.ECO_TOWN_DEBT_PREFIX);
 	}
 
 	public static String getNationAccountPrefix() {

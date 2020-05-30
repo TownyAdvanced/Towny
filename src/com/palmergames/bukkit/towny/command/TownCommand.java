@@ -2689,6 +2689,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				town.getAccount().setBalance(0, "Setting 0 balance for Town");
+				town.getDebtAccount().setBalance(0, "Setting 0 debt balance for town");
 			} catch (EconomyException e) {
 				e.printStackTrace();
 			}

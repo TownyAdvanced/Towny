@@ -21,7 +21,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -46,6 +45,8 @@ import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
+	private static final String ECONOMY_DEBT_ACCOUNT_PREFIX = TownySettings.getTownDebtAccountPrefix();
+
 
 	private List<Resident> residents = new ArrayList<>();
 	private List<Resident> outlaws = new ArrayList<>();
@@ -1582,7 +1583,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public EconomyAccount getDebtAccount() {
 		if (debtAccount == null) {
 
-			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + TownySettings.getDebtAccountPrefix() + getName(), 32);
+			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_DEBT_ACCOUNT_PREFIX + getName(), 32);
 			World world;
 
 			if (hasWorld()) {
