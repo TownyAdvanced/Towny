@@ -4621,3 +4621,4 @@ v0.92.0.11:
     - Closes #4039. 
   - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
     - Closes #4032.
+  - Switch to JitPack and Remove GH packages dependencies, courtesy of Siris with PR #4038.
