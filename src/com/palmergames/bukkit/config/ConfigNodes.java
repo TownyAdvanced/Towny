@@ -27,7 +27,7 @@ public enum ConfigNodes {
 			"#  Possible permission nodes",
 			"#",
 			"#    for a full list of permission nodes visit: ",
-			"#    http://palmergames.com/towny/towny-permission-nodes/ "),
+			"#    https://github.com/TownyAdvanced/Towny/wiki/Towny-Permission-Nodes "),
 	LEVELS(
 			"levels",
 			"",
@@ -78,7 +78,7 @@ public enum ConfigNodes {
 			"# Default amount for town's plottax costs."),
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
-			"false",
+			"true",
 			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
 	TOWN_DEF_TAXES_MINIMUMTAX(
 			"town.default_taxes.minimumtax",
@@ -88,7 +88,12 @@ public enum ConfigNodes {
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
-			"# Limits the maximum amount of bonus blocks a town can buy."),
+			"# Limits the maximum amount of bonus blocks a town can buy.",
+			"# This setting does nothing when town.max_purchased_blocks_uses_town_levels is set to true."),
+	TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS(
+			"town.max_purchased_blocks_uses_town_levels",
+			"true",
+			"# When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase."),
 	TOWN_MAX_PLOTS_PER_RESIDENT(
 			"town.max_plots_per_resident",
 			"100",
@@ -104,17 +109,25 @@ public enum ConfigNodes {
 			"town.town_limit",
 			"3000",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
+			"town.min_distances_ignored_for_towns_in_same_nation",
+			"true",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
 	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"town.min_plot_distance_from_town_plot",
 			"5",
 			"",
 			"# Minimum number of plots any towns plot must be from the next town's own plots.",
+			"# Does not affect towns which are in the same nation.",
 			"# This will prevent town encasement to a certain degree."),
 	TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"town.min_distance_from_town_homeblock",
 			"5",
 			"",
 			"# Minimum number of plots any towns home plot must be from the next town.",
+			"# Does not affect towns which are in the same nation.",
 			"# This will prevent someone founding a town right on your doorstep"),
     TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
     		"town.min_distance_for_outpost_from_plot",
@@ -171,7 +184,11 @@ public enum ConfigNodes {
 			"new_world_settings.pvp.force_pvp_on",
 			"false",
 			"# force_pvp_on is a global flag and overrides any towns flag setting"),
-
+	NWS_WAR_ALLOWED(
+			"new_world_settings.pvp.war_allowed",
+			"true",
+			"# If set to false the world will not be included in war events."),
+	
 	NWS_WORLD_MONSTERS_HEADER("new_world_settings.mobs", "", ""),
 	NWS_WORLD_MONSTERS_ON(
 			"new_world_settings.mobs.world_monsters_on",
@@ -232,7 +249,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED,TORCH,REDSTONE_WIRE,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,WOODEN_DOOR,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -244,7 +261,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE(
 			"new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete",
-			"WALL_SIGN,SIGN_POST",
+			"ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
 
@@ -272,7 +289,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN_POST,WALL_SIGN,GLOWSTONE",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK,WITHER_SKELETON_SKULL,WITHER_SKELETON_WALL_SKULL,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,BEACON",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
@@ -372,6 +389,29 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.movement_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
+	GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP(
+			"global_town_settings.damage_cancels_spawn_warmup",
+			"false",
+			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
+	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
+			"global_town_settings.spawn_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_SPAWN_WARNINGS(
+		"global_town_settings.spawn_warnings",
+		"true",
+		"# Decides whether confirmations should appear if you spawn to an area with an associated cost."
+	),
+	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
+			"global_town_settings.pvp_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before pvp can be toggled by a town.",
+			"# Applies to residents of the town using /res toggle pvp, as well as",
+			"# plots having their PVP toggled using /plot toggle pvp."),	
 	GTOWN_SETTINGS_TOWN_RESPAWN(
 			"global_town_settings.town_respawn",
 			"false",
@@ -390,6 +430,13 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
+			"global_town_settings.maximum_number_residents_without_nation",
+			"0",
+			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
+			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
@@ -423,7 +470,7 @@ public enum ConfigNodes {
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
-			"# List of animals which can be kiled on farm plots by town residents."
+			"# List of animals which can be killed on farm plots by town residents."
 	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
@@ -444,7 +491,8 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
 			"false",
-			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
+			"# Does not have any effect when Event War is active."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
@@ -468,7 +516,18 @@ public enum ConfigNodes {
 			"1000000.0",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
-	),	
+	),
+	GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS(
+			"global_town_settings.display_xyz_instead_of_towny_coords",
+			"false",
+			"# If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords."
+	),
+	GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY(
+			"global_town_settings.display_town_list_randomly",
+			"false",
+			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -511,6 +570,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_NATIONZONE_SHOW_NOTIFICATIONS(
+			"global_nation_settings.nationzone.show_notifications",
+			"false",
+			"",
+			"# When set to true, players will receive a notification when they enter into a nationzone.",
+			"# Set to false by default because, like the nationzone feature, it will generate more load on servers."),
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
@@ -549,6 +614,15 @@ public enum ConfigNodes {
             "global_nation_settings.default.public",
             "false",
             "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	GNATION_SETTINGS_ALLOWED_NATION_COLORS(
+			"global_nation_settings.allowed_map_colors",
+			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
+			"# This setting determines the list of allowed nation map colors.",
+			"# The color codes are in hex format."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -628,7 +702,10 @@ public enum ConfigNodes {
 			"12h",
 			"# The time each \"day\", when taxes will be collected.",
 			"# MUST be less than day_interval. Default is 12h (midday)."),
-
+	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
+			"plugin.day_timer.delete_0_plot_towns",
+			"false",
+			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
@@ -676,17 +753,16 @@ public enum ConfigNodes {
 			"# Regex fields used in validating inputs."),
 	FILTERS_REGEX_NAME_FILTER_REGEX(
 			"filters_colour_chat.regex.name_filter_regex",
-			"[ /]"),
+			"[\\\\\\/]"),
 	FILTERS_REGEX_NAME_CHECK_REGEX(
 			"filters_colour_chat.regex.name_check_regex",
-			"^[a-zA-Z0-9._\\[\\]-]*$"),
+			"^[\\p{L}a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
-			"^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
+			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^a-zA-Z0-9._\\[\\]-]"),
-
+			"[^\\P{M}a-zA-Z0-9\\&._\\[\\]-]"),
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
 			"filters_colour_chat.modify_chat.max_name_length",
@@ -696,7 +772,38 @@ public enum ConfigNodes {
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"# Maximum length of titles and surnames."),
+	
+	FILTERS_PAPI_CHAT_FORMATTING(
+			"filters_colour_chat.papi_chat_formatting","","",
+			"# See the Placeholders wiki page for list of PAPI placeholders.",
+			"# https://github.com/TownyAdvanced/Towny/wiki/Placeholders"),
+	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
+			"filters_colour_chat.papi_chat_formatting.both",
+			"&f[&6%n&f|&b%t&f] ",
+			"# When using PlaceholderAPI, and a tag would show both nation and town, this will determine how they are formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_TOWN(
+			"filters_colour_chat.papi_chat_formatting.town",
+			"&f[&b%s&f] ",
+			"# When using PlaceholderAPI, and a tag would showing a town, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_NATION(
+			"filters_colour_chat.papi_chat_formatting.nation",
+			"&f[&6%s&f] ",
+			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
+			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
+			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_RESIDENT(
+			"filters_colour_chat.papi_chat_formatting.ranks.resident","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_MAYOR(
+			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
+			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
+	
 
+
+	
 	PROT(
 			"protection",
 			"",
@@ -710,7 +817,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT",
+			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -724,7 +831,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME,POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE",
+			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME,POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE,BARREL,BREWING_STAND,LEAD,SWEET_BERRY_BUSH",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
@@ -739,7 +846,11 @@ public enum ConfigNodes {
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-
+	PROT_MOB_REMOVE_TOWN_KILLER_BUNNY(
+			"protection.town_mob_removal_killer_bunny",
+			"true",
+			"",
+			"# Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits."),
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
@@ -762,7 +873,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in the world."),
-
+	PROT_MOB_REMOVE_SKIP_NAMED_MOBS(
+			"protection.mob_removal_skips_named_mobs",
+			"false",
+			"",
+			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",
@@ -772,7 +887,7 @@ public enum ConfigNodes {
 			"# NEVER set below 1."),
 	PROT_MOB_TYPES(
 			"protection.mob_types",
-			"Animals,WaterMob,NPC,Snowman,ArmorStand",
+			"Animals,WaterMob,NPC,Snowman,ArmorStand,Villager",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
@@ -849,6 +964,12 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
+	NOTIFICATION_TOWN_NAMES_ARE_VERBOSE(
+			"notification.town_names_are_verbose",
+			"true",
+			"# When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.",
+			"# When false, it is only the town name."),	
+	NOTIFICATION_GROUP("notification.group", "&f[%s]"),
 	NOTIFICATION_USING_TITLES(
 			"notification.using_titles",
 			"false",
@@ -881,6 +1002,13 @@ public enum ConfigNodes {
 			"false", 
 			"# If the notification.owner option should show name or {title} name.", 
 			"# Titles are the ones granted by nation kings."),
+	NOTIFICATION_NOTIFICATIONS_APPEAR_IN_ACTION_BAR("notification.notifications_appear_in_action_bar",
+			"true",
+			"# This setting only applies to servers running spigot, paper or bungeecord.",
+			"# On servers using craftbukkit.jar the notifications will always appear in the chat.",
+			"# When set to false the notifications will appear in the chat rather than the action bar."),
+	NOTIFICATION_ACTIONBAR_DURATION("notification.notification_actionbar_duration", "15",
+		"# This settings set the duration the actionbar (The text above the inventory bar) lasts in seconds"),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",
@@ -910,6 +1038,10 @@ public enum ConfigNodes {
 	FLAGS_RES_FR_DESTROY("default_perm_flags.resident.friend.destroy", "true"),
 	FLAGS_RES_FR_ITEM_USE("default_perm_flags.resident.friend.item_use", "true"),
 	FLAGS_RES_FR_SWITCH("default_perm_flags.resident.friend.switch", "true"),
+	FLAGS_RES_TOWN_BUILD("default_perm_flags.resident.town.build", "false"),
+	FLAGS_RES_TOWN_DESTROY("default_perm_flags.resident.town.destroy", "false"),
+	FLAGS_RES_TOWN_ITEM_USE("default_perm_flags.resident.town.item_use","false"),
+	FLAGS_RES_TOWN_SWITCH("default_perm_flags.resident.town.switch", "false"),
 	FLAGS_RES_ALLY_BUILD("default_perm_flags.resident.ally.build", "false"),
 	FLAGS_RES_ALLY_DESTROY("default_perm_flags.resident.ally.destroy", "false"),
 	FLAGS_RES_ALLY_ITEM_USE(
@@ -952,6 +1084,10 @@ public enum ConfigNodes {
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),
 	FLAGS_TOWN_RES_ITEM_USE("default_perm_flags.town.resident.item_use", "true"),
 	FLAGS_TOWN_RES_SWITCH("default_perm_flags.town.resident.switch", "true"),
+	FLAGS_TOWN_NATION_BUILD("default_perm_flags.town.nation.build", "false"),
+	FLAGS_TOWN_NATION_DESTROY("default_perm_flags.town.nation.destroy", "false"),
+	FLAGS_TOWN_NATION_ITEM_USE("default_perm_flags.town.nation.item_use", "false"),
+	FLAGS_TOWN_NATION_SWITCH("default_perm_flags.town.nation.switch", "false"),
 	FLAGS_TOWN_ALLY_BUILD("default_perm_flags.town.ally.build", "false"),
 	FLAGS_TOWN_ALLY_DESTROY("default_perm_flags.town.ally.destroy", "false"),
 	FLAGS_TOWN_ALLY_ITEM_USE("default_perm_flags.town.ally.item_use", "false"),
@@ -1035,6 +1171,12 @@ public enum ConfigNodes {
 			"invite_system.maximum_invites_received.nation",
 			"10",
 			"# How many requests can one nation have from other nations for an alliance."),
+	INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN(
+			"invite_system.maximum_distance_from_town_spawn",
+			"0",
+			"# When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.",
+			"# Use this setting to require players to be near or inside a town before they can be invited."),
+	
 	RES_SETTING(
 			"resident_settings",
 			"",
@@ -1053,7 +1195,7 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",
-			"# if enabled old residents will be kicked and deleted from a town",
+			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
 			"# after Two months (default) of not logging in"),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
@@ -1064,6 +1206,10 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS_ECO(
 			"resident_settings.delete_old_residents.delete_economy_account",
 			"true"),
+	RES_SETTING_DELETE_OLD_RESIDENTS_TOWNLESS_ONLY(
+			"resident_settings.delete_old_residents.delete_only_townless",
+			"false",
+			"# When true only residents who have no town will be deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -1112,7 +1258,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
 			"0.0",
-			"# Cost to use /town spawn"),
+			"# Cost to use /town spawn."),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION(
 			"economy.spawn_travel.price_town_nation_spawn_travel",
 			"5.0",
@@ -1124,7 +1270,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC(
 			"economy.spawn_travel.price_town_public_spawn_travel",
 			"10.0",
-			"# Cost to use /town spawn [town]",
+			"# Maximum cost to use /town spawn [town] that mayors can set using /t set spawncost.",
 			"# This is paid to the town you goto."),
 	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
 			"economy.spawn_travel.town_spawn_cost_paid_to_town",
@@ -1154,6 +1300,16 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock",
 			"25.0",
 			"# The price for a town to expand one townblock."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_INCREASE(
+			"economy.new_expand.price_claim_townblock_increase",
+			"1.0",
+			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
+			"economy.new_expand.price_claim_townblock_refund",
+			"0.0",
+			"# The amount refunded to a town when they unclaim a townblock.",
+			"# Warning: do not set this higher than the cost to claim a townblock.",
+			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",
@@ -1177,18 +1333,18 @@ public enum ConfigNodes {
 			"0.0",
 			"# Maximum amount of money allowed in town bank",
 			"# Use 0 for no limit"),
-	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
-			"economy.banks.town_allow_withdrawls",
+	ECO_BANK_TOWN_ALLOW_WITHDRAWALS(
+			"economy.banks.town_allow_withdrawals",
 			"true",
-			"# Set to true to allow withdrawls from town banks"), ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawals from town banks"), ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
 			"# Use 0 for no limit"),
-	ECO_BANK_NATION_ALLOW_WITHDRAWLS(
-			"economy.banks.nation_allow_withdrawls",
+	ECO_BANK_NATION_ALLOW_WITHDRAWALS(
+			"economy.banks.nation_allow_withdrawals",
 			"true",
-			"# Set to true to allow withdrawls from nation banks"),
+			"# Set to true to allow withdrawals from nation banks"),
 	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
 			"economy.banks.disallow_bank_actions_outside_town",
 			"false",
@@ -1215,19 +1371,41 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
-	ECO_DAILY_TAXES_MAX_TAX(
-			"economy.daily_taxes.max_tax_amount",
+	ECO_DAILY_TAXES_MAX_PLOT_TAX(
+			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
-			"# Maximum tax amount allowed when using flat taxes"),
-	ECO_DAILY_TAXES_MAX_TAX_PERCENT(
-			"economy.daily_taxes.max_tax_percent",
+			"# Maximum tax amount allowed for townblocks sold to players."),
+	ECO_DAILY_TOWN_TAXES_MAX(
+			"economy.daily_taxes.max_town_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for towns when using flat taxes."),
+	ECO_DAILY_NATION_TAXES_MAX(
+			"economy.daily_taxes.max_nation_tax_amount",
+			"1000.0",
+			"# Maximum tax amount allowed for nations when using flat taxes."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT(
+			"economy.daily_taxes.max_town_tax_percent",
 			"25",
-			"# maximum tax percentage allowed when taxing by percentages"),
+			"# Maximum tax percentage allowed when taxing by percentages for towns."),
+	ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT(
+			"economy.daily_taxes.max_town_tax_percent_amount",
+			"10000",
+			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
+			),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",
 			"# The server's daily charge on each nation. If a nation fails to pay this upkeep",
 			"# all of it's member town are kicked and the Nation is removed."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN(
+			"economy.daily_taxes.nation_pertown_upkeep",
+			"false",
+			"# Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)",
+			"# calculated by (number of towns in nation X price_nation_upkeep)."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER(
+			"economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier",
+			"false",
+			"# If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers."),
 	ECO_PRICE_TOWN_UPKEEP(
 			"economy.daily_taxes.price_town_upkeep",
 			"10.0",
@@ -1242,12 +1420,54 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT(
+			"economy.daily_taxes.town_plotbased_upkeep_minimum_amount",
+			"0.0",
+			"# If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"0.0",
+			"# The server's daily charge on a town which has claimed more townblocks than it is allowed."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty_plotbased",
+			"false",
+			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
+			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
+	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
+	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
+			"0.0",
+			"# Cost to use /plot set shop to change a normal plot to a shop plot."),
+	ECO_PLOT_TYPE_COSTS_ARENA("economy.plot_type_costs.set_arena",
+			"0.0",
+			"# Cost to use /plot set arena to change a normal plot to a arena plot."),
+	ECO_PLOT_TYPE_COSTS_EMBASSY("economy.plot_type_costs.set_embassy",
+			"0.0",
+			"# Cost to use /plot set embassy to change a normal plot to a embassy plot."),
+	ECO_PLOT_TYPE_COSTS_WILDS("economy.plot_type_costs.set_wilds",
+			"0.0",
+			"# Cost to use /plot set wilds to change a normal plot to a wilds plot."),
+	ECO_PLOT_TYPE_COSTS_INN("economy.plot_type_costs.set_inn",
+			"0.0",
+			"# Cost to use /plot set inn to change a normal plot to a inn plot."),
+	ECO_PLOT_TYPE_COSTS_JAIL("economy.plot_type_costs.set_jail",
+			"0.0",
+			"# Cost to use /plot set jail to change a normal plot to a jail plot."),
+	ECO_PLOT_TYPE_COSTS_FARM("economy.plot_type_costs.set_farm",
+			"0.0",
+			"# Cost to use /plot set farm to change a normal plot to a farm plot."),
+	ECO_PLOT_TYPE_COSTS_BANK("economy.plot_type_costs.set_bank",
+			"0.0",
+			"# Cost to use /plot set bank to change a normal plot to a bank plot."),
+//	ECO_PLOT_TYPE_COSTS_OUTPOST("economy.plot_type_costs.set_outpost",
+//			"0.0",
+//			"# Cost to use /plot set outpost to change a normal plot to a outpost plot."),
+	
 	JAIL(
 			"jail",
 			"",
@@ -1285,7 +1505,20 @@ public enum ConfigNodes {
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),
+			"#Amount that bail costs for normal residents/nomads."),
+	JAIL_BAIL_BAIL_AMOUNT_MAYOR(
+			"jail.bail.bail_amount_mayor",
+			"10",
+			"#Amount that bail costs for Town mayors."),
+	JAIL_BAIL_BAIL_AMOUNT_KING(
+			"jail.bail.bail_amount_king",
+			"10",
+			"#Amount that bail costs for Nation kings."),
+	JAIL_BLACKLISTED_COMMANDS(
+			"jail.blacklisted_commands",
+			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
+			"# Commands which a jailed player cannot use."),
+	
 	BANK(
 			"bank",
 			"",
@@ -1320,7 +1553,7 @@ public enum ConfigNodes {
 			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
 	WAR_DISALLOW_ONE_WAY_ALLIANCE(
 			"war.disallow_one_way_alliance",
-			"false",
+			"true",
 			"#By setting this to true, nations will receive a prompt for alliances and alliances will show on both nations."
 	),
 	WAR_ECONOMY(
@@ -1398,7 +1631,8 @@ public enum ConfigNodes {
 			"war.event.remove_on_monarch_death",
 			"false",
 			"",
-			"# If true and the monarch/king dies the nation is removed from the war."),
+			"# If true and the monarch/king dies the nation is removed from the war.",
+			"# Also removes a town from the war event when the mayor dies."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
 			"false",
@@ -1431,7 +1665,21 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
 			"# and the losing town gains a negative (-1) bonus townblock."),
-
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+			"war.event.winner_takes_ownership_of_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.",
+			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town.",
+			"# Will not have any effect if war.event.winner_takes_ownership_of_town is set to true."),
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWN(
+			"war.event.winner_takes_ownership_of_town",
+			"false",
+			"# If set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.",
+			"# The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed."),
+	WAR_EVENT_CONQUER_TIME(
+			"war.event.conquer_time",
+			"7",
+			"# Number of Towny new days until a conquered town loses its conquered status."),	
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),
@@ -1448,10 +1696,12 @@ public enum ConfigNodes {
 			"",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                   Flag war settings                  | #",
+			"# |                   Flag War Settings                  | #",
 			"# |                                                      | #",
-			"# |               Separate from Event War                | #",
-			"# |                 Unsupported / Buggy                  | #",
+			"# |               [Separate from Event War]              | #",
+			"# |           --------------------------------           | #",
+			"# |        DEPRECATED: Minimally Supported Through       | #",
+		    "# |             3rd Party Contributions Only             | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1474,11 +1724,15 @@ public enum ConfigNodes {
 	WAR_ENEMY_MAX_ACTIVE_FLAGS_PER_PLAYER(
 			"war.enemy.max_active_flags_per_player",
 			"1"),
-	WAR_ENENY_FLAG("war.enemy.flag", ""),
-	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
+	WAR_ENEMY_FLAG("war.enemy.flag", ""),
+	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", 
+			"1m", 
+			"# This setting modifies the time between a war flag's Material shift. Accepts `s`(seconds) and `m`(minutes).",
+			"# Currently, you would multiply this times 10 to get the total time a flag should be in play.",
+			"# (It can also be set to `h` and `d` - but ain't nobody got time fo' that.)"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
-			"fence",
+			"oak_fence",
 			"# This is the block a player must place to trigger the attack event."),
 	WAR_ENEMY_FLAG_LIGHT_BLOCK(
 			"war.enemy.flag.light_block",
@@ -1504,6 +1758,26 @@ public enum ConfigNodes {
 	WAR_ENEMY_BEACON_WIREFRAME_BLOCK(
 			"war.enemy.beacon.wireframe_block",
 			"glowstone"),
+	WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while their town",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_nation_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while a town in their nation",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
+		"war.enemy.time_to_wait_after_flagged",
+		"600000",
+		"# This is how much time that must pass after a town in a nation has been flagged",
+		"# before certain actions can be performed, measured in milliseconds."),
+	WAR_ENEMY_FLAG_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+		"war.enemy.flag_takes_ownership_of_townblocks",
+		"true",
+		"# If set to true, when a war flag finishes it's countdown successfully, the attacking town takes full control of the townblock.",
+		"# Setting this to 'False' will result only in monetary exchanges."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",
@@ -1517,8 +1791,8 @@ public enum ConfigNodes {
 			""),
 	WAR_WARZONE_EDITABLE_MATERIALS(
 			"war.warzone.editable_materials",
-			"tnt,fence,ladder,wood_door,iron_door,fire",
-			"# List of materaials that can be modified in a warzone.",
+			"tnt,oak_fence,birch_fence,spruce_fence,jungle_fence,dark_oak_fence,acacia_fence,ladder,oak_door,birch_door,spruce_door,jungle_door,dark_oak_door,acacia_fence,iron_door,fire",
+			"# List of materials that can be modified in a warzone.",
 			"# '*' = Allow all materials.",
 			"# Prepend a '-' in front of a material to remove it. Used in conjunction with when you use '*'.",
 			"# Eg: '*,-chest,-furnace'"),

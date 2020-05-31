@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -44,8 +43,9 @@ public class TownyAsciiMap {
 		// Collect Sample Data
 		boolean hasTown = false;
 		Resident resident;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 			if (resident.hasTown())
 				hasTown = true;
 		} catch (TownyException x) {
@@ -55,7 +55,7 @@ public class TownyAsciiMap {
 
 		TownyWorld world;
 		try {
-			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;
@@ -159,8 +159,8 @@ public class TownyAsciiMap {
 
 		// Current town block data
 		try {
-			TownBlock townblock = world.getTownBlock(pos);
-			TownyMessaging.sendMsg(player, (TownySettings.getLangString("town_sing") + ": " + (townblock.hasTown() ? townblock.getTown().getName() : TownySettings.getLangString("status_no_town")) + " : " + TownySettings.getLangString("owner_status") + ": " + (townblock.hasResident() ? townblock.getResident().getName() : TownySettings.getLangString("status_no_town"))));
+			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
+			TownyMessaging.sendMsg(player, (TownySettings.getLangString("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : TownySettings.getLangString("status_no_town")) + " : " + TownySettings.getLangString("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : TownySettings.getLangString("status_no_town"))));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.

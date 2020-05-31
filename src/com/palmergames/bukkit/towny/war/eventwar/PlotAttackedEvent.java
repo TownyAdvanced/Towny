@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -29,7 +30,7 @@ public class PlotAttackedEvent extends Event {
 	
 	public PlotAttackedEvent (TownBlock townBlock, HashSet<Player> players, int hp)
 	{
-		super();
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.townBlock = townBlock;
 		this.players = players;
 		this.hp = hp;

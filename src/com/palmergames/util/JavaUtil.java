@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.palmergames.util.JavaUtil;
-
 public class JavaUtil {
 
 	/**
@@ -35,7 +33,7 @@ public class JavaUtil {
 
 		BufferedReader fin = new BufferedReader(new InputStreamReader(JavaUtil.class.getResourceAsStream(path)));
 		String line;
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		try {
 			while ((line = fin.readLine()) != null)
 				out.add(line);

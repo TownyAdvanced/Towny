@@ -13,14 +13,6 @@ import java.util.List;
  */
 
 public class ChatTools {
-
-	public static final int lineLength = 54;
-
-	public static List<String> listArr(String[] args) {
-
-		return list(Arrays.asList(args));
-	}
-
 	public static List<String> listArr(String[] args, String prefix) {
 
 		return list(Arrays.asList(args), prefix);
@@ -32,69 +24,26 @@ public class ChatTools {
 	}
 
 	public static List<String> list(List<String> args, String prefix) {
-
 		if (args.size() > 0) {
-			String line = "";
-			for (int i = 0; i < args.size() - 1; i++)
-				line += args.get(i) + ", ";
-			line += args.get(args.size() - 1).toString();
-
-			return color(prefix + line);
+			List<String> out = new ArrayList<>();
+			out.add(prefix + String.join(", ", args));
+			return out;
+		} else {
+			return new ArrayList<>();
 		}
 
-		return new ArrayList<>();
-	}
-
-	public static List<String> wordWrap(String[] tokens) {
-
-		List<String> out = new ArrayList<>();
-		out.add("");
-
-		for (String s : tokens) {
-			if (stripColour(out.get(out.size() - 1)).length() + stripColour(s).length() + 1 > lineLength)
-				out.add("");
-			out.set(out.size() - 1, out.get(out.size() - 1) + s + " ");
-		}
-
-		return out;
-	}
-
-	public static List<String> color(String line) {
-
-		List<String> out = wordWrap(line.split(" "));
-
-		String c = "f";
-		for (int i = 0; i < out.size(); i++) {
-			if (!out.get(i).startsWith("\u00A7") && !c.equalsIgnoreCase("f"))
-				out.set(i, "\u00A7" + c + out.get(i));
-
-			for (int index = 0; index < lineLength; index++)
-				try {
-					if (out.get(i).substring(index, index + 1).equalsIgnoreCase("\u00A7"))
-						c = out.get(i).substring(index + 1, index + 2);
-				} catch (Exception e) {
-				}
-		}
-
-		return out;
-	}
-
-	public static String parseSingleLineString(String str) {
-
-		return str.replaceAll("&", "\u00A7");
-	}
-
+	}	
 	public static String stripColour(String s) {
 
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			String c = s.substring(i, i + 1);
 			if (c.equals("\u00A7"))
 				i += 1;
 			else
-				out += c;
+				out.append(c);
 		}
-		return out;
+		return out.toString();
 	}
 
 	public static String formatTitle(String title) {

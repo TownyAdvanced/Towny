@@ -2,11 +2,12 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -17,7 +18,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +35,8 @@ import java.util.Set;
  */
 public class TownyPerms {
 
-	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<String, Permission>();
-	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<String, PermissionAttachment>();
+	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
+	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	
@@ -51,9 +51,7 @@ public class TownyPerms {
 		try {
 			permissions = PermissionAttachment.class.getDeclaredField("permissions");
 			permissions.setAccessible(true);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
+		} catch (SecurityException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
 	}
@@ -62,19 +60,20 @@ public class TownyPerms {
 	 * Load the townyperms.yml file.
 	 * If it doesn't exist create it from the resource file in the jar.
 	 * 
-	 * @param filepath
-	 * @param defaultRes
-	 * @throws IOException
+	 * @param filepath - Path to townyperms.yml
+	 * @param defaultRes - Default townyperms.yml within the jar.
+	 * @throws TownyException - When permission file cannot be loaded.
 	 */
-	public static void loadPerms(String filepath, String defaultRes) throws IOException {
+	public static void loadPerms(String filepath, String defaultRes) throws TownyException {
 
-		String fullPath = filepath + FileMgmt.fileSeparator() + defaultRes;
+		String fullPath = filepath + File.separator + defaultRes;
 
 		File file = FileMgmt.unpackResourceFile(fullPath, defaultRes, defaultRes);
 		if (file != null) {
 			// read the (language).yml into memory
 			perms = new CommentedConfiguration(file);
-			perms.load();
+			if (!perms.load())
+				throw new TownyException("Could not read Townyperms.yml");
 		}
 		
 		/*
@@ -87,15 +86,17 @@ public class TownyPerms {
 	/**
 	 * Register a specific residents permissions with Bukkit.
 	 * 
-	 * @param resident
+	 * @param resident - Resident to check if player is valid
+	 * @param player - Player to register permission
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
 
-		PermissionAttachment playersAttachment = null;
+		PermissionAttachment playersAttachment;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (resident == null) {
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (NotRegisteredException e) {
 				// failed to get resident
 				e.printStackTrace();
@@ -115,10 +116,10 @@ public class TownyPerms {
 			return;
 		}
 
-		TownyWorld World = null;
+		TownyWorld World;
 
 		try {
-			World = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
+			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			// World not registered with Towny.
 			e.printStackTrace();
@@ -127,9 +128,15 @@ public class TownyPerms {
 
 		if (attachments.containsKey(resident.getName())) {
 			playersAttachment = attachments.get(resident.getName());
-		} else
-			playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+		} else {
+			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
+			try {
+				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+			} catch (Exception e) {
+				return;
+			}
 
+		}
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
 		 * will perform a recalculation of perms for each addition.
@@ -158,12 +165,10 @@ public class TownyPerms {
 				 */
 				playersAttachment.getPermissible().recalculatePermissions();
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
+		
 		/*
 		 * Store the attachment for future reference
 		 */
@@ -174,12 +179,11 @@ public class TownyPerms {
 	/**
 	 * Should only be called when a player leaves the server.
 	 * 
-	 * @param name
+	 * @param name - Player's name to remove attachment of
 	 */
 	public static void removeAttachment(String name) {
 		
-		if (attachments.containsKey(name))
-			attachments.remove(name);
+		attachments.remove(name);
 		
 	}
 	
@@ -198,31 +202,33 @@ public class TownyPerms {
 	/**
 	 * Update the permissions for all residents of a town (if online)
 	 * 
-	 * @param town
+	 * @param town - Town to target
 	 */
 	public static void updateTownPerms(Town town) {
 		
-		for (Resident resident: town.getResidents())
+		for (Resident resident: town.getResidents()) {
 			assignPermissions(resident, null);
+		}
 		
 	}
 	
 	/**
 	 * Update the permissions for all residents of a nation (if online)
 	 * 
-	 * @param nation
+	 * @param nation - Nation to target
 	 */
 	public static void updateNationPerms(Nation nation) {
 		
-		for (Town town: nation.getTowns())
+		for (Town town: nation.getTowns()) {
 			updateTownPerms(town);
+		}
 		
 	}
 
 	/**
 	 * Fetch a list of permission nodes
 	 * 
-	 * @param path
+	 * @param path - path to permission nodes
 	 * @return a List of permission nodes.
 	 */
 	private static List<String> getList(String path) {
@@ -236,15 +242,12 @@ public class TownyPerms {
 	/**
 	 * Returns a sorted map of this residents current permissions.
 	 * 
-	 * @param resident
+	 * @param resident - Resident to check
 	 * @return a sorted Map of permission nodes
 	 */
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
-		
-		Set<String> permList = new HashSet<String>();
-		
 		// Start by adding the default perms everyone gets
-		permList.addAll(getDefault());
+		Set<String> permList = new HashSet<>(getDefault());
 		
 		//Check for town membership
 		if (resident.hasTown()) {
@@ -370,6 +373,7 @@ public class TownyPerms {
 	/**
 	 * Default permissions everyone in a town gets
 	 * 
+	 * @param town - Town to target
 	 * @return a list of permissions
 	 */
 	public static List<String> getTownDefault(Town town) {
@@ -387,7 +391,7 @@ public class TownyPerms {
 
 	/**
 	 * A town mayors permissions
-	 * 
+	 *
 	 * @return a list of permissions
 	 */
 	public static List<String> getTownMayor() {
@@ -399,7 +403,7 @@ public class TownyPerms {
 	/**
 	 * Get a specific ranks permissions
 	 * 
-	 * @param rank
+	 * @param rank - Rank to check permissions for
 	 * @return a List of permissions
 	 */
 	public static List<String> getTownRank(String rank) {
@@ -447,7 +451,7 @@ public class TownyPerms {
 	/**
 	 * Get a specific ranks permissions
 	 * 
-	 * @param rank
+	 * @param rank - Rank to get permissions of
 	 * @return a List of Permissions
 	 */
 	public static List<String> getNationRank(String rank) {
@@ -476,7 +480,7 @@ public class TownyPerms {
 	/**
 	 * Sort a permission node list by parent/child
 	 * 
-	 * @param permList
+	 * @param permList - List of permissions
 	 * @return List sorted for priority
 	 */
 	private static List<String> sort(List<String> permList) {
@@ -491,7 +495,7 @@ public class TownyPerms {
 				ListIterator<String> itr = result.listIterator();
 
 				while (itr.hasNext()) {
-					String node = (String) itr.next();
+					String node = itr.next();
 					String b = node.charAt(0) == '-' ? node.substring(1) : node;
 
 					// Insert the parent node before the child
@@ -513,7 +517,7 @@ public class TownyPerms {
 	 * Fetch all permissions which are registered with superperms.
 	 * {can include child nodes)
 	 * 
-	 * @param includeChildren
+	 * @param includeChildren - If child nodes should be included
 	 * @return List of all permission nodes
 	 */
 	public List<String> getAllRegisteredPermissions(boolean includeChildren) {
@@ -542,7 +546,7 @@ public class TownyPerms {
 	 * Returns a map of ALL child permissions registered with bukkit
 	 * null is empty
 	 * 
-	 * @param node
+	 * @param node - Parent node
 	 * @param playerPermArray current list of perms to check against for
 	 *            negations
 	 * @return Map of child permissions
@@ -580,7 +584,7 @@ public class TownyPerms {
 	 * Bukkit.
 	 * null is empty
 	 * 
-	 * @param node
+	 * @param node - Parent node
 	 * @return Map of child permissions
 	 */
 	public static Map<String, Boolean> getChildren(String node) {

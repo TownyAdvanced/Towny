@@ -1,15 +1,24 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
+import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.TransactionType;
+import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.ExtendedEconomyAPI;
+
+import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Economy handler to interface with Register or Vault directly.
@@ -17,6 +26,7 @@ import java.math.BigDecimal;
  * @author ElgarL
  * 
  */
+@SuppressWarnings("deprecation")
 public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
@@ -126,6 +136,7 @@ public class TownyEconomyHandler {
 	 * @param accountName - Name of the player's account (usually playername)
 	 * @return - The relevant player's economy account
 	 */
+	@SuppressWarnings("unused")
 	private static Object getEconomyAccount(String accountName) {
 
 		switch (Type) {
@@ -146,15 +157,15 @@ public class TownyEconomyHandler {
 	/**
 	 * Check if account exists
 	 * 
-	 * @param accountName
-	 * @return
+	 * @param accountName the economy account to check
+	 * @return true if the account exists
 	 */
 	public static boolean hasEconomyAccount(String accountName) {
 
 		switch (Type) {
 
 		case RESERVE:
-		  return reserveEconomy.hasAccount(accountName);
+		    return reserveEconomy.hasAccountDetail(accountName).success();
 			
 		case VAULT:
 			return vaultEconomy.hasAccount(accountName);
@@ -166,9 +177,34 @@ public class TownyEconomyHandler {
 
 		return false;
 	}
+	
+	/**
+	 * Check if account exists
+	 * 
+	 * @param uniqueId the UUID of the account to check
+	 * @return true if the account exists
+	 */
+	public static boolean hasEconomyAccount(UUID uniqueId) {
+		switch (Type) {
+
+		case RESERVE:
+		    return reserveEconomy.hasAccountDetail(uniqueId).success();
+			
+		case VAULT:
+			return vaultEconomy.hasAccount(Bukkit.getOfflinePlayer(uniqueId));
+			
+		default:
+			break;
+
+		}
+
+		return false;
+	}
 
 	/**
 	 * Attempt to delete the economy account.
+	 * 
+	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
 
@@ -176,7 +212,7 @@ public class TownyEconomyHandler {
 			switch (Type) {
 
 			case RESERVE:
-				reserveEconomy.deleteAccount(accountName);
+				reserveEconomy.deleteAccountDetail(accountName);
 				break;
 				
 			case VAULT: // Attempt to zero the account as Vault provides no delete method.
@@ -202,7 +238,8 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns the accounts current balance
 	 * 
-	 * @param accountName
+	 * @param accountName name of the economy account
+	 * @param world name of world to check in (for TNE Reserve)   
 	 * @return double containing the total in the account
 	 */
 	public static double getBalance(String accountName, World world) {
@@ -210,8 +247,9 @@ public class TownyEconomyHandler {
 		switch (Type) {
 
 		case RESERVE:
-			if (!reserveEconomy.hasAccount(accountName))
-				reserveEconomy.createAccount(accountName);
+			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
+				if(!reserveEconomy.createAccountDetail(accountName).success()) return 0.0;
+			}
 
 			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
 
@@ -232,8 +270,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns true if the account has enough money
 	 * 
-	 * @param accountName
-	 * @param amount
+	 * @param accountName name of an economy account
+	 * @param amount minimum amount to check against (Double)
+	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, Double amount, World world) {
@@ -247,23 +286,40 @@ public class TownyEconomyHandler {
 	/**
 	 * Attempts to remove an amount from an account
 	 * 
-	 * @param accountName
-	 * @param amount
+	 * @param accountName name of the account to modify
+	 * @param amount amount of currency to remove from the account
+	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
 	public static boolean subtract(String accountName, Double amount, World world) {
 
+		Player player = Bukkit.getServer().getPlayer(accountName);
+		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount.intValue());
+		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
+
+		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+			return false;
+		}
+
 		switch (Type) {
 
 		case RESERVE:
-			if (!reserveEconomy.hasAccount(accountName))
-				reserveEconomy.createAccount(accountName);
-			return reserveEconomy.removeHoldings(accountName, new BigDecimal(amount), world.getName());
+			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
+				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
+			}
+			
+			BukkitTools.getPluginManager().callEvent(event);
+			return reserveEconomy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
 				vaultEconomy.createPlayerAccount(accountName);
 
+			BukkitTools.getPluginManager().callEvent(event);
 			return vaultEconomy.withdrawPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
 			
 		default:
@@ -277,25 +333,40 @@ public class TownyEconomyHandler {
 	/**
 	 * Add funds to an account.
 	 * 
-	 * @param accountName
-	 * @param amount
-	 * @param world
+	 * @param accountName account to add funds to
+	 * @param amount amount of currency to add
+	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
 	public static boolean add(String accountName, Double amount, World world) {
 
+		Player player = Bukkit.getServer().getPlayer(accountName);
+		Transaction transaction = new Transaction(TransactionType.ADD, player, amount.intValue());
+		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
+
+		BukkitTools.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+			return false;
+		}
+
 		switch (Type) {
 
 		case RESERVE:
-			if (!reserveEconomy.hasAccount(accountName))
-				reserveEconomy.createAccount(accountName);
+			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
+				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
+			}
 
-			return reserveEconomy.addHoldings(accountName, new BigDecimal(amount), world.getName());
+			BukkitTools.getPluginManager().callEvent(event);
+			return reserveEconomy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
 				vaultEconomy.createPlayerAccount(accountName);
-
+			
+			Bukkit.getPluginManager().callEvent(event);
 			return vaultEconomy.depositPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
 			
 		default:
@@ -311,9 +382,11 @@ public class TownyEconomyHandler {
 		switch (Type) {
 
 		case RESERVE:
-			if (!reserveEconomy.hasAccount(accountName))
-				reserveEconomy.createAccount(accountName);
-			return reserveEconomy.setHoldings(accountName, new BigDecimal(amount), world.getName());
+			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
+				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
+			}
+
+			return reserveEconomy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -332,7 +405,7 @@ public class TownyEconomyHandler {
 	/**
 	 * Format this balance according to the current economy systems settings.
 	 * 
-	 * @param balance
+	 * @param balance account balance passed by the economy handler
 	 * @return string containing the formatted balance
 	 */
 	public static String getFormattedBalance(double balance) {
@@ -357,5 +430,7 @@ public class TownyEconomyHandler {
 		return String.format("%.2f", balance);
 
 	}
+
+
 
 }

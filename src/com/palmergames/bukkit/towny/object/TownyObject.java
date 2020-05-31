@@ -1,38 +1,33 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Observable;
-import java.util.Random;
 
-public abstract class TownyObject extends Observable {
-
-	private Integer UID = 0;
+public abstract class TownyObject implements Nameable {
 	private String name;
-	private boolean isChangedName = true;
 
-	public void setName(String name) {
-
-		if (getUID() == 0)
-			setUID(name.hashCode() + new Random(System.currentTimeMillis()).nextInt());
-
-		setChanged();
-		notifyObservers(TownyObservableType.OBJECT_NAME);
+	private HashSet<CustomDataField<?>> metadata = null;
+	
+	protected TownyObject(String name) {
 		this.name = name;
-		setChangedName(true);
 	}
-
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@Override
 	public String getName() {
-
 		return name;
 	}
 
 	public List<String> getTreeString(int depth) {
 
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	public String getTreeDepth(int depth) {
@@ -51,49 +46,53 @@ public abstract class TownyObject extends Observable {
 
 	@Override
 	public String toString() {
-
 		return getName();
 	}
 
+	/**
+	 * Get the formatted name, usually replacing the "_" with a space.
+	 * For example: <code>"Object_Name"</code> would be <code>"Object Name"</code>
+	 * 
+	 * @return The formatted name.
+	 */
 	public String getFormattedName() {
-
-		return TownyFormatter.getFormattedName(this);
+		return getName().replaceAll("_", " ");
 	}
 
-	/**
-	 * @return the isChangedName
-	 */
-	public boolean isChangedName() {
+	public void addMetaData(CustomDataField<?> md) {
+		if (getMetadata() == null)
+			metadata = new HashSet<>();
 
-		return isChangedName;
+		getMetadata().add(md);
 	}
 
-	/**
-	 * @param isChangedName the isChangedName to set
-	 */
-	public void setChangedName(boolean isChangedName) {
+	public void removeMetaData(CustomDataField<?> md) {
+		if (!hasMeta())
+			return;
 
-		this.isChangedName = isChangedName;
+		getMetadata().remove(md);
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
 	}
 
-	/**
-	 * Returns the current objects UID
-	 * 
-	 * @return integer containing the objects unique identifier
-	 */
-	public Integer getUID() {
-
-		return UID;
+	public HashSet<CustomDataField<?>> getMetadata() {
+		return metadata;
 	}
 
-	/**
-	 * A function to set the objects UID.
-	 * This should never be used unless duplicating an object.
-	 * 
-	 * @param uID - new Object's UID
-	 */
-	public void setUID(Integer uID) {
-
-		UID = uID;
+	public boolean hasMeta() {
+		return getMetadata() != null;
 	}
+
+	public void setMetadata(String str) {
+
+		if (metadata == null)
+			metadata = new HashSet<>();
+
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
+		}
+	}
+	
 }

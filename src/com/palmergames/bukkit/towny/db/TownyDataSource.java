@@ -2,25 +2,22 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.util.FileMgmt;
-
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
@@ -43,67 +40,29 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public abstract class TownyDataSource {
+	final Lock lock = new ReentrantLock();
+	protected final Towny plugin;
+	protected final TownyUniverse universe;
 
-	protected final Lock lock = new ReentrantLock();
-
-	protected TownyUniverse universe;
-	protected Towny plugin;
-	protected boolean firstRun = true;
-
-	public void initialize(Towny plugin, TownyUniverse universe) {
-
-		this.universe = universe;
+	TownyDataSource(Towny plugin, TownyUniverse universe) {
 		this.plugin = plugin;
+		this.universe = universe;
 	}
 
-	public synchronized void backup() throws IOException {
-		//place holder to be overridden
-	}
+	public abstract boolean backup() throws IOException;
 
-	public synchronized void cleanupBackups() {
+	public abstract void cleanupBackups();
 
-		long deleteAfter = TownySettings.getBackupLifeLength();
-		if (deleteAfter >= 0)
-			FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + FileMgmt.fileSeparator() + "backup"), deleteAfter);
-
-	}
-
-	public synchronized void deleteUnusedResidentFiles() {
-		//place holder to be overridden
-	}
-
-	public boolean confirmContinuation(String msg) {
-
-		Boolean choice = null;
-		String input = null;
-		while (choice == null) {
-			System.out.println(msg);
-			System.out.print("    Continue (y/n): ");
-			Scanner in = new Scanner(System.in);
-			input = in.next();
-			input = input.toLowerCase();
-			if (input.equals("y") || input.equals("yes")) {
-				in.close();
-				return true;
-			} else if (input.equals("n") || input.equals("no")) {
-				in.close();
-				return false;
-			}
-			in.close();
-
-		}
-		System.out.println("[Towny] Error recieving input, exiting.");
-		return false;
-	}
+	public abstract void deleteUnusedResidents();
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveResidentList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -116,7 +75,7 @@ public abstract class TownyDataSource {
 		return saveRegenList() && saveSnapshotList();
 	}
 
-	abstract public void cancelTask();
+	abstract public void finishTasks();
 
 	abstract public boolean loadTownBlockList();
 
@@ -142,11 +101,15 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorld(TownyWorld world);
 
-	abstract public boolean saveTownBlockList();
+	abstract public boolean loadPlotGroupList();
+
+	abstract public boolean loadPlotGroups();
 
 	abstract public boolean saveResidentList();
 
 	abstract public boolean saveTownList();
+
+	abstract public boolean savePlotGroupList();
 
 	abstract public boolean saveNationList();
 
@@ -159,6 +122,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveResident(Resident resident);
 
 	abstract public boolean saveTown(Town town);
+	
+	abstract public boolean savePlotGroup(PlotGroup group);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -187,32 +152,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteTownBlock(TownBlock townBlock);
 
 	abstract public void deleteFile(String file);
-
-	/*
-	 * public boolean loadWorldList() {
-	 * return loadServerWorldsList();
-	 * }
-	 *
-	 * public boolean loadServerWorldsList() {
-	 * sendDebugMsg("Loading Server World List");
-	 * for (World world : plugin.getServer().getWorlds())
-	 * try {
-	 * //String[] split = world.getName().split("/");
-	 * //String worldName = split[split.length-1];
-	 * //universe.newWorld(worldName);
-	 * universe.newWorld(world.getName());
-	 * } catch (AlreadyRegisteredException e) {
-	 * e.printStackTrace();
-	 * } catch (NotRegisteredException e) {
-	 * e.printStackTrace();
-	 * }
-	 * return true;
-	 * }
-	 */
-
-	/*
-	 * Load all of category
-	 */
+	
+	abstract public void deletePlotGroup(PlotGroup group);
 
 	public boolean cleanup() {
 
@@ -247,7 +188,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Towns");
 		for (Town town : getTowns())
 			if (!loadTown(town)) {
-				System.out.println("[Towny] Loading Error: Could not read town data " + town.getName() + "'.");
+				System.out.println("[Towny] Loading Error: Could not read town data '" + town.getName() + "'.");
 				return false;
 			}
 		return true;
@@ -288,6 +229,13 @@ public abstract class TownyDataSource {
 			saveResident(resident);
 		return true;
 	}
+	
+	public boolean savePlotGroups() {
+		TownyMessaging.sendDebugMsg("Saving PlotGroups");
+		for (PlotGroup plotGroup : getAllPlotGroups())
+			savePlotGroup(plotGroup);
+		return true;
+	}
 
 	public boolean saveTowns() {
 
@@ -317,6 +265,8 @@ public abstract class TownyDataSource {
 	abstract public List<Resident> getResidents(Player player, String[] names);
 
 	abstract public List<Resident> getResidents();
+	
+	abstract public List<PlotGroup> getAllPlotGroups();
 
 	abstract public List<Resident> getResidents(String[] names);
 
@@ -360,7 +310,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public List<TownBlock> getAllTownBlocks();
+	abstract public Collection<TownBlock> getAllTownBlocks();
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
@@ -368,7 +318,7 @@ public abstract class TownyDataSource {
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException;
+	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 
 	abstract public void removeTown(Town town);
 
@@ -387,7 +337,10 @@ public abstract class TownyDataSource {
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+	
+	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
 }

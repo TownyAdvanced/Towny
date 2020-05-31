@@ -8,12 +8,12 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
@@ -29,19 +29,20 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		if (TownyUniverse.isWarTime())
+		if (TownyAPI.getInstance().isWarTime())
 			return;
 
 		for (Player player : server.getOnlinePlayers()) {
 			if (player.getHealth() <= 0)
 				continue;
 
-			Coord coord = Coord.parseCoord(player);
 			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
-				TownBlock townBlock = world.getTownBlock(coord);
-
-				if (CombatUtil.isAlly(townBlock.getTown(), TownyUniverse.getDataSource().getResident(player.getName()).getTown()))
+				if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+					continue;
+				
+				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(WorldCoord.parseWorldCoord(player.getLocation())));
+				
+				if (townBlock != null && CombatUtil.isAlly(townBlock.getTown(), TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown()))
 					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 						incHealth(player);
 			} catch (TownyException x) {
@@ -63,8 +64,8 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		
 		// Heal while in town.
 		double currentHP = player.getHealth();
-		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()) {
-			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue(), ++currentHP));
+		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
 			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);

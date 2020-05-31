@@ -35,8 +35,8 @@ public class BukkitPermSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player name.
+	 * @param node - Node to be checked.
 	 * @return -1 = can't find
 	 */
 	@Override
@@ -53,8 +53,8 @@ public class BukkitPermSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player name.
+	 * @param node - Node to be checked.
 	 * @return empty = can't find
 	 */
 	@Override
@@ -81,7 +81,7 @@ public class BukkitPermSource extends TownyPermissionSource {
 	/**
 	 * Returns the players Group name.
 	 * 
-	 * @param player
+	 * @param player - Player.
 	 * @return Empty string as bukkit doesn't support groups
 	 */
 	@Override

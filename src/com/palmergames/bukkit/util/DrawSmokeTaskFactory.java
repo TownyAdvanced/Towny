@@ -13,11 +13,13 @@ public class DrawSmokeTaskFactory {
 
     /**
      * Send to the smoke effect to the player.
-     * @return LocationRunnable
+	 * 
+	 * @param player - {@link Player} to send smoke effect
+     * @return {@link LocationRunnable}
      */
     public static LocationRunnable sendToPlayer(final Player player) {
         return new LocationRunnable() {
-            Vector offset = new Vector(0.5, 0.5, 0.5);
+            Vector offset = new Vector(0.5, 1.5, 0.5);
 
             @Override
             public void run(Location loc) {

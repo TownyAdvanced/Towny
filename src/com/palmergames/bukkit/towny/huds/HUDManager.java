@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -24,10 +25,7 @@ public class HUDManager implements Listener{
 	ArrayList<Player> warUsers;
 	ArrayList<Player> permUsers;
 
-	private final Towny plugin;
-	
 	public HUDManager (Towny plugin) {
-		this.plugin = plugin;
 		warUsers = new ArrayList<>();
 		permUsers = new ArrayList<>();
 	}
@@ -37,7 +35,7 @@ public class HUDManager implements Listener{
 		if (!warUsers.contains(p)){
 			toggleAllOff(p);
 			warUsers.add(p);
-			WarHUD.toggleOn(p, plugin.getTownyUniverse().getWarEvent());
+			WarHUD.toggleOn(p, TownyUniverse.getInstance().getWarEvent());
 		} else 
 			toggleAllOff(p);
 	}
@@ -85,9 +83,9 @@ public class HUDManager implements Listener{
 		Player p = event.getPlayer();
 		if (warUsers.contains(p)) {
 			WarHUD.updateLocation(p, event.getTo());
-			WarHUD.updateAttackable(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
-			WarHUD.updateHealth(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
-		} else if (permUsers.contains(p)) {
+			WarHUD.updateAttackable(p, event.getTo(), TownyUniverse.getInstance().getWarEvent());
+			WarHUD.updateHealth(p, event.getTo(), TownyUniverse.getInstance().getWarEvent());
+		} else if (permUsers.contains(p) && p.getScoreboard().getTeam("plot") != null) {
 			if (event.getTo().getTownyWorld().isUsingTowny())
 				PermHUD.updatePerms(p, event.getTo());
 			else
@@ -111,7 +109,7 @@ public class HUDManager implements Listener{
 	public void onTownScored (TownScoredEvent event)
 	{
 		//Update town score
-		War warEvent = plugin.getTownyUniverse().getWarEvent();
+		War warEvent = TownyUniverse.getInstance().getWarEvent();
 		for (Resident r : event.getTown().getResidents())
 		{
 			Player player = BukkitTools.getPlayer(r.getName());

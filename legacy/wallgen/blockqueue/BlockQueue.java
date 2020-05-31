@@ -35,13 +35,7 @@ public class BlockQueue {
 
 		instance = new BlockQueue();
 		instance.worker = new BlockWorker(server, instance);
-
-		//TODO: Fix
-		//TODO: null = plugin
-		//TODO: null = plugin
-		//TODO: null = plugin
-		//TODO: null = plugin
-		//TODO: null = plugin
+		
 		server.getScheduler().runTaskLaterAsynchronously(null, instance.getWorker(),0);
 
 		return instance;

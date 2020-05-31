@@ -1,11 +1,10 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 
-public class WarSpoils extends TownyEconomyObject {
+public class WarSpoils extends EconomyAccount {
 
 	public WarSpoils() {
-
-		setName("towny-war-chest");
+		super("towny-war-chest");
 	}
 }

@@ -1,10 +1,20 @@
 package com.palmergames.bukkit.towny.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ChatTools;
+import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -12,21 +22,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.StringMgmt;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Send a list of all general townyworld help commands to player Command:
@@ -36,11 +36,42 @@ import com.palmergames.util.StringMgmt;
 public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> townyworld_help = new ArrayList<String>();
-	private static final List<String> townyworld_help_console = new ArrayList<String>();
-	private static final List<String> townyworld_set = new ArrayList<String>();
-	private static final List<String> townyworld_set_console = new ArrayList<String>();
+	private static final List<String> townyworld_help = new ArrayList<>();
+	private static final List<String> townyworld_help_console = new ArrayList<>();
+	private static final List<String> townyworld_set = new ArrayList<>();
+	private static final List<String> townyworld_set_console = new ArrayList<>();
 	private static TownyWorld Globalworld;
+	
+	private static final List<String> townyWorldTabCompletes = Arrays.asList(
+		"list",
+		"toggle",
+		"set",
+		"regen",
+		"undo"
+	);
+
+	private static final List<String> townyWorldToggleTabCompletes = Arrays.asList(
+		"claimable",
+		"usingtowny",
+		"pvp",
+		"forcepvp",
+		"explosion",
+		"forceexplosion",
+		"fire",
+		"townmobs",
+		"worldmobs",
+		"revertunclaim",
+		"revertexpl",
+		"warallowed"
+	);
+	
+	private static List<String> townySetTabCompletes = Arrays.asList(
+		"usedefault",
+		"wildperm",
+		"wildignore",
+		"wildregen",
+		"wildname"
+	);
 	
 	private boolean isConsole = false;
 
@@ -75,6 +106,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_set_console.add(ChatTools.formatCommand("", "/townyworld {world} set", "wildname [name]", ""));
 		
 		if (sender instanceof Player) {
+			if (plugin.isError()) {
+				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				return false;
+			}
 			parseWorldCommand(sender, args);
 		} else {
 			isConsole = true;			
@@ -87,6 +122,26 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		townyworld_help.clear();
 		Globalworld = null;
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		
+		switch (args[0].toLowerCase()) {
+			case "toggle":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
+				break;
+			case "set":
+				if (args.length == 2)
+					return NameUtil.filterByStart(townySetTabCompletes, args[1]);
+				break;
+			default:
+				if (args.length == 1)
+					return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
+		}
+		
+		return Collections.emptyList();
 	}
 
 	private void parseWorldFromConsole(CommandSender sender, String[] split) {
@@ -104,13 +159,18 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}		
 
-		if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("toggle")) {
-			for (String line : townyworld_help_console)
-				sender.sendMessage(line);			
-			return;
-		} else if (split.length > 0) {
+		if (split[0].equalsIgnoreCase("set")) {
+			for (String line : townyworld_set_console) {
+				sender.sendMessage(line);
+			}
+		}
+		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
+			for (String line : townyworld_help_console) {
+				sender.sendMessage(line);
+			}
+		} else {
 			try {
-				Globalworld = TownyUniverse.getDataSource().getWorld(split[0].toLowerCase());
+				Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(split[0].toLowerCase());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -121,14 +181,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseWorldCommand(CommandSender sender, String[] split) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Player player = null;
 
 		if (sender instanceof Player) {
 			player = (Player) sender;
 			try {
 				if (Globalworld == null)
-					Globalworld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+					Globalworld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -160,10 +220,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			if (player == null) {
-				for (String line : TownyFormatter.getStatus(Globalworld))
+				for (String line : TownyFormatter.getStatus(Globalworld)) {
 					sender.sendMessage(Colors.strip(line));
-			} else
+				}
+			} else {
 				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(Globalworld));
+			}
 
 			return;
 		}
@@ -179,14 +241,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				listWorlds(player, sender);
 
 			} else if (split[0].equalsIgnoreCase("set")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				worldSet(player, sender, StringMgmt.remFirstArg(split));
@@ -262,23 +324,26 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		} else
 			player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("world_plu")));
 
-		ArrayList<String> formatedList = new ArrayList<String>();
+		ArrayList<String> formatedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
-		for (TownyWorld world : TownyUniverse.getDataSource().getWorlds()) {
-			int numPlayers = playersPerWorld.containsKey(world.getName()) ? playersPerWorld.get(world.getName()) : 0;
+		for (TownyWorld world : TownyUniverse.getInstance().getDataSource().getWorlds()) {
+			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}
 
 		if (player == null) {
-			for (String line : ChatTools.list(formatedList))
+			for (String line : ChatTools.list(formatedList)) {
 				sender.sendMessage(line);
-		} else
-			for (String line : ChatTools.list(formatedList))
+			}
+		} else {
+			for (String line : ChatTools.list(formatedList)) {
 				player.sendMessage(line);
+			}
+		}
 	}
 
 	public void worldToggle(Player player, CommandSender sender, String[] split) throws TownyException {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 ) {
 			if (!isConsole) {		
 				player.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
@@ -293,6 +358,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "usingtowny", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "warallowed", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "pvp/forcepvp", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "explosion/forceexplosion", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "fire/forcefire", ""));
@@ -301,7 +367,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			String msg;
@@ -324,7 +390,17 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
+			
+			} else if (split[0].equalsIgnoreCase("warallowed")) {
 
+				Globalworld.setWarAllowed(!Globalworld.isWarAllowed());
+				plugin.resetCache();
+				msg = String.format(Globalworld.isWarAllowed() ? TownySettings.getLangString("msg_set_war_allowed_on") : TownySettings.getLangString("msg_set_war_allowed_off"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+				
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
 				Globalworld.setPVP(!Globalworld.isPVP());
@@ -424,7 +500,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			TownyUniverse.getDataSource().saveWorld(Globalworld);
+			townyUniverse.getDataSource().saveWorld(Globalworld);
 			
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(Globalworld);
@@ -492,7 +568,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						sender.sendMessage("Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
 				else
 					try {
-						List<String> mats = new ArrayList<String>();
+						List<String> mats = new ArrayList<>();
 						for (String s : StringMgmt.remFirstArg(split))
 							mats.add(Material.matchMaterial(s.trim().toUpperCase()).name());
 
@@ -517,7 +593,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						sender.sendMessage("Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
 				else {
 
-					List<String> entities = new ArrayList<String>(Arrays.asList(StringMgmt.remFirstArg(split)));
+					List<String> entities = new ArrayList<>(Arrays.asList(StringMgmt.remFirstArg(split)));
 
 					Globalworld.setPlotManagementWildRevertEntities(entities);
 
@@ -550,7 +626,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			TownyUniverse.getDataSource().saveWorld(Globalworld);
+			TownyUniverse.getInstance().getDataSource().saveWorld(Globalworld);
 		}
 	}
 

@@ -1,14 +1,14 @@
 package com.palmergames.bukkit.towny.invites;
 
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.Nameable;
 
 import java.util.List;
 
 /**
  * @author Articdive
  */
-public interface TownyInviteSender {
-	String getName();
+public interface TownyInviteSender extends Nameable {
 
 	List<Invite> getSentInvites();
 

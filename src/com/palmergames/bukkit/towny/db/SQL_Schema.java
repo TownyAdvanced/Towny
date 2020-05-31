@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SQL_Schema {
 
-    private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+    private static final String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
     private static String getWORLDS() {
 
@@ -27,7 +27,6 @@ public class SQL_Schema {
 
 	private static List<String> getWorldColumns() {
 		List<String> columns = new ArrayList<>();
-		columns.add("`towns` mediumtext NOT NULL");
 		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
@@ -57,6 +56,8 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
+		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -67,6 +68,22 @@ public class SQL_Schema {
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }
+    
+    private static String getPLOTGROUPS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "PLOTGROUPS ("
+			+ "`groupID` VARCHAR(36) NOT NULL,"
+			+ "PRIMARY KEY (`groupID`)"
+			+ ")";
+	}
+	
+	private static List<String> getPlotGroupColumns() {
+    	List<String> columns = new ArrayList<>();
+    	columns.add("`groupName` mediumtext NOT NULL");
+    	columns.add("`groupPrice` float DEFAULT NULL");
+		columns.add("`town` VARCHAR(32) NOT NULL");
+		
+		return columns;
+	}
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
@@ -82,8 +99,11 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
+		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
+		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -118,6 +138,7 @@ public class SQL_Schema {
 		columns.add("`open` bool NOT NULL DEFAULT '0'");
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
+		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
@@ -126,6 +147,9 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`conqueredDays` mediumint");
+		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 
@@ -147,11 +171,13 @@ public class SQL_Schema {
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
 		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
 		columns.add("`JailSpawn` mediumint");
+		columns.add("`JailDays` mediumint");
 		columns.add("`JailTown` mediumtext");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -176,6 +202,8 @@ public class SQL_Schema {
 		columns.add("`permissions` mediumtext NOT NULL");
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
+		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
 		return columns;
 	}
 
@@ -370,13 +398,47 @@ public class SQL_Schema {
             }
         }
         TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
+        
+        /*
+         * Fetch PLOTGROUPS table schema
+         */
+
+		String plotgroups_create = SQL_Schema.getPLOTGROUPS();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(plotgroups_create);
+			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table PLOTGROUPS : " + ee.getMessage());
+
+		}
+        
+        String plotGroups_update;
+        List<String> plotGroupColumns = getPlotGroupColumns();
+        for (String column : plotGroupColumns) {
+        	try {
+				plotGroups_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "PLOTGROUPS` "
+					+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(plotGroups_update);
+				ps.executeUpdate();
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table PLOTGROUPS :" + ee.getMessage());
+			}
+			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
+		}
     }
 
     /**
      * Call after loading to remove any old database elements we no longer need.
      *
-     * @param cntx
-     * @param db_name
+     * @param cntx - Connection.
+     * @param db_name - Name of database.
      */
     public static void cleanup(Connection cntx, String db_name) {
     	
@@ -401,5 +463,24 @@ public class SQL_Schema {
 //                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
 //
 //        }
+
+    	/*
+    	 * Update WORLDS 
+    	 */
+    	String world_update;
+    	
+    	try {
+    		world_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "WORLDS` " + "DROP COLUMN `towns`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(world_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table WORLDS :" + ee.getMessage());
+    	
+    	}    	
 	}
 }

@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
@@ -13,7 +15,9 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Rabbit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +25,9 @@ import java.util.List;
 public class MobRemovalTimerTask extends TownyTimerTask {
 
 	private Server server;
-	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<Class<?>>();
-	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<Class<?>>();
+	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
+	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
+	private boolean isRemovingKillerBunny;
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 
@@ -31,6 +36,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
 		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
+		isRemovingKillerBunny = TownySettings.isRemovingKillerBunny();
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
@@ -44,22 +50,20 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		// Build a list of mobs to be removed
-		List<LivingEntity> livingEntitiesToRemove = new ArrayList<LivingEntity>();
+		List<LivingEntity> livingEntitiesToRemove = new ArrayList<>();
 
 		for (World world : server.getWorlds()) {
 			TownyWorld townyWorld;
 
 			// Filter worlds not registered
 			try {
-				townyWorld = TownyUniverse.getDataSource().getWorld(world.getName());
-			} catch (NotRegisteredException e) {
+				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(world.getName());
+			} catch (NotRegisteredException | NullPointerException e) {
 				// World was not registered by Towny, so we skip all mobs in it.
 				continue;
-			} catch (NullPointerException ex) {
-				// Spigot has unloaded this world.
-				continue;
-			}
-
+			} // Spigot has unloaded this world.
+			
+			
 			// Filter worlds not using towny.
 			if (!townyWorld.isUsingTowny())
 				continue;
@@ -74,41 +78,14 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				if (!world.isChunkLoaded(livingEntityLoc.getBlockX() >> 4, livingEntityLoc.getBlockZ() >> 4))
 					continue;
 
-				Coord coord = Coord.parseCoord(livingEntityLoc);
+				// Check if entity is a Citizens NPC
+				if (plugin.isCitizens2()) {
+					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
+						continue;
+				}
 				
-
-				if (!townyWorld.hasTownBlock(coord))
-					continue;
-
-				try {
-					TownBlock townBlock = townyWorld.getTownBlock(coord);
-
-					// The entity is inside a registered plot.
-
-					// Check if mobs are always allowed inside towns in this world.
-					if (townyWorld.isForceTownMobs())
-						continue;
-
-					// Check if plot allows mobs.
-					if (townBlock.getPermissions().mobs)
-						continue;
-
-					// Check if the plot is registered to a town.
-					Town town = townBlock.getTown();
-
-					// Check if the town this plot is registered to allows mobs.
-					if (town.hasMobs())
-						continue;
-
-					// Check that Towny is removing this type of entity inside towns.
-					if (!isRemovingTownEntity(livingEntity))
-						continue;
-
-				} catch (NotRegisteredException x) {
-					// It will fall through to here if the mob is:
-					// - In an unregistered plot in this world.
-					// - If the plot isn't registered to a town.
-
+				// Handles entities in the wilderness.
+				if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
 					// Check if we're allowing mobs in unregistered plots in this world.
 					if (townyWorld.hasWorldMobs())
 						continue;
@@ -116,13 +93,47 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					// Check that Towny is removing this type of entity in unregistered plots.
 					if (!isRemovingWorldEntity(livingEntity))
 						continue;
+					
+					// Remove world mob.
+					livingEntitiesToRemove.add(livingEntity);
+					continue;
 				}
 
-				// Check if entity is a Citizens NPC
-				if (plugin.isCitizens2()) {
-					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
-						continue;
+				// The entity is inside of a town.
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
+
+				// Check if mobs are always allowed inside towns in this world.
+				if (townyWorld.isForceTownMobs())
+					continue;
+
+				// Check if plot allows mobs.
+				if (townBlock.getPermissions().mobs)
+					continue;
+
+				// Get the town this is registered to.
+				Town town = null;
+				try {
+					town = townBlock.getTown();
+				} catch (NotRegisteredException ignored) {
 				}
+
+				// Check if the town this plot is registered to allows mobs.
+				if (town.hasMobs())
+					continue;
+				
+				// Special check if it's a rabbit, for the Killer Bunny variant.
+				if (livingEntity.getType().equals(EntityType.RABBIT))
+					if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+						livingEntitiesToRemove.add(livingEntity);							
+						continue;						
+					}
+
+				// Check that Towny is removing this type of entity inside towns.
+				if (!isRemovingTownEntity(livingEntity))
+					continue;
+
+				if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
+					continue;
 
 				livingEntitiesToRemove.add(livingEntity);
 			}

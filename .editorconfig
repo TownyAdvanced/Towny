@@ -1,0 +1,37 @@
+# Towny's EditorConfig
+## Eclipse users need https://github.com/ncjones/editorconfig-eclipse
+## NetBeans users need https://github.com/welovecoding/editorconfig-netbeans
+## IDEA users have built-in support
+root = true
+
+# Global Rules (Applies to all files)
+## The project uses Windows-style line-endings.
+[*.java]
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = false
+charset = utf-8
+indent_size = 4
+indent_style = tab
+
+# Tab-sensitive files, use spaces from here on out
+
+## YAML 1.2 Spec (https://yaml.org/spec/1.2/spec.html)
+## Markdownlint (https://github.com/DavidAnson/markdownlint#rules--aliases)
+[*.{yml,yaml,md}]
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = true
+charset = utf-8
+indent_style = space
+indent_size = 4
+
+## See Maven Code Style and Code Conventions
+## https://maven.apache.org/developers/conventions/code.html
+[*.xml]
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = true
+charset = utf-8
+indent_style = space
+indent_size = 4

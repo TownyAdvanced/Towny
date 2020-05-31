@@ -1,9 +1,9 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.palmergames.bukkit.towny.TownySettings;
 
 public class TimeMgmt {
 
@@ -25,7 +25,7 @@ public class TimeMgmt {
 
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
-		List<Long> out = new ArrayList<Long>();
+		List<Long> out = new ArrayList<>();
 		for (long[] delay : delays)
 			if (delay.length != 2)
 				return null;
@@ -52,12 +52,12 @@ public class TimeMgmt {
 
 		String out = "";
 		if (l >= 3600) {
-			int h = (int) Math.floor(l / 3600);
+			int h = (int) (l / 3600.0);
 			out = h + TownySettings.getLangString("msg_hours");
 			l -= h * 3600;
 		}
 		if (l >= 60) {
-			int m = (int) Math.floor(l / 60);
+			int m = (int) (l / 60.0);
 			out += (out.length() > 0 ? ", " : "") + m + TownySettings.getLangString("msg_minutes");
 			l -= m * 60;
 		}

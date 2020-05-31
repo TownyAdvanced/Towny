@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +11,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -63,11 +63,11 @@ public abstract class TownyPermissionSource {
 
 	/**
 	 * Test if the player has a wild override to permit this action.
-	 * 
-	 * @param world
-	 * @param player
-	 * @param material
-	 * @param action
+	 *  
+	 * @param world - TownyWorld object.
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - Action type.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
@@ -123,9 +123,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an own town (or all town) override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
@@ -154,10 +154,10 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
-	 * @return
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
+	 * @return - True if action is permitted.
 	 */
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
@@ -186,9 +186,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an all town override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {
@@ -218,11 +218,7 @@ public abstract class TownyPermissionSource {
 	}
 
 	public boolean testPermission(Player player, String perm) {
-
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!has(player, perm)))
-			return false;
-
-		return true;
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
 	}
 
 	/**
@@ -230,8 +226,8 @@ public abstract class TownyPermissionSource {
 	 * 
 	 * Returns true if a player has a certain permission node.
 	 * 
-	 * @param player
-	 * @param node
+	 * @param player - Player to check
+	 * @param node - Permission node to check for
 	 * @return true if the player has this permission node.
 	 */
 	public boolean has(Player player, String node) {
@@ -268,203 +264,4 @@ public abstract class TownyPermissionSource {
 		return false;
 
 	}
-
-	/*
-	 * Wrappers for backwards compatibility
-	 */
-	@Deprecated
-	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
-
-		return hasWildOverride(world, player, blockId, (byte) 0, action);
-	}
-
-	@Deprecated
-	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
-
-		return hasOwnTownOverride(player, blockId, (byte) 0, action);
-	}
-
-	@Deprecated
-	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
-
-		return hasAllTownOverride(player, blockId, (byte) 0, action);
-	}
-	
-	/**
-	 * Test if the player has a wild override to permit this action.
-	 * 
-	 * @param world
-	 * @param player
-	 * @param blockId
-	 * @param data
-	 * @param action
-	 * @return true if the action is permitted.
-	 */
-	@Deprecated
-	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, byte data, TownyPermission.ActionType action) {
-
-		// check for permissions
-
-		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId);
-		String dataPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId + ":" + data);
-
-		boolean dataRegistered = player.isPermissionSet(dataPerm);
-
-		boolean hasBlock = has(player, blockPerm);
-		boolean hasData = has(player, dataPerm);
-
-		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 */
-		if ((hasData && dataRegistered) || (hasBlock && !dataRegistered))
-			return true;
-
-		// No node set but we are using permissions so check world settings
-		// (without UnclaimedIgnoreId's).
-		switch (action) {
-
-		case BUILD:
-			return world.getUnclaimedZoneBuild();
-		case DESTROY:
-			return world.getUnclaimedZoneDestroy();
-		case SWITCH:
-			return world.getUnclaimedZoneSwitch();
-		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse();
-		}
-
-		return false;
-	}
-	
-	@Deprecated
-	public boolean unclaimedZoneAction(TownyWorld world, int blockId, TownyPermission.ActionType action) {
-
-		String mat = BukkitTools.getMaterial(blockId).name();
-
-		switch (action) {
-
-		case BUILD:
-			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(mat);
-		case DESTROY:
-			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(mat);
-		case SWITCH:
-			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(mat);
-		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(mat);
-		}
-
-		return false;
-	}
-	
-	/**
-	 * Test if the player has an own town (or all town) override to permit this action.
-	 * 
-	 * @param player
-	 * @param blockId
-	 * @param data
-	 * @param action
-	 * @return true if the action is permitted.
-	 */
-	@Deprecated
-	public boolean hasOwnTownOverride(Player player, int blockId, byte data, TownyPermission.ActionType action) {
-
-		//check for permissions
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId);
-		String dataPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId + ":" + data);
-
-		boolean dataRegistered = player.isPermissionSet(dataPerm);
-
-		boolean hasBlock = has(player, blockPerm);
-		boolean hasData = has(player, dataPerm);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " - owntown (Block: " + hasBlock + " - Data: " + hasData + ":" + (dataRegistered ? "Registered" : "None"));
-
-		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 *  or
-		 * the player has an All town Override
-		 */
-		if ((hasData && dataRegistered) || (hasBlock && !dataRegistered) || hasAllTownOverride(player, blockId, data, action))
-			return true;
-
-		return false;
-	}
-	
-	/**
-	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to permit this action.
-	 * 
-	 * @param player
-	 * @param blockId
-	 * @param data
-	 * @param action
-	 * @return
-	 */
-	@Deprecated
-	public boolean hasTownOwnedOverride(Player player, int blockId, byte data, TownyPermission.ActionType action) {
-
-		//check for permissions
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("townowned." + action.toString().toLowerCase() + "." + blockId);
-		String dataPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("townowned." + action.toString().toLowerCase() + "." + blockId + ":" + data);
-
-		boolean dataRegistered = player.isPermissionSet(dataPerm);
-
-		boolean hasBlock = has(player, blockPerm);
-		boolean hasData = has(player, dataPerm);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " - townowned (Block: " + hasBlock + " - Data: " + hasData + ":" + (dataRegistered ? "Registered" : "None"));
-
-		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 *  or
-		 * the player has an Own Town Override
-		 *  or
-		 * the player has an All town Override
-		 */
-		if ((hasData && dataRegistered) || (hasBlock && !dataRegistered) || hasOwnTownOverride(player, blockId, data, action) || hasAllTownOverride(player, blockId, data, action))
-			return true;
-
-		return false;
-	}
-	
-	/**
-	 * Test if the player has an all town override to permit this action.
-	 * 
-	 * @param player
-	 * @param blockId
-	 * @param data
-	 * @param action
-	 * @return true if the action is permitted.
-	 */
-	@Deprecated
-	public boolean hasAllTownOverride(Player player, int blockId, byte data, TownyPermission.ActionType action) {
-
-		//check for permissions
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId);
-		String dataPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId + ":" + data);
-
-		//boolean blockRegistered = player.isPermissionSet(blockPerm);
-		boolean dataRegistered = player.isPermissionSet(dataPerm);
-
-		boolean hasBlock = has(player, blockPerm);
-		boolean hasData = has(player, dataPerm);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " - alltown (Block: " + hasBlock + " - Data: " + hasData + ":" + (dataRegistered ? "Registered" : "None"));
-
-		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 */
-		if ((hasData && dataRegistered) || (hasBlock && !dataRegistered))
-			return true;
-
-		return false;
-	}
-
 }

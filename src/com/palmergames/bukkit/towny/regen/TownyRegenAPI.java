@@ -1,38 +1,23 @@
 package com.palmergames.bukkit.towny.regen;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
+import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.regen.block.BlockInventoryHolder;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
-import com.palmergames.bukkit.towny.regen.block.BlockMobSpawner;
-import com.palmergames.bukkit.towny.regen.block.BlockObject;
-import com.palmergames.bukkit.towny.regen.block.BlockSign;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -40,32 +25,25 @@ import com.palmergames.bukkit.util.BukkitTools;
  */
 public class TownyRegenAPI {
 
-	//private static Towny plugin = null;
-	
-	public static void initialize(Towny plugin) {
-
-		//TownyRegenAPI.plugin = plugin;
-	}
-
 	// table containing snapshot data of active reversions.
-	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<String, PlotBlockData>();
+	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
 
 	// List of all old plots still to be processed for Block removal
-	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<WorldCoord>();
+	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
 
 	// A list of worldCoords which are needing snapshots
-	private static List<WorldCoord> worldCoords = new ArrayList<WorldCoord>();
+	private static List<WorldCoord> worldCoords = new ArrayList<>();
 	
 	// A holder for each protection regen task
-	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
+	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
-	private static  Set<Block> protectionPlaceholders = new HashSet<Block>();
+	private static  Set<Block> protectionPlaceholders = new HashSet<>();
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord
 	 */
 	public static void addWorldCoord(WorldCoord worldCoord) {
 
@@ -84,7 +62,7 @@ public class TownyRegenAPI {
 	/**
 	 * Check if this WorldCoord is waiting for a snapshot to be taken.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord to check
 	 * @return true if it's in the queue.
 	 */
 	public static boolean hasWorldCoord(WorldCoord worldCoord) {
@@ -132,21 +110,21 @@ public class TownyRegenAPI {
 	/**
 	 * Removes a Plot Chunk from the regeneration Hashtable
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to remove (PlotBlockData)
 	 */
 	public static void deletePlotChunk(PlotBlockData plotChunk) {
 
 		if (PlotChunks.containsKey(getPlotKey(plotChunk))) {
 			PlotChunks.remove(getPlotKey(plotChunk));
-			TownyUniverse.getDataSource().saveRegenList();
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 	
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
 	 * 
-	 * @param plotChunk
-	 * @param save
+	 * @param plotChunk - Chunk to add (PlotBlockData)
+	 * @param save - If Regen List should be saved
 	 */
 	public static void addPlotChunk(PlotBlockData plotChunk, boolean save) {
 
@@ -154,46 +132,50 @@ public class TownyRegenAPI {
 			//plotChunk.initialize();
 			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
 			if (save)
-				TownyUniverse.getDataSource().saveRegenList();
+				TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 
 	/**
 	 * Saves a Plot Chunk snapshot to the datasource
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to take Snapshot (PlotBlockData)
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
-
-		if (TownyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
-			TownyUniverse.getDataSource().savePlotData(plotChunk);
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+			townyUniverse.getDataSource().savePlotData(plotChunk);
 		}
 	}
 
 	/**
 	 * Deletes a Plot Chunk snapshot from the datasource
 	 * 
-	 * @param plotChunk
+	 * @param plotChunk - Chunk to delete snapshot (PlotBlockData)
 	 */
 	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
-
-		TownyUniverse.getDataSource().deletePlotData(plotChunk);
+		TownyUniverse.getInstance().getDataSource().deletePlotData(plotChunk);
 	}
 
 	/**
-	 * Loads a Plot Chunk snapshot from the datasource
+	 * Loads a Plot Chunk snapshot from the data source
 	 * 
-	 * @param townBlock
+	 * @param townBlock - TownBlock to get
+	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-
-		return TownyUniverse.getDataSource().loadPlotData(townBlock);
+		PlotBlockData data = TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		if (data != null) 
+			return data;
+		else
+			return null;
 	}
 
 	/**
 	 * Gets a Plot Chunk from the regeneration Hashtable
 	 * 
-	 * @param townBlock
+	 * @param townBlock - TownBlock to get
+	 * @return PlotChunks or null   
 	 */
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
 
@@ -213,12 +195,11 @@ public class TownyRegenAPI {
 		return "[" + townBlock.getWorld().getName() + "|" + townBlock.getX() + "|" + townBlock.getZ() + "]";
 	}
 
-	//TODO: restore functionality of the chunk regen command for use in 1.13+ servers.
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
+	/**
+	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
+	 * 
+	 * @param player
+	 */
 //	public static void regenChunk(Player player) {
 //		
 //		try {
@@ -274,8 +255,6 @@ public class TownyRegenAPI {
 //		} catch (NotRegisteredException e) {
 //			// Failed to get resident
 //		}
-//		
-//		
 //	}
 //	
 //	/**
@@ -385,7 +364,7 @@ public class TownyRegenAPI {
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - WorldCoord for the Town Block
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 
@@ -427,8 +406,8 @@ public class TownyRegenAPI {
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
-	 * @param townBlock
-	 * @param material
+	 * @param townBlock - TownBlock to delete from
+	 * @param material - Material to delete
 	 */
 	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
 
@@ -466,9 +445,31 @@ public class TownyRegenAPI {
 	 */
 	
 	/**
+	 * Called from various explosion listeners.
+	 * 
+	 * @param block - Block which is being exploded.
+	 * @param count - int for setting the delay to do one block at a time.
+	 */
+	public static void beginProtectionRegenTask(Block block, int count) {
+		if ((!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+			// Piston extensions which are broken by explosions ahead of the base block
+			// cause baseblocks to drop as items and no base block to be regenerated.
+			if (block.getType().equals(Material.PISTON_HEAD)) {
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
+				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
+				block = baseBlock;
+			}
+			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+			addProtectionRegenTask(task);
+			block.setType(Material.AIR);
+		}
+	}
+	
+	/**
 	 * Does a task for this block already exist?
 	 * 
-	 * @param blockLocation
+	 * @param blockLocation - Location of the block
 	 * @return true if a task exists
 	 */
 	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
@@ -480,7 +481,7 @@ public class TownyRegenAPI {
 	/**
 	 * Fetch the relevant regen task for this block
 	 * 
-	 * @param blockLocation
+	 * @param blockLocation - Location of the block.
 	 * @return the stored task, or null if there is none.
 	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
@@ -494,7 +495,7 @@ public class TownyRegenAPI {
 	/**
 	 * Add this task to the protection regen queue.
 	 * 
-	 * @param task
+	 * @param task - ProtectionRegenTask to add to queue
 	 */
 	public static void addProtectionRegenTask(ProtectionRegenTask task) {
 
@@ -504,7 +505,7 @@ public class TownyRegenAPI {
 	/**
 	 * Remove this task form the protection regen queue
 	 * 
-	 * @param task
+	 * @param task - ProtectionRegenTask to remove from queue
 	 */
 	public static void removeProtectionRegenTask(ProtectionRegenTask task) {
 
@@ -529,7 +530,7 @@ public class TownyRegenAPI {
 	/**
 	 * Is this a placholder block?
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 * @return true if it is a placeholder
 	 */
 	public static boolean isPlaceholder(Block block) {
@@ -540,7 +541,7 @@ public class TownyRegenAPI {
 	/**
 	 * Add this block as a placeholder (will be replaced when it's regeneration task occurs)
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 */
 	public static void addPlaceholder(Block block) {
 
@@ -550,7 +551,7 @@ public class TownyRegenAPI {
 	/**
 	 * Remove this block from being tracked as a placeholder.
 	 * 
-	 * @param block
+	 * @param block - Block identifier
 	 */
 	public static void removePlaceholder(Block block) {
 

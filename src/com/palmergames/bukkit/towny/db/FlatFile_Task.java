@@ -4,13 +4,13 @@ import java.util.List;
 
 public class FlatFile_Task {
 
-	public List<String> list;
+	public final List<String> list;
 	public final String path;
 	
 	/**
 	 * Constructor to save a list
-	 * @param list
-	 * @param path
+	 * @param list - list to save.
+	 * @param path - path on filesystem.
 	 */
 	public FlatFile_Task(List<String> list, String path) {
 

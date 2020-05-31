@@ -1,5 +1,11 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.events.GMGroupEvent;
@@ -12,13 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -43,8 +42,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 * 
 	 * returns the specified prefix/suffix nodes from GroupManager
 	 * 
-	 * @param resident
-	 * @param node
+	 * @param resident - Resident to check for
+	 * @param node - Node to check
 	 * @return String of the Prefix or Suffix.
 	 */
 	@Override
@@ -89,9 +88,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * 
-	 * @param playerName
-	 * @param node
+	 * Gets a Group Permission's Integer Node
+	 * @param playerName - Player Name to check against
+	 * @param node - Node to check against
 	 * @return -1 = can't find
 	 */
 	@Override
@@ -129,8 +128,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player's Name to check against
+	 * @param node - Node to check
 	 * @return empty = can't find
 	 */
 	@Override
@@ -147,7 +146,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	/**
 	 * Returns the players Group name.
 	 * 
-	 * @param player
+	 * @param player - Player
 	 * @return name of players group
 	 */
 	@Override
@@ -173,7 +172,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
 
 					try {
-						resident = TownyUniverse.getDataSource().getResident(event.getUserName());
+						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getUserName());
 						player = BukkitTools.getPlayerExact(resident.getName());
 						if (player != null) {
 							//setup default modes for this player.
@@ -181,7 +180,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 							plugin.setPlayerMode(player, modes, false);
 							plugin.resetCache(player);
 						}
-					} catch (NotRegisteredException x) {
+					} catch (NotRegisteredException ignored) {
 					}
 
 				}
@@ -191,6 +190,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		}
 
+		@SuppressWarnings("unlikely-arg-type")
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMGroupEvent(GMGroupEvent event) {
 

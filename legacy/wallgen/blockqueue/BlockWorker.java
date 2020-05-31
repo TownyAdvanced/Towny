@@ -74,8 +74,7 @@ public class BlockWorker implements Runnable {
 
 		if (blockWork.getId() == BukkitTools.getTypeId(block))
 			return;
-
-		// TODO: Set block
+		
 		BukkitTools.setTypeIdAndData(block, blockWork.getId(), blockWork.getData(), true);
 
 	}

@@ -1,55 +1,58 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import org.bukkit.Bukkit;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.util.BukkitTools;
 
-public class TownBlock {
+import org.bukkit.Bukkit;
+import java.util.HashSet;
+
+public class TownBlock extends TownyObject {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
 	private TownyWorld world;
-	private Town town;
-	private Resident resident;
-	private TownBlockType type;
-	private String name;
+	private Town town = null;
+	private Resident resident = null;
+	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
+	private HashSet<CustomDataField<?>> metadata = null;
+	private PlotGroup plotGroup;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
-	protected boolean isChanged;
+	protected boolean isChanged = false;
 	
 	public TownBlock(int x, int z, TownyWorld world) {
-
+		super("");
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
-		this.resident = null;
-		this.type = TownBlockType.RESIDENTIAL;
-		isChanged = false;
-		this.name = "";
 	}
 
 	public void setTown(Town town) {
 
-		try {
-			if (hasTown())
-				this.town.removeTownBlock(this);
-		} catch (NotRegisteredException e) {
-		}
+		if (hasTown())
+			this.town.removeTownBlock(this);
 		this.town = town;
 		try {
+			TownyUniverse.getInstance().addTownBlock(this);
 			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException e) {
-		} catch (NullPointerException e) {
-		}
+		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}
 
 	public Town getTown() throws NotRegisteredException {
@@ -69,8 +72,7 @@ public class TownBlock {
 		try {
 			if (hasResident())
 				this.resident.removeTownBlock(this);
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
@@ -78,7 +80,7 @@ public class TownBlock {
 		} catch (AlreadyRegisteredException | NullPointerException e) {
 			successful = false;
 		}
-		if (successful && resident != null) { //Should not cause a NPE, is checkingg if resident is null and
+		if (successful) { //Should not cause a NPE, is checkingg if resident is null and
 			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
 			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
 		}
@@ -102,14 +104,12 @@ public class TownBlock {
 		try {
 			if (owner == getTown())
 				return true;
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 
 		try {
 			if (owner == getResident())
 				return true;
-		} catch (NotRegisteredException e) {
-		}
+		} catch (NotRegisteredException ignored) {}
 
 		return false;
 	}
@@ -184,8 +184,6 @@ public class TownBlock {
 
 		return type;
 	}
-
-	
 	
 	public void setType(TownBlockType type) {
 		if (type != this.type)
@@ -200,83 +198,42 @@ public class TownBlock {
 		switch (type) {
 		
 		case RESIDENTIAL:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
+
+			case COMMERCIAL:
+
+			case EMBASSY:
+
+			case WILDS:
+
+			case FARM:
+
+			case BANK:
+
+				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+
+				if (this.hasResident()) {
+				setPermissions(this.resident.getPermissions().toString());
 			} else {
-				setPermissions(this.town.permissions.toString());
+				setPermissions(this.town.getPermissions().toString());
 			}
 			
 			break;
-			
-		case COMMERCIAL:
-			
-			//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case ARENA:
+
+			case ARENA:
 			
 			setPermissions("pvp");
 			break;
-			
-		case EMBASSY:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-			
-		case WILDS:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case SPLEEF:
-			
-			setPermissions("denyAll");
+
+			case SPLEEF:
+
+			case JAIL:
+
+				setPermissions("denyAll");
 			break;
 
 		case INN:
 			
 			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			break;
-			
-		case JAIL:
-			
-			setPermissions("denyAll");
-			break;
-		
-		case FARM:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
-			
-			break;
-		
-		case BANK:
-			
-			if (this.hasResident()) {
-				setPermissions(this.resident.permissions.toString());
-			} else {
-				setPermissions(this.town.permissions.toString());
-			}
 			break;
 		}
 			
@@ -290,22 +247,81 @@ public class TownBlock {
 
 		setType(TownBlockType.lookup(typeId));
 	}
-
-	public void setType(String typeName) throws TownyException {
-
+	
+	public void setType(String typeName, Resident resident) throws TownyException, EconomyException {
 		if (typeName.equalsIgnoreCase("reset"))
-			typeName = "default";					
-		
+			typeName = "default";
+
 		TownBlockType type = TownBlockType.lookup(typeName);
-		
+
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
 		
-		if (this.isJail())
-			this.getTown().removeJailSpawn(this.getCoord());
+		setType(type, resident);
+	}
+
+	public void setType(TownBlockType type, Resident resident) throws TownyException, EconomyException {
+				double cost;
+		switch (type) {
+		case COMMERCIAL:
+			cost = TownySettings.getPlotSetCommercialCost();
+			break;
+		case EMBASSY:
+			cost = TownySettings.getPlotSetEmbassyCost();
+			break;
+		case ARENA:
+			cost = TownySettings.getPlotSetArenaCost();
+			break;
+		case WILDS:
+			cost = TownySettings.getPlotSetWildsCost();
+			break;
+		case INN:
+			cost = TownySettings.getPlotSetInnCost();
+			break;
+		case JAIL:
+			cost = TownySettings.getPlotSetJailCost();
+			break;
+		case FARM:
+			cost = TownySettings.getPlotSetFarmCost();
+			break;
+		case BANK:
+			cost = TownySettings.getPlotSetBankCost();
+			break;
+		default: 
+			cost = 0;
+		}
 		
-		setType(type);
+		// Test if we can pay first to throw an exception.
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
+			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
+
+		// Handle payment via a confirmation to avoid suprise costs.
+		if (cost > 0 && TownySettings.isUsingEconomy()) {
+			Confirmation confirmation = new Confirmation(() -> {
 		
+				try {
+					resident.getAccount().pay(cost, String.format("Plot set to %s", type));
+				} catch (EconomyException ignored) {
+				}					
+
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+			
+				if (this.isJail())
+					try {
+						this.getTown().removeJailSpawn(this.getCoord());
+					} catch (NotRegisteredException ignored) {
+					}
+				
+				setType(type);
+			});
+			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)));
+			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(resident.getName()), confirmation);
+		// No payment required so just change the type.
+		} else {
+			if (this.isJail())
+				this.getTown().removeJailSpawn(this.getCoord());
+			setType(type);
+		}
 	}
 
 	public boolean isHomeBlock() {
@@ -317,14 +333,9 @@ public class TownBlock {
 		}
 	}
 	
+	@Override
 	public void setName(String newName) {
-
-		this.name = newName.replace("_", " ");
-	}
-
-	public String getName() {
-
-		return this.name;
+		super.setName(newName.replace("_", " ")); 
 	}
 
 	public void setX(int x) {
@@ -418,5 +429,64 @@ public class TownBlock {
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;
+	}
+	
+	public void addMetaData(CustomDataField md) {
+		if (getMetadata() == null)
+			metadata = new HashSet<>();
+		
+		getMetadata().add(md);
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+	
+	public void removeMetaData(CustomDataField md) {
+		if (!hasMeta())
+			return;
+		
+		getMetadata().remove(md);
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
+
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+
+	public HashSet<CustomDataField<?>> getMetadata() {
+		return metadata;
+	}
+
+	public boolean hasMeta() {
+		return getMetadata() != null;
+	}
+
+	public void setMetadata(String str) {
+		
+		if (metadata == null)
+			metadata = new HashSet<>();
+		
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
+		}
+	}
+	
+	public boolean hasPlotObjectGroup() { return plotGroup != null; }
+	
+	public PlotGroup getPlotObjectGroup() {
+		return plotGroup;
+	}
+	
+	public void removePlotObjectGroup() {
+		this.plotGroup = null;
+	}
+
+	public void setPlotObjectGroup(PlotGroup group) {
+		this.plotGroup = group;
+
+		try {
+			group.addTownBlock(this);
+		} catch (NullPointerException e) {
+			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
+		}
 	}
 }

@@ -4,8 +4,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 import javax.naming.InvalidNameException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -17,13 +18,20 @@ public class NameValidation {
 
 	private static Pattern namePattern = null;
 	private static Pattern stringPattern = null;
+	private static Collection<String> bannedNames;
+	
+	static {
+		bannedNames = new HashSet<>(
+			Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant",
+				          "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
+	}
 
 	/**
 	 * Check and perform getNameCheckRegex on any town/nation names
 	 * 
-	 * @param name
+	 * @param name - Town/Nation name {@link String}
 	 * @return result of getNameCheckRegex
-	 * @throws InvalidNameException
+	 * @throws InvalidNameException if the name parsed is blacklisted
 	 */
 	public static String checkAndFilterName(String name) throws InvalidNameException {
 
@@ -36,11 +44,11 @@ public class NameValidation {
 	}
 
 	/**
-	 * Check and perform regex on any Player names
+	 * Check and perform regex on any player names
 	 * 
-	 * @param name
+	 * @param name of a player in {@link String} format.
 	 * @return String of the valid name result.
-	 * @throws InvalidNameException
+	 * @throws InvalidNameException if the player name is invalid.
 	 */
 	public static String checkAndFilterPlayerName(String name) throws InvalidNameException {
 
@@ -55,28 +63,26 @@ public class NameValidation {
 	/**
 	 * Perform regex on all names passed and return the results.
 	 * 
-	 * @param arr
+	 * @param arr - Array of names
 	 * @return string array of the filtered names.
 	 */
 	public static String[] checkAndFilterArray(String[] arr) {
-
-		String[] out = arr;
+		
 		int count = 0;
 
 		for (String word : arr) {
-			out[count] = filterName(word);
+			arr[count] = filterName(word);
 			count++;
 		}
 
-		return out;
+		return arr;
 	}
-
 	/**
 	 * Is this name in our blacklist?
 	 * If not a blacklist, call isValidName and
 	 * return true if it is an invalid name.
 	 * 
-	 * @param name - Name to be checked for invalidility.
+	 * @param name - Name to be checked for invalidity.
 	 * @return true if this name is blacklist/invalid
 	 */
 	public static boolean isBlacklistName(String name) {
@@ -88,8 +94,6 @@ public class NameValidation {
 		  A list of all banned names (notably all sub commands like 'spawn'
 		  used in '/town spawn')
 		 */
-		ArrayList<String> bannedNames = new ArrayList<String>();
-		bannedNames.addAll(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
 		// Banned names
 		if (bannedNames.contains(name.toLowerCase()))
 			return true;
@@ -100,14 +104,18 @@ public class NameValidation {
 	/**
 	 * Is this a valid name via getNameCheckRegex
 	 *
-	 * @param name
+	 * @param name - {@link String} containing a name from getNameCheckRegex
 	 * @return true if this name is valid.
 	 */
 	public static boolean isValidName(String name) {
+
+		if (name.contains("'") || name.contains("`")) {
+			return false;
+		}
 	
 		try {
 			if (namePattern == null)
-				namePattern = Pattern.compile(TownySettings.getNameCheckRegex());
+				namePattern = Pattern.compile(TownySettings.getNameCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			return namePattern.matcher(name).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
@@ -115,12 +123,23 @@ public class NameValidation {
 		}
 		
 	}
-	public static boolean isValidString(String name) {
+	
+	/**
+	 * Used in validating the strings saved for town and nation boards.
+	 * 
+	 * @param message - String needing validation.
+	 * @return approved message.
+	 */
+	public static boolean isValidString(String message) {
+		
+		if (message.contains("'") || message.contains("`")) {
+			return false;
+		}
 
 		try {
 			if (stringPattern == null)
-				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex());
-			return stringPattern.matcher(name).find();
+				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+			return stringPattern.matcher(message).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
 			return false;
