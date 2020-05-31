@@ -171,8 +171,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return residents;
 	}
 
-	public List<Resident> getAssistants() {return getRank("assistant");}
+	public List<Resident> getAssistants() {
 
+	    return getRank("assistant");
+	}
 
 	public List<Resident> getRank(String rank) {
 
