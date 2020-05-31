@@ -202,4 +202,29 @@ public class BankAccount extends Account {
 			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
 	}
+
+	@Override
+	public double getHoldingBalance() throws EconomyException {
+		try {
+			if (isBankrupt()) {
+				return TownyEconomyHandler.getBalance(debtAccount.getName(), getBukkitWorld()) * -1;
+			}
+			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+			throw new EconomyException("Economy error getting holdings for " + getName());
+		}
+	}
+
+	@Override
+	public String getHoldingFormattedBalance() {
+		try {
+			if (isBankrupt()) {
+				return "-" + debtAccount.getHoldingFormattedBalance();
+			}
+			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
+		} catch (EconomyException e) {
+			return "Error";
+		}
+	}
 }

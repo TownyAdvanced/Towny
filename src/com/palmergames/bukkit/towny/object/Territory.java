@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
@@ -164,7 +163,7 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 
 		return account;
 	}
-
+	
 	public abstract void setTaxes(double taxes);
 	public abstract World getWorld();
 	
