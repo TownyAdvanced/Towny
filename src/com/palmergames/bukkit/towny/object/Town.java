@@ -38,8 +38,6 @@ import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
-	private static final List<String> mayoralSuccession = ["assistant"]; // TODO: Make setable via config file.
-
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private List<Resident> residents = new ArrayList<>();
@@ -690,7 +688,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (isMayor(resident)) {
 
 			if (residents.size() > 1) {
-				for (String rank : mayoralSuccession) {
+				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
 					for (Resident newMayor : new ArrayList<>(getRank(rank)))
 						if ((newMayor != resident) && (newMayor.hasTownRank(rank))) {
 							try {
@@ -703,7 +701,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 						}
 				}
 				if (isMayor(resident)) {
-					// Still mayor and no one with a rank in mayoralSuccession so pick a resident to be mayor
+					// Still mayor and no one with a rank in the order of mayoral succession
+					// (`TownySettings.getOrderOfMayoralSuccession()`) so pick a resident to be mayor.
 					for (Resident newMayor : new ArrayList<>(getResidents()))
 						if (newMayor != resident) {
 							try {
