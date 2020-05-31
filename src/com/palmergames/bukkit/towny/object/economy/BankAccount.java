@@ -1,17 +1,20 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import org.bukkit.World;
 
 /**
  * A variant of an account that implements
- * a checked cap on it's balance.
+ * a checked cap on it's balance, as well as a 
+ * debt system.
  */
 public class BankAccount extends Account {
 	
 	double balanceCap;
 	Account debtAccount = new DebtAccount(this);
+	// TODO: Debt Cap
 
 	/**
 	 * Because of limitations in Economy API's, debt isn't
@@ -19,8 +22,8 @@ public class BankAccount extends Account {
 	 * as a workaround for this problem.
 	 */
 	static class DebtAccount extends Account {
-
-		public static final String DEBT_PREFIX = "[DEBT]-";
+		
+		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
 
 		public DebtAccount(Account account) {
 			super(account.getName() + DEBT_PREFIX, account.getBukkitWorld());
@@ -65,7 +68,7 @@ public class BankAccount extends Account {
 	@Override
 	public boolean addMoney(double amount) {
 		try {
-			if (isInDebt()) {
+			if (isBankrupt()) {
 				return removeDebt(amount);
 			}
 		} catch (EconomyException e) {
@@ -76,7 +79,7 @@ public class BankAccount extends Account {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 
-	public boolean isInDebt() throws EconomyException {
+	public boolean isBankrupt() throws EconomyException {
 		return debtAccount.getHoldingBalance() > 0;
 	}
 	
@@ -97,5 +100,30 @@ public class BankAccount extends Account {
 		}
 		
 		return TownyEconomyHandler.subtract(debtAccount.getName(), amount, getBukkitWorld());
+	}
+
+	@Override
+	public double getHoldingBalance() throws EconomyException {
+		try {
+			if (isBankrupt()) {
+				return TownyEconomyHandler.getBalance(debtAccount.getName(), getBukkitWorld()) * -1;
+			}
+			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+			throw new EconomyException("Economy error getting holdings for " + getName());
+		}
+	}
+
+	@Override
+	public String getHoldingFormattedBalance() {
+		try {
+			if (isBankrupt()) {
+				return "-" + debtAccount.getHoldingFormattedBalance();
+			}
+			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
+		} catch (EconomyException e) {
+			return "Error";
+		}
 	}
 }
