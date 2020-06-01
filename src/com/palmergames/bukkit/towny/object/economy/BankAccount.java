@@ -127,6 +127,12 @@ public class BankAccount extends Account {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 
+	/**
+	 * Whether the account is in debt or not.
+	 * 
+	 * @return true if in debt, false otherwise.
+	 * @throws EconomyException On an economy error.
+	 */
 	public boolean isBankrupt() throws EconomyException {
 		return debtAccount.getHoldingBalance() > 0;
 	}
