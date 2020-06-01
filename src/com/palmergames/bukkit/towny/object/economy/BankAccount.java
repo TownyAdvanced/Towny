@@ -53,7 +53,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public boolean subtractMoney(double amount) {
+	protected boolean subtractMoney(double amount) {
 		try {
 			
 			if (isBankrupt()) {
@@ -81,7 +81,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public boolean addMoney(double amount) {
+	protected boolean addMoney(double amount) {
 		try {
 			if (isBankrupt()) {
 				return removeDebt(amount);

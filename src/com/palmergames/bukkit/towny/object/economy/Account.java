@@ -55,11 +55,11 @@ public abstract class Account implements Nameable {
 		return true;
 	}
 	
-	boolean addMoney(double amount) {
+	protected boolean addMoney(double amount) {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 	
-	boolean subtractMoney(double amount) {
+	protected boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 
