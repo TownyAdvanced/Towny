@@ -2888,7 +2888,7 @@ public class TownySettings {
 	}
 
 	public static List<String> getOrderOfMayoralSuccession() {
-		return getBoolean(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
+		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
 	}
 
 	public static boolean isWarAllowed() {
