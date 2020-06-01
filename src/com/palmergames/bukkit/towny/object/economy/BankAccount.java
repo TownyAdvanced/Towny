@@ -109,7 +109,9 @@ public class BankAccount extends Account {
 			double netMoney = amount - debtAccount.getHoldingBalance();
 			
 			// Zero out balance
-			TownyEconomyHandler.setBalance(debtAccount.getName(), 0, world);
+			TownyEconomyHandler.subtract(debtAccount.getName(), debtAccount.getHoldingBalance(), getBukkitWorld());
+			
+			TownyMessaging.sendErrorMsg("net = " + netMoney);
 			
 			return deposit(netMoney, null);
 		}
