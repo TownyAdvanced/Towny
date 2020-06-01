@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
+import org.javalite.activejdbc.cache.EHCache3Manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,7 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean deposit(double amount, String reason) throws EconomyException {
-	if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payFromServer(amount, reason);
 		}
 		if (addMoney(amount)) {
