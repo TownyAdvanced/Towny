@@ -261,6 +261,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return getAssistants().contains(resident);
 	}
 
+	public boolean hasRank(Resident resident, String rank) {
+
+		return getRank(rank).contains(resident);
+	}
+
 	public void addResident(Resident resident) throws AlreadyRegisteredException {
 
 		addResidentCheck(resident);
