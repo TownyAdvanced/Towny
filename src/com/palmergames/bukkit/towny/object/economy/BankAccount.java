@@ -16,7 +16,7 @@ public class BankAccount extends Account {
 	
 	double balanceCap;
 	Account debtAccount = new DebtAccount(this);
-	double debtCap = TownySettings.getDebtCap();
+	private double debtCap;
 
 	/**
 	 * Because of limitations in Economy API's, debt isn't
@@ -37,11 +37,47 @@ public class BankAccount extends Account {
 		this.balanceCap = balanceCap;
 	}
 
+	/**
+	 * Sets the max amount of money allowed in this account.
+	 * 
+	 * @param balanceCap The max amount allowed in this account.
+	 */
+	public void setBalanceCap(double balanceCap) {
+		this.balanceCap = balanceCap;
+	}
+
+	/**
+	 * Sets the maximum amount of money this account can have.
+	 *
+	 * @return the max amount allowed in this account.
+	 */
+	public double getBalanceCap() {
+		return balanceCap;
+	}
+
+	/**
+	 * The maximum amount of debt this account can have.
+	 * 
+	 * @return The max amount of debt for this account.
+	 */
+	public double getDebtCap() {
+		return debtCap;
+	}
+
+	/**
+	 * Sets the maximum amount of debt this account can have.
+	 * 
+	 * @param debtCap The new cap for debt on this account.
+	 */
+	public void setDebtCap(double debtCap) {
+		this.debtCap = debtCap;
+	}
+
 	@Override
 	protected boolean subtractMoney(double amount) {
 		try {
 			// Check cap
-			if (isBankrupt() && (debtAccount.getHoldingBalance() + amount > debtCap)) {
+			if (isBankrupt() && (debtAccount.getHoldingBalance() + amount > getDebtCap())) {
 				TownyMessaging.sendErrorMsg("got here");
 				return false;
 			}
