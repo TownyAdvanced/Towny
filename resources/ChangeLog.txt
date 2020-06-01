@@ -4622,3 +4622,6 @@ v0.92.0.11:
   - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
     - Closes #4032.
   - Switch to JitPack and Remove GH packages dependencies, courtesy of Siris with PR #4038.
+0.96.1.12:
+  - Fix /towny top land resident throwing an internal error.
+    - Closes #4045.
