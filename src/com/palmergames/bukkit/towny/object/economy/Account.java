@@ -55,11 +55,11 @@ public abstract class Account implements Nameable {
 		return true;
 	}
 	
-	public boolean addMoney(double amount) {
+	boolean addMoney(double amount) {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 	
-	public boolean subtractMoney(double amount) {
+	boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 
@@ -132,18 +132,15 @@ public abstract class Account implements Nameable {
 	 */
 	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
 		
-//		if (amount > getHoldingBalance()) {
-//			throw new EconomyException("Not enough money");
-//		}
-//		
-//		
-//		if (!withdraw(amount, reason)) {
-//			return false;
-//		}
-//		
-//		return collector.deposit(amount, reason);
+		if (amount > getHoldingBalance()) {
+			throw new EconomyException("Not enough money");
+		}
 		
-		return TownyEconomyHandler.setBalance(collector.getName(), -10, null);
+		if (!withdraw(amount, reason)) {
+			return false;
+		}
+
+		return collector.deposit(amount, reason);
 	}
 
 	/**

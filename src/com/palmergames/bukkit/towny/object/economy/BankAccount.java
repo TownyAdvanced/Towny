@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import org.bukkit.World;
@@ -14,7 +15,7 @@ public class BankAccount extends Account {
 	
 	double balanceCap;
 	Account debtAccount = new DebtAccount(this);
-	// TODO: Debt Cap
+	double debtCap = TownySettings.getDebtCap();
 
 	/**
 	 * Because of limitations in Economy API's, debt isn't
@@ -43,8 +44,22 @@ public class BankAccount extends Account {
 	}
 
 	@Override
+	public boolean canSubtract(double amount) throws EconomyException {
+		if (isBankrupt()) {
+			return !(debtAccount.getHoldingBalance() + amount > debtCap);
+		}
+		
+		return true;
+	}
+
+	@Override
 	public boolean subtractMoney(double amount) {
 		try {
+			
+			if (isBankrupt()) {
+				return addDebt(amount);
+			}
+			
 			if (!canPayFromHoldings(amount)) {
 				
 				// Calculate debt.
@@ -83,11 +98,11 @@ public class BankAccount extends Account {
 		return debtAccount.getHoldingBalance() > 0;
 	}
 	
-	public boolean addDebt(double amount) throws EconomyException {
+	private boolean addDebt(double amount) throws EconomyException {
 		return debtAccount.deposit(amount, null);
 	}
 	
-	public boolean removeDebt(double amount) throws EconomyException {
+	private boolean removeDebt(double amount) throws EconomyException {
 		if (!debtAccount.canPayFromHoldings(amount)) {
 			
 			// Calculate money being added.

@@ -20,7 +20,6 @@ public class Audit extends Transaction {
 		
 		// Set date to now
 		date = new Date();
-		
 		this.reason = reason;
 	}
 

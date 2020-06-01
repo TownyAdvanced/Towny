@@ -2581,6 +2581,10 @@ public class TownySettings {
 	public static String getDebtAccountPrefix() {
 		return getString(ConfigNodes.ECO_DEBT_PREFIX);
 	}
+	
+	public static double getDebtCap() {
+		return getDouble(ConfigNodes.ECO_DEBT_CAP);
+	}
 
 	public static String getNationAccountPrefix() {
 
