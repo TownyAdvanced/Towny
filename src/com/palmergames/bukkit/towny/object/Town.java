@@ -236,7 +236,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		List<Resident> residentsWithRank = new ArrayList<>();
 		
 		for (Resident resident: residents) {
-			if (assistant.hasTownRank(rank))
+			if (resident.hasTownRank(rank))
 				residentsWithRank.add(resident);
 		}
 		return residentsWithRank;
