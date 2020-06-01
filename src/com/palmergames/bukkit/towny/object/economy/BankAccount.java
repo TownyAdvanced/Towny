@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.object.EconomyAccount;
 import org.bukkit.World;
 
 /**
@@ -22,7 +23,7 @@ public class BankAccount extends Account {
 	 * supported reliably in them so we need use another account
 	 * as a workaround for this problem.
 	 */
-	static class DebtAccount extends Account {
+	static class DebtAccount extends EconomyAccount {
 		
 		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
 
@@ -35,26 +36,15 @@ public class BankAccount extends Account {
 		super(name, world);
 		this.balanceCap = balanceCap;
 	}
-	
-	public boolean canAdd(double amount) throws EconomyException {
-		if (balanceCap == 0) {
-			return true;
-		}
-		return !(getHoldingBalance() + amount > balanceCap);
-	}
-
-	@Override
-	public boolean canSubtract(double amount) throws EconomyException {
-		if (isBankrupt()) {
-			return !(debtAccount.getHoldingBalance() + amount > debtCap);
-		}
-		
-		return true;
-	}
 
 	@Override
 	protected boolean subtractMoney(double amount) {
 		try {
+			// Check cap
+			if (isBankrupt() && (debtAccount.getHoldingBalance() + amount > debtCap)) {
+				TownyMessaging.sendErrorMsg("got here");
+				return false;
+			}
 			
 			if (isBankrupt()) {
 				return addDebt(amount);
@@ -64,10 +54,11 @@ public class BankAccount extends Account {
 				
 				// Calculate debt.
 				double amountInDebt = amount - getHoldingBalance();
+				
+				TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
 
 				// Empty out account.
 				boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
-				
 				success &= addDebt(amountInDebt);
 				
 				return success;
@@ -83,6 +74,12 @@ public class BankAccount extends Account {
 	@Override
 	protected boolean addMoney(double amount) {
 		try {
+			
+			// Check balance cap.
+			if (balanceCap != 0 && !(getHoldingBalance() + amount > balanceCap)) {
+				return false;
+			}
+			
 			if (isBankrupt()) {
 				return removeDebt(amount);
 			}
@@ -109,9 +106,7 @@ public class BankAccount extends Account {
 			double netMoney = amount - debtAccount.getHoldingBalance();
 			
 			// Zero out balance
-			TownyEconomyHandler.subtract(debtAccount.getName(), debtAccount.getHoldingBalance(), getBukkitWorld());
-			
-			TownyMessaging.sendErrorMsg("net = " + netMoney);
+			TownyEconomyHandler.setBalance(debtAccount.getName(), 0, world);
 			
 			return deposit(netMoney, null);
 		}
@@ -142,5 +137,12 @@ public class BankAccount extends Account {
 		} catch (EconomyException e) {
 			return "Error";
 		}
+	}
+
+	@Override
+	public void removeAccount() {
+		// Make sure to remove debt account
+		TownyEconomyHandler.removeAccount(debtAccount.getName());
+		TownyEconomyHandler.removeAccount(getName());
 	}
 }

@@ -23,7 +23,17 @@ public class EconomyAccount extends Account {
 		super(name);
 		this.world = world;
 	}
-	
+
+	@Override
+	protected boolean addMoney(double amount) {
+		return TownyEconomyHandler.add(getName(), amount, world);
+	}
+
+	@Override
+	protected boolean subtractMoney(double amount) {
+		return TownyEconomyHandler.subtract(getName(), amount, world);
+	}
+
 	protected EconomyAccount(String name) {
 		super(name);
 	}
@@ -32,72 +42,12 @@ public class EconomyAccount extends Account {
 		return world;
 	}
 
-	private static final class TownyServerAccount extends Account {
+	private static final class TownyServerAccount extends EconomyAccount {
 		TownyServerAccount() {
 			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
 		}
 	}
-
-	/**
-	 * Tries to pay from the players holdings
-	 *
-	 * @param amount value to deduct from the player's account
-	 * @param reason leger memo stating why amount is deducted
-	 * @return true if successful
-	 * @throws EconomyException if the transaction fails
-	 */
-	@Deprecated
-	public boolean pay(double amount, String reason) throws EconomyException {
-		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return payTo(amount, SERVER_ACCOUNT, reason);
-		} else {
-			boolean payed = _pay(amount);
-			if (payed) {
-				TownyLogger.getInstance().logMoneyTransaction(this, amount, null, reason);
-			}
-				
-			return payed;
-		}
-	}
-
-	boolean _pay(double amount) throws EconomyException {
-		if (canPayFromHoldings(amount)) {
-			if (TownyEconomyHandler.isActive())
-				if (amount > 0) {
-					return TownyEconomyHandler.subtract(getName(), amount, getBukkitWorld());
-				} else {
-					return TownyEconomyHandler.add(getName(), Math.abs(amount), getBukkitWorld());
-				}
-		}
-		return false;
-	}
-
-	/**
-	 * When collecting money add it to the Accounts bank
-	 *
-	 * @param amount currency to collect
-	 * @param reason memo regarding transaction
-	 * @return collected or pay to server account   
-	 * @throws EconomyException if transaction fails
-	 */
-	@Deprecated
-	public boolean collect(double amount, String reason) throws EconomyException {
-		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return SERVER_ACCOUNT.payTo(amount, this, reason);
-		} else {
-			boolean collected = _collect(amount);
-			if (collected) {
-				TownyLogger.getInstance().logMoneyTransaction(null, amount, this, reason);
-			}
-				
-			return collected;
-		}
-	}
-
-	private boolean _collect(double amount) throws EconomyException {
-		return TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
-	}
-
+	
 //	/**
 //	 * When one account is paying another account(Taxes/Plot Purchasing)
 //	 *

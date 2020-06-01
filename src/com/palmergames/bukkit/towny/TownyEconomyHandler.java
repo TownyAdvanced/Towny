@@ -299,7 +299,7 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * Adds money to the server account (used for towny closed economy.
+	 * Adds money to the server account (used for towny closed economy.)
 	 * 
 	 * @param amount The amount to deposit.
 	 * @param world The world of the deposit.
@@ -307,6 +307,17 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean addToServer(double amount, World world) {
 		return add(getServerAccount(), amount, world);
+	}
+
+	/**
+	 * Removes money to the server account (used for towny closed economy.)
+	 *
+	 * @param amount The amount to withdraw.
+	 * @param world The world of the withdraw.
+	 * @return A boolean indicating success.
+	 */
+	public static boolean subtractFromServer(double amount, World world) {
+		return subtract(getServerAccount(), amount, world);
 	}
 	
 	private static void checkNewAccount(String accountName) {

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
+import org.javalite.activejdbc.cache.EHCache3Manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,26 +46,12 @@ public abstract class Account implements Nameable {
 	}
 	
 	// Template methods
-	
-	public boolean canAdd(double amount) throws EconomyException {
-		return true;
-	}
-	
-	public boolean canSubtract(double amount) throws EconomyException {
-		//return !(amount > getHoldingBalance());
-		return true;
-	}
-	
-	protected boolean addMoney(double amount) {
-		return TownyEconomyHandler.add(getName(), amount, world);
-	}
-	
-	protected boolean subtractMoney(double amount) {
-		return TownyEconomyHandler.subtract(getName(), amount, world);
-	}
+	protected abstract boolean addMoney(double amount);
+	protected abstract boolean subtractMoney(double amount);
 
 	/**
-	 * Attempts to add money to the account.
+	 * Attempts to add money to the account, 
+	 * and notifies account observers of any changes.
 	 * 
 	 * @param amount The amount to add.
 	 * @param reason The reason for adding.
@@ -72,7 +59,10 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean deposit(double amount, String reason) throws EconomyException {
-		if (canAdd(amount) && addMoney(amount)) {
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return payFromServer(amount, reason);
+		}
+		if (addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
 			return true;
 		}
@@ -81,7 +71,8 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * Attempts to withdraw money from the account.
+	 * Attempts to withdraw money from the account, 
+	 * and notifies account observers of any changes.
 	 *
 	 * @param amount The amount to withdraw.
 	 * @param reason The reason for subtracting.
@@ -91,13 +82,13 @@ public abstract class Account implements Nameable {
 	public boolean withdraw(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payToServer(amount, reason);
-		} else {
-			if (canSubtract(amount) && subtractMoney(amount)) {
-				notifyObserversWithdraw(this, amount, reason);
-				return true;
-			}
-			return false;
 		}
+		if (subtractMoney(amount)) {
+			notifyObserversWithdraw(this, amount, reason);
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -113,12 +104,20 @@ public abstract class Account implements Nameable {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	
-	private boolean payToServer(double amount, String reason) throws EconomyException {
+	protected boolean payToServer(double amount, String reason) throws EconomyException {
 		// Take money out.
 		withdraw(amount, reason);
 		
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
+	}
+	
+	protected boolean payFromServer(double amount, String reason) throws EconomyException {
+		// Put money in.
+		deposit(amount, reason);
+		
+		// Remove it from the server economy.
+		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
 	}
 
 	/**
@@ -231,6 +230,11 @@ public abstract class Account implements Nameable {
 		this.name = name;
 	}
 
+	/**
+	 * Gets the observers of this account.
+	 * 
+	 * @return A list of account observers.
+	 */
 	public List<AccountObserver> getObservers() {
 		return Collections.unmodifiableList(observers);
 	}
