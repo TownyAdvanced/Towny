@@ -2316,7 +2316,7 @@ public enum ConfigNodes {
 			"# this option gives players an off-ramp from the system without flooding staff w/ tickets,"),
 	WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS(
 			"war.common.peaceful_towns.confirmation_requirement_days",
-			"4",
+			"5",
 			"# This value determines how long it takes to confirm a town peacefulness status change.",
 			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
 	WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS(
