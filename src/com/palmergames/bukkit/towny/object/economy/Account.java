@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
-import org.javalite.activejdbc.cache.EHCache3Manager;
 
 import java.util.ArrayList;
 import java.util.Collections;

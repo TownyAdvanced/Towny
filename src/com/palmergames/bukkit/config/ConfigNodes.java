@@ -1485,11 +1485,6 @@ public enum ConfigNodes {
 		"",
 		"# The debt prefix for the debt eco account"
 	),
-	ECO_DEBT_CAP(
-		"economy.debt_cap",
-		"10000",
-		"# The max amount of debt a town or nation can have."
-	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
