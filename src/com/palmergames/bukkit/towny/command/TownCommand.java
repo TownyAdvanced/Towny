@@ -54,7 +54,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.towny.utils.BookUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -74,7 +73,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
@@ -472,13 +470,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					}
 				});
-			} else if (split[0].equalsIgnoreCase("audit")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
-
-				ItemStack auditBook = BookUtil.createAuditBook(town);
-				player.openBook(auditBook);
-				
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
 				for (String line : output)
@@ -2212,6 +2203,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					} else
 						try {
+							if (split[1].length() > 4)
+								throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 							town.setTag(NameValidation.checkAndFilterName(split[1]));
 							if (admin)
 								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_set_town_tag"), player.getName(), town.getTag()));

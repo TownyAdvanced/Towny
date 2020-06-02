@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -780,8 +781,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public List<TownBlock> getTownBlocks() {
-		return Collections.unmodifiableList(townBlocks);
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks);
 	}
 
 	@Override

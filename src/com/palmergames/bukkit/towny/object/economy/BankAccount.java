@@ -14,8 +14,8 @@ import org.bukkit.World;
  */
 public class BankAccount extends Account {
 	
-	double balanceCap;
-	Account debtAccount = new DebtAccount(this);
+	private double balanceCap;
+	private final Account debtAccount = new DebtAccount(this);
 	private double debtCap;
 
 	/**

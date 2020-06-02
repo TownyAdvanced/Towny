@@ -133,12 +133,8 @@ public abstract class Account implements Nameable {
 		if (amount > getHoldingBalance()) {
 			throw new EconomyException("Not enough money");
 		}
-		
-		if (!withdraw(amount, reason)) {
-			return false;
-		}
 
-		return collector.deposit(amount, reason);
+		return withdraw(amount, reason) && collector.deposit(amount, reason);
 	}
 
 	/**

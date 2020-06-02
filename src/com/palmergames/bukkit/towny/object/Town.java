@@ -69,8 +69,8 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	}
 
 	@Override
-	public List<TownBlock> getTownBlocks() {
-		return Collections.unmodifiableList(new ArrayList<>(townBlocks.values()));
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 
 	@Override
@@ -1271,11 +1271,8 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	}
 	
 	public World getWorld() {
-		if (hasWorld()) {
-			return BukkitTools.getWorld(getHomeblockWorld().getName());
-		} else {
-			return BukkitTools.getWorlds().get(0);
-		}
+		return hasWorld() ? BukkitTools.getWorld(getHomeblockWorld().getName()) :
+			BukkitTools.getWorlds().get(0);
 	}
 
 	@Override

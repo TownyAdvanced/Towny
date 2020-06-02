@@ -7,7 +7,7 @@ import org.bukkit.World;
 @SuppressWarnings("deprecation")
 public class VaultEconomyAdapter implements EconomyAdapter {
 	
-	final Economy economy;
+	private final Economy economy;
 	
 	public VaultEconomyAdapter(Economy economy) {
 		this.economy = economy;
@@ -41,21 +41,21 @@ public class VaultEconomyAdapter implements EconomyAdapter {
 	@Override
 	public void deleteAccount(String accountName) {
 		// Attempt to zero the account as Vault provides no delete method.
-		if (!economy.hasAccount(accountName))
-			economy.createPlayerAccount(accountName);
+		if (!economy.hasAccount(accountName)) {
+			return;
+		}
+		
 		economy.withdrawPlayer(accountName, (economy.getBalance(accountName)));
 	}
 
 	@Override
 	public boolean setBalance(String accountName, double amount, World world) {
 		double currentBalance = getBalance(accountName, world);
-		if (amount > currentBalance) {
-			double diff = amount - currentBalance;
-			return add(accountName, diff, world);
-		}
+		double diff = Math.abs(amount - currentBalance);
 		
-		if (amount < currentBalance) {
-			double diff = currentBalance - amount;
+		if (amount > currentBalance) {
+			return add(accountName, diff, world);
+		}else if (amount < currentBalance) {
 			return subtract(accountName, diff, world);
 		}
 		

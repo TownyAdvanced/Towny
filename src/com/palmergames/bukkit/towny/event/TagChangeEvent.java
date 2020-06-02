@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.event;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public abstract class TagChangeEvent extends Event {
+abstract class TagChangeEvent extends Event {
 	String newTag;
 	private static final HandlerList handlers = new HandlerList();
 	

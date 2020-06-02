@@ -3,8 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Allows objects to contain townblocks to be accessed/manipulated. 
@@ -20,7 +19,7 @@ public interface TownBlockOwner extends Permissible {
 	 * 
 	 * @return The townblocks this object contains.
 	 */
-	List<TownBlock> getTownBlocks();
+	Collection<TownBlock> getTownBlocks();
 
 	/**
 	 * Checks whether object has townblock or not.
