@@ -726,7 +726,7 @@ public class Nation extends Territory implements ResidentList {
 	 * @deprecated As of 0.96.2.0, please use {@link #getSpawn()} instead.
 	 * 
 	 * @return getSpawn()
-	 * @throws TownyException
+	 * @throws TownyException When a nation spawn isn't available
 	 */
 	@Deprecated
 	public Location getNationSpawn() throws TownyException {
