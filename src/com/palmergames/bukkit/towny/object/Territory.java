@@ -118,9 +118,7 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 	}
 
 	public final void setTag(String text) throws TownyException {
-		if (text.length() > 4)
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
-		this.tag = text.toUpperCase();
+		this.tag = text.toUpperCase().substring(0,3);
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new TerritoryTagChangeEvent(this.tag, this));

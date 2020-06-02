@@ -56,7 +56,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.towny.utils.BookUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -424,13 +423,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					}
 				});
-			} else if (split[0].equalsIgnoreCase("audit")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
-
-				ItemStack auditBook = BookUtil.createAuditBook(town);
-				player.openBook(auditBook);
-				
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 				HelpMenu.TOWN_HELP.send(player);
 				
