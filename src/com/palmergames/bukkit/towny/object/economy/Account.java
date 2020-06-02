@@ -318,14 +318,24 @@ public abstract class Account implements Nameable {
 
 	/**
 	 * @deprecated As of 0.96.1.11, use {@link #deposit(double, String)} instead.
+	 * 
+	 * @param amount The amount to add.
+	 * @param reason The reason for adding.
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
 		return deposit(amount, reason);
 	}
-
+	
 	/**
 	 * @deprecated As of 0.96.1.11, use {@link #withdraw(double, String)} instead.
+	 *
+	 * @param amount The amount to subtract.
+	 * @param reason The reason for subcracting.
+	 * @return boolean indicating success.
+	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
