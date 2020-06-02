@@ -166,7 +166,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                     <source>${java.version}</source>
                 </configuration>
             </plugin>
