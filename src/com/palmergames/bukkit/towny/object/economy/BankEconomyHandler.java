@@ -19,4 +19,7 @@ public interface BankEconomyHandler extends EconomyHandler {
 	 * @return A string providing the prefix.
 	 */
 	String getEconomyPrefix();
+
+	@Override
+	BankAccount getAccount();
 }
