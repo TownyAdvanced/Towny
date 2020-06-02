@@ -4625,3 +4625,6 @@ v0.92.0.11:
 0.96.1.12:
   - Fix /towny top land resident throwing an internal error.
     - Closes #4045.
+  - Add javadocs to maven, courtesy of Siris with PR #4049.
+    - Use mvn clean install to build javadocs.
+  
