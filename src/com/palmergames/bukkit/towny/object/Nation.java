@@ -463,7 +463,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 * A dry-run method for rechecking town distances to a new nation capital/
 	 * moved nation capital homeblock.
 	 * 
-	 * @param - The list of towns to check.
+	 * @param towns - The list of towns to check.
 	 * @throws TownyException - Generic TownyException
 	 * @return removedTowns - A list of Towns which would be removed under a real recheckTownDistance().
 	 */

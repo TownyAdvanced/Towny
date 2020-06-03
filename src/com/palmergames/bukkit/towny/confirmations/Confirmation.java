@@ -25,7 +25,8 @@ public class Confirmation {
 	 * Creates a new confirmation object.
 	 *
 	 * @param handler The handler to run after accepting the command.
-	 * @param title The title of the confirmation message.   
+	 * @param title The title of the confirmation message.
+	 * @param duration The amount of time to allow for the confirmation to be processed.   
 	 *          
 	 */
 	public Confirmation(Runnable handler, String title, int duration) {
