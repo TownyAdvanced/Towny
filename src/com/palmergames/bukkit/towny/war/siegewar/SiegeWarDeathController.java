@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import org.bukkit.entity.Player;
@@ -54,93 +54,89 @@ public class SiegeWarDeathController {
 			if (deadResidentTown.isOccupied())
 				return;
 
-			//If resident was a defending guard, award siege points
-			if(deadResidentTown.hasSiege()
-				&& deadResidentTown.getSiege().getStatus().isActive()
-				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
-			) {
-				boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
-					false,
-					deadPlayer,
-					deadResident,
-					deadResidentTown.getSiege(),
-					TownySettings.getLangString("msg_siege_war_defender_death"));
+			//Declare local variables
+			Siege confirmedCandidateSiege = null;
+			SiegeSide confirmedCandidateSiegePlayerSide = SiegeSide.NOBODY;
+			double confirmedCandidateDistanceToPlayer = 0;
+			double candidateSiegeDistanceToPlayer;
+			SiegeSide candidateSiegePlayerSide;
 
-				if(pointsAwarded) {
-					keepInventory(playerDeathEvent);
-					return;
+			//Find nearest eligible siege
+			for (Siege candidateSiege : universe.getDataSource().getSieges()) {
+
+				//Is siege out of range ?
+				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
+				if(candidateSiegeDistanceToPlayer > TownySettings.getWarSiegeZoneDeathRadiusBlocks())
+					continue;
+
+				//If siege further than the confirmed candidate ?
+				if(confirmedCandidateSiege != null && candidateSiegeDistanceToPlayer > confirmedCandidateDistanceToPlayer)
+					continue;
+
+				//Is player eligible ?
+				if (deadResidentTown.hasSiege()
+					&& deadResidentTown.getSiege().getStatus().isActive()
+					&& deadResidentTown.getSiege() == candidateSiege
+					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+				) {
+					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending own-town
+
+				} else if (deadResidentTown.hasNation()
+					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& candidateSiege.getDefendingTown().hasNation()
+					&& candidateSiege.getStatus().isActive()
+					&& (deadResidentTown.getNation() == candidateSiege.getDefendingTown().getNation()
+						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getDefendingTown().getNation()))) {
+
+					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending another town
+
+				} else if (deadResidentTown.hasNation()
+					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& candidateSiege.getStatus().isActive()
+					&& (deadResidentTown.getNation() == candidateSiege.getAttackingNation() 
+						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getAttackingNation()))) {
+
+					candidateSiegePlayerSide = SiegeSide.ATTACKERS; //Candidate siege has player attacking
+
+				} else {
+					continue;
 				}
+
+				//Now we know candidate is closer than current confirmed candidate, and player is eligible
+				confirmedCandidateSiege = candidateSiege;
+				confirmedCandidateSiegePlayerSide = candidateSiegePlayerSide;
+				confirmedCandidateDistanceToPlayer = candidateSiegeDistanceToPlayer;
 			}
 
-			//If resident was a defending soldier, award siege points
-			if (deadResidentTown.hasNation()
-				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
-			) {
-				for (Siege siege : universe.getDataSource().getSieges()) {
+			//If player is confirmed as close to one or more sieges in which they are eligible to be involved, 
+			// apply siege point penalty for the nearest one, and keep inventory
+			if(confirmedCandidateSiege != null) {
 
-					try {
-						if (siege.getDefendingTown().hasNation()
-							&& siege.getStatus().isActive()
-							&& (deadResidentTown.getNation() == siege.getDefendingTown().getNation() || deadResidentTown.getNation().hasMutualAlly(siege.getDefendingTown().getNation()))
-						) {
-							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
-								false,
-								deadPlayer,
-								deadResident,
-								siege,
-								TownySettings.getLangString("msg_siege_war_defender_death"));
+				if(confirmedCandidateSiegePlayerSide == SiegeSide.DEFENDERS) {
+					SiegeWarPointsUtil.awardPenaltyPoints(
+						false,
+						deadPlayer,
+						deadResident,
+						confirmedCandidateSiege,
+						TownySettings.getLangString("msg_siege_war_defender_death"));
 
-							if (pointsAwarded) {
-								keepInventory(playerDeathEvent);
-								return;
-							}
-						}
-
-					} catch (Exception e) {
-						try {
-							System.out.println("Problem reading siege zone for player death " + siege.getName());
-						} catch (Exception e2) {
-							System.out.println("Problem reading siege zone for player death (could not read name");
-						}
-						e.printStackTrace();
-					}
+				} else {
+					SiegeWarPointsUtil.awardPenaltyPoints(
+						true,
+						deadPlayer,
+						deadResident,
+						confirmedCandidateSiege,
+						TownySettings.getLangString("msg_siege_war_attacker_death"));
 				}
-			}
 
-			//If resident was an attacking soldier, award siege points
-			if (deadResidentTown.hasNation()
-				&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
-			) {
-				for (Siege siege : universe.getDataSource().getSieges()) {
-
-					try {
-						if (siege.getStatus().isActive()
-							&& (deadResidentTown.getNation() == siege.getAttackingNation() || deadResidentTown.getNation().hasMutualAlly(siege.getAttackingNation()))
-						) {
-							boolean pointsAwarded = SiegeWarPointsUtil.awardPointsIfPlayerIsInDeathPointZone(
-								true,
-								deadPlayer,
-								deadResident,
-								siege,
-								TownySettings.getLangString("msg_siege_war_attacker_death"));
-
-							if(pointsAwarded) {
-								keepInventory(playerDeathEvent);
-								return;
-							}
-						}
-					} catch (Exception e) {
-						try {
-							System.out.println("Problem reading siege zone for player death " + siege.getName());
-						} catch (Exception e2) {
-							System.out.println("Problem reading siege zone for player death (could not read name");
-						}
-						e.printStackTrace();
-					}
-				}
+				keepInventory(playerDeathEvent);
 			}
 		} catch (Exception e) {
-			System.out.println("Error evaluating siege player death");
+			try {
+				System.out.println("Error evaluating siege death for player " + deadPlayer.getName());
+			} catch (Exception e2) {
+				System.out.println("Error evaluating siege death (could not read player name)");
+			}
 			e.printStackTrace();
 		}
 	}

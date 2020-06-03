@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
@@ -147,12 +146,16 @@ public class SiegeWarPointsUtil {
 													  Resident resident,
 													  String unformattedErrorMessage) {
 
-		if(!(town.hasSiege() && town.getSiege().getStatus().isActive()))
-			return false;
+		if(town.hasSiege()
+			&& town.getSiege().getStatus().isActive()
+			&& TownyUniverse.getInstance().getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
 
-		TownyUniverse universe = TownyUniverse.getInstance();
-		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
-			return awardPointsIfPlayerIsInDeathPointZone(false, null, resident, town.getSiege(), unformattedErrorMessage);
+			if(isPlayerInDeathPointZone(null, resident, town.getSiege())) {
+				awardPenaltyPoints(false, null, resident, town.getSiege(), unformattedErrorMessage);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -173,13 +176,19 @@ public class SiegeWarPointsUtil {
 													  	String unformattedErrorMessage) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
+
 			//Apply penalty to sieges where the nation is attacking
 			for(Siege siege: nation.getActiveAttackSieges()) {
-				awardPointsIfPlayerIsInDeathPointZone(true, null, resident, siege, unformattedErrorMessage);
+				if(isPlayerInDeathPointZone(null, resident, siege)) {
+					awardPenaltyPoints(true, null, resident, siege, unformattedErrorMessage);
+				}
 			}
+
 			//Apply penalty to sieges where the nation is defending
 			for(Siege siege: nation.getActiveDefenceSieges(townToExclude)) {
-				awardPointsIfPlayerIsInDeathPointZone(false, null, resident, siege, unformattedErrorMessage);
+				if(isPlayerInDeathPointZone(null, resident, siege)) {
+					awardPenaltyPoints(false, null, resident, siege, unformattedErrorMessage);
+				}
 			}
 		}
 	}
@@ -193,17 +202,12 @@ public class SiegeWarPointsUtil {
 	 * @param resident the resident who the penalty relates to
 	 * @param siege the siege to apply the penalty to
 	 * @param unformattedErrorMessage the error message to be shown if points are deducted
-	 * @return true if points awarded
 	 */
-	public static boolean awardPointsIfPlayerIsInDeathPointZone(boolean residentIsAttacker,
-																Player player,
-																Resident resident,
-																Siege siege,
-																String unformattedErrorMessage) {
-		//Return false if player is not in death point zone
-		if(!isPlayerInDeathPointZone(player, resident, siege))
-			return false;
-
+	public static void awardPenaltyPoints(boolean residentIsAttacker,
+											 Player player,
+											 Resident resident,
+											 Siege siege,
+											 String unformattedErrorMessage) {
 		//Give siege points to opposing side
 		int siegePoints;
 		if (residentIsAttacker) {
@@ -241,8 +245,6 @@ public class SiegeWarPointsUtil {
 			siegePoints);
 
 		SiegeWarNotificationUtil.informSiegeParticipants(siege, message);
-
-		return true;
 	}
 
 	private static int adjustSiegePenaltyPointsForMilitaryLeadership(boolean residentIsAttacker,
