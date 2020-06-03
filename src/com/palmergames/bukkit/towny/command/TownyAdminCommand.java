@@ -119,6 +119,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
+		"kick",
 		"rename",
 		"delete",
 		"toggle",
@@ -1158,6 +1159,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "new", "[name] [capital]"));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] add [] .. []", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] kick [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] rename [newname]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] delete", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] recheck", ""));
@@ -1201,6 +1203,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * ); return; }
 				 */
 				NationCommand.nationAdd(nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+
+			} else if (split[1].equalsIgnoreCase("kick")) {
+
+				NationCommand.nationKick(sender, nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {

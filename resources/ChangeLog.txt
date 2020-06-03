@@ -4627,4 +4627,6 @@ v0.92.0.11:
     - Closes #4045.
   - Add javadocs to maven, courtesy of Siris with PR #4049.
     - Use mvn clean install to build javadocs.
-  
+  - New Command: /ta nation [nationname] kick [towns...]
+    - Allows admins to remove towns from a nation.
+    - Closes #4050.
