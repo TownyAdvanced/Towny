@@ -776,8 +776,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			return getTitle() + " " + getName();
 	}
 
-	public void setTownblocks(List<TownBlock> townBlocks) {
-		this.townBlocks = townBlocks;
+	public void setTownblocks(Collection<TownBlock> townBlocks) {
+		this.townBlocks = new ArrayList<>(townBlocks);
 	}
 
 	@Override

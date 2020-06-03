@@ -974,7 +974,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (resident.hasTown()) {
 				town = resident.getTown();
 			}
-			List<TownBlock> townBlocks = resident.getTownBlocks();
+			Collection<TownBlock> townBlocks = resident.getTownBlocks();
 			List<String> townRanks = resident.getTownRanks();
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
