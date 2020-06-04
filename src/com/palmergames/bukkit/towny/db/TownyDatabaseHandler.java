@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -632,33 +633,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
+		//Remove all sieges
+		for (Siege siege : new ArrayList<>(nation.getSieges()))
+			removeSiege(siege);
+
 		//Delete nation and save towns
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
-
-		//Delete all sieges
-		List<Siege> siegesToDelete = new ArrayList<>(nation.getSieges());
-		for (Siege siege : siegesToDelete) {
-			toSave.add(siege.getDefendingTown());  //Prepare to save town
-			siege.getDefendingTown().setSiege(null); //Remove siege from town
-
-			//If the siege was active, initiate siege immunity for the town
-			if (siege.getStatus().isActive()) {
-				siege.setActualEndTime(System.currentTimeMillis());
-				SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
-			}
-
-			//Delete siege
-			deleteSiege(siege);
-		}
-
 		nation.clear();
-
 		universe.getNationsTrie().removeKey(nation.getName().toLowerCase());
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
-		for (Siege siege : siegesToDelete) {
-			universe.getSiegesMap().remove(siege.getName().toLowerCase());
-		}
 
 		for (Town town : toSave) {
 
@@ -680,26 +664,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 		saveNationList();
-		if (siegesToDelete.size() > 0)
-			saveSiegeList();
 
-		//Refund some of the initial setup cost to the king
-		if (TownySettings.getWarSiegeEnabled()
-			&& TownySettings.isUsingEconomy()
-			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-
-			//Make the nation refund available
-			//The player can later do "/n claim refund" to receive the money
-			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-			king.addToNationRefundAmount(amountToRefund);
-			saveResident(king);
-
-			TownyMessaging.sendMsg(
-				king,
-				String.format(
-					TownySettings.getLangString("msg_siege_war_nation_refund_available"),
-					TownyEconomyHandler.getFormattedBalance(amountToRefund)));
-		}
+		SiegeWarMoneyUtil.makeNationRefundAvailable(king);
 
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 	}
@@ -1273,6 +1239,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	//Remove a particular siege, and all associated data
 	@Override
 	public void removeSiege(Siege siege) {
+		//If siege is active, return war chest & Initiate siege immunity for town
+		if(siege.getStatus().isActive()) {
+			SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
+			siege.setActualEndTime(System.currentTimeMillis());
+			SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
+		}
+
 		//Remove siege from town
 		siege.getDefendingTown().setSiege(null);
 		//Remove siege from nation

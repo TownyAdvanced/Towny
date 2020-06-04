@@ -38,7 +38,7 @@ public class SiegeWarMoneyUtil {
 				TownyMessaging.sendPrefixedNationMessage(winnerNation, message);
 				//Send message to town
 				TownyMessaging.sendPrefixedTownMessage(siege.getDefendingTown(), message);
-			} catch (EconomyException e) {
+			} catch (Exception e) {
 				System.out.println("Problem paying war chest(s) to winner nation");
 				e.printStackTrace();
 			}
@@ -194,6 +194,26 @@ public class SiegeWarMoneyUtil {
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_siege_war_nation_refund_claimed"), TownyEconomyHandler.getFormattedBalance(refundAmount)));
 		} else {
 			throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_refund_unavailable"));
+		}
+	}
+
+	public static void makeNationRefundAvailable(Resident king) {
+		//Refund some of the initial setup cost to the king
+		if (TownySettings.getWarSiegeEnabled()
+			&& TownySettings.isUsingEconomy()
+			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+
+			//Make the nation refund available
+			//The player can later do "/n claim refund" to receive the money
+			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+			king.addToNationRefundAmount(amountToRefund);
+			TownyUniverse.getInstance().getDataSource().saveResident(king);
+
+			TownyMessaging.sendMsg(
+				king,
+				String.format(
+					TownySettings.getLangString("msg_siege_war_nation_refund_available"),
+					TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 	}
 }
