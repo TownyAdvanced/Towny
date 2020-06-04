@@ -576,7 +576,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("outsiders"), TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("msg_cache_block_error_plot_outsiders"), TownySettings.getLangString(action.toString())));
 				return false;
 
 			}
