@@ -4630,3 +4630,5 @@ v0.92.0.11:
   - New Command: /ta nation [nationname] kick [towns...]
     - Allows admins to remove towns from a nation.
     - Closes #4050.
+  - New Command: /ta town [townname] leavenation
+    - Allows admins to make a town leave their nation.
