@@ -396,6 +396,21 @@ public class TownyAPI {
 	}
 
     /**
+     * Method to figure out if a location is in a NationZone.
+     * 
+     * @param location - Location to test.
+     * @return true if the location is in a NationZone.
+     */
+    public boolean isNationZone(Location location) {
+    	if (!isWilderness(location))
+    		return false;
+    	TownBlockStatus status = hasNationZone(location);
+    	if (status.equals(TownBlockStatus.NATION_ZONE))
+    		return true;
+    	
+    	return false;
+    }
+    /**
      * Method to figure out if a location in the wilderness is normal wilderness of nation zone.
      * Recommended to use {@link TownyAPI#isWilderness(Location)} prior to using this, to confirm the location is not in a town.  
      * 
