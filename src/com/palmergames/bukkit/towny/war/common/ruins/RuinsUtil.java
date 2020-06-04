@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class RuinsUtil {
 
 		//Remove siege if any
 		if (town.hasSiege())
-			townyUniverse.getDataSource().removeSiege(town.getSiege());
+			townyUniverse.getDataSource().removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
 		town.setRuinDurationRemainingHours(TownySettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);
@@ -115,13 +116,11 @@ public class RuinsUtil {
 
 		//Propogate perm changes to individual plots
 		try {
-			TownCommand.townSet(null, new String[]{"perm", "reset"}, true, town);
-		} catch (TownyException e) {
+			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
+			adminCommand.parseAdminTownCommand(new String[]{town.getName(),"set", "perm", "reset"});
+		} catch (Exception e) {
 			System.out.println("Problem propogating perm changes to individual plots");
 			e.printStackTrace();
-		} catch (EconomyException ex) {
-			System.out.println("Eco Problem propogating perm changes to individual plots");
-			ex.printStackTrace();
 		}
 
 		townyUniverse.getDataSource().saveTown(town);
@@ -190,7 +189,8 @@ public class RuinsUtil {
 
 			//Propogate perm changes to individual plots
 			try {
-				TownCommand.townSet(null, new String[]{"perm", "reset"}, true, town);
+				TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
+				adminCommand.parseAdminTownCommand(new String[]{town.getName(),"set", "perm", "reset"});
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}

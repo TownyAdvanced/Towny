@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
@@ -532,7 +533,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		removeTownBlocks(town);
 
 		if (town.hasSiege())
-			removeSiege(town.getSiege());
+			removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();
@@ -635,7 +636,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		//Remove all sieges
 		for (Siege siege : new ArrayList<>(nation.getSieges()))
-			removeSiege(siege);
+			removeSiege(siege, SiegeSide.DEFENDERS);
 
 		//Delete nation and save towns
 		deleteNation(nation);
@@ -1238,12 +1239,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	//Remove a particular siege, and all associated data
 	@Override
-	public void removeSiege(Siege siege) {
-		//If siege is active, return war chest & Initiate siege immunity for town
+	public void removeSiege(Siege siege, SiegeSide refundSideIfSiegeIsActive) {
+		//If siege is active, initiate siege immunity for town, and return war chest
 		if(siege.getStatus().isActive()) {
-			SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
 			siege.setActualEndTime(System.currentTimeMillis());
 			SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
+
+			if(refundSideIfSiegeIsActive == SiegeSide.ATTACKERS)
+				SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
+			else if (refundSideIfSiegeIsActive == SiegeSide.DEFENDERS)
+				SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
 		}
 
 		//Remove siege from town

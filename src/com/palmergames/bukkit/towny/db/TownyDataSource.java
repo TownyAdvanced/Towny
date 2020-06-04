@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -358,7 +359,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTown(Town town, boolean delayFullRemoval);
 
-	public abstract void removeSiege(Siege siege);
+	public abstract void removeSiege(Siege siege, SiegeSide refundSideIfSiegeIsActive);
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
