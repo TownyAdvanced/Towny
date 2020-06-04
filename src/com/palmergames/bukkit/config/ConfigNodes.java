@@ -2233,7 +2233,7 @@ public enum ConfigNodes {
 			"# * NOTE: Any additional dynmap config settings for map invisibility will override the 'always visible' scenarios above."),
 	WAR_SIEGE_TACTICAL_VISIBILITY_ITEMS(
 			"war.siege.items.tactical_visibility_items",
-			"shield|diamond_sword, shield|bow, compass|diamond_sword, compass|bow",
+			"any|diamond_sword, any|bow",
 			"# This list specifies the items which make players tactically invisible. ",
 			"# Each list entry is in the format of <off-hand>|<main-hand>.",
 			"# ",
