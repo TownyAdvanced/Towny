@@ -1088,7 +1088,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					townyUniverse.getDataSource().saveNationList();
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName()));
 				} finally {
-					townyUniverse.getDataSource().saveTown(town);
+					town.save();
 				}
 				
 			} else {
