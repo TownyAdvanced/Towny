@@ -266,43 +266,8 @@ public class PlayerCacheUtil {
 			if (TownySettings.getNationZonesEnabled()) {
 				// This nation zone system can be disabled during wartime.
 				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
-					Town nearestTown = null;
-					int distance;
-					try {
-						nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
-						if (nearestTown == null) {
-							return TownBlockStatus.UNCLAIMED_ZONE;
-						}
-						if (!nearestTown.hasNation()) {
-							return TownBlockStatus.UNCLAIMED_ZONE;
-						}
-						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
-					} catch (NotRegisteredException e1) {
-						// There will almost always be a town in any world where towny is enabled. 
-						// If there isn't then we fall back on normal unclaimed zone status.
-						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-
-					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
-					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
-						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-
-					try {
-						int nationZoneRadius;
-						if (nearestTown.isCapital()) {
-							nationZoneRadius =
-								Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
-									+ TownySettings.getNationZonesCapitalBonusSize();
-						} else {
-							nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
-						}
-
-						if (distance <= nationZoneRadius) {
-							return TownBlockStatus.NATION_ZONE;
-						}
-					} catch (NumberFormatException | NotRegisteredException ignored) {
-					}
+					// Returns either UNCLAIMED_ZONE or NATION_ZONE.
+					return TownyAPI.getInstance().hasNationZone(worldCoord);
 				}				
 			}
 	
