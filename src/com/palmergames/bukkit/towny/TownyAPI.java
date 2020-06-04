@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
@@ -393,6 +394,68 @@ public class TownyAPI {
     public void registerCustomDataField(CustomDataField field) throws KeyAlreadyRegisteredException {
     	townyUniverse.addCustomCustomDataField(field);
 	}
+
+    /**
+     * Method to figure out if a location in the wilderness is normal wilderness of nation zone.
+     * Recommended to use {@link TownyAPI#isWilderness(Location)} prior to using this, to confirm the location is not in a town.  
+     * 
+     * @param location - Location to test whether it is a nation zone or normal wilderness.
+     * @return returns either UNCLAIMED_ZONE or NATION_ZONE
+     */
+    public TownBlockStatus hasNationZone(Location location) {
+    	
+    	return hasNationZone(WorldCoord.parseWorldCoord(location));
+    }
+
+    /**
+     * Method to figure out if a worldcoord in the wilderness is normal wilderness of nation zone.
+     * Recommended to use {@link TownyAPI#isWilderness(WorldCoord)} prior to using this, to confirm the location is not in a town.  
+     * 
+     * @param worldCoord - WorldCoord to test whether it is a nation zone or normal wilderness.
+     * @return returns either UNCLAIMED_ZONE or NATION_ZONE
+     */
+    public TownBlockStatus hasNationZone(WorldCoord worldCoord) {
+    	
+		Town nearestTown = null;
+		int distance;
+		try {
+			nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
+			if (nearestTown == null) {
+				return TownBlockStatus.UNCLAIMED_ZONE;
+			}
+			if (!nearestTown.hasNation()) {
+				return TownBlockStatus.UNCLAIMED_ZONE;
+			}
+			distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+		} catch (NotRegisteredException e1) {
+			// There will almost always be a town in any world where towny is enabled. 
+			// If there isn't then we fall back on normal unclaimed zone status.
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
+
+		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
+		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
+
+		try {
+			int nationZoneRadius;
+			if (nearestTown.isCapital()) {
+				nationZoneRadius =
+					Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
+						+ TownySettings.getNationZonesCapitalBonusSize();
+			} else {
+				nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+			}
+
+			if (distance <= nationZoneRadius) {
+				return TownBlockStatus.NATION_ZONE;
+			}
+		} catch (NumberFormatException | NotRegisteredException ignored) {
+		}
+		
+		return TownBlockStatus.UNCLAIMED_ZONE;
+    }
     
     public static TownyAPI getInstance() {
         if (instance == null) {
