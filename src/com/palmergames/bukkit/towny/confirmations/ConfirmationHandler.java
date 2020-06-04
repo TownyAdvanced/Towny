@@ -39,6 +39,7 @@ public class ConfirmationHandler {
 	/**
 	 * Registers and begins the timeout timer for the confirmation.
 	 * 
+	 * @param sender The sender to receive the confirmation.
 	 * @param confirmation The confirmation to add.
 	 */
 	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {

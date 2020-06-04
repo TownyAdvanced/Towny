@@ -567,8 +567,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d",town.getFormattedName(), kv.value));
+			String name = null;
+			if (kv.key instanceof Town)
+				name = ((Town) kv.key).getFormattedName();
+			else 
+				name = ((Resident) kv.key).getFormattedName();
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", name, kv.value));
 		}
 		return output;
 	}
