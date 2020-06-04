@@ -474,7 +474,7 @@ public class TownyUniverse {
 	 * 
 	 * @param worldCoord we are testing for a townblock.
 	 * @return townblock if it exists, otherwise null.
-	 * @throws NotRegisteredException When townblock is not found
+	 * @throws NotRegisteredException if there is no homeblock to get.
 	 */
 	public TownBlock getTownBlock(WorldCoord worldCoord) throws NotRegisteredException {
 		if (hasTownBlock(worldCoord))

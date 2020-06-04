@@ -2717,7 +2717,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param player - Player.
 	 * @param split  - Current command arguments.
 	 * @param outpost - Whether this in an outpost or not.
-	 * @param ignoreWarning - Whether to ignore the cost warning or not.   
+	 * @param ignoreWarning - Whether to ignore cost warning and pay automatically.
 	 * @throws TownyException - Exception.
 	 */
 	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{
