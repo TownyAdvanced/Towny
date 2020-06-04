@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
+import com.palmergames.bukkit.towny.database.handler.annotations.Relationship;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
@@ -54,6 +55,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Type, List<Field>> fieldRelCache = new ConcurrentHashMap<>();
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -75,6 +77,32 @@ public abstract class DatabaseHandler {
 		
 		// Loads all the bukkit worlds.
 		loadWorlds();
+	}
+	
+	@NotNull
+	protected final List<Field> getRelationshipFields(@NotNull Saveable obj) {
+		Validate.notNull(obj);
+		
+		// Check cache.
+		List<Field> fields = fieldRelCache.get(obj.getClass());
+		
+		if (fields != null) {
+			return fields;
+		}
+		
+		fields = new ArrayList<>();
+		for (Field field : ReflectionUtil.getAllFields(obj, true)) {
+			Relationship rel = field.getAnnotation(Relationship.class);
+			
+			if (rel != null) {
+				fields.add(field);
+			}
+		}
+		
+		// Cache result.
+		fieldRelCache.putIfAbsent(obj.getClass(), fields);
+		
+		return fields;
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -295,6 +323,7 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
+	
 	/**
 	 * Saves the objects to the database.
 	 * 

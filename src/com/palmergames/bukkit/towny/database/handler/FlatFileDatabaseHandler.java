@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
@@ -31,7 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -40,6 +40,12 @@ import java.util.function.Consumer;
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	private final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
+	private static final File relationshipDir = new File(Towny.getPlugin().getDataFolder() + "/data/relationship/");
+	
+	// Create files
+	static {
+		relationshipDir.mkdirs();
+	}
 
 	@Override
 	public void save(@NotNull Saveable obj) {
@@ -320,8 +326,15 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 
 		// Cache result.
-		fileDirectoryCache.computeIfAbsent(type, (t) -> saveable.getSaveDirectory());
+		fileDirectoryCache.putIfAbsent(type, saveable.getSaveDirectory());
 
 		return saveable.getSaveDirectory();
+	}
+	
+	private void saveRelationships(Saveable obj) {
+		for (Field field : getRelationshipFields(obj)) {
+			// TODO: figure this out.
+			Type type = field.getType();
+		}
 	}
 }
