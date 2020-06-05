@@ -327,7 +327,7 @@ public class TownyFormatter {
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
-		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		title += (town.isEffectivelyOpen() ? TownySettings.getLangString("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby

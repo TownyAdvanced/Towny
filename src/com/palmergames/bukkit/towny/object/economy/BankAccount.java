@@ -15,7 +15,7 @@ import org.bukkit.World;
 public class BankAccount extends Account {
 	
 	private double balanceCap;
-	private final Account debtAccount = new DebtAccount(this);
+	private Account debtAccount;
 	private double debtCap;
 
 	/**
@@ -35,6 +35,7 @@ public class BankAccount extends Account {
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
+		this.debtAccount = new DebtAccount(this);
 	}
 
 	/**

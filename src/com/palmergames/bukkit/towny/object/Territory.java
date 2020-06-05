@@ -97,12 +97,22 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 		this.isOpen = isOpen; 
 	}
 
-	public final boolean isOpen() {
+	/**
+	 * Consider the effects of other game elements on the open status
+	 * before return the effective status
+	 * @return The effective open status
+	 */
+	public final boolean isEffectivelyOpen() {
 		try {
 			if (getAccount().isBankrupt())
 				return false;
-		} catch (EconomyException e) { }
+		} catch (EconomyException ee) {
+		} catch (Exception ex) {
+		}
+		return isOpen();
+	}
 
+	public final boolean isOpen() {
 		return isOpen;
 	}
 
