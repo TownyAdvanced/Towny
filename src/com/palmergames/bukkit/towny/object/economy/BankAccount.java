@@ -140,8 +140,8 @@ public class BankAccount extends Account {
 
 				// Calculate debt.
 				double amountInDebt = amount - getHoldingBalance();
-				
-				if(amountInDebt < getDebtCap()) {
+
+				if(amountInDebt <= getDebtCap()) {
 					TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
 
 				if(amountInDebt <= getDebtCap()) {
