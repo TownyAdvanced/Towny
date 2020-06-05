@@ -16,6 +16,7 @@ public class BankAccount extends Account {
 	
 	private double balanceCap;
 	private final Account debtAccount;
+
 	private double debtCap;
 
 	/**
