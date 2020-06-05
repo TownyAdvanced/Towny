@@ -1266,7 +1266,7 @@ public enum ConfigNodes {
 			"# The cost of renaming a nation."),
 	ECO_DEBT_PREFIX(
 		"economy.debt_prefix",
-		"[DEBT]",
+		"DEBT-",
 		"# The debt prefix for the debt eco account"
 	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),

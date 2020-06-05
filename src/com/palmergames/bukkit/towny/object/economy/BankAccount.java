@@ -83,17 +83,17 @@ public class BankAccount extends Account {
 				TownyMessaging.sendErrorMsg("got here");
 				return false;
 			}
-			
+
 			if (isBankrupt()) {
 				return addDebt(amount);
 			}
-			
+
 			if (!canPayFromHoldings(amount)) {
-				
+
 				// Calculate debt.
 				double amountInDebt = amount - getHoldingBalance();
-				
-				if(amountInDebt < getDebtCap()) {
+
+				if(amountInDebt <= getDebtCap()) {
 					TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
 
 					// Empty out account.
@@ -108,7 +108,7 @@ public class BankAccount extends Account {
 		} catch (EconomyException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Otherwise continue like normal.
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
@@ -140,7 +140,7 @@ public class BankAccount extends Account {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean isBankrupt() throws EconomyException {
-		return debtAccount.getHoldingBalance() < 0;
+		return debtAccount.getHoldingBalance() > 0;
 	}
 	
 	private boolean addDebt(double amount) throws EconomyException {
@@ -149,17 +149,16 @@ public class BankAccount extends Account {
 	
 	private boolean removeDebt(double amount) throws EconomyException {
 		if (!debtAccount.canPayFromHoldings(amount)) {
-			
-			// Calculate money being added.
+			// Calculate money to go into regular account.
 			double netMoney = amount - debtAccount.getHoldingBalance();
-			
-			// Zero out balance
+			//Clear debt account
 			TownyEconomyHandler.setBalance(debtAccount.getName(), 0, world);
-			
-			return deposit(netMoney, null);
+			//Set positive balance in regular account
+			TownyEconomyHandler.setBalance(getName(), netMoney, world);
+			return true;
+		} else {
+			return TownyEconomyHandler.subtract(debtAccount.getName(), amount,world);
 		}
-		
-		return TownyEconomyHandler.subtract(debtAccount.getName(), amount, getBukkitWorld());
 	}
 
 	@Override

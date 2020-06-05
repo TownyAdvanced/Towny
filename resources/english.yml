@@ -1139,7 +1139,7 @@ msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns 
 msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
 
 #Added in 0.84
-status_bank_bankrupt: '&2Bank: &a-%s &c(BANKRUPT)'
+status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
 msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '

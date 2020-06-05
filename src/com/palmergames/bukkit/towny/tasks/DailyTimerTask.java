@@ -218,15 +218,31 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (TownySettings.isTownBankruptcyEnabled()) {
 						//Bankruptcy enabled - Bankrupt town if it cannot pay
+						town.getAccount().setDebtCap(town.getEstimatedValueOfTown());
 						if (town.getAccount().isBankrupt()) {
 							//town already bankrupt
-							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName()))
+							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
+								//Town paid for tax using debt. Pay nation fully
 								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
-
+							} else {
+								//Town did not pay, as this would put it over the debt ceiling.
+								//Pay up to the ceiling now
+								double actualTaxPayment = town.getAccount().getDebtCap() + town.getAccount().getHoldingBalance();
+								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
+								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
+							}
 						} else {
-							//town not bankrupt yet
-							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName()))
+							//town not bankrupt
+							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
+								//Town paid for tax using balance or debt. Pay nation fully
 								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
+							} else {
+								//Town did not pay, as this would put it over the debt ceiling.
+								//Pay up to the ceiling now
+								double actualTaxPayment = town.getAccount().getHoldingBalance() + town.getAccount().getDebtCap();
+								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
+								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
+							}
 
 							if (town.getAccount().isBankrupt())
 								localNewlyBankruptTowns.add(town.getName());
