@@ -99,7 +99,7 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 
 	public final boolean isOpen() {
 		try {
-			if (account.isBankrupt())
+			if (getAccount().isBankrupt())
 				return false;
 		} catch (EconomyException e) { }
 
