@@ -36,6 +36,7 @@ public class BankAccount extends Account {
 		super(name, world);
 		this.balanceCap = balanceCap;
 		this.debtAccount = new DebtAccount(this);
+		this.debtCap = 0;
 	}
 
 	/**
@@ -92,13 +93,17 @@ public class BankAccount extends Account {
 				// Calculate debt.
 				double amountInDebt = amount - getHoldingBalance();
 				
-				TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
+				if(amountInDebt < getDebtCap()) {
+					TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
 
-				// Empty out account.
-				boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
-				success &= addDebt(amountInDebt);
-				
-				return success;
+					// Empty out account.
+					boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
+					success &= addDebt(amountInDebt);
+
+					return success;
+				} else {
+					return false; //This deb is not allowed
+				}
 			}
 		} catch (EconomyException e) {
 			e.printStackTrace();
