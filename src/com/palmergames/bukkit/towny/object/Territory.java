@@ -97,6 +97,7 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 		this.isOpen = isOpen; 
 	}
 
+
 	public final boolean isOpen() { 
 		return isOpen; 
 	}
