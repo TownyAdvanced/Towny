@@ -15,7 +15,7 @@ import org.bukkit.World;
 public class BankAccount extends Account {
 	
 	private double balanceCap;
-	private final Account debtAccount = new DebtAccount(this);
+	private final Account debtAccount;
 	private double debtCap;
 
 	/**
@@ -28,13 +28,14 @@ public class BankAccount extends Account {
 		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
 
 		public DebtAccount(Account account) {
-			super(account.getName() + DEBT_PREFIX, account.getBukkitWorld());
+			super(DEBT_PREFIX + account.getName(), account.getBukkitWorld());
 		}
 	}
 	
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
+		this.debtAccount = new DebtAccount(this);
 	}
 
 	/**
