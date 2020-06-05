@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -122,7 +122,7 @@ public class TownyLogger {
 		ctx.updateLoggers();
 	}
 	
-	public void logMoneyTransaction(EconomyAccount a, double amount, EconomyAccount b, String reason) {
+	public void logMoneyTransaction(Account a, double amount, Account b, String reason) {
 		
 		String sender;
 		String receiver;

@@ -3,11 +3,11 @@ package com.palmergames.bukkit.towny.object;
 import org.bukkit.entity.Player;
 
 public class Transaction {
-	private TransactionType type;
-	private Player player;
-	private int amount;
+	private final TransactionType type;
+	private final Player player;
+	private final double amount;
 	
-	public Transaction(TransactionType type, Player player, int amount) {
+	public Transaction(TransactionType type, Player player, double amount) {
 		this.type = type;
 		this.player = player;
 		this.amount = amount;
@@ -21,7 +21,7 @@ public class Transaction {
 		return player;
 	}
 
-	public int getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 }

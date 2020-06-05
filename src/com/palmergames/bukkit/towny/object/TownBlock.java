@@ -300,7 +300,7 @@ public class TownBlock extends TownyObject {
 			Confirmation confirmation = new Confirmation(() -> {
 		
 				try {
-					resident.getAccount().pay(cost, String.format("Plot set to %s", type));
+					resident.getAccount().withdraw(cost, String.format("Plot set to %s", type));
 				} catch (EconomyException ignored) {
 				}					
 

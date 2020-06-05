@@ -350,7 +350,7 @@ public class FlagWar {
 			// Skip payment + message if no cost.
 			if (costToPlaceWarFlag > 0) {
 				try {
-					attackingResident.getAccount().pay(costToPlaceWarFlag, "War - WarFlag Cost");
+					attackingResident.getAccount().withdraw(costToPlaceWarFlag, "War - WarFlag Cost");
 					TownyMessaging.sendResidentMessage(attackingResident, String.format(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 				} catch (EconomyException e) {
 					e.printStackTrace();

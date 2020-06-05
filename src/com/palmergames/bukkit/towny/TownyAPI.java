@@ -68,7 +68,7 @@ public class TownyAPI {
         try {
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             Nation nation = resident.getTown().getNation();
-            return nation.getNationSpawn();
+            return nation.getSpawn();
         } catch (TownyException x) {
             return null;
         }

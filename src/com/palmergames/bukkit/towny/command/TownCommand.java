@@ -73,6 +73,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
@@ -465,7 +466,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						try {
 							throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player,e.getMessage()); // Exceptions written from this runnable, are not reached by the catch at the end.
+							TownyMessaging.sendErrorMsg(player, e.getMessage()); // Exceptions written from this runnable, are not reached by the catch at the end.
 						}
 					}
 				});
@@ -1842,8 +1843,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_string_board_not_set"));
 						return;
 					}
+					// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
+					if (line.length() > 159)
+						line = line.substring(0, 159);
 
-					town.setTownBoard(line);
+					town.setBoard(line);
 					TownyMessaging.sendTownBoard(player, town);
 				}
 			} else if (split[0].equalsIgnoreCase("title")) {
@@ -2169,7 +2173,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
                     	final String name = split[1];
                     	Confirmation confirmation = new Confirmation(() -> {
                             try {
-								finalTown.getAccount().pay(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
+								finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
 							} catch (EconomyException ignored) {
 							}
 
@@ -2202,6 +2206,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					} else
 						try {
+							if (split[1].length() > 4)
+								throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 							town.setTag(NameValidation.checkAndFilterName(split[1]));
 							if (admin)
 								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_set_town_tag"), player.getName(), town.getTag()));
@@ -2438,7 +2444,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = new Confirmation(() -> {
 			try {
-				town.getAccount().pay(cost, String.format("Town Buy Bonus (%d)", n));
+				town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n));
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
@@ -2522,7 +2528,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation confirmation = new Confirmation(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
+						resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost");
 					} catch (EconomyException ignored) {
 					}
 					
@@ -2714,6 +2720,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param player - Player.
 	 * @param split  - Current command arguments.
 	 * @param outpost - Whether this in an outpost or not.
+	 * @param ignoreWarning - Whether to ignore cost warning and pay automatically.
 	 * @throws TownyException - Exception.
 	 */
 	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{
@@ -3042,7 +3049,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
-					town.getAccount().pay(TownySettings.getNewNationPrice(), "nation refund");
+					town.getAccount().withdraw(TownySettings.getNewNationPrice(), "nation refund");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -3497,7 +3504,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						blockCost = town.getTownBlockCostN(selection.size());
 
 					double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-					if (TownySettings.isUsingEconomy() && !town.getAccount().pay(blockCost, String.format("Town Claim (%d)", selection.size())))
+					if (TownySettings.isUsingEconomy() && !town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim2"), selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
@@ -3688,23 +3695,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 				return;
 			}
-			
-			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
-				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
-			//If town is bankrupt, clear some debt
-			if(town.isBankrupt()) {
-				if(amount >= town.getDebtAccount().getHoldingBalance()) {
-					//Full debt repayment
-					town.getAccount().setBalance(amount - town.getDebtAccount().getHoldingBalance(), "Debt repayment");
-					town.getDebtAccount().setBalance(0, "Debt Repayment");
+			if(town.getAccount().isBankrupt()) {
+				// Deposit into town.
+				town.depositToBank(resident, amount);
+				//Has bankruptcy been cleared ?
+				if(!town.getAccount().isBankrupt()) {
 					plugin.resetCache(); //Allow perms change to take effect immediately
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_debts_cleared"), town.getFormattedName()));
-				} else {
-					//Partial debt repayment
-					town.getDebtAccount().pay(amount, "Debt repayment");
-					town.getAccount().setBalance(0, "Debt repayment");
 				}
+			} else {
+				// Deposit into town.
+				town.depositToBank(resident, amount);
 			}
 
 			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("town_sing")));

@@ -2,36 +2,17 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Transaction;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.bukkit.Bukkit;
 
-public class NationTransactionEvent extends Event {
-	private Nation nation;
-	private static final HandlerList handlers = new HandlerList();
-	private Transaction transaction;
-
+public class NationTransactionEvent extends BankTransactionEvent {
+	
+	Nation nation;
+	
 	public NationTransactionEvent(Nation nation, Transaction transaction) {
-		super(!Bukkit.getServer().isPrimaryThread());
+		super(nation.getAccount(), transaction);
 		this.nation = nation;
-		this.transaction = transaction;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-
-		return handlers;
 	}
 
 	public Nation getNation() {
 		return nation;
-	}
-
-	public Transaction getTransaction() {
-		return transaction;
 	}
 }

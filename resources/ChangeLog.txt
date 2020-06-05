@@ -4617,3 +4617,18 @@ v0.92.0.11:
   - Fix Towny not refreshing the permissions of online players when /ta reload perms is used.
   - Fix issue where a badly configured townyperms.yml causes DB failure, courtesy of Goosius1 with PR #4003.
   - Fix /res set perm command not applying the new /res perm line to all unchanged resident-owned townblocks.
+  - Fix board messages being able to set to strings longer than TownyFormatter can display.
+    - Closes #4039. 
+  - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
+    - Closes #4032.
+  - Switch to JitPack and Remove GH packages dependencies, courtesy of Siris with PR #4038.
+0.96.1.12:
+  - Fix /towny top land resident throwing an internal error.
+    - Closes #4045.
+  - Add javadocs to maven, courtesy of Siris with PR #4049.
+    - Use mvn clean install to build javadocs.
+  - New Command: /ta nation [nationname] kick [towns...]
+    - Allows admins to remove towns from a nation.
+    - Closes #4050.
+  - New Command: /ta town [townname] leavenation
+    - Allows admins to make a town leave their nation.

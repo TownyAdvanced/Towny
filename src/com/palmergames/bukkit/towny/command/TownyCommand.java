@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -518,18 +519,18 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	public List<String> getTopBankBalance(List<EconomyAccount> list, int maxListing) throws EconomyException {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<EconomyAccount, Double> kvTable = new KeyValueTable<>();
+		KeyValueTable<Account, Double> kvTable = new KeyValueTable<>();
 		for (EconomyAccount obj : list) {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<EconomyAccount, Double> kv : kvTable.getKeyValues()) {
+		for (KeyValue<Account, Double> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			EconomyAccount town = kv.key;
+			Account town = kv.key;
 			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", town.getFormattedName(), TownyEconomyHandler.getFormattedBalance(kv.value)));
 		}
 		return output;
@@ -567,8 +568,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d",town.getFormattedName(), kv.value));
+			String name = null;
+			if (kv.key instanceof Town)
+				name = ((Town) kv.key).getFormattedName();
+			else 
+				name = ((Resident) kv.key).getFormattedName();
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", name, kv.value));
 		}
 		return output;
 	}
