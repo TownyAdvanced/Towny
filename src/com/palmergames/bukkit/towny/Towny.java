@@ -250,10 +250,13 @@ public class Towny extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		//TownBlock loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
-		//ReflectionUtil.dump(loadedResident);
-		//ReflectionUtil.dump(loadedTownBlock);
-		//ReflectionUtil.dump(loadedTown);
+		Nation nationA = new Nation(UUID.randomUUID(), "Narnia");
+		Nation nationB = new Nation(UUID.randomUUID(), "Osiris");
+		
+		nationA.getAllies().add(nationB);
+		((FlatFileDatabaseHandler)TownyUniverse.getInstance()
+			.getDatabaseHandler()).saveRelationships(nationA);
+		
 		// ------------------- TESTING CODE -------------------
 	}
 

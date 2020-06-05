@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
+import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -31,7 +32,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -103,7 +107,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		Field[] fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 
 		HashMap<String, String> values = loadFileIntoHashMap(file);
 		for (Field field : fields) {
@@ -331,10 +335,27 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return saveable.getSaveDirectory();
 	}
 	
-	private void saveRelationships(Saveable obj) {
-		for (Field field : getRelationshipFields(obj)) {
-			// TODO: figure this out.
-			Type type = field.getType();
+	public void saveRelationships(Saveable obj) {
+		List<String> data = new ArrayList<>();
+		for (Field field : getOneToManyFields(obj)) {
+			
+			field.setAccessible(true);
+			
+			try {
+				for (Iterator<Saveable> it = ReflectionUtil.convertToIterable(field.get(obj)); it.hasNext(); ) {
+					Saveable o = it.next();
+					data.add(obj.getUniqueIdentifier() + ":" + o.getUniqueIdentifier());
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			field.setAccessible(false);
 		}
+
+		System.out.println(data);
+		
+		// Save
+		FileMgmt.listToFile(data, relationshipDir.getPath() + "/testRel.txt");
 	}
 }

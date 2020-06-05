@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.google.common.collect.Iterators;
+import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
@@ -10,13 +12,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtil {
 	
-	private static final Map<Type, Field[]> fieldCaches = new ConcurrentHashMap<>();
+	private static final Map<Type, List<Field>> fieldCaches = new ConcurrentHashMap<>();
 
 	/**
 	 * Fetches all the fields from the TownyObject.
@@ -25,7 +32,7 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static @NotNull Field[] getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
+	public static @NotNull List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
 		Validate.notNull(townyObject);
 
 		// Get the class object.
@@ -40,9 +47,9 @@ public class ReflectionUtil {
 	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the class passed in.
 	 */
-	public static @NotNull Field[] getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
+	public static @NotNull List<Field> getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
 		// Check if cached.
-		Field[] fields = fieldCaches.get(objType);
+		List<Field> fields = fieldCaches.get(objType);
 		
 		if (fields != null) {
 			return fields;
@@ -52,15 +59,12 @@ public class ReflectionUtil {
 		ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
 		
 		// Iterate through superclasses.
-		int fieldCount = 0;
 		for (Class<?> c = objType; c != null; c = c.getSuperclass()) {
 			classStack.push(c);
-			fieldCount += c.getDeclaredFields().length;
 		}
 		
-		fields = new Field[fieldCount];
-
-		int curIndex = 0;
+		fields = new ArrayList<>();
+		
 		for (Class<?> classType : classStack) {
 			for (Field field : classType.getDeclaredFields()) {
 				// Ignore transient fields.
@@ -68,8 +72,7 @@ public class ReflectionUtil {
 					continue;
 				}
 				
-				fields[curIndex] = field;
-				curIndex++;
+				fields.add(field);
 			}
 		}
 		
@@ -89,9 +92,13 @@ public class ReflectionUtil {
 	public static Map<String, ObjectContext> getObjectMap(Object obj) {
 
 		HashMap<String, ObjectContext> dataMap = new HashMap<>();
-		Field[] fields = getAllFields(obj, true);
+		List<Field> fields = getAllFields(obj, true);
+		
 
 		for (Field field : fields) {
+
+			System.out.println(field);
+			
 			// Open field.
 			field.setAccessible(true);
 
@@ -126,6 +133,34 @@ public class ReflectionUtil {
 		|| type == double.class || type == Double.class
 		|| type == long.class || type == Long.class
 		|| type == byte.class || type == Byte.class;
+	}
+	
+	public static boolean isArrayType(Object obj) {
+		return obj instanceof List || obj.getClass().isArray();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static @NotNull Iterator<Saveable> convertToIterable(@NotNull Object obj) {
+		// Check if it's a primitive array.
+		if (obj.getClass().isArray()) {
+			
+			// Cast to primitive array.
+			Saveable[] temp = (Saveable[])obj;
+			
+			// Return iterator.
+			return Arrays.asList(temp).iterator();
+		}
+		
+		if (obj instanceof List) {
+			try {
+				return (Iterator<Saveable>) ((List<?>)obj).iterator();
+			} catch (ClassCastException e) {
+				throw new UnsupportedOperationException("List is not of type saveable.");
+			}
+			
+		}
+		
+		return Collections.emptyIterator();
 	}
 
 	@SuppressWarnings("unchecked")

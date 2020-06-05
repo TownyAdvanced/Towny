@@ -13,7 +13,7 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
-import com.palmergames.bukkit.towny.database.handler.annotations.Relationship;
+import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
@@ -37,10 +37,12 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -80,7 +82,7 @@ public abstract class DatabaseHandler {
 	}
 	
 	@NotNull
-	protected final List<Field> getRelationshipFields(@NotNull Saveable obj) {
+	protected final List<Field> getOneToManyFields(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 		
 		// Check cache.
@@ -92,11 +94,29 @@ public abstract class DatabaseHandler {
 		
 		fields = new ArrayList<>();
 		for (Field field : ReflectionUtil.getAllFields(obj, true)) {
-			Relationship rel = field.getAnnotation(Relationship.class);
+			
+			if (field.getAnnotation(OneToMany.class) == null) {
+				continue;
+			}
+			
+			field.setAccessible(true);
+			
+			// Strong condition
+			try {
+				Validate.isTrue(ReflectionUtil.isArrayType(field.get(obj)),
+					"The OneToMany annotation for field " + field.getName() +
+						" in " + obj.getClass() + " is not a List or primitive array type.");
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			OneToMany rel = field.getAnnotation(OneToMany.class);
 			
 			if (rel != null) {
 				fields.add(field);
 			}
+			
+			field.setAccessible(false);
 		}
 		
 		// Cache result.
@@ -146,7 +166,6 @@ public abstract class DatabaseHandler {
 			try {
 				
 				TownyWorld wrappedWorld = new TownyWorld(world.getUID(), world.getName());
-				
 				TownyUniverse.getInstance().addWorld(wrappedWorld);
 				
 				// Save

@@ -39,10 +39,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLDatabaseHandler extends DatabaseHandler {
-	private SQLHandler sqlHandler;
+	private final SQLHandler sqlHandler;
 	
 	// This map allows us to cache a stub object for quicker loading.
-	private Map<Class<?>, String> tableNameCache = new HashMap<>();
+	private final Map<Class<?>, String> tableNameCache = new HashMap<>();
 	
 	// TODO Queue creation/saves/deletes and process them async
 	
@@ -144,7 +144,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		String tableName = getTableName(clazz);
 		Validate.notNull(tableName);
 
-		return Arrays.stream(ReflectionUtil.getAllFields(clazz, true))
+		return ReflectionUtil.getAllFields(clazz, true)
+			.stream()
 			.filter(f -> !filter.contains(f.getName()))
 			.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
 				f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
@@ -168,7 +169,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		Field[] fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 
 		Map<String, Object> values = rowToMap(rs);
 		for (Field field : fields) {
@@ -365,7 +366,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	private Field fetchPrimaryKeyField(@NotNull Object obj) {
 		Validate.notNull(obj);
 		
-		Field[] fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
 		
 		for (Field field : fields) {
 			if (field.getAnnotation(PrimaryKey.class) != null) {
