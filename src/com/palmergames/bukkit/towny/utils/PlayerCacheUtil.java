@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -389,11 +390,14 @@ public class PlayerCacheUtil {
 			try {
 				townBlock = pos.getTownBlock();
 				targetTown = townBlock.getTown();
-				if(targetTown.isBankrupt())  {
+				if(targetTown.getAccount().isBankrupt())  {
 					cacheBlockErrMsg(player, TownySettings.getLangString("msg_err_bankrupt_town_cannot_build"));
 					return false;
 				}
 			} catch (NotRegisteredException e) {
+				//ignored
+			} catch (EconomyException ee) {
+				//also ignored
 			}
 		}
 
