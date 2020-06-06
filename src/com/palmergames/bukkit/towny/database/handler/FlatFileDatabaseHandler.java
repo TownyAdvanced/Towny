@@ -335,25 +335,28 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return saveable.getSaveDirectory();
 	}
 	
-	public void saveRelationships(Saveable obj) {
+	public void saveRelationships(@NotNull Saveable obj) {
+		Validate.notNull(obj);
 		List<String> data = new ArrayList<>();
-		for (Field field : getOneToManyFields(obj)) {
-			
-			field.setAccessible(true);
-			
+		
+		// Create execution block.
+		final Consumer<Field> consumer = (field) -> {
 			try {
-				for (Iterator<Saveable> it = ReflectionUtil.convertToIterable(field.get(obj)); it.hasNext(); ) {
-					Saveable o = it.next();
-					data.add(obj.getUniqueIdentifier() + ":" + o.getUniqueIdentifier());
-				}
+				Iterator<Saveable> itr = ReflectionUtil.resolveIterator(field.get(obj), Saveable.class);
+				itr.forEachRemaining(saveable -> {
+					data.add(saveable.getUniqueIdentifier() + ":" + obj.getUniqueIdentifier());
+				});
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 
-			field.setAccessible(false);
-		}
+			String saveFile = field.getAnnotation(OneToMany.class).tableName();
+			// Save
+			FileMgmt.listToFile(data, relationshipDir.getPath() + "/" + saveFile + ".txt");
+		};
 		
-		// Save
-		FileMgmt.listToFile(data, relationshipDir.getPath() + "/testRel.txt");
+		// Execute loop.
+		safeFieldIterate(getOneToManyFields(obj), consumer);
+		
 	}
 }

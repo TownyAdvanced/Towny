@@ -116,7 +116,12 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public boolean delete(@NotNull Saveable obj) {
 		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
-	
+
+	@Override
+	void saveRelationships(Saveable obj) {
+		throw new UnsupportedOperationException();
+	}
+
 	private <T extends TownyObject> void alterTownyObjectTable(Class<T> objectClazz) {
 		final String tableName = getTableName(objectClazz);
 		Validate.notNull(tableName);

@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.google.common.collect.Iterators;
 import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import org.apache.commons.lang.Validate;
@@ -137,28 +136,43 @@ public class ReflectionUtil {
 		return obj instanceof List || obj.getClass().isArray();
 	}
 
+	/**
+	 * Takes an arbitrary object and tries to extract it's iterable type.
+	 * 
+	 * @param obj The object to extract for iteration
+	 * @param ofType The generic type/component type of the iterable type, for example 
+	 *               if you want code <code>List&lt;String&gt;</code>, the ofType would be String.   
+	 * @param <T> Any type
+	 * @return An iterator extracted from the given object.
+	 * @throws UnsupportedOperationException When object either not 1) not iterable, or 2) not the requested 
+	 * parameter type.
+	 */
 	@SuppressWarnings("unchecked")
-	public static @NotNull Iterator<Saveable> convertToIterable(@NotNull Object obj) {
+	public static @NotNull <T> Iterator<T> resolveIterator(@NotNull Object obj, Class<T> ofType) {
 		// Check if it's a primitive array.
 		if (obj.getClass().isArray()) {
 			
+			if (obj.getClass().getComponentType() != ofType) {
+				throw new UnsupportedOperationException("Array is not of type: " + ofType);
+			}
+			
 			// Cast to primitive array.
-			Saveable[] temp = (Saveable[])obj;
+			T[] temp = (T[])obj;
 			
 			// Return iterator.
-			return Arrays.asList(temp).iterator();
+			return (Arrays.asList(temp)).iterator();
 		}
 		
 		if (obj instanceof List) {
 			try {
-				return (Iterator<Saveable>) ((List<?>)obj).iterator();
+				return (Iterator<T>) ((List<?>)obj).iterator();
 			} catch (ClassCastException e) {
-				throw new UnsupportedOperationException("List is not of type saveable.");
+				throw new UnsupportedOperationException("List is not of type: " + ofType);
 			}
 			
 		}
 		
-		return Collections.emptyIterator();
+		throw new UnsupportedOperationException("The given type: " + obj.getClass() + ", is not iterable.");
 	}
 
 	@SuppressWarnings("unchecked")

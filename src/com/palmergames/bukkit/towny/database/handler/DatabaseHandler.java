@@ -37,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * The object which is responsible for converting objects from one format to another and
@@ -314,6 +314,19 @@ public abstract class DatabaseHandler {
 		save(towns);
 		save(townBlocks);
 	}
+	
+	protected void safeFieldIterate(Iterable<Field> itr, Consumer<Field> forEach) {
+		itr.forEach((field -> {
+			
+			if (field == null) {
+				return;
+			}
+			
+			field.setAccessible(true);
+			forEach.accept(field);
+			field.setAccessible(false);
+		}));
+	}
 
 	// ---------- DB operation Methods ----------
 
@@ -355,6 +368,8 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
+	
+	abstract void saveRelationships(Saveable obj);
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.
