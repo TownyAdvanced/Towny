@@ -78,10 +78,8 @@ public class BankAccount extends Account {
 	@Override
 	protected boolean subtractMoney(double amount) {
 		try {
-			// Check cap
 			if (isBankrupt() && (debtAccount.getHoldingBalance() + amount > getDebtCap())) {
-				TownyMessaging.sendErrorMsg("got here");
-				return false;
+				return false;  //subtraction not allowed as it would exceed the debt cap
 			}
 
 			if (isBankrupt()) {
@@ -100,7 +98,7 @@ public class BankAccount extends Account {
 
 					return success;
 				} else {
-					return false; //This deb is not allowed
+					return false; //Subtraction not allowed as it would exceed the debt cap
 				}
 			}
 		} catch (EconomyException e) {
