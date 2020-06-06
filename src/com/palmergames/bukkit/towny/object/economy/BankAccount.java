@@ -94,8 +94,6 @@ public class BankAccount extends Account {
 				double amountInDebt = amount - getHoldingBalance();
 
 				if(amountInDebt <= getDebtCap()) {
-					TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
-
 					// Empty out account.
 					boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
 					success &= addDebt(amountInDebt);
