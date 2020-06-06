@@ -4634,3 +4634,4 @@ v0.92.0.11:
     - Allows admins to make a town leave their nation.
   - API: Added to TownyAPI, hasNationZone(Location) and hasNationZone(WorldCoord) which will return either TownBlockStatus.UNCLAIMED_ZONE or TownBlockStatus.NATION_ZONE.
   - API: Added to TownyAPI, isNationZone(Location), returns true if it is in a nation zone.
+  - Fix PlayerCacheUtil looking for a non-existant language string.
