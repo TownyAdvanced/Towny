@@ -352,8 +352,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 			field.setAccessible(false);
 		}
-
-		System.out.println(data);
 		
 		// Save
 		FileMgmt.listToFile(data, relationshipDir.getPath() + "/testRel.txt");

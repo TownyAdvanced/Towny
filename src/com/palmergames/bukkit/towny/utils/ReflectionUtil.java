@@ -96,8 +96,6 @@ public class ReflectionUtil {
 		
 
 		for (Field field : fields) {
-
-			System.out.println(field);
 			
 			// Open field.
 			field.setAccessible(true);
