@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.IOException;
@@ -218,7 +219,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (TownySettings.isTownBankruptcyEnabled()) {
 						//Bankruptcy enabled - Bankrupt town if it cannot pay
-						town.getAccount().setDebtCap(town.getEstimatedValueOfTown());
+						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
 						if (town.getAccount().isBankrupt()) {
 							//town already bankrupt
 							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
@@ -464,7 +465,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 						if (TownySettings.isTownBankruptcyEnabled()) {
 							//Bankruptcy enabled - Bankrupt town if it cannot pay
-							town.getAccount().setDebtCap(town.getEstimatedValueOfTown());
+							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
 							if(town.getAccount().isBankrupt()) {
 								//Town already bankrupt
 								town.getAccount().withdraw(upkeep, "Town Upkeep"); 

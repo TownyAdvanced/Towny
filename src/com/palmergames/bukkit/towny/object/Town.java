@@ -1377,8 +1377,4 @@ public class Town extends Territory implements ResidentList, ObjectGroupManageab
 	public String getTownBoard() {
 		return getBoard();
 	}
-
-	public double getEstimatedValueOfTown() {
-		return TownySettings.getNewTownPrice() + (getTownBlocks().size() * TownySettings.getClaimPrice());
-	}
 }
