@@ -417,6 +417,7 @@ public class TownyEntityListener implements Listener {
 	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
+	 * Also prevent lingering invis potions in siegezones
 	 * 
 	 *  @param event - LingeringPotionSplashEvent
 	 */
@@ -425,7 +426,27 @@ public class TownyEntityListener implements Listener {
 		ThrownPotion potion = event.getEntity();
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = null;
-		
+
+		//For siegewar, prevent lingering invis potions being used in the siegezone
+		if (TownySettings.getWarSiegeEnabled()
+			&& TownySettings.isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled()) {
+			//Is it an invis. potion?
+			for (PotionEffect effect : event.getEntity().getEffects()) {
+				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
+					//Was potion thrown near an active siegezone ?
+					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+						if (siege.getStatus().isActive()
+							&& event.getEntity().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+							event.setCancelled(true);
+							if (event.getEntity().getShooter() instanceof Player){
+								TownyMessaging.sendErrorMsg(event.getEntity().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
+							}
+						}
+					}
+				}
+			}
+		}
+
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 		} catch (NotRegisteredException e) {
@@ -1197,7 +1218,7 @@ public class TownyEntityListener implements Listener {
 							&& event.getPotion().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
 							event.setCancelled(true);
 							if (event.getPotion().getShooter() instanceof Player){
-								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_splash_invisibility_potions_in_siegezone"));
+								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
 							}
 						}
 					}
