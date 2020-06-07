@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.utils.PostRespawnPeacefulnessUtil;
 import com.palmergames.bukkit.towny.utils.PlayerHealthRegainLimiterUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
@@ -63,6 +64,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -1168,6 +1170,38 @@ public class TownyEntityListener implements Listener {
 				event.getEntity().setMetadata(PlayerHealthRegainLimiterUtil.METADATA_KEY_NAME, new FixedMetadataValue(Towny.getPlugin(), previousHealthRegainAmount + eventHealthRegainAmount ));
 			} else {
 				event.setCancelled(true);
+			}
+		}
+	}
+
+	/**
+	 * For siegewar
+	 * - Prevent splash potions of invis being used in the siegzone
+	 * - This could be exploited to stop an enemy from gaining banner control
+	 *
+	 * @param event - PotionSplashEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPotionSplash(PotionSplashEvent event) {
+
+		if (TownySettings.getWarSiegeEnabled() 
+			&& TownySettings.isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled()) {
+
+			//Is it an invis. potion?
+			for (PotionEffect effect : event.getPotion().getEffects()) {
+
+				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
+					//Was potion splashed near an active siegezone ?
+					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+						if (siege.getStatus().isActive()
+							&& event.getPotion().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+							event.setCancelled(true);
+							if (event.getPotion().getShooter() instanceof Player){
+								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_splash_invisibility_potions_in_siegezone"));
+							}
+						}
+					}
+				}
 			}
 		}
 	}

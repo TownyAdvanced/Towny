@@ -1251,6 +1251,8 @@ msg_err_siege_war_cannot_spawn_into_besieged_town: '&6[War]&c You cannot spawn i
 #Banner control
 msg_siege_war_banner_control_session_failure: '&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, going too far from the banner, going under a block, or going invisible/flying.'
 msg_siege_war_resident_exceeded_max_timed_points: '&6[War]&c Siege on %s > You have achieved maximum timed siege points. You can no longer gain or contribute to banner control in this siege.'
+#Siegezone Invis. Splash Potion Blocker
+msg_err_siege_war_cannot_use_splash_invisibility_potions_in_siegezone: 'You cannot use splash potions of invisibility in a siege zone.'
 
 #Town Info Siege Section
 status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'

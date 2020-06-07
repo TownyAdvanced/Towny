@@ -575,19 +575,4 @@ public class TownyUniverse {
 	public Map<Resident, Location> getRecentlyLoggedOutResidentLocationMap() {
 		return new HashMap<>(recentlyLoggedOutResidentLocationMap);
 	}
-
-	/**
-	 * Get all the sieges in the universe
-	 *
-	 * @return list of all the sieges in the universe
-	 */
-	public List<Siege> getAllSieges() {
-		List<Siege> result = new ArrayList<>();
-		for(Town town: getTownsMap().values()) {
-			if(town.hasSiege()) {
-				result.add(town.getSiege());
-			}
-		}
-		return result;
-	}
 }

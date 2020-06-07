@@ -29,7 +29,7 @@ public class SiegeWarTimerTaskController {
 	 * e.g. who wins if siege victory timer runs out ?
 	 */
 	public static void evaluateTimedSiegeOutcomes() {
-		for (Siege siege : TownyUniverse.getInstance().getAllSieges()) {
+		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 			evaluateTimedSiegeOutcome(siege);
 		}
 	}
