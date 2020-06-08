@@ -28,6 +28,7 @@ public class BankAccount extends Account {
 		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
 
 		public DebtAccount(Account account) {
+<<<<<<< Upstream, based on origin/master
 			// TNE doesn't play nice with "town-" on debt accounts.
 			super(DEBT_PREFIX + account.getName().replace("town-",""), account.getBukkitWorld());
 			
@@ -40,12 +41,16 @@ public class BankAccount extends Account {
 					e.printStackTrace();
 				}
 			}
+=======
+			super(DEBT_PREFIX + account.getName(), account.getBukkitWorld());
+>>>>>>> c74f9ed Add fixes from goosius' branch
 		}
 	}
 	
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
+<<<<<<< Upstream, based on origin/master
 		if (name.startsWith(TownySettings.getTownAccountPrefix()))
 			this.debtAccount = new DebtAccount(this);
 		else 
@@ -87,6 +92,10 @@ public class BankAccount extends Account {
 	 */
 	public void setDebtCap(double debtCap) {
 		this.debtCap = debtCap;
+=======
+		this.debtAccount = new DebtAccount(this);
+		this.debtCap = 0;
+>>>>>>> c74f9ed Add fixes from goosius' branch
 	}
 
 	/**
@@ -208,6 +217,7 @@ public class BankAccount extends Account {
 		} else {
 			return TownyEconomyHandler.subtract(debtAccount.getName(), amount,world);
 		}
+<<<<<<< Upstream, based on origin/master
 	}
 
 	@Override
@@ -241,6 +251,8 @@ public class BankAccount extends Account {
 		if (debtAccount != null)
 			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
+=======
+>>>>>>> c74f9ed Add fixes from goosius' branch
 	}
 
 	@Override
