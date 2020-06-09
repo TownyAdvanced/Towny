@@ -2004,9 +2004,17 @@ public enum ConfigNodes {
 
 	WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED(
 			"war.siege.switches.invisibility_splash_potions_in_siege_zone_disabled",
-				"true",
-				"# If this setting is true, then invisibility splash potions are disabled in the siegezone.",
-				"# This prevents the exploit of one side throwing these potions at the other to stop then gaining banner control."),
+			"true",
+			"# If this setting is true, then invisibility splash potions are disabled in the siegezone.",
+			"# This prevents the exploit of one side throwing these potions at the other to stop then gaining banner control."),
+
+	WAR_SIEGE_MULTIPLY_DEATH_POINTS_BY_BANNER_CONTROL_LIST_SIZE(
+			"war.siege.switches.multiply_death_points_by_banner_control_list_size",
+			"true",
+			"# If this setting is true, then if a player from the banner controlling side dies,",
+			"# the death points are multiplied by the size of the banner control list.",
+			"# The setting is recommended because it acts as a brake on overly-powerful nations.",
+			"# (Excessive battle dominance can result in boring battles, excessive political dominance can result in boring geopolitics)."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

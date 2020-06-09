@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
@@ -212,12 +213,14 @@ public class SiegeWarPointsUtil {
 		int siegePoints;
 		if (residentIsAttacker) {
 			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
-			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
+			siegePoints = adjustSiegePointPenaltyForBannerControl(true, siegePoints, siege);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(true, siegePoints, player, resident, siege);
 			siegePoints = adjustSiegePointsForPopulationQuotient(false, siegePoints, siege);
 			siege.adjustSiegePoints(siegePoints);
 		} else {
 			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
-			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(residentIsAttacker, siegePoints, player, resident, siege);
+			siegePoints = adjustSiegePointPenaltyForBannerControl(false, siegePoints, siege);
+			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(false, siegePoints, player, resident, siege);
 			siegePoints = adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
 			siege.adjustSiegePoints(siegePoints);
 		}
@@ -439,5 +442,18 @@ public class SiegeWarPointsUtil {
 
 		double modifier = siege.getSiegePointModifierForSideWithLowestPopulation();
 		return (int) (siegePoints * modifier);
+	}
+
+	public static int adjustSiegePointPenaltyForBannerControl(boolean residentIsAttacker, int siegePoints, Siege siege) {
+		if(!TownySettings.isWarSiegeMultiplyDeathPointsByBannerControlListSize())
+			return siegePoints;
+
+		if(residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.ATTACKERS) {
+			return siegePoints * siege.getBannerControllingResidents().size();
+		} else if (!residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.DEFENDERS) {
+			return siegePoints * siege.getBannerControllingResidents().size();
+		} else {
+			return siegePoints;
+		}
 	}
 }

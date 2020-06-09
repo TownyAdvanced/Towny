@@ -3272,4 +3272,8 @@ public class TownySettings {
 	public static boolean isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED);
 	}
+
+	public static boolean isWarSiegeMultiplyDeathPointsByBannerControlListSize() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_MULTIPLY_DEATH_POINTS_BY_BANNER_CONTROL_LIST_SIZE);
+	}
 }
