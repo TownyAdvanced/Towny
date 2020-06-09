@@ -2049,7 +2049,7 @@ public enum ConfigNodes {
 			"# When the nation is deleted or defeated."),
 	WAR_SIEGE_EXTRA_MONEY_PERCENTAGE_PER_TOWN_LEVEL(
 			"war.siege.money.extra_money_percentage_per_town_level",
-			"50",
+			"0",
 			"# This value increases the monetary costs & gains of sieges, depending on town level.",
 			"# ",
 			"# The value is recommended, so that established towns/nations will not feel unaffected by war moneys.",
