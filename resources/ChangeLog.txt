@@ -4635,3 +4635,5 @@ v0.92.0.11:
   - API: Added to TownyAPI, hasNationZone(Location) and hasNationZone(WorldCoord) which will return either TownBlockStatus.UNCLAIMED_ZONE or TownBlockStatus.NATION_ZONE.
   - API: Added to TownyAPI, isNationZone(Location), returns true if it is in a nation zone.
   - Fix PlayerCacheUtil looking for a non-existant language string.
+  - Fix Townblocks having their mob setting overridden by the Towns' mob setting in scenarios where the town has mobs on, but the townblock has mobs off.
+    - Closes #4067.
