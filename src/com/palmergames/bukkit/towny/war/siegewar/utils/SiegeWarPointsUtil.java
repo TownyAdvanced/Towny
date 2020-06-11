@@ -243,9 +243,9 @@ public class SiegeWarPointsUtil {
 
 		String message = String.format(
 			unformattedErrorMessage,
-			siege.getDefendingTown().getFormattedName(),
+			siege.getDefendingTown().getName(),
 			residentInformationString,
-			siegePoints);
+			Math.abs(siegePoints));
 
 		SiegeWarNotificationUtil.informSiegeParticipants(siege, message);
 	}
