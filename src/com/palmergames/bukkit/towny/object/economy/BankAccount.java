@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;

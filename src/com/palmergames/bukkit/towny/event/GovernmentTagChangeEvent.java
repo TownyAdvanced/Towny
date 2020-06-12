@@ -10,7 +10,11 @@ public class GovernmentTagChangeEvent extends TagChangeEvent {
 		this.government = government;
 	}
 
+<<<<<<< Upstream, based on origin/master
 	public Government getGovernment() {
+=======
+	public Government getTerritory() {
+>>>>>>> 75334a7 Cleanup/Territory renameRemove unused imports
 		return government;
 	}
 }
