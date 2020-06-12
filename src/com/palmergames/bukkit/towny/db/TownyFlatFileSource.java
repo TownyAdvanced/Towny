@@ -727,9 +727,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
+
+				line = "townBoard";
 				town.setBoard(keys.get("townBoard"));
-				
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -986,6 +987,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			} finally {
 				saveTown(town);

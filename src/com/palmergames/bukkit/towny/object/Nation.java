@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
-import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
+import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends Territory implements ResidentList {
+public class Nation extends Government implements ResidentList {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -46,7 +46,8 @@ public class Nation extends Territory implements ResidentList {
 	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
-	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
+	@SuppressWarnings("unused")
+	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 
 	public Nation(String name) {
 		super(name);

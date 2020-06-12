@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import java.util.List;
 
-public class TerritoryAccountAuditor implements AccountAuditor {
+public class GovernmentAccountAuditor implements AccountAuditor {
 
 	@Override
 	public void withdrew(Account account, double amount, String reason) {
