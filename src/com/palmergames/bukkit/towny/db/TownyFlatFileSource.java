@@ -726,9 +726,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
+
+				line = "townBoard";
 				town.setBoard(keys.get("townBoard"));
-				
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
