@@ -109,7 +109,7 @@ public class TownySpigotMessaging {
 				townName.addExtra(nextComponent);
 			}
 			
-			if (town.isOpen()) {
+			if (town.isEffectivelyOpen()) {
 				TextComponent nextComponent = new TextComponent(TownySettings.getLangString("status_title_open"));
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				townName.addExtra(nextComponent);

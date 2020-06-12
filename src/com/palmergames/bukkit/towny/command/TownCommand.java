@@ -1365,7 +1365,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			List<Town> townsList = TownyUniverse.getInstance().getDataSource().getTowns();
 			List<Town> openTownsList = new ArrayList<>();
 			for (Town town : townsList) {
-				if (town.isOpen())
+				if (town.isEffectivelyOpen())
 					openTownsList.add(town);
 			}
 			if (!openTownsList.isEmpty()) {
@@ -1417,7 +1417,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
 					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
-			if (town.isOpen())
+			if (town.isEffectivelyOpen())
 				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
 		}
@@ -1592,13 +1592,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_toggle_open"));
 
 				town.setOpen(!town.isOpen());
-				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_open"), town.isOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_changed_open"), town.isEffectivelyOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_changed_open"), town.isOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
 				// Send a warning when toggling on (a reminder about plot
 				// permissions).
-				if (town.isOpen())
+				if (town.isEffectivelyOpen())
 					throw new TownyException(String.format(TownySettings.getLangString("msg_toggle_open_on_warning")));
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
@@ -3215,7 +3215,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (!console) {
 				// Check if town is town is free to join.
-				if (!town.isOpen())
+				if (!town.isEffectivelyOpen())
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_not_open"), town.getFormattedName()));
 				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown())
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown()));

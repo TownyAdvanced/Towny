@@ -1069,6 +1069,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public boolean isEffectivelyOpen() {
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 			&& hasSiege()
@@ -1079,7 +1083,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			//Town is bankrupt, public joining disabled
 			return false;
 		} else {
-			return isOpen;
+			return isOpen();
 		}
 	}
 

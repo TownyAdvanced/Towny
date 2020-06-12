@@ -329,7 +329,7 @@ public class TownyFormatter {
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
-		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		title += (town.isEffectivelyOpen() ? TownySettings.getLangString("status_title_open") : "");
 		title += (TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful() ? TownySettings.getLangString("status_town_title_peaceful") : "");
 		out.add(ChatTools.formatTitle(title));
 
