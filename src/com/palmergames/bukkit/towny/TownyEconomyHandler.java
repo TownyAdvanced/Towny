@@ -191,7 +191,6 @@ public class TownyEconomyHandler {
 	 */
 	public static double getBalance(String accountName, World world) {
 		checkNewAccount(accountName);
-
 		return economy.getBalance(accountName, world);
 	}
 
