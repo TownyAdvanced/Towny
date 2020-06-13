@@ -355,7 +355,7 @@ public class TownyUniverse {
 		}
 
 		Resident newResident = new Resident(playerID, filteredName);
-		newResident.save();
+		getDatabaseHandler().saveNew(newResident);
 
 		residents.put(playerID, newResident);
 		residentNamesMap.put(filteredName.toLowerCase(), newResident);
@@ -378,7 +378,7 @@ public class TownyUniverse {
 		}
     	
     	Resident npc = new Resident(npcID, name);
-    	npc.save();
+		getDatabaseHandler().saveNew(npc);
     	
     	residents.put(npcID, npc);
     	residentNamesMap.put(name.toLowerCase(), npc);
@@ -587,7 +587,7 @@ public class TownyUniverse {
 		Town newTown = new Town(UUID.randomUUID(), filteredName);
 
 		// Save town
-		newTown.save();
+		getDatabaseHandler().saveNew(newTown);
 
 		// Add town to memory.
 		towns.put(newTown.getUniqueIdentifier(), newTown);
@@ -610,21 +610,6 @@ public class TownyUniverse {
 		townsTrie.addKey(town.getName());
 		
 		return town;
-	}
-	
-	public final @NotNull Nation addNation(@NotNull Nation nation) throws AlreadyRegisteredException {
-		Objects.requireNonNull(nation);
-		
-		if (nations.containsKey(nation.getUniqueIdentifier())) {
-			throw new AlreadyRegisteredException("The nation " + nation.getName() + " is already in use.");
-		}
-
-		// Store into memory.
-		nations.put(nation.getUniqueIdentifier(), nation);
-		nationNamesMap.put(nation.getName().toLowerCase(), nation);
-		townsTrie.addKey(nation.getName());
-		
-		return nation;
 	}
 
 	public void updateTownName(String oldName, String newName) {
@@ -795,7 +780,7 @@ public class TownyUniverse {
 		Nation newNation = new Nation(UUID.randomUUID(), filteredName);
 		
 		// Save nation
-		newNation.save();
+		getDatabaseHandler().saveNew(newNation);
 		
 		// Add nation to memory
 		nations.put(newNation.getUniqueIdentifier(), newNation);
@@ -803,6 +788,21 @@ public class TownyUniverse {
 		nationsTrie.addKey(filteredName);
 		
 		return newNation;
+	}
+
+	public final @NotNull Nation addNation(@NotNull Nation nation) throws AlreadyRegisteredException {
+		Objects.requireNonNull(nation);
+
+		if (nations.containsKey(nation.getUniqueIdentifier())) {
+			throw new AlreadyRegisteredException("The nation " + nation.getName() + " is already in use.");
+		}
+
+		// Store into memory.
+		nations.put(nation.getUniqueIdentifier(), nation);
+		nationNamesMap.put(nation.getName().toLowerCase(), nation);
+		townsTrie.addKey(nation.getName());
+
+		return nation;
 	}
 
 	public void updateNationName(String oldName, String newName) {

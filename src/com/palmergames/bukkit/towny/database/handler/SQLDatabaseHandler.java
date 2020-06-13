@@ -58,7 +58,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		createTownyObjectTable(TownBlock.class);
 		
 		// Update/alter tables. Order of this matters!
-		createTownyObjectTable(TownyWorld.class);
+		alterTownyObjectTable(TownyWorld.class);
 		alterTownyObjectTable(Nation.class);
 		alterTownyObjectTable(Town.class);
 		alterTownyObjectTable(Resident.class);
@@ -83,18 +83,30 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
 	}
-	
+
+	@Override
+	public void saveNew(@NotNull Saveable obj) {
+		Map<String, String> insertionMap = generateInsertionMap(obj);
+
+		StringBuilder stmtBuilder = new StringBuilder("INSERT INTO ").append(obj.getSQLTable().toUpperCase()).append(" ("); 
+		
+		// Append the keys which represent the column names
+		stmtBuilder.append(String.join(", ", insertionMap.keySet()));
+		stmtBuilder.append(") ");
+		
+		// Append the values which represent the values to be inserted.
+		stmtBuilder.append("VALUES (");
+		// FIXME I have no idea if these iterate in the same order...
+		stmtBuilder.append(String.join(", ", insertionMap.values()));
+		stmtBuilder.append(");");
+		
+		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
+	}
+
 	// TODO Figure out how to handle insertions vs updates
 	@Override
 	public void save(@NotNull Saveable obj) {
-		Map<String, ObjectContext> contextMap = ReflectionUtil.getObjectMap(obj);
-
-		// Invoke all the specified save methods and merge the results into the context map
-		for (Map.Entry<String, ObjectContext> entry : getSaveGetterData(obj).entrySet()) {
-			contextMap.put(entry.getKey(), entry.getValue());
-		}
-		
-		Map<String, String> insertionMap = convertToInsertionMap(contextMap);
+		Map<String, String> insertionMap = generateInsertionMap(obj);
 		
 		StringBuilder stmtBuilder = new StringBuilder("UPDATE ").append(obj.getSQLTable().toUpperCase()).append(" SET ");
 		
@@ -110,6 +122,17 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					.append("'");
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
+	}
+	
+	private Map<String, String> generateInsertionMap(@NotNull Saveable obj) {
+		Map<String, ObjectContext> contextMap = ReflectionUtil.getObjectMap(obj);
+
+		// Invoke all the specified save methods and merge the results into the context map
+		for (Map.Entry<String, ObjectContext> entry : getSaveGetterData(obj).entrySet()) {
+			contextMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return convertToInsertionMap(contextMap);
 	}
 
 	@Override
@@ -418,13 +441,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					insertionValue = value.toString();
 				}
 			} else {
-				// toStoredString will call toString() on the object which on a String obj will wrap the "" inside the string which we don't want
-				if (value instanceof String) {
-					insertionValue = (String) value;
-				}
-				else {
-					insertionValue = toStoredString(value, type);
-				}
+				insertionValue = toStoredString(value, type);
+				// Sanitize the input.
 				// Replace " with \"
 				insertionValue = insertionValue.replace("\"", "\\\"");
 				// Wrap with double quotes

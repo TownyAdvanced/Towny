@@ -331,6 +331,14 @@ public abstract class DatabaseHandler {
 	// ---------- DB operation Methods ----------
 
 	/**
+	 * Stores a newly created object in the DB
+	 * 
+	 * @param obj The object to save
+	 */
+	public abstract void saveNew(@NotNull Saveable obj);
+	
+	
+	/**
 	 * Saves the given object to the DB.
 	 *
 	 * @param obj The object to save.

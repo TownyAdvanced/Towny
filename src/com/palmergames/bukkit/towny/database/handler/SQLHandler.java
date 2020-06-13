@@ -142,7 +142,7 @@ public class SQLHandler {
 	
 	public void executeUpdatesError(@Nullable String errorMessage, @NotNull String... updates) {
 		Objects.requireNonNull(updates);
-		try (Statement stmt = con.createStatement();) {
+		try (Statement stmt = con.createStatement()) {
 			
 			for (String update : updates) {
 				// Try-catch around update to prevent one failed update from stopping the rest.
