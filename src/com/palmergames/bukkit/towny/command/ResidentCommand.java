@@ -281,10 +281,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				if (split[1].equalsIgnoreCase("paybail")) {
+					double cost = TownySettings.getBailAmount();					
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-					if (resident.getAccount().canPayFromHoldings(TownySettings.getBailAmount())) {
+					if (resident.isMayor())
+						cost = TownySettings.getBailAmountMayor();
+					if (resident.isKing())
+						cost = TownySettings.getBailAmountKing();
+					if (resident.getAccount().canPayFromHoldings(cost)) {
 						Town JailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
-						resident.getAccount().payTo(TownySettings.getBailAmount(), JailTown, "Bail");
+						resident.getAccount().payTo(cost, JailTown, "Bail");
 						resident.setJailed(false);
 						resident.setJailSpawn(0);
 						resident.setJailTown("");

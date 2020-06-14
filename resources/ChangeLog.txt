@@ -4637,3 +4637,4 @@ v0.92.0.11:
   - Fix PlayerCacheUtil looking for a non-existant language string.
   - Fix Townblocks having their mob setting overridden by the Towns' mob setting in scenarios where the town has mobs on, but the townblock has mobs off.
     - Closes #4067.
+  - Fix mayors and kings not paying the bail costs specified in the config.
