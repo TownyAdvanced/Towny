@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
+import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -23,17 +24,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -48,7 +49,13 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	public SQLDatabaseHandler(String databaseType) {
 		sqlHandler = new SQLHandler(databaseType);
-		sqlHandler.testConnection();
+		
+		if (!sqlHandler.testConnection()) {
+			TownyMessaging.sendErrorMsg("Cannot establish connection for SQL db type " + databaseType + "!");
+			return;
+		}
+		
+		sqlHandler.enableForeignKeyConstraints();
 
 		// Create tables
 		createTownyObjectTable(Town.class);
@@ -77,11 +84,44 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		String createTableStmt = "CREATE TABLE IF NOT EXISTS " + tableName +" ("
-			+ "`uniqueIdentifier` VARCHAR(32) NOT NULL"
+			+ "uniqueIdentifier VARCHAR(36) NOT NULL"
 			+ pkStmt
-			+ ")";
+			+ ");";
 
 		sqlHandler.executeUpdate(createTableStmt, "Error creating table " + tableName + "!");
+		createRelationship(objectClazz);
+	}
+	
+	private <T extends TownyObject> void createRelationship(Class<T> objectClazz) {
+		String objTableName = getTableName(objectClazz);
+		
+		List<String> updateStatements = new ArrayList<>();
+		
+		String tableTemplate = "CREATE TABLE IF NOT EXISTS " + TownySettings.getSQLTablePrefix() + "%s" + 
+			"(" +
+			"containerUUID VARCHAR(36), referenceUUID VARCHAR (36)," +
+			"FOREIGN KEY (containerUUID) REFERENCES " + objTableName + "(uniqueIdentifier) ON DELETE CASCADE," +
+			"FOREIGN KEY (referenceUUID) REFERENCES %s(uniqueIdentifier) ON DELETE CASCADE" +
+			");";
+		
+		List<Field> fields = ReflectionUtil.getNonTransientFields(objectClazz, f -> f.isAnnotationPresent(OneToMany.class));
+
+		for (Field field : fields) {
+			OneToMany annotation = field.getAnnotation(OneToMany.class);
+			
+			Class<?> parameterizedType = ReflectionUtil.getTypeOfIterable(field);
+			String typeTableName = tableNameCache.get(parameterizedType);
+			
+			if (typeTableName != null) {
+				updateStatements.add(String.format(tableTemplate, annotation.tableName(), typeTableName));
+			}
+			else {
+				TownyMessaging.sendErrorMsg("Cannot get type table name of class " + parameterizedType.getName());
+			}
+		}
+		
+		if (!updateStatements.isEmpty())
+			sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements.toArray(new String[0]));
 	}
 
 	@Override
@@ -100,7 +140,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		stmtBuilder.append(String.join(", ", insertionMap.values()));
 		stmtBuilder.append(");");
 		
-		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
+		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error creating object " + obj.getName());
+		saveRelationships(obj);
 	}
 
 	// TODO Figure out how to handle insertions vs updates
@@ -122,10 +163,13 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					.append("'");
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
+		saveRelationships(obj);
 	}
 	
 	private Map<String, String> generateInsertionMap(@NotNull Saveable obj) {
-		Map<String, ObjectContext> contextMap = ReflectionUtil.getObjectMap(obj);
+		// Get map for fields not OneToMany
+		Map<String, ObjectContext> contextMap = ReflectionUtil.getObjectMap(obj, field ->
+												!field.isAnnotationPresent(OneToMany.class));
 
 		// Invoke all the specified save methods and merge the results into the context map
 		for (Map.Entry<String, ObjectContext> entry : getSaveGetterData(obj).entrySet()) {
@@ -141,43 +185,57 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
-	void saveRelationships(Saveable obj) {
-		throw new UnsupportedOperationException();
+	protected void saveRelationships(final Saveable obj) {
+		// For each relationship
+		// We want to delete all rows in that relationship table with the parent id.
+		// Then we want to insert the collection back into the table.
+		
+		// Loop that applies the method to each relationship
+		// Create execution block.
+		final Consumer<Field> consumer = (field) -> {
+			String tableName = field.getAnnotation(OneToMany.class).tableName();
+			tableName = TownySettings.getSQLTablePrefix() + tableName;
+			
+			List<String> updateStatements = new ArrayList<>();
+			
+			// Delete all rows that match with the parent object
+			updateStatements.add("DELETE FROM " + tableName + " WHERE containerUUID = '" + obj.getUniqueIdentifier() + "'");
+			
+			// Perform re-insertions
+			try {
+				Iterator<Saveable> itr = ReflectionUtil.resolveIterator(field.get(obj), Saveable.class);
+				
+				itr.forEachRemaining(saveable -> 
+					updateStatements.add("INSERT INTO (containerUUID, referenceUUID) VALUES (" + obj.getUniqueIdentifier() + ","
+					+ saveable.getUniqueIdentifier() + ");"));
+				
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			
+			if (!updateStatements.isEmpty())
+				// Execute the update
+				sqlHandler.executeUpdatesError("Error storing OneToMany relationship for field " + field.getName(),
+					updateStatements.toArray(new String[0]));
+		};
+		
+		safeFieldIterate(getOneToManyFields(obj), consumer);
 	}
 
 	private <T extends TownyObject> void alterTownyObjectTable(Class<T> objectClazz) {
 		final String tableName = getTableName(objectClazz);
 		Validate.notNull(tableName);
-		
-		// Set of column names that already exist in the table
-		Set<String> columnNames = new HashSet<>();
-		
-		// Fetch all the column names
-		sqlHandler.executeQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "'", 
-			"Could not get column names from " + tableName, 
-			rs -> {
-				while (rs.next()) {
-					columnNames.add(rs.getString("COLUMN_NAME"));
-				}
-			});
-		
-		// Returns a list of statements to create columns which are not already in the table.
-		// This should prevent an SQL error from being thrown
-		String[] columnStatements = alterColumnStatements(objectClazz, columnNames);
 
-		sqlHandler.executeUpdatesError("Error creating table " + tableName + "!" , columnStatements);
-	}
+		Collection<Field> fields = ReflectionUtil.getNonTransientFields(objectClazz, f -> !f.isAnnotationPresent(OneToMany.class));
 
-	private <T extends Saveable> String[] alterColumnStatements(Class<T> clazz, Collection<String> filter) {
-		String tableName = getTableName(clazz);
-		Validate.notNull(tableName);
+		List<String[]> tableColumnDefs = new ArrayList<>(fields.size());
 
-		return ReflectionUtil.getAllFields(clazz, true)
-			.stream()
-			.filter(f -> !filter.contains(f.getName()))
-			.map(f -> "ALTER TABLE " + tableName + " ADD  (" +
-				f.getName() + " " + getSQLColumnDefinition(f) + getForeignKeyDefinition(f) + ")")
-			.toArray(String[]::new);
+		for (Field field : fields) {
+			String[] array = { field.getName(), getSQLColumnDefinition(field), getForeignKeyDefinition(field) };
+			tableColumnDefs.add(array);
+		}
+
+		sqlHandler.alterTableColumns(tableName, tableColumnDefs);
 	}
 	
 	private <T> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {
@@ -197,7 +255,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getNonTransientFields(obj, f -> !f.isAnnotationPresent(OneToMany.class));
 
 		Map<String, Object> values = rowToMap(rs);
 		for (Field field : fields) {
@@ -356,6 +414,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	// Returns the SQL table name from a savable object.
 	@Nullable
 	private <T extends Saveable> String getTableName(@NotNull Class<T> type) {
+		Validate.notNull(type);
 
 		String cachedObj = tableNameCache.get(type);
 		
@@ -380,8 +439,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		if (saveable == null) {
+			TownyMessaging.sendErrorMsg("Could not get table name for class " + type.getName());
 			return null;
 		}
+		Validate.notNull(saveable.getSQLTable());
 		
 		String tableName = TownySettings.getSQLTablePrefix() + saveable.getSQLTable();
 		
@@ -394,13 +455,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	private Field fetchPrimaryKeyField(@NotNull Object obj) {
 		Validate.notNull(obj);
 		
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getNonTransientFields(obj, f -> f.isAnnotationPresent(PrimaryKey.class));
 		
-		for (Field field : fields) {
-			if (field.getAnnotation(PrimaryKey.class) != null) {
-				return field;
-			}
-		}
+		if (!fields.isEmpty())
+			return fields.get(0);
 		
 		return null;
 	}
@@ -412,12 +470,12 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			final String tableName = getTableName(fkAnnotation.reference());
 			Validate.notNull(tableName);
 			
-			String keyConstraint = ", FOREIGN KEY (%s) REFERENCES %s(uniqueIdentifier)";
+			String keyConstraint = tableName + "(uniqueIdentifier)";
 			
 			if (fkAnnotation.cascadeOnDelete())
 				keyConstraint += " ON DELETE CASCADE";
 			
-			return String.format(keyConstraint, field.getName(), tableName);
+			return keyConstraint;
 		}
 		
 		return "";

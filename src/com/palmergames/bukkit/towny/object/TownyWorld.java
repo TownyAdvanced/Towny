@@ -762,6 +762,6 @@ public class TownyWorld extends TownyObject {
 
 	@Override
 	public String getSQLTable() {
-		return null;
+		return "WORLDS";
 	}
 }

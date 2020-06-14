@@ -891,7 +891,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	@Override
 	public String getSQLTable() {
-		return null;
+		return "NATIONS";
 	}
 
 	@Override

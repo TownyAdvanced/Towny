@@ -22,7 +22,7 @@ public class SaveUtil {
 	}
 	
 	public static HashMap<String, String> getSaveMap(TownyObject townyObject) {
-		List<Field> fields = ReflectionUtil.getAllFields(townyObject, true);
+		List<Field> fields = ReflectionUtil.getNonTransientFields(townyObject);
 		HashMap<String, String> saveMap = new HashMap<>();
 		
 		for (Field field : fields) {

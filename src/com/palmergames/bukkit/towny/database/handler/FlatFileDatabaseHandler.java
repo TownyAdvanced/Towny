@@ -113,7 +113,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
-		List<Field> fields = ReflectionUtil.getAllFields(obj, true);
+		List<Field> fields = ReflectionUtil.getNonTransientFields(obj);
 
 		HashMap<String, String> values = loadFileIntoHashMap(file);
 		for (Field field : fields) {

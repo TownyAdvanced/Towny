@@ -882,7 +882,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public String getSQLTable() {
-		return null;
+		return "RESIDENTS";
 	}
 
 	@Override

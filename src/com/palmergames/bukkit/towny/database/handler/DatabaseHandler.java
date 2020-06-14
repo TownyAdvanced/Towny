@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.UUIDHandler;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
@@ -41,7 +42,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -62,7 +62,7 @@ public abstract class DatabaseHandler {
 	public DatabaseHandler() {
 		// Register ALL default handlers.
 		registerAdapter(String.class, BaseTypeHandlers.STRING_HANDLER);
-		registerAdapter(UUID.class, BaseTypeHandlers.UUID_HANDLER);
+		registerAdapter(UUID.class, new UUIDHandler());
 		registerAdapter(Integer.class, BaseTypeHandlers.INTEGER_HANDLER);
 		registerAdapter(new TypeContext<List<String>>(){}.getType(), BaseTypeHandlers.STRING_LIST_HANDLER);
 		
@@ -93,9 +93,9 @@ public abstract class DatabaseHandler {
 		}
 		
 		fields = new ArrayList<>();
-		for (Field field : ReflectionUtil.getAllFields(obj, true)) {
+		for (Field field : ReflectionUtil.getNonTransientFields(obj)) {
 			
-			if (field.getAnnotation(OneToMany.class) == null) {
+			if (!field.isAnnotationPresent(OneToMany.class)) {
 				continue;
 			}
 			
@@ -293,7 +293,7 @@ public abstract class DatabaseHandler {
 			if (sqlAnnotation != null) {
 				SQLStringType sqlType = sqlAnnotation.stringType();
 				return sqlType.getColumnName() +
-					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation + ")" : "");
+					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
 			}
 		}
 		

@@ -500,7 +500,7 @@ public class TownBlock extends TownyObject {
 
 	@Override
 	public String getSQLTable() {
-		return null;
+		return "TOWNBLOCKS";
 	}
 
 	public UUID getTownID() {

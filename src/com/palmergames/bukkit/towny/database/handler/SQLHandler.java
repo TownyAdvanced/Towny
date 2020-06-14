@@ -13,9 +13,18 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class SQLHandler {
+	
+	@FunctionalInterface
+	private interface GenericResultSetFunction<T> {
+		T accept(ResultSet rs) throws SQLException;
+	}
 	
 	@FunctionalInterface
 	public interface ResultSetConsumer {
@@ -57,7 +66,7 @@ public class SQLHandler {
 
 		} else {
 			driver1 = "org.sqlite.JDBC";
-			this.connectionURL = ("jdbc:sqlite:" + dataFolderPath + File.separator + dbName + ".sqldb");
+			this.connectionURL = ("jdbc:sqlite:" + dataFolderPath + File.separator + dbName + ".db");
 			username = null;
 			password = null;
 		}
@@ -116,24 +125,61 @@ public class SQLHandler {
 			return false;
 		}
 	}
+	
+	public void enableForeignKeyConstraints() {
+		if (databaseType.equalsIgnoreCase("sqlite")){
+			executeUpdate("PRAGMA foreign_keys=ON", "Error enabling foreign keys for SQLITE!");
+		}
+	}
+	
+	public Collection<String> getColumnNames(String tableName, String errorMessage) {
+		String queryStatement;
+		final GenericResultSetFunction<String> columnFunction;
+
+		switch (databaseType.toLowerCase()) {
+			case "h2":
+			case "mysql":
+				queryStatement = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "'";
+				columnFunction = (rs) -> rs.getString("COLUMN_NAME");
+				break;
+			case "sqlite":
+				queryStatement = "PRAGMA table_info('" + tableName + "')";
+				columnFunction = (rs) -> rs.getString("name");
+				break;
+				
+			// Should never happen, but just in case
+			default:
+				throw new UnsupportedOperationException("Invalid database type!");
+		}
+
+		final Set<String> columnNames = new HashSet<>();
+		executeQuery(queryStatement, errorMessage, rs -> {
+				while (rs.next())
+					columnNames.add(columnFunction.accept(rs));
+			});
+		return columnNames;
+	}
 
 	public boolean executeUpdate(String updateStmt) {
 		return executeUpdate(updateStmt, null);
 	}
 	
 	public boolean executeUpdate(String updateStmt, @Nullable String errorMessage) {
-		try {
-			Statement stmt = con.createStatement();
-			int rowsAffected = stmt.executeUpdate(updateStmt);
-			// Return whether the update actually updated anything
-			return rowsAffected > 0;
-		} catch (SQLException ex) {
-			if (errorMessage != null) {
-				TownyMessaging.sendErrorMsg(errorMessage);
+		if (getContext()) {
+			try {
+				Statement stmt = con.createStatement();
+				int rowsAffected = stmt.executeUpdate(updateStmt);
+				// Return whether the update actually updated anything
+				return rowsAffected > 0;
+			} catch (SQLException ex) {
+				if (errorMessage != null) {
+					TownyMessaging.sendErrorMsg(errorMessage);
+					TownyMessaging.sendErrorMsg("SQL Statement: " + updateStmt);
+				}
 				ex.printStackTrace();
 			}
-			return false;
 		}
+		return false;
 	}
 
 	public void executeUpdates(String... updates) {
@@ -142,38 +188,90 @@ public class SQLHandler {
 	
 	public void executeUpdatesError(@Nullable String errorMessage, @NotNull String... updates) {
 		Objects.requireNonNull(updates);
-		try (Statement stmt = con.createStatement()) {
-			
-			for (String update : updates) {
-				// Try-catch around update to prevent one failed update from stopping the rest.
-				try {
-					stmt.executeUpdate(update);
-				} catch (SQLException ex) {
-					if (errorMessage != null) {
-						TownyMessaging.sendErrorMsg(errorMessage);
-						ex.printStackTrace();
+		
+		if (getContext()) {
+			try (Statement stmt = con.createStatement()) {
+
+				for (String update : updates) {
+					// Try-catch around update to prevent one failed update from stopping the rest.
+					try {
+						stmt.executeUpdate(update);
+					} catch (SQLException ex) {
+						if (errorMessage != null) {
+							TownyMessaging.sendErrorMsg(errorMessage);
+							TownyMessaging.sendErrorMsg("SQL Statement: " + update);
+							ex.printStackTrace();
+						}
 					}
 				}
-			}
-		} catch (SQLException ex) {
-			if (errorMessage != null) {
-				TownyMessaging.sendErrorMsg(errorMessage);
-				ex.printStackTrace();
+			} catch (SQLException ex) {
+				if (errorMessage != null) {
+					TownyMessaging.sendErrorMsg(errorMessage);
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	public void executeQuery(String query, String errorMessage, ResultSetConsumer consumer) {
-		try {
-			try (Statement stmt = con.createStatement();
-				 ResultSet rs = stmt.executeQuery(query)) {
-				consumer.accept(rs);
-			}
-		} catch (SQLException ex) {
-			if (errorMessage != null) {
-				TownyMessaging.sendErrorMsg(errorMessage);
-				ex.printStackTrace();
+		if (getContext()) {
+			try {
+				try (Statement stmt = con.createStatement();
+					 ResultSet rs = stmt.executeQuery(query)) {
+					consumer.accept(rs);
+				}
+			} catch (SQLException ex) {
+				if (errorMessage != null) {
+					TownyMessaging.sendErrorMsg(errorMessage);
+					ex.printStackTrace();
+				}
 			}
 		}
+	}
+
+	/***
+	 * 
+	 * @param tableName Table Name
+	 * @param columnDefs Collection of string arrays. The arrays are formatted where
+	 *                   the first elements is the column name,
+	 *                   second element is column type definition, and
+	 *                   third element is foreign key constraint (empty if none for that column)
+	 *                   
+	 */
+	public void alterTableColumns(String tableName, Collection<String[]> columnDefs) {
+		Collection<String> existingColumns = getColumnNames(tableName, "Error fetching column names for " + tableName + "!");
+		
+		Collection<String[]> uniqueColumns = new ArrayList<>();
+
+		// Compare column names against the column names in the table.
+		for (String[] columnDef : columnDefs) {
+			if (!existingColumns.contains(columnDef[0]))
+				uniqueColumns.add(columnDef);
+		}
+		
+		// No unique columns, so nothing to alter
+		if (uniqueColumns.isEmpty())
+			return;
+
+		String[] updateStatements;
+		
+		// Check whether SQLite or MYSQL/H2
+		if (databaseType.equalsIgnoreCase("sqlite")) {
+			updateStatements = uniqueColumns.stream()
+				.map(s -> "ALTER TABLE " + tableName + " ADD COLUMN "  +
+					s[0] + " " +  s[1] + (!s[2].isEmpty() ? " REFERENCES " + s[2] : "") + ";")
+				.toArray(String[]::new);
+		}
+		// MySQL or H2 or literally any other sane SQL format
+		else {
+			updateStatements = uniqueColumns.stream()
+										.map(s -> "ALTER TABLE " + tableName + " ADD "  + 
+											s[0] + " " +  s[1] +
+											(!s[2].isEmpty() ? ", ADD FOREIGN KEY (" + s[0] + ") " + s[2] : "") + ";")
+										.toArray(String[]::new);
+			
+		}
+
+		executeUpdatesError("Error altering table " + tableName, updateStatements);
 	}
 }

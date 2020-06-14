@@ -76,7 +76,7 @@ public class TypeAdapter<T> {
 				if (sqlAnnotation != null) {
 					SQLStringType type = sqlAnnotation.stringType();
 					return type.getColumnName() +
-						(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation + ")" : "");
+						(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
 				}
 			} catch (ReflectiveOperationException exception) {
 				TownyMessaging.sendErrorMsg(exception.getMessage());

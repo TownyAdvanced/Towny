@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.database.Saveable;
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +8,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ReflectionUtil {
 	
@@ -28,57 +30,66 @@ public class ReflectionUtil {
 	 * Fetches all the fields from the TownyObject.
 	 *
 	 * @param townyObject The TownyObject to get the fields from.
-	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the TownyObject.
 	 */
-	public static @NotNull List<Field> getAllFields(@NotNull Object townyObject, boolean ignoreTransient) {
-		Validate.notNull(townyObject);
-
-		// Get the class object.
-		Class<?> type = townyObject.getClass();
-		return getAllFields(type, ignoreTransient);
+	public static @NotNull List<Field> getNonTransientFields(@NotNull Object townyObject) {
+		return getNonTransientFields(townyObject, null);
 	}
 	
 	/**
 	 * Fetches all the fields from the passed in class.
 	 * 
 	 * @param objType The class to get the fields from
-	 * @param ignoreTransient Indicates whether or not to get transient fields or not.
 	 * @return A list of Fields from the class passed in.
 	 */
-	public static @NotNull List<Field> getAllFields(@NotNull Class<?> objType, boolean ignoreTransient) {
+	public static @NotNull List<Field> getNonTransientFields(@NotNull Class<?> objType) {
+		Validate.notNull(objType);
+		return getNonTransientFields(objType, null);
+	}
+
+	public static @NotNull List<Field> getNonTransientFields(@NotNull Object townyObj, @Nullable Predicate<Field> filter) {
+		Validate.notNull(townyObj);
+
+		// Get the class object.
+		Class<?> type = townyObj.getClass();
+		return getNonTransientFields(type, filter);
+	}
+
+	public static @NotNull List<Field> getNonTransientFields(@NotNull Class<?> objType, @Nullable Predicate<Field> filter) {
+		Validate.notNull(objType);
+		
 		// Check if cached.
 		List<Field> fields = fieldCaches.get(objType);
 		
-		if (fields != null) {
-			return fields;
-		}
+		if (fields == null) {
+			// Use a stack to evaluate classes in proper top-down hierarchy.
+			ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
 
-		// Use a stack to evaluate classes in proper top-down hierarchy.
-		ArrayDeque<Class<?>> classStack = new ArrayDeque<>();
-		
-		// Iterate through superclasses.
-		for (Class<?> c = objType; c != null; c = c.getSuperclass()) {
-			classStack.push(c);
-		}
-		
-		fields = new ArrayList<>();
-		
-		for (Class<?> classType : classStack) {
-			for (Field field : classType.getDeclaredFields()) {
-				// Ignore transient fields.
-				if (ignoreTransient && Modifier.isTransient(field.getModifiers())) {
-					continue;
-				}
-				
-				fields.add(field);
+			// Iterate through superclasses.
+			for (Class<?> c = objType; c != null; c = c.getSuperclass()) {
+				classStack.push(c);
 			}
+
+			fields = new ArrayList<>();
+
+			for (Class<?> classType : classStack) {
+				for (Field field : classType.getDeclaredFields()) {
+					// Check transient and filter
+					if (!Modifier.isTransient(field.getModifiers())) {
+						fields.add(field);
+					}
+				}
+			}
+
+			// Cache the results
+			fieldCaches.put(objType, fields);
 		}
 		
-		// Cache the results
-		fieldCaches.put(objType, fields);
-		
-		return fields;
+		if (filter == null)
+			return Collections.unmodifiableList(fields);
+		else {
+			return fields.stream().filter(filter).collect(Collectors.toList());
+		}
 	}
 
 	/**
@@ -89,13 +100,26 @@ public class ReflectionUtil {
 	 * @return The map.
 	 */
 	public static Map<String, ObjectContext> getObjectMap(Object obj) {
+		return getObjectMap(obj, null);
+	}
+
+	/**
+	 * Gets the object map of the object in the format of:
+	 * fieldName = fieldValue
+	 *
+	 * @param obj The object to get the map from.
+	 * @param filter Fields to filter out   
+	 * @return The map.
+	 */
+	public static Map<String, ObjectContext> getObjectMap(Object obj, @Nullable Predicate<Field> filter) {
 
 		HashMap<String, ObjectContext> dataMap = new HashMap<>();
-		List<Field> fields = getAllFields(obj, true);
-		
+		List<Field> fields = getNonTransientFields(obj);
 
 		for (Field field : fields) {
-			
+			if (filter != null && !filter.test(field))
+				continue;
+
 			// Open field.
 			field.setAccessible(true);
 
@@ -162,18 +186,28 @@ public class ReflectionUtil {
 			// Return iterator.
 			return (Arrays.asList(temp)).iterator();
 		}
-		
-		if (obj instanceof List) {
+		else if (obj instanceof Iterable) {
 			try {
-				return (Iterator<T>) ((List<?>)obj).iterator();
+				return (Iterator<T>) ((Iterable<?>)obj).iterator();
 			} catch (ClassCastException e) {
-				throw new UnsupportedOperationException("List is not of type: " + ofType);
+				throw new UnsupportedOperationException("Iterable is not of type: " + ofType);
 			}
-			
 		}
 		
 		throw new UnsupportedOperationException("The given type: " + obj.getClass() + ", is not iterable.");
 	}
+	
+	public static Class<?> getTypeOfIterable(Field field) {
+		try {
+			ParameterizedType iterableType = (ParameterizedType) field.getGenericType();
+			Type[] typeArgs = iterableType.getActualTypeArguments();
+			if (typeArgs.length > 0)
+				return (Class<?>) typeArgs[0];
+		} catch (Exception ex) {
+		}
+
+		throw new UnsupportedOperationException("No type argument found for field " + field.getName());
+	}  
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
@@ -184,7 +218,7 @@ public class ReflectionUtil {
 
 		System.out.println("================= " + obj + " =================");
 		
-		for (Field field : getAllFields(obj, true)) {
+		for (Field field : getNonTransientFields(obj)) {
 			field.setAccessible(true);
 			Object value;
 			try {
