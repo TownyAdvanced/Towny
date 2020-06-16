@@ -24,7 +24,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -32,15 +31,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLDatabaseHandler extends DatabaseHandler {
 	private final SQLHandler sqlHandler;
+	private final SQLAdapter sqlAdapter;
 	
 	// This map allows us to cache a stub object for quicker loading.
 	private final Map<Class<?>, String> tableNameCache = new HashMap<>();
@@ -49,6 +51,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	public SQLDatabaseHandler(String databaseType) {
 		sqlHandler = new SQLHandler(databaseType);
+		sqlAdapter = SQLAdapter.adapt(databaseType);
 		
 		if (!sqlHandler.testConnection()) {
 			TownyMessaging.sendErrorMsg("Cannot establish connection for SQL db type " + databaseType + "!");
@@ -97,7 +100,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		
 		List<String> updateStatements = new ArrayList<>();
 		
-		String tableTemplate = "CREATE TABLE IF NOT EXISTS " + TownySettings.getSQLTablePrefix() + "%s" + 
+		final String tableTemplate = "CREATE TABLE IF NOT EXISTS " + TownySettings.getSQLTablePrefix() + "%s" + 
 			"(" +
 			"containerUUID VARCHAR(36), referenceUUID VARCHAR (36)," +
 			"FOREIGN KEY (containerUUID) REFERENCES " + objTableName + "(uniqueIdentifier) ON DELETE CASCADE," +
@@ -120,8 +123,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			}
 		}
 		
-		if (!updateStatements.isEmpty())
-			sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements.toArray(new String[0]));
+		sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements);
 	}
 
 	@Override
@@ -216,7 +218,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			if (!updateStatements.isEmpty())
 				// Execute the update
 				sqlHandler.executeUpdatesError("Error storing OneToMany relationship for field " + field.getName(),
-					updateStatements.toArray(new String[0]));
+					updateStatements);
 		};
 		
 		safeFieldIterate(getOneToManyFields(obj), consumer);
@@ -226,16 +228,38 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		final String tableName = getTableName(objectClazz);
 		Validate.notNull(tableName);
 
-		Collection<Field> fields = ReflectionUtil.getNonTransientFields(objectClazz, f -> !f.isAnnotationPresent(OneToMany.class));
-
-		List<String[]> tableColumnDefs = new ArrayList<>(fields.size());
-
+		Collection<String> existingColumns = getColumnNames(tableName);
+		
+		// Get fields that are not already in the DB
+		Collection<Field> fields = ReflectionUtil.getNonTransientFields(objectClazz, 
+			f -> !f.isAnnotationPresent(OneToMany.class) && !existingColumns.contains(f.getName()));
+		
+		// List of update statements
+		Collection<String> updateStatements = new ArrayList<>(fields.size());
+		
+		// Get the alter table statement from the SQLAdapter
 		for (Field field : fields) {
-			String[] array = { field.getName(), getSQLColumnDefinition(field), getForeignKeyDefinition(field) };
-			tableColumnDefs.add(array);
+			String alterTableStmt = sqlAdapter.getAlterTableStatement(tableName, field.getName(),
+												getSQLColumnDefinition(field), getForeignKeyDefinition(field));
+
+			updateStatements.add(alterTableStmt);
 		}
 
-		sqlHandler.alterTableColumns(tableName, tableColumnDefs);
+		sqlHandler.executeUpdatesError("Error altering table " + tableName, updateStatements);
+	}
+	
+	private Collection<String> getColumnNames(String tableName) {
+		final String[] columnStatement = sqlAdapter.getColumnNameStmt(tableName);
+		
+		String queryStatement = columnStatement[0];
+		String columName = columnStatement[1];
+		
+		final Set<String> columnNames = new HashSet<>();
+		sqlHandler.executeQuery(queryStatement, "Error fetching column names for " + tableName, rs -> {
+			while (rs.next())
+				columnNames.add(rs.getString(columName));
+		});
+		return columnNames;
 	}
 	
 	private <T> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {

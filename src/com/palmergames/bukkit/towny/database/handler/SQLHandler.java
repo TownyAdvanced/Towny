@@ -131,34 +131,6 @@ public class SQLHandler {
 			executeUpdate("PRAGMA foreign_keys=ON", "Error enabling foreign keys for SQLITE!");
 		}
 	}
-	
-	public Collection<String> getColumnNames(String tableName, String errorMessage) {
-		String queryStatement;
-		final GenericResultSetFunction<String> columnFunction;
-
-		switch (databaseType.toLowerCase()) {
-			case "h2":
-			case "mysql":
-				queryStatement = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "'";
-				columnFunction = (rs) -> rs.getString("COLUMN_NAME");
-				break;
-			case "sqlite":
-				queryStatement = "PRAGMA table_info('" + tableName + "')";
-				columnFunction = (rs) -> rs.getString("name");
-				break;
-				
-			// Should never happen, but just in case
-			default:
-				throw new UnsupportedOperationException("Invalid database type!");
-		}
-
-		final Set<String> columnNames = new HashSet<>();
-		executeQuery(queryStatement, errorMessage, rs -> {
-				while (rs.next())
-					columnNames.add(columnFunction.accept(rs));
-			});
-		return columnNames;
-	}
 
 	public boolean executeUpdate(String updateStmt) {
 		return executeUpdate(updateStmt, null);
@@ -182,8 +154,10 @@ public class SQLHandler {
 		return false;
 	}
 
-	public void executeUpdates(String... updates) {
-		executeUpdatesError(null, updates);
+	public void executeUpdatesError(@Nullable String errorMessage, @NotNull Collection<String> updates) {
+		if (!updates.isEmpty()) {
+			executeUpdatesError(errorMessage, updates.toArray(new String[0]));
+		}
 	}
 	
 	public void executeUpdatesError(@Nullable String errorMessage, @NotNull String... updates) {
@@ -227,51 +201,5 @@ public class SQLHandler {
 				}
 			}
 		}
-	}
-
-	/***
-	 * 
-	 * @param tableName Table Name
-	 * @param columnDefs Collection of string arrays. The arrays are formatted where
-	 *                   the first elements is the column name,
-	 *                   second element is column type definition, and
-	 *                   third element is foreign key constraint (empty if none for that column)
-	 *                   
-	 */
-	public void alterTableColumns(String tableName, Collection<String[]> columnDefs) {
-		Collection<String> existingColumns = getColumnNames(tableName, "Error fetching column names for " + tableName + "!");
-		
-		Collection<String[]> uniqueColumns = new ArrayList<>();
-
-		// Compare column names against the column names in the table.
-		for (String[] columnDef : columnDefs) {
-			if (!existingColumns.contains(columnDef[0]))
-				uniqueColumns.add(columnDef);
-		}
-		
-		// No unique columns, so nothing to alter
-		if (uniqueColumns.isEmpty())
-			return;
-
-		String[] updateStatements;
-		
-		// Check whether SQLite or MYSQL/H2
-		if (databaseType.equalsIgnoreCase("sqlite")) {
-			updateStatements = uniqueColumns.stream()
-				.map(s -> "ALTER TABLE " + tableName + " ADD COLUMN "  +
-					s[0] + " " +  s[1] + (!s[2].isEmpty() ? " REFERENCES " + s[2] : "") + ";")
-				.toArray(String[]::new);
-		}
-		// MySQL or H2 or literally any other sane SQL format
-		else {
-			updateStatements = uniqueColumns.stream()
-										.map(s -> "ALTER TABLE " + tableName + " ADD "  + 
-											s[0] + " " +  s[1] +
-											(!s[2].isEmpty() ? ", ADD FOREIGN KEY (" + s[0] + ") " + s[2] : "") + ";")
-										.toArray(String[]::new);
-			
-		}
-
-		executeUpdatesError("Error altering table " + tableName, updateStatements);
 	}
 }
