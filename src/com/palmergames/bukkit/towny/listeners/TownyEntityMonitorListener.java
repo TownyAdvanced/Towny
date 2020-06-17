@@ -110,7 +110,12 @@ public class TownyEntityMonitorListener implements Listener {
 					Projectile projectile = (Projectile) attackerEntity;
 					if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
 						attackerPlayer = (Player) projectile.getShooter();
-						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+						try {
+							attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+						} catch (NotRegisteredException e) {
+							// Usually an NPC or a Bot of some kind.
+							attackerPlayer = null;
+						}
 					} else { // Something else shot a projectile.
 						try {
 							attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
@@ -124,6 +129,8 @@ public class TownyEntityMonitorListener implements Listener {
 					try {
 						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
 					} catch (NotRegisteredException e) {
+						// Usually an NPC or a Bot of some kind.
+						attackerPlayer = null;
 					}
 				}
 
