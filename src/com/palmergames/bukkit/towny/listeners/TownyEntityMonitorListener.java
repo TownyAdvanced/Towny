@@ -95,7 +95,13 @@ public class TownyEntityMonitorListener implements Listener {
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
 			Player defenderPlayer = (Player) defenderEntity;
-			Resident defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			Resident defenderResident;
+			try {
+				defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			} catch (NotRegisteredException e1) {
+				// Usually an NPC or a Bot of some kind.
+				return;
+			}
 			
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
