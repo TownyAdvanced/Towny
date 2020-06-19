@@ -644,8 +644,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Resident> remove = new ArrayList<>();
 
-		for (Resident newFriend : invited)
-
+		for (Resident newFriend : invited) {
+			try {
+				@SuppressWarnings("unused")
+				Resident res = TownyUniverse.getInstance().getDataSource().getResident(newFriend.getName());
+			} catch (NotRegisteredException e1) {
+				remove.add(newFriend);
+				continue;
+			}
+			
 			try {
 
 				resident.addFriend(newFriend);
@@ -656,6 +663,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				remove.add(newFriend);
 
 			}
+		}
 
 		/*
 		 *  Remove any names from the list who were already listed as friends
