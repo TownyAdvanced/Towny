@@ -3273,7 +3273,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED);
 	}
 
-	public static boolean isWarSiegeMultiplyDeathPointsByBannerControlListSize() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_MULTIPLY_DEATH_POINTS_BY_BANNER_CONTROL_LIST_SIZE);
+	public static boolean isWarSiegeCounterattackBoosterEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_COUNTERATTACK_BOOSTER_ENABLED);
+	}
+
+	public static double getWarSiegeCounterattackBoosterExtraDeathPointsPerPlayerPercent() {
+		return getDouble(ConfigNodes.WAR_SIEGE_COUNTERATTACK_BOOSTER_EXTRA_DEATH_POINTS_PER_PLAYER_PERCENT);
 	}
 }

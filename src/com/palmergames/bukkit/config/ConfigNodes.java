@@ -1993,7 +1993,6 @@ public enum ConfigNodes {
 			"# True - Expect small/casual nations to have an influence of world affairs.",
 			"# False - Expect small/casual nations to be mostly eliminated",
 			"#         and large/dedicate nations to dominate world affairs"),
-
 	WAR_SIEGE_POPULATION_BASED_POINT_BOOSTS_ENABLED(
 			"war.siege.switches.population_based_point_boosts_enabled",
 			"false",
@@ -2001,20 +2000,17 @@ public enum ConfigNodes {
 			"# The attacking side population consists of the residents of the attacking nation, and allies.",
 			"# The defending side population consists of the residents of the defending town, and nation + allies if applicable.",
 			"# The level of the boost is configured in separate configs. See the scoring section of this file."),
-
 	WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED(
 			"war.siege.switches.invisibility_splash_potions_in_siege_zone_disabled",
 			"true",
 			"# If this setting is true, then invisibility splash potions are disabled in the siegezone.",
 			"# This prevents the exploit of one side throwing these potions at the other to stop then gaining banner control."),
-
-	WAR_SIEGE_MULTIPLY_DEATH_POINTS_BY_BANNER_CONTROL_LIST_SIZE(
-			"war.siege.switches.multiply_death_points_by_banner_control_list_size",
-			"true",
-			"# If this setting is true, then if a player from the banner controlling side dies,",
-			"# the death points are multiplied by the size of the banner control list.",
-			"# The setting is recommended because it acts as a brake on overly-powerful nations.",
-			"# (Excessive battle dominance can result in boring battles, excessive political dominance can result in boring geopolitics)."),
+	WAR_SIEGE_COUNTERATTACK_BOOSTER_ENABLED(
+			"war.siege.switches.counterattack_booster_enabled",
+			"false",
+			"# If this setting is true, and a player from the banner controlling side dies,",
+			"# then the death points are increased by a certain percentage. (see points section below)",
+			"# This setting gives smaller and weaker towns/nations a better chance, as they will tend to be the counter-attackers."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -2164,7 +2160,7 @@ public enum ConfigNodes {
 			"# 10 minutes (default configuration)."),
 	WAR_SIEGE_POINTS_FOR_ATTACKER_DEATH(
 			"war.siege.scoring.points_for_attacker_death",
-			"150",
+			"100",
 			"# This setting determines the number of siege points awarded if an attacker dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to the defending town.",
@@ -2179,7 +2175,7 @@ public enum ConfigNodes {
 			"# Value LOW --> If the value is low, then PVP will be ENCOURAGED"),
 	WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH(
 			"war.siege.scoring.points_for_defender_death",
-			"150",
+			"100",
 			"# This setting determines the number of siege points awarded if a defender dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to the attacking nation.",
@@ -2227,6 +2223,12 @@ public enum ConfigNodes {
 			"# 2. Assume that a siege attacker greatly outnumbers a siege defender in population. (also counting allies)",
 			"# 3. In this example, if the siege defender scores any siege points, the points will be multiplied by 2.",
 			"# 4. In this example, the siege attacker will not get any points boosts."),
+	WAR_SIEGE_COUNTERATTACK_BOOSTER_EXTRA_DEATH_POINTS_PER_PLAYER_PERCENT(
+			"war.siege.scoring.counterattack_booster_extra_death_points_per_player_percent",
+			"5.0",
+			"# If the counterattack booster feature is enabled, then this setting determines the strength of the boost.",
+			"# Example: If this setting is 5.0, and there are 3 players on the banner control list, and a player from the controlling side dies,",
+			"# then the death points will be increased by 15%."),
 
 	//Tactical Visibility
 	//Todo - Eventually move this to another location as it works regardless of war system, or without.
@@ -2247,7 +2249,7 @@ public enum ConfigNodes {
 			"# * NOTE: Any additional dynmap config settings for map invisibility will override the 'always visible' scenarios above."),
 	WAR_SIEGE_TACTICAL_VISIBILITY_ITEMS(
 			"war.siege.items.tactical_visibility_items",
-			"any|diamond_sword, any|bow",
+			"compass|diamond_sword, compass|bow",
 			"# This list specifies the items which make players tactically invisible. ",
 			"# Each list entry is in the format of <off-hand>|<main-hand>.",
 			"# ",
@@ -2356,7 +2358,7 @@ public enum ConfigNodes {
 	//Player Health Regain Limiter
 	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED(
 			"war.common.player_health_regain_limiter.enabled",
-			"true",
+			"false",
 			"# If this value is true,",
 			"# then player health regain is limited to a max amount for every 20 seconds (short-tick).",
 			"# ",
@@ -2375,6 +2377,7 @@ public enum ConfigNodes {
 			"10.0",
 			"# The value determines the max health regain amount per short tick."),
 
+	//Occupied town unclaiming
 	WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED(
 			"war.common.occupied_town_unclaiming_disabled",
 			"true",

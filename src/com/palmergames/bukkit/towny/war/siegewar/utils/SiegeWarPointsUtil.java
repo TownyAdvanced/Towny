@@ -445,13 +445,15 @@ public class SiegeWarPointsUtil {
 	}
 
 	public static int adjustSiegePointPenaltyForBannerControl(boolean residentIsAttacker, int siegePoints, Siege siege) {
-		if(!TownySettings.isWarSiegeMultiplyDeathPointsByBannerControlListSize())
+		if(!TownySettings.isWarSiegeCounterattackBoosterEnabled())
 			return siegePoints;
 
-		if(residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.ATTACKERS) {
-			return siegePoints * siege.getBannerControllingResidents().size();
-		} else if (!residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.DEFENDERS) {
-			return siegePoints * siege.getBannerControllingResidents().size();
+		if(
+			(residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.ATTACKERS)
+			||
+			(!residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.DEFENDERS)
+		) {
+			return siegePoints + (int)(siegePoints * siege.getBannerControllingResidents().size() /100 * TownySettings.getWarSiegeCounterattackBoosterExtraDeathPointsPerPlayerPercent());
 		} else {
 			return siegePoints;
 		}
