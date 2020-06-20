@@ -3082,8 +3082,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS);
 	}
 
-	public static boolean getWarSiegeAttackerSpawnIntoBesiegedTownDisabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACKER_SPAWN_INTO_BESIEGED_TOWN_DISABLED);
+	public static boolean getWarSiegeNonResidentSpawnIntoBesiegedTownsDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_NON_RESIDENT_SPAWN_INTO_BESIEGED_TOWNS_DISABLED);
 	}
 	
 	public static double getWarSiegeNationCostRefundPercentageOnDelete() {

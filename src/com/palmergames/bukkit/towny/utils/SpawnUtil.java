@@ -2,9 +2,9 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -102,23 +102,6 @@ public class SpawnUtil {
 
 		case TOWN:
 			town = (Town) townyObject;
-
-			//Prevent siege attackers & allies from spawning into the town
-			if (TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegeAttackerSpawnIntoBesiegedTownDisabled()
-				&& resident.hasTown()
-				&& resident.getTown().hasNation()
-				&& town.hasSiege()
-				&& town.getSiege().getStatus().isActive()
- 				&& 	(
- 						resident.getTown().getNation() == town.getSiege().getAttackingNation()
-				    	|| 
-				    	resident.getTown().getNation().hasMutualAlly(town.getSiege().getAttackingNation())
-					) 
-				)
-			{
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_besieged_town"), town.getName()));
-			}
 
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
@@ -298,6 +281,27 @@ public class SpawnUtil {
 								String.format(TownySettings.getLangString("msg_err_x_spawn_disallowed_from_x"),
 										spawnType.getTypeName(), TownySettings.getLangString("msg_neutral_towns")));
 				}
+			}
+		}
+
+		//Prevent non-residents from spawning into besieged towns
+		if (!isTownyAdmin 
+			&& TownySettings.getWarSiegeEnabled() 
+			&& TownySettings.getWarSiegeNonResidentSpawnIntoBesiegedTownsDisabled()) {
+
+			try {
+				String townNameAtSpawnLocation = TownyAPI.getInstance().getTownName(spawnLoc);
+				Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
+				if(townAtSpawnLocation.hasSiege()
+						&& townAtSpawnLocation.getSiege().getStatus().isActive()
+						&& (!resident.hasTown() || resident.getTown() != townAtSpawnLocation)
+					) {
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_besieged_town")));
+					}
+			} catch (NullPointerException e) {
+				//No town found. Continue.
+			} catch (NotRegisteredException e) {
+				//No town found. Continue.
 			}
 		}
 
