@@ -66,7 +66,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public boolean hasResident(String name) {
-
 		try {
 			return TownySettings.isFakeResident(name) || universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
@@ -76,7 +75,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public boolean hasTown(String name) {
-
 		return universe.getTownsMap().containsKey(name.toLowerCase());
 	}
 
@@ -166,7 +164,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
 		}
 
 		if (!hasTown(name))

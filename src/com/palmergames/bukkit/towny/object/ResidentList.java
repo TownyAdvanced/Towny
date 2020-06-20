@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.Iterator;
 import java.util.List;
 
 public interface ResidentList {

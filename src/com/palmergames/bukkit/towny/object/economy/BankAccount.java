@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
@@ -28,7 +27,8 @@ public class BankAccount extends Account {
 		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
 
 		public DebtAccount(Account account) {
-			super(DEBT_PREFIX + account.getName(), account.getBukkitWorld());
+			// TNE doesn't play nice with "town-" on debt accounts.
+			super(DEBT_PREFIX + account.getName().replace("town-",""), account.getBukkitWorld());
 		}
 	}
 	

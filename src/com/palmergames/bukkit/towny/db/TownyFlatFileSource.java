@@ -675,7 +675,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadTown(Town town) {
-		
 		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
@@ -727,9 +726,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
+
+				line = "townBoard";
 				town.setBoard(keys.get("townBoard"));
-				
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -1519,6 +1519,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							town = getTown(line.trim());
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + ", deleting " + path);
+							e.printStackTrace();
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;

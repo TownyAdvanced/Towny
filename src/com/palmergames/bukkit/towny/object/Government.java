@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.event.TerritoryTagChangeEvent;
+import com.palmergames.bukkit.towny.event.GovernmentTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
-import com.palmergames.bukkit.towny.object.economy.TerritoryAccountAuditor;
+import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Territory extends TownyObject implements BankEconomyHandler, ResidentList, TownyInviter, SpawnLocation {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, TownyInviter, SpawnLocation {
 	
 	protected BankAccount account;
 	protected Location spawn;
@@ -33,9 +33,9 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 	private long registered;
 	private double spawnCost;
 	protected double taxes = -1;
-	private final AccountAuditor accountAuditor = new TerritoryAccountAuditor();
+	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
-	protected Territory(String name) {
+	protected Government(String name) {
 		super(name);
 	}
 
@@ -133,14 +133,14 @@ public abstract class Territory extends TownyObject implements BankEconomyHandle
 	}
 
 	public final void setTag(String text) throws TownyException {
-		if(text.length() == 0) {
-			this.tag = "";
-		} else {
-			this.tag = text.toUpperCase().substring(0, 3);
-			if (this.tag.matches(" "))
-				this.tag = "";
+		if (text.length() < 4) {
+			return;
 		}
-		Bukkit.getPluginManager().callEvent(new TerritoryTagChangeEvent(this.tag, this));
+		
+		this.tag = text.toUpperCase().substring(0,3);
+		if (this.tag.matches(" "))
+			this.tag = "";
+		Bukkit.getPluginManager().callEvent(new GovernmentTagChangeEvent(this.tag, this));
 	}
 
 	public final String getTag() {
