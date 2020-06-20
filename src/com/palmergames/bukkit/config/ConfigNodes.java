@@ -532,7 +532,7 @@ public enum ConfigNodes {
 			"assistant",
 			"# The ranks to be given preference when assigning a new mayor.",
 			"# All ranks should be as defined in `townyperms.yml`.",
-			"# Note that the order in which these ranks are checked is not guaranteed.
+			"# Note that the order in which these ranks are checked is not guaranteed.",
 			"# Example: `assistant,visemayor` to give both `assistant`s and `visemayor`s priority over regular residents."
 	),
 	
