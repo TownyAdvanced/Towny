@@ -232,6 +232,8 @@ public class RuinsUtil {
 					if(town.getRuinDurationRemainingHours() < 1) {
 						//Ruin found & recently ruined end time reached. Delete town now.
 						townyUniverse.getDataSource().removeTown(town, false);
+					} else {
+						townyUniverse.getDataSource().saveTown(town);
 					}
 				}
 			} 
