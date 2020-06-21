@@ -584,7 +584,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (hasHomeBlock())
 			return homeBlock;
 		else
-			throw new TownyException("Town has not set a home block.");
+			throw new TownyException(this.getName() + " has not set a home block.");
 	}
 
 	/**
