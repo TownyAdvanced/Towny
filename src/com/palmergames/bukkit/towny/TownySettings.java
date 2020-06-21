@@ -61,6 +61,7 @@ public class TownySettings {
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
+	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -2916,6 +2917,30 @@ public class TownySettings {
 			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
 		}
 		return nationColorsMap;
+	}
+
+	public static String getUUIDPercent() {
+		double fraction = uuidCount / TownyUniverse.getInstance().getDataSource().getResidents().size();
+		
+		if (fraction == 1.00)
+			return "100%";
+		if (fraction > 0.89)
+			return "90%+";
+		if (fraction > 0.79)
+			return "80%+";
+		if (fraction > 0.69)
+			return "70%+";
+		if (fraction > 0.59)
+			return "60%+";	
+		if (fraction > 0.49)
+			return "50%+";
+		
+		return "<50%";
+	}
+
+	public static void setUUIDCount(int hasUUID) {
+		uuidCount = hasUUID;
+		
 	}
 }
 
