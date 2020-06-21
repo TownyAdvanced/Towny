@@ -166,12 +166,16 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<>();
+		int hasUUID = 0;
 
 		for (Resident resident : new ArrayList<>(getResidents()))
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				toRemove.add(resident);
 				//return false;
+			} else {
+				if (resident.hasUUID())
+					hasUUID++;					
 			}
 
 		// Remove any resident which failed to load.
@@ -180,6 +184,7 @@ public abstract class TownyDataSource {
 			removeResidentList(resident);
 		}
 
+		System.out.println("[Towny] " + hasUUID + "/" + getResidents().size() + " residents have stored UUIDs.");		 
 		return true;
 	}
 

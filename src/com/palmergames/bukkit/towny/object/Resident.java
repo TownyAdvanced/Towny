@@ -27,10 +27,12 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
+	private UUID uuid = null;
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
@@ -77,6 +79,18 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public boolean isNPC() {
 
 		return isNPC;
+	}
+	
+	public UUID getUUID() {
+		return uuid;		
+	}
+	
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+	
+	public boolean hasUUID() {
+		return this.uuid != null;
 	}
 
 	public void setJailed(boolean isJailed) {
