@@ -2014,6 +2014,17 @@ public enum ConfigNodes {
 			"# If this setting is true, and a player from the banner controlling side dies,",
 			"# then the death points are increased by a certain percentage. (see points section below)",
 			"# This setting gives smaller and weaker towns/nations a better chance, as they will tend to be the counter-attackers."),
+	WAR_SIEGE_BATTLE_SESSIONS_ENABLED(
+			"war.siege.switches.battle_sessions_enabled",
+			"true",
+			"# If this setting is true, then battle sessions are enabled.",
+			"# Battle sessions are a way of automatically moderating the time each player spends siege-fighting.",
+			"# This is recommended to reduce stress and combat-fatigue.",
+			"# A battle session starts when a player steps into a siege zone.",
+			"# A battle session has 2 main phases:",
+			"# * phase 1 - active - In this phase, the player can attend any siege.",
+ 			"# * phase 2 - expired - In this phase the player must stay away from all sieges.",
+			"# The durations of these phases are configured below."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -2122,6 +2133,14 @@ public enum ConfigNodes {
 			"war.siege.times.banner_control_session_duration_minutes",
 			"10",
 			"# This value determines the duration of each banner control session."),
+	WAR_SIEGE_BATTLE_SESSION_ACTIVE_PHASE_DURATION_MINUTES (
+			"war.siege.times.battle_session_active_phase_duration_minutes",
+			"60",
+			"# This value determines the duration of the battle session active phase."),
+	WAR_SIEGE_BATTLE_SESSION_EXPIRED_PHASE_DURATION_MINUTES (
+			"war.siege.times.battle_session_expired_phase_duration_minutes",
+			"60",
+			"# This value determines the duration of the battle session expired phase."),
 
 	//Distances
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
@@ -2132,7 +2151,7 @@ public enum ConfigNodes {
 		     "# This setting prevents the banner being placed on a platform high in the air."),
 	WAR_SIEGE_ZONE_RADIUS_BLOCKS(
 			"war.siege.distances.zone_radius_blocks",
-			"250",
+			"150",
 			"# The radius of the 'siege zone' ",
 		    "# Various siege related effects can apply in this zone e.g. lose points on death, keep inv on death, cannot claim here."),
 	WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS(

@@ -10,10 +10,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBannerControlUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDynmapUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.*;
 import com.palmergames.util.TimeMgmt;
 
 /**
@@ -103,4 +100,11 @@ public class SiegeWarTimerTaskController {
 			SiegeWarPointsUtil.updatePopulationBasedSiegePointModifiers();
 		}
 	}
+
+	public static void evaluateBattleSessions() {
+		if(TownySettings.isWarSiegeBattleSessionsEnabled()) {
+			SiegeWarBattleSessionUtil.evaluateBattleSessions();
+		}
+	}
+
 }

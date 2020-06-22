@@ -82,5 +82,20 @@ public class SiegeWarDistanceUtil {
 			return new SiegeDistance(nearestSiege, distanceToNearestSiegeZone);
 		}
 	}
-	
+
+	/**
+	 * This method returns true if the given location is in an active siegezone
+	 *
+	 * @param location the target location
+	 * @return true is location is in an active siegezone
+	 */
+	public static boolean isLocationInActiveSiegeZone(Location location) {
+		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+			if(siege.getStatus().isActive()
+				&& location.distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

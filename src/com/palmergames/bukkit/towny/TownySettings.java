@@ -3272,4 +3272,16 @@ public class TownySettings {
 	public static double getWarSiegeCounterattackBoosterExtraDeathPointsPerPlayerPercent() {
 		return getDouble(ConfigNodes.WAR_SIEGE_COUNTERATTACK_BOOSTER_EXTRA_DEATH_POINTS_PER_PLAYER_PERCENT);
 	}
+
+	public static boolean isWarSiegeBattleSessionsEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_ENABLED);
+	}
+
+	public static int getWarSiegeBattleSessionActivePhaseDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSION_ACTIVE_PHASE_DURATION_MINUTES);
+	}
+
+	public static int getWarSiegeBattleSessionExpiredPhaseDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSION_EXPIRED_PHASE_DURATION_MINUTES);
+	}
 }
