@@ -84,9 +84,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.tnemc</groupId>
+            <groupId>com.github.TheNewEconomy</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.4.5</version>
+            <version>master-903e2271f0-1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
