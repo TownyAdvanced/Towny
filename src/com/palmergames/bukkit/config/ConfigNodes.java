@@ -2200,14 +2200,6 @@ public enum ConfigNodes {
 			"war.siege.scoring.percentage_adjustment_for_leader_death",
 			"50",
 			"# If a military leader dies in a siege, then points loss in increased by this percentage."),
-	WAR_SIEGE_SCORING_MAX_TIMED_POINTS_PER_PLAYER_PER_SIEGE(
-			"war.siege.scoring.max_timed_points_per_player_per_siege",
-			"13500",
-			"# This setting determines the maximum number of 'timed' siege points achievable by an individual player per siege.",
-			"# The setting is used to balance the system between casual players and dedicated players (i.e. those who spend a lot of time on the server).",
-			"# The higher the value, the more that dedicated players are favored.",
-			"# The lower the value, the more that casual players are favored.",
-			"# The default value (13500) equals 7.5 hours of playtime (but keep in mind that players also score while offline, if other players are on the b.c. list)."),
 	WAR_SIEGE_POPULATION_QUOTIENT_FOR_MAX_POINTS_BOOST(
 			"war.siege.scoring.population_quotient_for_max_points_boost",
 			"3.0",

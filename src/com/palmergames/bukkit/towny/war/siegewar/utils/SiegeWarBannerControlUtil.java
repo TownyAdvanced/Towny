@@ -56,12 +56,6 @@ public class SiegeWarBannerControlUtil {
 				if(siege.getBannerControlSessions().containsKey(player))
 					continue; // Player already has a control session
 
-				if(siege.getResidentTotalTimedPointsMap().containsKey(resident)
-					&& siege.getResidentTotalTimedPointsMap().get(resident) > TownySettings.getWarSiegeMaxTimedPointsPerPlayerPerSiege()) {
-					TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("msg_siege_war_resident_exceeded_max_timed_points"), siege.getDefendingTown().getFormattedName()));
-					continue; //Player has exceeded max timed pts for this siege
-				}
-
 				residentTown = resident.getTown();
 				if(residentTown == siege.getDefendingTown()
 					&& universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
@@ -252,16 +246,6 @@ public class SiegeWarBannerControlUtil {
 			break;
 			default:
 			return;
-		}
-
-		//Check if any residents have exceeded max timed pts/player
-		for(Resident resident: siege.getBannerControllingResidents()) {
-			if(siege.getResidentTotalTimedPointsMap().containsKey(resident)
-				&& siege.getResidentTotalTimedPointsMap().get(resident) > TownySettings.getWarSiegeMaxTimedPointsPerPlayerPerSiege()) {
-				//Resident has exceeded max timed pts/player. Remove from banner control
-				siege.removeBannerControllingResident(resident);
-				TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("msg_siege_war_resident_exceeded_max_timed_points"), siege.getDefendingTown().getFormattedName()));
-			}
 		}
 
 		//Remove banner control if 

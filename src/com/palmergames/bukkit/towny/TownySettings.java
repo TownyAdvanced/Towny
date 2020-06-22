@@ -3241,10 +3241,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
 	}
 
-	public static Integer getWarSiegeMaxTimedPointsPerPlayerPerSiege() {
-		return getInt(ConfigNodes.WAR_SIEGE_SCORING_MAX_TIMED_POINTS_PER_PLAYER_PER_SIEGE);
-	}
-
 	public static boolean getWarSiegePopulationBasedPointBoostsEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_POPULATION_BASED_POINT_BOOSTS_ENABLED);
 	}
