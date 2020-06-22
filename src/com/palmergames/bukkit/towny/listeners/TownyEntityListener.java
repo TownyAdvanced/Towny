@@ -436,7 +436,7 @@ public class TownyEntityListener implements Listener {
 					//Was potion thrown near an active siegezone ?
 					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 						if (siege.getStatus().isActive()
-							&& event.getEntity().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+							&& event.getEntity().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
 							event.setCancelled(true);
 							if (event.getEntity().getShooter() instanceof Player){
 								TownyMessaging.sendErrorMsg(event.getEntity().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
@@ -1215,7 +1215,7 @@ public class TownyEntityListener implements Listener {
 					//Was potion splashed near an active siegezone ?
 					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 						if (siege.getStatus().isActive()
-							&& event.getPotion().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneDeathRadiusBlocks()) {
+							&& event.getPotion().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
 							event.setCancelled(true);
 							if (event.getPotion().getShooter() instanceof Player){
 								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));

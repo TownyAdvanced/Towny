@@ -2124,22 +2124,17 @@ public enum ConfigNodes {
 			"# This value determines the duration of each banner control session."),
 
 	//Distances
-	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
-			"war.siege.distances.claim_disable_distance_blocks",
-			"250",
-			"# This is the distance in regular blocks from a siege banner in which claims are disabled.",
-			"# It is recommended to have this over 60, or else siege-zone-walling may not be adequately discouraged."),
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
 			"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
 			"15",
 			"# This is the max allowed elevation difference downward from siege banner to town.",
 			 "# There is no limit on the upward difference.",
 		     "# This setting prevents the banner being placed on a platform high in the air."),
-	WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS(
-			"war.siege.distances.zone_death_radius_blocks",
+	WAR_SIEGE_ZONE_RADIUS_BLOCKS(
+			"war.siege.distances.zone_radius_blocks",
 			"250",
-			"# If a siege zone participant dies within this distance of the siege banner,",
-			"# their opponents are awarded siege points."),
+			"# The radius of the 'siege zone' ",
+		    "# Various siege related effects can apply in this zone e.g. lose points on death, keep inv on death, cannot claim here."),
 	WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS(
 		"war.siege.distances.leadership_aura_radius_blocks",
 			"50",

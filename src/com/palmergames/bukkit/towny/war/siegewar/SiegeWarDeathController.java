@@ -66,7 +66,7 @@ public class SiegeWarDeathController {
 
 				//Is siege out of range ?
 				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
-				if(candidateSiegeDistanceToPlayer > TownySettings.getWarSiegeZoneDeathRadiusBlocks())
+				if(candidateSiegeDistanceToPlayer > TownySettings.getWarSiegeZoneRadiusBlocks())
 					continue;
 
 				//If siege further than the confirmed candidate ?

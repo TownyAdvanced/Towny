@@ -3019,10 +3019,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES);
 	}
 
-	public static int getWarSiegeClaimDisableDistanceBlocks() {
-		return getInt(ConfigNodes.WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS);
-	}
-
 	public static int getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference() {
 		return getInt(ConfigNodes.WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE);
 	}
@@ -3078,8 +3074,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH);
 	}
 	
-	public static int getWarSiegeZoneDeathRadiusBlocks() {
-		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS);
+	public static int getWarSiegeZoneRadiusBlocks() {
+		return getInt(ConfigNodes.WAR_SIEGE_ZONE_RADIUS_BLOCKS);
 	}
 
 	public static boolean getWarSiegeNonResidentSpawnIntoBesiegedTownsDisabled() {
