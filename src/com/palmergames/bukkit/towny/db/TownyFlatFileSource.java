@@ -1429,20 +1429,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("totalPillageAmount");
 				siege.setTotalPillageAmount(Double.parseDouble(line));
 
-				line = keys.get("residentTotalTimedPointsMap");
-				if(line != null && line.length() > 0) {
-					String[] entries = line.split(",");
-					String[] keyValuePair;
-					Resident resident;
-					int totalPoints;
-					for (String entry : entries) {
-						keyValuePair = entry.split(":");
-						resident = getResident(keyValuePair[0]);
-						totalPoints = Integer.parseInt(keyValuePair[1]);
-						siege.getResidentTotalTimedPointsMap().put(resident, totalPoints);
-					}
-				}
-
 			} catch (Exception e) {
 				String filename = getSiegeFilename(siege);
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading siege file at line: " + line + ", in file: " + filename);
@@ -2340,7 +2326,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("scheduledEndTime=" + siege.getScheduledEndTime());
 		list.add("actualEndTime=" + siege.getActualEndTime());
 		list.add("totalPillageAmount=" + siege.getTotalPillageAmount());
-		list.add("residentTotalTimedPointsMap=" + StringMgmt.join(siege.getResidentTotalTimedPointsMap(), ":" ,","));
 
 		/*
 		 *  Make sure we only save in async

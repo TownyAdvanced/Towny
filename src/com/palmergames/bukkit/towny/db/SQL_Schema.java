@@ -129,7 +129,6 @@ public class SQL_Schema {
 		columns.add("`scheduledEndTime` BIGINT");
 		columns.add("`actualEndTime` BIGINT");
 		columns.add("`totalPillageAmount` float NOT NULL");
-		columns.add("`residentTotalTimedPointsMap` mediumtext NOT NULL");
 		return columns;
 	}
 	

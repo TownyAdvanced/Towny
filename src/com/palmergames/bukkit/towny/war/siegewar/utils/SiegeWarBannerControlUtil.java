@@ -178,18 +178,12 @@ public class SiegeWarBannerControlUtil {
 					if(bannerControlSession.getSiegeSide() == siege.getBannerControllingSide()) {
 						//The player contributes to ongoing banner control
 						siege.addBannerControllingResident(bannerControlSession.getResident());
-						if(!siege.getResidentTotalTimedPointsMap().containsKey(bannerControlSession.getResident())) {
-							siege.getResidentTotalTimedPointsMap().put(bannerControlSession.getResident(), 0);
-						}
 						TownyMessaging.sendMsg(bannerControlSession.getPlayer(), TownySettings.getLangString("msg_siege_war_banner_control_session_success"));
 					} else {
 						//The player gains banner control for their side
 						siege.clearBannerControllingResidents();
 						siege.setBannerControllingSide(bannerControlSession.getSiegeSide());
 						siege.addBannerControllingResident(bannerControlSession.getResident());
-						if(!siege.getResidentTotalTimedPointsMap().containsKey(bannerControlSession.getResident())) {
-							siege.getResidentTotalTimedPointsMap().put(bannerControlSession.getResident(), 0);
-						}
 						//Inform player
 						TownyMessaging.sendMsg(bannerControlSession.getPlayer(), TownySettings.getLangString("msg_siege_war_banner_control_session_success"));
 						//Inform town/nation participants
@@ -222,7 +216,6 @@ public class SiegeWarBannerControlUtil {
 				siegePoints = siege.getBannerControllingResidents().size() * TownySettings.getWarSiegePointsForAttackerOccupation();
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
-				siege.increaseResidentTotalTimedPoints(siege.getBannerControllingResidents(), Math.abs(siegePoints));
 				//Pillage
 				double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siege.getDefendingTown().getTownBlocks().size();
 				if(TownySettings.getWarSiegePillagingEnabled()
@@ -240,7 +233,6 @@ public class SiegeWarBannerControlUtil {
 				siegePoints = -(siege.getBannerControllingResidents().size() * TownySettings.getWarSiegePointsForDefenderOccupation());
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(false, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
-				siege.increaseResidentTotalTimedPoints(siege.getBannerControllingResidents(), Math.abs(siegePoints));
 				//Save siege zone
 				TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 			break;
