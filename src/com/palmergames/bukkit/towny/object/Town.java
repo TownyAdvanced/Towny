@@ -533,7 +533,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 		if (hasHomeBlock())
 			return homeBlock;
 		else
-			throw new TownyException("Town has not set a home block.");
+			throw new TownyException(this.getName() + " has not set a home block.");
 	}
 
 	/**
