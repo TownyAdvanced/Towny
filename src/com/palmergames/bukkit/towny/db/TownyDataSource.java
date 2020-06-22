@@ -175,7 +175,7 @@ public abstract class TownyDataSource {
 				toRemove.add(resident);
 				//return false;
 			} else {
-				if (resident.hasUUID())
+				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
 					hasUUID++;					
 			}
 
