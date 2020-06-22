@@ -12,7 +12,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.1.13</version>
+    <version>0.96.1.14</version>
 
     <licenses>
         <license>
