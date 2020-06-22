@@ -4,6 +4,7 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -61,8 +62,9 @@ public class TownyPerms {
 	 * 
 	 * @param filepath - Path to townyperms.yml
 	 * @param defaultRes - Default townyperms.yml within the jar.
+	 * @throws TownyException - When permission file cannot be loaded.
 	 */
-	public static void loadPerms(String filepath, String defaultRes) {
+	public static void loadPerms(String filepath, String defaultRes) throws TownyException {
 
 		String fullPath = filepath + File.separator + defaultRes;
 
@@ -70,7 +72,8 @@ public class TownyPerms {
 		if (file != null) {
 			// read the (language).yml into memory
 			perms = new CommentedConfiguration(file);
-			perms.load();
+			if (!perms.load())
+				throw new TownyException("Could not read Townyperms.yml");
 		}
 		
 		/*
@@ -180,9 +183,7 @@ public class TownyPerms {
 	 */
 	public static void removeAttachment(String name) {
 		
-		if (attachments.containsKey(name)) {
-			attachments.remove(name);
-		}
+		attachments.remove(name);
 		
 	}
 	
@@ -245,11 +246,8 @@ public class TownyPerms {
 	 * @return a sorted Map of permission nodes
 	 */
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
-		
-		Set<String> permList = new HashSet<>();
-		
 		// Start by adding the default perms everyone gets
-		permList.addAll(getDefault());
+		Set<String> permList = new HashSet<>(getDefault());
 		
 		//Check for town membership
 		if (resident.hasTown()) {
@@ -497,7 +495,7 @@ public class TownyPerms {
 				ListIterator<String> itr = result.listIterator();
 
 				while (itr.hasNext()) {
-					String node = (String) itr.next();
+					String node = itr.next();
 					String b = node.charAt(0) == '-' ? node.substring(1) : node;
 
 					// Insert the parent node before the child

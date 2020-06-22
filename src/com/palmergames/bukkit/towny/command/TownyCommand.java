@@ -441,7 +441,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
 		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDataSource().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDataSource().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDataSource().getNations().size());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getDataSource().getAllTownBlocks().size());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70----- ");
 		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (test != null){
@@ -567,8 +567,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d",town.getFormattedName(), kv.value));
+			String name = null;
+			if (kv.key instanceof Town)
+				name = ((Town) kv.key).getFormattedName();
+			else 
+				name = ((Resident) kv.key).getFormattedName();
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", name, kv.value));
 		}
 		return output;
 	}

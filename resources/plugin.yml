@@ -9,7 +9,7 @@ description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -58,6 +58,7 @@ permissions:
             towny.wild.*: true
             towny.claimed.*: true
             towny.admin.nation_zone: true
+            towny.admin.spawn: true
 
     towny.outlaw.jailer:
         description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
@@ -66,6 +67,12 @@ permissions:
     towny.town.resident:
         description: User is permitted to join towns.
         default: false
+
+    towny.admin.spawn:
+        description: Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
+        default: false
+        children:
+            towny.command.townyadmin.town.spawn.freecharge: true
 
     towny.town.spawn.*:
         description: Grants all Spawn travel nodes
@@ -173,7 +180,7 @@ permissions:
     towny.command.nation.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
@@ -267,6 +274,7 @@ permissions:
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
+            towny.command.nation.set.mapcolor: true
 
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -308,7 +316,7 @@ permissions:
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
-        children: 
+        children:
             towny.command.town.list.residents: true
             towny.command.town.list.open: true
             towny.command.town.list.balance: true
@@ -381,6 +389,7 @@ permissions:
             towny.command.town.set.plottax: true
             towny.command.town.set.shoptax: true
             towny.command.town.set.embassytax: true
+            towny.command.town.set.taxpercentcap: true
             towny.command.town.set.title: true
             towny.command.town.set.surname: true
 
@@ -420,6 +429,7 @@ permissions:
             towny.command.plot.toggle.*: true
             towny.command.plot.set.*: true
             towny.command.plot.unclaim: true
+            towny.command.plot.group.*: true
 
     towny.command.plot.toggle.*:
         description: User can toggle plot settings.
@@ -446,6 +456,18 @@ permissions:
             towny.command.plot.set.shop: true
             towny.command.plot.set.spleef: true
             towny.command.plot.set.wilds: true
+
+    towny.command.plot.group.*:
+        description: User can access the plot group command.
+        default: false
+        children:
+            towny.command.plot.group.add: true
+            towny.command.plot.group.remove: true
+            towny.command.plot.group.rename: true
+            towny.command.plot.group.set: true
+            towny.command.plot.group.toggle: true
+            towny.command.plot.group.forsale: true
+            towny.command.plot.group.notforsale: true
 
     # Resident command permissions
     towny.command.resident.*:
@@ -503,6 +525,7 @@ permissions:
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.resident.*: true
+            towny.command.townyadmin.depositall: true
 
     towny.command.townyadmin.resident.*:
         description: User can access admin resident commands

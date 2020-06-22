@@ -26,13 +26,6 @@ import java.util.Set;
  */
 public class TownyRegenAPI {
 
-	//private static Towny plugin = null;
-	
-	public static void initialize(Towny plugin) {
-
-		//TownyRegenAPI.plugin = plugin;
-	}
-
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
 
@@ -169,10 +162,14 @@ public class TownyRegenAPI {
 	 * Loads a Plot Chunk snapshot from the data source
 	 * 
 	 * @param townBlock - TownBlock to get
-	 * @return loads the PlotData for the given townBlock   
+	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		PlotBlockData data = TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		if (data != null) 
+			return data;
+		else
+			return null;
 	}
 
 	/**
@@ -447,6 +444,28 @@ public class TownyRegenAPI {
 	/*
 	 * Protection Regen follows
 	 */
+	
+	/**
+	 * Called from various explosion listeners.
+	 * 
+	 * @param block - Block which is being exploded.
+	 * @param count - int for setting the delay to do one block at a time.
+	 */
+	public static void beginProtectionRegenTask(Block block, int count) {
+		if ((!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+			// Piston extensions which are broken by explosions ahead of the base block
+			// cause baseblocks to drop as items and no base block to be regenerated.
+			if (block.getType().equals(Material.PISTON_HEAD)) {
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
+				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
+				block = baseBlock;
+			}
+			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+			addProtectionRegenTask(task);
+			block.setType(Material.AIR);
+		}
+	}
 	
 	/**
 	 * Does a task for this block already exist?

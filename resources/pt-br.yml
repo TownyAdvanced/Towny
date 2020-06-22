@@ -1,5 +1,5 @@
 name: Towny
-version: 0.77
+version: 0.83
 language: português (Brasil)
 author: BannerGames
 website: 'http://townyadvanced.github.io/'
@@ -1082,20 +1082,62 @@ msg_err_plot_belongs_to_group_plot_fs2: 'Terreno: %s pertence a um grupo, use /p
 msg_err_plot_belongs_to_group_plot_nfs: 'Terreno: %s pertence a um grupo, use /plot group nfs'
 
 # Added in 0.72
-msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'A configuração %s controlada pelo administrador impede de que alteres o pvp para %s.'
 
 # Added in 0.73
-msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+msg_err_you_aren't currently jailed: 'De momento não estás aprisionado.'
 
 # Added in 0.74
-msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens permissão para criar o outro lado deste portal neste local.'
 
 # Added in 0.75
-msg_already_ally: 'Your nation is already allied with %s.'
+msg_already_ally: 'A tua nação já é aliada com %s.'
 
 # Added in 0.76
-msg_you: 'You'
+msg_you: 'Tu'
 
 # Added in 0.77
-msg_click_spawn: '&aClick to spawn to: &e%s'
-msg_spawn_cost: '&aSpawn Cost = &e%s'
+msg_click_spawn: '&aClique para te teletransportares para: &e%s'
+msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
+
+# Added in 0.78
+msg_reload_error: 'Um erro ocorreu ao recarregar o Towny.'
+msg_reloaded_config: '&2Configurações recarregadas com sucesso.'
+msg_reloaded_perms: '&2Permissões recarregadas com sucesso.'
+msg_reloaded_db: '&2Banco de dados recarregado com sucesso'
+msg_reloaded_lang: '&2Arquivo de línguas recarregado com sucesso'
+msg_reset_config: '&2Config foi redefinida'
+msg_err_teleport_cancelled: 'Teleporte cancelado por se mover.'
+
+# Added in 0.79
+msg_cache_block_error_plot_friends: 'amigos'
+msg_cache_block_error_plot_allies: 'aliados'
+msg_cache_block_error_plot_outsiders: 'forasteiros'
+msg_cache_block_error_plot_town_members: 'membros da cidade'
+msg_err_invalid_nation_map_color: '&cCor de mapa desconhecida. As cores permitidas são %s.'
+msg_nation_map_color_changed: '&bA cor do mapa da nação foi alterada para %s.'
+msg_err_unable_to_add_more_residents_without_nation: 'Sua cidade não pode convidar mais do que %s residentes sem entrar em uma nação ou criá-la.'
+msg_the_following_towns_were_deleted_for_having_0_claims: 'As seguintes cidades foram deletaras por terem 0 terrenos: %s'
+msg_spawn_warn: 'Custo de spawn %s. Continuar? Dica: acidione -ignore para pular essas confirmações.'
+msg_confirm_purchase: 'Fazer isso lhe custará %s. Continuar?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'As seguintes cidades serão removidas de sua nação: %s. Gostaria de continuar?'
+msg_ta_deposit_all_success: 'Depositado %s para o banco de todas as nações e cidades com sucesso.'
+bonus_townblocks: 'blocos de cidade bônus'
+
+# Added in 0.80
+nomad_sing: 'Nômade'
+msg_new_town_advice: 'Parabéns por criar sua cidade! Sua cidade pagará uma taxa diária de manutenção de %s atualmente. Você pode depositar dinheiro no banco de sua cidade usando ''/t deposit #''. Sem dinheiro para pagar a manutenção, sua cidade será deletada. Você pode ver os custos a qualquer hora usando /towny prices. A próxima taxa diária será em %s.'
+
+# Added in 0.81
+msg_err_teleport_cancelled_damage: 'Seu teleporte foi cancelado ao tomar dano.'
+
+# Added in 0.82
+invitation_prefix: "&8[&7Convite&8] &9"
+confirmation_prefix: "&8[&7Confirmação&8] &9"
+this_message_will_expire2: '&9Irá espirar automaticamente em 20 segundos'
+msg_hover_next_page: 'Próxima página'
+msg_hover_previous_page: 'Página anterior'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: "Limites de taxas apenas podem ser definidos para cidades com porcentagens de taxas."
+msg_town_set_tax_max_percent_amount: "%s mudou o valor da taxa máxima para %s."

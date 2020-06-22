@@ -1,6 +1,7 @@
 package com.palmergames.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -227,12 +228,11 @@ public class FileMgmt {
 	 */
 	public static void stringToFile(String source, File file) {
 
-		try {
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-
-			out.write(source);
-			out.close();
-
+		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			
+			bufferedWriter.write(source);
+			
 		} catch (IOException e) {
 			System.out.println("Exception ");
 		}
@@ -246,21 +246,15 @@ public class FileMgmt {
 	 * @return true on success, false on IOException
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
-
-		try {
-
-			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-
+		File file = new File(targetLocation);
+		try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
+			
 			for (String aSource : source) {
-
-				out.write(aSource + System.getProperty("line.separator"));
-
+				bufferedWriter.write(aSource + System.getProperty("line.separator"));
 			}
 
-			out.close();
 			return true;
-
 		} catch (IOException e) {
 			System.out.println("Exception ");
 			return false;
@@ -279,6 +273,25 @@ public class FileMgmt {
 				// Move file to new directory
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
 				
+			}
+		}
+	}
+	
+	public static void moveTownBlockFile(File sourceFile, String targetLocation, String townDir) {
+
+		synchronized (sourceFile) {
+			if (sourceFile.isFile()) {
+				if (!townDir.isEmpty())
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
+				else 
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted");
+				// check for an already existing file of that name
+				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
+				if ((f.exists() && f.isFile()))
+					f.delete();
+				// Move file to new directory
+				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
+
 			}
 		}
 	}

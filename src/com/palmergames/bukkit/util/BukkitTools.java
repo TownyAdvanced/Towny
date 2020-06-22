@@ -216,9 +216,21 @@ public class BukkitTools {
 	}
 	
 	public static String convertCoordtoXYZ(Location loc) {
-		String string = loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ(); 
-		
-		return string;
+		return loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+	}
+	
+	/**
+	 * 
+	 * @return whether server is running spigot (and not CraftBukkit.)
+	 */
+	public static boolean isSpigot() {
+		try {
+			Class.forName("org.bukkit.entity.Player$Spigot");
+			return true;
+		} catch (Throwable tr) {
+			return false;
+		}
+
 	}
 	
 	/**

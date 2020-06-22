@@ -54,7 +54,6 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
 		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
@@ -123,7 +122,7 @@ public class TownyFormatter {
 			out.add(TownySettings.getLangString("status_pvp") + ((!preventPVP) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? TownySettings.getLangString("status_on"):TownySettings.getLangString("status_off")) + 
-					TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+					TownySettings.getLangString("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
 			if (townBlock.hasPlotObjectGroup())
 				out.add(String.format(TownySettings.getLangString("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
@@ -334,7 +333,7 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.addAll(ChatTools.color(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard())));
+			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date

@@ -232,7 +232,7 @@ public class War {
 			}			
 		}
 		if (!enemy) {
-			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_no_enemies_for_war"));;
+			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_no_enemies_for_war"));
 			return;
 		}
 		
@@ -378,7 +378,7 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 		}
 		if (numTownBlocks > 0) {
-			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getJoinWarMsg(town));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_join"), town.getName()));
 			townScores.put(town, 0);
 			warringTowns.add(town);
 		}			
@@ -601,8 +601,10 @@ public class War {
 	 */
 	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 		// Add bonus blocks
+		Town defenderTown = townBlock.getTown();
+		boolean defenderHomeblock = townBlock.isHomeBlock();
 		if (TownySettings.getWarEventCostsTownblocks() || TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()){		
-			townBlock.getTown().addBonusBlocks(-1);
+			defenderTown.addBonusBlocks(-1);
 			attacker.addBonusBlocks(1);
 		}
 		
@@ -615,37 +617,36 @@ public class War {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
 			// Check for money loss in the defending town
-			if (!townBlock.getTown().getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
-				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
-				if (townBlock.getTown().isCapital())
-					remove(attacker, townBlock.getTown().getNation());
+			if (!defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
+				TownyMessaging.sendPrefixedTownMessage(defenderTown, TownySettings.getLangString("msg_war_town_ran_out_of_money"));
+				TownyMessaging.sendTitleMessageToTown(defenderTown, TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
+				if (defenderTown.isCapital())
+					remove(attacker, defenderTown.getNation());
 				else
-					remove(attacker, townBlock.getTown());
-				townyUniverse.getDataSource().saveTown(townBlock.getTown());
+					remove(attacker, defenderTown);
+				townyUniverse.getDataSource().saveTown(defenderTown);
 				townyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
-				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
+				TownyMessaging.sendPrefixedTownMessage(defenderTown, String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		} catch (EconomyException ignored) {}
 		
 		// Check to see if this is a special TownBlock
-		if (townBlock.getTown().isHomeBlock(townBlock) && townBlock.getTown().isCapital()){
-			remove(attacker, townBlock.getTown().getNation());
-		} else if (townBlock.getTown().isHomeBlock(townBlock)){
-			remove(attacker, townBlock.getTown());
+		if (defenderHomeblock && defenderTown.isCapital()){
+			remove(attacker, defenderTown.getNation());
+		} else if (defenderHomeblock){
+			remove(attacker, defenderTown);
 		} else{
 			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
 			// Free players who are jailed in the jail plot.
 			if (townBlock.getType().equals(TownBlockType.JAIL)){
-				Town town = townBlock.getTown();				
 				int count = 0;
 				for (Resident resident : townyUniverse.getJailedResidentMap()){
 					try {						
 						if (resident.isJailed())
-							if (resident.getJailTown().equals(town.toString())) 
-								if (Coord.parseCoord(town.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
+							if (resident.getJailTown().equals(defenderTown.toString())) 
+								if (Coord.parseCoord(defenderTown.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
 									townyUniverse.getDataSource().saveResident(resident);
 									count++;
@@ -654,10 +655,10 @@ public class War {
 					}
 				}
 				if (count>0)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), town, count));
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), defenderTown, count));
 			}				
 		}
-		townyUniverse.getDataSource().saveTown(townBlock.getTown());
+		townyUniverse.getDataSource().saveTown(defenderTown);
 		townyUniverse.getDataSource().saveTown(attacker);
 	}
 
@@ -776,8 +777,7 @@ public class War {
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
-		StringBuilder sb = new StringBuilder(town.getFormattedName()).append(" (").append(fallenTownBlocks).append(TownySettings.getLangString("msg_war_append_townblocks_fallen"));
-		sendEliminateMessage(sb.toString());
+		sendEliminateMessage(town.getFormattedName() + " (" + fallenTownBlocks + TownySettings.getLangString("msg_war_append_townblocks_fallen"));
 	}
 
 	/**
@@ -789,20 +789,20 @@ public class War {
 	}
 	
 	private void sendEliminateMessage(String name) {
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(name));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_eliminated"), name));
 	}
 	
 	public void nationLeave(Nation nation) {
 
 		remove(nation);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(nation.getName()));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("MSG_WAR_FORFEITED"), nation.getName()));
 		checkEnd();
 	}
 
 	public void townLeave(Town town) {
 
 		remove(town);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(town.getName()));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("MSG_WAR_FORFEITED"), town.getName()));
 		checkEnd();
 	}
 

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.77
+version: 0.83
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://townyadvanced.github.io/'
@@ -1095,3 +1095,45 @@ msg_you: 'You'
 # Added in 0.77
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
+
+# Added in 0.78
+msg_reload_error: 'There was an error reloading Towny.'
+msg_reloaded_config: '&2Configuration successfully reloaded.'
+msg_reloaded_perms: '&2Permissions successfully reloaded.'
+msg_reloaded_db: '&2Database successfully reloaded'
+msg_reloaded_lang: '&2Language file successfully reloaded'
+msg_reset_config: '&2Config has been reset'
+msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
+
+# Added in 0.79
+msg_cache_block_error_plot_friends: 'friends'
+msg_cache_block_error_plot_allies: 'allies'
+msg_cache_block_error_plot_outsiders: 'outsiders'
+msg_cache_block_error_plot_town_members: 'town members'
+msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
+msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
+msg_err_unable_to_add_more_residents_without_nation: 'Your town cannot invite more than %s residents without first joining or creating a nation.'
+msg_the_following_towns_were_deleted_for_having_0_claims: 'The following towns were deleted for having 0 claims: %s'
+msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
+msg_confirm_purchase: 'Doing this will cost %s. Continue?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'The following towns will be removed from your nation: %s. Do you wish to continue?'
+msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
+bonus_townblocks: 'bonus townblocks'
+
+# Added in 0.80
+nomad_sing: 'Nomad'
+msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
+
+# Added in 0.81
+msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
+
+# Added in 0.82
+invitation_prefix: "&8[&7Invitation&8] &9"
+confirmation_prefix: "&8[&7Confirmation&8] &9"
+this_message_will_expire2: '&9This will auto-expire in 20 seconds'
+msg_hover_next_page: 'Next Page'
+msg_hover_previous_page: 'Previous Page'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
+msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."

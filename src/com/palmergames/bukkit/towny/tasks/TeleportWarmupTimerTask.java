@@ -9,9 +9,12 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
+import io.papermc.lib.PaperLib;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -50,7 +53,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				if (p == null) {
 					return;
 				}
-				p.teleport(resident.getTeleportDestination());
+				PaperLib.teleportAsync(p, resident.getTeleportDestination(), TeleportCause.COMMAND);
 				if (TownySettings.getSpawnCooldownTime() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 				teleportQueue.poll();
@@ -75,6 +78,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	public static void abortTeleportRequest(Resident resident) {
 
 		if (resident != null && teleportQueue.contains(resident)) {
+			resident.clearTeleportRequest();
 			teleportQueue.remove(resident);
 			if ((resident.getTeleportCost() != 0) && (TownySettings.isUsingEconomy())) {
 				try {

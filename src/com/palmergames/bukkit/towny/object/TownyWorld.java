@@ -13,7 +13,6 @@ import org.bukkit.entity.Entity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 public class TownyWorld extends TownyObject {
@@ -33,7 +32,6 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 	
@@ -90,30 +88,14 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
-
-		TownBlock townBlock = townBlocks.get(coord);
-		if (townBlock == null)
+		if (!hasTownBlock(coord))
 			throw new NotRegisteredException();
-		else
-			return townBlock;
-	}
-
-	public void newTownBlock(int x, int z) throws AlreadyRegisteredException {
-
-		newTownBlock(new Coord(x, z));
-	}
-
-	public TownBlock newTownBlock(Coord key) throws AlreadyRegisteredException {
-
-		if (hasTownBlock(key))
-			throw new AlreadyRegisteredException();
-		townBlocks.put(new Coord(key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), this));
-		return townBlocks.get(new Coord(key.getX(), key.getZ()));
+		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), coord));
 	}
 
 	public boolean hasTownBlock(Coord key) {
 
-		return townBlocks.containsKey(key);
+		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), key));
 	}
 
 	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
@@ -130,9 +112,16 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
+	/*
+	 * Used only in the getTreeString() method.
+	 */
 	public Collection<TownBlock> getTownBlocks() {
 
-		return townBlocks.values();
+		List<TownBlock> townBlocks = new ArrayList<>();
+		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values())
+			if (townBlock.getWorld() == this)
+				townBlocks.add(townBlock);
+		return townBlocks;
 	}
 
 	public void removeTown(Town town) throws NotRegisteredException {
@@ -148,36 +137,6 @@ public class TownyWorld extends TownyObject {
 			 * }
 			 */
 		}
-	}
-
-	public void removeTownBlock(TownBlock townBlock) {
-
-		if (hasTownBlock(townBlock.getCoord())) {			
-	
-			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-	
-			removeTownBlock(townBlock.getCoord());
-		}
-	}
-
-	public void removeTownBlocks(List<TownBlock> townBlocks) {
-
-		for (TownBlock townBlock : new ArrayList<>(townBlocks))
-			removeTownBlock(townBlock);
-	}
-
-	public void removeTownBlock(Coord coord) {
-
-		townBlocks.remove(coord);
 	}
 
 	@Override
@@ -418,7 +377,7 @@ public class TownyWorld extends TownyObject {
 	@Deprecated
 	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 
-		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
+		if (getPlotManagementIgnoreIds().contains(id + ":" + data))
 			return true;
 		
 		return getPlotManagementIgnoreIds().contains(id);
@@ -647,7 +606,9 @@ public class TownyWorld extends TownyObject {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
 						continue;
 				
 				if (!town.getHomeblockWorld().equals(this)) continue;
@@ -685,7 +646,9 @@ public class TownyWorld extends TownyObject {
 		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR 
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;

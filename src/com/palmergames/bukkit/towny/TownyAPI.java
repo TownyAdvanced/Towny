@@ -4,13 +4,13 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
@@ -172,9 +172,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
      */
     public List<Player> getOnlinePlayersAlliance(Nation nation) {
-    	ArrayList<Player> players = new ArrayList<>();
-    	
-        players.addAll(getOnlinePlayers(nation));
+		ArrayList<Player> players = new ArrayList<>(getOnlinePlayers(nation));
         if (!nation.getAllies().isEmpty()) {
 			for (Nation nations : nation.getAllies()) {
 				players.addAll(getOnlinePlayers(nations));
@@ -188,25 +186,9 @@ public class TownyAPI {
      *
      * @param block {@link Block} to test for.
      * @return true if the {@link Block} is in the wilderness, false otherwise.
-     * @deprecated Use {@link #isWilderness(Location)} with block.getLocation()
      */
-    @Deprecated
     public boolean isWilderness(Block block) {
-        WorldCoord worldCoord;
-        
-        try {
-            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(block.getWorld().getName()).getName(), Coord.parseCoord(block));
-        } catch (NotRegisteredException e) {
-            // No record so must be Wilderness
-            return true;
-        }
-        
-        try {
-            return worldCoord.getTownBlock().getTown() == null;
-        } catch (NotRegisteredException e) {
-            // Must be wilderness
-            return true;
-        }
+        return isWilderness(block.getLocation());
     }
     
     /**
@@ -216,14 +198,16 @@ public class TownyAPI {
      * @return true if the {@link Location} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(Location location) {
-        WorldCoord worldCoord;
-        
-        try {
-            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
-        } catch (NotRegisteredException e) {
-            // No record so must be Wilderness
-            return true;
-        }
+        return isWilderness(WorldCoord.parseWorldCoord(location));
+    }
+    
+    /**
+     * Check if the specified {@link WorldCoord} is in the wilderness.
+     *
+     * @param worldCoord {@link WorldCoord} to test widlerness for.
+     * @return true if the {@link WorldCoord} is in the wilderness, false otherwise.
+     */
+    public boolean isWilderness(WorldCoord worldCoord) {
         
         try {
             return worldCoord.getTownBlock().getTown() == null;
@@ -231,7 +215,7 @@ public class TownyAPI {
             // Must be wilderness
             return true;
         }
-    }
+    }    
     
     /**
      * Returns value of usingTowny for the given world.
@@ -247,15 +231,14 @@ public class TownyAPI {
 		}
     }
     
-    /**
-     * Get the name of a {@link Town} at a specific {@link Location}.
+    /**     * Get the name of a {@link Town} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} name for.
      * @return {@link String} containg the name of the {@link Town} at this location, or null for none.
      */
     public String getTownName(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getName();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -272,7 +255,7 @@ public class TownyAPI {
      */
     public UUID getTownUUID(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock().getTown().getUuid();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -288,7 +271,7 @@ public class TownyAPI {
      */
     public TownBlock getTownBlock(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
             return worldCoord.getTownBlock();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -411,6 +394,83 @@ public class TownyAPI {
     public void registerCustomDataField(CustomDataField field) throws KeyAlreadyRegisteredException {
     	townyUniverse.addCustomCustomDataField(field);
 	}
+
+    /**
+     * Method to figure out if a location is in a NationZone.
+     * 
+     * @param location - Location to test.
+     * @return true if the location is in a NationZone.
+     */
+    public boolean isNationZone(Location location) {
+    	if (!isWilderness(location))
+    		return false;
+    	TownBlockStatus status = hasNationZone(location);
+    	if (status.equals(TownBlockStatus.NATION_ZONE))
+    		return true;
+    	
+    	return false;
+    }
+    /**
+     * Method to figure out if a location in the wilderness is normal wilderness of nation zone.
+     * Recommended to use {@link TownyAPI#isWilderness(Location)} prior to using this, to confirm the location is not in a town.  
+     * 
+     * @param location - Location to test whether it is a nation zone or normal wilderness.
+     * @return returns either UNCLAIMED_ZONE or NATION_ZONE
+     */
+    public TownBlockStatus hasNationZone(Location location) {
+    	
+    	return hasNationZone(WorldCoord.parseWorldCoord(location));
+    }
+
+    /**
+     * Method to figure out if a worldcoord in the wilderness is normal wilderness of nation zone.
+     * Recommended to use {@link TownyAPI#isWilderness(WorldCoord)} prior to using this, to confirm the location is not in a town.  
+     * 
+     * @param worldCoord - WorldCoord to test whether it is a nation zone or normal wilderness.
+     * @return returns either UNCLAIMED_ZONE or NATION_ZONE
+     */
+    public TownBlockStatus hasNationZone(WorldCoord worldCoord) {
+    	
+		Town nearestTown = null;
+		int distance;
+		try {
+			nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
+			if (nearestTown == null) {
+				return TownBlockStatus.UNCLAIMED_ZONE;
+			}
+			if (!nearestTown.hasNation()) {
+				return TownBlockStatus.UNCLAIMED_ZONE;
+			}
+			distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+		} catch (NotRegisteredException e1) {
+			// There will almost always be a town in any world where towny is enabled. 
+			// If there isn't then we fall back on normal unclaimed zone status.
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
+
+		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
+		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
+
+		try {
+			int nationZoneRadius;
+			if (nearestTown.isCapital()) {
+				nationZoneRadius =
+					Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
+						+ TownySettings.getNationZonesCapitalBonusSize();
+			} else {
+				nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+			}
+
+			if (distance <= nationZoneRadius) {
+				return TownBlockStatus.NATION_ZONE;
+			}
+		} catch (NumberFormatException | NotRegisteredException ignored) {
+		}
+		
+		return TownBlockStatus.UNCLAIMED_ZONE;
+    }
     
     public static TownyAPI getInstance() {
         if (instance == null) {

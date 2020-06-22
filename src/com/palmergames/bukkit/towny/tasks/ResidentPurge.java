@@ -33,6 +33,7 @@ public class ResidentPurge extends Thread {
 		this.deleteTime = deleteTime;
 		this.setPriority(NORM_PRIORITY);
 		this.townless = townless;
+		this.sender = sender;
 	}
 
 	@Override
