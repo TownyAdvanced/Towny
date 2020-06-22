@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -1034,18 +1035,6 @@ public class TownyPlayerListener implements Listener {
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
 	}
-	
-	/**
-	 * Any player that can break the lectern will be able to get the book anyways.
-	 * @param event - PlayerTakeLecternBookEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
-		
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
 
 	/**
 	 * Blocks jailed players using blacklisted commands.

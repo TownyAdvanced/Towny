@@ -153,17 +153,4 @@ public class WorldCoord extends Coord {
 			   toCell(from.getBlockZ()) != toCell(to.getBlockZ()) ||
 			   !Objects.equals(from.getWorld(), to.getWorld());
 	}
-
-	/**
-	 * Checks that locations are in different cells without allocating any garbage to the heap.
-	 * 
-	 * @param from Original location
-	 * @param to Next location
-	 * @return whether the locations are in different cells
-	 */
-	public static boolean cellChanged(Location from, Location to) {
-		return toCell(from.getBlockX()) != toCell(to.getBlockX()) ||
-			   toCell(from.getBlockZ()) != toCell(to.getBlockZ()) ||
-			   !Objects.equals(from.getWorld(), to.getWorld());
-	}
 }

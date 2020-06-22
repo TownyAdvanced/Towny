@@ -183,32 +183,4 @@ public class TownyWorldListener implements Listener {
 			event.getBlocks().removeAll(removed);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPortalCreate(PortalCreateEvent event) {
-		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
-			return;
-		}
-		try {
-			if (!TownyUniverse.getInstance().getDataSource().getWorld(event.getWorld().getName()).isUsingTowny()) {
-				return;
-			}
-		} catch (Exception ignored) {}
-
-		if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
-			return;
-		}
-		
-		for (BlockState block : event.getBlocks()) {
-			// Check if player can build in destination portal townblock.
-			boolean bBuild = PlayerCacheUtil.getCachePermission((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL, TownyPermission.ActionType.BUILD);
-
-			// If not reject the creation of the portal. No need to cancel event, bukkit does that automatically.
-			if (!bBuild) {
-				TownyMessaging.sendErrorMsg(event.getEntity(), TownySettings.getLangString("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
-				event.setCancelled(true);
-				break;
-			}
-		}
-	}
-
 }

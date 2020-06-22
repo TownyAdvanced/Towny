@@ -664,12 +664,6 @@ public class TownyEntityListener implements Listener {
 			if (townyWorld.isEndermanProtect())
 				event.setCancelled(true);
 			break;
-			
-		case RAVAGER:
-			
-			if (townyWorld.isDisableCreatureTrample())
-				event.setCancelled(true);
-			break;
 
 		default:
 
