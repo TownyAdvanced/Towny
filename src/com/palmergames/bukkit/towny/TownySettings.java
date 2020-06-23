@@ -66,7 +66,16 @@ public class TownySettings {
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
 	private static final List<HeldItemsCombination> tacticalVisibilityItems = new ArrayList<>();
+	private static final List<Material> battleSessionsForbiddenBlockTypes = new ArrayList<>();
 
+	static {
+		String listAsString = getString(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_FORBIDDEN_BLOCK_TYPES);
+		String[] listAsStringArray = listAsString.split(",");
+		for(String blockTypeAsString: listAsStringArray) {
+			Material material = Material.matchMaterial(blockTypeAsString.trim());
+			battleSessionsForbiddenBlockTypes.add(material);
+		}
+	}
 
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
@@ -3277,11 +3286,15 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_ENABLED);
 	}
 
-	public static int getWarSiegeBattleSessionActivePhaseDurationMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSION_ACTIVE_PHASE_DURATION_MINUTES);
+	public static int getWarSiegeBattleSessionsActivePhaseDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_ACTIVE_PHASE_DURATION_MINUTES);
 	}
 
-	public static int getWarSiegeBattleSessionExpiredPhaseDurationMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSION_EXPIRED_PHASE_DURATION_MINUTES);
+	public static int getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_EXPIRED_PHASE_DURATION_MINUTES);
+	}
+
+	public static List<Material> getWarSiegeBattleSessionsForbiddenBlockTypes() {
+		return battleSessionsForbiddenBlockTypes;
 	}
 }

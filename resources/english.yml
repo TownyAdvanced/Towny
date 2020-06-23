@@ -1319,6 +1319,7 @@ msg_war_siege_battle_session_started: '&6[War]&2 Battle session started. You are
 msg_war_siege_battle_session_expired_warning: '&6[War]&c Battle session expired. Leave the siege-zone immediately to avoid battle fatigue. [Session End-Time: %s]'
 msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle fatigue active. To remove battle fatigue, leave the siege-zone. [Session End-Time: %s]'
 msg_war_siege_battle_session_ended: '&6[War]&2 Battle session ended. The next time you enter a siege-zone, a new battle session will begin.'
+msg_war_siege_battle_session_forbidden_block_type: '&6[War]&c You cannot place this type of block while in a battle session.'
 
 #Nation Refund
 nation_help_11 : 'Claim all your nation refunds.'

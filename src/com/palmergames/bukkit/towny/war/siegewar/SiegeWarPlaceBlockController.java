@@ -58,6 +58,7 @@ public class SiegeWarPlaceBlockController {
 													 Towny plugin)
 	{
 		try {
+			//Banner placement
 			switch(block.getType()) {
 				case BLACK_BANNER:
 				case BLUE_BANNER:
@@ -80,8 +81,23 @@ public class SiegeWarPlaceBlockController {
 				case TRAPPED_CHEST:
 					return evaluatePlaceChest(player, block, event);
 				default:
-					return false;
 			}
+
+			//Forbidden block placement
+			if(TownySettings.isWarSiegeBattleSessionsEnabled()) {
+				for(Material forbiddenMaterial: TownySettings.getWarSiegeBattleSessionsForbiddenBlockTypes()) {
+					if(block.getType() == forbiddenMaterial) {
+						event.setCancelled(true);
+						event.setBuild(false);
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_forbidden_block_type"));
+						return true;
+					}
+				}
+			}
+
+			//Block placement unaffected
+			return false;
+
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Problem placing siege related block");
 			e.printStackTrace();

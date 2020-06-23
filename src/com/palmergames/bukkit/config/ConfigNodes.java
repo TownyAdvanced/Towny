@@ -2014,17 +2014,6 @@ public enum ConfigNodes {
 			"# If this setting is true, and a player from the banner controlling side dies,",
 			"# then the death points are increased by a certain percentage. (see points section below)",
 			"# This setting gives smaller and weaker towns/nations a better chance, as they will tend to be the counter-attackers."),
-	WAR_SIEGE_BATTLE_SESSIONS_ENABLED(
-			"war.siege.switches.battle_sessions_enabled",
-			"true",
-			"# If this setting is true, then battle sessions are enabled.",
-			"# Battle sessions are a way of automatically moderating the time each player spends siege-fighting.",
-			"# This is recommended to reduce stress and combat-fatigue.",
-			"# A battle session starts when a player steps into a siege zone (unless they are in their own town).",
-			"# A battle session has 2 main phases:",
-			"# * phase 1 - active - In this phase, the player can attend any siege.",
- 			"# * phase 2 - expired - In this phase the player cannot attend any siege (without getting 'battle fatigue' - poisoned/slowed/weakened).",
-			"# The durations of these phases are configured below."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -2133,14 +2122,6 @@ public enum ConfigNodes {
 			"war.siege.times.banner_control_session_duration_minutes",
 			"10",
 			"# This value determines the duration of each banner control session."),
-	WAR_SIEGE_BATTLE_SESSION_ACTIVE_PHASE_DURATION_MINUTES (
-			"war.siege.times.battle_session_active_phase_duration_minutes",
-			"60",
-			"# This value determines the duration of the battle session active phase."),
-	WAR_SIEGE_BATTLE_SESSION_EXPIRED_PHASE_DURATION_MINUTES (
-			"war.siege.times.battle_session_expired_phase_duration_minutes",
-			"60",
-			"# This value determines the duration of the battle session expired phase."),
 
 	//Distances
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
@@ -2238,6 +2219,35 @@ public enum ConfigNodes {
 			"# If the counterattack booster feature is enabled, then this setting determines the strength of the boost.",
 			"# Example: If this setting is 5.0, and there are 3 players on the banner control list, and a player from the controlling side dies,",
 			"# then the death points will be increased by 15%."),
+
+	//Battle Sessions
+	WAR_SIEGE_BATTLE_SESSIONS_ENABLED(
+		"war.siege.battle_sessions.enabled",
+		"true",
+		"# If this setting is true, then battle sessions are enabled.",
+		"# Battle sessions have 2 functions:",
+		"# 1. They automatically moderate the time each player spends siege-fighting.",
+		"# 2. They prevent certain blocks (e.g. obsidian) being placed while siege-fighting.",
+		"# ",
+		"# This feature is recommended to reduce stress and combat-fatigue.",
+		"# ",
+		"# A battle session starts when a player steps into a siege zone (unless they are in their own town).",
+		"# A battle session has 2 main phases:",
+		"# * phase 1 - active - In this phase, the player can attend any siege.",
+		"# * phase 2 - expired - In this phase the player cannot attend any siege (without getting 'battle fatigue' - poisoned/slowed/weakened).",
+		"# The durations of these phases are configured below."),
+	WAR_SIEGE_BATTLE_SESSIONS_ACTIVE_PHASE_DURATION_MINUTES(
+		"war.siege.battle_sessions.active_phase_duration_minutes",
+		"60",
+		"# This value determines the duration of the battle session active phase."),
+	WAR_SIEGE_BATTLE_SESSIONS_EXPIRED_PHASE_DURATION_MINUTES(
+		"war.siege.battle_sessions.expired_phase_duration_minutes",
+		"60",
+		"# This value determines the duration of the battle session expired phase."),
+	WAR_SIEGE_BATTLE_SESSIONS_FORBIDDEN_BLOCK_TYPES(
+		"war.siege.battle_sessions.forbidden_block_types",
+		"obsidian,water,lava",
+		"# This list specifies the block types which cannot be placed by a player in a battle session."),
 
 	//Tactical Visibility
 	//Todo - Eventually move this to another location as it works regardless of war system, or without.

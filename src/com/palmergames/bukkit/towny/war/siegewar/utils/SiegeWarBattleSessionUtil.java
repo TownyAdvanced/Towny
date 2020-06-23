@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -39,7 +38,7 @@ public class SiegeWarBattleSessionUtil {
 						//Active Session found. If expiry time has arrived, set session to expired
 						if(System.currentTimeMillis() >= battleSession.getExpiryTime()) {
 							battleSession.setExpired(true);
-							battleSession.setDeletionTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
+							battleSession.setDeletionTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 						}
 					}
 				}
@@ -61,9 +60,9 @@ public class SiegeWarBattleSessionUtil {
 				if(!playerInOwnTown && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
 					if (!player.hasMetadata(METADATA_TAG_NAME)) {
 						battleSession = new BattleSession();
-						battleSession.setExpiryTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
+						battleSession.setExpiryTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 						player.setMetadata(METADATA_TAG_NAME, new FixedMetadataValue(Towny.getPlugin(), battleSession));
-						long timeRemainingMillis = (int)(TownySettings.getWarSiegeBattleSessionActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+						long timeRemainingMillis = (int)(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 						String timeRemainingString = TimeMgmt.getFormattedTimeValue(timeRemainingMillis);
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_started"), timeRemainingString));
 						continue;
