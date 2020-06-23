@@ -61,6 +61,7 @@ public class OnPlayerLogin implements Runnable {
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_registration"), player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
+				resident.setUUID(player.getUniqueId());
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
@@ -89,9 +90,11 @@ public class OnPlayerLogin implements Runnable {
 					 */
 					if (!ess.getUser(player).isVanished())
 						resident.setLastOnline(System.currentTimeMillis());
-				} else
+				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-				
+					if (!resident.hasUUID())
+						resident.setUUID(player.getUniqueId());
+				}
 				resident.save();
 				
 			} catch (NotRegisteredException ex) {
