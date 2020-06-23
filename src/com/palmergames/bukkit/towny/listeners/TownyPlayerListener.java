@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarItemUseController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -214,7 +215,13 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarItemUseController.evaluatePlayerBucketEmptyEvent(event)) {
+				return;
+			}
+		}
+
 		// Test against the item in hand as we need to test the bucket contents
 		// we are trying to empty.
 		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event.getPlayer().getInventory().getItemInMainHand()));

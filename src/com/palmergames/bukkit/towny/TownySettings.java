@@ -66,6 +66,8 @@ public class TownySettings {
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
 	private static final List<HeldItemsCombination> tacticalVisibilityItems = new ArrayList<>();
+	private static List<Material> battleSessionsForbiddenBlockMaterials = null;
+	private static List<Material> battleSessionsForbiddenBucketMaterials = null;
 
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
@@ -3283,4 +3285,39 @@ public class TownySettings {
 	public static int getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() {
 		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_EXPIRED_PHASE_DURATION_MINUTES);
 	}
+
+	public static boolean isWarSiegeZoneBlockPlacementRestrictionsEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ZONE_BLOCK_PLACEMENT_RESTRICTIONS_ENABLED);
+	}
+
+	public static List<Material> getWarSiegeZoneBlockPlacementRestrictionsMaterials() {
+		if(battleSessionsForbiddenBlockMaterials == null) {
+			battleSessionsForbiddenBlockMaterials = new ArrayList<>();
+			String listAsString = getString(ConfigNodes.WAR_SIEGE_ZONE_BLOCK_PLACEMENT_RESTRICTIONS_MATERIALS);
+			String[] listAsStringArray = listAsString.split(",");
+			for (String blockTypeAsString : listAsStringArray) {
+				Material material = Material.matchMaterial(blockTypeAsString.trim());
+				battleSessionsForbiddenBlockMaterials.add(material);
+			}
+		}
+		return battleSessionsForbiddenBlockMaterials;
+	}
+
+	public static boolean isWarSiegeZoneBucketEmptyingRestrictionsEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ZONE_BUCKET_EMPTYING_RESTRICTIONS_ENABLED);
+	}
+
+	public static List<Material> getWarSiegeZoneBucketEmptyingRestrictionsMaterials() {
+		if(battleSessionsForbiddenBucketMaterials == null) {
+			battleSessionsForbiddenBucketMaterials = new ArrayList<>();
+			String listAsString = getString(ConfigNodes.WAR_SIEGE_ZONE_BUCKET_EMPTYING_RESTRICTIONS_MATERIALS);
+			String[] listAsStringArray = listAsString.split(",");
+			for (String blockTypeAsString : listAsStringArray) {
+				Material material = Material.matchMaterial(blockTypeAsString.trim());
+				battleSessionsForbiddenBucketMaterials.add(material);
+			}
+		}
+		return battleSessionsForbiddenBucketMaterials;
+	}
+
 }

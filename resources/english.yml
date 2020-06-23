@@ -1320,5 +1320,9 @@ msg_war_siege_battle_session_expired_warning: '&6[War]&c Battle session expired.
 msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle fatigue active. To remove battle fatigue, leave the siege-zone (and/or return to your own town). [Session End-Time: %s]'
 msg_war_siege_battle_session_ended: '&6[War]&2 Battle session ended. The next time you enter a siege-zone, a new battle session will begin.'
 
+#Siege-zone block placement restrictions
+msg_war_siege_zone_block_placement_forbidden: '&6[War]&c You cannot place this type of block in the wilderness area of a siege zone.'
+msg_war_siege_zone_bucket_emptying_forbidden: '&6[War]&c You cannot use this type of bucket in the wilderness area of a siege zone.'
+
 #Nation Refund
 nation_help_11 : 'Claim all your nation refunds.'

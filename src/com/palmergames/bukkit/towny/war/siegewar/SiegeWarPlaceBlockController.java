@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -12,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBattleSessionUtil;
@@ -84,11 +82,28 @@ public class SiegeWarPlaceBlockController {
 					return evaluatePlaceChest(player, block, event);
 			}
 
+			//Check for forbidden block placement
+			if(TownySettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled()) {
+				for(Material forbiddenMaterial: TownySettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials()) {
+					if(block.getType() == forbiddenMaterial) {
+						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());
+						if(townBlock == null && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) 
+						{
+							event.setCancelled(true);
+							event.setBuild(false);
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_zone_block_placement_forbidden"));
+							return true;
+						}
+						break; //A forbidden material was found, but other conditions were not met.
+					}
+				}
+			}
+
 			//Block placement unaffected
 			return false;
 
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(player, "Problem placing siege related block");
+			System.out.println("Problem evaluating siege block placement request");
 			e.printStackTrace();
 			return false;
 		}
