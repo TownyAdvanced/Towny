@@ -600,7 +600,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("uuid");
 				if (line != null)
-					resident.setUUID(UUID.fromString(line));
+					resident.setUniqueIdentifier(UUID.fromString(line));
 				
 				line = keys.get("registered");
 				if (line != null)

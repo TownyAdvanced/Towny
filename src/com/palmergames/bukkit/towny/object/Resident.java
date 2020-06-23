@@ -91,18 +91,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 		return isNPC;
 	}
-	
-	public UUID getUUID() {
-		return uuid;		
-	}
-	
-	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
-	}
-	
-	public boolean hasUUID() {
-		return this.uuid != null;
-	}
 
 	public void setJailed(boolean isJailed) {
 		this.isJailed = isJailed;

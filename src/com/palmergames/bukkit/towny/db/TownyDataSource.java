@@ -4,8 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
-import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -176,7 +174,7 @@ public abstract class TownyDataSource {
 				toRemove.add(resident);
 				//return false;
 			} else {
-				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
+				if (resident.hasUniqueIdentifier() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
 					hasUUID++;					
 			}
 

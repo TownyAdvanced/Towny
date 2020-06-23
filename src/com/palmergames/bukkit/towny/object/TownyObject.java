@@ -17,7 +17,7 @@ public abstract class TownyObject implements Nameable, Saveable {
 	private boolean changed;
 	
 	@PrimaryKey
-	private final UUID uniqueIdentifier;
+	private UUID uniqueIdentifier;
 
 	private transient HashSet<CustomDataField<?>> metadata = null;
 	
@@ -128,6 +128,14 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@Override
 	public final @NotNull UUID getUniqueIdentifier() {
 		return uniqueIdentifier;
+	}
+	
+	public void setUniqueIdentifier(UUID uuid) {
+		this.uniqueIdentifier = uuid;
+	}
+
+	public boolean hasUniqueIdentifier() {
+		return uniqueIdentifier != null;
 	}
 	
 	@Override
