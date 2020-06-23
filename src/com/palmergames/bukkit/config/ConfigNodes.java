@@ -2020,10 +2020,10 @@ public enum ConfigNodes {
 			"# If this setting is true, then battle sessions are enabled.",
 			"# Battle sessions are a way of automatically moderating the time each player spends siege-fighting.",
 			"# This is recommended to reduce stress and combat-fatigue.",
-			"# A battle session starts when a player steps into a siege zone.",
+			"# A battle session starts when a player steps into a siege zone (unless they are in their own town).",
 			"# A battle session has 2 main phases:",
 			"# * phase 1 - active - In this phase, the player can attend any siege.",
- 			"# * phase 2 - expired - In this phase the player must stay away from all sieges.",
+ 			"# * phase 2 - expired - In this phase the player cannot attend any siege (without getting 'battle fatigue' - poisoned/slowed/weakened).",
 			"# The durations of these phases are configured below."),
 
 	//Monetary Values

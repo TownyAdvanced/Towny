@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
@@ -24,11 +26,9 @@ public class SiegeWarBattleSessionUtil {
 		
 		for(Player player: BukkitTools.getOnlinePlayers()) {
 			try {
-
 				//Process progress of existing session
 				if (player.hasMetadata(METADATA_TAG_NAME)) {
 					battleSession = (BattleSession)player.getMetadata(METADATA_TAG_NAME).get(0).value();
-
 					if(battleSession.isExpired()) {
 						//Expired Session found. If deletion time has arrived, nuke session
 						if(System.currentTimeMillis() >= battleSession.getDeletionTime()) {
@@ -44,10 +44,21 @@ public class SiegeWarBattleSessionUtil {
 					}
 				}
 
-				//Process initiation/effects
-				if(SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
+				boolean playerInOwnTown = false;
+				try {
+					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if(resident.hasTown()) {
+						TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
+						if(townBlockAtPlayerLocation != null) {
+							if(resident.getTown() == townBlockAtPlayerLocation.getTown()) {
+								playerInOwnTown = true;
+							}
+						}
+					}
+				} catch (NotRegisteredException nre) {}
 
-					//Create battle session if required
+				//If player is in a siegezone (& not in own town), process initiation/effects
+				if(!playerInOwnTown && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
 					if (!player.hasMetadata(METADATA_TAG_NAME)) {
 						battleSession = new BattleSession();
 						battleSession.setExpiryTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
@@ -80,13 +91,14 @@ public class SiegeWarBattleSessionUtil {
 							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_expired_warning"), timeRemainingString));
 						}
 					}
+
 				} else {
-					//Player not in siege zone. Reset warning if applicable
+					//Player not in siege zone, or in own town. Reset warning if applicable
 					if(battleSession != null && battleSession.isExpired() && battleSession.isWarningGiven()) {
 						battleSession.setWarningGiven(false);
 					}
-				}
 
+				}
 			} catch (Exception e) {
 				try {
 					System.out.println("Problem evaluating battle session player " + player.getName());
