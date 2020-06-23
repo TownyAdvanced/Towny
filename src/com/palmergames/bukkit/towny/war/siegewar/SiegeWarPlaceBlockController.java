@@ -34,7 +34,7 @@ import java.util.List;
  * 3. A town surrender request  (place white banner in town)
  * 4. A town invasion request (place chest near attack banner)
  * 5. A town plunder request (place coloured banner near attack banner)
- * 6. A block forbidden as the player is in a battle session
+ * 6. A siege-forbidden block
  * 7. None of the above
  * 
  * If the place block event is determined to be a siege action,
@@ -82,21 +82,6 @@ public class SiegeWarPlaceBlockController {
 				case CHEST:
 				case TRAPPED_CHEST:
 					return evaluatePlaceChest(player, block, event);
-				default:
-			}
-
-			//Forbidden block placement
-			if(TownySettings.isWarSiegeBattleSessionsEnabled()) {
-				if(player.hasMetadata(SiegeWarBattleSessionUtil.METADATA_TAG_NAME)) {
-					for (Material forbiddenMaterial : TownySettings.getWarSiegeBattleSessionsForbiddenBlockTypes()) {
-						if (block.getType() == forbiddenMaterial) {
-							event.setCancelled(true);
-							event.setBuild(false);
-							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_forbidden_block_type"));
-							return true;
-						}
-					}
-				}
 			}
 
 			//Block placement unaffected

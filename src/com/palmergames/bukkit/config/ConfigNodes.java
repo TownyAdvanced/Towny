@@ -2244,10 +2244,6 @@ public enum ConfigNodes {
 		"war.siege.battle_sessions.expired_phase_duration_minutes",
 		"60",
 		"# This value determines the duration of the battle session expired phase."),
-	WAR_SIEGE_BATTLE_SESSIONS_FORBIDDEN_BLOCK_TYPES(
-		"war.siege.battle_sessions.forbidden_block_types",
-		"obsidian,water,lava",
-		"# This list specifies the block types which cannot be placed by a player in a battle session."),
 
 	//Tactical Visibility
 	//Todo - Eventually move this to another location as it works regardless of war system, or without.
