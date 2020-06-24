@@ -143,7 +143,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		stmtBuilder.append(");");
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error creating object " + obj.getName());
-		saveRelationships(obj);
+		saveOneToManyRelationships(obj);
 	}
 
 	// TODO Figure out how to handle insertions vs updates
@@ -165,7 +165,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					.append("'");
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
-		saveRelationships(obj);
+		saveOneToManyRelationships(obj);
 	}
 	
 	private Map<String, String> generateInsertionMap(@NotNull Saveable obj) {
@@ -187,7 +187,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
-	protected void saveRelationships(final Saveable obj) {
+	protected void saveOneToManyRelationships(final Saveable obj) {
 		// For each relationship
 		// We want to delete all rows in that relationship table with the parent id.
 		// Then we want to insert the collection back into the table.

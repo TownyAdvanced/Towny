@@ -42,8 +42,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -51,13 +53,11 @@ import java.util.function.Consumer;
 /**
  * The object which is responsible for converting objects from one format to another and
  * saving the mentioned format.
- * 
- * @author Suneet Tipirneni (Siris)
  */
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Type, List<Field>> fieldRelCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Type, List<Field>> fieldOneToManyCache = new ConcurrentHashMap<>();
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -86,7 +86,7 @@ public abstract class DatabaseHandler {
 		Validate.notNull(obj);
 		
 		// Check cache.
-		List<Field> fields = fieldRelCache.get(obj.getClass());
+		List<Field> fields = fieldOneToManyCache.get(obj.getClass());
 		
 		if (fields != null) {
 			return fields;
@@ -103,9 +103,9 @@ public abstract class DatabaseHandler {
 			
 			// Strong condition
 			try {
-				Validate.isTrue(ReflectionUtil.isArrayType(field.get(obj)),
+				Validate.isTrue(ReflectionUtil.isIterableType(field.get(obj)),
 					"The OneToMany annotation for field " + field.getName() +
-						" in " + obj.getClass() + " is not a List or primitive array type.");
+						" in " + obj.getClass() + " is not an iterable type.");
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -120,7 +120,7 @@ public abstract class DatabaseHandler {
 		}
 		
 		// Cache result.
-		fieldRelCache.putIfAbsent(obj.getClass(), fields);
+		fieldOneToManyCache.putIfAbsent(obj.getClass(), fields);
 		
 		return fields;
 	}
@@ -300,7 +300,7 @@ public abstract class DatabaseHandler {
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation", "unused"})
 	public void upgrade() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
@@ -336,7 +336,6 @@ public abstract class DatabaseHandler {
 	 * @param obj The object to save
 	 */
 	public abstract void saveNew(@NotNull Saveable obj);
-	
 	
 	/**
 	 * Saves the given object to the DB.
@@ -376,8 +375,13 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
-	
-	abstract void saveRelationships(Saveable obj);
+
+	/**
+	 * Saves all one-to-many relationships for a given object.
+	 * 
+	 * @param obj The object to save relationships from.
+	 */
+	abstract void saveOneToManyRelationships(Saveable obj);
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.

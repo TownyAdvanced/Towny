@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
-import com.palmergames.bukkit.towny.database.handler.SQLDatabaseHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -258,7 +257,7 @@ public class Towny extends JavaPlugin {
 		
 		
 		((FlatFileDatabaseHandler)TownyUniverse.getInstance()
-			.getDatabaseHandler()).saveRelationships(nationA);
+			.getDatabaseHandler()).saveOneToManyRelationships(nationA);
 		
 		// ------------------- TESTING CODE -------------------
 	}

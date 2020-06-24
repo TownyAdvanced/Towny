@@ -48,7 +48,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	// Create files
 	static {
-		relationshipDir.mkdirs();
+		boolean mkdirRes = relationshipDir.mkdirs();
+		if (!mkdirRes) {
+			throw new UnsupportedOperationException("Required Directories could not be created.");
+		}
 	}
 
 	// Flatfile doesn't need this specification, so can just forward it to the regular save method.
@@ -59,7 +62,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void save(@NotNull Saveable obj) {
-		// Validation safety
+		// Validation/fail-fast safety
 		Validate.notNull(obj);
 		Validate.notNull(obj.getSaveDirectory(), "You must specify a save path for class: " + obj.getClass().getName());
 		
@@ -341,7 +344,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return saveable.getSaveDirectory();
 	}
 	
-	public void saveRelationships(@NotNull Saveable obj) {
+	public void saveOneToManyRelationships(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 		List<String> data = new ArrayList<>();
 		
