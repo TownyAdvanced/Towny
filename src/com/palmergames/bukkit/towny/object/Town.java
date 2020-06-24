@@ -668,7 +668,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	private void remove(Resident resident) {
-		
+		System.out.println("private void remove(Resident residen = " + resident + ")");
 		resident.setTitle("");
 		resident.setSurname("");
 		resident.updatePerms();
@@ -693,9 +693,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (isMayor(resident)) {
 
 			if (residents.size() > 1) {
+				System.out.println("TownySettings.getOrderOfMayoralSuccession() = " + TownySettings.getOrderOfMayoralSuccession());
 				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
-					for (Resident newMayor : new ArrayList<>(getRank(rank)))
-						if ((newMayor != resident) && (newMayor.hasTownRank(rank))) {
+					System.out.println("getRank(rank = " + rank + ") = " + getRank(rank));
+					for (Resident newMayor : new ArrayList<>(getRank(rank))) {
+						System.out.println("newMayor = " + newMayor);
+						if ((newMayor != resident) && (newMayor.hasTownRank(rank))) {  // The latter potion seems redundant.
 							try {
 								setMayor(newMayor);
 								break;
@@ -703,12 +706,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 								// Error setting mayor.
 								e.printStackTrace();
 							}
+							System.out.println("mayor = " + mayor);
 						}
+					}
 				}
 				if (isMayor(resident)) {
 					// Still mayor and no one with a rank in the order of mayoral succession
 					// (`TownySettings.getOrderOfMayoralSuccession()`) so pick a resident to be mayor.
-					for (Resident newMayor : new ArrayList<>(getResidents()))
+					for (Resident newMayor : new ArrayList<>(getResidents())) {
 						if (newMayor != resident) {
 							try {
 								setMayor(newMayor);
@@ -718,6 +723,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 								e.printStackTrace();
 							}
 						}
+					}
 				}
 			}
 
