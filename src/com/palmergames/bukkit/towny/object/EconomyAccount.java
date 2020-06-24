@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.AbstractAccount;
 import org.bukkit.World;
 
 /**
@@ -13,7 +13,7 @@ import org.bukkit.World;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public class EconomyAccount extends Account {
+public class EconomyAccount extends AbstractAccount {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	private World world;
 	
@@ -24,12 +24,12 @@ public class EconomyAccount extends Account {
 
 	@Override
 	protected boolean addMoney(double amount) {
-		return TownyEconomyHandler.add(getName(), amount, world);
+		return TownyEconomyHandler.addPlayer(getName(), amount, world);
 	}
 
 	@Override
 	protected boolean subtractMoney(double amount) {
-		return TownyEconomyHandler.subtract(getName(), amount, world);
+		return TownyEconomyHandler.subtractPlayer(getName(), amount, world);
 	}
 
 	protected EconomyAccount(String name) {
@@ -97,7 +97,7 @@ public class EconomyAccount extends Account {
 //	 * @return true, or pay/collect balance for given reason
 //	 * @throws EconomyException if transaction fails
 //	 */
-//	public boolean setBalance(double amount, String reason) throws EconomyException {
+//	public boolean setPlayerBalance(double amount, String reason) throws EconomyException {
 //		double balance = getHoldingBalance();
 //		double diff = amount - balance;
 //		if (diff > 0) {
@@ -115,13 +115,13 @@ public class EconomyAccount extends Account {
 //
 //	/*
 //	private boolean _setBalance(double amount) {
-//		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
+//		return TownyEconomyHandler.setPlayerBalance(getEconomyName(), amount, getBukkitWorld());
 //	}
 //	*/
 //
 //	public double getHoldingBalance() throws EconomyException {
 //		try {
-//			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+//			return TownyEconomyHandler.getPlayerBalance(getName(), getBukkitWorld());
 //		} catch (NoClassDefFoundError e) {
 //			e.printStackTrace();
 //			throw new EconomyException("Economy error getting holdings for " + getName());
@@ -136,7 +136,7 @@ public class EconomyAccount extends Account {
 //	 * @throws EconomyException if failure
 //	 */
 //	public boolean canPayFromHoldings(double amount) throws EconomyException {
-//		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
+//		return TownyEconomyHandler.playerHasEnough(getName(), amount, getBukkitWorld());
 //	}
 //
 //	/**
@@ -148,7 +148,7 @@ public class EconomyAccount extends Account {
 //		try {
 //			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 //		} catch (EconomyException e) {
-//			return "Error Accessing Bank Account";
+//			return "Error Accessing Bank AbstractAccount";
 //		}
 //	}
 //

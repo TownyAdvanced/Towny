@@ -11,7 +11,7 @@ import org.bukkit.World;
  * a checked cap on it's balance, as well as a 
  * debt system.
  */
-public class BankAccount extends Account {
+public class Bank extends AbstractAccount {
 	
 	private double balanceCap;
 	private final Account debtAccount;
@@ -32,11 +32,11 @@ public class BankAccount extends Account {
 		}
 	}
 	
-	public BankAccount(String name, World world, double balanceCap) {
+	public Bank(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
 		this.debtAccount = new DebtAccount(this);
-		this.debtCap = 0;
+		this.debtCap = 1000;
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class BankAccount extends Account {
 
 				if(amountInDebt <= getDebtCap()) {
 					// Empty out account.
-					boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
+					boolean success = TownyEconomyHandler.setPlayerBalance(getName(), 0, world);
 					success &= addDebt(amountInDebt);
 
 					return success;
@@ -106,7 +106,7 @@ public class BankAccount extends Account {
 		}
 
 		// Otherwise continue like normal.
-		return TownyEconomyHandler.subtract(getName(), amount, world);
+		return TownyEconomyHandler.subtractFromBank(getName(), amount, world);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class BankAccount extends Account {
 		}
 
 		// Otherwise continue like normal.
-		return TownyEconomyHandler.add(getName(), amount, world);
+		return TownyEconomyHandler.addToBank(getName(), amount, world);
 	}
 
 	/**
@@ -148,12 +148,12 @@ public class BankAccount extends Account {
 			// Calculate money to go into regular account.
 			double netMoney = amount - debtAccount.getHoldingBalance();
 			//Clear debt account
-			TownyEconomyHandler.setBalance(debtAccount.getName(), 0, world);
+			TownyEconomyHandler.setPlayerBalance(debtAccount.getName(), 0, world);
 			//Set positive balance in regular account
-			TownyEconomyHandler.setBalance(getName(), netMoney, world);
+			TownyEconomyHandler.setBankBalance(getName(), netMoney, world);
 			return true;
 		} else {
-			return TownyEconomyHandler.subtract(debtAccount.getName(), amount,world);
+			return TownyEconomyHandler.subtractPlayer(debtAccount.getName(), amount,world);
 		}
 	}
 
@@ -161,9 +161,9 @@ public class BankAccount extends Account {
 	public double getHoldingBalance() throws EconomyException {
 		try {
 			if (isBankrupt()) {
-				return TownyEconomyHandler.getBalance(debtAccount.getName(), getBukkitWorld()) * -1;
+				return TownyEconomyHandler.getPlayerBalance(debtAccount.getName(), getBukkitWorld()) * -1;
 			}
-			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+			return TownyEconomyHandler.getPlayerBalance(getName(), getBukkitWorld());
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 			throw new EconomyException("Economy error getting holdings for " + getName());
@@ -186,6 +186,6 @@ public class BankAccount extends Account {
 	public void removeAccount() {
 		// Make sure to remove debt account
 		TownyEconomyHandler.removeAccount(debtAccount.getName());
-		TownyEconomyHandler.removeAccount(getName());
+		TownyEconomyHandler.removeBank(getName());
 	}
 }

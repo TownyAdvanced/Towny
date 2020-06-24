@@ -1,7 +1,7 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy;
 
-import com.palmergames.bukkit.towny.object.economy.EconomyAdapter;
 import net.tnemc.core.economy.EconomyAPI;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import java.math.BigDecimal;
@@ -15,12 +15,12 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public boolean add(String accountName, double amount, World world) {
+	public boolean depositPlayer(String accountName, double amount, World world) {
 		return economy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 	}
 
 	@Override
-	public boolean subtract(String accountName, double amount, World world) {
+	public boolean withdrawPlayer(String accountName, double amount, World world) {
 		return economy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
 	}
 
@@ -35,12 +35,12 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public void newAccount(String accountName) {
+	public void newPlayerAccount(String accountName) {
 		economy.createAccountDetail(accountName).success();
 	}
 
 	@Override
-	public void deleteAccount(String accountName) {
+	public void deletePlayerAccount(String accountName) {
 		economy.deleteAccountDetail(accountName);
 	}
 
@@ -52,5 +52,10 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	@Override
 	public String getFormattedBalance(double balance) {
 		return economy.format(new BigDecimal(balance));
+	}
+
+	@Override
+	public boolean hasBankSupport() {
+		return false;
 	}
 }

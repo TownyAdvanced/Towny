@@ -21,5 +21,5 @@ public interface BankEconomyHandler extends EconomyHandler {
 	String getEconomyPrefix();
 
 	@Override
-	BankAccount getAccount();
+	Bank getAccount();
 }

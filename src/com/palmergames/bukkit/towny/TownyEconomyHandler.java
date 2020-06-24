@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
-import com.palmergames.bukkit.towny.object.ReserveEconomyAdapter;
+import com.palmergames.bukkit.towny.object.economy.ReserveEconomyAdapter;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.economy.EconomyAdapter;
@@ -32,7 +32,9 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
 	private static String version = "";
+
 	
+
 	public enum EcoType {
 		NONE, VAULT, RESERVE
 	}
@@ -181,7 +183,7 @@ public class TownyEconomyHandler {
 	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
-		economy.deleteAccount(accountName);
+		economy.deletePlayerAccount(accountName);
 	}
 
 	/**
@@ -191,8 +193,8 @@ public class TownyEconomyHandler {
 	 * @param world name of world to check in (for TNE Reserve)   
 	 * @return double containing the total in the account
 	 */
-	public static double getBalance(String accountName, World world) {
-		checkNewAccount(accountName);
+	public static double getPlayerBalance(String accountName, World world) {
+		checkNewPlayerAccount(accountName);
 		return economy.getBalance(accountName, world);
 	}
 
@@ -204,9 +206,9 @@ public class TownyEconomyHandler {
 	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
-	public static boolean hasEnough(String accountName, double amount, World world) {
-		TownyMessaging.sendErrorMsg(getBalance(accountName, world) + "");
-		return getBalance(accountName, world) >= amount;
+	public static boolean playerHasEnough(String accountName, double amount, World world) {
+		TownyMessaging.sendErrorMsg(getPlayerBalance(accountName, world) + "");
+		return getPlayerBalance(accountName, world) >= amount;
 	}
 	
 	private static boolean runPreChecks(Transaction transaction, String accountName) {
@@ -218,7 +220,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		checkNewAccount(accountName);
+		checkNewPlayerAccount(accountName);
 		return true;
 	}
 	
@@ -231,7 +233,7 @@ public class TownyEconomyHandler {
 	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtract(String accountName, double amount, World world) {
+	public static boolean subtractPlayer(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
@@ -241,7 +243,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 		
-		if (economy.subtract(accountName, amount, world)) {
+		if (economy.withdrawPlayer(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -252,12 +254,12 @@ public class TownyEconomyHandler {
 	/**
 	 * Add funds to an account.
 	 * 
-	 * @param accountName account to add funds to
-	 * @param amount amount of currency to add
+	 * @param accountName account to depositPlayer funds to
+	 * @param amount amount of currency to depositPlayer
 	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean add(String accountName, double amount, World world) {
+	public static boolean addPlayer(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
@@ -267,7 +269,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		if (economy.add(accountName, amount, world)) {
+		if (economy.depositPlayer(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -275,8 +277,8 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	public static boolean setBalance(String accountName, double amount, World world) {
-		checkNewAccount(accountName);
+	public static boolean setPlayerBalance(String accountName, double amount, World world) {
+		checkNewPlayerAccount(accountName);
 		return economy.setBalance(accountName, amount, world);
 	}
 
@@ -305,7 +307,7 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean addToServer(double amount, World world) {
-		return add(getServerAccount(), amount, world);
+		return addPlayer(getServerAccount(), amount, world);
 	}
 
 	/**
@@ -316,14 +318,78 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean subtractFromServer(double amount, World world) {
-		return subtract(getServerAccount(), amount, world);
+		return subtractPlayer(getServerAccount(), amount, world);
 	}
 	
-	private static void checkNewAccount(String accountName) {
+	private static void checkNewPlayerAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
-			economy.newAccount(accountName);
+			economy.newPlayerAccount(accountName);
 		}
+	}
+	
+	public static boolean supportsBanks() {
+		return economy.hasBankSupport();
+	}
+	
+	// ---------- Bank Methods ----------
+	
+	public static boolean addToBank(String bankName, double amount, World world) {
+		if (!supportsBanks()) {
+			return addPlayer(bankName, amount, world);
+		}
+		
+		return economy.bankDeposit(bankName, amount);
+	}
+	
+	public static boolean subtractFromBank(String bankName, double amount, World world) {
+		if (!supportsBanks()) {
+			return subtractPlayer(bankName, amount, world);
+		}
+		
+		return economy.bankWithdraw(bankName, amount);
+	}
+	
+	public static double getBankBalance(String bankName) {
+		if (!supportsBanks()) {
+			return getPlayerBalance(bankName, null);
+		}
+		
+		return economy.getBankBalance(bankName);
+	}
+	
+	public static boolean bankHasEnough(String bankName, double amount, World world) {
+		if (!supportsBanks()) {
+			return playerHasEnough(bankName, amount, world);
+		}
+		
+		return getBankBalance(bankName) >= amount;
+	}
+
+	public static void setBankBalance(String name, double netMoney, World world) {
+		if (!supportsBanks()) {
+			setPlayerBalance(name, netMoney, world);
+			return;
+		}
+		
+		economy.setBankBalance(name, netMoney);
+	}
+	
+	public static void removeBank(String name) {
+		if (!supportsBanks()) {
+			economy.deletePlayerAccount(name);
+			return;
+		}
+		economy.deleteBank(name);
+	}
+	
+	public static void addBank(String name, Player player) {
+		if (!supportsBanks()) {
+			economy.newPlayerAccount(name);
+			return;
+		}
+		
+		economy.newBank(name, player);
 	}
 
 }
