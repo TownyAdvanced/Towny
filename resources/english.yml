@@ -1306,18 +1306,19 @@ msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peacefu
 msg_war_common_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, for %s.'
 msg_war_common_peaceful_town_cannot_toggle_pvp: '&cCannot toggle PVP in peaceful towns. It is forced off.'
 
-msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off, and residents can no longer inflict PVP damage or gain nation-military ranks. The town is now immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
-msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off, and residents can inflict PVP damage and gain nation-military ranks. The town is no longer immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
-msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, or gain nation-military ranks, for %s.'
+msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off. Residents are vulnerable to war-allergy if they enter a siege-zone, and cannot gain nation-military ranks. The town is now immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
+msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off. Residents are no longer vulnerable to war-allergy, and can gain nation-military ranks. The town is no longer immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
+msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you are still vulnerable to war-allergy, and cannot gain nation-military ranks, for %s.'
 msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to add military rank to resident, because they are in a peaceful town, or recently left one.'
+msg_war_siege_peaceful_player_punished_for_being_in_siegezone: '&cWar-allergy active. To remove this effect, leave the siege-zone immediately.'
 
 #Siege immunities
 msg_set_siege_immunities: 'All town siege immunities set to %d hours.'
 
 #Battle sessions
 msg_war_siege_battle_session_started: '&6[War]&2 Battle session started. You are free to enter any siege-zone for the next %s.'
-msg_war_siege_battle_session_expired_warning: '&6[War]&c Battle session expired. To avoid battle fatigue, leave the siege-zone immediately (and/or return to your own town). [Session End-Time: %s]'
-msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle fatigue active. To remove battle fatigue, leave the siege-zone (and/or return to your own town). [Session End-Time: %s]'
+msg_war_siege_battle_session_expired_warning: '&6[War]&c Battle session expired. To avoid battle-fatigue, leave the siege-zone immediately (and/or return to your own town). [Session End-Time: %s]'
+msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle-fatigue active. To remove this effect, leave the siege-zone (and/or return to your own town). [Session End-Time: %s]'
 msg_war_siege_battle_session_ended: '&6[War]&2 Battle session ended. The next time you enter a siege-zone, a new battle session will begin.'
 
 #Siege-zone block placement restrictions

@@ -31,6 +31,7 @@ public class ShortTimerTask extends TownyTimerTask {
 		}
 
 		if (TownySettings.getWarSiegeEnabled()) {
+			SiegeWarTimerTaskController.punishPeacefulPlayersInActiveSiegeZones();
 			SiegeWarTimerTaskController.evaluateBattleSessions();
 			SiegeWarTimerTaskController.evaluateBannerControl();
 			SiegeWarTimerTaskController.evaluateTacticalVisibility();

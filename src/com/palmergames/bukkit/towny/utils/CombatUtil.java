@@ -156,8 +156,6 @@ public class CombatUtil {
 					|| preventPvP(world, defenderTB)
 					|| (TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()
 						&& PostRespawnPeacefulnessUtil.doesPlayerHavePostRespawnPeacefulness(attackingPlayer))
-					|| (TownySettings.getWarCommonPeacefulTownsEnabled()
-						&& TownPeacefulnessUtil.doesPlayerHaveTownRelatedPeacefulness(attackingPlayer))
 					)
 				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
