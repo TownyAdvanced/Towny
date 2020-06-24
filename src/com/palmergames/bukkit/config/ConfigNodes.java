@@ -530,10 +530,9 @@ public enum ConfigNodes {
 	GTOWN_ORDER_OF_MAYORAL_SUCCESSION(
 			"global_town_settings.order_of_mayoral_succession",
 			"assistant",
-			"# The ranks to be given preference when assigning a new mayor.",
+			"# # The ranks to be given preference when assigning a new mayor, listed in order of descending preference.",
 			"# All ranks should be as defined in `townyperms.yml`.",
-			"# Note that the order in which these ranks are checked is not guaranteed.",
-			"# Example: `assistant,visemayor` to give both `assistant`s and `visemayor`s priority over regular residents."
+			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
 	
 	GNATION_SETTINGS(

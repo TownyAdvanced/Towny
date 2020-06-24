@@ -690,43 +690,21 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			}
 		}
 
+		// Mayoral succession.
 		if (isMayor(resident)) {
-
 			if (residents.size() > 1) {
 				System.out.println("TownySettings.getOrderOfMayoralSuccession() = " + TownySettings.getOrderOfMayoralSuccession());
 				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
-					System.out.println("getRank(rank = " + rank + ") = " + getRank(rank));
-					for (Resident newMayor : new ArrayList<>(getRank(rank))) {
-						System.out.println("newMayor = " + newMayor);
-						if ((newMayor != resident) && (newMayor.hasTownRank(rank))) {  // The latter potion seems redundant.
-							try {
-								setMayor(newMayor);
-								break;
-							} catch (TownyException e) {
-								// Error setting mayor.
-								e.printStackTrace();
-							}
-							System.out.println("mayor = " + mayor);
-						}
+					if (findNewMayor(rank)) {
+						break;
 					}
 				}
 				if (isMayor(resident)) {
 					// Still mayor and no one with a rank in the order of mayoral succession
 					// (`TownySettings.getOrderOfMayoralSuccession()`) so pick a resident to be mayor.
-					for (Resident newMayor : new ArrayList<>(getResidents())) {
-						if (newMayor != resident) {
-							try {
-								setMayor(newMayor);
-								break;
-							} catch (TownyException e) {
-								// Error setting mayor.
-								e.printStackTrace();
-							}
-						}
-					}
+					findNewMayor();
 				}
 			}
-
 		}
 
 		try {
@@ -745,6 +723,58 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
+	/**
+	 * Tries to find a new mayor from among the town's residents with the rank specified.
+	 * 
+	 * @param rank - the rank being checked for potential mayors
+	 * @return found - whether or not a new mayor was found
+	 */
+	private boolean findNewMayor(String rank) {
+		boolean found = false;
+		System.out.println("getRank(rank = " + rank + ") = " + getRank(rank));
+		for (Resident newMayor : new ArrayList<>(getRank(rank))) {
+			System.out.println("newMayor = " + newMayor);
+			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
+				try {
+					setMayor(newMayor);
+					found = true;
+					break;
+				} catch (TownyException e) {
+					// Error setting mayor.
+					e.printStackTrace();
+					found = false;
+				}
+				System.out.println("mayor = " + mayor);
+			}
+		}
+		return found;
+	}
+	
+	/**
+	 * Tries to find a new mayor from among the town's residents.
+	 * 
+	 * @return found - whether or not a new mayor was found
+	 */
+	private boolean findNewMayor() {
+		boolean found = false;
+		for (Resident newMayor : new ArrayList<>(getResidents())) {
+			System.out.println("newMayor = " + newMayor);
+			if (newMayor != mayor) {
+				try {
+					setMayor(newMayor);
+					found = true;
+					break;
+				} catch (TownyException e) {
+					// Error setting mayor.
+					e.printStackTrace();
+					found = false;
+				}
+				System.out.println("mayor = " + mayor);
+			}
+		}
+		return found;
+	}
+	
 	public void setSpawn(Location spawn) throws TownyException {
 
 		if (!hasHomeBlock())
