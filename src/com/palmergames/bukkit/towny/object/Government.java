@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.GovernmentTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -9,7 +10,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
-import com.palmergames.bukkit.towny.object.economy.BankAccount;
+import com.palmergames.bukkit.towny.object.economy.Bank;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, SpawnLocation {
 	
-	protected BankAccount account;
+	protected Bank account;
 	protected Location spawn;
 	protected String tag = "";
 	protected String board = null;
@@ -247,11 +248,11 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	@Override
-	public BankAccount getAccount() {
+	public Bank getAccount() {
 		if (account == null) {
 			String accountName = StringMgmt.trimMaxLength(getBankAccountPrefix() + getName(), 32);
 			World world = getWorld();
-			account = new BankAccount(accountName, world, getBankCap());
+			account = new Bank(accountName, world, getBankCap());
 			account.setAuditor(accountAuditor);
 		}
 

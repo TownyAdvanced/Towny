@@ -179,7 +179,7 @@ public class TownyEconomyHandler {
 	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
-		economy.deleteAccount(accountName);
+		economy.deletePlayerAccount(accountName);
 	}
 
 	/**
@@ -189,8 +189,8 @@ public class TownyEconomyHandler {
 	 * @param world name of world to check in (for TNE Reserve)   
 	 * @return double containing the total in the account
 	 */
-	public static double getBalance(String accountName, World world) {
-		checkNewAccount(accountName);
+	public static double getPlayerBalance(String accountName, World world) {
+		checkNewPlayerAccount(accountName);
 		return economy.getBalance(accountName, world);
 	}
 
@@ -216,7 +216,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		checkNewAccount(accountName);
+		checkNewPlayerAccount(accountName);
 		return true;
 	}
 	
@@ -229,7 +229,7 @@ public class TownyEconomyHandler {
 	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtract(String accountName, double amount, World world) {
+	public static boolean subtractPlayer(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
@@ -239,7 +239,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 		
-		if (economy.subtract(accountName, amount, world)) {
+		if (economy.withdrawPlayer(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -250,12 +250,12 @@ public class TownyEconomyHandler {
 	/**
 	 * Add funds to an account.
 	 * 
-	 * @param accountName account to add funds to
-	 * @param amount amount of currency to add
+	 * @param accountName account to depositPlayer funds to
+	 * @param amount amount of currency to depositPlayer
 	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean add(String accountName, double amount, World world) {
+	public static boolean addPlayer(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
@@ -265,7 +265,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		if (economy.add(accountName, amount, world)) {
+		if (economy.depositPlayer(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -273,8 +273,8 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	public static boolean setBalance(String accountName, double amount, World world) {
-		checkNewAccount(accountName);
+	public static boolean setPlayerBalance(String accountName, double amount, World world) {
+		checkNewPlayerAccount(accountName);
 		return economy.setBalance(accountName, amount, world);
 	}
 
@@ -303,7 +303,7 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean addToServer(double amount, World world) {
-		return add(getServerAccount(), amount, world);
+		return addPlayer(getServerAccount(), amount, world);
 	}
 
 	/**
@@ -314,16 +314,17 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean subtractFromServer(double amount, World world) {
-		return subtract(getServerAccount(), amount, world);
+		return subtractPlayer(getServerAccount(), amount, world);
 	}
 	
-	private static void checkNewAccount(String accountName) {
+	private static void checkNewPlayerAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
-			economy.newAccount(accountName);
+			economy.newPlayerAccount(accountName);
 		}
 	}
 	
+
 	public static void newAccount(String accountName) {
 		economy.newAccount(accountName);
 	}
