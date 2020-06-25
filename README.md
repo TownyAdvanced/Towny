@@ -14,13 +14,14 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.* & 1.16.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.* & 1.16.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
+| MC 1.16.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
 | MC 1.15.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
-| MC 1.14.* | [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) |
+| MC 1.14.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
 | MC 1.13.2 | [0.96.1.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
