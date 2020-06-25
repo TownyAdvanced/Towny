@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
@@ -27,10 +28,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
 		
 		// If the block has an inventory it implements the BlockInventoryHolder interface.
-		if (state instanceof Chest) {
+		if (state instanceof Container) {
 			
 			// Cast the block to the interface representation.
-			Chest container = (Chest) state;
+			Container container = (Container) state;
 			
 			// Capture inventory.
 			Inventory inventory = container.getInventory();
