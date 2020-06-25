@@ -79,9 +79,10 @@ public class SiegeWarBattleSessionUtil {
 							Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
 								public void run() {
 									List<PotionEffect> potionEffects = new ArrayList<>();
-									potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 1));
-									potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 1));
-									potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 1));
+									potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 0));
+									potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 0));
+									potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 0));
+									potionEffects.add(new PotionEffect(PotionEffectType.CONFUSION, effectDurationTicks, 0));
 									player.addPotionEffects(potionEffects);
 								}
 							});

@@ -167,9 +167,10 @@ public class TownPeacefulnessUtil {
 						Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
 							public void run() {
 								List<PotionEffect> potionEffects = new ArrayList<>();
-								potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 2));
-								potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 2));
-								potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 2));
+								potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 1));
+								potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 1));
+								potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 1));
+								potionEffects.add(new PotionEffect(PotionEffectType.CONFUSION, effectDurationTicks, 1));
 								player.addPotionEffects(potionEffects);
 							}
 						});

@@ -66,16 +66,6 @@ public class SiegeWarBlockUtil {
 	}
 
 	/**
-	 * This method determines if the player has an air block above them
-	 *
-	 * @param player the player
-	 * @return true if player has an air block above them
-	 */
-	public static boolean doesPlayerHaveANonAirBlockAboveThem(Player player) {
-		return doesLocationHaveANonAirBlockAboveIt(player.getLocation());
-	}
-
-	/**
 	 * This method determines if a block has an air block above it
 	 *
 	 * @param block the block

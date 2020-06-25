@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -12,9 +9,14 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BannerControlSession;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.util.TimeMgmt;
+import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains utility functions related to banner control
@@ -111,6 +113,17 @@ public class SiegeWarBannerControlUtil {
 		//Notify Player
 		TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_siege_war_banner_control_session_started"), TownySettings.getTownBlockSize(), TimeMgmt.getFormattedTimeValue(sessionDurationMillis)));
 
+		//Make player glow (which also shows them a timer)
+		int effectDurationSeconds = TownySettings.getWarSiegeBannerControlSessionDurationMinutes() * 60; 
+		int effectDurationTicks = (int)(TimeTools.convertToTicks(effectDurationSeconds));
+		Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
+			public void run() {
+				List<PotionEffect> potionEffects = new ArrayList<>();
+				potionEffects.add(new PotionEffect(PotionEffectType.GLOWING, effectDurationTicks, 0));
+				player.addPotionEffects(potionEffects);
+			}
+		});
+
 		//If this is a switching session, notify participating nations/towns
 		if(siegeSide != siege.getBannerControllingSide()) {
 
@@ -154,9 +167,6 @@ public class SiegeWarBannerControlUtil {
 
 		if(!SiegeWarPointsUtil.isPlayerInTimedPointZone(player, siege))
 			return false; //player is not in the timed point zone
-
-		if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player))
-			return false; //Player is under a block
 
 		return true;
 	}
