@@ -179,7 +179,7 @@ public class TownyEconomyHandler {
 	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
-		economy.deletePlayerAccount(accountName);
+		economy.deleteAccount(accountName);
 	}
 
 	/**
@@ -189,8 +189,8 @@ public class TownyEconomyHandler {
 	 * @param world name of world to check in (for TNE Reserve)   
 	 * @return double containing the total in the account
 	 */
-	public static double getPlayerBalance(String accountName, World world) {
-		checkNewPlayerAccount(accountName);
+	public static double getBalance(String accountName, World world) {
+		checkNewAccount(accountName);
 		return economy.getBalance(accountName, world);
 	}
 
@@ -203,7 +203,6 @@ public class TownyEconomyHandler {
 	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, double amount, World world) {
-
 		return getBalance(accountName, world) >= amount;
 	}
 	
@@ -216,7 +215,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		checkNewPlayerAccount(accountName);
+		checkNewAccount(accountName);
 		return true;
 	}
 	
@@ -229,7 +228,7 @@ public class TownyEconomyHandler {
 	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtractPlayer(String accountName, double amount, World world) {
+	public static boolean subtract(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
@@ -239,7 +238,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 		
-		if (economy.withdrawPlayer(accountName, amount, world)) {
+		if (economy.subtract(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -250,12 +249,12 @@ public class TownyEconomyHandler {
 	/**
 	 * Add funds to an account.
 	 * 
-	 * @param accountName account to depositPlayer funds to
-	 * @param amount amount of currency to depositPlayer
+	 * @param accountName account to add funds to
+	 * @param amount amount of currency to add
 	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean addPlayer(String accountName, double amount, World world) {
+	public static boolean add(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
@@ -265,7 +264,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		if (economy.depositPlayer(accountName, amount, world)) {
+		if (economy.add(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
@@ -273,8 +272,8 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	public static boolean setPlayerBalance(String accountName, double amount, World world) {
-		checkNewPlayerAccount(accountName);
+	public static boolean setBalance(String accountName, double amount, World world) {
+		checkNewAccount(accountName);
 		return economy.setBalance(accountName, amount, world);
 	}
 
@@ -303,7 +302,7 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean addToServer(double amount, World world) {
-		return addPlayer(getServerAccount(), amount, world);
+		return add(getServerAccount(), amount, world);
 	}
 
 	/**
@@ -314,13 +313,13 @@ public class TownyEconomyHandler {
 	 * @return A boolean indicating success.
 	 */
 	public static boolean subtractFromServer(double amount, World world) {
-		return subtractPlayer(getServerAccount(), amount, world);
+		return subtract(getServerAccount(), amount, world);
 	}
 	
-	private static void checkNewPlayerAccount(String accountName) {
+	private static void checkNewAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
-			economy.newPlayerAccount(accountName);
+			economy.newAccount(accountName);
 		}
 	}
 	

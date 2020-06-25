@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.object.economy.AbstractAccount;
 import com.palmergames.bukkit.towny.object.economy.Account;
 
 /**
@@ -11,9 +10,9 @@ import com.palmergames.bukkit.towny.object.economy.Account;
  */
 public interface EconomyHandler extends Nameable {
 	/**
-	 * Gets the {@link AbstractAccount} associated with this object.
+	 * Gets the {@link Account} associated with this object.
 	 * 
-	 * @return An {@link AbstractAccount} for this class.
+	 * @return An {@link Account} for this class.
 	 */
 	Account getAccount();
 }
