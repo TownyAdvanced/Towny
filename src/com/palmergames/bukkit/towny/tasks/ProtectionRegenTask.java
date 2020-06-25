@@ -7,11 +7,12 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class ProtectionRegenTask extends TownyTimerTask {
@@ -28,10 +29,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
 		
 		// If the block has an inventory it implements the BlockInventoryHolder interface.
-		if (state instanceof Container) {
+		if (state instanceof InventoryHolder) { // 1.13 support - Use InventoryHolder instead
 			
 			// Cast the block to the interface representation.
-			Container container = (Container) state;
+			InventoryHolder container = (InventoryHolder) state;
 			
 			// Capture inventory.
 			Inventory inventory = container.getInventory();
@@ -82,25 +83,22 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			state.update();
 		}
 		
-		/* Add inventory back to the block if it conforms to BlockInventoryHolder.
-		*
-		* Unusable on 1.13
-		* 
-		if (state instanceof BlockInventoryHolder) {
+		if (state instanceof InventoryHolder) { // 1.13 support - Use InventoryHolder instead
 			// Up cast to interface.
-			BlockInventoryHolder container = (BlockInventoryHolder) state;
+			InventoryHolder container = (InventoryHolder) state;
 			
 			// Check for chest.
 			if (container instanceof Chest) {
 				((Chest) state).getBlockInventory().setContents(contents);
+			} else if (container instanceof DoubleChest) {
+				((DoubleChest) state).getInventory().setContents(contents);
 			} else {
-				((BlockInventoryHolder) state).getInventory().setContents(contents);
+				((InventoryHolder) state).getInventory().setContents(contents);
 			}
 			
 			// update blocks.
 			state.update();
 		}
-		 */
 	}
 
 	/**
