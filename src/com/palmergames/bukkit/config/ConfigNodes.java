@@ -1941,18 +1941,17 @@ public enum ConfigNodes {
 			"# This prevents the new nation cost becoming a large sunken cost due to invasion."),
 	WAR_SIEGE_PILLAGING_ENABLED(
 			"war.siege.switches.pillaging_enabled",
-			"true",
+			"false",
 			"# If this is true, then pillaging is enabled,",
 			"# Pillaging represents attackers raiding the countryside around a besieged town.",
-			"# If this is enabled, then with each siege war tick, attacking soldiers steal a small amount from the town bank.",
-			"# The pillaged amount does not vary with the number of attacking soldiers at the banner.",
-			"# Rather it is divided up between all the attacking soldiers.",
+			"# If this is enabled, then with each short tick, attacking soldiers on the banner-control list steal a small amount from the town bank.",
+			"# The pillaged amount does not vary with the number of soldiers on the list.",
+			"# Rather it is divided up between all the soldiers.",
 			"# ",
-			"# This feature is highly recommended, because:",
-		    "# 1. Attackers are motivated to invade territory by receiving immediate financial rewards.", 
-		    "#    Otherwise, attacking soldiers at the banner are toiling for a distant reward, and the reward. if it arrives after a long siege. will only be received by the mayor or king anyway.",
-			"# 2. Defenders are motivated to fight because of immediate financial danger.",
-			"#    Otherwise, there is no urgent motivation for defenders to come out and fight, and defenders will often be better off waiting passively for enemy soldiers to leave the area, coming out only then to gain timed points and ultimately win."),
+			"# If this feature is enabled:",
+		    "# 1. Attackers are motivated to cap the banner by more immediate financial rewards. (than plunder)",
+			"# 2. Attackers are motivated to cap the banner by more personal financial rewards. (not the nation)",
+			"# 3. Defenders are motivated to cap the banner because of immediate financial danger."),
 	WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED(
 			"war.siege.switches.besieged_town_recruitment_disabled",
 			"true",
@@ -2023,19 +2022,19 @@ public enum ConfigNodes {
 			"# This value is recovered by the siege winner, whether attack or defender."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.money.attacker_plunder_amount_per_plot",
-			"10.0",
+			"40.0",
 			"# This is the amount plundered by the attacker is a siege is successful.",
-			"# It is recommended to be lower than the maximum pillage value. A ratio of about 1:3 is recommended"),
+			"# It is recommended that the 'attack-cost:plunder-reward' ratio be about 1:2 ."),
 	WAR_SIEGE_MAXIMUM_PILLAGE_AMOUNT_PER_PLOT(
 			"war.siege.money.maximum_pillage_amount_per_plot",
 			"30.0",
 			"# This value specifies the maximum amount which can be pillaged from a town during a siege.",
-			"# It is recommended to be higher than the maximum plunder value. A ratio of about 1:3 is recommended"),
+			"# If pillaging is enabled, it is recommended that the 'attack-cost:combined_plunder_plus_pillage_reward' ratio be about 1:2 ."),
 	WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT(
 			"war.siege.money.pillage_amount_per_plot",
 			"0.02",
-			"# This value specifies how much attacking soldiers near the siege-banner will steal from the town during each siege-war-tick.",
-			"# The value should be high enough to motivate the defender to come out and fight.",
+			"# This value specifies how much attacking soldiers on the banner control list will steal from the town during each short-tick.",
+			"# The value should be high enough to increase attack/defence motivation.",
 			"# The value should be low enough that the pillage cap (previous config) is only hit late in the siege (if at all).",
 			"# An starting configuration might be calculated after assuming a total of about 10 hours of pillaging over a full 3 day siege",
 			"# ",
@@ -2076,11 +2075,6 @@ public enum ConfigNodes {
 		 	"# This is because it will prevent larger nations from conducting as many sieges as their resources would otherwise allow."),
 
 	//Times
-	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
-			"war.siege.times.timer_interval_seconds",
-			"20",
-			"# The time in seconds for each siegewar timer tick.",
-			"# It is recommended to put this between 10-30, not too low to cause lag, not too high that players have to wait unacceptably long for siege points."),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.times.max_holdout_time_hours",
 			"72",
@@ -2107,7 +2101,7 @@ public enum ConfigNodes {
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
-			"2.5",
+			"3",
 			"# This value determines how long a town is safe from sieges, after a siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
 			"# A high value makes sieges less frequent. Suitable for moderately-aggressive servers",
@@ -2158,7 +2152,7 @@ public enum ConfigNodes {
 			"# 10 minutes (default configuration)."),
 	WAR_SIEGE_POINTS_FOR_ATTACKER_DEATH(
 			"war.siege.scoring.points_for_attacker_death",
-			"100",
+			"150",
 			"# This setting determines the number of siege points awarded if an attacker dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to the defending town.",
@@ -2173,7 +2167,7 @@ public enum ConfigNodes {
 			"# Value LOW --> If the value is low, then PVP will be ENCOURAGED"),
 	WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH(
 			"war.siege.scoring.points_for_defender_death",
-			"100",
+			"150",
 			"# This setting determines the number of siege points awarded if a defender dies.",
 			"# The points are awarded if the player dies within the configured siege zone death radius.",
 			"# The points are given to the attacking nation.",

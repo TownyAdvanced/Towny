@@ -3028,10 +3028,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT);
 	}
 
-	public static long getWarSiegeTimerIntervalSeconds() {
-		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
-	}
-
 	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS);
 	}
