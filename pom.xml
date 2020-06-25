@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.1.0-1.13.2</version>
+    <version>0.96.2.0-1.13.2</version>
 
     <licenses>
         <license>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -125,7 +125,7 @@
             <version>2.0.25-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Included in vanilla Minecraft's JAR -->
+        <!-- Included in vanilla minecraft's JAR -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -151,14 +151,6 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <source>${java.version}</source>
                 </configuration>
             </plugin>
             <plugin>
