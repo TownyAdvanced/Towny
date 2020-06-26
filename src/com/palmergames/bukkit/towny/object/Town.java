@@ -86,6 +86,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private EconomyAccount debtAccount; //Applies if town is bankrupt
 	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
+	private boolean ruined;
 	private int ruinDurationRemainingHours;
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
@@ -98,6 +99,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
+		ruined = false;
 		ruinDurationRemainingHours = 0;
 		revoltImmunityEndTime = 0;
 		siegeImmunityEndTime = System.currentTimeMillis()
@@ -1465,7 +1467,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isRuined() {
-		return (residents.size() == 0 || ruinDurationRemainingHours > 0);
+		if(!ruined && residents.size() == 0) {
+			ruined = true;  //If all residents have been deleted, flag town as ruined.
+		}
+		return ruined;
 	}
 
 	public void setOccupied(boolean occupied) {
@@ -1734,6 +1739,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return getHomeblockWorld();
 	}
 
+	public void setRuined(boolean b) {
+		ruined = b;
+	}
 
 	public int getRuinDurationRemainingHours() {
 		return ruinDurationRemainingHours;

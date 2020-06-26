@@ -1063,27 +1063,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
 
+				line = keys.get("ruined");
+				if (line != null) {
+					try {
+						town.setRuined(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+						town.setRuined(false);
+					}
+				}
+
 				line = keys.get("ruinDurationRemainingHours");
 				if (line != null) {
 					try {
 						town.setRuinDurationRemainingHours(Integer.parseInt(line));
 					} catch (Exception e) {
-						town.setRuinDurationRemainingHours(0);
-					}
-				} else {
-					//Look for legacy data to migrate
-					//Todo refactor this logic after sw trial
-					line = keys.get("recentlyRuinedEndTime");
-					if(line != null){
-						try {
-							long endTimeMillis = Long.parseLong(line);
-							long timeRemainingMillis = endTimeMillis - System.currentTimeMillis();
-							int timeRemainingHours = timeRemainingMillis > 0 ? (int)(timeRemainingMillis / 1000 / 60 / 60) : 0;
-							town.setRuinDurationRemainingHours(timeRemainingHours);
-						} catch (Exception e) {
-							town.setRuinDurationRemainingHours(0);
-						}
-					} else {
 						town.setRuinDurationRemainingHours(0);
 					}
 				}
@@ -2200,6 +2193,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 
+		list.add("ruined=" + town.isRuined());
 		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
 
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());

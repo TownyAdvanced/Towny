@@ -85,6 +85,7 @@ public class RuinsUtil {
 		if (town.hasSiege())
 			townyUniverse.getDataSource().removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
+		town.setRuined(true);
 		town.setRuinDurationRemainingHours(TownySettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);
 		town.setOpen(false);
@@ -141,9 +142,9 @@ public class RuinsUtil {
 			if (!resident.hasTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 
-			//Ensure town is in a standard ruined state (not active, or a zero-resident-ruin)
+			//Ensure town is ruined
 			town = resident.getTown();
-			if (town.getRuinDurationRemainingHours() < 1)
+			if (!town.isRuined())
 				throw new TownyException(TownySettings.getLangString("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
@@ -160,6 +161,7 @@ public class RuinsUtil {
 
 			//Recover Town now
 			resident.getAccount().pay(townReclaimCost, "Cost of town reclaim.");
+			town.setRuined(false);
 			town.setRuinDurationRemainingHours(0);
 
 			//Set player as mayor (and remove npc)
