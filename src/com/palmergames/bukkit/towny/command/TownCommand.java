@@ -2776,6 +2776,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
+
+				if(TownySettings.getWarCommonTownRuinsEnabled()) {
+					int durationHours =TownySettings.getWarCommonTownRuinsMaxDurationHours();
+					TownyMessaging.sendErrorMsg(player, String.format(
+						TownySettings.getLangString("msg_warning_town_ruined_if_deleted"),
+						durationHours));
+				}
+
 				Confirmation confirmation = new Confirmation(() -> {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);

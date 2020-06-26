@@ -71,7 +71,7 @@ public class TownRuinUtil {
 		} catch (NotRegisteredException e) {
 		}
 
-		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
+		//Set NPC mayor, otherwise mayor of ruined town would not be able to leave immediately
 		try {
 			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
 			adminCommand.adminSet(new String[]{"mayor", town.getName(), "npc"});
@@ -79,6 +79,17 @@ public class TownRuinUtil {
 			e.printStackTrace();
 		}
 
+		//Remove resident town ranks
+		for(Resident resident: town.getResidents()) {
+			for(String rank: resident.getTownRanks()){
+				try {
+					resident.removeTownRank(rank);
+					townyUniverse.getDataSource().saveResident(resident);
+				} catch (NotRegisteredException nre) {
+				}
+			}
+		}
+		
 		town.setRuined(true);
 		town.setRuinDurationRemainingHours(TownySettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);
