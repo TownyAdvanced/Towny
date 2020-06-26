@@ -1070,6 +1070,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setRuined(false);
 					}
+				} else {
+					//Migrate legacy ruins
+					//Todo - remove after sw trail
+					String ruinDurationRemainingHours = keys.get("ruinDurationRemainingHours");
+					if(ruinDurationRemainingHours != null) {
+						try {
+							int hours = Integer.parseInt(ruinDurationRemainingHours);
+							if(hours > 0) {
+								town.setRuined(true);
+							}
+						} catch (Exception e) {
+						}
+					}
 				}
 
 				line = keys.get("ruinDurationRemainingHours");

@@ -75,13 +75,22 @@ public class SiegeWarPointsUtil {
 			player = TownyAPI.getInstance().getPlayer(resident); //Gets player if online, null otherwise
 
 		if(player != null) {
-			//User location of online player
-			return player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
+			//Use location of online player
+			if(player.getLocation().getWorld() != siege.getFlagLocation().getWorld()) {
+				return false;
+			} else {
+				return player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
+			}
 		} else {
 			//Use location of logged out player
 			Map<Resident, Location> recentlyLoggedOutResidentLocationMap = TownyUniverse.getInstance().getRecentlyLoggedOutResidentLocationMap();
 			if(recentlyLoggedOutResidentLocationMap.containsKey(resident)) {
-				return recentlyLoggedOutResidentLocationMap.get(resident).distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
+				Location loggedOutPlayerLocation = recentlyLoggedOutResidentLocationMap.get(resident);
+				if(loggedOutPlayerLocation.getWorld() != siege.getFlagLocation().getWorld()) {
+					return false;
+				} else {
+					return recentlyLoggedOutResidentLocationMap.get(resident).distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
+				}
 			} else {
 				/*
 				 * We get here if the player is offline, and a server reboot has occurred since they logged off.
