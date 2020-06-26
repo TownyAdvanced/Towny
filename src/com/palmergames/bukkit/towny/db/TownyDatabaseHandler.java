@@ -31,7 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.towny.war.common.townruins.TownRuinsUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
@@ -514,7 +514,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
 		if (delayFullRemoval) {
-			TownRuinsUtil.putTownIntoRuinedState(town, plugin);
+			TownRuinUtil.putTownIntoRuinedState(town, plugin);
 			return;
 		}
 
