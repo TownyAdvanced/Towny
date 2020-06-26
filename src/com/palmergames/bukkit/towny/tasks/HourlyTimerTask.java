@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
+import com.palmergames.bukkit.towny.war.common.townruins.RuinsUtil;
 
 /**
  * This class represents the hourly timer task
