@@ -29,7 +29,7 @@ public class SiegeWarBannerControlUtil {
 		try {
 			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 				evaluateBannerControlEffects(siege);
-				evaluateCurrentBannerControlSessions(siege);
+				evaluateExistingBannerControlSessions(siege);
 				evaluateNewBannerControlSessions(siege);
 			}
 		} catch (Exception e) {
@@ -150,6 +150,12 @@ public class SiegeWarBannerControlUtil {
 	}
 
 	private static boolean doesPlayerMeetBasicSessionRequirements(Siege siege, Player player, Resident resident) throws Exception {
+		if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(player.getLocation().getWorld()))
+			return false; //Siege war not enabled in world
+
+		if(player.getWorld() != siege.getFlagLocation().getWorld())
+			return false; //Player not in same world as siege
+
 		if (!resident.hasTown())
 			return false; //Player is a nomad
 
@@ -168,10 +174,14 @@ public class SiegeWarBannerControlUtil {
 		if(!SiegeWarPointsUtil.isPlayerInTimedPointZone(player, siege))
 			return false; //player is not in the timed point zone
 
+		if(!SiegeWarDistanceUtil.isUndergroundBannerControlEnabledInWorld(player.getLocation().getWorld())
+			&& SiegeWarDistanceUtil.doesLocationHaveANonAirBlockAboveIt(player.getLocation()))
+			return false; //player has a block above them
+
 		return true;
 	}
 
-	private static void evaluateCurrentBannerControlSessions(Siege siege) {
+	private static void evaluateExistingBannerControlSessions(Siege siege) {
 		for(BannerControlSession bannerControlSession: siege.getBannerControlSessions().values()) {
 			try {
 				//Check if session failed

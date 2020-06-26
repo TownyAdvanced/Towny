@@ -5,8 +5,14 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains utility functions related to calculating and validating distances
@@ -14,6 +20,9 @@ import org.bukkit.block.Block;
  * @author Goosius
  */
 public class SiegeWarDistanceUtil {
+
+	public static List<World> worldsWithSiegeWarEnabled = null;
+	public static List<World> worldsWithUndergroundBannerControlEnabled = null;
 
 	/**
 	 * This method determines if the difference in elevation between a (attack banner) block, 
@@ -92,10 +101,75 @@ public class SiegeWarDistanceUtil {
 	public static boolean isLocationInActiveSiegeZone(Location location) {
 		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 			if(siege.getStatus().isActive()
+				&& location.getWorld() == siege.getFlagLocation().getWorld()
 				&& location.distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+    /**
+     * This method determines if a location has an air block above it
+     *
+     * @param location the location
+     * @return true if location has an air block above it
+     */
+    public static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
+        location.add(0,1,0);
+
+        while(location.getY() < 256)
+        {
+            if(!(location.getBlock().getType() == Material.AIR || location.getBlock().getType() == Material.CAVE_AIR || location.getBlock().getType() == Material.VOID_AIR))
+            {
+                return true;   //There is a non-air block above them
+            }
+            location.add(0,1,0);
+        }
+        return false;  //There is nothing but air above them
+    }
+
+	/**
+	 * This method determines if a siegewar is enabled in the given world
+	 *
+	 * @param worldToCheck the world to check
+	 * @return true if siegewar is enabled in the given world
+	 */
+	public static boolean isSiegeWarEnabledInWorld(World worldToCheck) {
+		try {
+			if (worldsWithSiegeWarEnabled == null) {
+				worldsWithSiegeWarEnabled = new ArrayList<>();
+				String[] worldNamesAsArray = TownySettings.getWarSiegeWorlds().split(",");
+				for (String worldName : worldNamesAsArray) {
+					worldsWithSiegeWarEnabled.add(Bukkit.getServer().getWorld(worldName.trim()));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Error checking if siege war is enabled in world. Check your config file.");
+			return false;
+		}
+		return worldsWithSiegeWarEnabled.contains(worldToCheck);
+	}
+
+	/**
+	 * This method determines if underground banner control is enabled in the given world
+	 *
+	 * @param worldToCheck the world to check
+	 * @return true if underground banner control is enabled in the given world
+	 */
+	public static boolean isUndergroundBannerControlEnabledInWorld(World worldToCheck) {
+		try {
+			if (worldsWithUndergroundBannerControlEnabled == null) {
+				worldsWithUndergroundBannerControlEnabled = new ArrayList<>();
+				String[] worldNamesAsArray = TownySettings.getWarWorldsWithUndergroundBannerControl().split(",");
+				for (String worldName : worldNamesAsArray) {
+					worldsWithUndergroundBannerControlEnabled.add(Bukkit.getServer().getWorld(worldName.trim()));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Error checking if world has underground banner control enabled. Check your config file.");
+			return false;
+		}
+		return worldsWithUndergroundBannerControlEnabled.contains(worldToCheck);
 	}
 }

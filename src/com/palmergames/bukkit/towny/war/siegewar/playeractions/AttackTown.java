@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.block.Block;
@@ -74,9 +73,9 @@ public class AttackTown {
             if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.getAccount().canPayFromHoldings(defendingTown.getSiegeCost()))
 				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 
-            if (SiegeWarBlockUtil.doesBlockHaveANonAirBlockAboveIt(block))
+            if (!SiegeWarDistanceUtil.isUndergroundBannerControlEnabledInWorld(block.getWorld()) && SiegeWarDistanceUtil.doesLocationHaveANonAirBlockAboveIt(block.getLocation()))
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_banner_must_be_placed_above_ground"));
-            
+
             if(defendingTown.isRuined())
                 throw new TownyException(TownySettings.getLangString("msg_err_cannot_attack_ruined_town"));
 

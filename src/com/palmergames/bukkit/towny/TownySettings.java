@@ -2980,6 +2980,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
 	}
 
+	public static String getWarSiegeWorlds() {
+		return getString(ConfigNodes.WAR_SIEGE_WORLDS);
+	}
+
+	public static String getWarWorldsWithUndergroundBannerControl() {
+		return getString(ConfigNodes.WAR_SIEGE_WORLDS_WITH_UNDERGROUND_BANNER_CONTROL);
+	}
+
 	public static boolean getWarSiegeAttackEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACK_ENABLED);
 	}

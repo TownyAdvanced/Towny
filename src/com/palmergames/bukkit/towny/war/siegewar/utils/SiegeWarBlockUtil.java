@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,30 +62,6 @@ public class SiegeWarBlockUtil {
 		}
 
 		return nearbyTownBlocks;
-	}
-
-	/**
-	 * This method determines if a block has an air block above it
-	 *
-	 * @param block the block
-	 * @return true if block has an air block above it
-	 */
-	public static boolean doesBlockHaveANonAirBlockAboveIt(Block block) {
-		return doesLocationHaveANonAirBlockAboveIt(block.getLocation());
-	}
-	
-	private static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
-		location.add(0,1,0);
-
-		while(location.getY() < 256)
-		{
-			if(!(location.getBlock().getType() == Material.AIR || location.getBlock().getType() == Material.CAVE_AIR || location.getBlock().getType() == Material.VOID_AIR))
-			{
-				return true;   //There is a non-air block above them
-			}
-			location.add(0,1,0);
-		}
-		return false;  //There is nothing but air above them
 	}
 
 	/**

@@ -64,6 +64,10 @@ public class SiegeWarDeathController {
 			//Find nearest eligible siege
 			for (Siege candidateSiege : universe.getDataSource().getSieges()) {
 
+				//Is siege in different world
+				if(candidateSiege.getFlagLocation().getWorld() != deadPlayer.getWorld())
+					continue;
+
 				//Is siege out of range ?
 				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
 				if(candidateSiegeDistanceToPlayer > TownySettings.getWarSiegeZoneRadiusBlocks())
