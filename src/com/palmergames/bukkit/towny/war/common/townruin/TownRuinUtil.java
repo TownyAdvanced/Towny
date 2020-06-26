@@ -81,14 +81,8 @@ public class TownRuinUtil {
 
 		//Remove resident town ranks
 		for(Resident resident: town.getResidents()) {
-			for(String rank: resident.getTownRanks()){
-				try {
-					resident.removeTownRank(rank);
-					townyUniverse.getDataSource().saveResident(resident);
-					plugin.deleteCache(resident.getName());
-				} catch (NotRegisteredException nre) {
-				}
-			}
+			resident.updatePerms();
+			townyUniverse.getDataSource().saveResident(resident);
 		}
 		
 		town.setRuined(true);
