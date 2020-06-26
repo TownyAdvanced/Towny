@@ -20,7 +20,7 @@ public class StringMgmt {
 	}
 
 	public static String join(Collection<?> args, String separator) {
-		StringJoiner joiner = new StringJoiner(" ");
+		StringJoiner joiner = new StringJoiner(separator);
 		
 		for (Object o : args) {
 			joiner.add(o.toString());
