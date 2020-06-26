@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -19,22 +20,13 @@ public class StringMgmt {
 	}
 
 	public static String join(Collection<?> args, String separator) {
-
-		StringBuilder out = new StringBuilder();
-		Iterator<?> iterator = args.iterator();
+		StringJoiner joiner = new StringJoiner(" ");
 		
-		while (iterator.hasNext()) {
-			Object o = iterator.next();
-			
-			if (!iterator.hasNext()) {
-				out.append(o);
-				return out.toString();
-			}
-			
-			out.append(o).append(separator);
+		for (Object o : args) {
+			joiner.add(o.toString());
 		}
 		
-		return out.toString();
+		return joiner.toString();
 	}
 
 	public static String join(Object[] arr) {
