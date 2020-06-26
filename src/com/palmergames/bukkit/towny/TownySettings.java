@@ -1560,7 +1560,21 @@ public class TownySettings {
 		}
 		return time;
 	}
-	
+
+	public static long getHourInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
+	}
+
+	public static long getNewHourTime() {
+		long time = getSeconds(ConfigNodes.PLUGIN_NEWHOUR_TIME);
+		long hour = getHourInterval();
+		if (time > hour) {
+			setProperty(ConfigNodes.PLUGIN_NEWHOUR_TIME.getRoot(), hour);
+			return hour;
+		}
+		return time;
+	}
+
 	public static boolean isNewDayDeleting0PlotTowns() {
 		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
 	}
@@ -2949,6 +2963,26 @@ public class TownySettings {
 
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.TOWN_BANKRUPTCY_ENABLED);
+	}
+
+	public static boolean getWarCommonTownRuinsEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_TOWN_RUINS_ENABLED);
+	}
+
+	public static int getWarCommonTownRuinsMaxDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS);
+	}
+
+	public static int getWarCommonTownRuinsMinDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS);
+	}
+
+	public static boolean getWarCommonTownRuinsReclaimEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED);
+	}
+
+	public static double getEcoPriceReclaimTown() {
+		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
 	}
 }
 

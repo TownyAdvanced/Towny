@@ -716,6 +716,16 @@ public enum ConfigNodes {
 			"plugin.day_timer.delete_0_plot_towns",
 			"false",
 			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
+	PLUGIN_HOUR_INTERVAL(
+			"plugin.hour_timer.hour_interval",
+			"60m",
+			"# The number of minutes in each \"day\".",
+			"# Default is 60m."),
+	PLUGIN_NEWHOUR_TIME(
+			"plugin.hour_timer.new_hour_time",
+			"30m",
+			"# The time each \"hour\", when the hourly timer ticks.",
+			"# MUST be less than hour_interval. Default is 30m."),
 	PLUGIN_DEBUG_MODE(
 			"plugin.debug_mode",
 			"false",
@@ -1307,6 +1317,11 @@ public enum ConfigNodes {
 			"economy.new_expand.price_new_town",
 			"250.0",
 			"# How much it costs to start a town."),
+	ECO_PRICE_RECLAIM_RUINED_TOWN(
+			"economy.new_expand.price_reclaim_ruined_town",
+			"200.0",
+			"# How much it costs to reclaim a ruined town.",
+			"# This is only applicable if the town-ruins & town-reclaim features are enabled."),
 	ECO_PRICE_OUTPOST(
 			"economy.new_expand.price_outpost",
 			"500.0",
@@ -1830,8 +1845,43 @@ public enum ConfigNodes {
 			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true.");
+			"# Only under affect when explosions_break_blocks is true."),
 
+	WAR_COMMON(
+		"war.common",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                 Common War settings                  | #",
+			"# |                                                      | #",
+			"# |  These configs are common to multiple war systems.   | #",
+			"# |  												      | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	//Town Ruins
+	WAR_COMMON_TOWN_RUINS_ENABLED(
+			"war.common.town_ruins.enabled",
+				"true",
+				"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
+				"# In this state, the town cannot be claimed, but can be looted.",
+				"# This feature is important to war system, as it prevents mayors from escaping attack/occupation, ",
+				"# by deleting then quickly recreating their town."),
+	WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS(
+			"war.common.town_ruins.max_duration_hours",
+				"72",
+				"# This value determines the maximum duration in which a town can lie in ruins",
+				"# After this time is reached, the town will be completely deleted."),
+	WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS(
+			"war.common.town_ruins.min_duration_hours",
+				"24",
+				"# This value determines the minimum duration in which a town must lie in ruins,",
+				"# before it can be reclaimed by a resident."),
+	WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED(
+			"war.common.town_ruins.reclaim_enabled",
+				"true",
+				"# If this is true, then after a town has been ruined for the minimum configured time,",
+				"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)");
 
 	private final String Root;
 	private final String Default;

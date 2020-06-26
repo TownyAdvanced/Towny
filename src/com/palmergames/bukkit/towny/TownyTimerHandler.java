@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
+import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -32,6 +33,7 @@ public class TownyTimerHandler{
 	
 	private static int townyRepeatingTask = -1;
 	private static int dailyTask = -1;
+	private static int hourlyTask = -1;
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
@@ -50,6 +52,14 @@ public class TownyTimerHandler{
 			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		}
+	}
+
+	public static void newHour() {
+		if (!isHourlyTimerRunning())
+			toggleHourlyTimer(true);
+
+		if (BukkitTools.scheduleAsyncDelayedTask(new HourlyTimerTask(plugin),0L) == -1)
+			TownyMessaging.sendErrorMsg("Could not schedule new hour.");
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -92,6 +102,20 @@ public class TownyTimerHandler{
 		} else if (!on && isDailyTimerRunning()) {
 			BukkitTools.getScheduler().cancelTask(dailyTask);
 			dailyTask = -1;
+		}
+	}
+
+	public static void toggleHourlyTimer(boolean on) {
+		if (on && !isHourlyTimerRunning()) {
+			long timeUntilNextHourInSections = getTimeUntilNextHourInSeconds();
+			hourlyTask = BukkitTools.scheduleAsyncRepeatingTask(new HourlyTimerTask(plugin), timeUntilNextHourInSections, TimeTools.convertToTicks(TownySettings.getHourInterval()));
+
+			if (hourlyTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule hourly timer.");
+
+		} else if (!on && isHourlyTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(hourlyTask);
+			hourlyTask = -1;
 		}
 	}
 
@@ -158,6 +182,11 @@ public class TownyTimerHandler{
 		return dailyTask != -1;
 	}
 
+	public static boolean isHourlyTimerRunning() {
+
+		return hourlyTask != -1;
+	}
+
 	public static boolean isHealthRegenRunning() {
 
 		return healthRegenTask != -1;
@@ -203,4 +232,10 @@ public class TownyTimerHandler{
 		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
 	}
 
+	public static Long getTimeUntilNextHourInSeconds() {
+		long timeSinceLastHourMillis = System.currentTimeMillis() % (1000 * 60 * 60);
+		long timeSinceLastHourSeconds = timeSinceLastHourMillis / 1000;
+		long timeUntilNextHourSeconds = (60 * 60) - timeSinceLastHourSeconds;
+		return timeUntilNextHourSeconds;
+	}
 }
