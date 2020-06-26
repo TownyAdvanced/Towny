@@ -1859,7 +1859,6 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	//Town Ruins
 	WAR_COMMON_TOWN_RUINS_ENABLED(
 			"war.common.town_ruins.enabled",
 				"true",

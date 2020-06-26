@@ -64,7 +64,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined;
 	private int ruinDurationRemainingHours;
-	
+
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -1379,7 +1379,7 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean isRuined() {
 		if(residents.size() == 0)
 			ruined= true; //If no residents, setup town for full deletion
-		
+
 		return ruined;
 	}
 
