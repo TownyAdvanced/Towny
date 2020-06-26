@@ -26,7 +26,7 @@ public class TownUpkeepCalculationEvent extends Event {
 	}
 
 	public double getUpkeep() {
-		return Math.max(0D, upkeep);
+		return upkeep;
 	}
 
 	@Override

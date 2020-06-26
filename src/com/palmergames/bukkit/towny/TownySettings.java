@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
@@ -60,6 +61,7 @@ public class TownySettings {
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
+	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -768,66 +770,6 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()));
 	}
 
-	public static String[] getRegistrationMsg(String name) {
-
-		return parseString(String.format(getLangString("MSG_REGISTRATION"), name));
-	}
-
-	public static String[] getNewTownMsg(String who, String town) {
-
-		return parseString(String.format(getLangString("MSG_NEW_TOWN"), who, town));
-	}
-
-	public static String[] getNewNationMsg(String who, String nation) {
-
-		return parseString(String.format(getLangString("MSG_NEW_NATION"), who, nation));
-	}
-
-	public static String[] getJoinTownMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_JOIN_TOWN"), who));
-	}
-
-	public static String[] getJoinNationMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_JOIN_NATION"), who));
-	}
-
-	public static String[] getNewMayorMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_NEW_MAYOR"), who));
-	}
-
-	public static String[] getNewKingMsg(String who, String nation) {
-
-		return parseString(String.format(getLangString("MSG_NEW_KING"), who, nation));
-	}
-
-	public static String[] getJoinWarMsg(TownyObject obj) {
-
-		return parseString(String.format(getLangString("MSG_WAR_JOIN"), obj.getName()));
-	}
-
-	public static String[] getWarTimeEliminatedMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_WAR_ELIMINATED"), who));
-	}
-
-	public static String[] getWarTimeForfeitMsg(String who) {
-
-		return parseString(String.format(getLangString("MSG_WAR_FORFEITED"), who));
-	}
-
-	public static String[] getWarTimeLoseTownBlockMsg(WorldCoord worldCoord, String town) {
-
-		return parseString(String.format(getLangString("MSG_WAR_LOSE_BLOCK"), worldCoord.toString(), town));
-	}
-
-	public static String[] getWarTimeScoreMsg(Town town, int n) {
-
-		return parseString(String.format(getLangString("MSG_WAR_SCORE"), town.getName(), n));
-	}
-	
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
@@ -843,10 +785,10 @@ public class TownySettings {
 
 		String townBlockName = "";
 		try {
-			Town fallenTown = ((TownBlock)fallenTownBlock).getTown();
-			townBlockName = "[" + fallenTown.getName() + "](" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+			Town fallenTown = fallenTownBlock.getTown();
+			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getCoord().toString() + ")";
 		} catch (NotRegisteredException e) {
-			townBlockName = "(" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
 		}
 		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
 	}
@@ -1114,11 +1056,7 @@ public class TownySettings {
 		} else
 			n += town.getNumResidents() * ratio;
 
-		if (town.hasNation())
-			try {
-				n += (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-			} catch (NotRegisteredException e) {
-			}
+		n += getNationBonusBlocks(town);
 
 		return n;
 	}
@@ -1142,8 +1080,10 @@ public class TownySettings {
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-
-		return (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
+		Bukkit.getPluginManager().callEvent(calculationEvent);
+		return calculationEvent.getBonusBlocks();
 	}
 
 	public static int getNationBonusBlocks(Town town) {
@@ -1314,11 +1254,6 @@ public class TownySettings {
 	public static int getWarzoneHomeBlockHealth() {
 
 		return getInt(ConfigNodes.WAR_EVENT_HOME_BLOCK_HP);
-	}
-
-	public static String[] getWarTimeLoseTownBlockMsg(WorldCoord worldCoord) {
-
-		return getWarTimeLoseTownBlockMsg(worldCoord, "");
 	}
 
 	public static String getDefaultTownName() {
@@ -1625,6 +1560,10 @@ public class TownySettings {
 		}
 		return time;
 	}
+	
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
 
@@ -1652,27 +1591,43 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Reading disallowed town spawn zones. ");
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
+	
+	public static boolean getSpawnWarnConfirmations() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
+	}
 
 	public static boolean isTaxingDaily() {
 
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_ENABLED);
 	}
 
-	public static double getMaxTax() {
+	public static double getMaxPlotTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_PLOT_TAX);
+	}
 
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
+	public static double getMaxTownTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_TOWN_TAXES_MAX);
+	}
+
+	public static double getMaxNationTax() {
+		return getDouble(ConfigNodes.ECO_DAILY_NATION_TAXES_MAX);
 	}
 	
 	public static double getMaxPlotPrice() {
 		
 		return getDouble(ConfigNodes.GTOWN_MAX_PLOT_PRICE_COST);
 	}
-
-	public static double getMaxTaxPercent() {
-
-		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX_PERCENT);
+	
+	public static double getMaxTownTaxPercent() {
+		
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT);
 	}
-
+	
+	public static double getMaxTownTaxPercentAmount() { 
+		
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT); 
+	}
+	
 	public static boolean isBackingUpDaily() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
@@ -2160,6 +2115,11 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
 	}
+	
+	public static boolean isMinDistanceIgnoringTownsInSameNation() {
+
+		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS);
+	}
 
 	public static int getMaxDistanceBetweenHomeblocks() {
 
@@ -2594,6 +2554,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
 	}
 	
+	public static boolean isMovementCancellingSpawnWarmup() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
+	}
+	
+	public static boolean isDamageCancellingSpawnWarmup() {
+		
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP);
+	}
+	
 	public static int getSpawnCooldownTime() {
 		
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
@@ -2677,6 +2647,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
 	
+	public static int getMaxNumResidentsWithoutNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
+	}
+	
 	public static int getNumResidentsJoinNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);
 	}
@@ -2711,12 +2685,12 @@ public class TownySettings {
 	
 	public static String getListPageMsg(int page, int total) {
 		 
-	    return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	    return parseString(String.format(getLangString("LIST_PAGE"), page, total))[0];
 	}
 	
 	public static String getListNotEnoughPagesMsg(int max) {
 	 
-	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), max))[0];
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
@@ -2932,6 +2906,41 @@ public class TownySettings {
 	
 	public static boolean isNotificationsTownNamesVerbose() {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
+	}
+
+	public static Map<String,String> getNationColorsMap() {
+		List<String> nationColorsList = getStrArr(ConfigNodes.GNATION_SETTINGS_ALLOWED_NATION_COLORS);
+		Map<String,String> nationColorsMap = new HashMap<>();
+		String[] keyValuePair;
+		for(String nationColor: nationColorsList) {
+			keyValuePair = nationColor.split(":");
+			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
+		}
+		return nationColorsMap;
+	}
+
+	public static String getUUIDPercent() {
+		double fraction = uuidCount / TownyUniverse.getInstance().getDataSource().getResidents().size();
+		
+		if (fraction == 1.00)
+			return "100%";
+		if (fraction > 0.89)
+			return "90%+";
+		if (fraction > 0.79)
+			return "80%+";
+		if (fraction > 0.69)
+			return "70%+";
+		if (fraction > 0.59)
+			return "60%+";	
+		if (fraction > 0.49)
+			return "50%+";
+		
+		return "<50%";
+	}
+
+	public static void setUUIDCount(int hasUUID) {
+		uuidCount = hasUUID;
+		
 	}
 }
 

@@ -75,7 +75,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 /**
  * Towny Plugin for Bukkit
@@ -136,7 +135,6 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.initialize(this);
 		TownyEconomyHandler.initialize(this);
 		TownyFormatter.initialize();
-		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
 		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
@@ -232,7 +230,7 @@ public class Towny extends JavaPlugin {
 		
 		try {
 			// Shut down our saving task.
-			townyUniverse.getDataSource().cancelTask();
+			townyUniverse.getDataSource().finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
 		}
@@ -450,7 +448,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * @param error the error to set
 	 */
-	protected void setError(boolean error) {
+	public void setError(boolean error) {
 
 		this.error = error;
 	}
@@ -480,12 +478,12 @@ public class Towny extends JavaPlugin {
 	}
 
 	public World getServerWorld(String name) throws NotRegisteredException {
-
-		for (World world : BukkitTools.getWorlds())
-			if (world.getName().equals(name))
-				return world;
-
-		throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
+		World world = BukkitTools.getWorld(name);
+		
+		if (world == null)
+			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
+		
+		return world;
 	}
 
 	public boolean hasCache(Player player) {
@@ -493,12 +491,15 @@ public class Towny extends JavaPlugin {
 		return playerCache.containsKey(player.getName().toLowerCase());
 	}
 
-	public void newCache(Player player) {
+	public PlayerCache newCache(Player player) {
 
 		try {
-			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player));
+			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
+			playerCache.put(player.getName().toLowerCase(), cache);
+			return cache;
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
+			return null;
 		}
 
 	}
@@ -522,12 +523,16 @@ public class Towny extends JavaPlugin {
 	 */
 	public PlayerCache getCache(Player player) {
 
-		if (!hasCache(player)) {
-			newCache(player);
-			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
+		PlayerCache cache = playerCache.get(player.getName().toLowerCase());
+		
+		if (cache == null) {
+			cache = newCache(player);
+			
+			if (cache != null)
+				cache.setLastTownBlock(WorldCoord.parseWorldCoord(player));
 		}
 
-		return playerCache.get(player.getName().toLowerCase());
+		return cache;
 	}
 
 	/**
@@ -537,7 +542,7 @@ public class Towny extends JavaPlugin {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
-				getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player))); // Automatically
+				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically
 																														// resets
 																														// permissions.
 	}
@@ -566,7 +571,7 @@ public class Towny extends JavaPlugin {
 
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
-				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
+				worldCoord = WorldCoord.parseWorldCoord(player);
 				PlayerCache cache = getCache(player);
 				if (cache.getLastTownBlock() != worldCoord)
 					cache.resetAndUpdate(worldCoord);
@@ -581,10 +586,10 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache(Player player) {
 
-		WorldCoord worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
+		WorldCoord worldCoord = WorldCoord.parseWorldCoord(player);
 		PlayerCache cache = getCache(player);
 
-		if (cache.getLastTownBlock() != worldCoord)
+		if (!cache.getLastTownBlock().equals(worldCoord))
 			cache.resetAndUpdate(worldCoord);
 	}
 
@@ -595,7 +600,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public void resetCache(Player player) {
 
-		getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
+		getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player));
 	}
 
 	public void setPlayerMode(Player player, String[] modes, boolean notify) {
@@ -801,7 +806,7 @@ public class Towny extends JavaPlugin {
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	private void registerSpecialCommands() {
-		List<Command> commands = new ArrayList<>();
+		List<Command> commands = new ArrayList<>(4);
 		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
@@ -824,64 +829,26 @@ public class Towny extends JavaPlugin {
 		 */
 		Metrics metrics = new Metrics(this);
 		
-		metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return TownySettings.getString(ConfigNodes.LANGUAGE);
-			}
-		}));
+		metrics.addCustomChart(new Metrics.SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("server_type", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
-					return "Paper";
-				else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-					if (isSpigot)
-						return "Spigot";
-					else 
-						return "CraftBukkit";
-				}
-				return "Unknown";
+		metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> {
+			if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
+				return "Paper";
+			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
+				if (isSpigot)
+					return "Spigot";
+				else 
+					return "CraftBukkit";
 			}
+			return "Unknown";
 		}));
 
-		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				if (TownySettings.getNationZonesEnabled())
-					return "true";
-				else
-					return "false";
-			}
-		}));
+		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return TownySettings.getSaveDatabase().toLowerCase();
-			}
-		}));		
-
-		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return String.valueOf(TownySettings.getNationZonesEnabled());
-			}
-		}));
+		metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> TownySettings.getSaveDatabase().toLowerCase()));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return TownySettings.getSaveDatabase();
-			}
-		}));
+		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return String.valueOf(TownySettings.getTownBlockSize());
-			}
-		}));
+		metrics.addCustomChart(new Metrics.SimplePie("resident_uuids_stored", () -> TownySettings.getUUIDPercent()));
 	}
 }

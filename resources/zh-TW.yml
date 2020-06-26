@@ -1,5 +1,5 @@
 name: Towny
-version: 0.77
+version: 0.83
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1094,3 +1094,45 @@ msg_you: '您'
 # Added in 0.77
 msg_click_spawn: '&a點擊以傳送至: &e%s'
 msg_spawn_cost: '&a傳送花費 = &e%s'
+
+# Added in 0.78
+msg_reload_error: '重新加載Towny時出錯。'
+msg_reloaded_config: '&2已成功重新加載配寘。'
+msg_reloaded_perms: '&2許可權已成功重新加載。'
+msg_reloaded_db: '&2資料庫已成功重新加載'
+msg_reloaded_lang: '&2成功重新加載語言檔案'
+msg_reset_config: '&2配寘已重置'
+msg_err_teleport_cancelled: '移動取消了你的傳送。'
+
+# Added in 0.79
+msg_cache_block_error_plot_friends: '朋友'
+msg_cache_block_error_plot_allies: '同盟國'
+msg_cache_block_error_plot_outsiders: '外人'
+msg_cache_block_error_plot_town_members: '城鎮居民'
+msg_err_invalid_nation_map_color: '&c未知的地圖顏色。允許的顏色是%s。'
+msg_nation_map_color_changed: '&b國家地圖顏色已更改為%s。'
+msg_err_unable_to_add_more_residents_without_nation: '如果不首先加入或創建一個國家，您的城鎮不能邀請超過%s個居民。'
+msg_the_following_towns_were_deleted_for_having_0_claims: '下列城鎮已被删除，因為它們有0個索賠: %s'
+msg_spawn_warn: '生成成本為%s。是否繼續？提示: 添加 -ignore 跳過這些確認。'
+msg_confirm_purchase: '這樣做將花費%s。是否繼續？'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '下列城鎮將從您的國家中删除: %s。是否繼續？'
+msg_ta_deposit_all_success: '已成功將%s存入所有國家''和城鎮''的銀行。'
+bonus_townblocks: '獎勵城鎮街區'
+
+# Added in 0.80
+nomad_sing: '遊牧民族'
+msg_new_town_advice: '恭喜你創建了你的都市！您所在的城鎮將支付當前估價為%s的每日維護費。您可以使用''/t deposit #''在城鎮銀行存款。如果沒有錢支付維護費用，你的城鎮將被删除。你可以隨時使用/towny prices查看你的成本。下一次日常維護在%s中進行。'
+
+# Added in 0.81
+msg_err_teleport_cancelled_damage: '損壞已取消你的傳送。'
+
+# Added in 0.82
+invitation_prefix: "&8[&7邀請&8] &9"
+confirmation_prefix: "&8[&7確認&8] &9"
+this_message_will_expire2: '&amp;9這將在20秒後自動過期'
+msg_hover_next_page: '下一頁'
+msg_hover_previous_page: '上一頁'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: "只能為具有納稅百分比的城鎮設定最大稅額。"
+msg_town_set_tax_max_percent_amount: "%s已將最大稅率設定為%s。"

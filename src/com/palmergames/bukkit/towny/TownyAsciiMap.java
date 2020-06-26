@@ -159,8 +159,8 @@ public class TownyAsciiMap {
 
 		// Current town block data
 		try {
-			TownBlock townblock = world.getTownBlock(pos);
-			TownyMessaging.sendMsg(player, (TownySettings.getLangString("town_sing") + ": " + (townblock.hasTown() ? townblock.getTown().getName() : TownySettings.getLangString("status_no_town")) + " : " + TownySettings.getLangString("owner_status") + ": " + (townblock.hasResident() ? townblock.getResident().getName() : TownySettings.getLangString("status_no_town"))));
+			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
+			TownyMessaging.sendMsg(player, (TownySettings.getLangString("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : TownySettings.getLangString("status_no_town")) + " : " + TownySettings.getLangString("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : TownySettings.getLangString("status_no_town"))));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.

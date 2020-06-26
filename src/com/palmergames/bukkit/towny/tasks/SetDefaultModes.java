@@ -33,9 +33,8 @@ public class SetDefaultModes extends TimerTask {
 		try {
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			String modeString = townyUniverse.getPermissionSource().getPlayerPermissionStringNode(name, PermissionNodes.TOWNY_DEFAULT_MODES.getNode());
-			String[] modes = new String[]{};
-			if (!modeString.isEmpty())
-				modes = modeString.split(",");
+			if (modeString.isEmpty()) { return; }
+			String[] modes = modeString.split(",");
 			try {
 				townyUniverse.getDataSource().getResident(name).resetModes(modes, notify);
 			} catch (NotRegisteredException e) {

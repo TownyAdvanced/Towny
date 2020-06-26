@@ -43,11 +43,14 @@ public class WarTimerTask extends TownyTimerTask {
 		int numPlayers = 0;
 		Hashtable<TownBlock, WarZoneData> plotList = new Hashtable<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
+			if (player != null && !player.isFlying()) {
 				numPlayers += 1;
 				TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 				try {
 					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (!resident.hasTown() || !warEvent.isWarringTown(resident.getTown()))
+						continue;
+					
 					if (resident.hasNation()) {
 						Nation nation = resident.getTown().getNation();
 						TownyMessaging.sendDebugMsg("[War]   hasNation");

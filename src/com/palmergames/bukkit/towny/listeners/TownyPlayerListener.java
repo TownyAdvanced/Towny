@@ -20,11 +20,15 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
@@ -32,6 +36,7 @@ import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -247,29 +252,8 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
-		TownyWorld World = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		try {
-			World = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
-			if (!World.isUsingTowny())
-				return;
-
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-		}
-		
-		// prevent players trampling crops
-
-		if ((event.getAction() == Action.PHYSICAL)) {
-			if ((block.getType() == Material.FARMLAND))				
-				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), ActionType.DESTROY)) {
-					event.setCancelled(true);
-					return;
-				}
-		}
 
 		if (event.hasItem()) {
 
@@ -278,7 +262,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
-				if (townyUniverse.getPermissionSource().isTownyAdmin(player)) {
+				if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 					if (event.getClickedBlock() != null) {
 
 						block = event.getClickedBlock();
@@ -324,7 +308,7 @@ public class TownyPlayerListener implements Listener {
 		if (!event.useItemInHand().equals(Event.Result.DENY))
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
-					onPlayerSwitchEvent(event, null, World);
+					onPlayerSwitchEvent(event, null);
 				}
 			}
 
@@ -375,6 +359,14 @@ public class TownyPlayerListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, ActionType.SWITCH);
 				break;
+				
+			case LEASH_HITCH:
+
+				TownyMessaging.sendDebugMsg("Leash Hitch Right Clicked");
+				block = Material.LEAD;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
+				break;				
 			
 			default:
 				break;
@@ -453,6 +445,11 @@ public class TownyPlayerListener implements Listener {
 					
 				case PAINTING:
 					block = Material.PAINTING;
+					actionType = ActionType.DESTROY;
+					break;
+					
+				case LEASH_HITCH:
+					block = Material.LEAD;
 					actionType = ActionType.DESTROY;
 					break;
 					
@@ -547,6 +544,21 @@ public class TownyPlayerListener implements Listener {
 		Location to = event.getTo();
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
+		Resident resident = null;
+		try {
+			resident = townyUniverse.getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException ignored) {
+		}
+		
+		if (resident != null
+				&& TownyTimerHandler.isTeleportWarmupRunning()				 
+				&& TownySettings.getTeleportWarmupTime() > 0 
+				&& TownySettings.isMovementCancellingSpawnWarmup() 
+				&& !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN.getNode()) 
+				&& resident.getTeleportRequestTime() > 0) {
+			TeleportWarmupTimerTask.abortTeleportRequest(resident);
+			TownyMessaging.sendMsg(resident, ChatColor.RED + TownySettings.getLangString("msg_err_teleport_cancelled"));
+		}
 
 		try {
 			from = cache.getLastLocation();
@@ -763,16 +775,16 @@ public class TownyPlayerListener implements Listener {
 	/*
 	*  Switch protection handling
 	*/	
-	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg, TownyWorld world) {
+	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg) {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		
-		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg, world));
+		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg));
 
 	}
 
-	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
+	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg) {
 
 		if (!TownySettings.isSwitchMaterial(block.getType().name()))
 			return false;
@@ -815,7 +827,7 @@ public class TownyPlayerListener implements Listener {
 	 * PlayerFishEvent
 	 * 
 	 * Prevents players from fishing for entities in protected regions.
-	 * - Armorstands, animals, any entity affected by rods.
+	 * - Armorstands, animals, players, any entity affected by rods.
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerFishEvent(PlayerFishEvent event) {
@@ -825,10 +837,22 @@ public class TownyPlayerListener implements Listener {
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
 			Player player = event.getPlayer();
 			Entity caught = event.getCaught();
-			if (caught.getType().equals(EntityType.PLAYER))
-				return;
-			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, ActionType.DESTROY);
-			if (!bDestroy) {
+			boolean test = false;
+			
+			// Caught players are tested for pvp at the location of the catch.
+			if (caught.getType().equals(EntityType.PLAYER)) {
+				TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getTownWorld(caught.getWorld().getName());
+				TownBlock tb = null;
+				try {
+					tb = townyWorld.getTownBlock(Coord.parseCoord(event.getCaught()));
+				} catch (NotRegisteredException e1) {
+				}
+				test = !CombatUtil.preventPvP(townyWorld, tb);
+			// Non-player catches are tested for destroy permissions.
+			} else {
+				test = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, ActionType.DESTROY);
+			}
+			if (!test) {
 				event.setCancelled(true);
 				event.getHook().remove();
 			}
@@ -962,11 +986,11 @@ public class TownyPlayerListener implements Listener {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			if (title.contains("{townname}")) {
-				String replacement = title.replace("{townname}", to.getTownBlock().getTown().getName());
+				String replacement = title.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				title = replacement;
 			}
 			if (subtitle.contains("{townname}")) {
-				String replacement = subtitle.replace("{townname}", to.getTownBlock().getTown().getName());
+				String replacement = subtitle.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				subtitle = replacement;
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
@@ -996,10 +1020,10 @@ public class TownyPlayerListener implements Listener {
 				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 				if (title.contains("{wilderness}")) {
-					title = title.replace("{wilderness}", townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					title = title.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 				}
 				if (subtitle.contains("{wilderness}")) {
-					subtitle = subtitle.replace("{wilderness}", townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 				}
 				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 			}			
@@ -1031,4 +1055,5 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+	
 }

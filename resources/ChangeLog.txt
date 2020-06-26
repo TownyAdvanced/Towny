@@ -4264,13 +4264,6 @@ v0.92.0.11:
   - Fix a couple missing child nodes for permissions in the plugin.yml.
 0.96.0.0:
   - Bump version number for release.
-  - Special Release for 1.13.2 Servers preceding 0.96.0.0
-    - Some "Required Config Changes" will not be necessary for this release.
-    - Reverted ProtectionRegenTask class to previous version found in 1.13 branch (API Incompatibility)
-      - This may result in run-time bugs! I am not familiar with this class, or the methods that call it.
-    - Changed to full-path import for ActionType in TownyPlayerListener.
-    - Reverted Nether portal fix introduced in 0.95.2.22 (PR #3745)
-      - Incompatible with 1.13, admins are advised to just ban abusers.
   - Update bukkit api to 1.15.2.
 0.96.0.1:
   - Add nation tab-complete to `/n online`, courtesy of silverwolfg11 with PR #3797.
@@ -4338,6 +4331,322 @@ v0.92.0.11:
     - Closes #3785.
 0.96.0.6:
   - Fix for ProtocolSupport servers and /town & /nation lists, courtesy of Siris with PR #3847.
-0.96.1.0 for MC 1.13.2:
-  - Bump version number for release.
-  - A special backport of Towny 0.96.1.0 for Minecraft 1.13.2, courtesy of TheFlagCourier with PR #3850.
+  - Handle invalid arguments for townyadmin economy cmds, courtesy of silverwolfg11 with PR #3849.
+0.96.1.0:
+  - Bump version for release.
+0.96.1.1:
+  - Fix EventWar bug when winner_takes_ownership_of_townblocks is true.
+    - Closes #3862.
+  - Fix message output when a single town or nation is fallen because of upkeep costs.
+    - Closes #3856.
+  - Fix SQL saveAllTownBlocks() returning false all of the time, preventing a server from switching from flatfile to mysql storage.
+    - Closes #3864.
+  - pt-br.yml updated to 0.77 courtesy of bane with PR #3865.
+  - TownBlocks database refactor:
+    - TownBlocks are no longer saved to a TownyWorld.
+    - They are now saved to the Town.
+    - This allows for much easier saving operations.
+    - For flatfile databases: towny\data\townblocks.txt no longer used (you may delete this after updating.)
+    - When townblocks are unclaimed they are now moved to a towny\data\townsblocks\WORLDNAME\deleted\TOWNNAME\ folder.
+      - This allows for easy restoration of townblocks which do get removed, whatever the cause.
+    - This will hopefully end the occurance of disappearing townblocks and fix the following tickets: #3783 #3796 #3813 #3821 #3844.
+    - This refactor has been tested fairly thoroughly, but it is always advised to back up your server before updating Towny. 
+0.96.1.2:
+  - Cleanup and microperformance pull request, courtesy of Articdive with PR #3802.
+  - Make /ta reload more specific, courtesy of Siris with PR #3851.
+    - Command now breaks into 5 subcommands: /ta reload <database|perms|config|lang|all>
+  - Changed Command: /ta reload
+    - /ta reload {database|db} - reloads the database.
+    - /ta reload {perms|townyperms|permissions} - reloads townyperms.yml
+    - /ta reload config - reloads the config & language file.
+    - /ta reload lang - reloads the language file.
+    - /ta reload all - reloads everything like /ta reload used to do.
+  - Add separate tax limits for towns, nations and townblocks, courtesy of Siris with PR #3860.
+    - The old max_tax_amount is removed.
+    - Adds the following new config options:
+  - New Config Options:
+    - economy.daily_taxes.max_plot_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for townblocks sold to players.
+    - economy.daily_taxes.max_town_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for towns when using flat taxes.
+    - economy.daily_taxes.max_nation_tax_amount
+      - default: 1000.0
+      - Maximum tax amount allowed for nations when using flat taxes.
+    - economy.daily_taxes.max_town_tax_percent
+      - default: 25
+      - Maximum tax percentage allowed when taxing by percentages for towns.
+  - Removed Config Option: economy.daily_taxes.max_tax_amount
+    - Replaced by the above new config options.
+  - polish.yml added courtesy of Martinez.
+  - Cleanup/Micro-optimization pull request, courtesy of Silverwolfg11 with PR #3866.
+  - Use Paperlib for Async Chunk Loading, courtesy of Siris with PR #3871.
+    - Servers using Paper will benefit from faster chunk loading when players are teleported via Towny.
+  - Fix regression in PVP world settings.
+    - It is now again possible to have PVP false in a world, but let the town/townblock override that.
+    - Closes #3863. 
+  - Fix for Nation&TownSpawnEvents causing titles/chunknotifications early, courtesy of Siris with PR #3872.
+  - API: Added NationBonusCalculationEvent, courtesy of Silverworldg11 with PR #3873.
+    - Allows plugins to modify the nation bonus returned by a nation.
+    - This is a particularly useful if plugins want to add nation bonus blocks based on their own specific criteria rather than what is determined by Towny config.
+  - New Feature: movement-cancels-spawn-warmup.
+    - Will not affect players with the towny.admin node.
+    - Removes essentials from the SpawnUtil.
+    - Closes #3619.    
+  - New Config Option: global_town_settings.movement_cancels_spawn_warmup
+    - Default: false
+    - When set to true, if players are currently in a spawn warmup, moving will cancel their spawn.
+  - Fix /plot set TYPE, always trying to pay into the closed_economy SERVER_ACCOUNT, even when closed_economy is false.
+    - Closes #3870.
+  - Fix onStructureGrow NPE seen in logs.
+  - Fix negative upkeep feature not working any longer.
+    - Closes #3874.
+0.96.1.3:
+  - Bump language files to 0.79.
+  - Fix some untranslatable strings in the PlayerCacheUtil.
+  - Fix /plot set perm on|off not giving feedback and saving.
+  - Fix for non-empty saving queues not finishing on shutdown, courtesy of Siris with PR #3877.
+    - Credit to Silverwolfg11 for finding above issue.
+  - Added: Dynamic Nation Colours, courtesy of Goosius with PR #3869.
+    - using /n set mapcolor, nations can set their own colour on dynmap-towny webpages.
+    - list of available colours to be used is set in the config.yml at global_nation_settings.allowed_map_colors
+  - New Command: /n set mapcolor {color}
+    - Used by a king to set their colour seen on dynmap-towny webpages.
+  - New Config Option: global_nation_settings.allowed_map_colors
+    - default: aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00
+    - This setting determines the list of allowed nation map colors.
+    - The color codes are in hex format.
+  - New Permission Node: towny.command.nation.set.mapcolor
+    - Child Node of towny.command.nation.set.*
+    - Existing installs do not have to grant this node to Kings, they will already inherit it as long as they have the above node.
+  - Fix /plot group commands missing their permission nodes.
+  - New Permission Nodes: towny.command.plot.group.*
+    - Child Nodes:
+    - towny.command.plot.group.add: true
+    - towny.command.plot.group.remove: true
+    - towny.command.plot.group.rename: true
+    - towny.command.plot.group.set: true
+    - towny.command.plot.group.toggle: true
+    - towny.command.plot.group.forsale: true
+    - towny.command.plot.group.notforsale: true
+  - Allow for other plugins to modify the TownPreClaim cancellation message.
+    - Closes #3814.
+  - Remove /town unclaim outpost from /town unclaim ?
+  - Add /ta unclaim & /plot unclaim tab completes.
+    - Closes #3883.
+  - Add ignoreCancelled=true to onPlayerTakeLecternBookEvent to prevent Towny overriding plugins who've already stopped taking a book.
+    - Closes #3894.
+  - Add Placeholders:
+    - %townyadvanced_town_ranks% - Displays either Mayor, or the various town ranks a player has or nothing if they have none.
+    - %townyadvanced_nation_ranks% - Displays either King, or the various nation ranks a player has or nothing if they have none.
+    - Closes #3695.
+  - Revamped Confirmation system, courtesy of Siris with PR #3892.
+  - New Command: /ta town [town] outlaw [add|remove] [name]
+    - Allows admins to add/remove outlaws from a town.
+    - Closes #3778.
+  - New Config Option: global_town_settings.maximum_number_residents_without_nation
+    - default: 0
+    - When set above zero this is the largest number of residents a town can support before they join/create a nation.
+    - Do not set this value to an amount less than the global_town_settings.required_number_residents_join_nation.
+    - Do not set this value to an amount less than the global_town_settings.required_number_residents_create_nation.
+    - This will not remove residents from nation-less towns that are already above the limit, they will not be able to invite more. 
+    - Closes #3720.
+  - New Config Option: plugin.day_timer.delete_0_plot_towns
+    - Default: false
+    - Whether towns with no claimed townblocks should be deleted when the new day is run.
+    - Closes #3746.
+  - Add confirmation of cost for /plot claim command when plots are priced higher than 0.
+  - Add confirmation of cost for spawn commands when costs are higher than 0, courtesy of Siris with PR #3861.
+    - Closes #3828.
+  - Fix: nation-requires-proximity feature should be working much better now.
+  - Added: For the nation-requires-proximity feature:
+    - Moving homeblocks will now tell the mayor if their town will leave their nation for moving too far from the homeblock.
+    - Moving homeblocks will now tell the king if any of their towns will leave their nation for moving their homeblock too far away.
+    - Merging nations will now be made aware if any of the towns will leave the prevailing nation when the two nations merge.
+  - Add confirmations to town and nation renames if their costs are higher than 0.
+  - New Command: /ta depositall [amount]
+    - Adds amount to all towns' and all nations' banks.
+    - Requires towny.command.townyadmin.depositall, which is a child node of towny.command.townyadmin.*.
+  - Add confirmations to /plot set type when costs are higher than 0.
+  - Add confirmation to /town buy bonus command.
+  - Cost confirmation added to /plot set outpost, courtesy of Siris with PR #3900.
+0.96.1.4:
+  - Language files bumped to 0.80.
+  - Added Placeholder: %townyadvanced_player_status%
+    - Displays Nomad, Resident, Mayor or King, depending on what position the player is in.
+    - Closes #3907.
+  - Fix /t buy bonus command not working after cost confirmation added.
+  - Fix some costs in confirmations not being formatted by the TownyEconomyHandler.
+  - Add cost confirmations to /t new and /n new commands.
+  - Added advice message to mayor when they create their town, advising them about upkeep, depositing money and when the next upkeep will be taken.
+    - Closes #3843.
+  - Properly delete townblocks which belong to towns that no longer exist.
+    - This will clear up ghost-townblocks which appear as NPEs in ChunkNotifications, as well as make some townblocks un-claimable.
+    - Closes #3911, #3771.
+0.96.1.5:
+  - Language files bumped to 0.81.
+  - New Config Option: global_town_settings.damage_cancels_spawn_warmup
+    - Default: false
+    - When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled.
+    - Closes #3916.
+  - Fix mysql DB's nation's not loading their registered date or metadata, spotted by Silverwolfg11. 
+  - Fix mysql DB's towns losing residents on load.
+0.96.1.6:
+  - Unify code called when explosions are being reverted and ProtectionRegenTasks are created.
+  - Explosion code clean up.
+  - Should not be possible to duplicate any block ever again.
+  - Fixed loading townblocks that do not use the config's current town_block_size.
+    - These townblocks will not be loaded into memory, but will remain in the database in case someone switches their town_block_size without realizing what it would do.
+    - Closes #3924.
+  - Fixed ChunkNotifications in the action_bar set to last for 3 or less seconds causing NPEs.
+    - Closes #3923.
+  - Fix mysql DB's nation's losing many of their settings.
+0.96.1.7:
+  - Fix german lang file.
+  - Fix "Modes set: " appearing when there are no modes to set, courtesy of v3Monsta with PR #3941.
+    - Closes #3857.
+  - Confirmation and invitations are now translatable, courtesy of v3Monsta with PR #3938.
+  - Language files bumped to 0.82.
+  - Fix overlapping confirmations properly cancelling previous ones, courtesy of Siris with PR #3902.
+  - Clickable navigation arrows on /n list and /t list pages, courtesy of Siris with PR #3937.
+    - Requires using Spigot or Paper or equivalent.
+    - Closes #3853.
+  - Make sure clickable texts are using the full command and not shortened versions.
+  - pt-br.yml updated to 0.82 courtesy of vsdepontes with PR #3930.
+  - Fix nations being able to kick towns from their nation during war.
+    - To prevent nations not having to defend all of their towns in war.
+  - Fix non-warring Towns from still being able to be considered as attackers in Event war.
+  - Fix flying players being able to count as townblock attackers/defenders in Event war.
+  - Fix resident's Town and Nation ranks being able to double up, which caused rare issues with TownyNameUpdater.
+    - Also catching the ConcurrentModificationException if it does somehow occur again.
+    - Closes #3912.
+  - REQUIRED CHANGE: at protection.item_use_ids
+    - add ,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE
+    - will prevent players from stripping logs in unwanted locations.
+0.96.1.8:
+  - Add Essentials to soft-depends.
+  - Fix movement-cancels-spawning showing cancel message when because you waited patiently and spawned.
+  - Fix out-dated comments in config re: spawning costs.
+  - French.yml updated to 0.82, courtesy of Yldales with PR #3958.
+  - Allow TownyMessaging to use more than 54 characters per line, courtesy of v3Monsta with PR #3946.
+0.96.1.9:
+  - Fix missing command-feedback when using some towny commands in the console, courtesy of Siris with PR #3961.
+    - Closes #3957. 
+  - Fix newly-joined players not having their lastOnline value not set.
+  - Fix residents.txt causing safemode for having a resident listed more than once.
+    - Also removes doubled up residents from the residents.txt when saving.
+  - New Permission Node: towny.admin.spawn
+    - Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
+    - Child Node: towny.command.townyadmin.town.spawn.freecharge
+    - Is itself a childnode of towny.admin.
+    - Closes: #3936.
+  - Removed Permission Nodes: 
+    - towny.command.townyadmin.town.spawn
+    - towny.command.townyadmin.nation.spawn
+    - Replaced by the above towny.admin.spawn node.
+  - Fix min_distance_between_homeblocks likely not working very well.
+  - Changed: towns in the same nation now bypass the min_distance_from_town_homeblock & min_plot_distance_from_town_plot config values.
+    - Allows for nations to connect seamlessly while still keeping towns not in the same nation from claiming close to each other.
+    - Closes #3913.
+  - Fix DrawSmokeFactory offset to move smoke puffs up from inside the blocks.
+  - Fix ghost townblocks that are missing a town not being deleted at startup.
+0.96.1.10:
+  - Changed: Whether someone light a Nether Portal, they will now have to be able to build NETHER_PORTAL blocks rather than OBSIDIAN blocks.
+    - This means that servers who want players to be able to make nether portals to a world where they do not grant towny.wild permissions will be able to build a portal.
+    - The node required to build a portal that would connect into the wilderness would be towny.wild.build.NETHER_PORTAL.
+    - This means servers that do not grant wild permissions do not have to give towny.wild.build.OBSIDIAN, which would mean players could place obsidian anywhere in the wild.
+  - Fix MobRemovalTask not appreciating when a world's worldmobs setting is off.
+  - Fix Slimes trampling on crops not abiding a world's creaturetrampling setting.
+    - Also cleans up croptrampling code from out of the TownyPlayerListener & lets us drop the TownyWorld from the onPlayerSwitchEvent.
+  - Fix Ravagers breaking leaves/crops and what not when world's creaturetrampling setting is off.
+    - Closes #3975.
+  - New Config Option: town.min_distances_ignored_for_towns_in_same_nation
+    - default: true
+    - If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same.
+    - Closes #3983.
+  - Fix underscores showing in title messages when entering and leaving towns, as well as in PAPI placeholders.
+    - Close #3985.
+  - Fix /ta town NAME toggle not being friendly towards many /t toggle subcommands.
+    - Additionally commands should display proper feedback.
+  - Taxpercent capping, courtesy of Siris with PR #3969.
+    - Closes #3967.
+  - New Command /town set taxpercentcap {amount}
+    - Mayor command to set the maximum amount that can be taken when taxpercent is enabled.
+  - New Permission Node: towny.command.town.set.taxpercentcap
+    - Child node of towny.command.town.set.*
+    - Required to use /town set taxpercentcap [amount]
+  - New Config Option: economy.daily_taxes.max_town_tax_percent_amount 
+    - Default: 10000
+    - Controls the highest amount of money that can be taken from a tax percentage on a resident.
+  - Changed Config Option: town.default_taxes.taxpercentage
+    - Default value changed from false to true.
+    - Will no affect existing configs.
+    - New config files will have taxpercentage on by default, which means new towns will start with taxpercent enabled.
+  - Fix regression in DisablePlayerTrampling which prevented crop trampling being prevented.
+0.96.1.11:
+  - Fix case in TownyPlayerListener that could result in an NPE.
+    - Closes #4002.
+  - russian.yml updated to 0.83 courtesy of Egor33345.
+  - Fix cost confirmation showing when new town or new nation prices are set to 0.
+  - zh-tw.yml updated by shou692199 with PR #3999.
+  - Allow only language unicode, courtesy of Siris with PR #3943.
+    - Stop players using emojis in their town and nation names. 
+    - New Configs will have the following regex, which you can add manually or have Towny add it by itself by removing the regex section of your config.yml.
+    - New Default:
+    regex:
+      name_filter_regex: '[\\\/]'
+      name_check_regex: ^[\p{L}a-zA-Z0-9._\[\]-]*$
+      string_check_regex: ^[a-zA-Z0-9 \s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
+      name_remove_regex: '[^\P{M}a-zA-Z0-9\&._\[\]-]'
+  - API: new PlotPreChangeTypeEvent, courtesy of rebstew with PR #3995.
+    - Cancellable event that plugins can use to stop players from changing a plot type.
+  - Fix plot groups not showing the correct pvp setting when /plot group set perm command is used.
+    - Closes #4000. 
+  - Fix getTownBlockStatus that affect Citizens2 NPCs from displaying "Failed to fetch resident: name" in the log.
+  - Fix bad PlotBlockData preventing a town from being deleted.
+  - Fix Leash_Hitches entities being unprotected from right-click-removals.
+    - Allowed outsiders to steal animals.
+    - Closes #4028.
+  - REQUIRED CONFIG CHANGE: add ,LEAD to the end of the protection.switch_ids list.
+  - pt-br.yml updated to 0.83, courtesy of vsdepontes with PR #4029.
+  - Fix for /plot set reset, courtesy of Silverwolfg11 with PR #4026.
+  - Fix Towny loading bad townyperms.yml files.
+    - Towny will now enter safe mode if the townyperms.yml file will not load correctly.
+    - This step is being taken because under certain circumstances it would cause Towny to harm it's own database when loading.
+  - Fix Towny not refreshing the permissions of online players when /ta reload perms is used.
+  - Fix issue where a badly configured townyperms.yml causes DB failure, courtesy of Goosius1 with PR #4003.
+  - Fix /res set perm command not applying the new /res perm line to all unchanged resident-owned townblocks.
+  - Fix board messages being able to set to strings longer than TownyFormatter can display.
+    - Closes #4039. 
+  - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
+    - Closes #4032.
+  - Switch to JitPack and Remove GH packages dependencies, courtesy of Siris with PR #4038.
+0.96.1.12:
+  - Fix /towny top land resident throwing an internal error.
+    - Closes #4045.
+  - Add javadocs to maven, courtesy of Siris with PR #4049.
+    - Use mvn clean install to build javadocs.
+  - New Command: /ta nation [nationname] kick [towns...]
+    - Allows admins to remove towns from a nation.
+    - Closes #4050.
+  - New Command: /ta town [townname] leavenation
+    - Allows admins to make a town leave their nation.
+  - API: Added to TownyAPI, hasNationZone(Location) and hasNationZone(WorldCoord) which will return either TownBlockStatus.UNCLAIMED_ZONE or TownBlockStatus.NATION_ZONE.
+  - API: Added to TownyAPI, isNationZone(Location), returns true if it is in a nation zone.
+  - Fix PlayerCacheUtil looking for a non-existant language string.
+  - Fix Townblocks having their mob setting overridden by the Towns' mob setting in scenarios where the town has mobs on, but the townblock has mobs off.
+    - Closes #4067.
+  - Fix mayors and kings not paying the bail costs specified in the config.
+0.96.1.13:
+  - Fix friendly fire not being respected during wars.
+  - Fix players being pulled around by fishing hooks in non-PVP plots.
+    - Closes #4092.
+  - Fix sentinalpvp bots causing NotRegisteredExceptions.
+  - Fix friend and outlaw lists being able to be fed invalid resident names.
+    - Closes #4097.
+  - Fix unhelpful getHomeBlock exception message.
+  - Add UUIDs to resident objects, for the day we need to convert databases to UUIDs.
+  - Add bstats metric to help track UUID gathering.
+0.96.1.14:
+  - Fix loading mysql databases with residents who have had a UUID gathered.

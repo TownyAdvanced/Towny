@@ -83,6 +83,8 @@ public class ChunkNotification {
 		try {
 			fromTownBlock = from.getTownBlock();
 			fromPlotType = fromTownBlock.getType();
+			if (fromTownBlock.hasPlotObjectGroup())
+				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
 			try {
 				fromTown = fromTownBlock.getTown();
 			} catch (NotRegisteredException e) {
@@ -98,6 +100,8 @@ public class ChunkNotification {
 		try {
 			toTownBlock = to.getTownBlock();
 			toPlotType = toTownBlock.getType();
+			if (toTownBlock.hasPlotObjectGroup())
+				toPlotGroup = toTownBlock.getPlotObjectGroup();
 			try {
 				toTown = toTownBlock.getTown();
 			} catch (NotRegisteredException e) {
@@ -118,16 +122,7 @@ public class ChunkNotification {
 		} catch (NotRegisteredException e) {
 			toWild = true;
 		}
-		
-		try {
-			if (toTownBlock.hasPlotObjectGroup()) {
-				toPlotGroup = toTownBlock.getPlotObjectGroup();
-			}
-			
-			if (fromTownBlock.hasPlotObjectGroup()) {
-				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
-			}
-		} catch (Exception ignored) { }
+
 	}
 
 	public String getNotificationString(Resident resident) {

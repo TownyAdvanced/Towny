@@ -13,9 +13,6 @@ import java.util.List;
  */
 
 public class ChatTools {
-
-	private static final int lineLength = 54;
-
 	public static List<String> listArr(String[] args, String prefix) {
 
 		return list(Arrays.asList(args), prefix);
@@ -27,53 +24,15 @@ public class ChatTools {
 	}
 
 	public static List<String> list(List<String> args, String prefix) {
-
 		if (args.size() > 0) {
-			StringBuilder line = new StringBuilder();
-			for (int i = 0; i < args.size() - 1; i++)
-				line.append(args.get(i)).append(", ");
-			line.append(args.get(args.size() - 1));
-
-			return color(prefix + line);
+			List<String> out = new ArrayList<>();
+			out.add(prefix + String.join(", ", args));
+			return out;
+		} else {
+			return new ArrayList<>();
 		}
 
-		return new ArrayList<>();
-	}
-
-	private static List<String> wordWrap(String[] tokens) {
-
-		List<String> out = new ArrayList<>();
-		out.add("");
-
-		for (String s : tokens) {
-			if (stripColour(out.get(out.size() - 1)).length() + stripColour(s).length() + 1 > lineLength)
-				out.add("");
-			out.set(out.size() - 1, out.get(out.size() - 1) + s + " ");
-		}
-
-		return out;
-	}
-
-	public static List<String> color(String line) {
-
-		List<String> out = wordWrap(line.split(" "));
-
-		String c = "f";
-		for (int i = 0; i < out.size(); i++) {
-			if (!out.get(i).startsWith("\u00A7") && !c.equalsIgnoreCase("f"))
-				out.set(i, "\u00A7" + c + out.get(i));
-
-			for (int index = 0; index < lineLength; index++)
-				try {
-					if (out.get(i).substring(index, index + 1).equalsIgnoreCase("\u00A7"))
-						c = out.get(i).substring(index + 1, index + 2);
-				} catch (Exception ignored) {
-				}
-		}
-
-		return out;
-	}
-
+	}	
 	public static String stripColour(String s) {
 
 		StringBuilder out = new StringBuilder();

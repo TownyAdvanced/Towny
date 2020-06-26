@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -168,13 +169,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 SQL_Task query = TownySQLSource.this.queryQueue.poll();
             
                 if (query.update) {
-                
                     TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
-                
                 } else {
-                
                     TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
-                
                 }
             
             }
@@ -183,10 +180,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
     @Override
-    public void cancelTask() {
+    public void finishTasks() {
+		// Cancel the repeating task as its not needed anymore.
+		task.cancel();
 
-        task.cancel();
-
+		// Make sure that *all* tasks are saved before shutting down.
+		while (!queryQueue.isEmpty()) {
+			SQL_Task query = TownySQLSource.this.queryQueue.poll();
+			
+			if (query.update) {
+				TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+			} else {
+				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+			}
+		}
     }
 
     /**
@@ -435,7 +442,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 Map.Entry<String, Object> me = i.next();
                 wherecode.append("`").append(me.getKey()).append("` = ");
                 if (me.getValue() instanceof String)
-                    wherecode.append("'").append(((String) me.getValue()).replace("'", "\''")).append("'");
+                    wherecode.append("'").append(((String) me.getValue()).replace("'", "''")).append("'");
                 else if (me.getValue() instanceof Boolean)
                     wherecode.append("'").append(((Boolean) me.getValue()) ? "1" : "0").append("'");
                 else
@@ -469,18 +476,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             Statement s = cntx.createStatement();
             ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
 
+            int total = 0;
             while (rs.next()) {
 
                 TownyWorld world = getWorld(rs.getString("world"));
                 int x = Integer.parseInt(rs.getString("x"));
                 int z = Integer.parseInt(rs.getString("z"));
 
-                try {
-                    world.newTownBlock(x, z);
-                } catch (AlreadyRegisteredException ignored) {
-                }
+                TownBlock townBlock = new TownBlock(x, z, world);
+                TownyUniverse.getInstance().addTownBlock(townBlock);
+                total++;
 
             }
+            TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
 
             s.close();
 
@@ -675,6 +683,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
+            	
+            	try {
+            		if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
+            			resident.setUUID(UUID.fromString(rs.getString("uuid")));
+            	} catch (Exception e) {
+                    e.printStackTrace();
+                }
+            	
                 try {
                     resident.setLastOnline(rs.getLong("lastOnline"));
                 } catch (Exception e) {
@@ -727,19 +743,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
                 }
 
-                line = rs.getString("town-ranks");
-                if ((line != null) && (!line.isEmpty())) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
-                }
+				try {
+					line = rs.getString("town-ranks");
+					if ((line != null) && (!line.isEmpty())) {
+						search = (line.contains("#")) ? "#" : ",";
+						resident.setTownRanks(Arrays.asList((line.split(search))));
+						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
+					}
+				} catch (Exception e) {}
 
-                line = rs.getString("nation-ranks");
-                if ((line != null) && (!line.isEmpty())) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(search)))));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
-                }
+				try {
+					line = rs.getString("nation-ranks");
+					if ((line != null) && (!line.isEmpty())) {
+						search = (line.contains("#")) ? "#" : ",";
+						resident.setNationRanks(Arrays.asList((line.split(search))));
+						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
+					}
+				} catch (Exception e) {}
 
                 try {
                     line = rs.getString("friends");
@@ -771,18 +791,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (SQLException ignored) {
 
 				}
-
-				/*
-				 * Attempt these for older databases.
-				 */
-                try {
-
-                    line = rs.getString("townBlocks");
-                    if ((line != null) && (!line.isEmpty()))
-                        utilLoadTownBlocks(line, null, resident);
-
-                } catch (SQLException ignored) {
-                }
 
                 s.close();
                 return true;
@@ -876,7 +884,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                             try {
                                 int x = Integer.parseInt(tokens[1]);
                                 int z = Integer.parseInt(tokens[2]);
-                                TownBlock homeBlock = world.getTownBlock(x, z);
+                                TownBlock homeBlock =  TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
                                 town.forceSetHomeBlock(homeBlock);
                             } catch (NumberFormatException e) {
                                 TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
@@ -983,18 +991,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 else 
                 	town.setConqueredDays(0);
 
-                /*
-                 * Attempt these for older databases.
-                 */
-                try {
-
-                    line = rs.getString("townBlocks");
-                    if (line != null)
-                        utilLoadTownBlocks(line, town, null);
-
-                } catch (SQLException ignored) {
-                }
-
                 try {
                     line = rs.getString("registered");
                     if (line != null) {
@@ -1065,7 +1061,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 else
                 	nation.setNationBoard("");
 
-                nation.setTag(rs.getString("tag"));
+				line = rs.getString("mapColorHexCode");
+				if (line != null)
+					nation.setMapColorHexCode(line);
+				else
+					nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+
+				nation.setTag(rs.getString("tag"));
 
                 line = rs.getString("allies");
                 if (line != null) {
@@ -1125,28 +1127,28 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 nation.setPublic(rs.getBoolean("isPublic"));
                 
                 nation.setOpen(rs.getBoolean("isOpen"));
-            }
-            try {
-                line = rs.getString("registered");
-                if (line != null) {
-                    nation.setRegistered(Long.valueOf(line));
-                } else {
+
+                try {
+                    line = rs.getString("registered");
+                    if (line != null) {
+                        nation.setRegistered(Long.valueOf(line));
+                    } else {
+                        nation.setRegistered(0);
+                    }
+                } catch (SQLException ignored) {
+                } catch (NumberFormatException | NullPointerException e) {
                     nation.setRegistered(0);
                 }
-            } catch (SQLException ignored) {
-            } catch (NumberFormatException | NullPointerException e) {
-                nation.setRegistered(0);
+
+    			try {
+    				line = rs.getString("metadata");
+    				if (line != null && !line.isEmpty()) {
+    					nation.setMetadata(line);
+    				}
+    			} catch (SQLException ignored) {
+
+    			}
             }
-
-			try {
-				line = rs.getString("metadata");
-				if (line != null && !line.isEmpty()) {
-					nation.setMetadata(line);
-				}
-			} catch (SQLException ignored) {
-
-			}
-
             s.close();
             return true;
         } catch (SQLException e) {
@@ -1455,16 +1457,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         }
 
                     line = rs.getString("town");
-                    if (line != null)
+                    if (line != null) {
+                        Town town;
+						try {
+							town = getTown(line.trim());
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
+							TownyUniverse.getInstance().removeTownBlock(townBlock);
+							deleteTownBlock(townBlock);
+							continue;
+						}
+                        townBlock.setTown(town);
                         try {
-                            Town town = getTown(line.trim());
-                            townBlock.setTown(town);
-                            TownyWorld townyWorld = townBlock.getWorld();
-                            if (townyWorld != null && !townyWorld.hasTown(town))
-                            	townyWorld.addTown(town);
-                        } catch (Exception ignored) {
-                        }
-
+							town.addTownBlock(townBlock);
+							TownyWorld townyWorld = townBlock.getWorld();
+							if (townyWorld != null && !townyWorld.hasTown(town))
+								townyWorld.addTown(town);
+						} catch (AlreadyRegisteredException ignored) {
+						}
+                    }
                     line = rs.getString("resident");
                     if (line != null && !line.isEmpty())
                         try {
@@ -1552,6 +1563,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> res_hm = new HashMap<>();
             res_hm.put("name", resident.getName());
+            res_hm.put("uuid", resident.hasUUID() ? resident.getUUID().toString() : "");
             res_hm.put("lastOnline", resident.getLastOnline());
             res_hm.put("registered", resident.getRegistered());
             res_hm.put("isNPC", resident.isNPC());
@@ -1682,6 +1694,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
             nat_hm.put("nationBoard", nation.getNationBoard());
+			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
@@ -1698,7 +1711,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
-            
+
 			if (nation.hasMeta())
 				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
 			else
@@ -1815,7 +1828,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean saveAllTownBlocks() {
-        return false;
+		for (Town town : getTowns()) {
+			for (TownBlock townBlock : town.getTownBlocks())
+				saveTownBlock(townBlock);
+		}
+		
+		return true;
     }
     
     @Override
@@ -1931,7 +1949,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         String value;
         
         if (isFile(fileName)) {
-            PlotBlockData plotBlockData = new PlotBlockData(townBlock);
+            PlotBlockData plotBlockData = null;
+			try {
+				plotBlockData = new PlotBlockData(townBlock);
+			} catch (NullPointerException e1) {
+				TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+				return null;
+			}
             List<String> blockArr = new ArrayList<>();
             int version = 0;
             
@@ -2228,13 +2252,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Save keys
 	 */
 
-    @Override
-    public boolean saveTownBlockList() {
-
-        return true;
-    }
-
-    @Override
+	@Override
     public boolean saveResidentList() {
 
         return true;
@@ -2324,117 +2342,5 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
 	}
-    
-    /**
-     * Load townblocks according to the given line Townblock: x,y,forSale Eg:
-     * townBlocks=world:10,11;10,12,true;|nether:1,1|
-     *
-     * @param line - Line to load
-     * @param town - Town to load from
-     * @param resident - resident to set to townblock
-     */
-    @Deprecated
-    public void utilLoadTownBlocks(String line, Town town, Resident resident) {
-        
-        String[] worlds = line.split("\\|");
-        for (String w : worlds) {
-            String[] split = w.split(":");
-            if (split.length != 2) {
-                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " BlockList does not have a World or data.");
-                continue;
-            }
-            try {
-                TownyWorld world = getWorld(split[0]);
-                for (String s : split[1].split(";")) {
-                    String blockTypeData = null;
-                    int indexOfType = s.indexOf("[");
-                    if (indexOfType != -1) { //is found
-                        int endIndexOfType = s.indexOf("]");
-                        if (endIndexOfType != -1) {
-                            blockTypeData = s.substring(indexOfType + 1, endIndexOfType);
-                        }
-                        s = s.substring(endIndexOfType + 1);
-                    }
-                    String[] tokens = s.split(",");
-                    if (tokens.length < 2)
-                        continue;
-                    try {
-                        int x = Integer.parseInt(tokens[0]);
-                        int z = Integer.parseInt(tokens[1]);
-                        
-                        try {
-                            world.newTownBlock(x, z);
-                        } catch (AlreadyRegisteredException ignored) {
-                        }
-                        TownBlock townblock = world.getTownBlock(x, z);
-                        
-                        if (town != null)
-                            townblock.setTown(town);
-                        
-                        if (resident != null && townblock.hasTown())
-                            townblock.setResident(resident);
-                        
-                        if (blockTypeData != null) {
-                            utilLoadTownBlockTypeData(townblock, blockTypeData);
-                        }
-                        
-                        //if present set the plot price
-                        if (tokens.length >= 3) {
-                            if (tokens[2].equals("true"))
-                                townblock.setPlotPrice(town.getPlotPrice());
-                            else
-                                townblock.setPlotPrice(Double.parseDouble(tokens[2]));
-                        }
-                        
-                    } catch (NumberFormatException | NotRegisteredException ignored) {
-                    }
-                }
-            } catch (NotRegisteredException e) {
-                // Continue; No longer necessary it's last statement!
-            }
-        }
-    }
-    
-    @Deprecated
-    public void utilLoadTownBlockTypeData(TownBlock townBlock, String data) {
-        
-        String[] tokens = data.split(",");
-        
-        // Plot Type
-        if (tokens.length >= 1)
-            townBlock.setType(Integer.valueOf(tokens[0]));
-        
-        // Outpost or normal plot.
-        if (tokens.length >= 2)
-            townBlock.setOutpost(tokens[1].equalsIgnoreCase("1"));
-    }
-    
-    @Deprecated
-    public String utilSaveTownBlocks(List<TownBlock> townBlocks) {
-        
-        HashMap<TownyWorld, ArrayList<TownBlock>> worlds = new HashMap<>();
-        StringBuilder out = new StringBuilder();
-        
-        // Sort all town blocks according to what world its in
-        for (TownBlock townBlock : townBlocks) {
-            TownyWorld world = townBlock.getWorld();
-            if (!worlds.containsKey(world))
-                worlds.put(world, new ArrayList<>());
-            worlds.get(world).add(townBlock);
-        }
-        
-        for (TownyWorld world : worlds.keySet()) {
-            out.append(world.getName()).append(":");
-            for (TownBlock townBlock : worlds.get(world)) {
-                out.append("[").append(townBlock.getType().getId());
-                out.append(",").append(townBlock.isOutpost() ? "1" : "0");
-                out.append("]").append(townBlock.getX()).append(",").append(townBlock.getZ()).append(",").append(townBlock.getPlotPrice()).append(";");
-            }
-            out.append("|");
-            
-        }
-        
-        return out.toString();
-    }
 }
 

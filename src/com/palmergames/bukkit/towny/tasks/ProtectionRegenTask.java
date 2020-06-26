@@ -8,47 +8,45 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
-	@SuppressWarnings("unused")
-	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
-	private List<ItemStack> contents = new ArrayList<ItemStack>();
-
-	//Tekkit - InventoryView
+	private ItemStack[] contents;
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 
 		super(plugin);
 		this.state = block.getState();
-		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
-
-		if (state instanceof InventoryHolder) {
-			Inventory inven;
-
+		
+		// If the block has an inventory it implements the BlockInventoryHolder interface.
+		if (state instanceof InventoryHolder) { // 1.13 support - Use InventoryHolder instead
+			
+			// Cast the block to the interface representation.
+			InventoryHolder container = (InventoryHolder) state;
+			
+			// Capture inventory.
+			Inventory inventory = container.getInventory();
+			
+			// Chests are special.
 			if (state instanceof Chest) {
-				inven = ((Chest) state).getBlockInventory();
-			} else {
-				// Contents we are respawning.
-				inven = ((InventoryHolder) state).getInventory();
+				inventory = ((Chest) state).getBlockInventory();
 			}
 
-			for (ItemStack item : inven.getContents()) {
-				contents.add((item != null) ? item.clone() : null);
-			}
-
-			inven.clear();
+			// Copy the contents over.
+			contents = inventory.getContents().clone();
+			
+			// Clear the inventory so no items drops and causes dupes.
+			inventory.clear();
 		}
 	}
 
@@ -62,6 +60,8 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	public void replaceProtections() {
 
 		Block block = state.getBlock();
+		
+		// Replace physical block.
 		try {
 			BlockData blockData = state.getBlockData().clone();
 			block.setType(state.getType(), false);
@@ -83,25 +83,22 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			state.update();
 		}
 		
-		/* Add inventory back to the block if it conforms to BlockInventoryHolder.
-		*
-		* Unusable on 1.13
-		* 
-		if (state instanceof BlockInventoryHolder) {
+		if (state instanceof InventoryHolder) { // 1.13 support - Use InventoryHolder instead
 			// Up cast to interface.
-			BlockInventoryHolder container = (BlockInventoryHolder) state;
+			InventoryHolder container = (InventoryHolder) state;
 			
 			// Check for chest.
 			if (container instanceof Chest) {
 				((Chest) state).getBlockInventory().setContents(contents);
+			} else if (container instanceof DoubleChest) {
+				((DoubleChest) state).getInventory().setContents(contents);
 			} else {
-				((BlockInventoryHolder) state).getInventory().setContents(contents);
+				((InventoryHolder) state).getInventory().setContents(contents);
 			}
 			
 			// update blocks.
 			state.update();
 		}
-		 */
 	}
 
 	/**

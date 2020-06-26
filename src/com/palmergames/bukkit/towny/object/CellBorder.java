@@ -20,7 +20,7 @@ public class CellBorder extends WorldCoord {
 
 		private Type type;
 
-		private Section(Type type) {
+		Section(Type type) {
 
 			this.type = type;
 		}

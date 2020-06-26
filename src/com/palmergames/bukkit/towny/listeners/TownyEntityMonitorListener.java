@@ -5,28 +5,35 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+
+import net.citizensnpcs.api.CitizensAPI;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 //import org.bukkit.event.entity.EntityDamageEvent;
@@ -39,7 +46,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class TownyEntityMonitorListener implements Listener {
 
-	@SuppressWarnings("unused")
 	private final Towny plugin;
 
 	public TownyEntityMonitorListener(Towny instance) {
@@ -47,6 +53,30 @@ public class TownyEntityMonitorListener implements Listener {
 		plugin = instance;
 	}
 
+	/**
+	 * Handles players who have taken damage having their spawn cancelled.
+	 * 
+	 * @param event EntityDamageEvent.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerTakesDamage(EntityDamageEvent event) {
+		if (!TownySettings.isDamageCancellingSpawnWarmup() 
+				|| !event.getEntityType().equals(EntityType.PLAYER) 
+				|| !TownyTimerHandler.isTeleportWarmupRunning() 
+				|| (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getEntity())))
+			return;
+
+		Resident resident = null;
+		try {
+			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getEntity().getName());
+		} catch (NotRegisteredException e) {
+		}
+		if (resident != null && resident.getTeleportRequestTime() > 0) {
+			TeleportWarmupTimerTask.abortTeleportRequest(resident);
+			TownyMessaging.sendMsg(resident, ChatColor.RED + TownySettings.getLangString("msg_err_teleport_cancelled_damage"));
+		}
+	}
+	
 	/**
 	 * This handles EntityDeathEvents on MONITOR in order to handle Towny features such as:
 	 * - DeathPayments,
@@ -65,7 +95,13 @@ public class TownyEntityMonitorListener implements Listener {
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
 			Player defenderPlayer = (Player) defenderEntity;
-			Resident defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			Resident defenderResident;
+			try {
+				defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			} catch (NotRegisteredException e1) {
+				// Usually an NPC or a Bot of some kind.
+				return;
+			}
 			
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
@@ -80,7 +116,12 @@ public class TownyEntityMonitorListener implements Listener {
 					Projectile projectile = (Projectile) attackerEntity;
 					if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
 						attackerPlayer = (Player) projectile.getShooter();
-						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+						try {
+							attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+						} catch (NotRegisteredException e) {
+							// Usually an NPC or a Bot of some kind.
+							attackerPlayer = null;
+						}
 					} else { // Something else shot a projectile.
 						try {
 							attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
@@ -94,6 +135,8 @@ public class TownyEntityMonitorListener implements Listener {
 					try {
 						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
 					} catch (NotRegisteredException e) {
+						// Usually an NPC or a Bot of some kind.
+						attackerPlayer = null;
 					}
 				}
 
@@ -484,11 +527,8 @@ public class TownyEntityMonitorListener implements Listener {
 						TownBlock jailBlock = null;
 						Integer index = 1;
 						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
-							try {
-								jailBlock = townyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
-							} catch (TownyException e) {
-								e.printStackTrace();
-							} 
+							jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
+
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
 								defenderResident.setJailed(defenderResident, index, attackerTown);
 								try {
@@ -540,12 +580,8 @@ public class TownyEntityMonitorListener implements Listener {
 				TownBlock jailBlock = null;
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
-					try {
-						jailBlock = townyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
-					} catch (TownyException e) {
-						e.printStackTrace();
-					} 
-					if (War.isWarZone(jailBlock.getWorldCoord())) {
+					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
+					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
 						defenderResident.setJailed(defenderResident, index, town);
 						try {
 							TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");

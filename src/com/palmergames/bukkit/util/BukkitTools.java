@@ -216,9 +216,7 @@ public class BukkitTools {
 	}
 	
 	public static String convertCoordtoXYZ(Location loc) {
-		String string = loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ(); 
-		
-		return string;
+		return loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
 	}
 	
 	/**
