@@ -5,10 +5,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
