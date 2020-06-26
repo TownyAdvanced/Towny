@@ -209,12 +209,18 @@ public class DailyTimerTask extends TownyTimerTask {
 				town = townItr.next();
 
 				/*
-				 * Only collect nation tax from this town if it really still
-				 * exists.
+				 * Only collect nation tax from this town if
+				 * - It exists
+				 * - It is not the capital
+				 * - It is not ruined
+				 * - It is not neutral
+				 *
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital() || !town.hasUpkeep())
+					if (town.isCapital() 
+						|| !town.hasUpkeep()
+						|| town.isRuined())
 						continue;
 
 					if (TownySettings.isTownBankruptcyEnabled()) {
@@ -304,7 +310,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()))
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined())
 				collectTownTaxes(town);
 		}
 	}
@@ -451,7 +457,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName())) {
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined()) {
 
 				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);

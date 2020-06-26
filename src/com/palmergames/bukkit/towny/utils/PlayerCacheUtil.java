@@ -382,21 +382,19 @@ public class PlayerCacheUtil {
 		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
 			return true;
 
-		//If town is bankrupt, nobody can build
+		//If town is bankrupt (but not ruined), nobody can build
 		TownBlock townBlock = null;
 		Town targetTown = null;
 		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
 			try {
 				townBlock = pos.getTownBlock();
 				targetTown = townBlock.getTown();
-				if(targetTown.getAccount().isBankrupt())  {
+				if(targetTown.getAccount().isBankrupt() && !targetTown.isRuined())  {
 					cacheBlockErrMsg(player, TownySettings.getLangString("msg_err_bankrupt_town_cannot_build"));
 					return false;
 				}
-			} catch (NotRegisteredException e) {
-				//ignored
-			} catch (EconomyException ee) {
-				//also ignored
+			} catch (NotRegisteredException nre) {
+			} catch (EconomyException ece) {
 			}
 		}
 
