@@ -150,9 +150,6 @@ public class SiegeWarBannerControlUtil {
 	}
 
 	private static boolean doesPlayerMeetBasicSessionRequirements(Siege siege, Player player, Resident resident) throws Exception {
-		if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(player.getLocation().getWorld()))
-			return false; //Siege war not enabled in world
-
 		if(player.getWorld() != siege.getFlagLocation().getWorld())
 			return false; //Player not in same world as siege
 

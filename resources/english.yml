@@ -1212,6 +1212,7 @@ msg_err_siege_war_peaceful_town_cannot_plunder: "&6[War]&c You cannot plunder a 
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."
 msg_err_siege_war_revolt_immunity_active: "&6[War]&c Your town has revolt immunity. It cannot revolt until the revolt immunity expires."
 #Attack
+msg_err_siege_war_not_enabled_in_world: '&6[War]&c War is not enabled in this world.'
 msg_err_siege_war_banner_must_be_placed_above_ground: '&6[War]&c The siege banner must be placed above ground.'
 msg_err_siege_war_action_not_a_town_member: '&6[War]&c You must be a member of a town to do this action.'
 msg_err_siege_war_action_not_a_nation_member: '&6[War]&c You must be a member of a nation to do this action.'
