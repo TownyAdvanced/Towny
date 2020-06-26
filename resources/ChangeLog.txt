@@ -4650,3 +4650,5 @@ v0.92.0.11:
   - Add bstats metric to help track UUID gathering.
 0.96.1.14:
   - Fix loading mysql databases with residents who have had a UUID gathered.
+0.96.2.0:
+  - Bump version for release.
