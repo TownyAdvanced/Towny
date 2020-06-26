@@ -58,6 +58,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -503,6 +504,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					String townName = String.join("_", newSplit);
 					
 					newTown(player, townName, player.getName(), noCharge);
+				}
+
+			} else if (split[0].equalsIgnoreCase("reclaim")) {
+
+				if(TownySettings.getWarCommonTownRuinsReclaimEnabled()) {
+					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
+				} else {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {

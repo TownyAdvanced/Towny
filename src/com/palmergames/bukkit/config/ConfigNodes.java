@@ -1861,7 +1861,7 @@ public enum ConfigNodes {
 			""),
 	WAR_COMMON_TOWN_RUINS_ENABLED(
 			"war.common.town_ruins.enabled",
-				"true",
+				"false",
 				"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
 				"# In this state, the town cannot be claimed, but can be looted.",
 				"# This feature is important to war system, as it prevents mayors from escaping attack/occupation, ",

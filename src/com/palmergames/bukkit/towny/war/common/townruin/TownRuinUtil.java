@@ -85,6 +85,7 @@ public class TownRuinUtil {
 				try {
 					resident.removeTownRank(rank);
 					townyUniverse.getDataSource().saveResident(resident);
+					plugin.deleteCache(resident.getName());
 				} catch (NotRegisteredException nre) {
 				}
 			}
