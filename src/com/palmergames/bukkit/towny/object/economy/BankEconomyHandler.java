@@ -18,8 +18,13 @@ public interface BankEconomyHandler extends EconomyHandler {
 	 * 
 	 * @return A string providing the prefix.
 	 */
-	String getEconomyPrefix();
+	String getBankAccountPrefix();
 
+	/**
+	 * Gets the bank account associated with this object 
+	 *
+	 * @return The BankAccount of this object.
+	 */
 	@Override
-	BankAccount getAccount();
+	BankAccount getAccount(); // Covariant return type of Account from superinterface
 }

@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
@@ -832,7 +833,7 @@ public class TownyPlayerListener implements Listener {
 	 * PlayerFishEvent
 	 * 
 	 * Prevents players from fishing for entities in protected regions.
-	 * - Armorstands, animals, any entity affected by rods.
+	 * - Armorstands, animals, players, any entity affected by rods.
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerFishEvent(PlayerFishEvent event) {
@@ -842,10 +843,22 @@ public class TownyPlayerListener implements Listener {
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
 			Player player = event.getPlayer();
 			Entity caught = event.getCaught();
-			if (caught.getType().equals(EntityType.PLAYER))
-				return;
-			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
-			if (!bDestroy) {
+			boolean test = false;
+			
+			// Caught players are tested for pvp at the location of the catch.
+			if (caught.getType().equals(EntityType.PLAYER)) {
+				TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getTownWorld(caught.getWorld().getName());
+				TownBlock tb = null;
+				try {
+					tb = townyWorld.getTownBlock(Coord.parseCoord(event.getCaught()));
+				} catch (NotRegisteredException e1) {
+				}
+				test = !CombatUtil.preventPvP(townyWorld, tb);
+			// Non-player catches are tested for destroy permissions.
+			} else {
+				test = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
+			}
+			if (!test) {
 				event.setCancelled(true);
 				event.getHook().remove();
 			}
@@ -1071,4 +1084,5 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+	
 }

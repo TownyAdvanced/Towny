@@ -39,8 +39,8 @@ public class TownyUniverse {
 		return TownyAPI.getInstance().getPlayerUUID(resident);
 	}
 
-	public static List<Player> getOnlinePlayers(ResidentList residentList) {
-		return TownyAPI.getInstance().getOnlinePlayers(residentList);
+	public static List<Player> getOnlinePlayers(Residence residence) {
+		return TownyAPI.getInstance().getOnlinePlayers(residence);
 	}
 
 	public static List<Player> getOnlinePlayers(Town town) {
@@ -145,8 +145,8 @@ public class TownyUniverse {
 		}
 	}
 
-	public static List<Resident> getOnlineResidents(ResidentList residentList) {
-		return TownyAPI.getInstance().getOnlineResidents(residentList);
+	public static List<Resident> getOnlineResidents(Residence residence) {
+		return TownyAPI.getInstance().getOnlineResidents(residence);
 	}
 
 	public void requestTeleport(Player player, Location spawnLoc) {

@@ -28,8 +28,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -267,7 +267,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 											// Get names of sent invites
 											.stream()
 											.map(Invite::getReceiver)
-											.map(TownyInviteReceiver::getName)
+											.map(InviteReceiver::getName)
 											// Collect sent invite names and check with the last arg without the hyphen
 											.collect(Collectors.toList()), args[args.length - 1].substring(1))
 											// Add the hyphen back to the beginning
@@ -291,7 +291,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 									return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
 									.stream()
 									.map(Invite::getSender)
-									.map(TownyInviteSender::getName)
+									.map(InviteSender::getName)
 									.collect(Collectors.toList()), args[args.length - 1]);
 								} catch (TownyException ignore) {}
 						}

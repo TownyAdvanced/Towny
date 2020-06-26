@@ -178,6 +178,7 @@ public class SQL_Schema {
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`uuid` mediumtext");
 		return columns;
 	}
 

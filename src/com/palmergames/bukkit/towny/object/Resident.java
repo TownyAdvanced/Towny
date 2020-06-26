@@ -13,7 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -30,10 +30,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
+	private UUID uuid = null;
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
@@ -80,6 +82,18 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public boolean isNPC() {
 
 		return isNPC;
+	}
+	
+	public UUID getUUID() {
+		return uuid;		
+	}
+	
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+	
+	public boolean hasUUID() {
+		return this.uuid != null;
 	}
 
 	public void setJailed(boolean isJailed) {
@@ -679,7 +693,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public List<Invite> getReceivedInvites() {
-		return receivedInvites;
+		return Collections.unmodifiableList(receivedInvites);
 	}
 
 	@Override

@@ -12,10 +12,10 @@ import java.util.Collection;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockOwner extends Permissible {
+public interface TownBlockOwner extends Permissible, Nameable {
 
 	/**
-	 * Gets the unmodifiable list of townblocks.
+	 * Gets the unmodifiable collection of townblocks.
 	 * 
 	 * @return The townblocks this object contains.
 	 */

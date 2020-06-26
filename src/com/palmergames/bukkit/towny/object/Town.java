@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends Government implements ResidentList, ObjectGroupManageable<PlotGroup>, TownBlockOwner {
+public class Town extends Government implements TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -533,7 +533,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 		if (hasHomeBlock())
 			return homeBlock;
 		else
-			throw new TownyException("Town has not set a home block.");
+			throw new TownyException(this.getName() + " has not set a home block.");
 	}
 
 	/**
@@ -1056,7 +1056,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 
 	@Override
-	public List<Resident> getOutlaws() {
+	public Collection<Resident> getOutlaws() {
 		return Collections.unmodifiableList(outlaws);
 	}
 	
@@ -1197,7 +1197,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 	
 	public void addPlotGroup(PlotGroup group) {
-		if (!hasObjectGroups()) 
+		if (!hasPlotGroups()) 
 			plotGroups = new HashMap<>();
 		
 		plotGroups.put(group.getName(), group);
@@ -1205,7 +1205,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
-		if (hasObjectGroups() && plotGroups.remove(plotGroup.getName()) != null) {
+		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1216,8 +1216,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 
 	// Abstract to collection in case we want to change structure in the future
-	@Override
-	public Collection<PlotGroup> getObjectGroups() {
+	public Collection<PlotGroup> getPlotGroups() {
 		if (plotGroups == null)
 			return null;
 		
@@ -1225,10 +1224,9 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 
 	// Method is inefficient compared to getting the group from name.
-	@Override
 	public PlotGroup getObjectGroupFromID(UUID ID) {
-		if (hasObjectGroups()) {
-			for (PlotGroup pg : getObjectGroups()) {
+		if (hasPlotGroups()) {
+			for (PlotGroup pg : getPlotGroups()) {
 				if (pg.getID().equals(ID)) 
 					return pg;
 			}
@@ -1236,20 +1234,18 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 		
 		return null;
 	}
-
-	@Override
-	public boolean hasObjectGroups() {
+	
+	public boolean hasPlotGroups() {
 		return plotGroups != null;
 	}
 
 	// Override default method for efficient access
-	@Override
-	public boolean hasObjectGroupName(String name) {
-		return hasObjectGroups() && plotGroups.containsKey(name);
+	public boolean hasPlotGroupName(String name) {
+		return hasPlotGroups() && plotGroups.containsKey(name);
 	}
 
 	public PlotGroup getPlotObjectGroupFromName(String name) {
-		if (hasObjectGroups()) {
+		if (hasPlotGroups()) {
 			return plotGroups.get(name);
 		}
 		
@@ -1262,7 +1258,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 	
 	public Collection<PlotGroup> getPlotObjectGroups() {
-		return getObjectGroups();
+		return getPlotGroups();
 	}
 
 	@Override
@@ -1276,7 +1272,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 
 	@Override
-	public String getEconomyPrefix() {
+	public String getBankAccountPrefix() {
 		return ECONOMY_ACCOUNT_PREFIX;
 	}
 

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object.economy;
+package com.palmergames.bukkit.towny.object.economy.adapter;
 
 import org.bukkit.World;
 

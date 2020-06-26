@@ -4637,3 +4637,16 @@ v0.92.0.11:
   - Fix PlayerCacheUtil looking for a non-existant language string.
   - Fix Townblocks having their mob setting overridden by the Towns' mob setting in scenarios where the town has mobs on, but the townblock has mobs off.
     - Closes #4067.
+  - Fix mayors and kings not paying the bail costs specified in the config.
+0.96.1.13:
+  - Fix friendly fire not being respected during wars.
+  - Fix players being pulled around by fishing hooks in non-PVP plots.
+    - Closes #4092.
+  - Fix sentinalpvp bots causing NotRegisteredExceptions.
+  - Fix friend and outlaw lists being able to be fed invalid resident names.
+    - Closes #4097.
+  - Fix unhelpful getHomeBlock exception message.
+  - Add UUIDs to resident objects, for the day we need to convert databases to UUIDs.
+  - Add bstats metric to help track UUID gathering.
+0.96.1.14:
+  - Fix loading mysql databases with residents who have had a UUID gathered.
