@@ -629,7 +629,7 @@ public class Nation extends Government implements ResidentList {
 	}
 
 	@Override
-	public String getEconomyPrefix() {
+	public String getBankAccountPrefix() {
 		return ECONOMY_ACCOUNT_PREFIX;
 	}
 

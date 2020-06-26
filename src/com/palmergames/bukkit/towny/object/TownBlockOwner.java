@@ -15,7 +15,7 @@ import java.util.Collection;
 public interface TownBlockOwner extends Permissible {
 
 	/**
-	 * Gets the unmodifiable list of townblocks.
+	 * Gets the unmodifiable collection of townblocks.
 	 * 
 	 * @return The townblocks this object contains.
 	 */

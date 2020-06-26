@@ -1,6 +1,5 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy.adapter;
 
-import com.palmergames.bukkit.towny.object.economy.EconomyAdapter;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.World;
 

@@ -1276,7 +1276,7 @@ public class Town extends Government implements ResidentList, ObjectGroupManagea
 	}
 
 	@Override
-	public String getEconomyPrefix() {
+	public String getBankAccountPrefix() {
 		return ECONOMY_ACCOUNT_PREFIX;
 	}
 
