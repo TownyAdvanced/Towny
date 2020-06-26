@@ -47,7 +47,6 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -58,7 +57,7 @@ import com.palmergames.bukkit.towny.utils.*;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
-import com.palmergames.bukkit.towny.war.common.ruins.RuinsUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -73,7 +72,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
@@ -511,7 +509,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
 				if(TownySettings.getWarCommonTownRuinsReclaimEnabled()) {
-					RuinsUtil.processRuinedTownReclaimRequest(player, plugin);
+					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
 				} else {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				}
@@ -525,7 +523,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
-				if (RuinsUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
 					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
@@ -565,7 +563,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
-				if (RuinsUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
 					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
@@ -606,7 +604,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town deposit"));
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
-				if (RuinsUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
 					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
@@ -630,7 +628,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townPlots(player, town);
 
 			} else {
-				if (RuinsUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
 					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
 				}
 

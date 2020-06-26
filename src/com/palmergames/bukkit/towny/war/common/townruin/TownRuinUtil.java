@@ -1,7 +1,6 @@
-package com.palmergames.bukkit.towny.war.common.ruins;
+package com.palmergames.bukkit.towny.war.common.townruin;
 
 import com.palmergames.bukkit.towny.*;
-import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -24,7 +23,7 @@ import java.util.ListIterator;
  *
  * @author Goosius
  */
-public class RuinsUtil {
+public class TownRuinUtil {
 
 	/**
 	 * This method returns true if the given player's town is ruined
