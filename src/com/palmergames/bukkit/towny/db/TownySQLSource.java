@@ -685,7 +685,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             while (rs.next()) {
             	
             	try {
-            		if (!rs.getString("uuid").isEmpty())
+            		if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
             			resident.setUUID(UUID.fromString(rs.getString("uuid")));
             	} catch (Exception e) {
                     e.printStackTrace();
