@@ -1,15 +1,13 @@
 package com.palmergames.util;
 
-<<<<<<< Upstream, based on origin/master
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
 
-=======
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -25,7 +23,6 @@ import java.util.regex.Pattern;
 
 public class StringMgmt {
 
-<<<<<<< Upstream, based on origin/master
 	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(#[a-fA-F0-9]{6})");
 	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
 	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
@@ -34,9 +31,6 @@ public class StringMgmt {
 		if (!Towny.is116Plus()) {
 			return str;
 		}
-=======
-	public static String join(Collection<?> arr) {
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 
 		final Matcher hexMatcher = hexPattern.matcher(str);
 		final Matcher ampMatcher = ampersandPattern.matcher(str);
@@ -65,15 +59,10 @@ public class StringMgmt {
 		return str;
 	}
 
-<<<<<<< Upstream, based on origin/master
 	public static String join(Collection<?> args) {
 		return join(args, " ");
 	}
-=======
-	public static String join(Collection<?> arr, String separator) {
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 
-<<<<<<< Upstream, based on origin/master
 	public static String join(Collection<?> args, String separator) {
 		StringJoiner joiner = new StringJoiner(separator);
 		
@@ -82,19 +71,6 @@ public class StringMgmt {
 		}
 		
 		return joiner.toString();
-=======
-		StringBuilder out = new StringBuilder();
-		
-		if (arr == null || arr.size() == 0) {
-			return "";
-		}
-		
-		for (Object o : arr) {
-			out.append(separator).append(o);
-		}
-		
-		return out.toString();
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 	}
 
 	public static String join(Object[] arr) {
