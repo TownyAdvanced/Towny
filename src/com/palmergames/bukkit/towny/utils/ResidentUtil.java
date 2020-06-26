@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.Residence;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class ResidentUtil {
@@ -19,10 +19,10 @@ public class ResidentUtil {
 	 * Return a list of Residents that can be seen (not vanished) by the viewer.
 	 * 
 	 * @param viewer - Player who is looking.
-	 * @param residentList - List of Residents which could be viewed.
+	 * @param residence - List of Residents which could be viewed.
 	 * @return - List of residents that can actually be seen.
 	 */
-	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
+	public static List<Resident> getOnlineResidentsViewable(Player viewer, Residence residence) {
 		
 		List<Resident> onlineResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
@@ -30,7 +30,7 @@ public class ResidentUtil {
 				/*
 				 * Loop town/nation resident list
 				 */
-				for (Resident resident : residentList.getResidents()) {
+				for (Resident resident : residence.getResidents()) {
 					if (resident.getName().equalsIgnoreCase(player.getName()))
 						if ((viewer == null) || (viewer.canSee(BukkitTools.getPlayerExact(resident.getName())))) {
 							onlineResidents.add(resident);

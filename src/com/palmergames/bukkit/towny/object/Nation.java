@@ -27,12 +27,13 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends Government implements ResidentList {
+public class Nation extends Government {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -552,12 +553,11 @@ public class Nation extends Government implements ResidentList {
 	}
 
 	@Override
-	public List<Resident> getOutlaws() {
-
+	public Collection<Resident> getOutlaws() {
 		List<Resident> out = new ArrayList<>();
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
-		return out;
+		return Collections.unmodifiableList(out);
 	}
 
 	public UUID getUuid() {

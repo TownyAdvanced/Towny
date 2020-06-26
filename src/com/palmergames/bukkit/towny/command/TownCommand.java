@@ -28,8 +28,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -336,7 +336,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 											// Get all sent invites
 											.stream()
 											.map(Invite::getReceiver)
-											.map(TownyInviteReceiver::getName)
+											.map(InviteReceiver::getName)
 											.collect(Collectors.toList()), args[1].substring(1))
 												// Add the hyphen back to the front
 												.stream()
@@ -356,7 +356,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 											// Get the names of all received invites
 											.stream()
 											.map(Invite::getSender)
-											.map(TownyInviteSender::getName)
+											.map(InviteSender::getName)
 											.collect(Collectors.toList()), args[2]);
 									} catch (TownyException ignore) {}
 							}

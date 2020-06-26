@@ -1401,7 +1401,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 
 				// Don't add the group to the town data if it's already there.
-				if (town.hasObjectGroupName(newGroup.getName())) {
+				if (town.hasPlotGroupName(newGroup.getName())) {
 					newGroup = town.getPlotObjectGroupFromName(newGroup.getName());
 				}
 

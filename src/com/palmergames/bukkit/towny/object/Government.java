@@ -20,7 +20,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, TownyInviter, SpawnLocation {
+/**
+ * A class which represents the structure of objects that
+ * occupy areas or interactive managed sub-objects.
+ * 
+ * @author Suneet Tipirneni (Siris)
+ */
+public abstract class Government extends TownyObject implements BankEconomyHandler, Residence, Inviteable, SpawnLocation {
 	
 	protected BankAccount account;
 	protected Location spawn;

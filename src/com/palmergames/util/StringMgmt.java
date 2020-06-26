@@ -1,5 +1,6 @@
 package com.palmergames.util;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -12,19 +13,24 @@ import java.util.Map;
 
 public class StringMgmt {
 
-	public static String join(List<?> arr) {
+	public static String join(Collection<?> arr) {
 
 		return join(arr, " ");
 	}
 
-	public static String join(List<?> arr, String separator) {
+	public static String join(Collection<?> arr, String separator) {
 
-		if (arr == null || arr.size() == 0)
+		StringBuilder out = new StringBuilder();
+		
+		if (arr == null || arr.size() == 0) {
 			return "";
-		String out = arr.get(0).toString();
-		for (int i = 1; i < arr.size(); i++)
-			out += separator + arr.get(i);
-		return out;
+		}
+		
+		for (Object o : arr) {
+			out.append(separator).append(o);
+		}
+		
+		return out.toString();
 	}
 
 	public static String join(Object[] arr) {

@@ -26,5 +26,5 @@ public interface BankEconomyHandler extends EconomyHandler {
 	 * @return The BankAccount of this object.
 	 */
 	@Override
-	BankAccount getAccount();
+	BankAccount getAccount(); // Covariant return type of Account from superinterface
 }
