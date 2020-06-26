@@ -384,6 +384,8 @@ public class TownyFormatter {
 				TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 				TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
+		List<String> outForNonRuinedTowns = new ArrayList<>();
+
 		// | Bank: 534 coins
 		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 			String bankString = "";
@@ -403,21 +405,21 @@ public class TownyFormatter {
 					bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
 				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 			}
-			out.add(bankString);
+			outForNonRuinedTowns.add(bankString);
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
+		outForNonRuinedTowns.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
 
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<>();
 		getRanks(town, ranklist);
 
-		out.addAll(ranklist);
+		outForNonRuinedTowns.addAll(ranklist);
 
 		// Nation: Azur Empire
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
+			outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
 		} catch (TownyException ignored) {}
 
 		// Residents [12]: James, Carry, Mason
@@ -429,10 +431,14 @@ public class TownyFormatter {
 			System.arraycopy(entire, 0, residents, 0, 35);
 			residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
+		outForNonRuinedTowns.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
-		out.addAll(getExtraFields(town));
-		
+		outForNonRuinedTowns.addAll(getExtraFields(town));
+
+		if(!town.isRuined()) {
+			out.addAll(outForNonRuinedTowns);
+		}
+
 		out = formatStatusScreens(out);
 		return out;
 	}
