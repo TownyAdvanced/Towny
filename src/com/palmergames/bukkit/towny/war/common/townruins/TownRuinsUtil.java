@@ -18,11 +18,11 @@ import java.util.ListIterator;
 
 
 /**
- * This class contains utility functions related to ruins
+ * This class contains utility functions related to town ruins
  *
  * @author Goosius
  */
-public class RuinsUtil {
+public class TownRuinsUtil {
 
 	/**
 	 * This method returns true if the given player's town is ruined

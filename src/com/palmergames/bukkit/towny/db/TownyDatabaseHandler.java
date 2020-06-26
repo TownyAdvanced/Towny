@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.common.townruins.TownRuinsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
@@ -506,7 +507,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town) {
-		
+		boolean delayFullRemoval = TownySettings.getWarCommonTownRuinsEnabled();
+		removeTown(town, delayFullRemoval);
+	}
+
+	@Override
+	public void removeTown(Town town, boolean delayFullRemoval) {
+		if (delayFullRemoval) {
+			TownRuinsUtil.putTownIntoRuinedState(town, plugin);
+			return;
+		}
+
 		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
 		BukkitTools.getPluginManager().callEvent(preEvent);
 		
@@ -576,6 +587,30 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveTownList();
 		
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+	}
+
+	@Override
+	public void removeTownFromNation(Towny plugin, Town town, Nation nation) {
+		boolean removeNation = false;
+
+		try {
+			nation.removeTown(town);
+		} catch(NotRegisteredException x) {
+			return;  //Town was already removed
+		} catch(EmptyNationException x) {
+			removeNation = true;  //Set flag to remove nation at end of this method
+		}
+
+		if(removeNation) {
+			removeNation(nation);
+			saveNationList();
+		} else {
+			saveNation(nation);
+			saveNationList();
+			plugin.resetCache();
+		}
+
+		saveTown(town);
 	}
 
 	@Override

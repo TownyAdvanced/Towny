@@ -984,6 +984,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+				line = keys.get("ruined");
+				if (line != null) {
+					try {
+						town.setRuined(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+						town.setRuined(false);
+					}
+				}
+
+				line = keys.get("ruinDurationRemainingHours");
+				if (line != null) {
+					try {
+						town.setRuinDurationRemainingHours(Integer.parseInt(line));
+					} catch (Exception e) {
+						town.setRuinDurationRemainingHours(0);
+					}
+				}
+
+
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
@@ -1912,6 +1931,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				md.append(cdf.toString()).append(";");
 			}
 		}
+
+		list.add("ruined=" + town.isRuined());
+		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
+
 		list.add("metadata=" + md.toString());
 		
 		/*

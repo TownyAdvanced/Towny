@@ -62,7 +62,9 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
-
+	private boolean ruined;
+	private int ruinDurationRemainingHours;
+	
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -1372,5 +1374,28 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
+	}
+
+	public boolean isRuined() {
+		if(residents.size() == 0)
+			ruined= true; //If no residents, setup town for full deletion
+		
+		return ruined;
+	}
+
+	public void setRuined(boolean ruined) {
+		this.ruined = ruined;
+	}
+
+	public int getRuinDurationRemainingHours() {
+		return ruinDurationRemainingHours;
+	}
+
+	public void setRuinDurationRemainingHours(int ruinDurationRemainingHours) {
+		this.ruinDurationRemainingHours = ruinDurationRemainingHours;
+	}
+
+	public void decrementRemainingRuinTimeHours() {
+		ruinDurationRemainingHours--;
 	}
 }

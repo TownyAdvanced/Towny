@@ -150,6 +150,8 @@ public class SQL_Schema {
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`conqueredDays` mediumint");
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
+		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
+		columns.add("`recentlyRuinedEndTime` BIGINT");
 		return columns;
 	}
 

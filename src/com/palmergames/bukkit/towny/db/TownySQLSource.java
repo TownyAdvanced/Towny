@@ -1004,6 +1004,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     town.setRegistered(0);
                 }
 
+				town.setRuined(rs.getBoolean("ruined"));
+				town.setRuinDurationRemainingHours(rs.getInt("ruinDurationRemainingHours"));
+
 				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
@@ -1654,8 +1657,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 twn_hm.put("uuid", UUID.randomUUID());
             }
             twn_hm.put("registered", town.getRegistered());
-        
-            UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
+			twn_hm.put("ruined", town.isRuined());
+			twn_hm.put("ruinDurationRemainingHours", Long.toString(town.getRuinDurationRemainingHours()));
+
+			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
             return true;
         
         } catch (Exception e) {
