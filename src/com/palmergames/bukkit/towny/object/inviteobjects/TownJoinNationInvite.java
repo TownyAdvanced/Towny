@@ -3,6 +3,12 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+<<<<<<< Upstream, based on origin/master
+=======
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteSender;
+>>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -11,10 +17,38 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< Upstream, based on origin/master
 public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 	
 	public TownJoinNationInvite(CommandSender directSender, Town receiver, Nation sender) {
 		super(directSender, receiver, sender);
+=======
+public class TownJoinNationInvite implements Invite {
+
+	public TownJoinNationInvite(String directsender, InviteSender sender, InviteReceiver receiver) {
+		this.directsender = directsender;
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+
+	private String directsender;
+	private InviteReceiver receiver;
+	private InviteSender sender;
+
+	@Override
+	public String getDirectSender() {
+		return directsender;
+	}
+
+	@Override
+	public InviteReceiver getReceiver() {
+		return receiver;
+	}
+
+	@Override
+	public InviteSender getSender() {
+		return sender;
+>>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 	}
 
 	@Override

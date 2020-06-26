@@ -15,6 +15,10 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
+<<<<<<< Upstream, based on origin/master
+=======
+import java.util.HashSet;
+>>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 import java.util.Objects;
 
 public class TownBlock extends TownyObject {
