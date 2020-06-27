@@ -72,6 +72,28 @@ public class BukkitTools {
 		return matchedPlayers;
 	}
 	
+	/**
+	 * Given a name this method should only return a UUID that is stored in the server cache,
+	 * without pinging Mojang servers.
+	 * 
+	 * @param name - Resident/Player name to get a UUID for.
+	 * @return UUID of player or null if the player is not in the cache.
+	 */
+	public static UUID getUUIDSafely(String name) {
+		if (hasPlayedBefore(name))
+			return getOfflinePlayer(name).getUniqueId();
+		else
+			return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	public static boolean hasPlayedBefore(String name) {
+		if (!Bukkit.getServer().getOfflinePlayer(name).hasPlayedBefore())
+			return false;
+		else 
+			return true;
+	}
+	
 	public static Player getPlayerExact(String name) {
 		return getServer().getPlayerExact(name);
 	}

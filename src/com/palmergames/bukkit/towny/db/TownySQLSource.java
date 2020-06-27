@@ -107,9 +107,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         if (this.type.equals("h2")) {
         
             driver1 = "org.h2.Driver";
-            // H2 requires an absolute path
-            String dataFolderAbsolute = Towny.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "data";
-            this.dsn = ("jdbc:h2:" + dataFolderAbsolute + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
+            this.dsn = ("jdbc:h2:" + dataFolderPath + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
             username = "sa";
             password = "sa";
         
@@ -739,12 +737,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
-                String line = rs.getString("town");
-                if ((line != null) && (!line.isEmpty())) {
-                    resident.setTown(getTown(line));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
-                }
+//                String line = rs.getString("town");
+//                if ((line != null) && (!line.isEmpty())) {
+//                    resident.setTown(getTown(line));
+//                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
+//                }
 
+                String line;
 				try {
 					line = rs.getString("town-ranks");
 					if ((line != null) && (!line.isEmpty())) {
@@ -1575,7 +1574,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("JailTown", resident.getJailTown());
             res_hm.put("title", resident.getTitle());
             res_hm.put("surname", resident.getSurname());
-            res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
+//            res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
             res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
             res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
@@ -2254,11 +2253,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Save keys
 	 */
 
-	@Override
-    public boolean saveResidentList() {
-
-        return true;
-    }
+//	@Override
+//    public boolean saveResidentList() {
+//
+//        return true;
+//    }
 
     @Override
     public boolean saveTownList() {

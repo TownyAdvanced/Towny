@@ -501,7 +501,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.getAccount().removeAccount();
 
 		plugin.deleteCache(name);
-		saveResidentList();
 
 	}
 
@@ -1038,7 +1037,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setJailSpawn(JailSpawn);
 			
 			//save stuff
-			saveResidentList();
 			saveResident(resident);
 			if(town != null){
 			    saveTown(town);

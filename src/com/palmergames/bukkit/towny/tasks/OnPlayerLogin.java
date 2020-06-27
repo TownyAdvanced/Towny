@@ -71,7 +71,6 @@ public class OnPlayerLogin implements Runnable {
 				}
 				
 				universe.getDataSource().saveResident(resident);
-				universe.getDataSource().saveResidentList();
 				
 			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
 				// Should never happen

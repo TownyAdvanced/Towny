@@ -163,7 +163,7 @@ public class SQL_Schema {
 
     private static List<String> getResidentColumns(){
     	List<String> columns = new ArrayList<>();
-    	columns.add("`town` mediumtext");
+//    	columns.add("`town` mediumtext");
 		columns.add("`town-ranks` mediumtext");
 		columns.add("`nation-ranks` mediumtext");
 		columns.add("`lastOnline` BIGINT NOT NULL");
@@ -446,24 +446,24 @@ public class SQL_Schema {
 		/*
 		 * Update RESIDENTS.
 		 */
-//        String resident_update;
-//
-//        try {
-//
-//            resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
-//                    + "DROP COLUMN `townBlocks`";
-//
-//            Statement s = cntx.createStatement();
-//            s.executeUpdate(resident_update);
-//
-//            TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-//
-//        } catch (SQLException ee) {
-//
-//            if (ee.getErrorCode() != 1060)
-//                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-//
-//        }
+        String resident_update;
+
+        try {
+
+            resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
+                    + "DROP COLUMN `town`";
+
+            Statement s = cntx.createStatement();
+            s.executeUpdate(resident_update);
+
+            TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
+
+        } catch (SQLException ee) {
+
+            if (ee.getErrorCode() != 1060)
+                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+
+        }
 
     	/*
     	 * Update WORLDS 

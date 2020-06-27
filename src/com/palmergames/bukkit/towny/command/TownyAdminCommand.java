@@ -1383,7 +1383,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setNPC(true);
 
 						townyUniverse.getDataSource().saveResident(newMayor);
-						townyUniverse.getDataSource().saveResidentList();
 
 						// set for no upkeep as an NPC mayor is assigned
 						town.setHasUpkeep(false);
