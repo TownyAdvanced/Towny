@@ -3,6 +3,9 @@ package com.palmergames.bukkit.util;
 import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.sun.istack.internal.Nullable;
+
 import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
@@ -14,7 +17,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-
+import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,7 +35,7 @@ public class BukkitTools {
 
 	private static Towny plugin = null;
 	private static Server server = null;
-	
+
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
 		BukkitTools.server = plugin.getServer();
@@ -79,11 +82,27 @@ public class BukkitTools {
 	 * @param name - Resident/Player name to get a UUID for.
 	 * @return UUID of player or null if the player is not in the cache.
 	 */
+	@Nullable
 	public static UUID getUUIDSafely(String name) {
 		if (hasPlayedBefore(name))
 			return getOfflinePlayer(name).getUniqueId();
 		else
 			return null;
+	}
+	
+	/**
+	 * Given a resident, return the UUID using their name as of last login.
+	 * Uses mojang API call. Do not abuse.
+	 * 
+	 * @param resident - who to return a UUID for. 
+	 * @return uuid - UUID of resident using the name at last login or null.
+	 */
+	@Nullable
+	public static UUID getUUIDFromResident(Resident resident) {
+
+		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
+		
+		return (object != null && object.containsKey("id")) ? UUID.fromString(MojangAPI.dashUUID(object.get("id").toString())) : null;
 	}
 	
 	public static Player getPlayerExact(String name) {

@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -175,6 +177,12 @@ public abstract class TownyDataSource {
 			} else {
 				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
 					hasUUID++;
+				else {
+					if (BukkitTools.getUUIDFromResident(resident) != null) {
+						System.out.println("Assigning uuid to " + resident.getName());
+						hasUUID++;
+					}
+				}
 			}
 
 		// Remove any resident which failed to load.
