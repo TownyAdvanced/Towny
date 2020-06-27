@@ -737,12 +737,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
-//                String line = rs.getString("town");
-//                if ((line != null) && (!line.isEmpty())) {
-//                    resident.setTown(getTown(line));
-//                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
-//                }
-
                 String line;
 				try {
 					line = rs.getString("town-ranks");
@@ -1574,11 +1568,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("JailTown", resident.getJailTown());
             res_hm.put("title", resident.getTitle());
             res_hm.put("surname", resident.getSurname());
-//            res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
             res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
             res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
-            //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
             
 			if (resident.hasMeta())
@@ -2252,12 +2244,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	/*
 	 * Save keys
 	 */
-
-//	@Override
-//    public boolean saveResidentList() {
-//
-//        return true;
-//    }
 
     @Override
     public boolean saveTownList() {

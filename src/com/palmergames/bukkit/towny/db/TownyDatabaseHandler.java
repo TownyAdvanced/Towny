@@ -291,6 +291,31 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeResident(Resident resident) {
 
+		// Remove resident from towns' outlawlists.
+		for (Town townOutlaw : getTowns()) {
+			if (townOutlaw.hasOutlaw(resident)) {
+				townOutlaw.removeOutlaw(resident);
+				saveTown(townOutlaw);
+			}
+		}
+
+		// Remove resident from residents' friendslists.
+		List<Resident> toSave = new ArrayList<>();
+		for (Resident toCheck : new ArrayList<>(universe.getResidentMap().values())) {
+			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
+			if (toCheck.hasFriend(resident)) {
+				try {
+					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
+					toCheck.removeFriend(resident);
+					toSave.add(toCheck);
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		for (Resident toCheck : toSave)
+			saveResident(toCheck);
+		
 		Town town = null;
 
 		if (resident.hasTown())
@@ -318,17 +343,24 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			e.printStackTrace();
 		}
 		
+		//Wipe and delete resident
 		try {
-			for (Town townOutlaw : getTowns()) {
-				if (townOutlaw.hasOutlaw(resident)) {
-					townOutlaw.removeOutlaw(resident);
-					saveTown(townOutlaw);
-				}
-			}
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+			resident.clear();
+		} catch (EmptyTownException ex) {
+			removeTown(ex.getTown());
 		}
+		// Delete the residents file.
+		deleteResident(resident);
+		// Remove the residents record from memory.
+		universe.getResidentMap().remove(resident.getName().toLowerCase());
+		universe.getResidentsTrie().removeKey(resident.getName());
 
+		// Clear accounts
+		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
+			resident.getAccount().removeAccount();
+
+		plugin.deleteCache(resident.getName());
+		
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
@@ -458,50 +490,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
 		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
-	}
-
-	@Override
-	public void removeResidentList(Resident resident) {
-
-		String name = resident.getName();
-
-		//search and remove from all friends lists
-		List<Resident> toSave = new ArrayList<>();
-
-		for (Resident toCheck : new ArrayList<>(universe.getResidentMap().values())) {
-			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
-			if (toCheck.hasFriend(resident)) {
-				try {
-					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
-					toCheck.removeFriend(resident);
-					toSave.add(toCheck);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		for (Resident toCheck : toSave)
-			saveResident(toCheck);
-
-		//Wipe and delete resident
-		try {
-			resident.clear();
-		} catch (EmptyTownException ex) {
-			removeTown(ex.getTown());
-		}
-		// Delete the residents file.
-		deleteResident(resident);
-		// Remove the residents record from memory.
-		universe.getResidentMap().remove(name.toLowerCase());
-		universe.getResidentsTrie().removeKey(name);
-
-		// Clear accounts
-		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
-			resident.getAccount().removeAccount();
-
-		plugin.deleteCache(name);
-
 	}
 
 	@Override
@@ -1065,12 +1053,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			List<Town> toSaveTown = new ArrayList<>(getTowns());
 			for (Town toCheckTown : toSaveTown) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
-					try {
-						toCheckTown.removeOutlaw(oldResident);
-						toCheckTown.addOutlaw(resident);
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}					
+					toCheckTown.removeOutlaw(oldResident);
+					toCheckTown.addOutlaw(resident);
 				}
 			}
 			for (Town toCheckTown : toSaveTown)

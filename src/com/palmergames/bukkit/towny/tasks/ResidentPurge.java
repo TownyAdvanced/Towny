@@ -51,7 +51,6 @@ public class ResidentPurge extends Thread {
 				count++;
 				message("Deleting resident: " + resident.getName());
 				townyUniverse.getDataSource().removeResident(resident);
-				townyUniverse.getDataSource().removeResidentList(resident);
 			}
 		}
 

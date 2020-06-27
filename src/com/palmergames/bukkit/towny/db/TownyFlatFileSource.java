@@ -362,7 +362,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Don't load resident files if they weren't in the residents.txt file.
 			String name = resident.getName().replace(".txt", "");
 			if (residents.size() > 0 && !residents.contains(name)) {
-				System.out.println("[Towny] Removing " + resident.getName() + " because they are not found in the residents.txt.");
+				TownyMessaging.sendDebugMsg("Removing " + resident.getName() + " because they are not found in the residents.txt.");
 				deleteFile(resident.getAbsolutePath());
 				continue;
 			}
@@ -642,10 +642,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("surname");
 				if (line != null)
 					resident.setSurname(line);
-				
-//				line = keys.get("town");
-//				if (line != null)
-//					resident.setTown(getTown(line));
 
 				try {
 					line = keys.get("town-ranks");
@@ -1754,10 +1750,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("surname=" + resident.getSurname());
 
 		if (resident.hasTown()) {
-//			try {
-//				list.add("town=" + resident.getTown().getName());
-//			} catch (NotRegisteredException ignored) {
-//			}
 			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ","));
 			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ","));
 		}

@@ -1106,14 +1106,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 			} else if (target != null && split[0].equalsIgnoreCase("remove")) {
-				try {
+				if (town.hasOutlaw(target)) {
 					town.removeOutlaw(target);
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_undeclared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
 					if (admin)
 						TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
-				} catch (NotRegisteredException e) {
+				} else {
 					// Must already not be an outlaw
 					TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_err_player_not_an_outlaw"));
 					return;
@@ -2870,10 +2870,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 			if (town.hasOutlaw(newMember)) {
-				try {
-					town.removeOutlaw(newMember);
-				} catch (NotRegisteredException ignored) {
-				}
+				town.removeOutlaw(newMember);
 			}
 		}
 

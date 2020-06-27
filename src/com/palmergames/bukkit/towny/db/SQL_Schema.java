@@ -163,7 +163,6 @@ public class SQL_Schema {
 
     private static List<String> getResidentColumns(){
     	List<String> columns = new ArrayList<>();
-//    	columns.add("`town` mediumtext");
 		columns.add("`town-ranks` mediumtext");
 		columns.add("`nation-ranks` mediumtext");
 		columns.add("`lastOnline` BIGINT NOT NULL");

@@ -1403,7 +1403,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						try {
 							town.removeResident(oldMayor);
 							townyUniverse.getDataSource().removeResident(oldMayor);
-							townyUniverse.getDataSource().removeResidentList(oldMayor);
 							// set upkeep again
 							town.setHasUpkeep(true);
 						} catch (EmptyTownException e) {
@@ -1744,7 +1743,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						Resident resident = townyUniverse.getDataSource().getResident(name);
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							townyUniverse.getDataSource().removeResident(resident);
-							townyUniverse.getDataSource().removeResidentList(resident);
 							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
 						} else
 							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_online_or_npc"), name));

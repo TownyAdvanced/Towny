@@ -1204,11 +1204,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			}
 	}
 	
-	public void removeOutlaw(Resident resident) throws NotRegisteredException {
+	public void removeOutlaw(Resident resident) {
 
-		if (!hasOutlaw(resident))
-			throw new NotRegisteredException();
-		else 
+		if (hasOutlaw(resident))
 			outlaws.remove(resident);			
 	}
 

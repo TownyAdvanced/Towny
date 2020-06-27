@@ -106,8 +106,6 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroups();
 
-//	abstract public boolean saveResidentList();
-
 	abstract public boolean saveTownList();
 
 	abstract public boolean savePlotGroupList();
@@ -182,7 +180,7 @@ public abstract class TownyDataSource {
 		// Remove any resident which failed to load.
 		for (Resident resident : toRemove) {
 			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
-			removeResidentList(resident);
+			removeResident(resident);
 		}
 
 		System.out.println("[Towny] " + hasUUID + "/" + getResidents().size() + " residents have stored UUIDs.");
@@ -278,8 +276,6 @@ public abstract class TownyDataSource {
 	abstract public List<Resident> getResidents(String[] names);
 
 	abstract public Resident getResident(String name) throws NotRegisteredException;
-
-	abstract public void removeResidentList(Resident resident);
 
 	abstract public void removeNation(Nation nation);
 
