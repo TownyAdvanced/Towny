@@ -85,14 +85,6 @@ public class BukkitTools {
 		else
 			return null;
 	}
-
-	@SuppressWarnings("deprecation")
-	public static boolean hasPlayedBefore(String name) {
-		if (!Bukkit.getServer().getOfflinePlayer(name).hasPlayedBefore())
-			return false;
-		else 
-			return true;
-	}
 	
 	public static Player getPlayerExact(String name) {
 		return getServer().getPlayerExact(name);
@@ -227,9 +219,22 @@ public class BukkitTools {
 		return (value * TownySettings.getTownBlockSize()) / 16;
 	}
 
+
+	@SuppressWarnings("deprecation")
+	public static boolean hasPlayedBefore(String name) {
+		return getServer().getOfflinePlayer(name).hasPlayedBefore();
+	}
+	
+	/**
+	 * Do not use without first using {@link #hasPlayedBefore(String)}
+	 * 
+	 * @param name - name of resident
+	 * @return OfflinePlayer
+	 */
+	@SuppressWarnings("deprecation")
 	public static OfflinePlayer getOfflinePlayer(String name) {
 
-		return Bukkit.getOfflinePlayer(getPlayerExact(name).getUniqueId());
+		return Bukkit.getOfflinePlayer(name);
 	}
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {

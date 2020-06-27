@@ -337,12 +337,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return friends;
 	}
 
-	public boolean removeFriend(Resident resident) throws NotRegisteredException {
+	public void removeFriend(Resident resident) {
 
 		if (hasFriend(resident))
-			return friends.remove(resident);
-		else
-			throw new NotRegisteredException();
+			friends.remove(resident);
 	}
 
 	public boolean hasFriend(Resident resident) {
@@ -361,9 +359,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	public void removeAllFriends() {
 
 		for (Resident resident : new ArrayList<>(friends))
-			try {
-				removeFriend(resident);
-			} catch (NotRegisteredException ignored) {}
+			removeFriend(resident);
 	}
 
 	public void clear() throws EmptyTownException {

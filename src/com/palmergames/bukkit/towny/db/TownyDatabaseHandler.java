@@ -304,13 +304,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (Resident toCheck : new ArrayList<>(universe.getResidentMap().values())) {
 			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
 			if (toCheck.hasFriend(resident)) {
-				try {
-					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
-					toCheck.removeFriend(resident);
-					toSave.add(toCheck);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
+				toCheck.removeFriend(resident);
+				toSave.add(toCheck);
 			}
 		}
 		for (Resident toCheck : toSave)
@@ -1039,12 +1035,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			List<Resident> toSaveResident = new ArrayList<>(getResidents());
 			for (Resident toCheck : toSaveResident){
 				if (toCheck.hasFriend(oldResident)) {
-					try {
-						toCheck.removeFriend(oldResident);
-						toCheck.addFriend(resident);
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}
+					toCheck.removeFriend(oldResident);
+					toCheck.addFriend(resident);
 				}
 			}
 			for (Resident toCheck : toSaveResident)
