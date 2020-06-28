@@ -4,6 +4,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import org.bukkit.World;
 
 /**
@@ -38,12 +39,6 @@ public class EconomyAccount extends Account {
 
 	public World getWorld() {
 		return world;
-	}
-
-	private static final class TownyServerAccount extends EconomyAccount {
-		TownyServerAccount() {
-			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
-		}
 	}
 	
 //	/**
