@@ -61,6 +61,7 @@ public class OnPlayerLogin implements Runnable {
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUUID(player.getUniqueId());
+				TownySettings.uuidCount++;
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
@@ -91,8 +92,10 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-					if (!resident.hasUUID())
+					if (!resident.hasUUID()) {
 						resident.setUUID(player.getUniqueId());
+						TownySettings.uuidCount++;
+					}
 				}
 				universe.getDataSource().saveResident(resident);
 				

@@ -13,7 +13,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 
 import org.bukkit.entity.Player;
 
@@ -167,7 +167,6 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<>();
-		int hasUUID = 0;
 
 		for (Resident resident : new ArrayList<>(getResidents()))
 			if (!loadResident(resident)) {
@@ -176,13 +175,9 @@ public abstract class TownyDataSource {
 				//return false;
 			} else {
 				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
-					hasUUID++;
-				else {
-					if (BukkitTools.getUUIDFromResident(resident) != null) {
-						System.out.println("Assigning uuid to " + resident.getName());
-						hasUUID++;
-					}
-				}
+					TownySettings.uuidCount++;
+				else
+					GatherResidentUUIDTask.addResident(resident);
 			}
 
 		// Remove any resident which failed to load.
@@ -191,8 +186,7 @@ public abstract class TownyDataSource {
 			removeResident(resident);
 		}
 
-		System.out.println("[Towny] " + hasUUID + "/" + getResidents().size() + " residents have stored UUIDs.");
-		TownySettings.setUUIDCount(hasUUID);
+		System.out.println("[Towny] " + TownySettings.uuidCount + "/" + getResidents().size() + " residents have stored UUIDs.");
 		return true;
 	}
 

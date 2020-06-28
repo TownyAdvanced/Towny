@@ -181,6 +181,9 @@ public class Towny extends JavaPlugin {
 		}
 		System.out.println("=============================================================");
 
+		if (!TownySettings.getUUIDPercent().equals("100%"))
+			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+		
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
@@ -223,6 +226,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 

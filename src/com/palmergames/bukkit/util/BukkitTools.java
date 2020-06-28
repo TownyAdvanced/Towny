@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.sun.istack.internal.Nullable;
 
 import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
@@ -82,7 +81,6 @@ public class BukkitTools {
 	 * @param name - Resident/Player name to get a UUID for.
 	 * @return UUID of player or null if the player is not in the cache.
 	 */
-	@Nullable
 	public static UUID getUUIDSafely(String name) {
 		if (hasPlayedBefore(name))
 			return getOfflinePlayer(name).getUniqueId();
@@ -97,7 +95,6 @@ public class BukkitTools {
 	 * @param resident - who to return a UUID for. 
 	 * @return uuid - UUID of resident using the name at last login or null.
 	 */
-	@Nullable
 	public static UUID getUUIDFromResident(Resident resident) {
 
 		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
