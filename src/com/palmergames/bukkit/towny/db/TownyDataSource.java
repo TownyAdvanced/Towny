@@ -186,7 +186,10 @@ public abstract class TownyDataSource {
 			removeResident(resident);
 		}
 
-		System.out.println("[Towny] " + TownySettings.uuidCount + "/" + getResidents().size() + " residents have stored UUIDs.");
+		if (!TownySettings.getUUIDPercent().equals("100%"))
+			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + getResidents().size() + " residents have stored UUIDs.");
+		else 
+			System.out.println("[Towny] All residents store UUIDs,  upgrade preparation complete.");
 		return true;
 	}
 
