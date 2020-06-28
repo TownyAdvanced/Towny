@@ -4655,3 +4655,6 @@ v0.92.0.11:
 0.96.2.1:
   - Absolute path for h2 database, courtesy of silverwolfg11 with PR #4101.
   - Updated chinese.yml, courtesy of qsefthuopq with PR #4114.
+  - Fix reporting of gathered UUID %.
+  - Fix for towns not having their homeblocks set sometimes on creation.
+  - Fix for /t list by resident not working.
