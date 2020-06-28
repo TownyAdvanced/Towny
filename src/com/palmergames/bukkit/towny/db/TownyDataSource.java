@@ -167,14 +167,15 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<>();
-
+		TownySettings.setUUIDCount(0);
+		
 		for (Resident resident : new ArrayList<>(getResidents()))
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				toRemove.add(resident);
 				//return false;
 			} else {
-				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
+				if (resident.hasUUID())
 					TownySettings.uuidCount++;
 				else
 					GatherResidentUUIDTask.addResident(resident);
@@ -186,10 +187,6 @@ public abstract class TownyDataSource {
 			removeResident(resident);
 		}
 
-		if (!TownySettings.getUUIDPercent().equals("100%"))
-			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + getResidents().size() + " residents have stored UUIDs.");
-		else 
-			System.out.println("[Towny] All residents store UUIDs,  upgrade preparation complete.");
 		return true;
 	}
 

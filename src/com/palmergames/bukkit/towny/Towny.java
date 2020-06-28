@@ -180,9 +180,6 @@ public class Towny extends JavaPlugin {
 			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
 		}
 		System.out.println("=============================================================");
-
-		if (!TownySettings.getUUIDPercent().equals("100%"))
-			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 		
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -248,6 +245,7 @@ public class Towny extends JavaPlugin {
 	public boolean load() {
 
 		checkCitizens();
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
@@ -265,6 +263,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleCooldownTimer(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
 
+
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
 		TownyTimerHandler.toggleDailyTimer(true);
@@ -273,6 +272,12 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
+		if (!TownySettings.getUUIDPercent().equals("100%")) { 
+			TownyTimerHandler.toggleGatherResidentUUIDTask(true);		
+			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
+		} else 
+			System.out.println("[Towny] All residents store UUIDs,  upgrade preparation complete.");
+		
 		resetCache();
 
 		return true;

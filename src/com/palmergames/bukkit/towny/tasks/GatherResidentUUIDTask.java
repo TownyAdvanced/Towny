@@ -37,6 +37,8 @@ public class GatherResidentUUIDTask extends Thread {
 	@Override
 	public void run() {
 		Resident resident = queue.peek();
+		if (resident.hasUUID())
+			return;
 		UUID uuid = BukkitTools.getUUIDSafely(resident.getName());
 
 		if (uuid != null)

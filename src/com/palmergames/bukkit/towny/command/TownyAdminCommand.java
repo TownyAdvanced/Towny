@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -1381,6 +1382,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
+						newMayor.setUUID(UUID.randomUUID());
 
 						townyUniverse.getDataSource().saveResident(newMayor);
 

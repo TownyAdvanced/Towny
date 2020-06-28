@@ -92,10 +92,10 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-					if (!resident.hasUUID()) {
-						resident.setUUID(player.getUniqueId());
-						TownySettings.uuidCount++;
-					}
+				}
+				if (!resident.hasUUID()) {
+					resident.setUUID(player.getUniqueId());
+					TownySettings.uuidCount++;
 				}
 				universe.getDataSource().saveResident(resident);
 				
