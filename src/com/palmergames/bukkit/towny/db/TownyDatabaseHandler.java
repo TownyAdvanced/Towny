@@ -933,6 +933,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Town town = null;
 			long registered;
 			long lastOnline;
+			UUID uuid = null;
 			boolean isMayor;
 			boolean isJailed;
 			boolean isNPC;
@@ -961,6 +962,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			List<String> townRanks = resident.getTownRanks();
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
+			if (resident.hasUUID())
+				uuid = resident.getUUID();
 			isMayor = resident.isMayor();
 			isNPC = resident.isNPC();
 			isJailed = resident.isJailed();			
@@ -1009,6 +1012,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			resident.setRegistered(registered);
 			resident.setLastOnline(lastOnline);
+			if (uuid != null)
+				resident.setUUID(uuid);
 			if(isMayor){
 				try {
 					town.setMayor(resident);

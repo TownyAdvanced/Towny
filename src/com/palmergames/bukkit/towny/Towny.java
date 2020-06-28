@@ -180,7 +180,7 @@ public class Towny extends JavaPlugin {
 			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
 		}
 		System.out.println("=============================================================");
-		
+
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
@@ -262,7 +262,6 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleCooldownTimer(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
-
 
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);

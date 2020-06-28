@@ -34,7 +34,7 @@ public class BukkitTools {
 
 	private static Towny plugin = null;
 	private static Server server = null;
-
+	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
 		BukkitTools.server = plugin.getServer();
