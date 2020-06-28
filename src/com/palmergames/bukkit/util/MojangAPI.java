@@ -9,35 +9,45 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import javax.xml.ws.http.HTTPException;
+
 /**
- * @author LlmDl with permission from creatorfromhell, using code snippets from TNELib (https://github.com/TheNewEconomy/TNELib)
+ * @author LlmDl with permission from creatorfromhell, using code snippets from
+ *         TNELib (https://github.com/TheNewEconomy/TNELib)
  */
 public class MojangAPI {
 
-  static final Pattern uuidCreator = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
-	
-  static JSONObject send(String url) {
-    return (JSONObject) JSONValue.parse(sendGetRequest(url));
-  }
+	static final Pattern uuidCreator = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
 
-  static String dashUUID(String undashed) {
-    return undashed.replaceAll(uuidCreator.pattern(), "$1-$2-$3-$4-$5");
-  }
+	static JSONObject send(String url) {
+		return (JSONObject) JSONValue.parse(sendGetRequest(url));
+	}
 
-  private static String sendGetRequest(String URL) {
-    StringBuilder builder = new StringBuilder();
-    try {
-      HttpURLConnection connection = (HttpURLConnection) new URL(URL).openConnection();
-      connection.setRequestMethod("GET");
-      BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      String response;
-      while((response = reader.readLine()) != null) {
-        builder.append(response);
-      }
-      reader.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return builder.toString();
-  }
+	static String dashUUID(String undashed) {
+		return undashed.replaceAll(uuidCreator.pattern(), "$1-$2-$3-$4-$5");
+	}
+
+	private static String sendGetRequest(String URL) {
+		StringBuilder builder = new StringBuilder();
+
+		try {
+			HttpURLConnection connection = (HttpURLConnection) new URL(URL).openConnection();
+			connection.setRequestMethod("GET");
+
+			if (connection.getResponseCode() == 204)
+				throw new HTTPException(204);
+		
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String response;
+			while ((response = reader.readLine()) != null) {
+				builder.append(response);
+			}
+			reader.close();
+		} catch (HTTPException e1) {
+			throw new HTTPException(204);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
 }

@@ -12,6 +12,8 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.xml.ws.http.HTTPException;
+
 /**
  * @author ElgarL
  * 
@@ -36,19 +38,34 @@ public class GatherResidentUUIDTask extends Thread {
 
 	@Override
 	public void run() {
+		if (queue.isEmpty()) {
+			TownyTimerHandler.toggleGatherResidentUUIDTask(false);
+			return;
+		}
 		Resident resident = queue.peek();
 		if (resident.hasUUID())
 			return;
+		if (resident.isNPC())
+			resident.setUUID(UUID.randomUUID());
 		UUID uuid = BukkitTools.getUUIDSafely(resident.getName());
 
 		if (uuid != null)
 			applyUUID(resident, uuid, "cache");
 		else {
-			uuid = BukkitTools.getUUIDFromResident(resident);
+			try {
+				uuid = BukkitTools.getUUIDFromResident(resident);
+			} catch (HTTPException e) {
+				TownyMessaging.sendErrorMsg("HTTP Response Code " + e.getStatusCode() + " - Mojang says " + resident.getName() + " has never had an account.");
+				// TODO: Decide what to do with these residents.
+				queue.remove(resident);
+				return;
+			}
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");
 			else {
-				TownyMessaging.sendDebugMsg("Could not resolve UUID for resident: " + resident.getName() + ", sorry! Gather task will try again in a minute.");				
+				TownyMessaging.sendDebugMsg("Could not resolve UUID for resident: " + resident.getName() + ", sorry! Gather task will try again in a minute.");
+				queue.remove(resident);
+				queue.add(resident);
 				TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 			}			
