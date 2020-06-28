@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -58,7 +59,12 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			return;
 		}
 		
-		sqlHandler.enableForeignKeyConstraints();
+		// Enable foreign keys explicitly if necessary
+		if (sqlAdapter.explicitForeignKeyEnable()) {
+			sqlHandler.executeUpdate(sqlAdapter.explicitForeignKeyStatement(),
+				"Error enabling foreign keys for " + databaseType +  " DB!");
+		}
+		
 
 		// Create tables
 		createTownyObjectTable(Town.class);
@@ -130,23 +136,31 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public void saveNew(@NotNull Saveable obj) {
 		Map<String, String> insertionMap = generateInsertionMap(obj);
 
-		StringBuilder stmtBuilder = new StringBuilder("INSERT INTO ").append(obj.getSQLTable().toUpperCase()).append(" ("); 
+		StringBuilder stmtBuilder = new StringBuilder("INSERT INTO ").append(obj.getSQLTable().toUpperCase()).append(" (");
+
+		StringJoiner keysJoiner = new StringJoiner(", "),
+					 valueJoiner = new StringJoiner(", ");
+
+		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
+			keysJoiner.add(entry.getKey());
+			valueJoiner.add(entry.getValue());
+		}
 		
 		// Append the keys which represent the column names
-		stmtBuilder.append(String.join(", ", insertionMap.keySet()));
+		stmtBuilder.append(keysJoiner.toString());
 		stmtBuilder.append(") ");
 		
 		// Append the values which represent the values to be inserted.
 		stmtBuilder.append("VALUES (");
-		// FIXME I have no idea if these iterate in the same order...
-		stmtBuilder.append(String.join(", ", insertionMap.values()));
+		stmtBuilder.append(valueJoiner.toString());
 		stmtBuilder.append(");");
 		
 		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error creating object " + obj.getName());
 		saveRelationships(obj);
 	}
-
-	// TODO Figure out how to handle insertions vs updates
+	
+	// New objects are saved through the saveNew method, while existing objects
+	// are updated through this method.
 	@Override
 	public void save(@NotNull Saveable obj) {
 		Map<String, String> insertionMap = generateInsertionMap(obj);
@@ -186,6 +200,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
 
+	// TODO Not all OneToMany relationships are between savables
 	@Override
 	protected void saveRelationships(final Saveable obj) {
 		// For each relationship

@@ -22,11 +22,6 @@ import java.util.Set;
 public class SQLHandler {
 	
 	@FunctionalInterface
-	private interface GenericResultSetFunction<T> {
-		T accept(ResultSet rs) throws SQLException;
-	}
-	
-	@FunctionalInterface
 	public interface ResultSetConsumer {
 		void accept(ResultSet rs) throws SQLException;
 	}
@@ -34,7 +29,6 @@ public class SQLHandler {
 	private String username, password;
 	private String databaseType;
 	private String dbName;
-	private String tablePrefix = TownySettings.getSQLTablePrefix().toUpperCase();;
 	private String connectionURL;
 	private Connection con;
 	
@@ -123,12 +117,6 @@ public class SQLHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.connectionURL + ": " + e.getMessage());
 			return false;
-		}
-	}
-	
-	public void enableForeignKeyConstraints() {
-		if (databaseType.equalsIgnoreCase("sqlite")){
-			executeUpdate("PRAGMA foreign_keys=ON", "Error enabling foreign keys for SQLITE!");
 		}
 	}
 

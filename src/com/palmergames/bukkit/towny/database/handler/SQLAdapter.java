@@ -25,7 +25,17 @@ public class SQLAdapter {
 		
 		return stmt;
 	}
+
+	// Foreign key checks
+	public boolean explicitForeignKeyEnable() {
+		return false;
+	}
+
+	public String explicitForeignKeyStatement() {
+		return "";
+	}
 	
+	// SQLite Class
 	private static class SQLiteAdapter extends SQLAdapter {
 		
 		@Override
@@ -44,6 +54,16 @@ public class SQLAdapter {
 				stmt += " REFERENCES " + foreignKeyDef;
 			
 			return stmt;
+		}
+
+		@Override
+		public boolean explicitForeignKeyEnable() {
+			return true;
+		}
+
+		@Override
+		public String explicitForeignKeyStatement() {
+			return "PRAGMA foreign_keys=ON";
 		}
 	}
 	
