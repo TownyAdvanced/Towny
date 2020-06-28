@@ -1267,7 +1267,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				i++;
 				if (i < split.length) {
 
-					if (split[i].equalsIgnoreCase("residents")) {
+					if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_RESIDENTS.getNode()))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_NUM_RESIDENTS;
