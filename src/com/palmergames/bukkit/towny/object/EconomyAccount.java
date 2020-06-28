@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import com.palmergames.bukkit.towny.object.economy.AbstractAccount;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import org.bukkit.World;
 
 /**
