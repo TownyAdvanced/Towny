@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
@@ -37,9 +38,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
+	@OneToMany(to = Resident.class, tableName = "friends")
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
-	@ForeignKey(reference = Town.class, referenceField = "uniqueIdentifier", cascadeOnDelete = true)
+	@ForeignKey(reference = Town.class)
 	private UUID townID = null;
 	private long lastOnline;
 	private long registered;

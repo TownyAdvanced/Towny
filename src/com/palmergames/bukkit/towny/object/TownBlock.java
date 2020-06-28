@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -28,7 +29,9 @@ public class TownBlock extends TownyObject {
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
 	private TownyWorld world;
+	@ForeignKey(reference = Town.class)
 	private UUID townID = null;
+	@ForeignKey(reference = Resident.class)
 	private UUID residentID = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;

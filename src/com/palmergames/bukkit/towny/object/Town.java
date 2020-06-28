@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
@@ -52,8 +53,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
-	
+
+	@ForeignKey(reference = Nation.class)
+	private UUID nationID;
+	@ForeignKey(reference = Resident.class, cascadeOnDelete = false)
 	private UUID mayorID;
+	
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
 	private double taxes = TownySettings.getTownDefaultTax();
@@ -63,7 +68,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
-	private UUID nationID;
 	private boolean hasUpkeep = true;
 	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();

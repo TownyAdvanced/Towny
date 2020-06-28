@@ -11,6 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ForeignKey {
 	Class<? extends Saveable> reference();
-	String referenceField();
 	boolean cascadeOnDelete() default true;
 }
