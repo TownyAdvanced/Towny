@@ -4,12 +4,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
-
-import javax.xml.ws.http.HTTPException;
 
 /**
  * @author LlmDl with permission from creatorfromhell, using code snippets from
@@ -19,7 +18,7 @@ public class MojangAPI {
 
 	static final Pattern uuidCreator = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
 
-	static JSONObject send(String url) {
+	static JSONObject send(String url) throws IOException {
 		return (JSONObject) JSONValue.parse(sendGetRequest(url));
 	}
 
@@ -27,7 +26,7 @@ public class MojangAPI {
 		return undashed.replaceAll(uuidCreator.pattern(), "$1-$2-$3-$4-$5");
 	}
 
-	private static String sendGetRequest(String URL) {
+	private static String sendGetRequest(String URL) throws IOException {
 		StringBuilder builder = new StringBuilder();
 
 		try {
@@ -35,7 +34,7 @@ public class MojangAPI {
 			connection.setRequestMethod("GET");
 
 			if (connection.getResponseCode() == 204)
-				throw new HTTPException(204);
+				throw new IOException();
 		
 			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String response;
@@ -43,8 +42,8 @@ public class MojangAPI {
 				builder.append(response);
 			}
 			reader.close();
-		} catch (HTTPException e1) {
-			throw new HTTPException(204);
+		} catch (IOException e1) {
+			throw new IOException();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

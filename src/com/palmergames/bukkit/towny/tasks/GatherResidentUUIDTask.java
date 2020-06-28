@@ -6,13 +6,13 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.utils.TNUPlayerMapImporter;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import java.io.IOException;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import javax.xml.ws.http.HTTPException;
 
 /**
  * @author ElgarL
@@ -54,11 +54,17 @@ public class GatherResidentUUIDTask extends Thread {
 		else {
 			try {
 				uuid = BukkitTools.getUUIDFromResident(resident);
-			} catch (HTTPException e) {
-				TownyMessaging.sendErrorMsg("HTTP Response Code " + e.getStatusCode() + " - Mojang says " + resident.getName() + " has never had an account.");
-				// TODO: Decide what to do with these residents.
-				queue.remove(resident);
-				return;
+			} catch (IOException e) {
+				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " has never had an account.");
+				// Make a last ditch attempt using the TownyNameUpdater playermap.
+				if (TNUPlayerMapImporter.mappedResidents.containsKey(resident.getName().toLowerCase())) {
+					uuid = TNUPlayerMapImporter.mappedResidents.get(resident.getName().toLowerCase());
+					applyUUID(resident, uuid, "TNU playermap");
+					return;
+				} else {
+					queue.remove(resident);
+					return;
+				}
 			}
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");
@@ -82,13 +88,6 @@ public class GatherResidentUUIDTask extends Thread {
 		queue.remove(resident);
 		TownySettings.uuidCount++;
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
-		checkEnd();
-	}
-	
-	private void checkEnd() {
-		if (TownySettings.getUUIDPercent().equals("100%")) {
-			TownyTimerHandler.toggleGatherResidentUUIDTask(false);
-			System.out.println("[Towny] Resident UUID Gathering Complete - Shutting Down Background Task - Your Towny database is ready for UUID conversion.");
-		}		
+		return;
 	}
 }

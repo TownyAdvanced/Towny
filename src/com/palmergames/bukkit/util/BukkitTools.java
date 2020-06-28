@@ -17,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -94,8 +96,9 @@ public class BukkitTools {
 	 * 
 	 * @param resident - who to return a UUID for. 
 	 * @return uuid - UUID of resident using the name at last login or null.
+	 * @throws IOException when Mojang returns HTTP Code 204.
 	 */
-	public static UUID getUUIDFromResident(Resident resident) {
+	public static UUID getUUIDFromResident(Resident resident) throws IOException {
 
 		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
 		
