@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class SiegeWarDistanceUtil {
 
-	public static List<World> worldsWithSiegeWarEnabled = null;
-	public static List<World> worldsWithUndergroundBannerControlEnabled = null;
+	public static List<String> worldsWithSiegeWarEnabled = null;
+	public static List<String> worldsWithUndergroundBannerControlEnabled = null;
 
 	/**
 	 * This method determines if the difference in elevation between a (attack banner) block, 
@@ -141,14 +141,14 @@ public class SiegeWarDistanceUtil {
 				worldsWithSiegeWarEnabled = new ArrayList<>();
 				String[] worldNamesAsArray = TownySettings.getWarSiegeWorlds().split(",");
 				for (String worldName : worldNamesAsArray) {
-					worldsWithSiegeWarEnabled.add(Bukkit.getServer().getWorld(worldName.trim()));
+					worldsWithSiegeWarEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
 				}
 			}
 		} catch (Exception e) {
 			System.out.println("Error checking if siege war is enabled in world. Check your config file.");
 			return false;
 		}
-		return worldsWithSiegeWarEnabled.contains(worldToCheck);
+		return worldsWithSiegeWarEnabled.contains(worldToCheck.getName());
 	}
 
 	/**
@@ -163,13 +163,13 @@ public class SiegeWarDistanceUtil {
 				worldsWithUndergroundBannerControlEnabled = new ArrayList<>();
 				String[] worldNamesAsArray = TownySettings.getWarWorldsWithUndergroundBannerControl().split(",");
 				for (String worldName : worldNamesAsArray) {
-					worldsWithUndergroundBannerControlEnabled.add(Bukkit.getServer().getWorld(worldName.trim()));
+					worldsWithUndergroundBannerControlEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
 				}
 			}
 		} catch (Exception e) {
 			System.out.println("Error checking if world has underground banner control enabled. Check your config file.");
 			return false;
 		}
-		return worldsWithUndergroundBannerControlEnabled.contains(worldToCheck);
+		return worldsWithUndergroundBannerControlEnabled.contains(worldToCheck.getName());
 	}
 }
