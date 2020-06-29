@@ -1351,7 +1351,12 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
-	
+
+	public static String getTownDefaultBoard() {
+
+		return getString(ConfigNodes.TOWN_DEF_BOARD);
+	}
+
 	public static boolean getNationDefaultOpen() {
 
 		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
@@ -1946,6 +1951,11 @@ public class TownySettings {
 	public static boolean getNationDefaultPublic(){
 
 		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+	}
+
+	public static String getNationDefaultBoard(){
+
+		return getString(ConfigNodes.GNATION_DEF_BOARD);
 	}
 
 	public static String getFlatFileBackupType() {

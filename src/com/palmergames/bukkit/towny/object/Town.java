@@ -61,7 +61,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String townBoard = "/town set board [msg]";
+	private String townBoard = TownySettings.getTownDefaultBoard();
 	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
