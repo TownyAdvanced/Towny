@@ -1145,6 +1145,8 @@ msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bank
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
 msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay taxes and has gone bankrupt.'
 msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
+msg_town_destroyed_by_nation_tax: '&b%s couldn''t pay taxes and has fallen.'
+msg_town_destroyed_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have fallen: '
 msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
