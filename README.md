@@ -14,13 +14,14 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.* & 1.16.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.* & 1.16.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
+| MC 1.16.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
 | MC 1.15.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
-| MC 1.14.* | [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) |
+| MC 1.14.* | Use [0.96.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0) or the above Latest Pre-Release. |
 | MC 1.13.2 | [0.96.1.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.1.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
@@ -58,6 +59,12 @@ Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) 
 If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
 If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
+
+___
+
+### Video Tutorials
+Courtesy of Major_Graft, we have a new series of Tutorial Videos [available on the Towny website.](https://townyadvanced.github.io/tutorials.html)
+
 ___
 
 ### Contributing
@@ -66,7 +73,6 @@ If you'd like to contribute to the Towny code, see the [Contributing.md](https:/
 ___
 
 ### Licensing
-
 Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](http://creativecommons.org/licenses/by-nc-nd/3.0/)
 
 We don't object to you making your own forks and builds but we do object to people being selfish, which is why we specify No Derivative Works.
@@ -74,7 +80,14 @@ If you want to modify the code to add some nice feature the least you can do is 
 
 ___
 
-### Building
+### Importing Towny for API use
+[![](https://jitpack.io/v/TownyAdvanced/Towny.svg)](https://jitpack.io/#TownyAdvanced/Towny)
+
+Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+
+___
+
+### Building Towny
 If you would like to build from a specific branch yourself, you can do so with either [Apache Ant](https://ant.apache.org/) or [Apache Maven](http://maven.apache.org/), depending on the age of the branch.
 
 For building, open your terminal / command prompt and navigate to the Towny Directory (either extracted, or cloned).
@@ -82,7 +95,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 - **Maven**
 
     - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
-    - Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+
 
 - **Ant** (_Deprecated_)
 

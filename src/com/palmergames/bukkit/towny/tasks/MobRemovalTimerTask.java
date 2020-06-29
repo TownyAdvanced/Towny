@@ -103,30 +103,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
 
 				// Check if mobs are always allowed inside towns in this world.
-				if (townyWorld.isForceTownMobs())
+				if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs)
 					continue;
-
-				// Check if plot allows mobs.
-				if (townBlock.getPermissions().mobs)
-					continue;
-
-				// Get the town this is registered to.
-				Town town = null;
-				try {
-					town = townBlock.getTown();
-				} catch (NotRegisteredException ignored) {
-				}
-
-				// Check if the town this plot is registered to allows mobs.
-				if (town.hasMobs())
-					continue;
-				
-				// Special check if it's a rabbit, for the Killer Bunny variant.
-				if (livingEntity.getType().equals(EntityType.RABBIT))
-					if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
-						livingEntitiesToRemove.add(livingEntity);							
-						continue;						
-					}
 
 				// Check that Towny is removing this type of entity inside towns.
 				if (!isRemovingTownEntity(livingEntity))
@@ -135,6 +113,13 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
 					continue;
 
+				// Special check if it's a rabbit, for the Killer Bunny variant.
+				if (livingEntity.getType().equals(EntityType.RABBIT))
+					if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+						livingEntitiesToRemove.add(livingEntity);							
+						continue;						
+					}
+				
 				livingEntitiesToRemove.add(livingEntity);
 			}
 		}

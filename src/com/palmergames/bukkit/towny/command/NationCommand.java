@@ -1771,10 +1771,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		nationKick(player, resident, nation, townyUniverse.getDataSource().getTowns(names));
+		nationKick(player, nation, townyUniverse.getDataSource().getTowns(names));
 	}
 
-	public void nationKick(Player player, Resident resident, Nation nation, List<Town> kicking) {
+	public static void nationKick(CommandSender sender, Nation nation, List<Town> kicking) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		ArrayList<Town> remove = new ArrayList<>();
@@ -1816,17 +1816,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			for (Town town : kicking) {
 				msg.append(town.getName()).append(", ");
 
-				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_nation_kicked_by"), player.getName()));
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_nation_kicked_by"), sender.getName()));
 			}
 
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_nation_kicked"), player.getName(), msg.toString()));
+			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_nation_kicked"), sender.getName(), msg.toString()));
 			TownyMessaging.sendPrefixedNationMessage(nation, msg.toString());
 			townyUniverse.getDataSource().saveNation(nation);
 
 			plugin.resetCache();
 		} else
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
 	}
 
 	private void nationAlly(Player player, String[] split) throws TownyException {

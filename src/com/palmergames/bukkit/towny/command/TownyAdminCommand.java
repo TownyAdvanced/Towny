@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -116,11 +117,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"meta",
 		"deposit",
 		"withdraw",
-		"outlaw"
+		"outlaw",
+		"leavenation"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
+		"kick",
 		"rename",
 		"delete",
 		"toggle",
@@ -892,7 +895,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
-			
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
 			return;
 		}
 
@@ -1061,7 +1064,32 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, withdrawMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
 			} else if (split[1].equalsIgnoreCase("outlaw")) {
-				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);				
+				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
+			} else if (split[1].equalsIgnoreCase("leavenation")) {
+				Nation nation = null;
+				if (town.hasNation())
+					nation = town.getNation();
+				else
+					throw new TownyException(TownySettings.getLangString("That town does not belong to a nation."));
+				
+				try {
+					nation.removeTown(town);
+					
+					townyUniverse.getDataSource().saveNation(nation);
+					townyUniverse.getDataSource().saveNationList();
+
+					plugin.resetCache();
+
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_town_left"), StringMgmt.remUnderscore(town.getName())));
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_left_nation"), StringMgmt.remUnderscore(nation.getName())));
+				} catch (EmptyNationException en) {
+					townyUniverse.getDataSource().removeNation(en.getNation());
+					townyUniverse.getDataSource().saveNationList();
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName()));
+				} finally {
+					townyUniverse.getDataSource().saveTown(town);
+				}
+				
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -1078,6 +1106,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
 				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
+				sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
 				
 				return;
 			}
@@ -1167,6 +1196,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "new", "[name] [capital]"));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] add [] .. []", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] kick [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] rename [newname]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] delete", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] recheck", ""));
@@ -1210,6 +1240,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * ); return; }
 				 */
 				NationCommand.nationAdd(nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+
+			} else if (split[1].equalsIgnoreCase("kick")) {
+
+				NationCommand.nationKick(sender, nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {

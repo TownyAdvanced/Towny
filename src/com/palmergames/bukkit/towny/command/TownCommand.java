@@ -1078,7 +1078,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		} else {
 
-			Resident resident, target;
+			Resident resident;
+			Resident target = null;
 			Town targetTown = null;
 
 			/*
@@ -1087,17 +1088,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (split.length < 2)
 				throw new TownyException("Eg: /town outlaw add/remove [name]");
 
+			if (!admin)
+				resident = townyUniverse.getDataSource().getResident(sender.getName());
+			else
+				resident = town.getMayor();				
+			
 			try {
-				if (!admin)
-					resident = townyUniverse.getDataSource().getResident(sender.getName());
-				else
-					resident = town.getMayor();
 				target = townyUniverse.getDataSource().getResident(split[1]);
-			} catch (TownyException x) {
-				throw new TownyException(x.getMessage());
+			} catch (NotRegisteredException e2) {
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_invalid_name"), split[1]));
+				return;
 			}
 
-			if (split[0].equalsIgnoreCase("add")) {
+			if (target != null && split[0].equalsIgnoreCase("add")) {
 				try {
 					try {
 						targetTown = target.getTown();
@@ -1128,7 +1131,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					e.printStackTrace();
 				}
 
-			} else if (split[0].equalsIgnoreCase("remove")) {
+			} else if (target != null && split[0].equalsIgnoreCase("remove")) {
 				try {
 					town.removeOutlaw(target);
 					townyUniverse.getDataSource().saveTown(town);
@@ -2812,6 +2815,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param player - Player.
 	 * @param split  - Current command arguments.
 	 * @param outpost - Whether this in an outpost or not.
+	 * @param ignoreWarning - Whether to ignore cost warning and pay automatically.
 	 * @throws TownyException - Exception.
 	 */
 	public static void townSpawn(Player player, String[] split, Boolean outpost, boolean ignoreWarning) throws TownyException{

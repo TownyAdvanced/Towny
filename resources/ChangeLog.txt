@@ -4622,3 +4622,33 @@ v0.92.0.11:
   - REQUIRED CONFIG CHANGE: add ,SWEET_BERRY_BUSH to the end of the protection.switch_ids list.
     - Closes #4032.
   - Switch to JitPack and Remove GH packages dependencies, courtesy of Siris with PR #4038.
+0.96.1.12:
+  - Fix /towny top land resident throwing an internal error.
+    - Closes #4045.
+  - Add javadocs to maven, courtesy of Siris with PR #4049.
+    - Use mvn clean install to build javadocs.
+  - New Command: /ta nation [nationname] kick [towns...]
+    - Allows admins to remove towns from a nation.
+    - Closes #4050.
+  - New Command: /ta town [townname] leavenation
+    - Allows admins to make a town leave their nation.
+  - API: Added to TownyAPI, hasNationZone(Location) and hasNationZone(WorldCoord) which will return either TownBlockStatus.UNCLAIMED_ZONE or TownBlockStatus.NATION_ZONE.
+  - API: Added to TownyAPI, isNationZone(Location), returns true if it is in a nation zone.
+  - Fix PlayerCacheUtil looking for a non-existant language string.
+  - Fix Townblocks having their mob setting overridden by the Towns' mob setting in scenarios where the town has mobs on, but the townblock has mobs off.
+    - Closes #4067.
+  - Fix mayors and kings not paying the bail costs specified in the config.
+0.96.1.13:
+  - Fix friendly fire not being respected during wars.
+  - Fix players being pulled around by fishing hooks in non-PVP plots.
+    - Closes #4092.
+  - Fix sentinalpvp bots causing NotRegisteredExceptions.
+  - Fix friend and outlaw lists being able to be fed invalid resident names.
+    - Closes #4097.
+  - Fix unhelpful getHomeBlock exception message.
+  - Add UUIDs to resident objects, for the day we need to convert databases to UUIDs.
+  - Add bstats metric to help track UUID gathering.
+0.96.1.14:
+  - Fix loading mysql databases with residents who have had a UUID gathered.
+0.96.2.0:
+  - Bump version for release.

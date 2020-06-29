@@ -633,7 +633,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (hasHomeBlock())
 			return homeBlock;
 		else
-			throw new TownyException("Town has not set a home block.");
+			throw new TownyException(this.getName() + " has not set a home block.");
 	}
 
 	/**
@@ -1733,6 +1733,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 	/**
 	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
+	 * @return {@link #getHomeblockWorld()}
 	 */
 	@Deprecated
 	public TownyWorld getWorld() {

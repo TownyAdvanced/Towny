@@ -281,10 +281,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				if (split[1].equalsIgnoreCase("paybail")) {
+					double cost = TownySettings.getBailAmount();					
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-					if (resident.getAccount().canPayFromHoldings(TownySettings.getBailAmount())) {
+					if (resident.isMayor())
+						cost = TownySettings.getBailAmountMayor();
+					if (resident.isKing())
+						cost = TownySettings.getBailAmountKing();
+					if (resident.getAccount().canPayFromHoldings(cost)) {
 						Town JailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
-						resident.getAccount().payTo(TownySettings.getBailAmount(), JailTown, "Bail");
+						resident.getAccount().payTo(cost, JailTown, "Bail");
 						resident.setJailed(false);
 						resident.setJailSpawn(0);
 						resident.setJailTown("");
@@ -639,8 +644,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Resident> remove = new ArrayList<>();
 
-		for (Resident newFriend : invited)
-
+		for (Resident newFriend : invited) {
+			try {
+				@SuppressWarnings("unused")
+				Resident res = TownyUniverse.getInstance().getDataSource().getResident(newFriend.getName());
+			} catch (NotRegisteredException e1) {
+				remove.add(newFriend);
+				continue;
+			}
+			
 			try {
 
 				resident.addFriend(newFriend);
@@ -651,6 +663,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				remove.add(newFriend);
 
 			}
+		}
 
 		/*
 		 *  Remove any names from the list who were already listed as friends
