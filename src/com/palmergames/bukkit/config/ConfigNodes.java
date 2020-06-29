@@ -129,13 +129,13 @@ public enum ConfigNodes {
 			"# Minimum number of plots any towns home plot must be from the next town.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent someone founding a town right on your doorstep"),
-	TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
-			"town.min_distance_for_outpost_from_plot",
-			"5",
-			"",
-			"# Minimum number of plots an outpost must be from any other town's plots.",
-			"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
-			"# near to each other, but want to keep outposts away from towns."),
+    TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
+    		"town.min_distance_for_outpost_from_plot",
+    		"5",
+    		"",
+    		"# Minimum number of plots an outpost must be from any other town's plots.",
+    		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
+    		"# near to each other, but want to keep outposts away from towns."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",
@@ -584,7 +584,7 @@ public enum ConfigNodes {
 			"global_nation_settings.capital_spawn",
 			"true",
 			"# If enabled, only allow the nation spawn to be set in the capital city."),
-	GNATION_SETTINGS_ALLOW_NATION_SPAWN(
+    GNATION_SETTINGS_ALLOW_NATION_SPAWN(
 			"global_nation_settings.allow_nation_spawn",
 			"true",
 			"# Allow the use of /nation spawn",
@@ -610,14 +610,14 @@ public enum ConfigNodes {
 			"0",
 			"# If higher than 0, it will limit how many towns can be joined into a nation.",
 			"# Does not affect existing nations that are already over the limit."),
-	GNATION_DEF_PUBLIC(
-			"global_nation_settings.default.public",
-			"false",
-			"# If set to true, any newly made nation will have their spawn set to public."),
-	GNATION_DEF_OPEN(
-			"global_nation_settings.default.open",
-			"false",
-			"# If set to true, any newly made nation will have open status and any town may join without an invite."),
+    GNATION_DEF_PUBLIC(
+            "global_nation_settings.default.public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	GNATION_SETTINGS_ALLOWED_NATION_COLORS(
 			"global_nation_settings.allowed_map_colors",
 			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
@@ -1701,7 +1701,7 @@ public enum ConfigNodes {
 			"# |               [Separate from Event War]              | #",
 			"# |           --------------------------------           | #",
 			"# |        DEPRECATED: Minimally Supported Through       | #",
-			"# |             3rd Party Contributions Only             | #",
+		    "# |             3rd Party Contributions Only             | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
