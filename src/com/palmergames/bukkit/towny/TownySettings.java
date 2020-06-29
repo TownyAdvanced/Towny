@@ -199,6 +199,9 @@ public class TownySettings {
 //
 //		if (level != null) return level;
 //		return 0;
+		if(town.isRuined())
+			return 0;
+
 		int n = town.getNumResidents();
 		for (Integer level : configTownLevel.keySet())
 			if (n >= level)
