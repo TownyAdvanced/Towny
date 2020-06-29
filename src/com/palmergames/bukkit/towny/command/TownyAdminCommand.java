@@ -230,7 +230,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			player = (Player) sender;
 			isConsole = false;
-new
+
 		} else {
 			isConsole = true;
 			this.player = null;
