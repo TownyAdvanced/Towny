@@ -91,6 +91,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"backup",
 		"checkperm",
 		"newday",
+		"newhour",
 		"unclaim",
 		"purge",
 		"mysqldump",
@@ -206,6 +207,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "mysqldump", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "database [save/load]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "newday", TownySettings.getLangString("admin_panel_3")));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "newhour", TownySettings.getLangString("admin_panel_4")));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "purge [number of days]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "delete [] .. []", "delete a residents data files."));
 
@@ -228,7 +230,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			player = (Player) sender;
 			isConsole = false;
-
+new
 		} else {
 			isConsole = true;
 			this.player = null;
@@ -547,6 +549,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("newday")) {
 
 				TownyTimerHandler.newDay();
+
+			} else if (split[0].equalsIgnoreCase("newhour")) {
+
+				TownyTimerHandler.newHour();
+				TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_newhour_success"));
 
 			} else if (split[0].equalsIgnoreCase("purge")) {
 
