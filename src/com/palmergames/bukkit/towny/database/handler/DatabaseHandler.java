@@ -375,13 +375,6 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
-
-	/**
-	 * Saves all one-to-many relationships for a given object.
-	 * 
-	 * @param obj The object to save relationships from.
-	 */
-	abstract void saveOneToManyRelationships(Saveable obj);
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.

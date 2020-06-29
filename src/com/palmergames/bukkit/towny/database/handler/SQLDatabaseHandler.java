@@ -185,8 +185,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public boolean delete(@NotNull Saveable obj) {
 		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
-
-	@Override
+	
+	
 	protected void saveOneToManyRelationships(final Saveable obj) {
 		// For each relationship
 		// We want to delete all rows in that relationship table with the parent id.

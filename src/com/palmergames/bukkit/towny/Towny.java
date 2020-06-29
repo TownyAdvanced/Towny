@@ -255,10 +255,6 @@ public class Towny extends JavaPlugin {
 		
 		nationA.getAllies().add(nationB);
 		
-		
-		((FlatFileDatabaseHandler)TownyUniverse.getInstance()
-			.getDatabaseHandler()).saveOneToManyRelationships(nationA);
-		
 		// ------------------- TESTING CODE -------------------
 	}
 

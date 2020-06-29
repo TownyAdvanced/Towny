@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.Saveable;
@@ -99,7 +100,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 	
 	@Nullable
-	public <T> T load(File file, @NotNull Class<T> clazz) {
+	public <T> T load(@NotNull File file, @NotNull Class<T> clazz) {
+		Validate.notNull(clazz);
+		Validate.notNull(file);
+		
 		Constructor<T> objConstructor = null;
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
@@ -257,7 +261,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		// Make sure that a file wasn't given instead of a directory
 		if (!dir.isDirectory()) {
-			throw new UnsupportedOperationException("Object of type: " + clazz + " has save path is not a directory.");
+			throw new TownyRuntimeException("Object of type: " + clazz + " has save path is not a directory.");
 		}
 
 		Path path = Paths.get(dir.getPath());
@@ -278,8 +282,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				consumer.accept(loadedObj);
 			}
 		} catch (IOException e) {
-			// An I/O problem has occurred
-			e.printStackTrace();
+			throw new TownyRuntimeException(e.getMessage());
 		}
 	}
 
@@ -329,8 +332,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			try {
 				saveable = objConstructor.newInstance((Object) null);
 			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-				e.printStackTrace();
-				return null;
+				throw new RuntimeException("Error in instantiation of " + type);
 			}
 		}
 
@@ -342,30 +344,5 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		fileDirectoryCache.putIfAbsent(type, saveable.getSaveDirectory());
 
 		return saveable.getSaveDirectory();
-	}
-	
-	public void saveOneToManyRelationships(@NotNull Saveable obj) {
-		Validate.notNull(obj);
-		List<String> data = new ArrayList<>();
-		
-		// Create execution block.
-		final Consumer<Field> consumer = (field) -> {
-			try {
-				Iterator<Saveable> itr = ReflectionUtil.resolveIterator(field.get(obj), Saveable.class);
-				itr.forEachRemaining(saveable -> {
-					data.add(saveable.getUniqueIdentifier() + ":" + obj.getUniqueIdentifier());
-				});
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-
-			String saveFile = field.getAnnotation(OneToMany.class).tableName();
-			// Save
-			FileMgmt.listToFile(data, relationshipDir.getPath() + "/" + saveFile + ".txt");
-		};
-		
-		// Execute loop.
-		safeFieldIterate(getOneToManyFields(obj), consumer);
-		
 	}
 }
