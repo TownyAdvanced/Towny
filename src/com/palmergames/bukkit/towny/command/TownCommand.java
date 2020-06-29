@@ -113,6 +113,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"deposit",
 		"outlaw",
 		"outpost",
+		"reclaim",
 		"ranklist",
 		"rank",
 		"reslist",
@@ -212,6 +213,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		output.add(ChatTools.formatCommand("", "/town", "list", ""));
 		output.add(ChatTools.formatCommand("", "/town", "online", TownySettings.getLangString("town_help_10")));
 		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
+		output.add(ChatTools.formatCommand("", "/town", "reclaim", TownySettings.getLangString("town_help_12")));
 		output.add(ChatTools.formatCommand("", "/town", "reslist", ""));
 		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
 		output.add(ChatTools.formatCommand("", "/town", "outlawlist", ""));
