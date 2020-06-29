@@ -2562,7 +2562,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		townyDataSource.newTown(name);
 		Town town = townyDataSource.getTown(name);
-		town.addResident(resident);
+		resident.setTown(town);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
@@ -2891,7 +2891,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {
 
-		town.addResident(resident);
+		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().saveResident(resident);

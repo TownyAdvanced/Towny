@@ -737,7 +737,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
-                String line;
+                String line = rs.getString("town");
+                if ((line != null) && (!line.isEmpty())) {
+                    resident.setTown(getTown(line));
+                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
+                }
+
 				try {
 					line = rs.getString("town-ranks");
 					if ((line != null) && (!line.isEmpty())) {
@@ -815,18 +820,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
-                line = rs.getString("residents");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Resident resident = getResident(token);
-                            if (resident != null)
-                                town.addResident(resident);
-                        }
-                    }
-                }
+//                line = rs.getString("residents");
+//                if (line != null) {
+//                    search = (line.contains("#")) ? "#" : ",";
+//                    tokens = line.split(search);
+//                    for (String token : tokens) {
+//                        if (!token.isEmpty()) {
+//                            Resident resident = getResident(token);
+//                            if (resident != null)
+//                                town.addResident(resident);
+//                        }
+//                    }
+//                }
 
                 town.setMayor(getResident(rs.getString("mayor")));
                 // line = rs.getString("assistants");
@@ -1568,6 +1573,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("JailTown", resident.getJailTown());
             res_hm.put("title", resident.getTitle());
             res_hm.put("surname", resident.getSurname());
+            res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
             res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
             res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
@@ -1594,7 +1600,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> twn_hm = new HashMap<>();
             twn_hm.put("name", town.getName());
-            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
+//            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");

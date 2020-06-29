@@ -642,6 +642,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("surname");
 				if (line != null)
 					resident.setSurname(line);
+				
+				line = keys.get("town");
+				if (line != null)
+					resident.setTown(getTown(line));
 
 				try {
 					line = keys.get("town-ranks");
@@ -700,27 +704,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileTown);
 
-				line = keys.get("residents");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
-							try {
-								Resident resident = getResident(token);
-								if (resident != null) {
-									try {
-										town.addResident(resident);
-									} catch (AlreadyRegisteredException e) {
-										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
-									}
-								}
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
-							}
-						}
-					}
-				}
+//				line = keys.get("residents");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						if (!token.isEmpty()) {
+//							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
+//							try {
+//								Resident resident = getResident(token);
+//								if (resident != null) {
+//									try {
+//										town.addResident(resident);
+//									} catch (AlreadyRegisteredException e) {
+//										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+//									}
+//								}
+//							} catch (NotRegisteredException e) {
+//								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
+//							}
+//						}
+//					}
+//				}
 				
 				line = keys.get("outlaws");
 				if (line != null) {
@@ -1750,6 +1754,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("surname=" + resident.getSurname());
 
 		if (resident.hasTown()) {
+			try {
+				list.add("town=" + resident.getTown().getName());
+			} catch (NotRegisteredException ignored) {
+			}
 			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ","));
 			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ","));
 		}
@@ -1786,8 +1794,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Name
 		list.add("name=" + town.getName());
-		// Residents
-		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
+//		// Residents
+//		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
 		// Mayor
 		if (town.hasMayor())
 			list.add("mayor=" + town.getMayor().getName());

@@ -325,6 +325,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		setTitle("");
 		setSurname("");
 		updatePerms();
+		town.addResident(this);
 	}
 
 	public void setFriends(List<Resident> newFriends) {

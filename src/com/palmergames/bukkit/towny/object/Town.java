@@ -256,11 +256,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return getAssistants().contains(resident);
 	}
 
-	public void addResident(Resident resident) throws AlreadyRegisteredException {
+	void addResident(Resident resident) throws AlreadyRegisteredException {
 
 		addResidentCheck(resident);
 		residents.add(resident);
-		resident.setTown(this);
+//		resident.setTown(this);
 		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}

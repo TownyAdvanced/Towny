@@ -65,7 +65,7 @@ public class OnPlayerLogin implements Runnable {
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
-						town.addResident(resident);
+						resident.setTown(town);
 						universe.getDataSource().saveTown(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
