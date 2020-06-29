@@ -1875,11 +1875,11 @@ public enum ConfigNodes {
 			"# If true, the Siege-War system is enabled.",
 			"# if false, the Siege-War system is disabled."),
 	WAR_SIEGE_WORLDS(
-			"war.siege.worlds",
+			"war.siege.switches.worlds",
 			"world, world_nether, world_the_end",
 			"# This list specifies the worlds in which siegewar is enabled."),
 	WAR_SIEGE_WORLDS_WITH_UNDERGROUND_BANNER_CONTROL(
-			"war.siege.worlds_with_underground_banner_control",
+			"war.siege.switches.worlds_with_underground_banner_control",
 			"world_nether",
 			"# This list specifies the worlds in which underground-banner-control is enabled."),
 	WAR_SIEGE_ATTACK_ENABLED(
