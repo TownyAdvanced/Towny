@@ -2942,7 +2942,7 @@ public class TownySettings {
 	}
 
 	public static String getUUIDPercent() {
-		double fraction = uuidCount / TownyUniverse.getInstance().getDataSource().getResidents().size();
+		double fraction = Double.valueOf(uuidCount) / TownyUniverse.getInstance().getDataSource().getResidents().size();
 		
 		if (fraction == 1.00)
 			return "100%";

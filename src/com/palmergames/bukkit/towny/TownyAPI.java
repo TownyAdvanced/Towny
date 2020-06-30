@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Residence;
@@ -23,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -129,41 +131,6 @@ public class TownyAPI {
         }
         return players;
     }
-    
-    /**
-     * Gets all online {@link Player}s for a specific {@link Town}.
-     *
-     * @param town {@link Town} of which you want all the online {@link Player}s.
-     * @return {@link List} of all online {@link Player}s in the specified {@link Town}.
-     */
-    public List<Player> getOnlinePlayers(Town town) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        for (Player player : BukkitTools.getOnlinePlayers()) {
-            if (player != null) {
-                if (town.hasResident(player.getName())) {
-                    players.add(player);
-                }
-            }
-        }
-        return players;
-    }
-    
-    /**
-     * Gets all online {@link Player}s for a specific {@link Nation}.
-     *
-     * @param nation {@link Nation} of which you want all the online {@link Player}s.
-     * @return {@link List} of all online {@link Player}s in the specified {@link Nation}.
-     */
-    public List<Player> getOnlinePlayers(Nation nation) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        for (Town town : nation.getTowns()) {
-            players.addAll(getOnlinePlayers(town));
-        }
-        return players;
-    }
-    
     
     /** 
      * Gets all online {@link Player}s for a specific {@link Nation}s alliance.
