@@ -109,7 +109,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         if (this.type.equals("h2")) {
         
             driver1 = "org.h2.Driver";
-            this.dsn = ("jdbc:h2:" + dataFolderPath + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
+            // H2 requires an absolute path
+            String dataFolderAbsolute = Towny.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "data";
+            this.dsn = ("jdbc:h2:" + dataFolderAbsolute + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
             username = "sa";
             password = "sa";
         
