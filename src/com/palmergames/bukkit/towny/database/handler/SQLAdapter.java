@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import java.util.Map;
+import java.util.StringJoiner;
+
 public class SQLAdapter {
 	
 	private SQLAdapter() {}
@@ -35,6 +38,26 @@ public class SQLAdapter {
 		return "";
 	}
 	
+	public String upsertStatement(String tableName, Map<String, String> insertionMap) {
+		StringBuilder stmtBuilder = new StringBuilder();
+		StringJoiner columnBuilder = new StringJoiner(", "),
+					  valueBuilder = new StringJoiner(", "),
+					  keyValueBuilder = new StringJoiner(", ");
+
+		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
+			columnBuilder.add(entry.getKey());
+			valueBuilder.add(entry.getValue());
+			keyValueBuilder.add(entry.getKey() + " = " + entry.getValue());
+		}
+
+		stmtBuilder.append("INSERT INTO ").append(tableName).append(" (")
+					.append(columnBuilder.toString()).append(") VALUES (")
+					.append(valueBuilder.toString()).append(") ON DUPLICATE KEY UPDATE ")
+					.append(keyValueBuilder.toString()).append(";");
+		
+		return stmtBuilder.toString();
+	}
+	
 	// SQLite Class
 	private static class SQLiteAdapter extends SQLAdapter {
 		
@@ -65,14 +88,60 @@ public class SQLAdapter {
 		public String explicitForeignKeyStatement() {
 			return "PRAGMA foreign_keys=ON";
 		}
+
+		@Override
+		public String upsertStatement(String tableName, Map<String, String> insertionMap) {
+			StringBuilder stmtBuilder = new StringBuilder();
+			StringJoiner columnBuilder = new StringJoiner(", "),
+				valueBuilder = new StringJoiner(", "),
+				keyValueBuilder = new StringJoiner(", ");
+
+			for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
+				columnBuilder.add(entry.getKey());
+				valueBuilder.add(entry.getValue());
+				keyValueBuilder.add(entry.getKey() + " = " + entry.getValue());
+			}
+
+			stmtBuilder.append("INSERT INTO ").append(tableName).append(" (")
+				.append(columnBuilder.toString()).append(") VALUES (")
+				.append(valueBuilder.toString()).append(") ON CONFLICT (uniqueIdentifier) DO UPDATE SET ")
+				.append(keyValueBuilder.toString()).append(";");
+
+			return stmtBuilder.toString();
+		}
 	}
 	
+	// H2 Class
+	private static class H2Adapter extends SQLAdapter {
+		@Override
+		public String upsertStatement(String tableName, Map<String, String> insertionMap) {
+			StringBuilder stmtBuilder = new StringBuilder();
+			StringJoiner columnBuilder = new StringJoiner(", "),
+				valueBuilder = new StringJoiner(", ");
+
+			for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
+				columnBuilder.add(entry.getKey());
+				valueBuilder.add(entry.getValue());
+			}
+
+			stmtBuilder.append("MERGE INTO ").append(tableName).append(" (")
+				.append(columnBuilder.toString()).append(") KEY (uniqueIdentifier) (")
+				.append(valueBuilder.toString()).append(");");
+
+			return stmtBuilder.toString();
+		}
+	} 
+	
 	public static SQLAdapter adapt(String databaseType) {
-		if (databaseType.equalsIgnoreCase("sqlite")) {
-			return new SQLiteAdapter();
+		switch (databaseType.toLowerCase()) {
+			case "sqlite":
+				return new SQLiteAdapter();
+			case "h2":
+				return new H2Adapter();
+			case "mysql":
+				return new SQLAdapter();
 		}
-		else {
-			return new SQLAdapter();
-		}
+		
+		return new SQLAdapter();
 	}
 }

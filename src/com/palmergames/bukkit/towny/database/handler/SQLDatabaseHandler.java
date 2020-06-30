@@ -50,7 +50,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	private final Map<Class<?>, String> tableNameCache = new HashMap<>();
 
 	// Store the fields for OneToMany relationships
-	private final ConcurrentHashMap<Type, List<Field>> fieldRelCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Type, List<Field>> fieldOneToManyCache = new ConcurrentHashMap<>();
 	
 	// TODO Queue creation/saves/deletes and process them async
 	
@@ -144,33 +144,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		
 		sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements);
 	}
-
-	@Override
-	public void saveNew(@NotNull Saveable obj) {
-		Map<String, String> insertionMap = generateInsertionMap(obj);
-
-		StringBuilder stmtBuilder = new StringBuilder("INSERT INTO ").append(obj.getSQLTable().toUpperCase()).append(" (");
-
-		StringJoiner keysJoiner = new StringJoiner(", "),
-					 valueJoiner = new StringJoiner(", ");
-
-		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
-			keysJoiner.add(entry.getKey());
-			valueJoiner.add(entry.getValue());
-		}
-		
-		// Append the keys which represent the column names
-		stmtBuilder.append(keysJoiner.toString());
-		stmtBuilder.append(") ");
-		
-		// Append the values which represent the values to be inserted.
-		stmtBuilder.append("VALUES (");
-		stmtBuilder.append(valueJoiner.toString());
-		stmtBuilder.append(");");
-		
-		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error creating object " + obj.getName());
-		saveOneToManyRelationships(obj);
-	}
 	
 	// New objects are saved through the saveNew method, while existing objects
 	// are updated through this method.
@@ -178,20 +151,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public void save(@NotNull Saveable obj) {
 		Map<String, String> insertionMap = generateInsertionMap(obj);
 		
-		StringBuilder stmtBuilder = new StringBuilder("UPDATE ").append(obj.getSQLTable().toUpperCase()).append(" SET ");
+		String upsertStmt = sqlAdapter.upsertStatement(TownySettings.getSQLTablePrefix() + obj.getSQLTable(),
+														insertionMap);
 		
-		// Convert the map into the statement
-		// Depending on performance, we may want to remove the stream
-		String valueBuilder = insertionMap.entrySet().stream()
-							.map(e -> e.getKey() + " = " + e.getValue())
-							.collect(Collectors.joining(", "));
-		
-		stmtBuilder.append(valueBuilder);
-		stmtBuilder.append(" WHERE uniqueIdentifier = '")
-					.append(obj.getUniqueIdentifier().toString())
-					.append("'");
-		
-		sqlHandler.executeUpdate(stmtBuilder.toString(), "Error updating object " + obj.getName());
+		sqlHandler.executeUpdate(upsertStmt, "Error updating object " + obj.getName());
 		saveOneToManyRelationships(obj);
 	}
 	
@@ -257,7 +220,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		Validate.notNull(obj);
 
 		// Check cache.
-		List<Field> fields = fieldRelCache.get(obj.getClass());
+		List<Field> fields = fieldOneToManyCache.get(obj.getClass());
 
 		if (fields != null) {
 			return fields;
@@ -274,7 +237,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 			// Strong condition
 			try {
-				Validate.isTrue(ReflectionUtil.isArrayType(field.get(obj)),
+				Validate.isTrue(ReflectionUtil.isIterableType(field.get(obj)),
 					"The OneToMany annotation for field " + field.getName() +
 						" in " + obj.getClass() + " is not a List or primitive array type.");
 			} catch (IllegalAccessException e) {
@@ -291,7 +254,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 
 		// Cache result.
-		fieldRelCache.putIfAbsent(obj.getClass(), fields);
+		fieldOneToManyCache.putIfAbsent(obj.getClass(), fields);
 
 		return fields;
 	}

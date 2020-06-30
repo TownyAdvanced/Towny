@@ -55,12 +55,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 	}
 
-	// Flatfile doesn't need this specification, so can just forward it to the regular save method.
-	@Override
-	public void saveNew(@NotNull Saveable obj) {
-		save(obj);
-	}
-
 	@Override
 	public void save(@NotNull Saveable obj) {
 		// Validation/fail-fast safety

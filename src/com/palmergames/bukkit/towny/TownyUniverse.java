@@ -355,7 +355,7 @@ public class TownyUniverse {
 		}
 
 		Resident newResident = new Resident(playerID, filteredName);
-		getDatabaseHandler().saveNew(newResident);
+		newResident.save();
 
 		residents.put(playerID, newResident);
 		residentNamesMap.put(filteredName.toLowerCase(), newResident);
@@ -378,7 +378,7 @@ public class TownyUniverse {
 		}
     	
     	Resident npc = new Resident(npcID, name);
-		getDatabaseHandler().saveNew(npc);
+    	npc.save();
     	
     	residents.put(npcID, npc);
     	residentNamesMap.put(name.toLowerCase(), npc);
@@ -587,7 +587,7 @@ public class TownyUniverse {
 		Town newTown = new Town(UUID.randomUUID(), filteredName);
 
 		// Save town
-		getDatabaseHandler().saveNew(newTown);
+		newTown.save();
 
 		// Add town to memory.
 		towns.put(newTown.getUniqueIdentifier(), newTown);
@@ -780,7 +780,7 @@ public class TownyUniverse {
 		Nation newNation = new Nation(UUID.randomUUID(), filteredName);
 		
 		// Save nation
-		getDatabaseHandler().saveNew(newNation);
+		newNation.save();
 		
 		// Add nation to memory
 		nations.put(newNation.getUniqueIdentifier(), newNation);
