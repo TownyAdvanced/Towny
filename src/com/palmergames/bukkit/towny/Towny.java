@@ -273,8 +273,10 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		if (!TownySettings.getUUIDPercent().equals("100%")) {
-			TNUPlayerMapImporter.loadTNUPlayermap();
-			TownyTimerHandler.toggleGatherResidentUUIDTask(true);		
+			if (TownySettings.isGatheringResidentUUIDS()) {
+				TNUPlayerMapImporter.loadTNUPlayermap();
+				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+			}
 			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
 			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
