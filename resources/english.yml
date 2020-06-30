@@ -1139,12 +1139,14 @@ msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns 
 msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
 
 #Added in 0.84
-status_bank_bankrupt: '&2Bank: &a-%s &c(BANKRUPT)'
+status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
 msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
 msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay taxes and has gone bankrupt.'
 msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
+msg_town_destroyed_by_nation_tax: '&b%s couldn''t pay taxes and has fallen.'
+msg_town_destroyed_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have fallen: '
 msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
@@ -1188,8 +1190,6 @@ msg_siege_war_banner_control_gained_by_attacker: '&6[War]&b Siege on %s > The at
 msg_siege_war_banner_control_gained_by_defender: '&6[War]&b Siege on %s > The defenders have gained banner control.'
 msg_siege_war_nation_refund_available: "A nation refund of %s is now available to you. It can be claimed using '/n refund'"
 msg_siege_war_nation_refund_claimed: "You have claimed the nation refund of %s."
-msg_town_destroyed_by_nation_tax: '&b%s couldn''t pay taxes and has fallen.'
-msg_town_destroyed_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have fallen: '
 
 #Siege war error message
 #Town Toggling
@@ -1287,6 +1287,7 @@ msg_attackers: '&aAttackers'
 msg_defenders: '&aDefenders'
 
 #Town Ruins
+#Added in ?????
 admin_panel_4: 'Run the new hour code'
 msg_newhour_success: 'newhour command executed successfully'
 town_help_12: 'Reclaim your town from a ruined state.'

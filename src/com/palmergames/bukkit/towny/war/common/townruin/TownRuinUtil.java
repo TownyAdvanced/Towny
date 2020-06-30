@@ -19,7 +19,7 @@ import java.util.ListIterator;
 
 
 /**
- * This class contains utility functions related to ruins
+ * This class contains utility functions related to the town ruin feature
  *
  * @author Goosius
  */
@@ -71,19 +71,25 @@ public class TownRuinUtil {
 			}
 		} catch (NotRegisteredException e) {
 		}
-
-		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
+		
+		//Set NPC mayor, otherwise mayor of ruined town would not be able to leave immediately
 		try {
 			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
 			adminCommand.adminSet(new String[]{"mayor", town.getName(), "npc"});
 		} catch (TownyException e) {
 			e.printStackTrace();
 		}
-
+		
 		//Remove siege if any
 		if (town.hasSiege())
 			townyUniverse.getDataSource().removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
-
+		
+		//Remove resident town ranks
+		for(Resident resident: town.getResidents()) {
+			resident.updatePerms();
+			townyUniverse.getDataSource().saveResident(resident);
+		}
+		
 		town.setRuined(true);
 		town.setRuinDurationRemainingHours(TownySettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);

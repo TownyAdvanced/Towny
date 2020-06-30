@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.Residence;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -563,7 +563,7 @@ public class TownyMessaging {
 		String tbColor1 = TownySettings.getLangString("townboard_message_colour_1");
 		String tbColor2 = TownySettings.getLangString("townboard_message_colour_2");
 		
-		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getTownBoard());
+		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**
@@ -576,7 +576,7 @@ public class TownyMessaging {
 		String nbColor1 = TownySettings.getLangString("nationboard_message_colour_1");
 		String nbColor2 = TownySettings.getLangString("nationboard_message_colour_2");
 
-		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getNationBoard());
+		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/**
@@ -586,7 +586,7 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 * @param modeRequired a resident mode required for the resident to receive the message.
 	 */
-	public static void sendMessageToMode(ResidentList residents, String msg, String modeRequired) {
+	public static void sendMessageToMode(Residence residents, String msg, String modeRequired) {
 
 		for (Resident resident : TownyAPI.getInstance().getOnlineResidents(residents))
 			if (resident.hasMode(modeRequired))

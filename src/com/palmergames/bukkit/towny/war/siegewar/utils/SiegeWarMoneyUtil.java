@@ -105,12 +105,18 @@ public class SiegeWarMoneyUtil {
 				//Town cannot afford payment
 				if (TownySettings.isTownBankruptcyEnabled()) {
 					//Take from town
-					if(town.isBankrupt()) {
-						actualPillageAmount = town.increaseTownDebt(fullPillageAmountForAllAttackingSoldiers, "Pillage by soldiers of " + nation.getName());
+					if(town.getAccount().isBankrupt()) {
+						//Town already bankrupt
+						boolean pillageSuccessful = town.getAccount().withdraw(fullPillageAmountForAllAttackingSoldiers, "Pillage by soldiers of " + nation.getName());
+						if(pillageSuccessful)
+							actualPillageAmount = fullPillageAmountForAllAttackingSoldiers;
+						else
+							actualPillageAmount = 0;
 					} else {
+						//We will bankrupt town now
 						double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
 						town.getAccount().setBalance(0, "Pillage by soldiers of " + nation.getName());
-						double actualDebtIncrease = town.increaseTownDebt(fullPillageAmountForAllAttackingSoldiers - prePaymentTownBankBalance, "Pillage by soldiers of " + nation.getName());
+						double actualDebtIncrease = town.getAccount().withdraw(fullPillageAmountForAllAttackingSoldiers - prePaymentTownBankBalance, "Pillage by soldiers of " + nation.getName());
 						actualPillageAmount = prePaymentTownBankBalance + actualDebtIncrease;
 						townNewlyBankrupted = true;
 					}

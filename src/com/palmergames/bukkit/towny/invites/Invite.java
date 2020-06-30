@@ -15,12 +15,12 @@ public interface Invite {
 	/**
 	 * @return - Resident, Town or Nation as a TownyEconomyObject.
 	 */
-	TownyInviteReceiver getReceiver();
+	InviteReceiver getReceiver();
 
 	/**
 	 * @return - Resident, Town or Nation as TownyEconomyObject.
 	 */
-	TownyInviteSender getSender();
+	InviteSender getSender();
 
 	/**
 	 * @throws TownyException - Sends errors back up to be processed by the caller.

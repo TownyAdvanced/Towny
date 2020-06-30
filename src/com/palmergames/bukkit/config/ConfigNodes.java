@@ -1283,6 +1283,11 @@ public enum ConfigNodes {
 			"economy.nation_rename_cost",
 			"0",
 			"# The cost of renaming a nation."),
+	ECO_DEBT_PREFIX(
+		"economy.debt_prefix",
+		"DEBT-",
+		"# The debt prefix for the debt eco account"
+	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
@@ -1850,7 +1855,6 @@ public enum ConfigNodes {
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
 			"# Only under affect when explosions_break_blocks is true."),
-
 	WAR_SIEGE(
 			"war.siege",
 			"",
@@ -2302,28 +2306,27 @@ public enum ConfigNodes {
 			"# Example 4:  An entry with 'compass|any' grants the feature to many players including builders/miners/lumberjacks."),
 
 	WAR_COMMON(
-		"war.common",
-		"",
-		"############################################################",
-		"# +------------------------------------------------------+ #",
-		"# |                 Common War settings                  | #",
-		"# |                                                      | #",
-		"# |  These configs are common to multiple war systems.   | #",
-		"# |                                                      | #",
-		"# |  Note: The town ruins settings are here,             | #",
-		"# |  because town ruin is critical to many war systems   | #",
-		"# |  												      | #",
-		"# +------------------------------------------------------+ #",
-		"############################################################",
-		""),
-	
-	//Town Ruins
+			"war.common",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                 Common War settings                  | #",
+			"# |                                                      | #",
+			"# |  These configs are common to multiple war systems.   | #",
+			"# |                                                      | #",
+			"# |  Note: The town ruins settings are here,             | #",
+			"# |  because town ruin is critical to many war systems   | #",
+			"# |  												      | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+
 	WAR_COMMON_TOWN_RUINS_ENABLED(
 			"war.common.town_ruins.enabled",
-			"true",
+			"false",
 			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
 			"# In this state, the town cannot be claimed, but can be looted.",
-			"# The feature prevents mayors from escaping attack/occupation, ",
+			"# This feature is important to war system, as it prevents mayors from escaping attack/occupation, ",
 			"# by deleting then quickly recreating their town."),
 	WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS(
 			"war.common.town_ruins.max_duration_hours",
@@ -2332,7 +2335,7 @@ public enum ConfigNodes {
 			"# After this time is reached, the town will be completely deleted."),
 	WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS(
 			"war.common.town_ruins.min_duration_hours",
-			"24",
+			"24", 	
 			"# This value determines the minimum duration in which a town must lie in ruins,",
 			"# before it can be reclaimed by a resident."),
 	WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED(

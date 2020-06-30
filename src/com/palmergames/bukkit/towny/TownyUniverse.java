@@ -383,7 +383,7 @@ public class TownyUniverse {
 		Town t = towns.get(townName);
 
 		if (t != null) {
-			return t.hasObjectGroupName(groupName);
+			return t.hasPlotGroupName(groupName);
 		}
 
 		return false;
@@ -399,7 +399,7 @@ public class TownyUniverse {
     	List<PlotGroup> groups = new ArrayList<>();
     	
 		for (Town town : towns.values()) {
-			if (town.hasObjectGroups()) {
+			if (town.hasPlotGroups()) {
 				groups.addAll(town.getPlotObjectGroups());
 			}
 		}
@@ -456,7 +456,7 @@ public class TownyUniverse {
 		PlotGroup newGroup = new PlotGroup(id, name, town);
 		
 		// Check if there is a duplicate
-		if (town.hasObjectGroupName(newGroup.getName())) {
+		if (town.hasPlotGroupName(newGroup.getName())) {
 			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
 			throw new AlreadyRegisteredException();
 		}

@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.Residence;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -50,8 +50,8 @@ public class TownyFormatter {
 
 	public static void initialize() {}
 
-	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
-		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
+	public static List<String> getFormattedOnlineResidents(String prefix, Residence residence, Player player) {
+		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residence);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 
@@ -336,7 +336,7 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
+			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getBoard()));
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
@@ -382,148 +382,159 @@ public class TownyFormatter {
 		// Permissions: B=rao D=--- S=ra-
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
 		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
-		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-		TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) +
-		TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
+				TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
+				TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
-		//Only display the remaining fields if town is not ruined
-		if(!town.isRuined()) {
+		List<String> outForNonRuinedTowns = new ArrayList<>();
 
-			// | Bank: 534 coins
-			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
-				String bankString = "";
-				if (town.isBankrupt()) {
-					bankString = String.format(TownySettings.getLangString("status_bank_bankrupt"), town.getDebtAccount().getHoldingFormattedBalance());
-				} else {
-					bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
-					if (town.hasUpkeep())
-						bankString += String.format(TownySettings.getLangString("status_bank_town2"), BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-					if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-						bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
-					bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
-				}
-				out.add(bankString);
-			}
+		// | Bank: 534 coins
+		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
+			String bankString = "";
+			boolean bankrupt = false;
 
-			// Mayor: MrSand | Bank: 534 coins
-			out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
-
-			// Assistants [2]: Sammy, Ginger
-			List<String> ranklist = new ArrayList<>();
-			getRanks(town, ranklist);
-			out.addAll(ranklist);
-
-			// Nation: Azur Empire
 			try {
-				out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "") + (town.isOccupied() ? " " + TownySettings.getLangString("msg_occupier") : ""));
-			} catch (TownyException ignored) {
+				bankrupt = town.getAccount().isBankrupt();
+			} catch (EconomyException e) {}
+
+			if(bankrupt) {
+				bankString = String.format(TownySettings.getLangString("status_bank_bankrupt"), town.getAccount().getHoldingFormattedBalance());
+			} else {
+				bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
+				if (town.hasUpkeep())
+					bankString += String.format(TownySettings.getLangString("status_bank_town2"), BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+					bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
+				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+			}
+			outForNonRuinedTowns.add(bankString);
+		}
+
+		// Mayor: MrSand | Bank: 534 coins
+		outForNonRuinedTowns.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
+
+		// Assistants [2]: Sammy, Ginger
+		List<String> ranklist = new ArrayList<>();
+		getRanks(town, ranklist);
+		outForNonRuinedTowns.addAll(ranklist);
+		
+		// Nation: Azur Empire
+		try {
+			outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "") + (town.isOccupied() ? " " + TownySettings.getLangString("msg_occupier") : ""));
+		} catch (TownyException ignored) {
+		}
+
+		// Residents [12]: James, Carry, Mason
+		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
+		if (residents.length > 34) {
+			String[] entire = residents;
+			residents = new String[36];
+			System.arraycopy(entire, 0, residents, 0, 35);
+			residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+		}
+		outForNonRuinedTowns.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents())));
+
+		outForNonRuinedTowns.addAll(ranklist);
+
+		outForNonRuinedTowns.addAll(getExtraFields(town));
+
+		//Countdown To Peacefulness Status Change: 3 days
+		if (TownySettings.getWarCommonPeacefulTownsEnabled()
+			&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
+			&& town.isPeaceful() != town.getDesiredPeacefulnessValue()) {
+			outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
+		}
+		outForNonRuinedTowns.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
+
+		//Siege  Info
+		if (TownySettings.getWarSiegeEnabled()) {
+
+			//Revolt Immunity Timer: 71.8 hours
+			if (TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
+				outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 			}
 
-			// Residents [12]: James, Carry, Mason
-			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
-			if (residents.length > 34) {
-				String[] entire = residents;
-				residents = new String[36];
-				System.arraycopy(entire, 0, residents, 0, 35);
-				residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
-			}
-			out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents())));
+			if (town.hasSiege()) {
+				Siege siege = town.getSiege();
 
-			//Countdown To Peacefulness Status Change: 3 days
-			if (TownySettings.getWarCommonPeacefulTownsEnabled()
-				&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
-				&& town.isPeaceful() != town.getDesiredPeacefulnessValue()) {
-				out.add(String.format(TownySettings.getLangString("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
-			}
-
-			//Siege  Info
-			if (TownySettings.getWarSiegeEnabled()) {
-
-				//Revolt Immunity Timer: 71.8 hours
-				if (TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
-					out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
-				}
-
-				if (town.hasSiege()) {
-					Siege siege = town.getSiege();
-
-					switch (siege.getStatus()) {
-						case IN_PROGRESS:
-							//Siege:
-							String siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
-							out.add(siegeStatus);
-
-							// > Banner XYZ: {2223,82,9877}
-							out.add(
-								String.format(
-									TownySettings.getLangString("status_town_siege_status_banner_xyz"),
-									siege.getFlagLocation().getBlockX(),
-									siege.getFlagLocation().getBlockY(),
-									siege.getFlagLocation().getBlockZ())
-							);
-
-							// > Attacker: Land of Empire (Nation) {+30}
-							int pointsInt = siege.getSiegePoints();
-							String pointsString = pointsInt > 0 ? "+" + pointsInt : "" + pointsInt;
-							out.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), siege.getAttackingNation().getFormattedName(), pointsString));
-
-							// >  Victory Timer: 5.3 hours
-							String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
-							out.add(victoryTimer);
-
-							// > Banner Control: Attackers [4] Killbot401x, NerfeyMcNerferson, WarCriminal80372
-							if (siege.getBannerControllingSide() == SiegeSide.NOBODY) {
-								out.add(String.format(TownySettings.getLangString("status_town_banner_control_nobody"), siege.getBannerControllingSide().getFormattedName()));
-							} else {
-								String[] bannerControllingResidents = getFormattedNames(siege.getBannerControllingResidents());
-								if (bannerControllingResidents.length > 34) {
-									String[] entire = bannerControllingResidents;
-									bannerControllingResidents = new String[36];
-									System.arraycopy(entire, 0, bannerControllingResidents, 0, 35);
-									bannerControllingResidents[35] = TownySettings.getLangString("status_town_reslist_overlength");
-								}
-								out.addAll(ChatTools.listArr(bannerControllingResidents, String.format(TownySettings.getLangString("status_town_banner_control"), siege.getBannerControllingSide().getFormattedName(), siege.getBannerControllingResidents().size())));
-							}
-							break;
-
-						case ATTACKER_WIN:
-						case DEFENDER_SURRENDER:
-							siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
-							String invadedYesNo = siege.isTownInvaded() ? TownySettings.getLangString("status_yes") : TownySettings.getLangString("status_no_green");
-							String plunderedYesNo = siege.isTownPlundered() ? TownySettings.getLangString("status_yes") : TownySettings.getLangString("status_no_green");
-							String invadedPlunderedStatus = String.format(TownySettings.getLangString("status_town_siege_invaded_plundered_status"), invadedYesNo, plunderedYesNo);
-							String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
-							out.add(siegeStatus);
-							out.add(invadedPlunderedStatus);
-							out.add(siegeImmunityTimer);
-							break;
-
-						case DEFENDER_WIN:
-						case ATTACKER_ABANDON:
-							siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
-							siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
-							out.add(siegeStatus);
-							out.add(siegeImmunityTimer);
-							break;
-
-						case PENDING_DEFENDER_SURRENDER:
-						case PENDING_ATTACKER_ABANDON:
-							siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
-							out.add(siegeStatus);
-							break;
-					}
-				} else {
-					if (TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
+				switch (siege.getStatus()) {
+					case IN_PROGRESS:
 						//Siege:
-						// > Immunity Timer: 40.8 hours
-						out.add(String.format(TownySettings.getLangString("status_town_siege_status"), ""));
-						out.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
-					}
+						String siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+						outForNonRuinedTowns.add(siegeStatus);
+
+						// > Banner XYZ: {2223,82,9877}
+						outForNonRuinedTowns.add(
+							String.format(
+								TownySettings.getLangString("status_town_siege_status_banner_xyz"),
+								siege.getFlagLocation().getBlockX(),
+								siege.getFlagLocation().getBlockY(),
+								siege.getFlagLocation().getBlockZ())
+						);
+
+						// > Attacker: Land of Empire (Nation) {+30}
+						int pointsInt = siege.getSiegePoints();
+						String pointsString = pointsInt > 0 ? "+" + pointsInt : "" + pointsInt;
+						outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_siege_status_besieger"), siege.getAttackingNation().getFormattedName(), pointsString));
+
+						// >  Victory Timer: 5.3 hours
+						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
+						outForNonRuinedTowns.add(victoryTimer);
+
+						// > Banner Control: Attackers [4] Killbot401x, NerfeyMcNerferson, WarCriminal80372
+						if (siege.getBannerControllingSide() == SiegeSide.NOBODY) {
+							outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_banner_control_nobody"), siege.getBannerControllingSide().getFormattedName()));
+						} else {
+							String[] bannerControllingResidents = getFormattedNames(siege.getBannerControllingResidents());
+							if (bannerControllingResidents.length > 34) {
+								String[] entire = bannerControllingResidents;
+								bannerControllingResidents = new String[36];
+								System.arraycopy(entire, 0, bannerControllingResidents, 0, 35);
+								bannerControllingResidents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+							}
+							outForNonRuinedTowns.addAll(ChatTools.listArr(bannerControllingResidents, String.format(TownySettings.getLangString("status_town_banner_control"), siege.getBannerControllingSide().getFormattedName(), siege.getBannerControllingResidents().size())));
+						}
+						break;
+
+					case ATTACKER_WIN:
+					case DEFENDER_SURRENDER:
+						siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+						String invadedYesNo = siege.isTownInvaded() ? TownySettings.getLangString("status_yes") : TownySettings.getLangString("status_no_green");
+						String plunderedYesNo = siege.isTownPlundered() ? TownySettings.getLangString("status_yes") : TownySettings.getLangString("status_no_green");
+						String invadedPlunderedStatus = String.format(TownySettings.getLangString("status_town_siege_invaded_plundered_status"), invadedYesNo, plunderedYesNo);
+						String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						outForNonRuinedTowns.add(siegeStatus);
+						outForNonRuinedTowns.add(invadedPlunderedStatus);
+						outForNonRuinedTowns.add(siegeImmunityTimer);
+						break;
+
+					case DEFENDER_WIN:
+					case ATTACKER_ABANDON:
+						siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+						siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						outForNonRuinedTowns.add(siegeStatus);
+						outForNonRuinedTowns.add(siegeImmunityTimer);
+						break;
+
+					case PENDING_DEFENDER_SURRENDER:
+					case PENDING_ATTACKER_ABANDON:
+						siegeStatus = String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+						outForNonRuinedTowns.add(siegeStatus);
+						break;
+				}
+			} else {
+				if (TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
+					//Siege:
+					// > Immunity Timer: 40.8 hours
+					outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_siege_status"), ""));
+					outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
 				}
 			}
 		}
 
-		out.addAll(getExtraFields(town));
+		if(!town.isRuined()) {
+			out.addAll(outForNonRuinedTowns);
+		}
 
 		out = formatStatusScreens(out);
 		return out;
@@ -570,7 +581,7 @@ public class TownyFormatter {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
 			try {
-				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
+				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
 			} catch (TownyException ignored) {
 			}
 		}		

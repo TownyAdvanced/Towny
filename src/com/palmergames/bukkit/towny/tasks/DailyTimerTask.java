@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -198,8 +199,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
 		
 		if (nation.getTaxes() > 0) {
-
-			List<String> localTownsNewlyBankrupt = new ArrayList<>();
+			
+			List<String> localNewlyBankruptTowns = new ArrayList<>();
 			List<String> localTownsRemovedFromNation = new ArrayList<>();
 			List<String> localTownsDestroyed = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
@@ -212,42 +213,64 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				/*
 				 * Only collect nation tax from this town if 
+				 * Only collect nation tax from this town if
 				 * - It exists
 				 * - It is not the capital
 				 * - It is not ruined
 				 * - It is not neutral
-				 * 
+				 *
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital()
+					if (town.isCapital() 
 						|| !town.hasUpkeep()
-						|| town.isRuined()
-						|| (TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful())) {
+						|| town.isRuined())
 						continue;
-					}
 
-					if (town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-						//Town can afford tax
-						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
-					} else {
-						//Town cannot afford tax
-						if (TownySettings.isTownBankruptcyEnabled()) {
-							//Take from town and pay to nation
-							if (town.isBankrupt()) {
-								double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes(), "Nation Tax");
-								nation.getAccount().collect(actualDebtIncrease, "Tax take from " + town.getName());
+					if (TownySettings.isTownBankruptcyEnabled()) {
+						//Bankruptcy enabled - Bankrupt town if it cannot pay
+						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+						if (town.getAccount().isBankrupt()) {
+							//town already bankrupt
+							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
+								//Town paid for tax using debt. Pay nation fully
+								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
+								TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 							} else {
-								double preTaxTownBankBalance = town.getAccount().getHoldingBalance();
-								town.getAccount().setBalance(0, "Nation tax");
-								double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes() - preTaxTownBankBalance, "Nation Tax");
-								double paymentToNation = preTaxTownBankBalance + actualDebtIncrease;
-								nation.getAccount().collect(paymentToNation, "Tax take from " + town.getName());
-								localTownsNewlyBankrupt.add(town.getName());
+								//Town did not pay, as this would put it over the debt ceiling.
+								//Pay up to the ceiling now
+								double actualTaxPayment = town.getAccount().getDebtCap() + town.getAccount().getHoldingBalance();
+								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
+								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
+								TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + actualTaxPayment);
 							}
 						} else {
-							//If town is occupied, destroy it, otherwise remove from nation
-							if (TownySettings.getWarSiegeEnabled() && town.isOccupied()) {
+							//town not bankrupt
+							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
+								//Town paid for tax using balance or debt. Pay nation fully
+								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
+								TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+							} else {
+								//Town did not pay, as this would put it over the debt ceiling.
+								//Pay up to the ceiling now
+								double actualTaxPayment = town.getAccount().getHoldingBalance() + town.getAccount().getDebtCap();
+								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
+								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
+								TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + actualTaxPayment);
+							}
+
+							if (town.getAccount().isBankrupt())
+								localNewlyBankruptTowns.add(town.getName());
+						}
+
+					} else {
+						/*Bankruptcy disabled
+						 * If town cannot pay & ruin enabled, destroy
+						 * If town cannot pay & ruin disabled, remove from nation
+						 */
+						if(!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
+							//Town cannot pay
+							if (TownySettings.getWarCommonTownRuinsEnabled()) {
 								townyUniverse.getDataSource().removeTown(town);
 								localTownsDestroyed.add(town.getName());
 							} else {
@@ -261,33 +284,34 @@ public class DailyTimerTask extends TownyTimerTask {
 								townyUniverse.getDataSource().saveTown(town);
 								townyUniverse.getDataSource().saveNation(nation);
 							}
+						} else {
+							//Town can pay
+							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 						}
 					}
-				}
+				} 
 			}
 
 			if(TownySettings.isTownBankruptcyEnabled()) {
-				if(localTownsNewlyBankrupt.size() > 0) {
-					if (localTownsNewlyBankrupt.size() == 1)
-						TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_town_bankrupt_by_nation_tax"), ChatTools.list(localTownsNewlyBankrupt)));
+				if(localNewlyBankruptTowns.size() > 0) {
+					if (localNewlyBankruptTowns.size() == 1)
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_bankrupt_by_nation_tax"), ChatTools.list(localNewlyBankruptTowns)));
 					else
-						TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsNewlyBankrupt, TownySettings.getLangString("msg_town_bankrupt_by_nation_tax_multiple")));
+						TownyMessaging.sendGlobalMessage(ChatTools.list(localNewlyBankruptTowns, TownySettings.getLangString("msg_town_bankrupt_by_nation_tax_multiple")));
 				}
 			} else {
 				if(localTownsRemovedFromNation.size() > 0) {
 					if (localTownsRemovedFromNation.size() == 1)
-						TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(localTownsNewlyBankrupt), "nation"));
+						TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(localNewlyBankruptTowns), "nation"));
 					else
-						TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsNewlyBankrupt, TownySettings.getLangString("msg_couldnt_pay_nation_tax_multiple")));
+						TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyBankruptTowns, TownySettings.getLangString("msg_couldnt_pay_nation_tax_multiple")));
 				}
-
-				if(TownySettings.getWarSiegeEnabled()) {
-					if (localTownsDestroyed.size() > 0) {
-						if (localTownsDestroyed.size() == 1)
-							TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_town_destroyed_by_nation_tax"), ChatTools.list(localTownsDestroyed)));
-						else
-							TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsDestroyed, TownySettings.getLangString("msg_town_destroyed_by_nation_tax_multiple")));
-					}
+				
+				if (localTownsDestroyed.size() > 0) {
+					if (localTownsDestroyed.size() == 1)
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_destroyed_by_nation_tax"), ChatTools.list(localTownsDestroyed)));
+					else
+						TownyMessaging.sendGlobalMessage(ChatTools.list(localTownsDestroyed, TownySettings.getLangString("msg_town_destroyed_by_nation_tax_multiple")));
 				}
 			}
 		}
@@ -459,30 +483,34 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName())) {
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined()) {
 
 				if (town.hasUpkeep() && !town.isRuined()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
 					double upkeepPenalty = TownySettings.getTownPenaltyUpkeepCost(town);
 					if (upkeepPenalty > 0 && upkeep > 0)
 						upkeep = upkeep + upkeepPenalty;
-				
+
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
 
-						if(!town.getAccount().pay(upkeep, "Town Upkeep")) {
-							if (TownySettings.isTownBankruptcyEnabled()) {
-								//Add debt to town
-								if(town.isBankrupt()) {
-									town.increaseTownDebt(upkeep, "Town Upkeep");
-								} else {
-									town.increaseTownDebt(upkeep - town.getAccount().getHoldingBalance(), "Town Upkeep");
-									town.getAccount().setBalance(0, "Town Upkeep");
+						if (TownySettings.isTownBankruptcyEnabled()) {
+							//Bankruptcy enabled - Bankrupt town if it cannot pay
+							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+							if(town.getAccount().isBankrupt()) {
+								//Town already bankrupt
+								town.getAccount().withdraw(upkeep, "Town Upkeep"); 
+							} else {
+								//Town not bankrupt at this point
+								town.getAccount().withdraw(upkeep, "Town Upkeep");
+								if(town.getAccount().isBankrupt()) {
 									newlyBankruptTowns.add(town.getName());
 								}
-							} else {
-								//Delete town
+							}
+						} else {
+							//Bankruptcy disabled - Remove town if it cannot pay
+							if(!town.getAccount().withdraw(upkeep, "Town Upkeep")) {
 								townyUniverse.getDataSource().removeTown(town);
 								newlyBankruptTowns.add(town.getName());
 							}
@@ -497,14 +525,14 @@ public class DailyTimerTask extends TownyTimerTask {
 
 							for (TownBlock townBlock : plots) {
 								if (townBlock.hasResident())
-									townBlock.getResident().getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									townBlock.getResident().getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 								else
-									town.getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									town.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 							}
 
 						} else {
 							// Not paying plot owners so just pay the town
-							town.getAccount().pay(upkeep, "Negative Town Upkeep");
+							town.getAccount().withdraw(upkeep, "Negative Town Upkeep");
 						}
 					}
 				}
@@ -557,12 +585,12 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (upkeep > 0) {
 					// Town is paying upkeep
 
-					if (!nation.getAccount().pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+					if (!nation.getAccount().withdraw(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 						townyUniverse.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {
-						if (!nation.getAccount().pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
+						if (!nation.getAccount().withdraw(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							try {
 								nation.setNeutral(false);
 							} catch (TownyException e) {
@@ -574,7 +602,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					
 				} else if (upkeep < 0) {
-					nation.getAccount().pay(upkeep, "Negative Nation Upkeep");
+					nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
 				}
 			}
 		}

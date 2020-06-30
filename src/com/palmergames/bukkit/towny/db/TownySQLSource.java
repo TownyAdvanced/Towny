@@ -901,7 +901,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 // }
                 // }
                 // }
-                town.setTownBoard(rs.getString("townBoard"));
+                town.setBoard(rs.getString("townBoard"));
                 line = rs.getString("tag");
                 if (line != null)
                     try {
@@ -1060,6 +1060,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     town.setRegistered(0);
                 }
 
+				town.setRuined(rs.getBoolean("ruined"));
+				town.setRuinDurationRemainingHours(rs.getInt("ruinDurationRemainingHours"));
+
 				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
@@ -1123,9 +1126,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 
                 line = rs.getString("nationBoard");
                 if (line != null)
-                    nation.setNationBoard(rs.getString("nationBoard"));
+                    nation.setBoard(rs.getString("nationBoard"));
                 else
-                	nation.setNationBoard("");
+                	nation.setBoard("");
 
 				line = rs.getString("mapColorHexCode");
 				if (line != null)
@@ -1759,7 +1762,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
             twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
-            twn_hm.put("townBoard", town.getTownBoard());
+            twn_hm.put("townBoard", town.getBoard());
             twn_hm.put("tag", town.getTag());
             twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
             twn_hm.put("bonus", town.getBonusBlocks());
@@ -1856,7 +1859,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("name", nation.getName());
             nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
-            nat_hm.put("nationBoard", nation.getNationBoard());
+            nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
@@ -1865,7 +1868,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
-            nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw() : "");
+            nat_hm.put("nationSpawn", nation.hasSpawn() ? nation.getSpawn().getWorld().getName() + "#" + nation.getSpawn().getX() + "#" + nation.getSpawn().getY() + "#" + nation.getSpawn().getZ() + "#" + nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw() : "");
             if (nation.hasValidUUID()){
                 nat_hm.put("uuid", nation.getUuid());
             } else {

@@ -1591,17 +1591,9 @@ public class TownySettings {
 		}
 		return time;
 	}
-	
-	public static boolean isNewDayDeleting0PlotTowns() {
-		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
-	}
 
 	public static long getHourInterval() {
 		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
-	}
-
-	public static long getShortInterval() {
-		return getSeconds(ConfigNodes.PLUGIN_SHORT_INTERVAL);
 	}
 
 	public static long getNewHourTime() {
@@ -1612,6 +1604,14 @@ public class TownySettings {
 			return hour;
 		}
 		return time;
+	}
+
+	public static boolean isNewDayDeleting0PlotTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
+
+	public static long getShortInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_SHORT_INTERVAL);
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
@@ -2994,7 +2994,6 @@ public class TownySettings {
 
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
-		
 	}
 
 	public static boolean isTownBankruptcyEnabled() {

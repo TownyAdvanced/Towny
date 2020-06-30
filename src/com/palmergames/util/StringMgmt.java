@@ -1,7 +1,10 @@
 package com.palmergames.util;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -12,19 +15,18 @@ import java.util.Map;
 
 public class StringMgmt {
 
-	public static String join(List<?> arr) {
-
-		return join(arr, " ");
+	public static String join(Collection<?> args) {
+		return join(args, " ");
 	}
 
-	public static String join(List<?> arr, String separator) {
-
-		if (arr == null || arr.size() == 0)
-			return "";
-		String out = arr.get(0).toString();
-		for (int i = 1; i < arr.size(); i++)
-			out += separator + arr.get(i);
-		return out;
+	public static String join(Collection<?> args, String separator) {
+		StringJoiner joiner = new StringJoiner(separator);
+		
+		for (Object o : args) {
+			joiner.add(o.toString());
+		}
+		
+		return joiner.toString();
 	}
 
 	public static String join(Object[] arr) {

@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
@@ -15,15 +15,15 @@ import java.util.List;
 
 public class TownJoinNationInvite implements Invite {
 
-	public TownJoinNationInvite(String directsender, TownyInviteSender sender, TownyInviteReceiver receiver) {
+	public TownJoinNationInvite(String directsender, InviteSender sender, InviteReceiver receiver) {
 		this.directsender = directsender;
 		this.sender = sender;
 		this.receiver = receiver;
 	}
 
 	private String directsender;
-	private TownyInviteReceiver receiver;
-	private TownyInviteSender sender;
+	private InviteReceiver receiver;
+	private InviteSender sender;
 
 	@Override
 	public String getDirectSender() {
@@ -31,12 +31,12 @@ public class TownJoinNationInvite implements Invite {
 	}
 
 	@Override
-	public TownyInviteReceiver getReceiver() {
+	public InviteReceiver getReceiver() {
 		return receiver;
 	}
 
 	@Override
-	public TownyInviteSender getSender() {
+	public InviteSender getSender() {
 		return sender;
 	}
 
