@@ -36,11 +36,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class SQLDatabaseHandler extends DatabaseHandler {
 	private final SQLHandler sqlHandler;
@@ -56,7 +54,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	public SQLDatabaseHandler(String databaseType) {
 		sqlHandler = new SQLHandler(databaseType);
-		sqlAdapter = SQLAdapter.adapt(databaseType);
+		sqlAdapter = SQLAdapter.from(databaseType);
 		
 		if (!sqlHandler.testConnection()) {
 			TownyMessaging.sendErrorMsg("Cannot establish connection for SQL db type " + databaseType + "!");
@@ -145,8 +143,6 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements);
 	}
 	
-	// New objects are saved through the saveNew method, while existing objects
-	// are updated through this method.
 	@Override
 	public void save(@NotNull Saveable obj) {
 		Map<String, String> insertionMap = generateInsertionMap(obj);
@@ -216,7 +212,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@NotNull
-	private final List<Field> getOneToManyFields(@NotNull Saveable obj) {
+	private List<Field> getOneToManyFields(@NotNull Saveable obj) {
 		Validate.notNull(obj);
 
 		// Check cache.

@@ -165,7 +165,7 @@ public class ReflectionUtil {
 	 * 
 	 * @param obj The object to extract for iteration
 	 * @return An iterator extracted from the given object.
-	 * @throws UnsupportedOperationException When object is not iterable
+	 * @throws UnsupportedOperationException When object is not an iterable type.
 	 */
 	public static @NotNull Iterator<?> resolveIterator(@NotNull Object obj) {
 		// Check if it's a primitive array.
@@ -186,15 +186,40 @@ public class ReflectionUtil {
 	
 	public static Type getTypeOfIterable(Field field) {
 		try {
+
+			if (field.getType().isArray()) {
+				return field.getType().getComponentType();
+			}
+			
 			ParameterizedType iterableType = (ParameterizedType) field.getGenericType();
 			Type[] typeArgs = iterableType.getActualTypeArguments();
 			if (typeArgs.length > 0)
 				return typeArgs[0];
-		} catch (Exception ex) {
+		} catch (Exception e) {
+			throw new UnsupportedOperationException(e.getMessage());
 		}
 
 		throw new UnsupportedOperationException("No type argument found for field " + field.getName());
-	}  
+	}
+
+	public static Type getTypeOfIterable(Class<?> clazz) {
+		try {
+			
+			if (clazz.isArray()) {
+				return clazz.getComponentType();
+			}
+			
+			ParameterizedType iterableType = ((ParameterizedType) clazz.getGenericSuperclass());
+			Type[] typeArgs = iterableType.getActualTypeArguments();
+			if (typeArgs.length > 0) {
+				return typeArgs[0];
+			}
+		} catch (Exception e) {
+			throw new UnsupportedOperationException(e.getMessage());
+		}
+
+		throw new UnsupportedOperationException("No type argument found for field " + clazz.getName());
+	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
