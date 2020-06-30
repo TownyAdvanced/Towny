@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -307,8 +308,7 @@ public class SpawnUtil {
 					//Block TP if the town town is near a siege zone
 					for (Siege siege : townyUniverse.getDataSource().getSieges()) {
 						if (siege.getStatus().isActive()
-							&& siege.getFlagLocation().getWorld().getName().equalsIgnoreCase(spawnLoc.getWorld().getName())
-							&& siege.getFlagLocation().distance(spawnLoc) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+							&& SiegeWarDistanceUtil.isInSiegeZone(spawnLoc, siege)) {
 							throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
 						}
 					}

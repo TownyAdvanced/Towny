@@ -36,10 +36,10 @@ public class SiegeWarClaimUtil {
 			&& TownySettings.getWarSiegeClaimingDisabledNearSiegeZones())
 		{
 			boolean nearActiveSiegeZone = false;
-			int claimDisableDistance = TownySettings.getWarSiegeZoneRadiusBlocks();
 			for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 				try {
-					if (siege.getStatus().isActive() && siege.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
+					if (siege.getStatus().isActive()
+						&& SiegeWarDistanceUtil.isInSiegeZone(player, siege)) {
 						nearActiveSiegeZone = true;
 						break;
 					}

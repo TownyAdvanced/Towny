@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -436,7 +437,7 @@ public class TownyEntityListener implements Listener {
 					//Was potion thrown near an active siegezone ?
 					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 						if (siege.getStatus().isActive()
-							&& event.getEntity().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+							&& SiegeWarDistanceUtil.isInSiegeZone(event.getEntity(), siege)) {
 							event.setCancelled(true);
 							if (event.getEntity().getShooter() instanceof Player){
 								TownyMessaging.sendErrorMsg(event.getEntity().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
@@ -1202,7 +1203,7 @@ public class TownyEntityListener implements Listener {
 					//Was potion splashed near an active siegezone ?
 					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
 						if (siege.getStatus().isActive()
-							&& event.getPotion().getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+							&& SiegeWarDistanceUtil.isInSiegeZone(event.getEntity(), siege)) {
 							event.setCancelled(true);
 							if (event.getPotion().getShooter() instanceof Player){
 								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));

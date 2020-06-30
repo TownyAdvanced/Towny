@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,10 @@ public class SiegeWarDistanceUtil {
 		double distanceToNearestSiegeZone = -1;
 		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 
+			if(!block.getLocation().getWorld().getName().equalsIgnoreCase(siege.getFlagLocation().getWorld().getName())) {
+				continue;
+			}
+
 			if (nearestSiege == null) {
 				nearestSiege = siege;
 				distanceToNearestSiegeZone = block.getLocation().distance(nearestSiege.getFlagLocation());
@@ -101,8 +107,7 @@ public class SiegeWarDistanceUtil {
 	public static boolean isLocationInActiveSiegeZone(Location location) {
 		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 			if(siege.getStatus().isActive()
-				&& location.getWorld() == siege.getFlagLocation().getWorld()
-				&& location.distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+				&& SiegeWarDistanceUtil.isInSiegeZone(location, siege)) {
 				return true;
 			}
 		}
@@ -171,5 +176,28 @@ public class SiegeWarDistanceUtil {
 			return false;
 		}
 		return worldsWithUndergroundBannerControlEnabled.contains(worldToCheck.getName());
+	}
+
+	public static boolean isInSiegeZone(Location location, Siege siege) {
+		return areLocationsClose(location, siege.getFlagLocation(), TownySettings.getWarSiegeZoneRadiusBlocks());
+	}
+
+	public static boolean isInSiegeZone(Entity entity, Siege siege) {
+		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getWarSiegeZoneRadiusBlocks());
+	}
+
+	public static boolean isCloseToLeader(Player player1, Player player2) {
+		return areLocationsClose(player1.getLocation(), player2.getLocation(), TownySettings.getWarSiegeLeadershipAuraRadiusBlocks());
+	}
+
+	public static boolean isInTimedPointZone(Entity entity, Siege siege) {
+		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getTownBlockSize());
+	}
+	
+	private static boolean areLocationsClose(Location location1, Location location2, int radius) {
+		if(!location1.getWorld().getName().equalsIgnoreCase(location2.getWorld().getName()))
+			return false;
+
+		return location1.distance(location2) < radius;
 	}
 }

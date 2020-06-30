@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -64,16 +65,12 @@ public class SiegeWarDeathController {
 			//Find nearest eligible siege
 			for (Siege candidateSiege : universe.getDataSource().getSieges()) {
 
-				//Is siege in different world
-				if(candidateSiege.getFlagLocation().getWorld() != deadPlayer.getWorld())
-					continue;
-
-				//Is siege out of range ?
-				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
-				if(candidateSiegeDistanceToPlayer > TownySettings.getWarSiegeZoneRadiusBlocks())
+				//Is siege in a different world
+				if(!deadPlayer.getLocation().getWorld().getName().equalsIgnoreCase(candidateSiege.getFlagLocation().getWorld().getName()))
 					continue;
 
 				//If siege further than the confirmed candidate ?
+				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
 				if(confirmedCandidateSiege != null && candidateSiegeDistanceToPlayer > confirmedCandidateDistanceToPlayer)
 					continue;
 

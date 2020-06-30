@@ -56,9 +56,8 @@ public class SiegeWarPointsUtil {
 	 * @return true if a player in in the timed point zone
 	 */
 	public static boolean isPlayerInTimedPointZone(Player player, Siege siege) {
-		return player.getLocation().getWorld() == siege.getFlagLocation().getWorld()
-				&& !TownyAPI.getInstance().hasTownBlock(player.getLocation())
-				&& player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getTownBlockSize();
+		return !TownyAPI.getInstance().hasTownBlock(player.getLocation())
+				&& SiegeWarDistanceUtil.isInTimedPointZone(player, siege);
 	}
 
 	/**
@@ -76,11 +75,7 @@ public class SiegeWarPointsUtil {
 
 		if(player != null) {
 			//Use location of online player
-			if(player.getLocation().getWorld() != siege.getFlagLocation().getWorld()) {
-				return false;
-			} else {
-				return player.getLocation().distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
-			}
+			return SiegeWarDistanceUtil.isInSiegeZone(player, siege);
 		} else {
 			//Use location of logged out player
 			Map<Resident, Location> recentlyLoggedOutResidentLocationMap = TownyUniverse.getInstance().getRecentlyLoggedOutResidentLocationMap();
@@ -89,7 +84,7 @@ public class SiegeWarPointsUtil {
 				if(loggedOutPlayerLocation.getWorld() != siege.getFlagLocation().getWorld()) {
 					return false;
 				} else {
-					return recentlyLoggedOutResidentLocationMap.get(resident).distance(siege.getFlagLocation()) < TownySettings.getWarSiegeZoneRadiusBlocks();
+					return SiegeWarDistanceUtil.isInSiegeZone(recentlyLoggedOutResidentLocationMap.get(resident), siege);
 				}
 			} else {
 				/*
@@ -298,7 +293,7 @@ public class SiegeWarPointsUtil {
 									&& otherResident.hasNation()
 									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
 									&& (otherResident.getTown().getNation() == resident.getTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(resident.getTown().getNation()))
-									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									friendlyLeaderNearby = true;
 									continue;
 								}
@@ -313,7 +308,7 @@ public class SiegeWarPointsUtil {
 									&& siege.getDefendingTown().hasNation()
 									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
 									&& (otherResident.getTown().getNation() == siege.getDefendingTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getDefendingTown().getNation()))
-									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									hostileLeaderNearby = true;
 									continue;
 								}
@@ -327,7 +322,7 @@ public class SiegeWarPointsUtil {
 									&& otherResident.getTown().hasNation()
 									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
 									&& (otherResident.getTown().getNation() == siege.getAttackingNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getAttackingNation()))
-									&& player.getLocation().distance(otherPlayer.getLocation()) < TownySettings.getWarSiegeLeadershipAuraRadiusBlocks()) {
+									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									hostileLeaderNearby = true;
 									continue;
 								}
