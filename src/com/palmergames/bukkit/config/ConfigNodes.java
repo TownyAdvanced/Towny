@@ -1932,10 +1932,10 @@ public enum ConfigNodes {
 			"true",
 			"# If true, then land cannot be claimed near a siege zone.",
 			"# This setting is generally considered critical, otherwise one side could wall off the siege zone."),
-	WAR_SIEGE_NON_RESIDENT_SPAWN_INTO_BESIEGED_TOWNS_DISABLED(
-			"war.siege.switches.non_resident_spawn_into_besieged_towns_disabled",
+	WAR_SIEGE_NON_RESIDENT_SPAWN_INTO_SIEGE_ZONES_OR_BESIEGED_TOWNS_DISABLED(
+			"war.siege.switches.non_resident_spawn_into_siegezones_or_besieged_towns_disabled",
 			"true",
-			"# If this setting is true, then only town residents are permitted to spawn into besieged towns.",
+			"# If this setting is true, then only town residents are permitted to spawn into siegezones OR besieged towns.",
 			"# This setting is recommended to:",
 			"# 1. Protect players from accidentally spawning into a warzone while unprepared.",
 			"# 2. Discourage 'fake' sieges, by making the automatic siege impact harsher.",
