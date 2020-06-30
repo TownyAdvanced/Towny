@@ -61,6 +61,7 @@ public class TypeAdapter<T> {
 		LoadContext loadContext = new LoadContext(databaseHandler);
 		return loadHandler.loadString(loadContext, str);
 	}
+	
 	public TypeAdapter(DatabaseHandler dataBaseHandler, LoadHandler<T> loadHandler, SaveHandler<T> saveHandler) {
 		this.databaseHandler = dataBaseHandler;
 		this.loadHandler = loadHandler;

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.Saveable;
@@ -48,7 +49,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	// Create files
 	static {
-		relationshipDir.mkdirs();
+		boolean mkdirRes = relationshipDir.mkdirs();
+		if (!mkdirRes) {
+			throw new UnsupportedOperationException("Required Directories could not be created.");
+		}
 	}
 
 	// Flatfile doesn't need this specification, so can just forward it to the regular save method.
@@ -59,7 +63,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public void save(@NotNull Saveable obj) {
-		// Validation safety
+		// Validation/fail-fast safety
 		Validate.notNull(obj);
 		Validate.notNull(obj.getSaveDirectory(), "You must specify a save path for class: " + obj.getClass().getName());
 		
@@ -96,7 +100,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 	
 	@Nullable
-	public <T> T load(File file, @NotNull Class<T> clazz) {
+	public <T> T load(@NotNull File file, @NotNull Class<T> clazz) {
+		Validate.notNull(clazz);
+		Validate.notNull(file);
+		
 		Constructor<T> objConstructor = null;
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
@@ -254,7 +261,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		// Make sure that a file wasn't given instead of a directory
 		if (!dir.isDirectory()) {
-			throw new UnsupportedOperationException("Object of type: " + clazz + " has save path is not a directory.");
+			throw new TownyRuntimeException("Object of type: " + clazz + " has save path is not a directory.");
 		}
 
 		Path path = Paths.get(dir.getPath());
@@ -275,8 +282,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				consumer.accept(loadedObj);
 			}
 		} catch (IOException e) {
-			// An I/O problem has occurred
-			e.printStackTrace();
+			throw new TownyRuntimeException(e.getMessage());
 		}
 	}
 
@@ -326,8 +332,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			try {
 				saveable = objConstructor.newInstance((Object) null);
 			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-				e.printStackTrace();
-				return null;
+				throw new RuntimeException("Error in instantiation of " + type);
 			}
 		}
 

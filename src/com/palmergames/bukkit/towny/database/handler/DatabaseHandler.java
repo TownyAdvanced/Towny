@@ -42,8 +42,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,12 +54,11 @@ import java.util.function.Consumer;
 /**
  * The object which is responsible for converting objects from one format to another and
  * saving the mentioned format.
- * 
- * @author Suneet Tipirneni (Siris)
  */
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Type, List<Field>> fieldOneToManyCache = new ConcurrentHashMap<>();
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -79,6 +80,50 @@ public abstract class DatabaseHandler {
 		
 		// Loads all the bukkit worlds.
 		loadWorlds();
+	}
+	
+	@NotNull
+	protected final List<Field> getOneToManyFields(@NotNull Saveable obj) {
+		Validate.notNull(obj);
+		
+		// Check cache.
+		List<Field> fields = fieldOneToManyCache.get(obj.getClass());
+		
+		if (fields != null) {
+			return fields;
+		}
+		
+		fields = new ArrayList<>();
+		for (Field field : ReflectionUtil.getNonTransientFields(obj)) {
+			
+			if (!field.isAnnotationPresent(OneToMany.class)) {
+				continue;
+			}
+			
+			field.setAccessible(true);
+			
+			// Strong condition
+			try {
+				Validate.isTrue(ReflectionUtil.isIterableType(field.get(obj)),
+					"The OneToMany annotation for field " + field.getName() +
+						" in " + obj.getClass() + " is not an iterable type.");
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			OneToMany rel = field.getAnnotation(OneToMany.class);
+			
+			if (rel != null) {
+				fields.add(field);
+			}
+			
+			field.setAccessible(false);
+		}
+		
+		// Cache result.
+		fieldOneToManyCache.putIfAbsent(obj.getClass(), fields);
+		
+		return fields;
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -262,7 +307,7 @@ public abstract class DatabaseHandler {
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation", "unused"})
 	public void upgrade() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
@@ -276,6 +321,19 @@ public abstract class DatabaseHandler {
 		save(towns);
 		save(townBlocks);
 	}
+	
+	protected void safeFieldIterate(Iterable<Field> itr, Consumer<Field> forEach) {
+		itr.forEach((field -> {
+			
+			if (field == null) {
+				return;
+			}
+			
+			field.setAccessible(true);
+			forEach.accept(field);
+			field.setAccessible(false);
+		}));
+	}
 
 	// ---------- DB operation Methods ----------
 
@@ -285,7 +343,6 @@ public abstract class DatabaseHandler {
 	 * @param obj The object to save
 	 */
 	public abstract void saveNew(@NotNull Saveable obj);
-	
 	
 	/**
 	 * Saves the given object to the DB.

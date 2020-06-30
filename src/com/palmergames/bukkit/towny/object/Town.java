@@ -132,10 +132,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		else {
 			addTownBlockMap(townBlock);
 			townBlock.setTown(this);
-			if (townBlocks.size() == 1 && !hasHomeBlock())
+			if (townBlocks.size() < 2 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
-				} catch (TownyException ignored) {}
+				} catch (TownyException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 

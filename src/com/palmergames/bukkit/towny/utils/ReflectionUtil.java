@@ -156,8 +156,8 @@ public class ReflectionUtil {
 		|| type == byte.class || type == Byte.class;
 	}
 	
-	public static boolean isArrayType(Object obj) {
-		return obj instanceof List || obj.getClass().isArray();
+	public static boolean isIterableType(Object obj) {
+		return obj instanceof Iterable || obj.getClass().isArray();
 	}
 
 	/**
