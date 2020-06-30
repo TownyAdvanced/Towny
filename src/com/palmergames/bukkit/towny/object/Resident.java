@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
-	@OneToMany(to = Resident.class, tableName = "friends")
+	@OneToMany(tableName = "friends")
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class)
