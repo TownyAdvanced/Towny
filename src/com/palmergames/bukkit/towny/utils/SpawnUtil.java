@@ -5,6 +5,7 @@ import java.util.List;
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -284,24 +285,36 @@ public class SpawnUtil {
 			}
 		}
 
-		//Prevent non-residents from spawning into besieged towns
+		//Prevent spawning into siegezones OR besieged towns except by residents
 		if (!isTownyAdmin 
 			&& TownySettings.getWarSiegeEnabled() 
-			&& TownySettings.getWarSiegeNonResidentSpawnIntoBesiegedTownsDisabled()) {
+			&& TownySettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
 
 			try {
+				//Do not block TP if the siegeloc is the resident's town
 				String townNameAtSpawnLocation = TownyAPI.getInstance().getTownName(spawnLoc);
-				Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
-				if(townAtSpawnLocation.hasSiege()
-						&& townAtSpawnLocation.getSiege().getStatus().isActive()
-						&& (!resident.hasTown() || resident.getTown() != townAtSpawnLocation)
-					) {
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_besieged_town")));
+				if(!(townNameAtSpawnLocation != null
+					&& resident.hasTown() 
+					&& resident.getTown().getName().equalsIgnoreCase(townNameAtSpawnLocation))) {
+
+					//Block TP if the town is besieged
+					Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
+					if (townAtSpawnLocation.hasSiege()
+						&& townAtSpawnLocation.getSiege().getStatus().isActive()) {
+						throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
 					}
-			} catch (NullPointerException e) {
-				//No town found. Continue.
-			} catch (NotRegisteredException e) {
-				//No town found. Continue.
+
+					//Block TP if the town town is near a siege zone
+					for (Siege siege : townyUniverse.getDataSource().getSieges()) {
+						if (siege.getStatus().isActive()
+							&& siege.getFlagLocation().getWorld().getName().equalsIgnoreCase(spawnLoc.getWorld().getName())
+							&& siege.getFlagLocation().distance(spawnLoc) < TownySettings.getWarSiegeZoneRadiusBlocks()) {
+							throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
+						}
+					}
+				}
+			} catch (NotRegisteredException e) { 
+				//No exception expected due to logic
 			}
 		}
 
