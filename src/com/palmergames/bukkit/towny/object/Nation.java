@@ -43,9 +43,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	//private List<Resident> assistants = new ArrayList<Resident>();
 	private transient List<Town> towns = new ArrayList<>();
 	
-	@OneToMany(tableName = "allies", to = Nation.class)
+	@OneToMany(tableName = "allies")
 	private List<Nation> allies = new ArrayList<>();
-	@OneToMany(tableName = "enemies", to = Nation.class)
+	@OneToMany(tableName = "enemies")
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private double taxes, spawnCost;

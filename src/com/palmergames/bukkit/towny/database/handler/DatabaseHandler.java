@@ -44,6 +44,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -57,7 +58,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
 	private final ConcurrentHashMap<Type, TypeAdapter<?>> registeredAdapters = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Type, List<Field>> fieldRelCache = new ConcurrentHashMap<>();
 	
 	public DatabaseHandler() {
 		// Register ALL default handlers.
@@ -79,50 +79,6 @@ public abstract class DatabaseHandler {
 		
 		// Loads all the bukkit worlds.
 		loadWorlds();
-	}
-	
-	@NotNull
-	protected final List<Field> getOneToManyFields(@NotNull Saveable obj) {
-		Validate.notNull(obj);
-		
-		// Check cache.
-		List<Field> fields = fieldRelCache.get(obj.getClass());
-		
-		if (fields != null) {
-			return fields;
-		}
-		
-		fields = new ArrayList<>();
-		for (Field field : ReflectionUtil.getNonTransientFields(obj)) {
-			
-			if (!field.isAnnotationPresent(OneToMany.class)) {
-				continue;
-			}
-			
-			field.setAccessible(true);
-			
-			// Strong condition
-			try {
-				Validate.isTrue(ReflectionUtil.isArrayType(field.get(obj)),
-					"The OneToMany annotation for field " + field.getName() +
-						" in " + obj.getClass() + " is not a List or primitive array type.");
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-
-			OneToMany rel = field.getAnnotation(OneToMany.class);
-			
-			if (rel != null) {
-				fields.add(field);
-			}
-			
-			field.setAccessible(false);
-		}
-		
-		// Cache result.
-		fieldRelCache.putIfAbsent(obj.getClass(), fields);
-		
-		return fields;
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -266,6 +222,21 @@ public abstract class DatabaseHandler {
 	// This method is in this class because TypeAdapter is not exposed
 	protected final String getSQLColumnDefinition(Field field) {
 		Class<?> type = field.getType();
+		
+		if (type == String.class) {
+			SQLString sqlAnnotation = field.getAnnotation(SQLString.class);
+
+			if (sqlAnnotation != null) {
+				SQLStringType sqlType = sqlAnnotation.stringType();
+				return sqlType.getColumnName() +
+					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
+			}
+		}
+		
+		return getSQLColumnDefinition(type);
+	}
+
+	protected final String getSQLColumnDefinition(Type type) {
 		if (type == int.class || type == Integer.class) {
 			return "INTEGER";
 		} else if (type == boolean.class || type == Boolean.class) {
@@ -281,22 +252,13 @@ public abstract class DatabaseHandler {
 		} else if (type == byte.class || type == Byte.class) {
 			return "BIT(8)";
 		}
-		
+
 		TypeAdapter<?> typeAdapter = getAdapter(type);
-		
+
 		if (typeAdapter != null) {
 			return typeAdapter.getSQLColumnDefinition();
 		}
-		else if (type == String.class) {
-			SQLString sqlAnnotation = field.getAnnotation(SQLString.class);
 
-			if (sqlAnnotation != null) {
-				SQLStringType sqlType = sqlAnnotation.stringType();
-				return sqlType.getColumnName() +
-					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
-			}
-		}
-		
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
@@ -313,19 +275,6 @@ public abstract class DatabaseHandler {
 		save(nations);
 		save(towns);
 		save(townBlocks);
-	}
-	
-	protected void safeFieldIterate(Iterable<Field> itr, Consumer<Field> forEach) {
-		itr.forEach((field -> {
-			
-			if (field == null) {
-				return;
-			}
-			
-			field.setAccessible(true);
-			forEach.accept(field);
-			field.setAccessible(false);
-		}));
 	}
 
 	// ---------- DB operation Methods ----------
@@ -376,8 +325,6 @@ public abstract class DatabaseHandler {
 			save(obj);
 		}
 	}
-	
-	abstract void saveRelationships(Saveable obj);
 	
 	// These methods will differ greatly between inheriting classes,
 	// hence they are abstract.

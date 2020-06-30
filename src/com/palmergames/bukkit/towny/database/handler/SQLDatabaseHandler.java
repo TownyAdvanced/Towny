@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	
 	// This map allows us to cache a stub object for quicker loading.
 	private final Map<Class<?>, String> tableNameCache = new HashMap<>();
+
+	// Store the fields for OneToMany relationships
+	private final ConcurrentHashMap<Type, List<Field>> fieldRelCache = new ConcurrentHashMap<>();
 	
 	// TODO Queue creation/saves/deletes and process them async
 	
@@ -107,26 +111,35 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		List<String> updateStatements = new ArrayList<>();
 		
 		final String tableTemplate = "CREATE TABLE IF NOT EXISTS " + TownySettings.getSQLTablePrefix() + "%s" + 
-			"(" +
-			"containerUUID VARCHAR(36), referenceUUID VARCHAR (36)," +
-			"FOREIGN KEY (containerUUID) REFERENCES " + objTableName + "(uniqueIdentifier) ON DELETE CASCADE," +
-			"FOREIGN KEY (referenceUUID) REFERENCES %s(uniqueIdentifier) ON DELETE CASCADE" +
-			");";
+			"(containerUUID VARCHAR(36), referenceValue %s," +
+			"FOREIGN KEY (containerUUID) REFERENCES " + objTableName + "(uniqueIdentifier) ON DELETE CASCADE" +
+			"%s);";
 		
 		List<Field> fields = ReflectionUtil.getNonTransientFields(objectClazz, f -> f.isAnnotationPresent(OneToMany.class));
 
 		for (Field field : fields) {
 			OneToMany annotation = field.getAnnotation(OneToMany.class);
 			
-			Class<?> parameterizedType = ReflectionUtil.getTypeOfIterable(field);
-			String typeTableName = tableNameCache.get(parameterizedType);
+			Type parameterizedType = ReflectionUtil.getTypeOfIterable(field);
 			
-			if (typeTableName != null) {
-				updateStatements.add(String.format(tableTemplate, annotation.tableName(), typeTableName));
+			String columnDef = getSQLColumnDefinition(parameterizedType);
+			
+			String foreignKey = "";
+			
+			// Instance of Savable
+			if(Saveable.class.isAssignableFrom((Class<?>) parameterizedType)) {
+				String typeTableName = tableNameCache.get(parameterizedType);
+
+				if (typeTableName != null) {
+					foreignKey = ", FOREIGN KEY (referenceValue) REFERENCES " +
+						typeTableName + "(uniqueIdentifier) ON DELETE CASCADE";
+				}
+				else {
+					TownyMessaging.sendErrorMsg("Cannot get type table name of class " + ((Class<?>) parameterizedType).getName());
+				}
 			}
-			else {
-				TownyMessaging.sendErrorMsg("Cannot get type table name of class " + parameterizedType.getName());
-			}
+			
+			updateStatements.add(String.format(tableTemplate, annotation.tableName(), columnDef, foreignKey));
 		}
 		
 		sqlHandler.executeUpdatesError("Cannot create relationships for " + objectClazz.getName(), updateStatements);
@@ -199,44 +212,87 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public boolean delete(@NotNull Saveable obj) {
 		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
-
-	// TODO Not all OneToMany relationships are between savables
-	@Override
+	
 	protected void saveRelationships(final Saveable obj) {
 		// For each relationship
 		// We want to delete all rows in that relationship table with the parent id.
 		// Then we want to insert the collection back into the table.
 		
-		// Loop that applies the method to each relationship
-		// Create execution block.
-		final Consumer<Field> consumer = (field) -> {
+		for (Field field : getOneToManyFields(obj)) {
+			if (field == null)
+				continue;
+
+			// Get the table name of the relationship
 			String tableName = field.getAnnotation(OneToMany.class).tableName();
 			tableName = TownySettings.getSQLTablePrefix() + tableName;
-			
+
 			List<String> updateStatements = new ArrayList<>();
-			
+
 			// Delete all rows that match with the parent object
 			updateStatements.add("DELETE FROM " + tableName + " WHERE containerUUID = '" + obj.getUniqueIdentifier() + "'");
-			
+
 			// Perform re-insertions
 			try {
-				Iterator<Saveable> itr = ReflectionUtil.resolveIterator(field.get(obj), Saveable.class);
-				
-				itr.forEachRemaining(saveable -> 
-					updateStatements.add("INSERT INTO (containerUUID, referenceUUID) VALUES (" + obj.getUniqueIdentifier() + ","
-					+ saveable.getUniqueIdentifier() + ");"));
-				
+				field.setAccessible(true);
+				Iterator<?> itr = ReflectionUtil.resolveIterator(field.get(obj));
+
+				itr.forEachRemaining(refVal ->
+					updateStatements.add("INSERT INTO (containerUUID, referenceValue) VALUES (" + obj.getUniqueIdentifier() + ", "
+						+ getConvertedValue(refVal.getClass(), refVal) + ");"));
+				field.setAccessible(false);
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			
+
 			if (!updateStatements.isEmpty())
 				// Execute the update
 				sqlHandler.executeUpdatesError("Error storing OneToMany relationship for field " + field.getName(),
 					updateStatements);
-		};
-		
-		safeFieldIterate(getOneToManyFields(obj), consumer);
+		}
+	}
+
+	@NotNull
+	private final List<Field> getOneToManyFields(@NotNull Saveable obj) {
+		Validate.notNull(obj);
+
+		// Check cache.
+		List<Field> fields = fieldRelCache.get(obj.getClass());
+
+		if (fields != null) {
+			return fields;
+		}
+
+		fields = new ArrayList<>();
+		for (Field field : ReflectionUtil.getNonTransientFields(obj)) {
+
+			if (!field.isAnnotationPresent(OneToMany.class)) {
+				continue;
+			}
+
+			field.setAccessible(true);
+
+			// Strong condition
+			try {
+				Validate.isTrue(ReflectionUtil.isArrayType(field.get(obj)),
+					"The OneToMany annotation for field " + field.getName() +
+						" in " + obj.getClass() + " is not a List or primitive array type.");
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			OneToMany rel = field.getAnnotation(OneToMany.class);
+
+			if (rel != null) {
+				fields.add(field);
+			}
+
+			field.setAccessible(false);
+		}
+
+		// Cache result.
+		fieldRelCache.putIfAbsent(obj.getClass(), fields);
+
+		return fields;
 	}
 
 	private <T extends TownyObject> void alterTownyObjectTable(Class<T> objectClazz) {
@@ -277,7 +333,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return columnNames;
 	}
 	
-	private <T> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {
+	private <T extends Saveable> T load(ResultSet rs, @NotNull Class<T> clazz) throws SQLException {
 		Constructor<T> objConstructor = null;
 		try {
 			objConstructor = clazz.getConstructor(UUID.class);
@@ -524,30 +580,34 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		Map<String, String> insertionMap = new HashMap<>((contextMap.size() * 4) / 3);
 		for (Map.Entry<String, ObjectContext> entry : contextMap.entrySet()) {
 			String field = entry.getKey();
-			Type type = entry.getValue().getType();
-			Object value = entry.getValue().getValue();
-			String insertionValue;
-
-			if (ReflectionUtil.isPrimitive(type)) {
-				if (type == boolean.class || type == Boolean.class) { // Is this the right comparison??
-					// Booleans are 1 and 0 in SQL not true or false
-					insertionValue = ((boolean) value) ? "1" : "0";
-				}
-				// It's a primitive so to string should(tm) be fine.
-				else {
-					insertionValue = value.toString();
-				}
-			} else {
-				insertionValue = toStoredString(value, type);
-				// Sanitize the input.
-				// Replace " with \"
-				insertionValue = insertionValue.replace("\"", "\\\"");
-				// Wrap with double quotes
-				insertionValue = "\"" + insertionValue + "\"";
-			}
+			String insertionValue = getConvertedValue(entry.getValue().getType(),
+													entry.getValue().getValue());
 			
 			insertionMap.put(field, insertionValue);
 		}
 		return insertionMap;
+	}
+	
+	private String getConvertedValue(Type type, Object value) {
+		String insertionValue;
+		if (ReflectionUtil.isPrimitive(type)) {
+			if (type == boolean.class || type == Boolean.class) { // Is this the right comparison??
+				// Booleans are 1 and 0 in SQL not true or false
+				insertionValue = ((boolean) value) ? "1" : "0";
+			}
+			// It's a primitive so to string should(tm) be fine.
+			else {
+				insertionValue = value.toString();
+			}
+		} else {
+			insertionValue = toStoredString(value, type);
+			// Sanitize the input.
+			// Replace " with \"
+			insertionValue = insertionValue.replace("\"", "\\\"");
+			// Wrap with double quotes
+			insertionValue = "\"" + insertionValue + "\"";
+		}
+		
+		return insertionValue;
 	}
 }

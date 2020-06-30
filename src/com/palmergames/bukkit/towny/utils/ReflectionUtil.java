@@ -164,45 +164,32 @@ public class ReflectionUtil {
 	 * Takes an arbitrary object and tries to extract it's iterable type.
 	 * 
 	 * @param obj The object to extract for iteration
-	 * @param ofType The generic type/component type of the iterable type, for example 
-	 *               if you want code <code>List&lt;String&gt;</code>, the ofType would be String.   
-	 * @param <T> Any type
 	 * @return An iterator extracted from the given object.
-	 * @throws UnsupportedOperationException When object either not 1) not iterable, or 2) not the requested 
-	 * parameter type.
+	 * @throws UnsupportedOperationException When object is not iterable
 	 */
-	@SuppressWarnings("unchecked")
-	public static @NotNull <T> Iterator<T> resolveIterator(@NotNull Object obj, Class<T> ofType) {
+	public static @NotNull Iterator<?> resolveIterator(@NotNull Object obj) {
 		// Check if it's a primitive array.
 		if (obj.getClass().isArray()) {
-			
-			if (obj.getClass().getComponentType() != ofType) {
-				throw new UnsupportedOperationException("Array is not of type: " + ofType);
-			}
-			
-			// Cast to primitive array.
-			T[] temp = (T[])obj;
-			
-			// Return iterator.
-			return (Arrays.asList(temp)).iterator();
+			Object[] array = (Object[]) obj;
+			return (Arrays.asList(array)).iterator();
 		}
 		else if (obj instanceof Iterable) {
 			try {
-				return (Iterator<T>) ((Iterable<?>)obj).iterator();
+				return ((Iterable<?>)obj).iterator();
 			} catch (ClassCastException e) {
-				throw new UnsupportedOperationException("Iterable is not of type: " + ofType);
+				throw new UnsupportedOperationException("Iterable is not a valid type!");
 			}
 		}
-		
+
 		throw new UnsupportedOperationException("The given type: " + obj.getClass() + ", is not iterable.");
 	}
 	
-	public static Class<?> getTypeOfIterable(Field field) {
+	public static Type getTypeOfIterable(Field field) {
 		try {
 			ParameterizedType iterableType = (ParameterizedType) field.getGenericType();
 			Type[] typeArgs = iterableType.getActualTypeArguments();
 			if (typeArgs.length > 0)
-				return (Class<?>) typeArgs[0];
+				return typeArgs[0];
 		} catch (Exception ex) {
 		}
 
