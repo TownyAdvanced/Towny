@@ -182,7 +182,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		// We want to delete all rows in that relationship table with the parent id.
 		// Then we want to insert the collection back into the table.
 		
-		for (Field field : getOneToManyFields(obj)) {
+		for (Field field : getOneToManyFields(obj.getClass())) {
 			if (field == null)
 				continue;
 
@@ -216,45 +216,31 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@NotNull
-	private final List<Field> getOneToManyFields(@NotNull Saveable obj) {
-		Validate.notNull(obj);
+	private final List<Field> getOneToManyFields(@NotNull Class<? extends Saveable> clazz) {
+		Validate.notNull(clazz);
 
 		// Check cache.
-		List<Field> fields = fieldOneToManyCache.get(obj.getClass());
+		List<Field> fields = fieldOneToManyCache.get(clazz);
 
 		if (fields != null) {
 			return fields;
 		}
 
 		fields = new ArrayList<>();
-		for (Field field : ReflectionUtil.getNonTransientFields(obj)) {
-
-			if (!field.isAnnotationPresent(OneToMany.class)) {
-				continue;
-			}
-
-			field.setAccessible(true);
-
-			// Strong condition
-			try {
-				Validate.isTrue(ReflectionUtil.isIterableType(field.get(obj)),
-					"The OneToMany annotation for field " + field.getName() +
-						" in " + obj.getClass() + " is not a List or primitive array type.");
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+		for (Field field : ReflectionUtil.getNonTransientFields(clazz, f -> f.isAnnotationPresent(OneToMany.class))) {
+			Validate.isTrue(ReflectionUtil.isIterableType(field.getClass()),
+				"The OneToMany annotation for field " + field.getName() +
+					" in " + clazz + " is not a List or primitive array type.");
 
 			OneToMany rel = field.getAnnotation(OneToMany.class);
 
 			if (rel != null) {
 				fields.add(field);
 			}
-
-			field.setAccessible(false);
 		}
 
 		// Cache result.
-		fieldOneToManyCache.putIfAbsent(obj.getClass(), fields);
+		fieldOneToManyCache.putIfAbsent(clazz, fields);
 
 		return fields;
 	}
@@ -324,21 +310,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 			String fieldName = field.getName();
 
-			if (values.get(fieldName) == null) {
-				continue;
-			}
-
-			Object value = values.get(fieldName);
-
-			if (value instanceof String) {
-				String stringValue = (String) value;
-				if (!ReflectionUtil.isPrimitive(type)) {
-					value = fromStoredString(stringValue, classType);
-				} else if (field.getType().isEnum()) {
-					// Assume value is a string
-					value = ReflectionUtil.loadEnum(stringValue, classType);
-				}
-			}
+			Object value = getAdaptedObject(values.get(fieldName), type, classType);
 
 			if (value == null) {
 				// ignore it as another already allocated value may be there.
@@ -363,6 +335,19 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return obj;
 	}
 	
+	private Object getAdaptedObject(Object value, Type type, Class<?> classType) {
+		if (value instanceof String) {
+			String stringValue = (String) value;
+			if (!ReflectionUtil.isPrimitive(type)) {
+				value = fromStoredString(stringValue, classType);
+			} else if (classType.isEnum()) {
+				// Assume value is a string
+				value = ReflectionUtil.loadEnum(stringValue, classType);
+			}
+		}
+		return value;
+	}
+	
 	private Map<String, Object> rowToMap(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsMD = rs.getMetaData();
 		int columns = rsMD.getColumnCount();
@@ -382,6 +367,8 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		final String tableName = getTableName(objectClazz);
 		Validate.notNull(tableName);
 		
+		Map<UUID, T> townyObjects = new HashMap<>();
+		
 		sqlHandler.executeQuery("SELECT * from " + tableName,
 			"Error loading" + tableName + "from SQL",
 			(rs) -> {
@@ -395,8 +382,76 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 					}
 					
 					consumer.accept(townyObj);
+					
+					// For loading the OneToMany relations after it has been added to the universe map
+					townyObjects.put(townyObj.getUniqueIdentifier(), townyObj);
 				}
 			});
+		
+		loadRelationships(objectClazz, townyObjects);
+	}
+	
+	private <T extends TownyObject> void loadRelationships(final Class<T> objectClass, Map<UUID, T> uuidObjMap) {
+		for (Field oneToManyField : getOneToManyFields(objectClass)) {
+
+			OneToMany annotation = oneToManyField.getAnnotation(OneToMany.class);
+
+			String tableName = TownySettings.getSQLTablePrefix() + annotation.tableName();
+
+			Type parameterizedType = ReflectionUtil.getTypeOfIterable(oneToManyField);
+
+			final Map<UUID, Collection<Object>> iterableMap = new HashMap<>();
+			
+			// Perform query
+			sqlHandler.executeQuery("SELECT * FROM " + tableName + " GROUP BY containerUUID",
+				"Error loading " + oneToManyField.getName() + " for " + objectClass.getName(),
+				rs -> {
+					UUID lastUUID = null;
+					Collection<Object> lastCollection = null;
+					
+					while (rs.next()) {
+						UUID containerUUID = UUID.fromString(rs.getString("containerUUID"));
+						
+						if (!containerUUID.equals(lastUUID)) {
+							if (!uuidObjMap.containsKey(containerUUID))
+								continue;
+							
+							lastUUID = containerUUID;
+							lastCollection = iterableMap.computeIfAbsent(lastUUID, k -> new ArrayList<>());
+						}
+						
+						Object rsObj = rs.getObject("referenceValue");
+						rsObj = getAdaptedObject(rsObj, parameterizedType, (Class<?>) parameterizedType);
+						
+						if (rsObj != null)
+							lastCollection.add(rsObj);
+					}
+				});
+			
+			boolean isArray = oneToManyField.getType().isArray();
+			boolean isCollection = !isArray && Collection.class.isAssignableFrom(oneToManyField.getType());
+			oneToManyField.setAccessible(true); // Allow field to be accessed if it is private
+			for (Map.Entry<UUID, Collection<Object>> entry : iterableMap.entrySet()) {
+				T loadedObj = uuidObjMap.get(entry.getKey());
+				
+				if (loadedObj == null)
+					continue;
+				
+				try {
+					// Check if field is an array. if so just set the field to collection.toArray
+					if (isArray) {
+						oneToManyField.set(loadedObj, entry.getValue().toArray());
+					}
+					else if (isCollection && !entry.getValue().isEmpty()) {
+						Collection<Object> collection = (Collection<Object>) oneToManyField.get(loadedObj);
+						if (collection != null)
+							collection.addAll(entry.getValue());
+					}
+				} catch (IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	@Override
