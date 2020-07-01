@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
@@ -44,6 +45,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
+@SavedEntity(
+	tableName = "TOWNS",
+	directory = "towns"
+)
 public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
@@ -1603,22 +1608,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	@Deprecated
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
-	}
-
-	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "TOWNS";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return this == obj ||
-			((obj instanceof Town) &&  this.getUniqueIdentifier().equals(((Town) obj).getUniqueIdentifier()));
 	}
 	
 	public Nation getNation() throws NotRegisteredException {

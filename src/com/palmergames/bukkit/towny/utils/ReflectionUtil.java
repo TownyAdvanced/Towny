@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.database.handler.ObjectContext;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -306,26 +305,5 @@ public class ReflectionUtil {
 		}
 
 		System.out.println("================= " + obj + " =================");
-	}
-
-	/**
-	 * A method to get the minimum viable object of the given type.
-	 * 
-	 * This should ONLY be used to fetch instance-wise data, and discarded
-	 * afterwards as it is unsafe.
-	 * 
-	 * @param clazz The class to instantiate.
-	 * @param <T> The class type.
-	 * @return The unsafely allocated object.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> @Nullable T unsafeNewInstance(Class<T> clazz) {
-		try {
-			return (T)Unsafe.getUnsafe().allocateInstance(clazz);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
 	}
 }
