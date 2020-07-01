@@ -711,20 +711,16 @@ public class War {
 			try {				
 				// if losingNation is not a one-town nation then this.
 				losingNation.removeTown(town);
-				try {
-					attacker.getNation().addTown(town);
-				} catch (AlreadyRegisteredException e) {
-				}
+				attacker.getNation().addTown(town);
+				
 				townyUniverse.getDataSource().saveTown(town);
 				townyUniverse.getDataSource().saveNation(attacker.getNation());
 				townyUniverse.getDataSource().saveNation(losingNation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 			} catch (EmptyNationException e) {
 				// if losingNation was a one-town nation then this.
-				try {
-					attacker.getNation().addTown(town);
-				} catch (AlreadyRegisteredException e1) {
-				}
+				attacker.getNation().addTown(town);
+				
 				townyUniverse.getDataSource().saveTown(town);
 				townyUniverse.getDataSource().saveNation(attacker.getNation());
 				townyUniverse.getDataSource().removeNation(losingNation);
@@ -732,8 +728,9 @@ public class War {
 			}
 		}
 		
-		if (towns == 1)
+		if (towns == 1) {
 			remove(losingNation);
+		}
 		checkEnd();
 	}
 	

@@ -207,7 +207,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			throw new NotRegisteredException(TownySettings.getLangString("msg_err_town_doesnt_belong_to_any_nation"));
 	}
 
-	public void setNation(Nation nation) throws AlreadyRegisteredException {
+	public void setNation(Nation nation) {
+		if (this.nation == nation || hasNation()) {
+			return;
+		}
 
 		if (nation == null) {
 			this.nation = null;
@@ -215,10 +218,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 			return;
 		}
-		if (this.nation == nation)
-			return;
-		if (hasNation())
-			throw new AlreadyRegisteredException();
+		
 		this.nation = nation;
 		TownyPerms.updateTownPerms(this);
 	}

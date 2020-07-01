@@ -192,13 +192,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return towns.contains(town);
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
+	public void addTown(Town town) {
 
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else if (town.hasNation())
-			throw new AlreadyRegisteredException();
-		else {
+		if (!hasTown(town) && !town.hasNation()) {
 			towns.add(town);
 			town.setNation(this);
 			
@@ -377,10 +373,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private void remove(Town town) {
 
 		//removeAssistantsIn(town);
-		try {
-			town.setNation(null);
-		} catch (AlreadyRegisteredException ignored) {
-		}
+		town.setNation(null);
 		
 		/*
 		 * Remove all resident titles/nationRanks before saving the town itself.

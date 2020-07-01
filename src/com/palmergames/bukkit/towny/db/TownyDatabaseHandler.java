@@ -535,8 +535,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
-		} catch (AlreadyRegisteredException ignored) {
-			// This should only be happening when a town thinks it is in the nation, while the nation doesn't consider the town a member.
 		}
 
 		for (Resident resident : toSave) {
