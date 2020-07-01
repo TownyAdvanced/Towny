@@ -4664,3 +4664,4 @@ v0.92.0.11:
   - Fix allow_nation_spawn config nodes not overriding player permissions.
     - Closes #4066. 
   - Fix /towny prices showing costs when using_economy: false.
+  - Fix death costs appearing messages showing when using_economy: false.

@@ -212,6 +212,9 @@ public class TownyEntityMonitorListener implements Listener {
 	
 	public void deathPayment(Player defenderPlayer, Resident defenderResident) throws NotRegisteredException {
 
+		if (!TownySettings.isUsingEconomy())
+			return;
+
 		if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) != null) {
 			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
 				return;				
