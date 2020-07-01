@@ -52,7 +52,7 @@ public class TownBlock extends TownyObject {
 		try {
 			TownyUniverse.getInstance().addTownBlock(this);
 			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
+		} catch (NullPointerException ignored) {}
 	}
 
 	public Town getTown() throws NotRegisteredException {
@@ -69,15 +69,13 @@ public class TownBlock extends TownyObject {
 
 	public void setResident(Resident resident) {
 		boolean successful;
-		try {
-			if (hasResident())
-				this.resident.removeTownBlock(this);
-		} catch (NotRegisteredException ignored) {}
-		this.resident = resident;
+        if (hasResident())
+            this.resident.removeTownBlock(this);
+        this.resident = resident;
 		try {
 			resident.addTownBlock(this);
 			successful = true;
-		} catch (AlreadyRegisteredException | NullPointerException e) {
+		} catch (NullPointerException e) {
 			successful = false;
 		}
 		if (successful) { //Should not cause a NPE, is checkingg if resident is null and

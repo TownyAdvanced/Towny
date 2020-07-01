@@ -806,17 +806,21 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
-		if (hasTownBlock(townBlock))
-			throw new AlreadyRegisteredException();
-		else
-			townBlocks.add(townBlock);
+	public void addTownBlock(TownBlock townBlock) {
+		if (hasTownBlock(townBlock)) {
+			return;
+		}
+
+		townBlocks.add(townBlock);
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
-		if (!townBlocks.remove(townBlock))
-			throw new NotRegisteredException();
+	public void removeTownBlock(TownBlock townBlock) {
+		if (!hasTownBlock(townBlock)) {
+			return;
+		}
+		
+		townBlocks.remove(townBlock);
 	}
 
 	@Override

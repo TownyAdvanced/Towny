@@ -1470,12 +1470,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							continue;
 						}
                         townBlock.setTown(town);
-                        try {
-							town.addTownBlock(townBlock);
-							TownyWorld townyWorld = townBlock.getWorld();
-							if (townyWorld != null && !townyWorld.hasTown(town))
-								townyWorld.addTown(town);
-						} catch (AlreadyRegisteredException ignored) {
+						town.addTownBlock(townBlock);
+						TownyWorld townyWorld = townBlock.getWorld();
+						if (townyWorld != null && !townyWorld.hasTown(town)) {
+							townyWorld.addTown(town);
 						}
                     }
                     line = rs.getString("resident");

@@ -109,18 +109,19 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	@Override
-	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
+	public void addTownBlock(TownBlock townBlock) {
+		
+		if (hasTownBlock(townBlock)) {
+			return;
+		}
 
-		if (hasTownBlock(townBlock))
-			throw new AlreadyRegisteredException();
-		else {
-			addTownBlockMap(townBlock);
-			if (townBlocks.size() < 2 && !hasHomeBlock())
-				try {
-					setHomeBlock(townBlock);
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
+		addTownBlockMap(townBlock);
+		if (townBlocks.size() < 2 && !hasHomeBlock()) {
+			try {
+				setHomeBlock(townBlock);
+			} catch (TownyException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -131,7 +132,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	/**
 	 * Handles removing townblocks from both the Town's townblock hashmap.
 	 * 
-	 * Called by {@link Town#removeTownBlock(TownBlock)}
+	 * Called by {@link TownBlockOwner#removeTownBlock(TownBlock)}
 	 * 
 	 * @param townBlock to be removed.
 	 */
@@ -613,10 +614,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		this.world = world;
 
-		try {
-			this.world.addTown(this);
-		} catch (AlreadyRegisteredException ignored) {
-		}
+		this.world.addTown(this);
 	}
 
 	/**
@@ -809,25 +807,25 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock){
+	public void removeTownBlock(TownBlock townBlock) {
 
-		if (!hasTownBlock(townBlock))
+		if (hasTownBlock(townBlock)){
 			return;
-		else {
-			// Remove the spawn point for this outpost.
-			if (townBlock.isOutpost())
-				removeOutpostSpawn(townBlock.getCoord());
-			if (townBlock.isJail())
-				removeJailSpawn(townBlock.getCoord());
-			
-			// Clear the towns homeblock if this is it.
-			try {
-				if (getHomeBlock() == townBlock)
-					setHomeBlock(null);
-			} catch (TownyException ignored) {}
-			removeTownBlockMap(townBlock);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
+
+		// Remove the spawn point for this outpost.
+		if (townBlock.isOutpost())
+			removeOutpostSpawn(townBlock.getCoord());
+		if (townBlock.isJail())
+			removeJailSpawn(townBlock.getCoord());
+
+		// Clear the towns homeblock if this is it.
+		try {
+			if (getHomeBlock() == townBlock)
+				setHomeBlock(null);
+		} catch (TownyException ignored) {}
+		removeTownBlockMap(townBlock);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	@Override

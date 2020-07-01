@@ -73,18 +73,16 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean hasTown(Town town) {
-
 		return hasTown(town.getName());
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
-
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else {
-			towns.put(town.getName(), town);
-			town.setWorld(this);
+	public void addTown(Town town) {
+		if (hasTown(town)) {
+			return;
 		}
+
+		towns.put(town.getName(), town);
+		town.setWorld(this);
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
