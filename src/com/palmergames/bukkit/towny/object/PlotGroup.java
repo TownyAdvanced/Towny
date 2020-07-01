@@ -2,7 +2,9 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.Saveable;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,9 +12,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Suneet Tipirneni (Siris)
  * A simple class which encapsulates the grouping of townblocks.
  */
+@SavedEntity(
+	tableName = "PLOT_GROUPS",
+	directory = "plotgroups"
+)
 public class PlotGroup extends ObjectGroup implements TownBlockOwner, Saveable {
 	private Resident resident = null;
 	private List<TownBlock> townBlocks;
@@ -148,17 +153,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Saveable {
 	}
 
 	@Override
-	public File getSaveDirectory() {
-		return null;
-	}
-
-	@Override
-	public String getSQLTable() {
-		return null;
-	}
-
-	@Override
-	public @org.jetbrains.annotations.NotNull UUID getUniqueIdentifier() {
+	public @NotNull UUID getUniqueIdentifier() {
 		return uniqueIdentifier;
 	}
 

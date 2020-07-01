@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -12,7 +11,6 @@ import org.bukkit.Material;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import org.bukkit.entity.Entity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -758,15 +756,5 @@ public class TownyWorld extends TownyObject {
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 		save();
-	}
-
-	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/worlds/");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "WORLDS";
 	}
 }

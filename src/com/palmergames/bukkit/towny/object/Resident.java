@@ -883,16 +883,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/residents/");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "RESIDENTS";
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		return this == obj ||
 			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));

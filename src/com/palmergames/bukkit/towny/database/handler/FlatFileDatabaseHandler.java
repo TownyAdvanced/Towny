@@ -45,7 +45,7 @@ import java.util.function.Consumer;
 
 public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
-	private final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
+	private static final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
 	private static final File relationshipDir = new File(Towny.getPlugin().getDataFolder() + "/data/relationship/");
 	
 	// Create files
@@ -72,7 +72,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		convertMapData(getSaveGetterData(obj), saveMap);
 		
 		// Save
-		FileMgmt.mapToFile(saveMap, getFlatFileDirectory(obj.getClass()));
+		FileMgmt.mapToFile(saveMap, getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
 	}
 
 	@Override
@@ -245,14 +245,9 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		Validate.notNull(consumer);
 		File dir = getFlatFileDirectory(clazz);
 		
-		// This must be non-null
-		if (dir == null) {
-			throw new UnsupportedOperationException("Directory does not exist");
-		}
-		
 		// Make sure that a file wasn't given instead of a directory
 		if (!dir.isDirectory()) {
-			throw new TownyRuntimeException("Object of type: " + clazz + " has save path is not a directory.");
+			throw new TownyRuntimeException("Object of type: " + clazz + " has save path is not a directory. " + dir.getPath());
 		}
 
 		Path path = Paths.get(dir.getPath());
@@ -284,25 +279,21 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 	}
 
-	private <T extends Saveable> @Nullable File getFlatFile(@NotNull Class<T> type, @NotNull UUID id) {
+	private <T extends Saveable> @NotNull File getFlatFile(@NotNull Class<T> type, @NotNull UUID id) {
 		Validate.notNull(type);
 		Validate.notNull(id);
 
 		File dir = getFlatFileDirectory(type);
 
-		if (dir == null) {
-			return null;
-		}
-
 		return new File(dir.getPath() + "/" + id + ".txt");
 	}
 
-	private <T extends Saveable> @Nullable File getFlatFileDirectory(@NotNull Class<T> type) {
+	private <T extends Saveable> @NotNull File getFlatFileDirectory(@NotNull Class<T> type) {
 		Validate.notNull(type);
 
 		// Check the cache
 		File cached = fileDirectoryCache.get(type);
-		if (fileDirectoryCache.get(type) != null) {
+		if (cached != null) {
 			return cached;
 		}
 
@@ -314,6 +305,14 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		// Cache result.
 		String fileName = Towny.getPlugin().getDataFolder() + "/data/" + annotation.directory();
 		File dir = new File(fileName);
+		
+		// Make sure the directory exists
+		if (!dir.exists() || !dir.isDirectory()) {
+			if (!dir.mkdirs()) {
+				throw new TownyRuntimeException("Required Directory for " + type + " could not be created.");
+			}
+		}
+		
 		fileDirectoryCache.putIfAbsent(type, dir);
 
 		return dir;

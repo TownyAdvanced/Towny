@@ -46,7 +46,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	//private List<Resident> assistants = new ArrayList<Resident>();
-	private transient List<Town> towns = new ArrayList<>();
+	private final transient List<Town> towns = new ArrayList<>();
 	
 	@OneToMany(tableName = "allies")
 	private List<Nation> allies = new ArrayList<>();
@@ -888,16 +888,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
-	}
-
-	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/nations/");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "NATIONS";
 	}
 
 	@Override

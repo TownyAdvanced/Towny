@@ -1609,22 +1609,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public TownyWorld getWorld() {
 		return getHomeblockWorld();
 	}
-
-	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + File.separator + "data" + File.separator + "towns");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "TOWNS";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return this == obj ||
-			((obj instanceof Town) &&  this.getUniqueIdentifier().equals(((Town) obj).getUniqueIdentifier()));
-	}
 	
 	public Nation getNation() throws NotRegisteredException {
 		

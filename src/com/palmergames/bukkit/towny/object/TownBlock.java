@@ -500,16 +500,6 @@ public class TownBlock extends TownyObject {
 		}
 	}
 
-	@Override
-	public File getSaveDirectory() {
-		return new File(Towny.getPlugin().getDataFolder() + "/data/townblocks/");
-	}
-
-	@Override
-	public String getSQLTable() {
-		return "TOWNBLOCKS";
-	}
-
 	public UUID getTownID() {
 		return townID;
 	}
