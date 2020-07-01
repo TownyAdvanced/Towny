@@ -124,6 +124,18 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			if (values.get(fieldName) == null) {
 				continue;
 			}
+			
+			// If there is a default value that already exists,
+			// make sure we are adapting to the same default value type.
+			try {
+				Object fieldValue = field.get(obj);
+
+				if (fieldValue != null) {
+					type = fieldValue.getClass();
+				}
+			} catch (IllegalAccessException e) {
+			}
+
 
 			Object value;
 
