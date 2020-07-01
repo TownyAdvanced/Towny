@@ -26,7 +26,7 @@ public class SaveContext {
 	 * @param <T> The type of object class.
 	 * @return The class type.
 	 */
-	public <T> String toStoredString(T obj, Class<T> type) {
+	public <T> String toStoredString(T obj, Class<? extends T> type) {
 		return handler.toStoredString(obj, type);
 	}
 	

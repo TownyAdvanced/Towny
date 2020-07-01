@@ -7,12 +7,14 @@ import org.jetbrains.annotations.Nullable;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -156,6 +158,26 @@ public class ReflectionUtil {
 		|| type == byte.class || type == Byte.class;
 	}
 	
+	public static boolean isArray(Type type) {
+		if (type instanceof Class<?>) 
+			return ((Class<?>) type).isArray();
+		
+		return type instanceof GenericArrayType;
+	}
+
+	public static boolean isIterableType(Type type) {
+		if (type instanceof Class<?>) {
+			return isIterableType((Class<?>) type);
+		}
+
+		if (type instanceof ParameterizedType) {
+			ParameterizedType pType = (ParameterizedType) type;
+			return isIterableType(pType.getRawType());
+		}
+
+		return type instanceof GenericArrayType;
+	}
+	
 	public static boolean isIterableType(Class<?> clazz) {
 		return Iterable.class.isAssignableFrom(clazz) || clazz.isArray();
 	}
@@ -185,23 +207,32 @@ public class ReflectionUtil {
 	}
 	
 	public static Type getTypeOfIterable(Field field) {
-		try {
-
-			if (field.getType().isArray()) {
-				return field.getType().getComponentType();
-			}
-			
-			ParameterizedType iterableType = (ParameterizedType) field.getGenericType();
-			Type[] typeArgs = iterableType.getActualTypeArguments();
-			if (typeArgs.length > 0)
-				return typeArgs[0];
-		} catch (Exception e) {
-			throw new UnsupportedOperationException(e.getMessage());
-		}
-
-		throw new UnsupportedOperationException("No type argument found for field " + field.getName());
+		return getTypeOfIterable(field.getType());
 	}
 
+	public static Type getTypeOfIterable(Type type) {
+		if (type instanceof Class<?>)
+			return getTypeOfIterable((Class<?>) type);
+		
+		if (type instanceof ParameterizedType) {
+			try {
+				ParameterizedType iterableType = (ParameterizedType) type; 
+				Type[] typeArgs = iterableType.getActualTypeArguments();
+				if (typeArgs.length > 0) {
+					return typeArgs[0];
+				}
+			} catch (Exception e) {
+				throw new UnsupportedOperationException(e.getMessage());
+			}
+		}
+		
+		if (type instanceof GenericArrayType) {
+			return ((GenericArrayType) type).getGenericComponentType();
+		}
+
+		throw new UnsupportedOperationException("No type argument found for this type " + type.getTypeName());
+	}
+	
 	public static Type getTypeOfIterable(Class<?> clazz) {
 		try {
 			
@@ -219,6 +250,31 @@ public class ReflectionUtil {
 		}
 
 		throw new UnsupportedOperationException("No type argument found for field " + clazz.getName());
+	}
+	
+	public static boolean isCollection(Class<?> clazz) {
+		return Collection.class.isAssignableFrom(clazz);
+	}
+	
+	public static Type getRawType(Type type) {
+		try {
+			
+			if (isArray(type)) {
+				return getTypeOfIterable(type);
+			}
+			else if (type instanceof Class<?>) {
+				Class<?> clazz = (Class<?>) type;
+				ParameterizedType iterableType = ((ParameterizedType) clazz.getGenericSuperclass());
+				return iterableType.getRawType();
+			}
+			else if (type instanceof ParameterizedType) {
+				return ((ParameterizedType) type).getRawType();
+			}
+		} catch (Exception e) {
+			throw new UnsupportedOperationException(e.getMessage());
+		}
+
+		throw new UnsupportedOperationException("No type argument found for field " + type);
 	}
 
 	@SuppressWarnings("unchecked")

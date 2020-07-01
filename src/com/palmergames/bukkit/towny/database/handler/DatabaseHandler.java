@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
+import com.palmergames.bukkit.towny.database.dbHandlers.ListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
@@ -35,9 +36,13 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,8 +50,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * The object which is responsible for converting objects from one format to another and
@@ -65,10 +73,11 @@ public abstract class DatabaseHandler {
 		
 		registerAdapter(Resident.class, new ResidentHandler());
 		registerAdapter(Location.class, new LocationHandler());
+		registerAdapter(List.class, new ListHandler());
 		registerAdapter(new TypeContext<List<Resident>>(){}.getType(), new ResidentListHandler());
 		registerAdapter(new TypeContext<List<Location>>(){}.getType(), new LocationListHandler());
 		registerAdapter(new TypeContext<List<TownBlock>>(){}.getType(), new TownBlockListHandler());
-		registerAdapter(new TypeContext<List<Nation>>(){}.getType(), new NationListHandler());
+		//registerAdapter(new TypeContext<List<Nation>>(){}.getType(), new NationListHandler());
 		registerAdapter(TownBlock.class, new TownBlockHandler());
 		registerAdapter(Nation.class, new NationHandler());
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
@@ -76,7 +85,7 @@ public abstract class DatabaseHandler {
 		registerAdapter(Town.class, new TownHandler());
 		
 		// Loads all the bukkit worlds.
-		loadWorlds();
+		//loadWorlds();
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -131,62 +140,171 @@ public abstract class DatabaseHandler {
 	}
 	
 	public <T> String toStoredString(Object obj, Type type) {
-		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
-		
+		// If object is null, just store "null" string
 		if (obj == null) {
 			return "null";
 		}
 
+		// Store enum name if object is an an enum
 		if (obj instanceof Enum<?>) {
 			return ((Enum<?>) obj).name();
 		}
 
+		// If the object has a type adapter, use that to store the string.
+		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
+		if (adapter != null) {
+			return adapter.toStoredString((T) obj);
+		}
+
 		// If iterable store as a list.
-		if (ReflectionUtil.isIterableType(obj)) {
-			// Extract the iterator.
-			Iterator<?> iterator = ReflectionUtil.resolveIterator(obj);
-			StringBuilder builder = new StringBuilder();
-			
-			// Get the parameterized type.
-			Type genericType = ReflectionUtil.getTypeOfIterable(obj.getClass());
-			
-			// Iterate through it, and build the list string.
-			while (iterator.hasNext()) {
-				Object next = iterator.next();
-				if (!iterator.hasNext()) {
-					builder.append(toStoredString(next, genericType));
-					continue;
-				}
-				builder.append(toStoredString(next, genericType)).append(", ");
-			}
-			
-			return "[" + builder.toString() + "]";
+		if (ReflectionUtil.isIterableType(obj.getClass())) {
+			return iterableToString(obj);
 		}
-		
-		if (adapter == null) {
-			return obj.toString();
-		}
-		
-		return adapter.toStoredString((T) obj);
+
+		// Default to toString()
+		return obj.toString();
 	}
 	
-	public final <T> @Nullable T fromStoredString(String str, Type type) {
+	private <T> String iterableToString(Object obj) {
+		if (ReflectionUtil.isArray(obj.getClass())) {
+			return arrayToString(obj);
+		}
+		else {
+			Type rawType = ReflectionUtil.getRawType(obj.getClass());
+			TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(rawType);
+			if (adapter == null) {
+				System.out.println("[Towny] No adapter found for " + rawType); // FIXME DEBUG
+				// Resort to iterator
+				return arrayToString(obj);
+			}
+			return adapter.toStoredString((T) obj);
+		}
+	}
+	
+	private <T> String arrayToString(Object obj) {
+		Iterator<?> iterator = ReflectionUtil.resolveIterator(obj);
+		StringJoiner joiner = new StringJoiner(",");
+
+		// Get the parameterized type.
+		Type genericType = ReflectionUtil.getTypeOfIterable(obj.getClass());
+
+		// Iterate through it, and build the list string.
+		while (iterator.hasNext()) {
+			joiner.add(toStoredString(iterator.next(), genericType));
+		}
+
+		return "[" + joiner.toString() + "]";
+	}
+	
+	private <T, P> T stringToArray(String str, Type type) {
+		System.out.println("[Towny] String " + str + " is an array!"); // FIXME DEBUG
+		// Check if string is of pattern "[]"
+		if (str.length() > 1
+			&& 	str.charAt(0) == '['
+			&& str.charAt(str.length() - 1) == ']') {
+			// Remove the brackets
+			String pureList = str.substring(1, str.length() - 1);
+			// Get the parameterized type of the array. E.g. int[] will get the int type
+			Type parameterizedType = ReflectionUtil.getTypeOfIterable(type);
+			// Convert the string into a string[]
+			String[] splitArray = pureList.split(",");
+			// Create a new array from the parameterized type, e.g. int[]
+			P[] array = (P[]) Array.newInstance((Class<?>) parameterizedType, splitArray.length);
+			// Insert converted values from the string array to to the parameterized array
+			for (int i = 0; i < splitArray.length; i++) {
+				array[i] = fromStoredString(splitArray[i], parameterizedType);
+			}
+			System.out.println("[Towny] Array of class " + array.getClass().getName() + " has " + array.length + "elements!"); //FIXME DEBUG
+		}
+		throw new UnsupportedOperationException("Invalid array load for type " + type + " and string " + str);
+	}
+	
+	private <T, P> T stringToCollection(String str, Type type) {
+		System.out.println("[Towny] String is collection! Str: " +str ); //FIXME DEBUG
+		// Get the parameterized and raw type
+		Type parameterizedType = ReflectionUtil.getTypeOfIterable(type);
+		Type rawType = ReflectionUtil.getRawType(type);
+		// Make sure the raw type is a class
+		if (rawType instanceof Class<?>) {
+			Class<?> rawTypeClass = (Class<?>) rawType;
+			// Make sure the raw type is a collection
+			if (ReflectionUtil.isCollection(rawTypeClass)) {
+				// Get the adapter for the raw type, make sure the type is a
+				TypeAdapter<?> adapter = fitAdapterFromClass(rawTypeClass, ReflectionUtil::isCollection);
+				if (adapter != null) {
+					// Get a collection the adapter
+					Collection<?> collection = (Collection<?>) adapter.fromStoredString(str);
+					try {
+						// Construct that collection from an empty parameter
+						Constructor<T> rawConstructor = (Constructor<T>) collection.getClass().getConstructor();
+						Collection<P> rawInstance = (Collection<P>) rawConstructor.newInstance();
+						// Check if collection from the adapter has any elements
+						if (!collection.isEmpty()) {
+							for (Object s : collection) {
+								// Make sure it's converting from a string
+								if (s instanceof String) {
+									P element = fromStoredString((String) s, parameterizedType);
+									if (element != null)
+										rawInstance.add(element);
+								}
+							}
+						}
+						System.out.println("Collection of type " + rawInstance.getClass().getName() + " has " + rawInstance.size() + " elements!"); // FIXME DEBUG
+						return (T) rawInstance;
+					} catch (ReflectiveOperationException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		throw new UnsupportedOperationException("No adapter found for iterable " + type + " with string " + str);
+	}
+	
+	private TypeAdapter fitAdapterFromClass(Class<?> clazz, Predicate<Class<?>> fitFilter) {
+		// This will get an adapter for a class from its interfaces, and its super classes
+		// as long as those pass the filter provided.
+		TypeAdapter adapter = getAdapter(clazz);
+		if (adapter == null) {
+			for (Class<?> clazzInterface : clazz.getInterfaces()) {
+				if (fitFilter.test(clazz) &&
+					(adapter = getAdapter(clazzInterface)) != null)
+					return adapter;
+			}
+
+			Class<?> superClass = clazz.getSuperclass();
+			if (superClass != null && fitFilter.test(superClass)) {
+				// Recursively call the method for the super class
+				return fitAdapterFromClass(superClass, fitFilter);
+			}
+		}
+		
+		return null;
+	}
+	
+	public final <T, P> @Nullable T fromStoredString(String str, Type type) { 
+		if (str.isEmpty() || str.equals("null")) {
+			return null;
+		}
+
 		TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(type);
 
 		if (adapter == null) {
+			if (ReflectionUtil.isArray(type)) {
+				return stringToArray(str, type);
+			}
+			
+			if (ReflectionUtil.isIterableType(type)) {
+				return stringToCollection(str, type);	
+			}
+
 			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type);
 		}
-		
-		if (str.equals("") || str.equals("null")) {
-			return null;
-		}
-		
-		if (str.equals("[]")) {
-			return (T) new ArrayList<>();
-		}
-		
+
+
 		return adapter.fromStoredString(str);
-	}
+	}	
+	
+	
 
 	/**
 	 * Registers an adapter to use with loading fields.
