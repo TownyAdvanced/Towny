@@ -232,6 +232,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					showMap(player);
 			} else if (split[0].equalsIgnoreCase("prices")) {
 				Town town = null;
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+				
 				if (split.length > 1) {
 					try {
 						town = townyUniverse.getDataSource().getTown(split[1]);

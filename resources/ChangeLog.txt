@@ -4663,3 +4663,4 @@ v0.92.0.11:
   - Fix the towny.nation.spawn.public node not being used for checks if a player can n spawn to a public nation. 
   - Fix allow_nation_spawn config nodes not overriding player permissions.
     - Closes #4066. 
+  - Fix /towny prices showing costs when using_economy: false.
