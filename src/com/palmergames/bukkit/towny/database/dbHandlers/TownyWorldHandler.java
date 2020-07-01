@@ -1,19 +1,26 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
-import com.palmergames.bukkit.towny.database.handler.LoadHandler;
+import com.palmergames.bukkit.towny.database.handler.SaveContext;
+import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
-public class TownyWorldHandler implements LoadHandler<TownyWorld> {
+import java.util.UUID;
+
+public class TownyWorldHandler implements SerializationHandler<TownyWorld> {
+
+	@Override
+	public String toStoredString(SaveContext context, TownyWorld obj) {
+		return obj.getUniqueIdentifier().toString();
+	}
 
 	@Override
 	public TownyWorld loadString(LoadContext context, String str) {
-		TownyMessaging.sendErrorMsg(TownyUniverse.getInstance().getWorlds().toString());
 		try {
-			return TownyUniverse.getInstance().getWorld(str);
+			UUID id = UUID.fromString(str);
+			return TownyUniverse.getInstance().getWorld(id);
 		} catch (NotRegisteredException e) {
 			return null;
 		}

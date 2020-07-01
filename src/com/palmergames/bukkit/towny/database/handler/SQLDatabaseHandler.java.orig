@@ -212,8 +212,13 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	}
 
 	@NotNull
+<<<<<<< HEAD
 	private final List<Field> getOneToManyFields(@NotNull Class<? extends Saveable> clazz) {
 		Validate.notNull(clazz);
+=======
+	private List<Field> getOneToManyFields(@NotNull Saveable obj) {
+		Validate.notNull(obj);
+>>>>>>> b0bc3aedaecf4d5980d30ae4a9758ea90a66fe3e
 
 		// Check cache.
 		List<Field> fields = fieldOneToManyCache.get(clazz);

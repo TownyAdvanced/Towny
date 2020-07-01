@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.NationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
@@ -14,7 +15,6 @@ import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.UUIDHandler;
-import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
@@ -45,11 +45,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 /**
  * The object which is responsible for converting objects from one format to another and
@@ -71,6 +68,7 @@ public abstract class DatabaseHandler {
 		registerAdapter(new TypeContext<List<Resident>>(){}.getType(), new ResidentListHandler());
 		registerAdapter(new TypeContext<List<Location>>(){}.getType(), new LocationListHandler());
 		registerAdapter(new TypeContext<List<TownBlock>>(){}.getType(), new TownBlockListHandler());
+		registerAdapter(new TypeContext<List<Nation>>(){}.getType(), new NationListHandler());
 		registerAdapter(TownBlock.class, new TownBlockHandler());
 		registerAdapter(Nation.class, new NationHandler());
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
@@ -123,7 +121,7 @@ public abstract class DatabaseHandler {
 				
 				TownyWorld wrappedWorld = new TownyWorld(world.getUID(), world.getName());
 				TownyUniverse.getInstance().addWorld(wrappedWorld);
-				
+				TownyMessaging.sendErrorMsg("got here");
 				// Save
 				save(wrappedWorld);
 			} catch (AlreadyRegisteredException e) {
@@ -138,9 +136,31 @@ public abstract class DatabaseHandler {
 		if (obj == null) {
 			return "null";
 		}
-		
+
 		if (obj instanceof Enum<?>) {
 			return ((Enum<?>) obj).name();
+		}
+
+		// If iterable store as a list.
+		if (ReflectionUtil.isIterableType(obj)) {
+			// Extract the iterator.
+			Iterator<?> iterator = ReflectionUtil.resolveIterator(obj);
+			StringBuilder builder = new StringBuilder();
+			
+			// Get the parameterized type.
+			Type genericType = ReflectionUtil.getTypeOfIterable(obj.getClass());
+			
+			// Iterate through it, and build the list string.
+			while (iterator.hasNext()) {
+				Object next = iterator.next();
+				if (!iterator.hasNext()) {
+					builder.append(toStoredString(next, genericType));
+					continue;
+				}
+				builder.append(toStoredString(next, genericType)).append(", ");
+			}
+			
+			return "[" + builder.toString() + "]";
 		}
 		
 		if (adapter == null) {

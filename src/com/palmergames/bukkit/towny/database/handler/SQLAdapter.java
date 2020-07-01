@@ -132,16 +132,15 @@ public class SQLAdapter {
 		}
 	} 
 	
-	public static SQLAdapter adapt(String databaseType) {
+	public static SQLAdapter from(String databaseType) {
 		switch (databaseType.toLowerCase()) {
 			case "sqlite":
 				return new SQLiteAdapter();
 			case "h2":
 				return new H2Adapter();
 			case "mysql":
+			default:
 				return new SQLAdapter();
 		}
-		
-		return new SQLAdapter();
 	}
 }

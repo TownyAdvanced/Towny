@@ -49,9 +49,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	// Create files
 	static {
-		boolean mkdirRes = relationshipDir.mkdirs();
-		if (!mkdirRes) {
-			throw new UnsupportedOperationException("Required Directories could not be created.");
+		if (!relationshipDir.exists()) {
+			boolean mkdirRes = relationshipDir.mkdirs();
+			if (!mkdirRes) {
+				throw new TownyRuntimeException("Required Directories could not be created.");
+			}
 		}
 	}
 
@@ -78,11 +80,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		Validate.notNull(obj);
 		
 		File objFile = getFlatFile(obj.getClass(), obj.getUniqueIdentifier());
-		
-		if (objFile == null) {
-			TownyMessaging.sendErrorMsg("Cannot delete: " + objFile + ", it does not exist.");
-			return false;
-		}
 		
 		if (objFile.exists()) {
 			return objFile.delete();
@@ -287,8 +284,9 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 	}
 
-	private <T extends Saveable> @Nullable File getFlatFile(@NotNull Class<T> type, UUID id) {
+	private <T extends Saveable> @Nullable File getFlatFile(@NotNull Class<T> type, @NotNull UUID id) {
 		Validate.notNull(type);
+		Validate.notNull(id);
 
 		File dir = getFlatFileDirectory(type);
 

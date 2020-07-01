@@ -261,26 +261,23 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		TownyPerms.assignPermissions(mayor, null);
 	}
 
-	public void setNation(Nation nation) throws AlreadyRegisteredException {
+	public void setNation(@Nullable Nation nation) throws AlreadyRegisteredException {
 		
 		// TODO: Implement
 		
-		throw new UnsupportedOperationException("This has not been implemented");
-		
-//
-//		if (nation == null) {
-//			this.nation = null;
-//			TownyPerms.updateTownPerms(this);
-//			TownyUniverse.getInstance().getDatabaseHandler().save(this);
-//			return;
-//		}
-//		if (this.nation == nation)
-//			return;
-//		if (hasNation())
-//			throw new AlreadyRegisteredException();
-//		this.nation = nation;
-//		TownyPerms.updateTownPerms(this);
-//		TownyUniverse.getInstance().getDatabaseHandler().save(this);
+		if (nation == null) {
+			this.nationID = null;
+			TownyPerms.updateTownPerms(this);
+			TownyUniverse.getInstance().getDatabaseHandler().save(this);
+			return;
+		}
+		if (this.nationID == nation.getUniqueIdentifier())
+			return;
+		if (hasNation())
+			throw new AlreadyRegisteredException();
+		this.nationID = nation.getUniqueIdentifier();
+		TownyPerms.updateTownPerms(this);
+		TownyUniverse.getInstance().getDatabaseHandler().save(this);
 	}
 
 	@Override
