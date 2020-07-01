@@ -158,7 +158,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 
 				if (loadSetter != null) {
 					Method method = obj.getClass().getMethod(loadSetter.setterName(), field.getType());
+					boolean originallyAccessible = method.isAccessible();
+					method.setAccessible(true);
 					method.invoke(obj, value);
+					if (!originallyAccessible)
+						method.setAccessible(false);
 				} else {
 					field.set(obj, value);
 				}
