@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
@@ -36,6 +37,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+@SavedEntity(
+	tableName = "NATIONS",
+	directory = "nations"
+)
 public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -8,7 +9,9 @@ import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -20,6 +23,7 @@ import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -147,7 +151,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	public void save(@NotNull Saveable obj) {
 		Map<String, String> insertionMap = generateInsertionMap(obj);
 		
-		String upsertStmt = sqlAdapter.upsertStatement(TownySettings.getSQLTablePrefix() + obj.getSQLTable(),
+		String upsertStmt = sqlAdapter.upsertStatement(TownySettings.getSQLTablePrefix() + getTableName(obj.getClass()),
 														insertionMap);
 		
 		sqlHandler.executeUpdate(upsertStmt, "Error updating object " + obj.getName());
@@ -169,7 +173,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 	@Override
 	public boolean delete(@NotNull Saveable obj) {
-		return sqlHandler.executeUpdate("DELETE FROM " + obj.getSQLTable() + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
+		return sqlHandler.executeUpdate("DELETE FROM " + getTableName(obj.getClass()) + " WHERE uniqueIdentifier = '" + obj.getUniqueIdentifier() + "'");
 	}
 	
 	
@@ -469,41 +473,21 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	// Returns the SQL table name from a savable object.
 	@Nullable
 	private <T extends Saveable> String getTableName(@NotNull Class<T> type) {
-		Validate.notNull(type);
-
-		String cachedObj = tableNameCache.get(type);
-		
-		if (cachedObj != null) {
-			return cachedObj;
-		}
-		
-		T saveable = null;
-		// First try the natural constructor
-		try {
-			final Constructor<T> objConstructor = type.getConstructor(UUID.class);
-
-			try {
-				saveable = objConstructor.newInstance((Object) null);
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			}
-		} catch (NoSuchMethodException e) {
-			// If there is no UUID constructor we need to rely
-			// on unsafe allocation to bypass any defined constructors.
-			saveable = ReflectionUtil.unsafeNewInstance(type);
+		// Check the cache
+		String cached = tableNameCache.get(type);
+		if (tableNameCache.get(type) != null) {
+			return cached;
 		}
 
-		if (saveable == null) {
-			TownyMessaging.sendErrorMsg("Could not get table name for class " + type.getName());
-			return null;
+		SavedEntity annotation = type.getAnnotation(SavedEntity.class);
+		if (annotation == null) {
+			throw new TownyRuntimeException("Saveable class is not annotated with @SavedEntity.");
 		}
-		Validate.notNull(saveable.getSQLTable());
+
+		// Cache result.
+		tableNameCache.putIfAbsent(type, annotation.tableName());
 		
-		String tableName = TownySettings.getSQLTablePrefix() + saveable.getSQLTable();
-		
-		tableNameCache.putIfAbsent(type, tableName);
-		
-		return tableName;
+		return annotation.tableName();
 	}
 	
 	@Nullable

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
@@ -37,6 +38,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@SavedEntity(
+	tableName = "RESIDENTS",
+	directory = "residents"
+)
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	@OneToMany(tableName = "friends")
 	private List<Resident> friends = new ArrayList<>();

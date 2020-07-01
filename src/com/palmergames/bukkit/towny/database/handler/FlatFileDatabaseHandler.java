@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -61,7 +62,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	public void save(@NotNull Saveable obj) {
 		// Validation/fail-fast safety
 		Validate.notNull(obj);
-		Validate.notNull(obj.getSaveDirectory(), "You must specify a save path for class: " + obj.getClass().getName());
 		
 		HashMap<String, String> saveMap = new HashMap<>();
 
@@ -72,7 +72,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		convertMapData(getSaveGetterData(obj), saveMap);
 		
 		// Save
-		FileMgmt.mapToFile(saveMap, new File(obj.getSaveDirectory().getPath() + "/" + obj.getUniqueIdentifier() + ".txt"));
+		FileMgmt.mapToFile(saveMap, getFlatFileDirectory(obj.getClass()));
 	}
 
 	@Override
@@ -306,35 +306,16 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			return cached;
 		}
 
-		boolean hasUUIDConstructor = true;
-		Constructor<T> objConstructor = null;
-		// First try the natural constructor
-		try {
-			objConstructor = type.getConstructor(UUID.class);
-		} catch (NoSuchMethodException e) {
-			hasUUIDConstructor = false;
-		}
-
-		Saveable saveable;
-		if (!hasUUIDConstructor) {
-			// If there is no UUID constructor we need to rely
-			// on unsafe allocation to bypass any defined constructors
-			saveable = ReflectionUtil.unsafeNewInstance(type);
-		} else {
-			try {
-				saveable = objConstructor.newInstance((Object) null);
-			} catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException("Error in instantiation of " + type);
-			}
-		}
-
-		if (saveable == null) {
-			return null;
+		SavedEntity annotation = type.getAnnotation(SavedEntity.class);
+		if (annotation == null) {
+			throw new TownyRuntimeException("Saveable class is not annotated with @SavedEntity.");
 		}
 
 		// Cache result.
-		fileDirectoryCache.putIfAbsent(type, saveable.getSaveDirectory());
+		String fileName = Towny.getPlugin().getDataFolder() + "/data/" + annotation.directory();
+		File dir = new File(fileName);
+		fileDirectoryCache.putIfAbsent(type, dir);
 
-		return saveable.getSaveDirectory();
+		return dir;
 	}
 }
