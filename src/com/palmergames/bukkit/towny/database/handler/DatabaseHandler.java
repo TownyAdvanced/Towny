@@ -83,9 +83,6 @@ public abstract class DatabaseHandler {
 		registerAdapter(TownyWorld.class, new TownyWorldHandler());
 		registerAdapter(TownyPermission.class, new TownyPermissionsHandler());
 		registerAdapter(Town.class, new TownHandler());
-		
-		// Loads all the bukkit worlds.
-		//loadWorlds();
 	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
@@ -190,14 +187,16 @@ public abstract class DatabaseHandler {
 
 		// Iterate through it, and build the list string.
 		while (iterator.hasNext()) {
-			joiner.add(toStoredString(iterator.next(), genericType));
+			String s = toStoredString(iterator.next(), genericType);
+			if (s != null) {
+				joiner.add(s);
+			}
 		}
 
 		return "[" + joiner.toString() + "]";
 	}
 	
 	private <T, P> T stringToArray(String str, Type type) {
-		System.out.println("[Towny] String " + str + " is an array!"); // FIXME DEBUG
 		// Check if string is of pattern "[]"
 		if (str.length() > 1
 			&& 	str.charAt(0) == '['
@@ -214,13 +213,11 @@ public abstract class DatabaseHandler {
 			for (int i = 0; i < splitArray.length; i++) {
 				array[i] = fromStoredString(splitArray[i], parameterizedType);
 			}
-			System.out.println("[Towny] Array of class " + array.getClass().getName() + " has " + array.length + "elements!"); //FIXME DEBUG
 		}
 		throw new UnsupportedOperationException("Invalid array load for type " + type + " and string " + str);
 	}
 	
 	private <T, P> T stringToCollection(String str, Type type) {
-		System.out.println("[Towny] String is collection! Str: " +str ); //FIXME DEBUG
 		// Get the parameterized and raw type
 		Type parameterizedType = ReflectionUtil.getTypeOfIterable(type);
 		Type rawType = ReflectionUtil.getRawType(type);
@@ -249,7 +246,6 @@ public abstract class DatabaseHandler {
 								}
 							}
 						}
-						System.out.println("Collection of type " + rawInstance.getClass().getName() + " has " + rawInstance.size() + " elements!"); // FIXME DEBUG
 						return (T) rawInstance;
 					} catch (ReflectiveOperationException e) {
 						e.printStackTrace();
@@ -475,5 +471,7 @@ public abstract class DatabaseHandler {
 		loadAllTowns();
 		loadAllResidents();
 		loadAllTownBlocks();
+		// Loads all the bukkit worlds if they haven't been loaded.
+		loadWorlds();
 	}
 }

@@ -144,6 +144,14 @@ public abstract class TownyObject implements Nameable, Saveable {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TownyObject that = (TownyObject) o;
+		return uniqueIdentifier.equals(that.uniqueIdentifier);
+	}
+
+	@Override
 	public boolean isChanged() {
 		return changed;
 	}

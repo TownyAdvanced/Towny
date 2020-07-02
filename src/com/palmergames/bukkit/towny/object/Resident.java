@@ -882,12 +882,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.confirmation = confirmation;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		return this == obj ||
-			((obj instanceof Resident) &&  this.getUniqueIdentifier().equals(((Resident) obj).getUniqueIdentifier()));
-	}
-
 	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
 		this.townID = townID;
 		
@@ -912,7 +906,15 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			throw new NotRegisteredException("Resident has no town");
 		}
 		
-		return TownyUniverse.getInstance().getTown(getTownID());
+		try {
+			return TownyUniverse.getInstance().getTown(getTownID());
+		} catch (NotRegisteredException ex) {
+			// Properly handle invalid data
+			TownyMessaging.sendErrorMsg("Error resident " + getName() + " was part of invalid town " + townID 
+			+ ". Please fix this in the database!");
+			townID = null;
+			throw new NotRegisteredException("Resident has no town");
+		}
 	}
 
 	public UUID getTownID() {

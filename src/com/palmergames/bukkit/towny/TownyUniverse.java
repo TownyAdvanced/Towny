@@ -404,7 +404,7 @@ public class TownyUniverse {
 			Town town = resident.getTown();
 			town.addResident(resident);
 			
-			if (resident.isMayor()) {
+			if (resident.isMayor() && town.getMayor() != resident) {
 				town.setMayor(resident);
 			}
 			
@@ -602,6 +602,16 @@ public class TownyUniverse {
 		
 		if (towns.containsKey(town.getUniqueIdentifier())) {
 			throw new AlreadyRegisteredException("The town " + town.getName() + " is already in use.");
+		}
+		
+		// Attach connections
+		if (town.hasNation()) {
+			try {
+				Nation nation = town.getNation();
+				nation.addTown(town);
+			} catch (NotRegisteredException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		// Store into memory.

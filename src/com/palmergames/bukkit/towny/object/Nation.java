@@ -52,7 +52,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private List<Nation> allies = new ArrayList<>();
 	@OneToMany(tableName = "enemies")
 	private List<Nation> enemies = new ArrayList<>();
-	private Town capital;
+	private UUID capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
 	private String nationBoard = "/nation set board [msg]";
@@ -259,8 +259,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public void setCapital(Town capital) {
-
-		this.capital = capital;
+		this.capital = capital.getUniqueIdentifier();
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
 		} catch (Exception e) {
@@ -270,8 +269,15 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public Town getCapital() {
+		try {
+			return TownyUniverse.getInstance().getTown(capital);
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg("The capital for nation " + getName() + " does not exist!" +
+				" Please fix this in the database!");
+			capital = null;
+		}
 
-		return capital;
+		return null;
 	}
 
 	public Location getNationSpawn() throws TownyException {
@@ -487,14 +493,15 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 * @throws TownyException - Generic TownyException
 	 */
 	public void recheckTownDistance() throws TownyException {
-		if(capital != null) {
+		Town capTown = getCapital();
+		if(capTown != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				final Coord capitalCoord = capTown.getHomeBlock().getCoord();
 				Iterator<Town> it = towns.iterator();
 				while(it.hasNext()) {
 					Town town = it.next();
 					Coord townCoord = town.getHomeBlock().getCoord();
-					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
+					if (!capTown.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						it.remove();
 						continue;
 					}
@@ -521,13 +528,14 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 */
 	public List<Town> recheckTownDistanceDryRun(List<Town> towns) throws TownyException {
 		List<Town> removedTowns = new ArrayList<>();
-		if(capital != null) {
+		Town capTown = getCapital();
+		if(capTown != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				final Coord capitalCoord = capTown.getHomeBlock().getCoord();
 				
 				for (Town town : towns) {
 					Coord townCoord = town.getHomeBlock().getCoord();
-					if (!capital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
+					if (!capTown.getHomeblockWorld().equals(town.getHomeblockWorld())) {
 						continue;
 					}
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
@@ -764,7 +772,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 	
 	public Resident getKing() {
-		return capital.getMayor();
+		return capital != null ? getCapital().getMayor() : null; 
 	}
 
 	@Override
@@ -888,11 +896,5 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return this == obj ||
-			((obj instanceof Nation) &&  this.getUniqueIdentifier().equals(((Nation) obj).getUniqueIdentifier()));
 	}
 }

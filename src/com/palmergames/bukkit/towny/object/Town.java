@@ -267,19 +267,17 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setNation(@Nullable Nation nation) throws AlreadyRegisteredException {
+		UUID newNatUUID = nation != null ? nation.getUniqueIdentifier() : null;
 		
-		// TODO: Implement
-		
-		if (nation == null) {
-			this.nationID = null;
-			TownyPerms.updateTownPerms(this);
-			TownyUniverse.getInstance().getDatabaseHandler().save(this);
+		// Ignore if the nation is the same (including if both are null)
+		if (nationID == newNatUUID ||
+			(nationID != null && nationID.equals(newNatUUID)))
 			return;
-		}
-		if (this.nationID == nation.getUniqueIdentifier())
-			return;
-		if (hasNation())
+
+		if (newNatUUID != null && hasNation()) {
 			throw new AlreadyRegisteredException();
+		}
+
 		this.nationID = nation.getUniqueIdentifier();
 		TownyPerms.updateTownPerms(this);
 		TownyUniverse.getInstance().getDatabaseHandler().save(this);
