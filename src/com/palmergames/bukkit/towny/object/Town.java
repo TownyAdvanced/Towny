@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;

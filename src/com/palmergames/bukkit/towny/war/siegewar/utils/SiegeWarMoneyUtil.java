@@ -6,11 +6,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
@@ -83,6 +83,7 @@ public class SiegeWarMoneyUtil {
 	public static void pillageTown(List<Resident> pillagingResidents, Nation nation, Town town) {
 		try {
 			double actualPillageAmount;
+			boolean townBankruptBeforePayment = town.getAccount().isBankrupt();
 			boolean townNewlyBankrupted = false;
 			boolean townDestroyed = false;
 
@@ -92,40 +93,21 @@ public class SiegeWarMoneyUtil {
 				|| town.getTownBlocks().size() == 0) 
 			return;
 
-			double fullPillageAmountForAllAttackingSoldiers =
+			double fullAmount =
 				TownySettings.getWarSiegePillageAmountPerPlot()
 					* town.getTownBlocks().size()
 					* getMoneyMultiplier(town);
 
-			//Take money from town
-			if(town.getAccount().pay(fullPillageAmountForAllAttackingSoldiers,"Pillage")) {
-				//Town can afford payment
-				actualPillageAmount = fullPillageAmountForAllAttackingSoldiers;
-			} else {
-				//Town cannot afford payment
-				if (TownySettings.isTownBankruptcyEnabled()) {
-					//Take from town
-					if(town.getAccount().isBankrupt()) {
-						//Town already bankrupt
-						boolean pillageSuccessful = town.getAccount().withdraw(fullPillageAmountForAllAttackingSoldiers, "Pillage by soldiers of " + nation.getName());
-						if(pillageSuccessful)
-							actualPillageAmount = fullPillageAmountForAllAttackingSoldiers;
-						else
-							actualPillageAmount = 0;
-					} else {
-						//We will bankrupt town now
-						double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
-						town.getAccount().setBalance(0, "Pillage by soldiers of " + nation.getName());
-						double actualDebtIncrease = town.getAccount().withdraw(fullPillageAmountForAllAttackingSoldiers - prePaymentTownBankBalance, "Pillage by soldiers of " + nation.getName());
-						actualPillageAmount = prePaymentTownBankBalance + actualDebtIncrease;
-						townNewlyBankrupted = true;
-					}
-				} else {
-					//Destroy town
-					actualPillageAmount = town.getAccount().getHoldingBalance();
-					townDestroyed = true;
-				}
-			}
+			//If bankruptcy is disabled and town cannot pay, it will be destroyed
+			if(TownySettings.isTownBankruptcyEnabled() && !town.getAccount().canPayFromHoldings(fullAmount))
+				townDestroyed = true;
+
+			//Redistribute money
+			actualPillageAmount = town.getAccount().payAsMuchAsPossible(fullAmount, MoneyUtil.getEstimatedValueOfTown(town), nation, "pillage");
+
+			//Record if town is newly bankrupt
+			if(!townBankruptBeforePayment && town.getAccount().isBankrupt()) 
+				townNewlyBankrupted = true;
 
 			//Give money steal to pillaging residents
 			double pillageAmountReceivedByEachResident = actualPillageAmount / pillagingResidents.size();

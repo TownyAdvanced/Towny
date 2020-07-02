@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.EconomyHandler;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import org.bukkit.World;
 
 /**
@@ -187,5 +189,71 @@ public class BankAccount extends Account {
 		// Make sure to remove debt account
 		TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
+	}
+
+	/**
+	 * Pay as much money as possible to the collector
+	 *
+	 * If bankruptcy is disabled, the account can pay up to the holding balance
+	 * If bankruptcy is enabled, the account can pay up to the debt limit.
+	 *
+	 * Return the actual amount paid
+	 *
+	 * @param fullAmount The full amount due to the collector
+	 * @param collector The collector of the money
+	 * @return The actual amount which was paid to the collector
+	 */
+	public double payAsMuchAsPossible(
+		double fullAmount, 
+		double debtCap,
+		EconomyHandler collector, 
+		String reason) {
+
+		try {
+			double actualAmountPaid;
+			if (TownySettings.isTownBankruptcyEnabled()) {
+				//Bankruptcy enabled - Bankrupt town if it cannot pay
+				setDebtCap(debtCap);
+				if (isBankrupt()) {
+					//town already bankrupt
+					if (withdraw(fullAmount, reason + " to " + collector.getName())) {
+						//Town paid item using debt. Pay nation fully
+						actualAmountPaid = fullAmount;
+						collector.getAccount().deposit(actualAmountPaid, reason + " from " + getName());
+					} else {
+						//Town did not pay item, as this would put it over the debt ceiling.
+						//Pay up to the ceiling now
+						actualAmountPaid = getDebtCap() + getHoldingBalance();
+						withdraw(actualAmountPaid, reason + " to " + collector.getName());
+						collector.getAccount().deposit(actualAmountPaid, reason + " from " + getName());
+					}
+				} else {
+					//town not yet bankrupt
+					if (withdraw(fullAmount, reason + " to " + collector.getName())) {
+						//Town paid for item using balance and/or debt. Pay nation fully
+						actualAmountPaid = fullAmount;
+						collector.getAccount().deposit(actualAmountPaid, reason + " from " + getName());
+					} else {
+						//Town did not pay item, as this would both make it bankrupt AND put it over the debt ceiling.
+						//Pay up to the ceiling now
+						actualAmountPaid = getHoldingBalance() + getDebtCap();
+						withdraw(actualAmountPaid, reason + " to " + collector.getName());
+						collector.getAccount().deposit(actualAmountPaid, reason + " from " + getName());
+					}
+				}
+			} else {
+				//Bankruptcy disabled - Pay up to ceiling only
+				if (payTo(fullAmount, collector, reason)) {
+					actualAmountPaid = fullAmount;
+				} else {
+					actualAmountPaid = getHoldingBalance();
+					payTo(actualAmountPaid, collector, reason);
+				}
+			}
+			//Return the actual amount paid
+			return actualAmountPaid;
+		} catch (EconomyException ee) {
+			return 0;
+		}
 	}
 }

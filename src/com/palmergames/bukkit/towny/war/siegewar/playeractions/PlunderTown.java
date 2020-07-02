@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
@@ -80,6 +81,7 @@ public class PlunderTown {
 
     private static void plunderTown(Siege siege, Town town, Nation nation, BlockPlaceEvent event) throws Exception {
 		double actualPlunderAmount;
+		boolean townBankruptBeforePayment = town.getAccount().isBankrupt();
 		boolean townNewlyBankrupted = false;
 		boolean townDestroyed = false;
 
@@ -88,32 +90,16 @@ public class PlunderTown {
 				* town.getTownBlocks().size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(town);
 
+		//If bankruptcy is disabled and town cannot pay, it will be destroyed
+		if(TownySettings.isTownBankruptcyEnabled() && !town.getAccount().canPayFromHoldings(fullPlunderAmount))
+			townDestroyed = true;
+
 		//Redistribute money
-		if(town.getAccount().payTo(fullPlunderAmount, nation,"Plunder")) {
-			//Town can afford plunder
-			actualPlunderAmount = fullPlunderAmount;
-		} else {
-			//Town cannot afford plunder
-			if (TownySettings.isTownBankruptcyEnabled()) {
-				//Take from town and pay to nation
-				if(town.isBankrupt()) {
-					actualPlunderAmount = town.increaseTownDebt(fullPlunderAmount, "Plunder by " + nation.getName());
-					nation.getAccount().collect(actualPlunderAmount, "Plunder of " + town.getName());
-				} else {
-					double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
-					town.getAccount().setBalance(0, "Plunder by " + nation.getName());
-					double actualDebtIncrease = town.increaseTownDebt(fullPlunderAmount - prePaymentTownBankBalance, "Plunder by " + nation.getName());
-					actualPlunderAmount = prePaymentTownBankBalance + actualDebtIncrease;
-					nation.getAccount().collect(actualPlunderAmount, "Plunder of " + town.getName());
-					townNewlyBankrupted = true;
-				}
-			} else {
-				//Destroy town
-				actualPlunderAmount = town.getAccount().getHoldingBalance();
-				town.getAccount().payTo(actualPlunderAmount, nation, "Plunder");
-				townDestroyed = true;
-			}
-		}
+		actualPlunderAmount = town.getAccount().payAsMuchAsPossible(fullPlunderAmount, MoneyUtil.getEstimatedValueOfTown(town), nation, "pillage");
+
+		//Record if town is newly bankrupt
+		if(!townBankruptBeforePayment && town.getAccount().isBankrupt())
+			townNewlyBankrupted = true;
 
 		//Set siege plundered flag
 		siege.setTownPlundered(true);
