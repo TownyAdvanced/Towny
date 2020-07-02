@@ -90,7 +90,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (hasTownBlock(townBlock))
 			throw new AlreadyRegisteredException();
 		else {
-			addTownBlockMap(townBlock);
+			townBlocks.put(townBlock.getWorldCoord(), townBlock);
 			if (townBlocks.size() < 2 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
@@ -99,19 +99,8 @@ public class Town extends Government implements TownBlockOwner {
 				}
 		}
 	}
-
-	public void addTownBlockMap(TownBlock townBlock) {
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);
-	}
 	
-	/**
-	 * Handles removing townblocks from both the Town's townblock hashmap.
-	 * 
-	 * Called by {@link Town#removeTownBlock(TownBlock)}
-	 * 
-	 * @param townBlock to be removed.
-	 */
-	public void removeTownBlockMap(TownBlock townBlock) {
+	private void removeTownBlockMap(TownBlock townBlock) {
 		townBlocks.remove(townBlock.getWorldCoord());
 	}
 
@@ -739,28 +728,28 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean hasWorld() {
-
 		return world != null;
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock){
+	public void removeTownBlock(TownBlock townBlock) {
 
-		if (!hasTownBlock(townBlock))
-			return;
-		else {
+		if (hasTownBlock(townBlock)) {
 			// Remove the spawn point for this outpost.
-			if (townBlock.isOutpost())
+			if (townBlock.isOutpost()) {
 				removeOutpostSpawn(townBlock.getCoord());
-			if (townBlock.isJail())
+			}
+			if (townBlock.isJail()) {
 				removeJailSpawn(townBlock.getCoord());
+			}
 			
 			// Clear the towns homeblock if this is it.
 			try {
-				if (getHomeBlock() == townBlock)
+				if (getHomeBlock() == townBlock) {
 					setHomeBlock(null);
+				}
 			} catch (TownyException ignored) {}
-			removeTownBlockMap(townBlock);
+			townBlocks.remove(townBlock.getWorldCoord());
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}
@@ -805,10 +794,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param spawn - Location to set Outpost's spawn point
 	 */
 	public void forceAddOutpostSpawn(Location spawn) {
-
 		outpostSpawns.add(spawn);
-
-
 	}
 
 	/**
@@ -827,12 +813,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public int getMaxOutpostSpawn() {
-
 		return outpostSpawns.size();
 	}
 
 	public boolean hasOutpostSpawn() {
-
 		return (outpostSpawns.size() > 0);
 	}
 
@@ -842,7 +826,6 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return List of outpostSpawns
 	 */
 	public List<Location> getAllOutpostSpawns() {
-
 		return outpostSpawns;
 	}
 
@@ -862,7 +845,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotPrice() {
-
 		return plotPrice;
 	}
 
@@ -906,7 +888,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
-
 		return hasHomeBlock() && townBlock == homeBlock;
 	}
 
@@ -915,7 +896,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotTax() {
-
 		return plotTax;
 	}
 
@@ -924,7 +904,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getCommercialPlotTax() {
-
 		return commercialPlotTax;
 	}
 
@@ -933,7 +912,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getEmbassyPlotTax() {
-
 		return embassyPlotTax;
 	}
 
@@ -979,7 +957,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public List<Location> getJailSpawns() {
-
 		return jailSpawns;
 	}
 
@@ -1020,7 +997,6 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param spawn - Location to set a Jail's spawn
 	 */
 	public void forceAddJailSpawn(Location spawn) {
-
 		jailSpawns.add(spawn);
 	}
 
@@ -1032,7 +1008,6 @@ public class Town extends Government implements TownBlockOwner {
 	 * @throws TownyException if there are no jail spawns set
 	 */
 	public Location getJailSpawn(Integer index) throws TownyException {
-
 		if (getMaxJailSpawn() == 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_jail_spawns_set"));
 
@@ -1040,12 +1015,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public int getMaxJailSpawn() {
-
 		return jailSpawns.size();
 	}
 
 	public boolean hasJailSpawn() {
-
 		return (jailSpawns.size() > 0);
 	}
 	
@@ -1055,7 +1028,6 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return List of jailSpawns
 	 */
 	public List<Location> getAllJailSpawns() {
-
 		return Collections.unmodifiableList(jailSpawns);
 	}
 
@@ -1065,7 +1037,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasOutlaw (String name) {
-		
 		for (Resident outlaw : outlaws)
 			if (outlaw.getName().equalsIgnoreCase(name))
 				return true;
@@ -1141,13 +1112,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isOverOutpostLimit() {
-		
 		return (getMaxOutpostSpawn() > getOutpostLimit());
 
 	}
 	
 	public boolean isOverClaimed() {
-		
 		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
 	}
 	
@@ -1161,7 +1130,6 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
-
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 	
@@ -1182,9 +1150,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
-		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
-		
 		TownyMessaging.sendErrorMsg(group.toString());
 		
 		for (TownBlock townBlock : getTownBlocks()) {
