@@ -49,7 +49,7 @@ public class TownJoinNationInvite implements Invite {
 
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarCommonPeacefulTownsEnabled()
-			&& (town.isPeaceful() || town.getDesiredPeacefulnessValue())) {
+			&& (town.isPeaceful() || town.getDesiredPeacefulValue())) {
 			//Player can only get here in some edge-case scenario/attempted exploit. So no attempted exception or messaging.
 		} else {
 			NationCommand.nationAdd(nation, towns);

@@ -2354,12 +2354,12 @@ public enum ConfigNodes {
 			"# ",
 			"# Common:",
 			"# PVP is forced off in the town",
-			"# Residents cannot inflict pvp damage",
-			"# A resident who leaves such a town cannot inflict PVP for a (configured) number of hours.",
 			"# ",
 			"# Siegewar:", 
 			"# A peaceful town is protected from all material siege costs e.g. pillage, plunder, and occupier taxes.",
 			"# Residents cannot have nation-military-ranks (e.g. soldier)",
+			"# Residents get 'war allergy' if they go into a siege zone",
+			"# Post leave effect: Yes, as per above 2 resident restrictions",
 			"# ",
 			"# PLAYER TIPS:",
 			"# If a town is in any of the following scenarios, it may find the feature useful:",
@@ -2372,16 +2372,21 @@ public enum ConfigNodes {
 			"# This option is recommended as a 'safety valve'",
 			"# E.g. if something has been badly coded or misconfigured,", 
 			"# this option gives players an off-ramp from the system without flooding staff w/ tickets,"),
-	WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS(
-			"war.common.peaceful_towns.confirmation_requirement_days",
-			"5",
+	WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_HOURS(
+			"war.common.peaceful_towns.confirmation_requirement_hours",
+			"120",
 			"# This value determines how long it takes to confirm a town peacefulness status change.",
 			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
-	WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS(
-			"war.common.peaceful_towns.resident_post_leave_peacefulness_duration_hours",
+	WAR_COMMON_PEACEFUL_TOWNS_POST_LEAVE_PEACEFULNESS_EFFECT_ENABLED(
+			"war.common.peaceful_towns.post_leave_peacefulness_effect.enabled",
+			"true",
+			"# If this is true, then when a player leaves a peaceful town, ",
+			"# they are affected by a peacefulness 'hangover' effect for a certain duration. (effect depends on the war system)",
+		    "# This is useful to prevent players exploiting by jumping between peaceful & non-peaceful towns."),
+	WAR_COMMON_PEACEFUL_TOWNS_POST_LEAVE_PEACEFULNESS_EFFECT_DURATION_HOURS(
+			"war.common.peaceful_towns.post_leave_peacefulness_effect.duration_hours",
 			"72",
-			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town.",
-			"# In this time they cannot inflict PVP damage, or (in Siegewar) gain nation-military ranks."),
+			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town."),
 
 	//Post-Respawn Peacefulness
 	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(

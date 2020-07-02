@@ -1300,18 +1300,17 @@ msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command b
 
 #Town Peacefulness
 status_town_title_peaceful: '&b (PEACEFUL)'
-status_town_peacefulness_status_change_timer: '&2Countdown To Peacefulness Status Change: &a%d days'
-msg_war_common_town_declared_peaceful: '&bPeacefulness Declared!. The town will be confirmed as peaceful in %d day(s).'
-msg_war_common_town_declared_non_peaceful: '&bNon-Peacefulness Declared!. The town will be confirmed as non-peaceful in %d day(s).'
+status_town_peacefulness_status_change_timer: '&2Countdown To Peacefulness Status Change: &a%d hours'
+msg_war_common_town_declared_peaceful: '&bPeacefulness Declared!. The town will be confirmed as peaceful in %d hours(s).'
+msg_war_common_town_declared_non_peaceful: '&bNon-Peacefulness Declared!. The town will be confirmed as non-peaceful in %d hours(s).'
 msg_war_common_town_peacefulness_countdown_cancelled: '&bThe peacefulness status change countdown was cancelled.'
 msg_war_common_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is forced off, and residents can no longer inflict PVP damage.'
 msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off, and residents can inflict PVP damage.'
-msg_war_common_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, for %s.'
 msg_war_common_peaceful_town_cannot_toggle_pvp: '&cCannot toggle PVP in peaceful towns. It is forced off.'
 
 msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off. Residents are vulnerable to war-allergy if they enter a siege-zone, and cannot gain nation-military ranks. The town is now immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
 msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off. Residents are no longer vulnerable to war-allergy, and can gain nation-military ranks. The town is no longer immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
-msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you are still vulnerable to war-allergy, and cannot gain nation-military ranks, for %s.'
+msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you are still vulnerable to war-allergy, and cannot gain nation-military ranks, for %d hours.'
 msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to add military rank to resident, because they are in a peaceful town, or recently left one.'
 msg_war_siege_peaceful_player_punished_for_being_in_siegezone: '&cWar-allergy active. To remove this effect, leave the siege-zone immediately.'
 

@@ -1167,7 +1167,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("desiredPeacefulnessValue");
 				if (line != null) {
 					try {
-						town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
+						town.setDesiredPeacefulValue(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
 				} else {
@@ -1175,7 +1175,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("desiredNeutralityValue");
 					if (line != null) {
 						try {
-							town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
+							town.setDesiredPeacefulValue(Boolean.parseBoolean(line));
 						} catch (Exception ignored) {
 						}
 					}
@@ -1184,7 +1184,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("peacefulnessChangeConfirmationCounterDays");
 				if (line != null) {
 					try {
-						town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));
+						town.setPeacefulnessChangeCountdownHours(Integer.parseInt(line));
 					} catch (Exception ignored) {
 					}
 				} else {
@@ -1192,7 +1192,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("neutralityChangeConfirmationCounterDays");
 					if (line != null) {
 						try {
-							town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));						} catch (Exception ignored) {
+							town.setPeacefulnessChangeCountdownHours(Integer.parseInt(line));						} catch (Exception ignored) {
 						}
 					}
 				}
@@ -2240,8 +2240,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());
 		list.add("occupied=" + town.isOccupied());
 		list.add("peaceful=" + town.isPeaceful());
-		list.add("desiredPeacefulnessValue=" + town.getDesiredPeacefulnessValue());
-		list.add("peacefulnessChangeConfirmationCounterDays=" + town.getPeacefulnessChangeConfirmationCounterDays());
+		list.add("desiredPeacefulValue=" + town.getDesiredPeacefulValue());
+		list.add("peacefulnessChangeCountdownHours=" + town.getPeacefulnessChangeCountdownHours());
 
 		/*
 		 *  Make sure we only save in async

@@ -438,11 +438,11 @@ public class TownyFormatter {
 
 		outForNonRuinedTowns.addAll(getExtraFields(town));
 
-		//Countdown To Peacefulness Status Change: 3 days
+		//Countdown To Peacefulness Status Change: 14 hours
 		if (TownySettings.getWarCommonPeacefulTownsEnabled()
-			&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
-			&& town.isPeaceful() != town.getDesiredPeacefulnessValue()) {
-			outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
+			&& town.getPeacefulnessChangeCountdownHours() > 0
+			&& town.isPeaceful() != town.getDesiredPeacefulValue()) {
+			outForNonRuinedTowns.add(String.format(TownySettings.getLangString("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeCountdownHours()));
 		}
 		outForNonRuinedTowns.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 

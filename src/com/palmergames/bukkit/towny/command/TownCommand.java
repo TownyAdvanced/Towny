@@ -1665,18 +1665,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if(admin) {
-					town.setPeacefulnessChangeConfirmationCounterDays(1);
-					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
+					town.setPeacefulnessChangeCountdownHours(1);
+					TownPeacefulnessUtil.updateTownPeacefulnessChangeCountdowns(town);
 				} else {
-					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
+					if (town.getPeacefulnessChangeCountdownHours() == 0) {
 						
 						//Here, no countdown is in progress, and the town wishes to change peacefulness status
-						town.setDesiredPeacefulnessValue(!town.isPeaceful());
-						int counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
-						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
+						town.setDesiredPeacefulValue(!town.isPeaceful());
+						int counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementHours();
+						town.setPeacefulnessChangeCountdownHours(counterValue);
 						
 						//Send message to town
-						if (town.getDesiredPeacefulnessValue())
+						if (town.getDesiredPeacefulValue())
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_peaceful"), counterValue));
 						else
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_non_peaceful"), counterValue));
@@ -1692,8 +1692,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						
 					} else {
 						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
-						town.setDesiredPeacefulnessValue(town.isPeaceful());
-						town.setPeacefulnessChangeConfirmationCounterDays(0);
+						town.setDesiredPeacefulValue(town.isPeaceful());
+						town.setPeacefulnessChangeCountdownHours(0);
 						//Send message to town
 						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_peacefulness_countdown_cancelled")));
 					}
@@ -1752,7 +1752,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 
 			if(TownySettings.getWarCommonPeacefulTownsEnabled() 
-				&& (town.isPeaceful() || town.getDesiredPeacefulnessValue())) {
+				&& (town.isPeaceful() || town.getDesiredPeacefulValue())) {
 				throw new TownyException(TownySettings.getLangString("msg_war_common_peaceful_town_cannot_toggle_pvp"));
 			}
 

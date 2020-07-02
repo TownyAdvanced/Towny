@@ -181,8 +181,8 @@ public class SQL_Schema {
 		columns.add("`siegeImmunityEndTime` BIGINT");
 		columns.add("`occupied` bool NOT NULL DEFAULT '0'");
 		columns.add("`peaceful` bool NOT NULL DEFAULT '0'");
-		columns.add("`desiredPeacefulnessValue` bool NOT NULL DEFAULT '0'");
-		columns.add("`peacefulnessChangeConfirmationCounterDays` int(11) DEFAULT 0");
+		columns.add("`desiredPeacefulValue` bool NOT NULL DEFAULT '0'");
+		columns.add("`peacefulnessChangeCountdownHours` int(11) DEFAULT 0");
 		return columns;
 	}
 

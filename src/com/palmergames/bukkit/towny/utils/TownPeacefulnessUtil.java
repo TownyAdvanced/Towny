@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,7 +22,7 @@ public class TownPeacefulnessUtil {
 	/**
 	 * This method adjust the peacefulness counters of all towns, where required
 	 */
-	public static void updateTownPeacefulnessCounters() {
+	public static void updateTownPeacefulnessChangeCountdowns() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
@@ -37,17 +36,17 @@ public class TownPeacefulnessUtil {
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined())
-				updateTownPeacefulnessCounters(town);
+				updateTownPeacefulnessChangeCountdowns(town);
 		}
 	}
 
-	public static void updateTownPeacefulnessCounters(Town town) {
+	public static void updateTownPeacefulnessChangeCountdowns(Town town) {
 		String messageKey;
 
-		if(town.getPeacefulnessChangeConfirmationCounterDays() != 0) {
-			town.decrementPeacefulnessChangeConfirmationCounterDays();
+		if(town.getPeacefulnessChangeCountdownHours() != 0) {
+			town.decrementPeacefulnessChangeCountdownHours();
 
-			if(town.getPeacefulnessChangeConfirmationCounterDays() < 1) {
+			if(town.getPeacefulnessChangeCountdownHours() < 1) {
 				town.flipPeaceful();
 
 				if(town.isPeaceful()) {
@@ -82,7 +81,7 @@ public class TownPeacefulnessUtil {
 				 * or player just left a peaceful town
 				*/
 				return resident.getTown().isPeaceful() 
-					|| resident.getTown().getDesiredPeacefulnessValue()
+					|| resident.getTown().getDesiredPeacefulValue()
 					|| resident.isPostTownLeavePeacefulEnabled();
 			} else {
 				//True if if player just left a peaceful town
@@ -90,23 +89,22 @@ public class TownPeacefulnessUtil {
 			}
 
 		} catch (NotRegisteredException e) { return false; }
-}
-
-	public static void grantPostTownLeavePeacefulnessToResident(Resident resident) {
-		int hours = TownySettings.getWarCommonPeacefulTownsResidentPostLeavePeacefulnessDurationHours();
-		String timeString = TimeMgmt.getFormattedTimeValue(hours * TimeMgmt.ONE_HOUR_IN_MILLIS);
-		String message;
-		if(TownySettings.getWarSiegeEnabled()) {
-			message  = String.format(TownySettings.getLangString("msg_war_siege_resident_left_peaceful_town"), timeString);
-		} else {
-			message  = String.format(TownySettings.getLangString("msg_war_common_resident_left_peaceful_town"), timeString);
-		}
-		resident.setPostTownLeavePeacefulEnabled(true);
-		resident.setPostTownLeavePeacefulHoursRemaining(hours);
-		TownyMessaging.sendMsg(resident, message);
 	}
 
-	public static void updatePostTownLeavePeacefulnessCounters() {
+	/**
+	 * This method gives a peacefulness 'hangover' effect to players who leave a peaceful town
+	 * The status lasts a configured amount of time
+	 * Its effects are dependant on each war system.
+	 ** 
+	 * @param resident The resident to be granted post-town-leave-peacefulness
+	 */
+	public static void grantPostTownLeavePeacefulnessToResident(Resident resident) {
+		int hours = TownySettings.getWarCommonPeacefulTownsPostLeavePeacefulnessEffectDurationHours();
+		resident.setPostTownLeavePeacefulEnabled(true);
+		resident.setPostTownLeavePeacefulHoursRemaining(hours);
+	}
+
+	public static void updatePostTownLeavePeacefulnessEffectCountdowns() {
 		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
 		
 		List<Resident> residents = new ArrayList<>(townyDataSource.getResidents());

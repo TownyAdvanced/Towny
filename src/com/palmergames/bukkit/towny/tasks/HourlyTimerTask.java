@@ -26,7 +26,10 @@ public class HourlyTimerTask extends TownyTimerTask {
 		}
 
 		if(TownySettings.getWarCommonPeacefulTownsEnabled()) {
-			TownPeacefulnessUtil.updatePostTownLeavePeacefulnessCounters();
+			TownPeacefulnessUtil.updateTownPeacefulnessChangeCountdowns();
+			if(TownySettings.getWarCommonPeacefulTownsPostLeavePeacefulnessEffectEnabled()) {
+				TownPeacefulnessUtil.updatePostTownLeavePeacefulnessEffectCountdowns();
+			}
 		}
 
 		if(TownySettings.getWarSiegeEnabled()) {

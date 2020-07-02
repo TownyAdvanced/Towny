@@ -3127,12 +3127,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_ENABLED);
 	}
 
-	public static int getWarCommonPeacefulTownsConfirmationRequirementDays() {
-		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS);
+	public static int getWarCommonPeacefulTownsConfirmationRequirementHours() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_HOURS);
 	}
 
-	public static int getWarCommonPeacefulTownsResidentPostLeavePeacefulnessDurationHours() {
-		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS);
+	public static boolean getWarCommonPeacefulTownsPostLeavePeacefulnessEffectEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_POST_LEAVE_PEACEFULNESS_EFFECT_ENABLED);
+	}
+
+	public static int getWarCommonPeacefulTownsPostLeavePeacefulnessEffectDurationHours() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_POST_LEAVE_PEACEFULNESS_EFFECT_DURATION_HOURS);
 	}
 
 	public static boolean getWarSiegePillagingEnabled() {

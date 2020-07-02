@@ -133,11 +133,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 		}
 
-		//Update town peacefulness counters
-		if (TownySettings.getWarCommonPeacefulTownsEnabled()) {
-			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
-		}
-
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
 

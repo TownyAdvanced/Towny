@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -23,7 +22,6 @@ import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -81,8 +79,8 @@ public class Town extends Government implements TownBlockOwner {
 	private Siege siege;
 	private boolean occupied;
 	private boolean peaceful;
-	private boolean desiredPeacefulnessValue;
-	private int peacefulnessChangeConfirmationCounterDays;
+	private boolean desiredPeacefulValue;
+	private int peacefulnessChangeCountdownHours;
 
 	public Town(String name) {
 		super(name);
@@ -95,8 +93,8 @@ public class Town extends Government implements TownBlockOwner {
 		siege = null;
 		occupied = false;
 		peaceful = false;
-		desiredPeacefulnessValue = false;
-		peacefulnessChangeConfirmationCounterDays = 0;
+		desiredPeacefulValue = false;
+		peacefulnessChangeCountdownHours = 0;
 	}
 
 	@Override
@@ -635,11 +633,19 @@ public class Town extends Government implements TownBlockOwner {
 			throw new NotRegisteredException();
 		} else {
 
-			if(TownySettings.getWarSiegeEnabled())
+			if(TownySettings.getWarSiegeEnabled()) {
 				SiegeWarMembershipController.evaluateTownRemoveResident(this, resident);
+			}
 
-			if(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
+			if(TownySettings.getWarCommonPeacefulTownsEnabled() && TownySettings.getWarCommonPeacefulTownsPostLeavePeacefulnessEffectEnabled()) {
 				TownPeacefulnessUtil.grantPostTownLeavePeacefulnessToResident(resident);
+
+				//In siegewar, give this message
+				if(TownySettings.getWarSiegeEnabled()) {
+					String message = String.format(TownySettings.getLangString("msg_war_siege_resident_left_peaceful_town"), resident.getPostTownLeavePeacefulHoursRemaining());
+					TownyMessaging.sendMsg(resident, message);
+				}
+			}
 
 			remove(resident);
 
@@ -1417,12 +1423,12 @@ public class Town extends Government implements TownBlockOwner {
 		return peaceful;
 	}
 
-	public int getPeacefulnessChangeConfirmationCounterDays() {
-		return peacefulnessChangeConfirmationCounterDays;
+	public int getPeacefulnessChangeCountdownHours() {
+		return peacefulnessChangeCountdownHours;
 	}
 
-	public void decrementPeacefulnessChangeConfirmationCounterDays() {
-		peacefulnessChangeConfirmationCounterDays--;
+	public void decrementPeacefulnessChangeCountdownHours() {
+		peacefulnessChangeCountdownHours--;
 	}
 
 	public void flipPeaceful() {
@@ -1430,19 +1436,19 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void flipDesiredPeacefulnessValue() {
-		desiredPeacefulnessValue = !desiredPeacefulnessValue;
+		desiredPeacefulValue = !desiredPeacefulValue;
 	}
 
-	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
-		peacefulnessChangeConfirmationCounterDays = counterValueDays;
+	public void setPeacefulnessChangeCountdownHours(int hours) {
+		peacefulnessChangeCountdownHours = hours;
 	}
 
-	public void setDesiredPeacefulnessValue(boolean value) {
-		desiredPeacefulnessValue = value;
+	public void setDesiredPeacefulValue(boolean value) {
+		desiredPeacefulValue = value;
 	}
 
-	public boolean getDesiredPeacefulnessValue() {
-		return desiredPeacefulnessValue;
+	public boolean getDesiredPeacefulValue() {
+		return desiredPeacefulValue;
 	}
 
 	public void setPeaceful(boolean value) {

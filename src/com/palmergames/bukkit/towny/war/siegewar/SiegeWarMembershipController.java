@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 
 /**
@@ -26,6 +28,12 @@ public class SiegeWarMembershipController {
 	 *  
 	 */
 	public static void evaluateTownRemoveResident(Town town, Resident resident) {
+		if(TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
+			TownPeacefulnessUtil.grantPostTownLeavePeacefulnessToResident(resident);
+			String message  = String.format(TownySettings.getLangString("msg_war_siege_resident_left_peaceful_town"), resident.getPostTownLeavePeacefulHoursRemaining());
+			TownyMessaging.sendMsg(resident, message);
+		}
+
 		if(!TownySettings.getWarSiegePenaltyPointsEnabled())
 			return;
 
