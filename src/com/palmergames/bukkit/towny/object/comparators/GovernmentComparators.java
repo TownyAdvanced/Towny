@@ -36,8 +36,4 @@ public class GovernmentComparators {
 			return -1;
 		}
 	};
-
-	public static Comparator<? extends Government> of(final Comparator<? extends Government> orig) {
-		return orig;
-	}
 }

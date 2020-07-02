@@ -197,6 +197,9 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @throws TownyException Thrown on an error setting.
 	 */
 	public final void setTag(String text) throws TownyException {
+		if (text.length() > 4)
+			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
+
 		if (text.length() < 4) {
 			return;
 		}
