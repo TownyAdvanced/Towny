@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -2070,6 +2071,10 @@ public class TownySettings {
 	public static boolean isTownRespawningInOtherWorlds() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
+	}
+	
+	public static boolean isRespawnAnchorHigherPrecedence() {
+		return getBoolean(ConfigNodes.GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
 	public static int getMaxResidentsPerTown() {
