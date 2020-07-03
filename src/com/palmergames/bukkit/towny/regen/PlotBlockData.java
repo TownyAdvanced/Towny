@@ -130,7 +130,7 @@ public class PlotBlockData {
 			try {
 				storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
 			} catch (IllegalArgumentException e1) {
-				System.out.println("Towny encountered a block which will not load on the current version of MC. Ignoring.");
+				TownyMessaging.sendDebugMsg("Towny's revert-on-unclaim feature encountered a block which will not load on the current version of MC. Ignoring and skipping to next block.");
 				continue;
 			}
 			
