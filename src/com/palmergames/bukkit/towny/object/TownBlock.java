@@ -69,12 +69,17 @@ public class TownBlock extends TownyObject {
 
 	public void setResident(Resident resident) {
 		boolean successful;
-        if (hasResident())
-            this.resident.removeTownBlock(this);
+        if (hasResident()) {
+			this.resident.removeTownBlock(this);
+		}
         this.resident = resident;
 		try {
-			resident.addTownBlock(this);
-			successful = true;
+			if (!resident.hasTownBlock(this)) {
+				successful = false;
+			} else {
+				resident.addTownBlock(this);
+				successful = true;
+			}
 		} catch (NullPointerException e) {
 			successful = false;
 		}

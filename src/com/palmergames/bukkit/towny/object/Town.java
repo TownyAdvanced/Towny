@@ -208,14 +208,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public void setNation(Nation nation) {
-		if (this.nation == nation || hasNation()) {
-			return;
-		}
-
 		if (nation == null) {
 			this.nation = null;
 			TownyPerms.updateTownPerms(this);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			return;
+		}
+		
+		if (this.nation == nation || hasNation()) {
 			return;
 		}
 		
@@ -821,8 +821,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		// Clear the towns homeblock if this is it.
 		try {
-			if (getHomeBlock() == townBlock)
+			if (getHomeBlock() == townBlock) {
 				setHomeBlock(null);
+			}
 		} catch (TownyException ignored) {}
 		removeTownBlockMap(townBlock);
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
