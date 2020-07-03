@@ -4665,3 +4665,5 @@ v0.92.0.11:
     - Closes #4066. 
   - Fix /towny prices showing costs when using_economy: false.
   - Fix death costs appearing messages showing when using_economy: false.
+  - Fix revert-on-unclaim feature failing to read 1.15 and lower BlockStates of walls in 1.16.
+    - Closes #4121.
