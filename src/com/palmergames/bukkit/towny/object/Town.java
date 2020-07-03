@@ -55,7 +55,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
-	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
+	private double commercialPlotPrice, embassyPlotPrice;
+	private double spawnCost = TownySettings.getSpawnTravelCost();
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isPublic = TownySettings.getTownDefaultPublic();
