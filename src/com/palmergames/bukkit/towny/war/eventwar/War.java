@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.EventWarEndEvent;
 import com.palmergames.bukkit.towny.event.EventWarPreStartEvent;
 import com.palmergames.bukkit.towny.event.EventWarStartEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
