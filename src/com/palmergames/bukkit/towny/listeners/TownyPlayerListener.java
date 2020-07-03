@@ -156,8 +156,15 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if (!TownySettings.isTownRespawning())
+		if (!TownySettings.isTownRespawning()) {
 			return;
+		}
+		
+		// If respawn anchors have higher precedence than town spawns, use them instead.
+		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
+			TownyMessaging.sendErrorMsg("got here");
+			return;
+		}
 		
 		Location respawn;
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
