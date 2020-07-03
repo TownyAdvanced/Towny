@@ -860,8 +860,6 @@ public class Towny extends JavaPlugin {
 		Version ver = new Version(verString);
 		Version required = new Version("1.16.1");
 		
-		TownyMessaging.sendErrorMsg(ver.compareTo(required) + "");
-		
 		return ver.compareTo(required) >= 0;
 	}
 }
