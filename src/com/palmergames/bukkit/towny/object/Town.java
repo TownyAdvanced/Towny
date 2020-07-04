@@ -50,7 +50,6 @@ public class Town extends Government implements TownBlockOwner {
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
-	private double spawnCost = TownySettings.getSpawnTravelCost();
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
