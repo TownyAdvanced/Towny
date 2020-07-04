@@ -425,6 +425,10 @@ public enum ConfigNodes {
 			"enemy",
 			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
 			"# Allowed options: unclaimed,enemy,neutral"),
+	GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
+		"global_town_settings.respawn_anchor_higher_precendence",
+		"true",
+		"# When this is true, players will respawn to respawn anchors on death rather than their own town. 1.16+ only."),
 	GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS(
 			"global_town_settings.show_town_notifications",
 			"true",

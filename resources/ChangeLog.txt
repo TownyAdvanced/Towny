@@ -4663,3 +4663,14 @@ v0.92.0.11:
   - Fix the towny.nation.spawn.public node not being used for checks if a player can n spawn to a public nation. 
   - Fix allow_nation_spawn config nodes not overriding player permissions.
     - Closes #4066. 
+  - Fix /towny prices showing costs when using_economy: false.
+  - Fix death costs appearing messages showing when using_economy: false.
+  - Fix revert-on-unclaim feature failing to read 1.15 and lower BlockStates of walls in 1.16.
+    - Closes #4121.
+  - Add Respawn Anchor Integration, courtesy of Siris with PR #4134.
+    - Closes #4132.
+  - New Config option: global_town_settings.respawn_anchor_higher_precendence
+    - Default: true
+    - When this is true, players will respawn to respawn anchors on death rather than their own town. Affect 1.16+ servers only. 
+  - Fix new Towns not adopting the economy.spawn_travel.price_town_public_spawn_travel cost for using /t spawn [townname].
+    - Closes #4082.
