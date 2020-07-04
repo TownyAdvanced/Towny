@@ -23,6 +23,13 @@ public class BattleSession {
 	private boolean warningGiven;
 	private long expiryTime;
 	private long deletionTime;
+	
+	public BattleSession() {
+		expired = false;
+		warningGiven = false;
+		expiryTime = 0;
+		deletionTime = 0;
+	}
 
 	public boolean isExpired() {
 		return expired;

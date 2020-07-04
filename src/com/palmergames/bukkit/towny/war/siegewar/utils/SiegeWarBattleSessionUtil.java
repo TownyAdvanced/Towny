@@ -21,10 +21,9 @@ public class SiegeWarBattleSessionUtil {
 	public static final String METADATA_TAG_NAME= "towny.siegewar.battle.session";
 	
 	public static void evaluateBattleSessions() {
-		BattleSession battleSession = null;
-		
 		for(Player player: BukkitTools.getOnlinePlayers()) {
 			try {
+				BattleSession battleSession = null;
 				//Process progress of existing session
 				if (player.hasMetadata(METADATA_TAG_NAME)) {
 					battleSession = (BattleSession)player.getMetadata(METADATA_TAG_NAME).get(0).value();
