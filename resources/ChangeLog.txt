@@ -4674,3 +4674,5 @@ v0.92.0.11:
     - When this is true, players will respawn to respawn anchors on death rather than their own town. Affect 1.16+ servers only. 
   - Fix new Towns not adopting the economy.spawn_travel.price_town_public_spawn_travel cost for using /t spawn [townname].
     - Closes #4082.
+  - Bump language files to 0.84.
+  - Fix /plot toggle being able to be used on grouped plots.

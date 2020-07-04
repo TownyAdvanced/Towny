@@ -574,6 +574,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					plotTestOwner(resident, townBlock); // ignore the return as
 					// we are only checking
 					// for an exception
+					
+					// Make sure that the player is only operating on a single plot and not a plotgroup.
+					if (townBlock.hasPlotObjectGroup()) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_plot_belongs_to_group_toggle"));
+						return false;
+					}
 
 					plotToggle(player, new WorldCoord(world, Coord.parseCoord(player)).getTownBlock(), StringMgmt.remFirstArg(split));
 

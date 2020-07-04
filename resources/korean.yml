@@ -1,5 +1,5 @@
 name: Towny
-version: 0.83
+version: 0.84
 language: 한국어
 author: 'Daybreak 새벽'
 website: 'http://townyadvanced.github.io/'
@@ -1050,3 +1050,6 @@ msg_hover_previous_page: 'Previous Page'
 # Added in 0.83
 msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
 msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
+
+# Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
