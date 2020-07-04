@@ -4676,3 +4676,4 @@ v0.92.0.11:
     - Closes #4082.
   - Bump language files to 0.84.
   - Fix /plot toggle being able to be used on grouped plots.
+  - Update log4j to 2.13.2.
