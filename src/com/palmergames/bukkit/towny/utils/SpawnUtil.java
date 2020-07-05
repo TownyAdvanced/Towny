@@ -286,30 +286,39 @@ public class SpawnUtil {
 			}
 		}
 
-		//Prevent spawning into siegezones OR besieged towns except by residents
+		/* 
+		 Prevent spawning into siegezones OR besieged towns except if:
+		 1. It is a town resident spawning into their own town, OR
+		 2. It is a player spawning into a peaceful town
+		 */
 		if (!isTownyAdmin 
 			&& TownySettings.getWarSiegeEnabled() 
 			&& TownySettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
 
 			try {
-				//Do not block TP if the siegeloc is the resident's town
 				String townNameAtSpawnLocation = TownyAPI.getInstance().getTownName(spawnLoc);
-				if(!(townNameAtSpawnLocation != null
-					&& resident.hasTown() 
-					&& resident.getTown().getName().equalsIgnoreCase(townNameAtSpawnLocation))) {
+				boolean residentSpawningIntoOwnTown =
+				    townNameAtSpawnLocation != null
+					&& resident.hasTown()
+					&& resident.getTown().getName().equalsIgnoreCase(townNameAtSpawnLocation);
 
-					//Block TP if the town is besieged
+				if(!residentSpawningIntoOwnTown) {   //No block if this is a resident spawning into own town
 					Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
-					if (townAtSpawnLocation.hasSiege()
-						&& townAtSpawnLocation.getSiege().getStatus().isActive()) {
-						throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
-					}
 
-					//Block TP if the town town is near a siege zone
-					for (Siege siege : townyUniverse.getDataSource().getSieges()) {
-						if (siege.getStatus().isActive()
-							&& SiegeWarDistanceUtil.isInSiegeZone(spawnLoc, siege)) {
+					if(!townAtSpawnLocation.isPeaceful()) {  //No block if this is a peaceful town
+
+						//Block TP if the target town is besieged
+						if (townAtSpawnLocation.hasSiege()
+							&& townAtSpawnLocation.getSiege().getStatus().isActive()) {
 							throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
+						}
+
+						//Block TP if the target spawn point is in a siege zone
+						for (Siege siege : townyUniverse.getDataSource().getSieges()) {
+							if (siege.getStatus().isActive()
+								&& SiegeWarDistanceUtil.isInSiegeZone(spawnLoc, siege)) {
+								throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
+							}
 						}
 					}
 				}
