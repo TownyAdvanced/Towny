@@ -18,12 +18,16 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.tasks.BackupTask;
+import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -62,8 +67,10 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-    
-    private TownyUniverse() {
+	private String saveDbType;
+	private String loadDbType;
+
+	private TownyUniverse() {
         towny = Towny.getPlugin();
         rootFolder = towny.getDataFolder().getPath();
     }
@@ -82,9 +89,9 @@ public class TownyUniverse {
         }
 		// Init logger
 		TownyLogger.getInstance();
-        
-        String saveDbType = TownySettings.getSaveDatabase();
-        String loadDbType = TownySettings.getLoadDatabase();
+
+		saveDbType = TownySettings.getSaveDatabase();
+		loadDbType = TownySettings.getLoadDatabase();
         
         // Setup any defaults before we load the dataSource.
         Coord.setCellSize(TownySettings.getTownBlockSize());
@@ -102,7 +109,6 @@ public class TownyUniverse {
         System.out.println("[Towny] Database loaded in " + time + "ms.");
         
         try {
-            dataSource.cleanupBackups();
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
                 case "ff":
@@ -121,19 +127,12 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            try {
-                dataSource.backup();
-                
-                if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    dataSource.deleteUnusedResidents();
-                }
-                
-            } catch (IOException e) {
-                System.out.println("[Towny] Error: Could not create backup.");
-                e.printStackTrace();
-                return false;
-            }
-            
+			
+			// Run both the backup cleanup and backup async.
+			CompletableFuture
+				.runAsync(new CleanupBackupTask())
+				.thenRun(new BackupTask());
+
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
                 dataSource.saveAllWorlds();
@@ -548,5 +547,12 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-	
+
+	public String getSaveDbType() {
+		return saveDbType;
+	}
+
+	public String getLoadDbType() {
+		return loadDbType;
+	}
 }
