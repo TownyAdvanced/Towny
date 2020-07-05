@@ -1248,7 +1248,7 @@ msg_err_siege_war_cannot_destroy_siege_banner: "&6[War]&c While the siege is in 
 msg_err_siege_war_nation_zone_this_area_protected_but_besieged: '&6[War]&c This part of the %s is under the protection of %s, and also cannot be altered while the nearby town is under siege.'
 msg_err_siege_war_banner_support_block_not_stable: "&6[War]&c You cannot place the banner on unstable ground e.g. sand or gravel."
 # Spawn
-msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town: '&6[War]&c Only town residents can spawn into besieged towns or siege-zones.'
+msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town: '&6[War]&c Only town residents can spawn into a besieged town or siege zone (unless the target town is peaceful).'
 #Banner control
 msg_siege_war_banner_control_session_failure: '&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, too far from the banner, invisible, flying, or under a block (world-dependent).'
 msg_war_siege_zone_milk_bucket_forbidden_while_attempting_banner_control: 'You cannot use this item while in a banner control session.'
