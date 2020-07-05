@@ -158,6 +158,25 @@ public enum ConfigNodes {
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
+	
+	NATION("nation", "", "", 
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |               New Nation Defaults                    | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################", ""),
+    NATION_DEF_PUBLIC(
+            "nation.default_public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
+    NATION_DEF_OPEN(
+            "nation.default_open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	NATION_DEF_BOARD("nation.default_board", 
+			"/nation set board [msg]",
+			"# Default nation board"),
+	
 	NWS(
 			"new_world_settings",
 			"",
@@ -622,22 +641,7 @@ public enum ConfigNodes {
 			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
 			"# This setting determines the list of allowed nation map colors.",
 			"# The color codes are in hex format."),
-	NATION("nation", "", "", "############################################################",
-			"# +------------------------------------------------------+ #",
-			"# |               New Nation Defaults                    | #",
-			"# +------------------------------------------------------+ #",
-			"############################################################", ""),
-    NATION_DEF_PUBLIC(
-            "nation.default_public",
-            "false",
-            "# If set to true, any newly made nation will have their spawn set to public."),
-    NATION_DEF_OPEN(
-            "nation.default_open",
-            "false",
-            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
-	NATION_DEF_BOARD("nation.default_board", 
-			"/nation set board [msg]",
-			"# Default nation board"),
+
 	PLUGIN(
 			"plugin",
 			"",

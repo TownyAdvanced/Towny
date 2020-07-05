@@ -4677,3 +4677,18 @@ v0.92.0.11:
   - Bump language files to 0.84.
   - Fix /plot toggle being able to be used on grouped plots.
   - Update log4j to 2.13.2.
+  - Add color code translation to resident formatted names, courtesy of Siris with PR #4059.
+  - Add configurable default Town&Nation board #4125, courtesy of ronthecookie with PR #4125.
+  - New Config Option: nation.default_board 
+    - default: /nation set board [msg]
+    - Default nation board.
+  - New Config Option: town.default_board 
+    - default: /town set board [msg]
+    - Default town board.
+  - MOVED CONFIG OPTIONS:
+    - global_nation_settings.default.public
+    - global_nation_settings.default.open
+    - These config options are now found in the brand new "New Nation Defaults" section immediately below the "Town Claim/new defaults" section.
+    - nation.default_public, default: false.
+    - nation.default_open, default: false.
+    - You will have to reconfigure these new settings if you had either of the old setting set to true.
