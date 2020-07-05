@@ -1351,10 +1351,15 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
-	
+
+	public static String getTownDefaultBoard() {
+
+		return getString(ConfigNodes.TOWN_DEF_BOARD);
+	}
+
 	public static boolean getNationDefaultOpen() {
 
-		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
+		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
 
 	public static double getTownDefaultTax() {
@@ -1945,7 +1950,12 @@ public class TownySettings {
 
 	public static boolean getNationDefaultPublic(){
 
-		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+		return getBoolean(ConfigNodes.NATION_DEF_PUBLIC);
+	}
+
+	public static String getNationDefaultBoard(){
+
+		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
 	public static String getFlatFileBackupType() {
