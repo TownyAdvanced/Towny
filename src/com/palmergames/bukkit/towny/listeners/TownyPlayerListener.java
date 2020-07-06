@@ -977,6 +977,15 @@ public class TownyPlayerListener implements Listener {
 
 			}
 		}
+		if (TownySettings.getKeepInventoryInArenas()) {
+			if (!keepInventory) {
+				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
+				if (tb != null && tb.getType() == TownBlockType.ARENA) {
+					event.setKeepInventory(true);
+					event.getDrops().clear();
+				}
+			}
+		}
 	}
 
 
