@@ -4709,3 +4709,8 @@ v0.92.0.11:
   - Fix NoSuchMethodError on startup from the new log4j methods.
 0.96.2.3:
   - pt-br.yml updated to 0.84, courtesy of vsdepontes with PR #4139.
+  - Add option for keep inventory for arena plots, courtesy of Siris with #4138.
+  - New Config Option: global_town_settings.keep_inventory_on_death_in_arena
+    - default: false.
+    - If People should keep their inventories on death in an arena townblock.
+    - Is not guaranteed to work with other keep inventory plugins!
