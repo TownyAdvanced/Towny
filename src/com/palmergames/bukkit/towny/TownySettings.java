@@ -2692,6 +2692,10 @@ public class TownySettings {
 	public static boolean getKeepInventoryInTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN);
 	}
+	
+	public static boolean getKeepInventoryInArenas() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
+	}
 
 	public static boolean getKeepExperienceInTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN);
