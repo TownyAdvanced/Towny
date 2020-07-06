@@ -4707,3 +4707,5 @@ v0.92.0.11:
       - Add ",CRIMSON_SIGN,WARPED_SIGN,CRIMSON_WALL_SIGN,WARPED_WALL_SIGN,CRIMSON_DOOR,WARPED_DOOR,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE"
       - This will also have to be added to any towny\data\worlds\WORLDNAME.txt file in the plotManagementDeleteIds list.
   - Fix NoSuchMethodError on startup from the new log4j methods.
+0.96.2.3:
+  - pt-br.yml updated to 0.84, courtesy of vsdepontes with PR #4139.
