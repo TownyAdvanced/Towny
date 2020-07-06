@@ -131,7 +131,7 @@ public class TownyUniverse {
 			// Run both the backup cleanup and backup async.
 			CompletableFuture
 				.runAsync(new CleanupBackupTask())
-				.thenRun(new BackupTask());
+				.thenRunAsync(new BackupTask());
 
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
