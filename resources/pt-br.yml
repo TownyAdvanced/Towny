@@ -1143,4 +1143,4 @@ msg_max_tax_amount_only_for_percent: "Limites de taxas apenas podem ser definido
 msg_town_set_tax_max_percent_amount: "%s mudou o valor da taxa máxima para %s."
 
 # Added in 0.84
-msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
+msg_err_plot_belongs_to_group_toggle: 'O terreno pertence a um grupo, use /plot group toggle'
