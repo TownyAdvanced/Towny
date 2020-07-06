@@ -24,10 +24,8 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,10 +65,10 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-	private String saveDbType;
-	private String loadDbType;
-
-	private TownyUniverse() {
+    private String saveDbType;
+    private String loadDbType;
+    
+    private TownyUniverse() {
         towny = Towny.getPlugin();
         rootFolder = towny.getDataFolder().getPath();
     }
@@ -90,8 +88,8 @@ public class TownyUniverse {
 		// Init logger
 		TownyLogger.getInstance();
 
-		saveDbType = TownySettings.getSaveDatabase();
-		loadDbType = TownySettings.getLoadDatabase();
+        saveDbType = TownySettings.getSaveDatabase();
+        loadDbType = TownySettings.getLoadDatabase();
         
         // Setup any defaults before we load the dataSource.
         Coord.setCellSize(TownySettings.getTownBlockSize());
@@ -127,11 +125,11 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-			
-			// Run both the backup cleanup and backup async.
-			CompletableFuture
-				.runAsync(new CleanupBackupTask())
-				.thenRunAsync(new BackupTask());
+            
+            // Run both the backup cleanup and backup async.
+            CompletableFuture
+                .runAsync(new CleanupBackupTask())
+                .thenRunAsync(new BackupTask());
 
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
