@@ -4717,3 +4717,4 @@ v0.92.0.11:
     - Is not guaranteed to work with other keep inventory plugins!
   - Fix for CMIFakeOperator triggering a NotRegisteredException on the PlayerCommandPreprocessEvent.
     - Closes #4144.
+  - Add Asynchronous Backup To Speed up Load Times, courtesy of Siris with PR #4136.
