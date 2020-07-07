@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentOwner;
+import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
@@ -401,7 +401,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentOwner> list = new ArrayList<>(universe.getDataSource().getTowns());
+				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
 				list.addAll(universe.getDataSource().getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
 				towny_top.addAll(getMostResidents(list, 10));
@@ -539,20 +539,20 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentOwner> list, int maxListing) {
+	public List<String> getMostResidents(List<ResidentList> list, int maxListing) {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<ResidentOwner, Integer> kvTable = new KeyValueTable<>();
-		for (ResidentOwner obj : list)
+		KeyValueTable<ResidentList, Integer> kvTable = new KeyValueTable<>();
+		for (ResidentList obj : list)
 			kvTable.put(obj, obj.getResidents().size());
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<ResidentOwner, Integer> kv : kvTable.getKeyValues()) {
+		for (KeyValue<ResidentList, Integer> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			ResidentOwner owner = kv.key;
+			ResidentList owner = kv.key;
 			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) owner).getFormattedName(), kv.value));
 		}
 		return output;

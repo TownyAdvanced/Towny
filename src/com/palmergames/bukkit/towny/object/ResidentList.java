@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * Represents an object capable of storing residents within it.
  */
-public interface ResidentOwner {
+public interface ResidentList {
 	/**
 	 * Returns an unmodifiable list of residents.
 	 * 

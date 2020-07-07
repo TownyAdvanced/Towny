@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentOwner;
+import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class ResidentUtil {
@@ -22,7 +22,7 @@ public class ResidentUtil {
 	 * @param owner - List of Residents which could be viewed.
 	 * @return - List of residents that can actually be seen.
 	 */
-	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentOwner owner) {
+	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList owner) {
 		
 		List<Resident> onlineResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
