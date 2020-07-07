@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
+public class Nation extends TownyObject implements ResidentOwner, TownyInviter, Bank {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
