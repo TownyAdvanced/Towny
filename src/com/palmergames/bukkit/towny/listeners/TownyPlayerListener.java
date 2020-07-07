@@ -1086,11 +1086,17 @@ public class TownyPlayerListener implements Listener {
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) {
 		if (plugin.isError()) {
 			return;
 		}
-		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
+		Resident resident = null;
+		try {
+			resident = TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName());
+		} catch (NotRegisteredException e) {
+			// More than likely another plugin using a fake player to run a command. 
+		} 
+		if (resident == null || !resident.isJailed())
 			return;
 				
 		String[] split = event.getMessage().substring(1).split(" ");
