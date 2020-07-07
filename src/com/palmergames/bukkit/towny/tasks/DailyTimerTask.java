@@ -135,6 +135,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		//Update town peacefulness counters
 		if (TownySettings.getWarCommonPeacefulTownsEnabled()) {
 			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
+			if(TownySettings.getWarSiegeEnabled()) {
+				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
+			}
 		}
 
 		// Backups

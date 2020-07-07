@@ -855,7 +855,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
 				}
 			}
-			
+
+			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful())
+				throw new Exception(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"));
+
 			// Check if the command is not cancelled
 			NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 			Bukkit.getPluginManager().callEvent(preEvent);
@@ -1459,6 +1462,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownySettings.getWarSiegeEnabled()) {
 
+				//Peaceful towns cannot leave
+				if(TownySettings.getWarCommonPeacefulTownsEnabled()
+					&& town.isPeaceful())
+					throw new TownyException(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_leave_nation"), TownySettings.calcTownLevel(town)));
+
 				if (TownySettings.getWarSiegeTownLeaveDisabled()) {
 
 					if (!TownySettings.getWarSiegeRevoltEnabled())
@@ -1631,6 +1639,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Tests here are performed to make sure the Towns are allowed to join the Nation:
 	 * - make sure the town has enough residents to join a nation (if it is required in the config.)
 	 * - make sure the town is close enough to the nation capital (if it is required in the config.)
+	 * - make sure the town is not siege-war-peaceful
 	 * 
 	 * Lastly, invites are sent and if successful, the third stage is called by the invite handler.
 	 * 
@@ -1644,7 +1653,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
 			try {
-				
 		        if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 		        	remove.add(town);
 		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
@@ -1668,7 +1676,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						continue;
 					}
 				}
-				
+
+				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"));
+					remove.add(town);
+					continue;
+				}
+
 				// Check if the command is not cancelled
 				NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 				Bukkit.getPluginManager().callEvent(preEvent);
@@ -1778,7 +1792,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		ArrayList<Town> remove = new ArrayList<>();
-		for (Town town : kicking)
+		for (Town town : kicking) {
+
+			//Peaceful towns cannot be kicked
+			if (TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarCommonPeacefulTownsEnabled()
+				&& town.isPeaceful()) {
+				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_be_kicked"), TownySettings.calcTownLevel(town)));
+				return;
+			}
+
 			if (town.isCapital())
 				remove.add(town);
 			else
@@ -1797,7 +1820,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						res.updatePermsForNationRemoval(); // Clears the nationRanks.
 						townyUniverse.getDataSource().saveResident(res);
 					}
-					
+
 					townyUniverse.getDataSource().saveTown(town);
 				} catch (NotRegisteredException e) {
 					remove.add(town);
@@ -1806,6 +1829,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// assistants
 					// so there will always be at least one resident.
 				}
+		}
 
 		for (Town town : remove)
 			kicking.remove(town);

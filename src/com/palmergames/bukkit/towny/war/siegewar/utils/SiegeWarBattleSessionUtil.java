@@ -42,21 +42,33 @@ public class SiegeWarBattleSessionUtil {
 					}
 				}
 
+				boolean playerInPeacefulTown = false;
 				boolean playerInOwnTown = false;
-				try {
-					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-					if(resident.hasTown()) {
-						TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
-						if(townBlockAtPlayerLocation != null) {
-							if(resident.getTown() == townBlockAtPlayerLocation.getTown()) {
-								playerInOwnTown = true;
-							}
-						}
-					}
-				} catch (NotRegisteredException nre) {}
 
-				//If player is in a siegezone (& not in own town), process initiation/effects
-				if(!playerInOwnTown && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
+				//Check if resident in in a peaceful town
+				TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
+				if(townBlockAtPlayerLocation != null
+					&& townBlockAtPlayerLocation.getTown().isPeaceful())
+				{
+					playerInPeacefulTown = true;
+				}
+
+				//Check if resident is in their own town
+				if(!playerInPeacefulTown) {
+					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (resident.hasTown()
+						&& townBlockAtPlayerLocation != null
+						&& resident.getTown() == townBlockAtPlayerLocation.getTown())
+					{
+						playerInOwnTown = true;
+					}
+				}
+
+				//If player is in an area where they should get battle fatigue, process initiation/effects
+				if(!playerInPeacefulTown
+					&& !playerInOwnTown
+					&& SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation()))
+				{
 					if (!player.hasMetadata(METADATA_TAG_NAME)) {
 						battleSession = new BattleSession();
 						battleSession.setExpiryTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
@@ -92,11 +104,10 @@ public class SiegeWarBattleSessionUtil {
 					}
 
 				} else {
-					//Player not in siege zone, or in own town. Reset warning if applicable
+					//Player not in an area where they can get battle fatigue. Reset warning if applicable
 					if(battleSession != null && battleSession.isExpired() && battleSession.isWarningGiven()) {
 						battleSession.setWarningGiven(false);
 					}
-
 				}
 			} catch (Exception e) {
 				try {

@@ -183,8 +183,11 @@ public class SpawnUtil {
 									String.format(TownySettings.getLangString("msg_err_ally_isnt_public"), town));
 						else
 							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
-					} else if (targetNation.hasEnemy(playerNation)) {
-						// Prevent enemies from using spawn travel.
+					} else if (targetNation.hasEnemy(playerNation) 
+								&& !(TownySettings.getWarCommonPeacefulTownsEnabled()
+									&& TownySettings.getWarCommonPeacefulTownsSpawnNationalityOverride()
+									&& (town.isPeaceful() || resident.getTown().isPeaceful()))) {
+						// Prevent enemies from using spawn travel. (except when peaceful towns are involved)
 						throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
@@ -201,12 +204,28 @@ public class SpawnUtil {
 			}
 
 			TownyMessaging.sendDebugMsg(townSpawnPermission.toString() + " " + townSpawnPermission.isAllowed(town));
-			townSpawnPermission.checkIfAllowed(plugin, player, town);
 
-			// Check the permissions
-			if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic()
+			//If the town is peaceful, proceed, otherwise check
+			if(TownySettings.getWarCommonPeacefulTownsEnabled()
+				 && TownySettings.getWarCommonPeacefulTownsTSpawnOverride()
+				 && town.isPeaceful()) {
+				//Proceed
+			} else {
+				townSpawnPermission.checkIfAllowed(plugin, player, town);
+			}
+
+			//The town is peaceful & public, proceed, otherwise check
+			if(TownySettings.getWarCommonPeacefulTownsEnabled()
+				&& TownySettings.getWarCommonPeacefulTownsTSpawnOverride()
+				&& town.isPeaceful() 
+				&& town.isPublic()) {
+				//Proceed
+			} else {
+				// Check the permissions
+				if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic()
 					: townSpawnPermission.hasPermissionNode(plugin, player, town))))
-				throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
+					throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
+			}
 
 			// Prevent outlaws from spawning into towns they're considered an outlaw in.
 			if (!isTownyAdmin && town.hasOutlaw(resident))
@@ -231,8 +250,11 @@ public class SpawnUtil {
 
 					if (playerNation == nation) {
 						nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
-					} else if (nation.hasEnemy(playerNation)) {
-						// Prevent enemies from using spawn travel.
+					} else if (nation.hasEnemy(playerNation) 
+								&& !(TownySettings.getWarCommonPeacefulTownsEnabled() 
+									 && TownySettings.getWarCommonPeacefulTownsSpawnNationalityOverride()  
+						             && resident.getTown().isPeaceful())) {
+						// Prevent enemies from using spawn travel. (except when the traveller is peaceful)
 						throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
 					} else if (nation.hasAlly(playerNation)) {
 						nationSpawnPermission = NationSpawnLevel.NATION_ALLY;
@@ -271,17 +293,26 @@ public class SpawnUtil {
 									spawnType.getTypeName(), TownySettings.getLangString("msg_the_wilderness")));
 				if (inTown != null && resident.hasNation()
 						&& townyUniverse.getDataSource().getTown(inTown).hasNation()) {
-					Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
-					Nation playerNation = resident.getTown().getNation();
-					if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
-						throw new TownyException(
+					Town inThisTown = townyUniverse.getDataSource().getTown(inTown);
+
+					if	(
+							!(TownySettings.getWarSiegeEnabled() 
+						 	  && TownySettings.getWarCommonPeacefulTownsSpawnNationalityOverride() 
+						 	  && (resident.getTown().isPeaceful() || inThisTown.isPeaceful()))
+					 	)
+					{
+						Nation inNation = inThisTown.getNation();
+						Nation playerNation = resident.getTown().getNation();
+						if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
+							throw new TownyException(
 								String.format(TownySettings.getLangString("msg_err_x_spawn_disallowed_from_x"),
-										spawnType.getTypeName(), TownySettings.getLangString("msg_enemy_areas")));
-					if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation)
+									spawnType.getTypeName(), TownySettings.getLangString("msg_enemy_areas")));
+						if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation)
 							&& disallowedZones.contains("neutral"))
-						throw new TownyException(
+							throw new TownyException(
 								String.format(TownySettings.getLangString("msg_err_x_spawn_disallowed_from_x"),
-										spawnType.getTypeName(), TownySettings.getLangString("msg_neutral_towns")));
+									spawnType.getTypeName(), TownySettings.getLangString("msg_neutral_towns")));
+					}
 				}
 			}
 		}

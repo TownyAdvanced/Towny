@@ -237,7 +237,6 @@ public class SiegeWarBannerControlUtil {
 				double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siege.getDefendingTown().getTownBlocks().size();
 				if(TownySettings.getWarSiegePillagingEnabled()
 					&& TownySettings.isUsingEconomy()
-					&& !siege.getDefendingTown().isPeaceful()
 					&& siege.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount)
 				{
 					SiegeWarMoneyUtil.pillageTown(siege.getBannerControllingResidents(), siege.getAttackingNation(), siege.getDefendingTown());

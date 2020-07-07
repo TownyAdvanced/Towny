@@ -2222,6 +2222,23 @@ public enum ConfigNodes {
 			"# Example: If this setting is 5.0, and there are 3 players on the banner control list, and a player from the controlling side dies,",
 			"# then the death points will be increased by 15%."),
 
+	//Siege-war specific peaceful towns
+	WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_POPULATION_REQUIREMENT(
+			"war.siege.peaceful_towns.guardian_town_population_requirement",
+			"5",
+			"# This value determines how much population a town has to have,",
+			"# to be considered a guardian town."),
+	WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_PLOTS_REQUIREMENT(
+			"war.siege.peaceful_towns.guardian_town_plots_requirement",
+			"25",
+			"# This value determines how many plots a town has to have,",
+			"# to be considered a guardian town."),
+	WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_MIN_DISTANCE_REQUIREMENT_TOWNBLOCKS(
+			"war.siege.peaceful_towns.guardian_town_min_distance_requirement_townblocks",
+			"45",
+			"# This value determines how close a town has to be to a peaceful town,",
+			"# to be considered a guardian town."),
+
 	//Battle Sessions
 	WAR_SIEGE_BATTLE_SESSIONS_ENABLED(
 			"war.siege.battle_sessions.enabled",
@@ -2349,21 +2366,33 @@ public enum ConfigNodes {
 			"# After a countdown (usually in days), the new town status is confirmed.",
 			"# The status has different effects depending on the war-system",
 			"# ",
-			"# Common:",
-			"# PVP is forced off in the town",
-			"# Residents cannot inflict pvp damage",
-			"# A resident who leaves such a town cannot inflict PVP for a (configured) number of hours.",
+			"# COMMON:",
+			"# 1. PVP is forced off in the town",
+			"# 2. A resident who leaves such a town cannot inflict PVP for a (configured) number of hours.",
+			"# 3. (optional) T spawn is enabled, even if it is normally off via config.",
+			"# 4. (optional) Nationality is disregarded for spawn purposes (for residents and visitors to the town).",
 			"# ",
-			"# Siegewar:", 
-			"# A peaceful town is protected from all material siege costs e.g. pillage, plunder, and occupier taxes.",
-			"# Residents cannot have nation-military-ranks (e.g. soldier)",
+			"# SIEGEWAR:", 
+			"# 1. Town is immune to attack ",
+			"# 2. Town is immune to most power-diplomacy (e.g. 'join my nation pls pls pls').",
+			"#    This second benefit is achieved by hitching the political status of the town to a nearby 'Guardian Town' (and removing the choice from the town).",
+			"# 	  Thus if the guardian town joins/leaves a nation, the peaceful town automatically does the same (on new day).",
+			"#    The following are required for a guardian town",
+			"#    - Close to the peaceful town (configurable) ",
+			"#    - Min population (configurable) ",
+			"#    - Min number of plots (configurable) ",
+			"#    - Not under siege ",
+			"#    - Not affected by a recent siege (i.e. immunity finished) ",
+			"#    - The largest qualifying town (size is determined by pop * plots) ",
+			"# 3. Residents cannot get nation military ranks.",
+			"# 4. Residents get 'war nausea' if they enter siege zones.",
 			"# ",
 			"# PLAYER TIPS:",
 			"# If a town is in any of the following scenarios, it may find the feature useful:",
 			"# 1. Town is building strength and preparing for war, but not yet ready to handle war costs.",
 			"# 2. Town is currently in a hopeless geo-political position e.g. completely surrounded by much more powerful enemies,",
 			"# 3. Town is interested in politics, but prefers to influence world events via diplomatic/economic methods rather than military strength.",
-			"# 4. Town is not currently interested much in war/politics, and just wants to build in peace.",
+			"# 4. Town is not currently interested much in war/politics, and just wants to build/trade/explore in peace.",
 		    "# ",
 			"# SERVER TIPS",
 			"# This option is recommended as a 'safety valve'",
@@ -2379,6 +2408,14 @@ public enum ConfigNodes {
 			"72",
 			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town.",
 			"# In this time they cannot inflict PVP damage, or (in Siegewar) gain nation-military ranks."),
+	WAR_COMMON_PEACEFUL_TOWNS_T_SPAWN_OVERRIDE(
+			"war.common.peaceful_towns.t_spawn_override",
+			"false",
+			"# If this value is true, then the basic t spawn config settings are overridden and people can spawn to peaceful towns."),
+	WAR_COMMON_PEACEFUL_TOWNS_SPAWN_NATIONALITY_OVERRIDE(
+			"war.common.peaceful_towns.spawn_nationality_override",
+			"true",
+			"# If this value is true, then nationality is not checked for spawning visitors to the town, or town residents spawning to other locations."),
 
 	//Post-Respawn Peacefulness
 	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(
@@ -2417,7 +2454,7 @@ public enum ConfigNodes {
 
 	//Occupied town unclaiming
 	WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED(
-			"war.common.occupied_town_unclaiming_disabled",
+			"war.common.occupied_towns.occupied_town_unclaiming_disabled",
 			"true",
 			"# If this value is true, then a town under occupation cannot unclaim.",
 			"#  This setting is recommended, to avoid occupation escape exploits.");

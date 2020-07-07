@@ -1206,8 +1206,6 @@ msg_err_war_common_occupied_town_cannot_unclaim: "&6[War]&c Occupied towns canno
 #Nation Delete
 msg_err_siege_war_delete_nation_warning: "WARNING!!!: If you delete your nation you will be refunded %s. This can be claimed later by using '/n refund'."
 msg_err_siege_war_nation_refund_unavailable: "There is no nation refund available to you."
-#Plunder
-msg_err_siege_war_peaceful_town_cannot_plunder: "&6[War]&c You cannot plunder a peaceful town."
 #Revolt
 msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."
 msg_err_siege_war_revolt_immunity_active: "&6[War]&c Your town has revolt immunity. It cannot revolt until the revolt immunity expires."
@@ -1303,16 +1301,24 @@ status_town_peacefulness_status_change_timer: '&2Countdown To Peacefulness Statu
 msg_war_common_town_declared_peaceful: '&bPeacefulness Declared!. The town will be confirmed as peaceful in %d day(s).'
 msg_war_common_town_declared_non_peaceful: '&bNon-Peacefulness Declared!. The town will be confirmed as non-peaceful in %d day(s).'
 msg_war_common_town_peacefulness_countdown_cancelled: '&bThe peacefulness status change countdown was cancelled.'
-msg_war_common_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is forced off, and residents can no longer inflict PVP damage.'
-msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off, and residents can inflict PVP damage.'
-msg_war_common_resident_left_peaceful_town: '&cBecause you left a peaceful town, you will be unable to inflict PVP damage, for %s.'
+
+msg_war_common_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off.'
+msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off.'
 msg_war_common_peaceful_town_cannot_toggle_pvp: '&cCannot toggle PVP in peaceful towns. It is forced off.'
 
-msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off. Residents are vulnerable to war-allergy if they enter a siege-zone, and cannot gain nation-military ranks. The town is now immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
-msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off. Residents are no longer vulnerable to war-allergy, and can gain nation-military ranks. The town is no longer immune to material siege costs (e.g. pillage, plunder, and occupier taxes).'
-msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you are still vulnerable to war-allergy, and cannot gain nation-military ranks, for %s.'
+msg_war_siege_town_became_peaceful: '&b%s has been confirmed as Peaceful. The town is now immune to sieges and taxes. PVP is always off. The town can no longer choose its nation status, which is instead copied each day from an automatically assigned ''Guardian Town'' (see the user-guide for details of how the assignment is done). Residents cannot enter siege-zones or gain nation-military ranks.'
+msg_war_siege_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. The town is no longer immune to sieges and taxes. The town can toggle PVP. The town can now choose its nation status. Residents can enter siege-zones and gain nation-military ranks.'
+msg_war_siege_resident_left_peaceful_town: '&cBecause you left a peaceful town, you cannot enter siege zones, or gain nation-military ranks, for %s.'
 msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident: '&cUnable to add military rank to resident, because they are in a peaceful town, or recently left one.'
 msg_war_siege_peaceful_player_punished_for_being_in_siegezone: '&cWar-allergy active. To remove this effect, leave the siege-zone immediately.'
+msg_war_siege_err_cannot_attack_peaceful_town: '&6[War]&c You cannot attack a peaceful town.'
+msg_war_siege_err_cannot_plunder_peaceful_town: "&6[War]&c You cannot plunder a peaceful town."
+msg_war_siege_peaceful_town_cannot_join_nation: "&cThe nation of a peaceful town is not chosen, but automatically assigned. It will be be whoever controls the assigned ''Guardian Town'' (see the user-guide for details of how the assignment is done)."
+msg_war_siege_peaceful_town_cannot_leave_nation: "&cThe nation of a peaceful town is not chosen, but automatically assigned. It will be be whoever controls the assigned ''Guardian Town'' (see the user-guide for details of how the assignment is done)."
+msg_war_siege_peaceful_town_cannot_be_kicked: "&cThe nation of a peaceful town is not chosen, but automatically assigned. It will be be whoever controls the assigned ''Guardian Town'' (see the user-guide for details of how the assignment is done)."
+msg_war_siege_peaceful_town_changed_nation: "&b%s has peacefully changed hands, moving from %s to %s."
+msg_war_siege_peaceful_town_joined_nation: "&b%s has peacefully joined %s."
+msg_war_siege_peaceful_town_left_nation: "&b%s has peacefully left %s."
 
 #Siege immunities
 msg_set_siege_immunities: 'All town siege immunities set to %d hours.'
