@@ -2244,7 +2244,7 @@ public enum ConfigNodes {
 			"# This value determines the duration of the battle session active phase."),
 	WAR_SIEGE_BATTLE_SESSIONS_EXPIRED_PHASE_DURATION_MINUTES(
 			"war.siege.battle_sessions.expired_phase_duration_minutes",
-			"60",
+			"15",
 			"# This value determines the duration of the battle session expired phase."),
 
 	//Siege zone block/use restrictions
