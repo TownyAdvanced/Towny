@@ -53,9 +53,6 @@ public class Town extends Government implements TownBlockOwner {
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
-	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String townBoard = TownySettings.getTownDefaultBoard();
-	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
@@ -69,6 +66,10 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
+		
+		// Set defaults.
+		setOpen(TownySettings.getTownDefaultOpen());
+		setBoard(TownySettings.getTownDefaultBoard());
 	}
 
 	@Override
@@ -114,11 +115,6 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
-	}
-
-	@Override
-	public String getBoard() {
-		return board == null ? "/t set board [board]" : board;
 	}
 
 	public Resident getMayor() {

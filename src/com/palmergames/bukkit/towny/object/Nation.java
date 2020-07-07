@@ -43,7 +43,6 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private boolean neutral = false;
-	private String nationBoard = TownySettings.getNationDefaultBoard();
 	private String mapColorHexCode = "";
 	public UUID uuid;
 	private Location nationSpawn;
@@ -53,11 +52,10 @@ public class Nation extends Government {
 
 	public Nation(String name) {
 		super(name);
-	}
-
-	@Override
-	public String getBoard() {
-		return board == null ? "/n set board [board]" : board;
+		
+		// Set defaults
+		setBoard(TownySettings.getNationDefaultBoard());
+		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
 	public void addAlly(Nation nation) throws AlreadyRegisteredException {
