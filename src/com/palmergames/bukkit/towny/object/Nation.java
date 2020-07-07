@@ -43,6 +43,7 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private boolean neutral = false;
+	private String nationBoard = TownySettings.getNationDefaultBoard();
 	private String mapColorHexCode = "";
 	public UUID uuid;
 	private Location nationSpawn;

@@ -53,6 +53,9 @@ public class Town extends Government implements TownBlockOwner {
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
+	private boolean isOpen = TownySettings.getTownDefaultOpen();
+	private String townBoard = TownySettings.getTownDefaultBoard();
+	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
