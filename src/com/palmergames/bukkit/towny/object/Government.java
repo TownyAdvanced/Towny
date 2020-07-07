@@ -26,7 +26,7 @@ import java.util.List;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Government extends TownyObject implements BankEconomyHandler, Residence, Inviteable, SpawnLocation {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentOwner, Inviteable, SpawnLocation {
 	
 	protected BankAccount account;
 	protected Location spawn;

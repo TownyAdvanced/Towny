@@ -4,10 +4,9 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Residence;
+import com.palmergames.bukkit.towny.object.ResidentOwner;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -24,7 +23,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,17 +112,17 @@ public class TownyAPI {
     }
     
     /**
-     * Gets all online {@link Player}s for a specific {@link Residence}.
+     * Gets all online {@link Player}s for a specific {@link ResidentOwner}.
      *
-     * @param residence {@link Residence} of which you want all the online {@link Player}s.
-     * @return {@link List} of all online {@link Player}s in the specified {@link Residence}.
+     * @param owner {@link ResidentOwner} of which you want all the online {@link Player}s.
+     * @return {@link List} of all online {@link Player}s in the specified {@link ResidentOwner}.
      */
-    public List<Player> getOnlinePlayers(Residence residence) {
+    public List<Player> getOnlinePlayers(ResidentOwner owner) {
         ArrayList<Player> players = new ArrayList<>();
         
         for (Player player : BukkitTools.getOnlinePlayers()) {
             if (player != null) {
-                if (residence.hasResident(player.getName())) {
+                if (owner.hasResident(player.getName())) {
                     players.add(player);
                 }
             }
@@ -300,17 +298,17 @@ public class TownyAPI {
     }
     
     /**
-     * Check which {@link Resident}s are online in a {@link Residence}
+     * Check which {@link Resident}s are online in a {@link ResidentOwner}
      *
-     * @param residence {@link Residence} to check for online {@link Resident}s.
+     * @param owner {@link ResidentOwner} to check for online {@link Resident}s.
      * @return {@link List} of {@link Resident}s that are online.
      */
-    public List<Resident> getOnlineResidents(Residence residence) {
+    public List<Resident> getOnlineResidents(ResidentOwner owner) {
         
         List<Resident> onlineResidents = new ArrayList<>();
         for (Player player : BukkitTools.getOnlinePlayers()) {
             if (player != null)
-                for (Resident resident : residence.getResidents()) {
+                for (Resident resident : owner.getResidents()) {
                     if (resident.getName().equalsIgnoreCase(player.getName()))
                         onlineResidents.add(resident);
                 }
