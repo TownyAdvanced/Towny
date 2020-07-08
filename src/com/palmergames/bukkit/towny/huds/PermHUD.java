@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -45,7 +45,7 @@ public class PermHUD {
 		}
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
-			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
+			TownBlockHolder owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 			TownyPermission tp = townBlock.getPermissions();

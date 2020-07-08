@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
@@ -624,7 +624,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Mayor/Assistant of the town.
 							
 							// Test we are allowed to work on this plot
-							TownBlockOwner owner = plotTestOwner(resident, townBlock);
+							TownBlockHolder owner = plotTestOwner(resident, townBlock);
 
 							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
 
@@ -810,21 +810,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * Returns a TownyPermissionChange object representing the change action
 	 *
 	 * @param player Player initiator
-	 * @param townBlockOwner Resident/Town with the targeted permissions change
+	 * @param townBlockHolder Resident/Town with the targeted permissions change
 	 * @param townBlock Targeted town block
 	 * @param split Permission arguments
 	 * @return a TownyPermissionChange object
 	 */
-	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
+	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockHolder townBlockHolder, TownBlock townBlock, String[] split) {
 		TownyPermissionChange permChange = null;
 
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
-			if (townBlockOwner instanceof Town)
+			if (townBlockHolder instanceof Town)
 				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
-			if (townBlockOwner instanceof Resident)
+			if (townBlockHolder instanceof Resident)
 				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
 
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
@@ -849,7 +849,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					perm.change(permChange);
 					townyUniverse.getDataSource().saveTownBlock(townBlock);
 
-					if (townBlockOwner instanceof Town)
+					if (townBlockHolder instanceof Town)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
 					else
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
@@ -950,8 +950,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 			}
 
@@ -1309,7 +1309,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @return - returns owner of plot.
 	 * @throws TownyException - Exception.
 	 */
-	public TownBlockOwner plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
+	public TownBlockHolder plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 
 		Player player = BukkitTools.getPlayer(resident.getName());
 		boolean isAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
@@ -1544,13 +1544,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_plot_not_associated_with_a_group"));
 				return false;
 			}
-			TownBlockOwner townBlockOwner = plotTestOwner(resident, townBlock);
+			TownBlockHolder townBlockHolder = plotTestOwner(resident, townBlock);
 			
 			if (split.length < 2) {
 				player.sendMessage(ChatTools.formatTitle("/plot group set"));
-				if (townBlockOwner instanceof Town)
+				if (townBlockHolder instanceof Town)
 					player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
-				if (townBlockOwner instanceof Resident)
+				if (townBlockHolder instanceof Resident)
 					player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));				
 				player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
 				player.sendMessage(ChatTools.formatCommand("/plot group set", "perm", "[on/off]", "Toggle all permissions"));
@@ -1574,7 +1574,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownBlock tb = plotGroup.getTownBlocks().get(0);
 
 					// setTownBlockPermissions returns a towny permission change object
-					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, tb, StringMgmt.remArgs(split, 2));
+					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockHolder, tb, StringMgmt.remArgs(split, 2));
 					// If the perm change object is not null
 					if (permChange != null) {
 
@@ -1596,8 +1596,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						TownyPermission perm = plotGroup.getTownBlocks().get(0).getPermissions();
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
 				};

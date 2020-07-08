@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentOwner;
+import com.palmergames.bukkit.towny.object.ResidentHolder;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -586,7 +586,7 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 * @param modeRequired a resident mode required for the resident to receive the message.
 	 */
-	public static void sendMessageToMode(ResidentOwner residents, String msg, String modeRequired) {
+	public static void sendMessageToMode(ResidentHolder residents, String msg, String modeRequired) {
 
 		for (Resident resident : TownyAPI.getInstance().getOnlineResidents(residents))
 			if (resident.hasMode(modeRequired))

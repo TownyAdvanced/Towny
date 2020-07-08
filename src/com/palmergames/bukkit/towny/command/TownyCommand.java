@@ -13,9 +13,9 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentOwner;
+import com.palmergames.bukkit.towny.object.ResidentHolder;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -400,7 +400,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentOwner> list = new ArrayList<>(universe.getDataSource().getTowns());
+				List<ResidentHolder> list = new ArrayList<>(universe.getDataSource().getTowns());
 				list.addAll(universe.getDataSource().getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
 				towny_top.addAll(getMostResidents(list, 10));
@@ -414,7 +414,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("land"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<TownBlockOwner> list = new ArrayList<>(universe.getDataSource().getResidents());
+				List<TownBlockHolder> list = new ArrayList<>(universe.getDataSource().getResidents());
 				list.addAll(universe.getDataSource().getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
 				towny_top.addAll(getMostLand(list, 10));
@@ -538,35 +538,35 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentOwner> list, int maxListing) {
+	public List<String> getMostResidents(List<ResidentHolder> list, int maxListing) {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<ResidentOwner, Integer> kvTable = new KeyValueTable<>();
-		for (ResidentOwner obj : list)
+		KeyValueTable<ResidentHolder, Integer> kvTable = new KeyValueTable<>();
+		for (ResidentHolder obj : list)
 			kvTable.put(obj, obj.getResidents().size());
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<ResidentOwner, Integer> kv : kvTable.getKeyValues()) {
+		for (KeyValue<ResidentHolder, Integer> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			ResidentOwner owner = kv.key;
+			ResidentHolder owner = kv.key;
 			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) owner).getFormattedName(), kv.value));
 		}
 		return output;
 	}
 
-	public List<String> getMostLand(List<TownBlockOwner> list, int maxListing) {
+	public List<String> getMostLand(List<TownBlockHolder> list, int maxListing) {
 
 		List<String> output = new ArrayList<>();
-		KeyValueTable<TownBlockOwner, Integer> kvTable = new KeyValueTable<>();
-		for (TownBlockOwner obj : list)
+		KeyValueTable<TownBlockHolder, Integer> kvTable = new KeyValueTable<>();
+		for (TownBlockHolder obj : list)
 			kvTable.put(obj, obj.getTownBlocks().size());
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<TownBlockOwner, Integer> kv : kvTable.getKeyValues()) {
+		for (KeyValue<TownBlockHolder, Integer> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;

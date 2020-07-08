@@ -12,7 +12,7 @@ import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -2341,7 +2341,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_OUTSIDER_SWITCH);
 	}
 
-	public static boolean getDefaultResidentPermission(TownBlockOwner owner, ActionType type) {
+	public static boolean getDefaultResidentPermission(TownBlockHolder owner, ActionType type) {
 
 		if (owner instanceof Resident)
 			switch (type) {
@@ -2373,7 +2373,7 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 
-	public static boolean getDefaultNationPermission(TownBlockOwner owner, ActionType type) {
+	public static boolean getDefaultNationPermission(TownBlockHolder owner, ActionType type) {
 
 		if (owner instanceof Resident)
 			switch (type) {
@@ -2405,7 +2405,7 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 	
-	public static boolean getDefaultAllyPermission(TownBlockOwner owner, ActionType type) {
+	public static boolean getDefaultAllyPermission(TownBlockHolder owner, ActionType type) {
 
 		if (owner instanceof Resident)
 			switch (type) {
@@ -2437,7 +2437,7 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 
-	public static boolean getDefaultOutsiderPermission(TownBlockOwner owner, ActionType type) {
+	public static boolean getDefaultOutsiderPermission(TownBlockHolder owner, ActionType type) {
 
 		if (owner instanceof Resident)
 			switch (type) {
@@ -2469,7 +2469,7 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 
-	public static boolean getDefaultPermission(TownBlockOwner owner, PermLevel level, ActionType type) {
+	public static boolean getDefaultPermission(TownBlockHolder owner, PermLevel level, ActionType type) {
 
 		switch (level) {
 		case RESIDENT:

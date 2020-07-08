@@ -10,7 +10,7 @@ import java.util.UUID;
  * @author Suneet Tipirneni (Siris)
  * A simple class which encapsulates the grouping of townblocks.
  */
-public class PlotGroup extends ObjectGroup implements TownBlockOwner {
+public class PlotGroup extends ObjectGroup implements TownBlockHolder {
 	private Resident resident = null;
 	private List<TownBlock> townBlocks;
 	private double price = -1;

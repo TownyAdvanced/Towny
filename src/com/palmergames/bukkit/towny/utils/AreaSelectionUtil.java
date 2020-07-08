@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AreaSelectionUtil {
 
-	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	public static List<WorldCoord> selectWorldCoordArea(TownBlockHolder owner, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	public static List<WorldCoord> selectWorldCoordAreaRect(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	public static List<WorldCoord> selectWorldCoordAreaRect(TownBlockHolder owner, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (pos.getTownyWorld().isClaimable()) {
@@ -117,7 +117,7 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	public static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	public static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockHolder owner, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (pos.getTownyWorld().isClaimable()) {
@@ -224,7 +224,7 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
+	public static List<WorldCoord> filterOwnedBlocks(TownBlockHolder owner, List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
@@ -324,7 +324,7 @@ public class AreaSelectionUtil {
 		return -1;
 	}
 
-	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord) {
+	public static boolean isOnEdgeOfOwnership(TownBlockHolder owner, WorldCoord worldCoord) {
 
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)

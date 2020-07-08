@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentOwner;
+import com.palmergames.bukkit.towny.object.ResidentHolder;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -48,7 +48,7 @@ public class TownyFormatter {
 
 	public static void initialize() {}
 
-	public static List<String> getFormattedOnlineResidents(String prefix, ResidentOwner owner, Player player) {
+	public static List<String> getFormattedOnlineResidents(String prefix, ResidentHolder owner, Player player) {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, owner);
 		return getFormattedResidents(prefix, onlineResidents);
 	}

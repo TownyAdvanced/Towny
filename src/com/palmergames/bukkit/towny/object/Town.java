@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends TownyObject implements ResidentOwner, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
+public class Town extends TownyObject implements ResidentHolder, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockHolder {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 

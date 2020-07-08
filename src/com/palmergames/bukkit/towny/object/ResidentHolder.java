@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import java.util.List;
 
-public interface ResidentOwner {
+public interface ResidentHolder {
 
 	List<Resident> getResidents();
 

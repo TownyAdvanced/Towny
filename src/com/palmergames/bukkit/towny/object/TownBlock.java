@@ -99,7 +99,7 @@ public class TownBlock extends TownyObject {
 		return resident != null;
 	}
 
-	public boolean isOwner(TownBlockOwner owner) {
+	public boolean isOwner(TownBlockHolder owner) {
 
 		try {
 			if (owner == getTown())

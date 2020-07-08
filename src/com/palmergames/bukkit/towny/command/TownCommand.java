@@ -37,7 +37,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownComparators;
 import com.palmergames.bukkit.towny.object.TownyPermission;
@@ -3196,28 +3196,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	// wrapper function for non friend setting of perms
-	public static void setTownBlockOwnerPermissions(Player player, TownBlockOwner townBlockOwner, String[] split) {
+	public static void setTownBlockOwnerPermissions(Player player, TownBlockHolder townBlockHolder, String[] split) {
 
-		setTownBlockPermissions(player, townBlockOwner, townBlockOwner.getPermissions(), split, false);
+		setTownBlockPermissions(player, townBlockHolder, townBlockHolder.getPermissions(), split, false);
 	}
 
-	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
+	public static void setTownBlockPermissions(Player player, TownBlockHolder townBlockHolder, TownyPermission perm, String[] split, boolean friend) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
-			if (townBlockOwner instanceof Town)
+			if (townBlockHolder instanceof Town)
 				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
-			if (townBlockOwner instanceof Resident)
+			if (townBlockHolder instanceof Resident)
 				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
-			if (townBlockOwner instanceof Town)
+			if (townBlockHolder instanceof Town)
 				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
-			if (townBlockOwner instanceof Resident)
+			if (townBlockHolder instanceof Resident)
 				player.sendMessage(ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
 
 		} else {
@@ -3234,16 +3234,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (split[0].equalsIgnoreCase("reset")) {
 
 					// reset all townBlock permissions (by town/resident)
-					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+					for (TownBlock townBlock : townBlockHolder.getTownBlocks()) {
 
-						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
+						if (((townBlockHolder instanceof Town) && (!townBlock.hasResident())) || ((townBlockHolder instanceof Resident) && (townBlock.hasResident()))) {
 
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
 							townyUniverse.getDataSource().saveTownBlock(townBlock);
 						}
 					}
-					if (townBlockOwner instanceof Town)
+					if (townBlockHolder instanceof Town)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
 					else
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
@@ -3336,13 +3336,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 			// Propagate perms to all unchanged townblocks
-			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
+			for (TownBlock townBlock : townBlockHolder.getTownBlocks()) {
+				if ((townBlockHolder instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 					}
-				} else if (townBlockOwner instanceof Resident)
+				} else if (townBlockHolder instanceof Resident)
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
@@ -3350,8 +3350,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 			// Reset all caches as this can affect everyone.
@@ -3529,7 +3529,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 	}
 
-	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {
+	public static boolean isEdgeBlock(TownBlockHolder owner, List<WorldCoord> worldCoords) {
 
 		// TODO: Better algorithm that doesn't duplicates checks.
 
@@ -3539,7 +3539,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		return false;
 	}
 
-	public static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord) {
+	public static boolean isEdgeBlock(TownBlockHolder owner, WorldCoord worldCoord) {
 
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)
@@ -3555,7 +3555,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		return false;
 	}
 
-	public static void checkIfSelectionIsValid(TownBlockOwner owner, List<WorldCoord> selection, boolean attachedToEdge, double blockCost, boolean force) throws TownyException {
+	public static void checkIfSelectionIsValid(TownBlockHolder owner, List<WorldCoord> selection, boolean attachedToEdge, double blockCost, boolean force) throws TownyException {
 
 		if (force)
 			return;
