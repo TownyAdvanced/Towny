@@ -1,11 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerHandler;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
@@ -77,6 +72,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handle events for all Player related events
@@ -1003,9 +1000,14 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
+
+			// TEMPORARY
+			long startTime = System.currentTimeMillis();
 			
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
+			
+			/* 
 			if (title.contains("{townname}")) {
 				String replacement = title.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				title = replacement;
@@ -1013,8 +1015,24 @@ public class TownyPlayerListener implements Listener {
 			if (subtitle.contains("{townname}")) {
 				String replacement = subtitle.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 				subtitle = replacement;
+			} 
+			*/
+
+			HashMap<String, Object> placeholders = new HashMap<>();
+			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
+			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
+			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
+			placeholders.put("{town_residents_online}", to.getTownBlock().getTown().getNumResidentsOnline());
+
+			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
+				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
+				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
+			
+			// TEMPORARY
+			long endTime = System.currentTimeMillis();
+			this.plugin.getLogger().info("onPlayerEnterTown done in " + (endTime - startTime) + " ms.");
 		}
 	}
 	
