@@ -24,6 +24,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -296,6 +297,22 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return residents.size();
 	}
 
+	public int getNumResidentsOnline() {
+		int onlineResidents = 0;
+		for(Resident resident: getResidents()) {
+			if(resident.isNPC()) {
+				onlineResidents++;
+				continue;
+			}
+			
+			Player player = Bukkit.getServer().getPlayer(resident.getName());
+			if(player.isOnline()) {
+				onlineResidents++;
+			}
+		}
+		return onlineResidents;
+	}
+	
 	public boolean isCapital() {
 
 		return hasNation() && nation.isCapital(this);
