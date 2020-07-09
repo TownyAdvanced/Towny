@@ -1001,23 +1001,9 @@ public class TownyPlayerListener implements Listener {
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
 
-			// TEMPORARY
-			long startTime = System.currentTimeMillis();
-			
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
-			/* 
-			if (title.contains("{townname}")) {
-				String replacement = title.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-				title = replacement;
-			}
-			if (subtitle.contains("{townname}")) {
-				String replacement = subtitle.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-				subtitle = replacement;
-			} 
-			*/
-
 			HashMap<String, Object> placeholders = new HashMap<>();
 			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
@@ -1029,10 +1015,6 @@ public class TownyPlayerListener implements Listener {
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
-			
-			// TEMPORARY
-			long endTime = System.currentTimeMillis();
-			this.plugin.getLogger().info("onPlayerEnterTown done in " + (endTime - startTime) + " ms.");
 		}
 	}
 	
