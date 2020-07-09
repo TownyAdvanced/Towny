@@ -248,14 +248,19 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
-		else if (town.hasNation())
-			throw new AlreadyRegisteredException();
-		else {
-			towns.add(town);
-			town.setNation(this);
-			
-			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
+		
+		if (town.hasNation()) {
+			// Allow code execution if there is a desync (which there is on load).
+			try {
+				if (!town.getNation().equals(this))
+					throw new AlreadyRegisteredException();
+			} catch (NotRegisteredException ignore) {}
 		}
+
+		towns.add(town);
+		town.setNation(this);
+
+		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
 	}
 
 	public void setCapital(Town capital) {
