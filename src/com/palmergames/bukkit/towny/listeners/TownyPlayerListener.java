@@ -1000,7 +1000,6 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
-
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
@@ -1008,7 +1007,7 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
 			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
-			placeholders.put("{town_residents_online}", to.getTownBlock().getTown().getNumResidentsOnline());
+			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()));
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
