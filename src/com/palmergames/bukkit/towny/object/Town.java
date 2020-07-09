@@ -24,7 +24,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -296,7 +295,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		return residents.size();
 	}
-	
+
 	public boolean isCapital() {
 
 		return hasNation() && nation.isCapital(this);
