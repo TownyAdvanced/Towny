@@ -80,7 +80,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Handle events for all Player related events
  * Players deaths are handled both here and in the TownyEntityMonitorListener
