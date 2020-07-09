@@ -296,22 +296,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		return residents.size();
 	}
-
-	public int getNumResidentsOnline() {
-		int onlineResidents = 0;
-		for(Resident resident: getResidents()) {
-			if(resident.isNPC()) {
-				onlineResidents++;
-				continue;
-			}
-			
-			Player player = Bukkit.getServer().getPlayer(resident.getName());
-			if(player.isOnline()) {
-				onlineResidents++;
-			}
-		}
-		return onlineResidents;
-	}
 	
 	public boolean isCapital() {
 
