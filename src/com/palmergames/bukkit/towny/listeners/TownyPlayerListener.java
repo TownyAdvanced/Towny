@@ -1012,7 +1012,7 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
 			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
 			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
-			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()));
+			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()).size());
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
