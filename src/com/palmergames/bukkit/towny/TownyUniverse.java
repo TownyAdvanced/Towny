@@ -82,6 +82,17 @@ public class TownyUniverse {
 	private final Map<String, Nation> nationNamesMap = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     
+    // Legacy Maps
+	@Deprecated
+	private final Map<String, Nation> nationMap = new ConcurrentHashMap<>();
+	@Deprecated
+	private final Map<String, Town> townMap = new ConcurrentHashMap<>();
+	@Deprecated
+	private final Map<String, Resident> residentMap = new ConcurrentHashMap<>();
+	@Deprecated
+	private final Map<WorldCoord, TownBlock> townBlockMap = new ConcurrentHashMap<>();
+	
+    
     private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
 	private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
@@ -184,7 +195,11 @@ public class TownyUniverse {
             }
             
             // Load all the world files in.
-            databaseHandler.loadAll();
+			
+			// Commented out for testing.
+            //databaseHandler.loadAll();
+			
+			databaseHandler.upgrade(dataSource);
             
         } catch (UnsupportedOperationException e) {
             System.out.println("[Towny] Error: Unsupported getString format!");
@@ -203,7 +218,7 @@ public class TownyUniverse {
         return true;
     }
     
-    private boolean loadDatabase(String loadDbType) {
+    public boolean loadLegacyDatabase(String loadDbType) {
         
         switch (loadDbType.toLowerCase()) {
             case "ff":
@@ -408,9 +423,7 @@ public class TownyUniverse {
 				town.setMayor(resident);
 			}
 			
-		} catch (TownyException e) {
-			e.printStackTrace();
-		}
+		} catch (TownyException ignored) {}
 
 	}
 
@@ -483,7 +496,7 @@ public class TownyUniverse {
 	
     @Deprecated
     public Map<String, Resident> getResidentMap() {
-        return residentNamesMap;
+        return residentMap;
     }
     
     @NotNull
@@ -718,7 +731,7 @@ public class TownyUniverse {
     
     @Deprecated
     public Map<String, Town> getTownsMap() {
-        return townNamesMap;
+        return townMap;
     }
     
     public Trie getTownsTrie() {
@@ -883,7 +896,7 @@ public class TownyUniverse {
 	
 	@Deprecated
 	public Map<String, Nation> getNationsMap() {
-		return nationNamesMap;
+		return nationMap;
 	}
 
 	public Trie getNationsTrie() {
@@ -1217,7 +1230,7 @@ public class TownyUniverse {
 	 */	
 	@Deprecated
 	public Map<WorldCoord, TownBlock> _getTownBlocks() {
-		return Collections.emptyMap();
+		return townBlockMap;
 	}
 	
 	public List<TownBlock> getTownBlocks() {

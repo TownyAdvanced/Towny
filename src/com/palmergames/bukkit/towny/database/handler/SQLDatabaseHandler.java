@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -606,5 +607,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		}
 		
 		return insertionValue;
+	}
+
+	@Override
+	public void upgrade(TownyDataSource legacyDataSource) {
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

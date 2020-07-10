@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -396,20 +397,7 @@ public abstract class DatabaseHandler {
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
-	@SuppressWarnings({"deprecation", "unused"})
-	public void upgrade() {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		Collection<TownyWorld> worlds = townyUniverse.getWorldMap().values();
-		Collection<Nation> nations = townyUniverse.getNationsMap().values();
-		Collection<Town> towns = townyUniverse.getTownsMap().values();
-		Collection<TownBlock> townBlocks = townyUniverse.getTownBlocks();
-		
-		// MANUALLY Save older data items.
-		save(worlds);
-		save(nations);
-		save(towns);
-		save(townBlocks);
-	}
+	public abstract void upgrade(TownyDataSource legacyDataSource);
 
 	// ---------- DB operation Methods ----------
 	
@@ -473,5 +461,13 @@ public abstract class DatabaseHandler {
 		loadAllTownBlocks();
 		// Loads all the bukkit worlds if they haven't been loaded.
 		loadWorlds();
+	}
+	
+	public final void saveAll() {
+		TownyUniverse.getInstance().getTownBlocks().forEach(this::save);
+		TownyUniverse.getInstance().getTowns().forEach(this::save);
+		TownyUniverse.getInstance().getNations().forEach(this::save);
+		TownyUniverse.getInstance().getWorlds().forEach(this::save);
+		TownyUniverse.getInstance().getResidents().forEach(this::save);
 	}
 }

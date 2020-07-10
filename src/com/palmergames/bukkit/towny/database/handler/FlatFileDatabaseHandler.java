@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -332,5 +334,22 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		fileDirectoryCache.putIfAbsent(type, dir);
 
 		return dir;
+	}
+
+	@Override
+	public void upgrade(TownyDataSource legacyDataSource) {
+
+    	System.out.println("Beginning upgrade process...\nLoading from Legacy DB...");
+
+		// Load all file from the legacy database.
+		TownyUniverse.getInstance().loadLegacyDatabase("ff");
+		System.out.print("Done\n");
+		
+		// Then save it in the new format.
+    	System.out.println("Saving into new DB format...");
+    	saveAll();
+		System.out.print("Done\n");
+
+    	System.out.println("Database successfully updated");
 	}
 }

@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -184,7 +185,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Collection<TownBlock> getAllTownBlocks() {
-		return TownyUniverse.getInstance().getTownBlocks();
+		return TownyUniverse.getInstance()._getTownBlocks().values();
 	}
 	
 	public List<PlotGroup> getAllPlotGroups() {
@@ -197,22 +198,79 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		// TODO Figure out how to fetch UUID from name
-		throw new UnsupportedOperationException("Cannot fetch resident UUID!");
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterPlayerName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
+
+		Resident resident = new Resident(UUID.randomUUID());
+		resident.setName(filteredName);
+		
+		universe.getResidentMap().put(filteredName.toLowerCase(), resident);
+		universe.getResidentsTrie().addKey(filteredName);
+		
+		// Start New DB - Add to new datastructures.
+		universe.addResident(resident);
+		// End New DB
 	}
 	
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+
+		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(UUID.randomUUID(), filteredName));
+		universe.getTownsTrie().addKey(filteredName);
+		
+		// Start New DB - Add to new datastructures.
 		universe.newTown(name);
+		// End New DB
 	}
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+
+		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(UUID.randomUUID(), filteredName));
+		universe.getNationsTrie().addKey(filteredName);
+
+		// Start New DB - Add to new datastructures.
 		universe.newNation(name);
+		// End New DB
 	}
 
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException {
 		World world = Bukkit.getWorld(name);
+		
+		if (world == null) {
+			return;
+		}
+		
+		if (universe.getWorldMap().containsKey(name.toLowerCase()))
+			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
+
+		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(world.getUID(), name));
 		
 		if (world != null) {
 			try {

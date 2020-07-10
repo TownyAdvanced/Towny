@@ -38,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -259,7 +260,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles();
+		File[] worldFolders = townblocksFolder.listFiles((file, filename) -> filename.toLowerCase().endsWith(".txt"));
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		boolean mismatched = false;
 		int mismatchedCount = 0;
@@ -637,6 +638,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					resident.setSurname(line);
 				
 				line = keys.get("town");
+				TownyMessaging.sendErrorMsg("Town line = " + line);
 				if (line != null)
 					resident.setTown(getTown(line));
 
