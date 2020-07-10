@@ -1,5 +1,5 @@
 name: Towny
-version: 0.83
+version: 0.84
 language: português (Brasil)
 author: BannerGames
 website: 'http://townyadvanced.github.io/'
@@ -1141,3 +1141,6 @@ msg_hover_previous_page: 'Página anterior'
 # Added in 0.83
 msg_max_tax_amount_only_for_percent: "Limites de taxas apenas podem ser definidos para cidades com porcentagens de taxas."
 msg_town_set_tax_max_percent_amount: "%s mudou o valor da taxa máxima para %s."
+
+# Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'O terreno pertence a um grupo, use /plot group toggle'

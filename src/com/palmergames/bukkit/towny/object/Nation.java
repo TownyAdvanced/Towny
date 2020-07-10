@@ -55,7 +55,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	private UUID capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
-	private String nationBoard = "/nation set board [msg]";
+	private String nationBoard = TownySettings.getNationDefaultBoard();
 	private String mapColorHexCode = "";
 	private String tag = "";
 	private long registered;
