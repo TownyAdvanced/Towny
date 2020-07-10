@@ -65,30 +65,30 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
 		// Create files and folders if non-existent
-		if (!FileMgmt.checkOrCreateFolders(
-			rootFolderPath,
-			dataFolderPath,
-			dataFolderPath + File.separator + "residents",
-			dataFolderPath + File.separator + "towns",
-			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
-			dataFolderPath + File.separator + "nations",
-			dataFolderPath + File.separator + "nations" + File.separator + "deleted",
-			dataFolderPath + File.separator + "worlds",
-			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
-			dataFolderPath + File.separator + "plot-block-data",
-			dataFolderPath + File.separator + "townblocks",
-			dataFolderPath + File.separator + "plotgroups"
-		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "residents.txt",
-			dataFolderPath + File.separator + "towns.txt",
-			dataFolderPath + File.separator + "nations.txt",
-			dataFolderPath + File.separator + "worlds.txt",
-			dataFolderPath + File.separator + "regen.txt",
-			dataFolderPath + File.separator + "snapshot_queue.txt",
-			dataFolderPath + File.separator + "plotgroups.txt"
-		)) {
-			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
-		}
+//		if (!FileMgmt.checkOrCreateFolders(
+//			rootFolderPath,
+//			dataFolderPath,
+//			dataFolderPath + File.separator + "residents",
+//			dataFolderPath + File.separator + "towns",
+//			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
+//			dataFolderPath + File.separator + "nations",
+//			dataFolderPath + File.separator + "nations" + File.separator + "deleted",
+//			dataFolderPath + File.separator + "worlds",
+//			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
+//			dataFolderPath + File.separator + "plot-block-data",
+//			dataFolderPath + File.separator + "townblocks",
+//			dataFolderPath + File.separator + "plotgroups"
+//		) || !FileMgmt.checkOrCreateFiles(
+//			dataFolderPath + File.separator + "residents.txt",
+//			dataFolderPath + File.separator + "towns.txt",
+//			dataFolderPath + File.separator + "nations.txt",
+//			dataFolderPath + File.separator + "worlds.txt",
+//			dataFolderPath + File.separator + "regen.txt",
+//			dataFolderPath + ,File.separator + "snapshot_queue.txt",
+//			dataFolderPath + File.separator + "plotgroups.txt"
+//		)) {
+//			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
+//		}
 		/*
 		 * Start our Async queue for pushing data to the database.
 		 */
@@ -260,12 +260,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles((file, filename) -> filename.toLowerCase().endsWith(".txt"));
+		File[] worldFolders = townblocksFolder.listFiles();
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		boolean mismatched = false;
 		int mismatchedCount = 0;
 		try {
 			for (File worldfolder : worldFolders) {
+				if (!worldfolder.isDirectory()) {
+					continue;
+				}
+				
 				String worldName = worldfolder.getName();
 				TownyWorld world;
 				try {
@@ -293,7 +297,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
 	                TownBlock townBlock = new TownBlock(UUID.randomUUID(), x, z, world);
+	                
+	                TownyUniverse.getInstance()._getTownBlocks().put(townBlock.getWorldCoord(), townBlock);
+	                
+	                // New DB - Begin
 	                TownyUniverse.getInstance().addTownBlock(townBlock);
+					// New DB - End
 					total++;
 				}
 				TownyMessaging.sendDebugMsg("World: " + worldName + " loaded " + total + " townblocks.");
@@ -312,6 +321,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg("Loading Group List");
 		String line = null;
+		
+		if (!new File(dataFolderPath + File.separator + "plotgroups.txt").exists()) {
+			return true;
+		}
 
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "plotgroups.txt"), StandardCharsets.UTF_8))) {
 
@@ -638,7 +651,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					resident.setSurname(line);
 				
 				line = keys.get("town");
-				TownyMessaging.sendErrorMsg("Town line = " + line);
 				if (line != null)
 					resident.setTown(getTown(line));
 
@@ -891,11 +903,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length == 3)
 						try {
-							TownyWorld world = getWorld(tokens[0]);
+							TownyWorld world = TownyUniverse.getInstance()._getWorld(tokens[0]);
 							try {
 								int x = Integer.parseInt(tokens[1]);
 								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
+								TownBlock homeBlock = TownyUniverse.getInstance()._getTownBlock(new WorldCoord(world.getName(), x, z));
 								town.forceSetHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
 								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");

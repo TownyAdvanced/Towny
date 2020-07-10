@@ -54,7 +54,7 @@ import java.util.UUID;
 @Deprecated
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
-	final String dataFolderPath;
+	public final String dataFolderPath;
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
@@ -270,14 +270,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.getWorldMap().containsKey(name.toLowerCase()))
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(world.getUID(), name));
+		TownyWorld townyWorld = new TownyWorld(world.getUID(), name);
 		
-		if (world != null) {
-			try {
-				universe.newWorld(world.getUID(), world.getName());
-			} catch (NotRegisteredException ignore) {
-			}
-		}
+		universe.getWorldMap().put(name.toLowerCase(), townyWorld);
+
+		try {
+			universe.newWorld(world.getUID(), world.getName());
+		} catch (NotRegisteredException ignored) {}
 	}
 
 	@Override

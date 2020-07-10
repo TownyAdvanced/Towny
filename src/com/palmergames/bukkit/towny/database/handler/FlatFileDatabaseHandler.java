@@ -73,6 +73,15 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
 		
+		File dir = getFlatFileDirectory(obj.getClass());
+		
+		// Make sure parent dir exists
+		if (!dir.exists()) {
+			if (!dir.mkdirs()) {
+				throw new TownyRuntimeException("Could not make Directories for " + obj);
+			}
+		}
+		
 		// Save
 		FileMgmt.mapToFile(saveMap, getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
 	}
@@ -336,6 +345,22 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return dir;
 	}
 
+	private static void recursiveDelete(File file) {
+		//to end the recursive loop
+		if (!file.exists())
+			return;
+
+		//if directory, go inside and call recursively
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				//call recursively
+				recursiveDelete(f);
+			}
+		}
+		//call delete to delete files and empty directory
+		file.delete();
+	}
+
 	@Override
 	public void upgrade(TownyDataSource legacyDataSource) {
 
@@ -344,6 +369,11 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		// Load all file from the legacy database.
 		TownyUniverse.getInstance().loadLegacyDatabase("ff");
 		System.out.print("Done\n");
+
+		System.out.println("Deleting old DB files");
+		// Delete all old files.
+		final File dataDir = new File(TownyUniverse.getInstance().getRootFolder() + File.separator + "data");
+		recursiveDelete(dataDir);
 		
 		// Then save it in the new format.
     	System.out.println("Saving into new DB format...");

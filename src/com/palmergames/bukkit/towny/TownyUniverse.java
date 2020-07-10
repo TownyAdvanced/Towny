@@ -94,6 +94,8 @@ public class TownyUniverse {
 	private final Map<String, Resident> residentMap = new ConcurrentHashMap<>();
 	@Deprecated
 	private final Map<WorldCoord, TownBlock> townBlockMap = new ConcurrentHashMap<>();
+	@Deprecated
+	private final Map<String, TownyWorld> worldMap = new ConcurrentHashMap<>();
 	
     
     private final Map<UUID, TownyWorld> worlds = new ConcurrentHashMap<>();
@@ -148,7 +150,11 @@ public class TownyUniverse {
 //        long time = System.currentTimeMillis() - startTime;
 //        System.out.println("[Towny] Database loaded in " + time + "ms.");
 
-		System.out.println("[Towny] Loading new Database...");
+		// Figure out if legacy or not.
+		boolean isLegacy = false;
+		if (new File(getRootFolder() + "/data/towns.txt").exists()) {
+			isLegacy = true;
+		}
         
         try {
             // Set the new class for saving.
@@ -193,10 +199,12 @@ public class TownyUniverse {
             
             // Load all the world files in.
 			
-			// Commented out for testing.
-            //databaseHandler.loadAll();
+			if (isLegacy) {
+				databaseHandler.upgrade(dataSource);
+			} else {
+				databaseHandler.loadAll();
+			}
 			
-			databaseHandler.upgrade(dataSource);
             
         } catch (UnsupportedOperationException e) {
             System.out.println("[Towny] Error: Unsupported getString format!");
@@ -911,6 +919,15 @@ public class TownyUniverse {
     	return world;
 	}
 	
+	public TownyWorld _getWorld(String name) throws NotRegisteredException {
+		TownyWorld world = worldMap.get(name);
+		if (world == null) {
+			throw new NotRegisteredException(String.format("The world '%s' is not registered.", name));
+		}
+
+		return world;
+	}
+	
 	public TownyWorld getWorld(UUID uuid) throws NotRegisteredException {
     	TownyWorld world = worlds.get(uuid);
     	if (world == null) {
@@ -983,8 +1000,9 @@ public class TownyUniverse {
 	
 	public List<TownyWorld> getWorlds() { return new ArrayList<>(worlds.values()); }
 	
+	@Deprecated
     public Map<String, TownyWorld> getWorldMap() {
-        return worldNameMap;
+        return worldMap;
     }
     
     public TownyDataSource getDataSource() {
@@ -1218,6 +1236,14 @@ public class TownyUniverse {
 			throw new NotRegisteredException();
 	}
 
+	@Deprecated
+	public TownBlock _getTownBlock(WorldCoord worldCoord) throws NotRegisteredException {
+		if (hasTownBlock(worldCoord))
+			return townBlockMap.get(worldCoord);
+		else
+			throw new NotRegisteredException();
+	}
+	
 	/**
 	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
 	 * Populated at load time from townblocks folder's files.

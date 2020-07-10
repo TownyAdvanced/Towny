@@ -91,7 +91,6 @@ public class TownyPerms {
 	 * @param player - Player to register permission
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
-		TownyMessaging.sendErrorMsg("Flag 17");
 		PermissionAttachment playersAttachment;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 

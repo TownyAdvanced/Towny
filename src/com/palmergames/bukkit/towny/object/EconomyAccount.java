@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -60,6 +61,7 @@ public class EconomyAccount implements Nameable {
 	 * @throws EconomyException if the transaction fails
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
+		TownyMessaging.sendErrorMsg("Account Name = " + getName());
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {

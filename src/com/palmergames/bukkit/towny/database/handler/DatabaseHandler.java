@@ -294,7 +294,7 @@ public abstract class DatabaseHandler {
 				return stringToCollection(str, type);	
 			}
 
-			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type);
+			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type + " " + str);
 		}
 
 
