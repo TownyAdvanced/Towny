@@ -2408,14 +2408,18 @@ public enum ConfigNodes {
 			"72",
 			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town.",
 			"# In this time they cannot inflict PVP damage, or (in Siegewar) gain nation-military ranks."),
-	WAR_COMMON_PEACEFUL_TOWNS_T_SPAWN_OVERRIDE(
-			"war.common.peaceful_towns.t_spawn_override",
-			"false",
-			"# If this value is true, then the basic t spawn config settings are overridden and people can spawn to peaceful towns."),
-	WAR_COMMON_PEACEFUL_TOWNS_SPAWN_NATIONALITY_OVERRIDE(
-			"war.common.peaceful_towns.spawn_nationality_override",
+	WAR_COMMON_PEACEFUL_TOWNS_VISITOR_T_SPAWN_OVERRIDE(
+			"war.common.peaceful_towns.visitor_t_spawn_override",
 			"true",
-			"# If this value is true, then nationality is not checked for spawning visitors to the town, or town residents spawning to other locations."),
+			"# If this value is true, then visitors can always spawn to public peaceful towns."),
+	WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_N_SPAWN_OVERRIDE(
+			"war.common.peaceful_towns.traveller_n_spawn_override",
+			"true",
+			"# If this value is true, then residents of peaceful towns can always travel to public nations."),
+	WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE(
+			"war.common.peaceful_towns.traveller_disallowed_zones_override",
+			"true",
+			"# If this value is true, then residents of peaceful towns are not affected by disallowed zones when spawning."),
 
 	//Post-Respawn Peacefulness
 	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(

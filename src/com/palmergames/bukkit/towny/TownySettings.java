@@ -3361,11 +3361,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_MIN_DISTANCE_REQUIREMENT_TOWNBLOCKS);
 	}
 
-	public static boolean getWarCommonPeacefulTownsTSpawnOverride() {
-		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_T_SPAWN_OVERRIDE);
+	public static boolean getWarCommonPeacefulTownsVisitorTSpawnOverride() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_VISITOR_T_SPAWN_OVERRIDE);
 	}
 
-	public static boolean getWarCommonPeacefulTownsSpawnNationalityOverride() {
-		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_SPAWN_NATIONALITY_OVERRIDE);
+	public static boolean getWarCommonPeacefulTownsTravellerNSpawnOverride() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_N_SPAWN_OVERRIDE);
 	}
+
+	public static boolean getWarCommonPeacefulTownsDisallowedZonesOverride() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE);
+	}
+
 }
