@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
@@ -64,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -522,14 +524,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
-				try {
-					townyUniverse.getDataSource().backup();
-					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("mag_backup_success"));
-
-				} catch (IOException e) {
-					TownyMessaging.sendErrorMsg(getSender(), "Error: " + e.getMessage());
-
-				}
+				CompletableFuture.runAsync(new BackupTask())
+					.thenRun(()-> TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("mag_backup_success")));
+				
 			} else if (split[0].equalsIgnoreCase("database")) {
 
 				parseAdminDatabaseCommand(StringMgmt.remFirstArg(split));

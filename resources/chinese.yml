@@ -1,5 +1,5 @@
 name: Towny
-version: 0.83
+version: 0.84
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -550,9 +550,9 @@ msg_err_not_outlaw_in_your_town: '你无法放逐你的城镇居民.'
 msg_you_have_been_declared_outlaw: '你被 %s 视为了放逐者. 不要死在那个城镇内.'
 msg_you_have_declared_an_outlaw: '%s 被城镇 %s 放逐了.'
 msg_you_have_been_undeclared_outlaw: '你不再被 %s 放逐.'
-msg_you_have_undeclared_an_outlaw: '%s 不再是 %s 的放逐者.'
-msg_err_player_not_an_outlaw: '那个玩家不再被视为放逐者.'
-msg_err_outlaw_in_open_town: '你无法加入一个已经把你视为放逐者的公开城镇.'
+msg_you_have_undeclared_an_outlaw: '%s 不再被 %s 放逐.'
+msg_err_player_not_an_outlaw: '那个玩家不再被视为被放逐者.'
+msg_err_outlaw_in_open_town: '你无法加入一个已经将你放逐的公开城镇.'
 msg_you_are_an_outlaw_in_this_town: '&4小心, %s 放逐了你,死在这你将会被监禁.'
 msg_err_town_not_close_enough_to_nation: '%ss 的城镇中心离你的首都中心太远了所以不能加入你的国家.'
 msg_nation_town_moved_their_homeblock_too_far: '由于%ss 的城镇中心离你的首都中心太远了所以已不再属于这个国家.'
@@ -1069,72 +1069,75 @@ msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
 msg_err_plot_group_name_required: '你必须设置土地组名, 指令为/plot group add {名称}'
 msg_confirmation_spigot_hover_accept: '点击接受'
 msg_confirmation_spigot_hover_cancel: '点击'
-msg_confirmation_spigot_click_accept: '点击 %s 或输入 %s'
-msg_confirmation_spigot_click_cancel: '点击 %s 或输入 %s'
+msg_confirmation_spigot_click_accept: '点击%s或输入%s'
+msg_confirmation_spigot_click_cancel: '点击%s或输入%s'
 msg_you_cannot_kick_yourself: '你不能踢出自己.'
 msg_you_cannot_kick_this_resident: '你不能踢出 %s, 他是城主或助手.'
 
 # Added in 0.71
-msg_err_plot_belongs_to_group_plot_fs2: '土地: %s 属于土地组, 请使用 /plot group fs [价格] 设置土地价格'
-msg_err_plot_belongs_to_group_plot_nfs: '土地: %s 属于土地组, 请使用 /plot group nfs 停售'
+msg_err_plot_belongs_to_group_plot_fs2: '土地: %s属于土地组, 请使用 /plot group fs [价格] 设置土地价格'
+msg_err_plot_belongs_to_group_plot_nfs: '土地: %s属于土地组, 请使用 /plot group nfs 停售'
 
 # Added in 0.72
-msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理员控制的%s设置阻止你将pvp状态改为%s.'
 
 # Added in 0.73
-msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+msg_err_you_aren't currently jailed: '你已被监禁.'
 
 # Added in 0.74
-msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '你不能在这里创建传送门的另一端.'
 
 # Added in 0.75
-msg_already_ally: 'Your nation is already allied with %s.'
+msg_already_ally: '你的国家已与%s结盟.'
 
 # Added in 0.76
-msg_you: 'You'
+msg_you: '你'
 
 # Added in 0.77
-msg_click_spawn: '&aClick to spawn to: &e%s'
-msg_spawn_cost: '&aSpawn Cost = &e%s'
+msg_click_spawn: '&a点击传送到:&e%s'
+msg_spawn_cost: '&a传送价格=&e%s'
 
 # Added in 0.78
-msg_reload_error: 'There was an error reloading Towny.'
-msg_reloaded_config: '&2Configuration successfully reloaded.'
-msg_reloaded_perms: '&2Permissions successfully reloaded.'
-msg_reloaded_db: '&2Database successfully reloaded'
-msg_reloaded_lang: '&2Language file successfully reloaded'
-msg_reset_config: '&2Config has been reset'
-msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
+msg_reload_error: '重载Towny时出错.'
+msg_reloaded_config: '&2成功重载配置.'
+msg_reloaded_perms: '&2成功重载权限.'
+msg_reloaded_db: '&2成功重载数据库'
+msg_reloaded_lang: '&2成功重载语言文件'
+msg_reset_config: '&2成功重置配置'
+msg_err_teleport_cancelled: '传送时移动导致取消传送.'
 
 # Added in 0.79
-msg_cache_block_error_plot_friends: 'friends'
-msg_cache_block_error_plot_allies: 'allies'
-msg_cache_block_error_plot_outsiders: 'outsiders'
-msg_cache_block_error_plot_town_members: 'town members'
-msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
-msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
-msg_err_unable_to_add_more_residents_without_nation: 'Your town cannot invite more than %s residents without first joining or creating a nation.'
-msg_the_following_towns_were_deleted_for_having_0_claims: 'The following towns were deleted for having 0 claims: %s'
-msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
-msg_confirm_purchase: 'Doing this will cost %s. Continue?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: 'The following towns will be removed from your nation: %s. Do you wish to continue?'
-msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
-bonus_townblocks: 'bonus townblocks'
+msg_cache_block_error_plot_friends: '朋友'
+msg_cache_block_error_plot_allies: '盟友'
+msg_cache_block_error_plot_outsiders: '外来者'
+msg_cache_block_error_plot_town_members: '城镇居民'
+msg_err_invalid_nation_map_color: '&c未知的地图颜色. 可用颜色有%s.'
+msg_nation_map_color_changed: '&b国家地图颜色已更改为%s.'
+msg_err_unable_to_add_more_residents_without_nation: '你的城镇在第一次加入其他国家或建国前无法邀请多于%s位居民n.'
+msg_the_following_towns_were_deleted_for_having_0_claims: '以下城镇因没有声明任何土地而被删除: %s'
+msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
+msg_confirm_purchase: '这样做将消耗%s. 你确认?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '以下城镇将离开祖国的怀抱: %s. 你确认要这么做?'
+msg_ta_deposit_all_success: '成功卷轴%s到所有国家和城镇的银行内.'
+bonus_townblocks: '奖励城镇区块'
 
 # Added in 0.80
-nomad_sing: 'Nomad'
-msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
+nomad_sing: '流浪者'
+msg_new_town_advice: '建城配置! 你的城镇需要消耗%s的每日维护费用.你可以输入 ''/t deposit #''将你的钱捐到城镇银行内. 银行内没钱且支付不起每日维护费用的城镇将会被删除.你随时可以输入/towny prices 查看费用. 下一次维护费用为%s.'
 
 # Added in 0.81
-msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
+msg_err_teleport_cancelled_damage: '伤害取消了你的传送.'
 
 # Added in 0.82
-invitation_prefix: "&8[&7Invitation&8] &9"
-confirmation_prefix: "&8[&7Confirmation&8] &9"
-this_message_will_expire2: '&9This will auto-expire in 20 seconds'
-msg_hover_next_page: 'Next Page'
-msg_hover_previous_page: 'Previous Page'
+invitation_prefix: "&8[&7邀请&8] &9"
+confirmation_prefix: "&8[&7确认&8] &9"
+this_message_will_expire2: '&9邀请将在20秒后过期'
+msg_hover_next_page: '下一页'
+msg_hover_previous_page: '上一页'
 
 # Added in 0.83
-msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
-msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
+msg_max_tax_amount_only_for_percent: "只能在征收税率的城镇内设置最大税率."
+msg_town_set_tax_max_percent_amount: "%s将税率上限设置为%s."
+
+# Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
