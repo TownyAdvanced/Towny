@@ -1,5 +1,5 @@
 name: Towny
-version: 0.83
+version: 0.84
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1138,3 +1138,6 @@ msg_hover_previous_page: '上一页'
 # Added in 0.83
 msg_max_tax_amount_only_for_percent: "只能在征收税率的城镇内设置最大税率."
 msg_town_set_tax_max_percent_amount: "%s将税率上限设置为%s."
+
+# Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'

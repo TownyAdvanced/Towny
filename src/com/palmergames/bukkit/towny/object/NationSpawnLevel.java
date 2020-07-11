@@ -31,7 +31,7 @@ public enum NationSpawnLevel {
 			"msg_err_public_nation_spawn_forbidden_war",
 			"msg_err_public_nation_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC,
-			PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode()),
+			PermissionNodes.TOWNY_NATION_SPAWN_PUBLIC.getNode()),
 	ADMIN(
 			null,
 			null,

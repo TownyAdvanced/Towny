@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
@@ -850,5 +851,15 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
 		metrics.addCustomChart(new Metrics.SimplePie("resident_uuids_stored", () -> TownySettings.getUUIDPercent()));
+	}
+	
+	public static boolean is116Plus() {
+		String verString = Bukkit.getBukkitVersion();
+		verString = verString.replace("-R0.1-SNAPSHOT", "");
+		
+		Version ver = new Version(verString);
+		Version required = new Version("1.16.1");
+		
+		return ver.compareTo(required) >= 0;
 	}
 }

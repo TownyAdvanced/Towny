@@ -156,8 +156,14 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if (!TownySettings.isTownRespawning())
+		if (!TownySettings.isTownRespawning()) {
 			return;
+		}
+		
+		// If respawn anchors have higher precedence than town spawns, use them instead.
+		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
+			return;
+		}
 		
 		Location respawn;
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
@@ -971,6 +977,15 @@ public class TownyPlayerListener implements Listener {
 
 			}
 		}
+		if (TownySettings.getKeepInventoryInArenas()) {
+			if (!keepInventory) {
+				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
+				if (tb != null && tb.getType() == TownBlockType.ARENA) {
+					event.setKeepInventory(true);
+					event.getDrops().clear();
+				}
+			}
+		}
 	}
 
 
@@ -1071,11 +1086,17 @@ public class TownyPlayerListener implements Listener {
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) {
 		if (plugin.isError()) {
 			return;
 		}
-		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
+		Resident resident = null;
+		try {
+			resident = TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName());
+		} catch (NotRegisteredException e) {
+			// More than likely another plugin using a fake player to run a command. 
+		} 
+		if (resident == null || !resident.isJailed())
 			return;
 				
 		String[] split = event.getMessage().substring(1).split(" ");

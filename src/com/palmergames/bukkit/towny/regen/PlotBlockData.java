@@ -127,7 +127,12 @@ public class PlotBlockData {
 	
 			block = world.getBlockAt(worldx + x, y, worldz + z);
 			blockMat = block.getType();
-			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
+			try {
+				storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
+			} catch (IllegalArgumentException e1) {
+				TownyMessaging.sendDebugMsg("Towny's revert-on-unclaim feature encountered a block which will not load on the current version of MC. Ignoring and skipping to next block.");
+				continue;
+			}
 			
 			switch (version) {
 		

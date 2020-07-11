@@ -238,6 +238,7 @@ public class SpawnUtil {
 					nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
 				}
 			}
+			nationSpawnPermission.checkIfAllowed(plugin, player, nation);
 
 			// Check the permissions
 			if (!(isTownyAdmin || ((nationSpawnPermission == NationSpawnLevel.UNAFFILIATED) ? nation.isPublic()

@@ -1351,10 +1351,15 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
-	
+
+	public static String getTownDefaultBoard() {
+
+		return getString(ConfigNodes.TOWN_DEF_BOARD);
+	}
+
 	public static boolean getNationDefaultOpen() {
 
-		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
+		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
 
 	public static double getTownDefaultTax() {
@@ -1945,7 +1950,12 @@ public class TownySettings {
 
 	public static boolean getNationDefaultPublic(){
 
-		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+		return getBoolean(ConfigNodes.NATION_DEF_PUBLIC);
+	}
+
+	public static String getNationDefaultBoard(){
+
+		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
 	public static String getFlatFileBackupType() {
@@ -2070,6 +2080,10 @@ public class TownySettings {
 	public static boolean isTownRespawningInOtherWorlds() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
+	}
+	
+	public static boolean isRespawnAnchorHigherPrecedence() {
+		return getBoolean(ConfigNodes.GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
 	public static int getMaxResidentsPerTown() {
@@ -2678,6 +2692,10 @@ public class TownySettings {
 	public static boolean getKeepInventoryInTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN);
 	}
+	
+	public static boolean getKeepInventoryInArenas() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
+	}
 
 	public static boolean getKeepExperienceInTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN);
@@ -2920,7 +2938,7 @@ public class TownySettings {
 	}
 
 	public static String getUUIDPercent() {
-		double fraction = uuidCount / TownyUniverse.getInstance().getDataSource().getResidents().size();
+		double fraction = Double.valueOf(uuidCount) / TownyUniverse.getInstance().getDataSource().getResidents().size();
 		
 		if (fraction == 1.00)
 			return "100%";
