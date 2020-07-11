@@ -1006,7 +1006,12 @@ public enum ConfigNodes {
 			"",
 			"# Requires the above using_titles to be set to true.",
 			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
-			"# You may use colour codes &f, &c and so on."),	
+			"# You may use colour codes &f, &c and so on.",
+			"# For town_title and town_subtitle you may use: ",
+			"# {townname} - Name of the town.",
+			"# {town_motd} - Shows the townboard message.",
+			"# {town_residents} - Shows the number of residents in the town.",
+			"# {town_residents_online} - Shows the number of residents online currently."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
 			"",

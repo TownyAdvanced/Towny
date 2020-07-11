@@ -4719,3 +4719,8 @@ v0.92.0.11:
     - Closes #4144.
   - Add Asynchronous Backup To Speed up Load Times, courtesy of Siris with PR #4136.
   - Fix jail days being able to crash mysql databases, jail days now max out at 10000.
+  - Added 3 placeholders for entering-towns title/subtitle messages, courtesy of Yldales with PR #4153.
+    - Along with the original {townname} option you may now also use the following on the notification.titles.town_title and notification.titles.town_subtitle lines:
+    - {town_motd} : show the town's townboard.
+    - {town_residents} : show the number of residents of the town.
+    - {town_residents_online} : show the number of online residents (including npcs) of the town.
