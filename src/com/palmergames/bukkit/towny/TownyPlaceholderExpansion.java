@@ -485,6 +485,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = res;
 			}
 			return tag;
+		case "player_plot_type":
+			return "";
+		case "player_plot_owner":
+			return "";
 		default:
 			return null;
 		}
