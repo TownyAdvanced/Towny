@@ -651,12 +651,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
-	private void removeAllResidents() {
-
-		for (Resident resident : new ArrayList<>(residents))
-			remove(resident);
-	}
-
 	private void remove(Resident resident) {
 		
 		resident.setTitle("");
@@ -723,7 +717,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			e.printStackTrace();
 		}
 		residents.remove(resident);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public void setSpawn(Location spawn) throws TownyException {
@@ -774,31 +767,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public boolean hasHomeBlock() {
 
 		return homeBlock != null;
-	}
-
-	public void clear() throws EmptyNationException {
-
-		//Cleanup
-		removeAllResidents();
-		mayor = null;
-		residents.clear();
-		outlaws.clear();
-		homeBlock = null;
-		outpostSpawns.clear();
-		jailSpawns.clear();
-	
-//		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
-//			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
-//				world.removeTownBlocks(getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
-//				world.removeTown(this);
-//			}
-//		} catch (NotRegisteredException e) {
-//		}
-//		if (hasNation())
-//			try {
-//				nation.removeTown(this);
-//			} catch (NotRegisteredException e) {
-//			}
 	}
 
 	public boolean hasWorld() {

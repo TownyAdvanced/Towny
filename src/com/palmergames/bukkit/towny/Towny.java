@@ -42,7 +42,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TNUPlayerMapImporter;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
@@ -273,10 +272,8 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		if (!TownySettings.getUUIDPercent().equals("100%")) {
-			if (TownySettings.isGatheringResidentUUIDS()) {
-				TNUPlayerMapImporter.loadTNUPlayermap();
+			if (TownySettings.isGatheringResidentUUIDS())
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
-			}
 			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
 			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");

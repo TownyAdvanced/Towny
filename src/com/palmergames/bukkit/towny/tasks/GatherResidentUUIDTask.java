@@ -6,13 +6,14 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.utils.TNUPlayerMapImporter;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import java.io.IOException;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.bukkit.Bukkit;
 
 /**
  * @author ElgarL
@@ -25,9 +26,6 @@ public class GatherResidentUUIDTask extends Thread {
 
 	/**
 	 * @param plugin reference to Towny
-	 * @param sender reference to CommandSender
-	 * @param deleteTime time at which resident is purged (long)
-	 * @param townless if resident should be 'Townless'
 	 */
 	public GatherResidentUUIDTask(Towny plugin) {
 
@@ -55,16 +53,12 @@ public class GatherResidentUUIDTask extends Thread {
 			try {
 				uuid = BukkitTools.getUUIDFromResident(resident);
 			} catch (IOException e) {
-				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " has never had an account.");
-				// Make a last ditch attempt using the TownyNameUpdater playermap.
-				if (TNUPlayerMapImporter.mappedResidents.containsKey(resident.getName().toLowerCase())) {
-					uuid = TNUPlayerMapImporter.mappedResidents.get(resident.getName().toLowerCase());
-					applyUUID(resident, uuid, "TNU playermap");
-					return;
-				} else {
-					queue.remove(resident);
-					return;
-				}
+				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " no longer has an account. Removing this resident from the database.");
+				queue.remove(resident);
+				Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
+					TownyUniverse.getInstance().getDataSource().removeResident(resident);
+				}, 20);
+				return;	
 			}
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");

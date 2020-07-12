@@ -508,18 +508,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
 				if (nation.hasTown(town)) {
 					nation.removeTown(town);
-					saveNation(nation);
 				}
-				town.setNation(null);
 			}
-			town.clear();
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
-		} catch (AlreadyRegisteredException ignored) {
-			// This should only be happening when a town thinks it is in the nation, while the nation doesn't consider the town a member.
 		}
 
 		for (Resident resident : toSave) {
