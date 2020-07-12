@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -114,6 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		} catch (NotRegisteredException e) {
 			return null;
 		}
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		String town = "";
 		String nation = "";
 		String balance = "";
