@@ -487,8 +487,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = res;
 			}
 			return tag;
-		case "player_plot_type":
-			return "";
+		case "player_plot_type": // %townyadvanced_player_plot_type%
+			return townblock != null ? townblock.getType().toString() : "";
 		case "player_plot_owner":
 			return "";
 		default:
