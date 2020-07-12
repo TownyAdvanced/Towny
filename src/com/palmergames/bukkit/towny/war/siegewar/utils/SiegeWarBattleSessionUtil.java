@@ -22,6 +22,10 @@ public class SiegeWarBattleSessionUtil {
 	
 	public static void evaluateBattleSessions() {
 		for(Player player: BukkitTools.getOnlinePlayers()) {
+			//Don't apply to towny admins
+			if(TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+				continue;
+
 			try {
 				BattleSession battleSession = null;
 				//Process progress of existing session

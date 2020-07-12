@@ -143,8 +143,11 @@ public class TownPeacefulnessUtil {
 	public static void punishPeacefulPlayersInActiveSiegeZones() {
 		for(Player player: BukkitTools.getOnlinePlayers()) {
 			try {
-				if(doesPlayerHaveTownRelatedPeacefulness(player)) {
+				//Don't apply to towny admins
+				if(TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+					continue;
 
+				if(doesPlayerHaveTownRelatedPeacefulness(player)) {
 					//Don't punish if the player is in a peaceful town
 					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					if(townBlockAtPlayerLocation != null
