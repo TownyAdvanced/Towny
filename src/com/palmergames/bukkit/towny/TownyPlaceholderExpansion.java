@@ -490,26 +490,22 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		case "town_prefix":
 			try {
 				return resident.hasTown() ? TownySettings.getTownPrefix(resident.getTown()) : "";
-			} catch (NotRegisteredException ignored) { 
-				
+			} catch (NotRegisteredException ignored) {
 			}
 		case "town_postfix":
 			try {
 				return resident.hasTown() ? TownySettings.getTownPostfix(resident.getTown()) : "";
 			} catch (NotRegisteredException ignored) {
-
 			}
 		case "nation_prefix":
 			try {
 				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
-			} catch (NotRegisteredException ignored) { 
-				
+			} catch (NotRegisteredException ignored) {
 			}
 		case "nation_postfix":
 			try {
 				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
 			} catch (NotRegisteredException ignored) {
-
 			}
 		case "player_jailed":
 			return String.valueOf(resident.isJailed());
