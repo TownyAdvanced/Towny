@@ -487,6 +487,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = res;
 			}
 			return tag;
+		case "player_jailed":
+			return String.valueOf(resident.isJailed());
 		case "player_plot_type": // %townyadvanced_player_plot_type%
 			return townblock != null ? townblock.getType().toString() : "";
 		case "player_plot_owner":
