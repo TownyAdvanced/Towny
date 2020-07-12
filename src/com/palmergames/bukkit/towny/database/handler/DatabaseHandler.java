@@ -358,6 +358,8 @@ public abstract class DatabaseHandler {
 			return  Float.parseFloat(str);
 		} else if (type == double.class) {
 			return Double.parseDouble(str);
+		}else if (type == long.class) {
+			return Long.parseLong(str);
 		} else if (type == byte.class) {
 			return Byte.parseByte(str);
 		}
