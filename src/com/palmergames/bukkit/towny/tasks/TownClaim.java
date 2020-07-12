@@ -85,7 +85,7 @@ public class TownClaim extends Thread {
 
 					if (claim) {
 						// Claim						
-						townClaim(town, worldCoord, outpost);
+						townClaim(town, worldCoord, outpost, player);
 						// Reset so we only flag the first plot as an outpost.
 						outpost = false;
 					} else {
@@ -177,7 +177,7 @@ public class TownClaim extends Thread {
 		}
 	}
 
-	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost) throws TownyException {
+	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost, Player player) throws TownyException {
 
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
 				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), "some town"));
@@ -206,7 +206,7 @@ public class TownClaim extends Thread {
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 			
 			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
+			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
 				
 		}
 	}
