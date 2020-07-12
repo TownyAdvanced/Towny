@@ -2,6 +2,7 @@ package com.palmergames.util;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -11,6 +12,15 @@ import java.util.Map;
  */
 
 public class StringMgmt {
+	
+	public static String objectNotationStr(String... strs) {
+		StringJoiner joiner = new StringJoiner(";");
+		for (String str : strs) {
+			joiner.add(str);
+		}
+		
+		return "{" + joiner.toString() + "}";
+	}
 
 	public static String join(List<?> arr) {
 

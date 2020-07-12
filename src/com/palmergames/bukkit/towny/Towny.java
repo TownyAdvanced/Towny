@@ -245,12 +245,7 @@ public class Towny extends JavaPlugin {
 			return;
 		}
 		
-		try {
-			loadedResident.getAccount().pay(TownySettings.getNewTownPrice(), "New Town Cost");
-		} catch (EconomyException e) {
-			e.printStackTrace();
-		}
-
+		
 		Nation nationA = new Nation(UUID.randomUUID(), "Narnia");
 		Nation nationB = new Nation(UUID.randomUUID(), "Osiris");
 		

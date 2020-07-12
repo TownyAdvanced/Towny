@@ -109,7 +109,6 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean hasTownBlock(Coord key) {
-
 		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), key));
 	}
 

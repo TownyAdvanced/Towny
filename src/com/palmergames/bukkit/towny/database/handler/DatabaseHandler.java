@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
@@ -13,9 +14,11 @@ import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.TownListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.UUIDHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.WorldCoordHandler;
 import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
@@ -29,6 +32,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -76,8 +80,8 @@ public abstract class DatabaseHandler {
 		registerAdapter(Location.class, new LocationHandler());
 		registerAdapter(List.class, new ListHandler());
 		registerAdapter(new TypeContext<List<Resident>>(){}.getType(), new ResidentListHandler());
-		registerAdapter(new TypeContext<List<Location>>(){}.getType(), new LocationListHandler());
 		registerAdapter(new TypeContext<List<TownBlock>>(){}.getType(), new TownBlockListHandler());
+		registerAdapter(WorldCoord.class, new WorldCoordHandler());
 		//registerAdapter(new TypeContext<List<Nation>>(){}.getType(), new NationListHandler());
 		registerAdapter(TownBlock.class, new TownBlockHandler());
 		registerAdapter(Nation.class, new NationHandler());
@@ -156,16 +160,17 @@ public abstract class DatabaseHandler {
 
 		// If iterable store as a list.
 		if (ReflectionUtil.isIterableType(obj.getClass())) {
-			return iterableToString(obj);
+			System.out.println("Got here");
+			return iterableToString(obj, type);
 		}
 
 		// Default to toString()
 		return obj.toString();
 	}
 	
-	private <T> String iterableToString(Object obj) {
+	private <T> String iterableToString(Object obj, Type type) {
 		if (ReflectionUtil.isArray(obj.getClass())) {
-			return arrayToString(obj);
+			return arrayToString(obj, type);
 		}
 		else {
 			Type rawType = ReflectionUtil.getRawType(obj.getClass());
@@ -173,18 +178,19 @@ public abstract class DatabaseHandler {
 			if (adapter == null) {
 				System.out.println("[Towny] No adapter found for " + rawType); // FIXME DEBUG
 				// Resort to iterator
-				return arrayToString(obj);
+				return arrayToString(obj, type);
 			}
 			return adapter.toStoredString((T) obj);
 		}
 	}
 	
-	private <T> String arrayToString(Object obj) {
+	private <T> String arrayToString(Object obj, Type type) {
 		Iterator<?> iterator = ReflectionUtil.resolveIterator(obj);
 		StringJoiner joiner = new StringJoiner(",");
 
 		// Get the parameterized type.
-		Type genericType = ReflectionUtil.getTypeOfIterable(obj.getClass());
+		Type genericType = ReflectionUtil.getTypeOfIterable(type);
+		System.out.println("Iterable type = " + genericType);
 
 		// Iterate through it, and build the list string.
 		while (iterator.hasNext()) {
@@ -219,16 +225,20 @@ public abstract class DatabaseHandler {
 	}
 	
 	private <T, P> T stringToCollection(String str, Type type) {
+		
 		// Get the parameterized and raw type
 		Type parameterizedType = ReflectionUtil.getTypeOfIterable(type);
 		Type rawType = ReflectionUtil.getRawType(type);
+		
 		// Make sure the raw type is a class
 		if (rawType instanceof Class<?>) {
 			Class<?> rawTypeClass = (Class<?>) rawType;
 			// Make sure the raw type is a collection
-			if (ReflectionUtil.isCollection(rawTypeClass)) {
+			if (ReflectionUtil.isCollection(rawTypeClass)) { ;
 				// Get the adapter for the raw type, make sure the type is a
 				TypeAdapter<?> adapter = fitAdapterFromClass(rawTypeClass, ReflectionUtil::isCollection);
+				System.out.println("raw type class = " + rawTypeClass);
+				System.out.println("Str = " + str);
 				if (adapter != null) {
 					// Get a collection the adapter
 					Collection<?> collection = (Collection<?>) adapter.fromStoredString(str);
@@ -239,6 +249,7 @@ public abstract class DatabaseHandler {
 						// Check if collection from the adapter has any elements
 						if (!collection.isEmpty()) {
 							for (Object s : collection) {
+								System.out.println("s = " + s);
 								// Make sure it's converting from a string
 								if (s instanceof String) {
 									P element = fromStoredString((String) s, parameterizedType);
@@ -257,10 +268,10 @@ public abstract class DatabaseHandler {
 		throw new UnsupportedOperationException("No adapter found for iterable " + type + " with string " + str);
 	}
 	
-	private TypeAdapter fitAdapterFromClass(Class<?> clazz, Predicate<Class<?>> fitFilter) {
+	private TypeAdapter<?> fitAdapterFromClass(Class<?> clazz, Predicate<Class<?>> fitFilter) {
 		// This will get an adapter for a class from its interfaces, and its super classes
 		// as long as those pass the filter provided.
-		TypeAdapter adapter = getAdapter(clazz);
+		TypeAdapter<?> adapter = getAdapter(clazz);
 		if (adapter == null) {
 			for (Class<?> clazzInterface : clazz.getInterfaces()) {
 				if (fitFilter.test(clazz) &&
@@ -275,7 +286,7 @@ public abstract class DatabaseHandler {
 			}
 		}
 		
-		return null;
+		return adapter;
 	}
 	
 	public final <T, P> @Nullable T fromStoredString(String str, Type type) { 
@@ -294,7 +305,7 @@ public abstract class DatabaseHandler {
 				return stringToCollection(str, type);	
 			}
 
-			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type + " " + str);
+			throw new UnsupportedOperationException("There is no flatfile load adapter for " + type.getClass() + " " + str);
 		}
 
 

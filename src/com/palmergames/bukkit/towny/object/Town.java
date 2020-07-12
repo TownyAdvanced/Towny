@@ -54,7 +54,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private transient List<Resident> residents = new ArrayList<>();
-	private List<Resident> outlaws = new ArrayList<>();
+	private transient List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
@@ -81,10 +81,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private String townBoard = TownySettings.getTownDefaultBoard();
 	private String tag = "";
 	
-	@LoadSetter(setterName = "forceSetHomeBlock")
-	private TownBlock homeBlock;
+	private WorldCoord homeBlock;
 	private TownyWorld world;
 	private Location spawn;
+	
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private long registered;
@@ -286,11 +286,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	@Override
 	public List<Resident> getResidents() {
-
 		return residents;
 	}
 
-	@SaveGetter(keyName = "assistants")
+	//@SaveGetter(keyName = "assistants")
 	public List<Resident> getAssistants() {
 
 		List<Resident> assistants = new ArrayList<>();
@@ -321,19 +320,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return getAssistants().contains(resident);
 	}
 
-	public void addResident(Resident resident) throws AlreadyRegisteredException {
+	public void 
+	addResident(Resident resident) throws AlreadyRegisteredException {
 		Validate.notNull(resident);
 		addResidentCheck(resident);
 		residents.add(resident);
 		resident.setTown(this);
-		
-		if (resident.isMayor()) {
-			try {
-				this.setMayor(resident);
-			} catch (TownyException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
@@ -352,8 +344,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isMayor(Resident resident) {
-
-		return resident == getMayor();
+		return resident.getUniqueIdentifier() == getMayorID();
 	}
 
 	public boolean hasNation() {
@@ -585,7 +576,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 		if (!hasTownBlock(homeBlock))
 			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_claim_over_this_town_block"));
-		this.homeBlock = homeBlock;
+		this.homeBlock = homeBlock.getWorldCoord();
 
 		// Set the world as it may have changed
 		if (this.world != homeBlock.getWorld()) {
@@ -645,7 +636,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			return;
 		}
 
-		this.homeBlock = homeBlock;
+		this.homeBlock = homeBlock.getWorldCoord();
 
 		// Set the world as it may have changed
 		if (this.world != homeBlock.getWorld()) {
@@ -660,7 +651,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public TownBlock getHomeBlock() throws TownyException {
 
 		if (hasHomeBlock())
-			return homeBlock;
+			return TownyUniverse.getInstance().getTownBlock(homeBlock);
 		else
 			throw new TownyException(this.getName() + " has not set a home block.");
 	}
@@ -852,7 +843,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean hasHomeBlock() {
-
 		return homeBlock != null;
 	}
 
@@ -1059,8 +1049,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
-
-		return hasHomeBlock() && townBlock == homeBlock;
+		return hasHomeBlock() && townBlock.getWorldCoord() == homeBlock;
 	}
 
 	public void setPlotTax(double plotTax) {
@@ -1620,5 +1609,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	public void setNationID(UUID nationID) {
 		this.nationID = nationID;
+	}
+
+	public UUID getMayorID() {
+		return mayorID;
 	}
 }

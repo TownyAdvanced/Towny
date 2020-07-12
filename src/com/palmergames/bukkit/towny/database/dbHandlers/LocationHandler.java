@@ -1,22 +1,19 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.Arrays;
-
 public class LocationHandler implements SerializationHandler<Location> {
 	@Override
 	public Location loadString(LoadContext context, String str) {
-		TownyMessaging.sendErrorMsg(str);
-		String[] tokens = str.split(",");
-		
-		TownyMessaging.sendErrorMsg(Arrays.toString(tokens));
+
+		String elements = StringUtils.substringBetween(str, "{", "}");
+		String[] tokens = elements.split(";");
 		
 		World world;
 		double x;
@@ -35,6 +32,7 @@ public class LocationHandler implements SerializationHandler<Location> {
 			
 			return new Location(world, x, y, z, pitch, yaw);
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
 			return null;
 		}
 
@@ -51,6 +49,6 @@ public class LocationHandler implements SerializationHandler<Location> {
 		
 		assert world != null;
 		
-		return world.getName() + "," + x + "," + y + "," + z + "," + pitch + "," + yaw;
+		return "{" + world.getName() + ";" + x + ";" + y + ";" + z + ";" + pitch + ";" + yaw + "}";
 	}
 }

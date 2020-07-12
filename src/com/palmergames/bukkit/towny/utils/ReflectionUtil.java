@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.database.handler.ObjectContext;
+import com.palmergames.bukkit.towny.database.type.TypeContext;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -210,8 +211,10 @@ public class ReflectionUtil {
 	}
 
 	public static Type getTypeOfIterable(Type type) {
-		if (type instanceof Class<?>)
+		if (type instanceof Class<?>) {
+			System.out.println("CLass type");
 			return getTypeOfIterable((Class<?>) type);
+		}
 		
 		if (type instanceof ParameterizedType) {
 			try {
@@ -226,6 +229,7 @@ public class ReflectionUtil {
 		}
 		
 		if (type instanceof GenericArrayType) {
+			System.out.println("Generic arr type");
 			return ((GenericArrayType) type).getGenericComponentType();
 		}
 

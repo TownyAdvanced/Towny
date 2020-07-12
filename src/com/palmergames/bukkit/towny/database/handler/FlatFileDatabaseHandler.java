@@ -136,18 +136,17 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				continue;
 			}
 			
-			// If there is a default value that already exists,
-			// make sure we are adapting to the same default value type.
-			try {
-				Object fieldValue = field.get(obj);
-
-				if (fieldValue != null) {
-					type = fieldValue.getClass();
-				}
-			} catch (IllegalAccessException e) {
-			}
-
-
+//			// If there is a default value that already exists,
+//			// make sure we are adapting to the same default value type.
+//			try {
+//				Object fieldValue = field.get(obj);
+//
+//				if (fieldValue != null) {
+//					type = fieldValue.getClass();
+//				}
+//			} catch (IllegalAccessException e) {
+//			}
+			
 			Object value;
 
 			if (ReflectionUtil.isPrimitive(type)) {
@@ -163,24 +162,10 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 				continue;
 			}
 
-			LoadSetter loadSetter = field.getAnnotation(LoadSetter.class);
-
 			try {
-
-				if (loadSetter != null) {
-					Method method = obj.getClass().getMethod(loadSetter.setterName(), field.getType());
-					boolean originallyAccessible = method.isAccessible();
-					method.setAccessible(true);
-					method.invoke(obj, value);
-					if (!originallyAccessible)
-						method.setAccessible(false);
-				} else {
-					field.set(obj, value);
-				}
-				
-			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-				e.printStackTrace();
-				return null;
+				field.set(obj, value);
+			} catch (IllegalAccessException e) {
+				throw new TownyRuntimeException(e.getMessage());
 			}
 		}
 		
@@ -290,7 +275,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 					TownyMessaging.sendErrorMsg("Could not load " + p);
 					continue;
 				}
-
+				
 				// Consume the loaded object.
 				consumer.accept(loadedObj);
 			}

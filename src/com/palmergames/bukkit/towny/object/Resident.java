@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -45,7 +44,7 @@ import java.util.UUID;
 )
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	@OneToMany(tableName = "friends")
-	private List<Resident> friends = new ArrayList<>();
+	private transient List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class)
 	private UUID townID = null;
@@ -334,6 +333,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		try {
 			town = getTown();
 		} catch (NotRegisteredException e) {
+			e.printStackTrace();
 			return false;
 		}
 

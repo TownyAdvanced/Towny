@@ -357,6 +357,7 @@ public class TownyUniverse {
     	return residentList;
 	}
 
+	@Deprecated
 	public final @NotNull Resident newResident(Player player) throws AlreadyRegisteredException, NotRegisteredException {
 		Objects.requireNonNull(player);
 
@@ -423,13 +424,12 @@ public class TownyUniverse {
 		try {
 			Town town = resident.getTown();
 			town.addResident(resident);
-			
+
 			if (resident.isMayor() && town.getMayor() != resident) {
 				town.setMayor(resident);
 			}
-			
-		} catch (TownyException ignored) {}
 
+		} catch (TownyException ignored) {}
 	}
 
 	public void removeResident(Resident resident) {
@@ -1275,6 +1275,12 @@ public class TownyUniverse {
 			if (townBlock.hasTown()) {
 				town = townBlock.getTown();
 				town.addTownBlock(townBlock);
+
+				// Check if homeblock
+				if (townBlock.isHomeBlock()) {
+					System.out.println("Setting homeblock for " + town);
+					town.forceSetHomeBlock(townBlock);
+				}
 			}
 			
 			// Attach Resident
@@ -1282,7 +1288,7 @@ public class TownyUniverse {
 				resident = townBlock.getResident();
 				resident.addTownBlock(townBlock);
 			}
-		} catch (NotRegisteredException e) {
+		} catch (TownyException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1368,7 +1374,6 @@ public class TownyUniverse {
 	 * @return whether the townblock was successfully removed   
 	 */
 	private boolean removeTownBlock(WorldCoord worldCoord) {
-
 		return townBlocks.remove(worldCoord) != null;
 	}
 

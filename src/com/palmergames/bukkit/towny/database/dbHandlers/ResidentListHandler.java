@@ -1,13 +1,15 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
+import com.palmergames.bukkit.towny.database.handler.SaveContext;
+import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResidentListHandler implements LoadHandler<List<Resident>> {
+public class ResidentListHandler implements SerializationHandler<List<Resident>> {
 	
 	@Override
 	public List<Resident> loadString(LoadContext context, String str) {
@@ -27,5 +29,17 @@ public class ResidentListHandler implements LoadHandler<List<Resident>> {
 		}
 		
 		return residents;
+	}
+
+	@Override
+	public String toStoredString(SaveContext context, List<Resident> obj) {
+		StringBuilder output = new StringBuilder("[");
+		for (Resident r : obj) {
+			output.append(r.getUniqueIdentifier()).append(",");
+		}
+		
+		output.append(']');
+		
+		return output.toString();
 	}
 }

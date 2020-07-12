@@ -15,9 +15,11 @@ public class ListHandler implements LoadHandler<List<?>>, SaveHandler<List<?>> {
 	public String toStoredString(SaveContext context, List<?> obj) {
 		StringJoiner joiner = new StringJoiner(",");
 		for (Object o : obj) {
-			if (o != null)
+			if (o != null) {
 				joiner.add(context.toStoredString(o, o.getClass()));
+			}
 		}
+		
 		return "[" + joiner.toString() + "]";
 	}
 
