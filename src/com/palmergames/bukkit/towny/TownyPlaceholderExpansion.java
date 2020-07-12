@@ -490,7 +490,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		case "player_plot_type": // %townyadvanced_player_plot_type%
 			return townblock != null ? townblock.getType().toString() : "";
 		case "player_plot_owner":
-			return "";
+			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 		default:
 			return null;
 		}
