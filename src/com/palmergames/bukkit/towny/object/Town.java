@@ -5,8 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -260,9 +258,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		addResidentCheck(resident);
 		residents.add(resident);
-//		resident.setTown(this);
-		
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
 
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
@@ -652,27 +647,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	private void remove(Resident resident) {
-		
-		resident.setTitle("");
-		resident.setSurname("");
-		resident.updatePerms();
-
-		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-			
-			// Do not remove Embassy plots
-			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				townBlock.setResident(null);
-				try {
-					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-				
-				// Set the plot permissions to mirror the towns.
-				townBlock.setType(townBlock.getType());
-			}
-		}
 
 		if (isMayor(resident)) {
 
@@ -700,21 +674,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 							}
 						}
 				}
+				
+				// Town is not removing its last resident so be sure to save it.
+				TownyUniverse.getInstance().getDataSource().saveTown(this);
 			}
-
-		}
-
-		try {
-			/* 
-			 * Trigger a resident removal event if they are in a town.
-			 */
-			if (resident.hasTown()) {
-				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, resident.getTown()));
-			}
-			resident.setTown(null);
-		} catch (AlreadyRegisteredException ignored) {
-		} catch (IllegalStateException | NotRegisteredException e) {
-			e.printStackTrace();
 		}
 		residents.remove(resident);
 	}

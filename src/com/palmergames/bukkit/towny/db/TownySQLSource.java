@@ -726,6 +726,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                String line = rs.getString("town");
+                if ((line != null) && (!line.isEmpty())) {
+                    resident.setTown(getTown(line));
+                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
+                }
+
                 try {
                     resident.setTitle(rs.getString("title"));
                 } catch (Exception e) {
@@ -737,13 +744,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
-                String line = rs.getString("town");
-                if ((line != null) && (!line.isEmpty())) {
-                    resident.setTown(getTown(line));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
-                }
-
-				try {
+                try {
 					line = rs.getString("town-ranks");
 					if ((line != null) && (!line.isEmpty())) {
 						search = (line.contains("#")) ? "#" : ",";

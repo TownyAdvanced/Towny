@@ -635,6 +635,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setJailTown(line);
 				
+				line = keys.get("town");
+				if (line != null)
+					resident.setTown(getTown(line));
+
 				line = keys.get("title");
 				if (line != null)
 					resident.setTitle(line);
@@ -643,10 +647,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setSurname(line);
 				
-				line = keys.get("town");
-				if (line != null)
-					resident.setTown(getTown(line));
-
 				try {
 					line = keys.get("town-ranks");
 					if (line != null)

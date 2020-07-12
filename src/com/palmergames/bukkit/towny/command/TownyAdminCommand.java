@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1402,16 +1401,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					town.setMayor(newMayor);
 
 					if (oldMayor.isNPC()) {
-						try {
-							town.removeResident(oldMayor);
-							townyUniverse.getDataSource().removeResident(oldMayor);
-							// set upkeep again
-							town.setHasUpkeep(true);
-						} catch (EmptyTownException e) {
-							// Should never reach here as we are setting a new
-							// mayor before removing the old one.
-							e.printStackTrace();
-						}
+						oldMayor.removeTown();
+						townyUniverse.getDataSource().removeResident(oldMayor);
+						// set upkeep again
+						town.setHasUpkeep(true);
 					}
 					townyUniverse.getDataSource().saveTown(town);					
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));

@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -321,30 +320,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				e1.printStackTrace();
 			}
 
-		try {
-			if (town != null) {
-				town.removeResident(resident);
-				if (town.hasNation())
-					saveNation(town.getNation());
-
-				saveTown(town);
-			}
-			resident.clear();
-			
-		} catch (EmptyTownException e) {
-			removeTown(town);
-
-		} catch (NotRegisteredException e) {
-			// town not registered
-			e.printStackTrace();
+		if (town != null) {
+			resident.removeTown();
 		}
-		
-		//Wipe and delete resident
-		try {
-			resident.clear();
-		} catch (EmptyTownException ex) {
-			removeTown(ex.getTown());
-		}
+
 		// Delete the residents file.
 		deleteResident(resident);
 		// Remove the residents record from memory.
@@ -519,11 +498,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			resident.clearModes();
-			try {
-				town.removeResident(resident);
-			} catch (NotRegisteredException | EmptyTownException ignored) {
-			}
-			saveResident(resident);
+			resident.removeTown();
 		}
 		
 		// Look for residents inside of this town's jail and free them
