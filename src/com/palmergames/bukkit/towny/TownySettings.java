@@ -3064,6 +3064,7 @@ public class TownySettings {
 	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS);
 	}
+
 	public static double getWarSiegeSiegeImmunityTimeModifier() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER);
 	}
@@ -3373,4 +3374,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE);
 	}
 
+	public static int getWarCommonPeacefulTownsNewTownPeacefulnessDurationDays() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_DURATION_DAYS);
+	}
 }

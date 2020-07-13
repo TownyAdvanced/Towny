@@ -1118,12 +1118,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setSiegeImmunityEndTime(0);
 					}
 				} else {
-					/*
-					 * On first load of system, give each existing town a random siege immunity cooldown
-					 * This should help prevent everyone killing each other 5 mins after system deployment
-					 */
-					long siegeImmunityDurationMillis = (long)(Math.random() * (TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() + 1) * TimeMgmt.ONE_HOUR_IN_MILLIS);
-					town.setSiegeImmunityEndTime(System.currentTimeMillis() + siegeImmunityDurationMillis);
+					 //On first load of system, give each existing town the new town cooldown
+					long siegeImmunityEndTime = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
+					town.setSiegeImmunityEndTime(siegeImmunityEndTime);
 				}
 
 				line = keys.get("occupied");
@@ -1140,48 +1137,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				} else {
-					//Try to migrate  (delete this bit after sw trial)
-					line = keys.get("neutral");
-					if (line != null) {
-						try {
-							town.setPeaceful(Boolean.parseBoolean(line));
-						} catch (Exception ignored) {
-						}
+					//On first load of system, give each existing town the temporary new town peacefulness effect
+					int newTownPeacefulnessDays = TownySettings.getWarCommonPeacefulTownsNewTownPeacefulnessDurationDays();
+					if(newTownPeacefulnessDays > 0){
+						town.setPeaceful(true);
+						town.setDesiredPeacefulnessValue(false);
+						town.setPeacefulnessChangeConfirmationCounterDays(newTownPeacefulnessDays);
 					}
 				}
 
 				line = keys.get("desiredPeacefulnessValue");
-				if (line != null) {
+				if (line != null)
 					try {
 						town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				} else {
-					//Try to migrate  (delete this bit after sw trial)
-					line = keys.get("desiredNeutralityValue");
-					if (line != null) {
-						try {
-							town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
-						} catch (Exception ignored) {
-						}
-					}
-				}
 
 				line = keys.get("peacefulnessChangeConfirmationCounterDays");
-				if (line != null) {
+				if (line != null)
 					try {
 						town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));
 					} catch (Exception ignored) {
 					}
-				} else {
-					//Try to migrate  (delete this bit after sw trial)
-					line = keys.get("neutralityChangeConfirmationCounterDays");
-					if (line != null) {
-						try {
-							town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));						} catch (Exception ignored) {
-						}
-					}
-				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
