@@ -153,6 +153,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 				sendToJail(player, index, town);
 				if (days > 0) {
+					if (days > 10000)
+						days = 10000;
 					this.setJailDays(days);
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
 				}
