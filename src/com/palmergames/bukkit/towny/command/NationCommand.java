@@ -1321,7 +1321,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!town.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
-				Confirmation confirmation = new Confirmation(() -> {				
+				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
 						town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost");
@@ -1335,10 +1335,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_nation"), player.getName(), StringMgmt.remUnderscore(name)));
 
-				});
-				// Send confirmation.
-				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+					.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
+					.sendTo(player);
+				
 			// Or, it is free, so just make the nation.
 			} else {
 				newNation(name, town);
@@ -2354,8 +2354,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							
 							// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 							if (!removedTowns.isEmpty()) {
+								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
 								final Nation finalNation = nation;
-								Confirmation confirmation = new Confirmation(() -> {
+								Confirmation.runOnAccept(() -> {
 									
 									try {
 										finalNation.setCapital(newCapital);										
@@ -2365,12 +2366,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
-										return;
 									}
-								});
-								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
-								confirmation.setTitle(title);
-								ConfirmationHandler.sendConfirmation(player, confirmation);
+								})
+								.setTitle(title)
+								.sendTo(player);
 								
 							// No towns will be removed, skip the Confirmation.
 							} else {
@@ -2465,7 +2464,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 						final Nation finalNation = nation;
                     	final String name = split[1];
-				    	Confirmation confirmation = new Confirmation(() -> {
+				    	Confirmation.runOnAccept(() -> {
 							try {
 								finalNation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 							} catch (EconomyException ignored) {}
@@ -2474,9 +2473,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								nationRename(player, finalNation, name);
 							else
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
-				    	});
-				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
-                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+				    	})
+				    	.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
+						.sendTo(player);
+				    	
                     } else {
 						if (!NameValidation.isBlacklistName(split[1]))
 							nationRename(player, nation, split[1]);

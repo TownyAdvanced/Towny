@@ -13,13 +13,23 @@ import java.util.Map;
 /**
  * A class that handles the processing confirmations sent in Towny.
  * 
- * @author Lukas Manour (ArticDive)
+ * @author Lukas Mansour (ArticDive)
  * @author Suneet Tipirneni (Siris)
  */
 public class ConfirmationHandler {
 	
+	private static final class ConfirmationContext {
+		final Confirmation confirmation;
+		final int taskID;
+		
+		ConfirmationContext(Confirmation confirmation, int taskID) {
+			this.confirmation = confirmation;
+			this.taskID = taskID;
+		}
+	}
+	
 	private static Towny plugin;
-	public static Map<CommandSender, Confirmation> confirmations = new HashMap<>();
+	public static Map<CommandSender, ConfirmationContext> confirmations = new HashMap<>();
 
 	public static void initialize(Towny plugin) {
 		ConfirmationHandler.plugin = plugin;
@@ -31,7 +41,7 @@ public class ConfirmationHandler {
 	 * @param sender The sender to get the confirmation from.
 	 */
 	public static void cancelConfirmation(CommandSender sender) {
-		Bukkit.getScheduler().cancelTask(confirmations.get(sender).getTaskID());
+		Bukkit.getScheduler().cancelTask(confirmations.get(sender).taskID);
 		confirmations.remove(sender);
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
 	}
@@ -50,9 +60,6 @@ public class ConfirmationHandler {
 			cancelConfirmation(sender);
 		}
 		
-		// Add the confirmation to the map.
-		confirmations.put(sender, confirmation);
-		
 		// Send the confirmation message.
 		String title = confirmation.getTitle();
 		TownyMessaging.sendConfirmationMessage(sender, title, null, null, null);
@@ -67,9 +74,9 @@ public class ConfirmationHandler {
 				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
 			}
 		}, 20L * duration).getTaskId();
-		
-		// Cache task ID
-		confirmation.setTaskID(taskID);
+
+		// Cache the task.
+		confirmations.put(sender, new ConfirmationContext(confirmation, taskID));
 	}
 
 	/**
@@ -79,16 +86,16 @@ public class ConfirmationHandler {
 	 */
 	public static void handleConfirmation(CommandSender sender) {
 		// Get confirmation
-		Confirmation confirmation = confirmations.get(sender);
+		ConfirmationContext context = confirmations.get(sender);
 
 		// Get handler
-		Runnable handler = confirmation.getHandler();
+		Runnable handler = context.confirmation.getAcceptHandler();
 
 		// Execute handler.
 		handler.run();
 
 		// Cancel task.
-		Bukkit.getScheduler().cancelTask(confirmation.getTaskID());
+		Bukkit.getScheduler().cancelTask(context.taskID);
 		
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
