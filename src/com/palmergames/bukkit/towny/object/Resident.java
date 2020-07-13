@@ -885,21 +885,21 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
-		this.townID = townID;
-		
-		setTitle("");
-		setSurname("");
-		updatePerms();
+		if (this.townID != null && townID != null) {
+			if (!this.townID.equals(townID)) {
+				throw new AlreadyRegisteredException();
+			}
+		} else {
+			this.townID = townID;
+			setTitle("");
+			setSurname("");
+			updatePerms();
+		}
 	}
 	
 	public void setTown(@Nullable Town town) throws AlreadyRegisteredException {
-		if (town == null) {
-			setTownID(null);
-			
-			return;
-		}
-		
-		setTownID(town.getUniqueIdentifier());
+		UUID townUUID = town != null ? town.getUniqueIdentifier() : null;
+		setTownID(townUUID);
 	}
 	
 	public Town getTown() throws NotRegisteredException {
