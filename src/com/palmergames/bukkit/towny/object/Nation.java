@@ -227,8 +227,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public boolean isCapital(Town town) {
-
-		return town == getCapital();
+		return town.getUniqueIdentifier().equals(getCapital().getUniqueIdentifier());
 	}
 
 	public boolean hasTown(String name) {

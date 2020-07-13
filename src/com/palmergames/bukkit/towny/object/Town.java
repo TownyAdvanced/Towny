@@ -319,8 +319,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return getAssistants().contains(resident);
 	}
 
-	public void 
-	addResident(Resident resident) throws AlreadyRegisteredException {
+	public void addResident(Resident resident) throws AlreadyRegisteredException {
 		Validate.notNull(resident);
 		addResidentCheck(resident);
 		residents.add(resident);
@@ -343,7 +342,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public boolean isMayor(Resident resident) {
-		return resident.getUniqueIdentifier() == getMayorID();
+		return resident.getUniqueIdentifier().equals(getMayorID());
 	}
 
 	public boolean hasNation() {

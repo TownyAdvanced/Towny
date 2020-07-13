@@ -923,6 +923,7 @@ public class TownyUniverse {
     	return world;
 	}
 	
+	@Deprecated
 	public TownyWorld _getWorld(String name) throws NotRegisteredException {
 		TownyWorld world = worldMap.get(name);
 		if (world == null) {

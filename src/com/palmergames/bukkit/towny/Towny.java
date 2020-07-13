@@ -214,14 +214,7 @@ public class Towny extends JavaPlugin {
 		DatabaseHandler databaseHandler = new FlatFileDatabaseHandler();
 		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get("world");
 		Nation nation = new Nation(UUID.randomUUID(),"test");
-		Resident resident = new Resident(UUID.randomUUID(), "testUser");
 		Town town = new Town(UUID.randomUUID(), "Utopia");
-		
-		try {
-			resident.setTown(town);
-		} catch (AlreadyRegisteredException e) {
-			e.printStackTrace();
-		}
 		
 		Resident loadedResident = null;
 		if (TownyUniverse.getInstance().getResidents().size() > 0) {
@@ -235,7 +228,7 @@ public class Towny extends JavaPlugin {
 			ReflectionUtil.dump(loadedTownBlock);
 		}
 		
-		Town loadedTown;
+		Town loadedTown = null;
 		if (TownyUniverse.getInstance().getTowns().size() > 0) {
 			loadedTown = TownyUniverse.getInstance().getTowns().iterator().next();
 			ReflectionUtil.dump(loadedTown);

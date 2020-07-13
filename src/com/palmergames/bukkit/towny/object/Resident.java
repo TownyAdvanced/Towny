@@ -412,7 +412,6 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		townRanks.clear();
 		nationRanks.clear();
 		TownyPerms.assignPermissions(this, null);
-		
 	}
 	
 	public void updatePermsForNationRemoval() {
