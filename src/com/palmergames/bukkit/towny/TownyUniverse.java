@@ -337,11 +337,13 @@ public class TownyUniverse {
 		return resident;
 	}
 	
-	public List<Resident> getResidents(@NotNull String... residents) {
+	@NotNull
+	public Collection<Resident> getResidents(@NotNull String... residents) {
     	return getResidents(null, residents);
 	}
 	
-	public List<Resident> getResidents(@Nullable Player errorReceiver, @NotNull String... residents) {
+	@NotNull
+	public Collection<Resident> getResidents(@Nullable Player errorReceiver, @NotNull String... residents) {
     	Objects.requireNonNull(residents);
     	
     	List<Resident> residentList = new ArrayList<>(residents.length);
@@ -354,7 +356,7 @@ public class TownyUniverse {
 					TownyMessaging.sendErrorMsg(errorReceiver, ex.getMessage());
 			}
 		}
-    	return residentList;
+    	return Collections.unmodifiableList(residentList);
 	}
 
 	@Deprecated
@@ -505,8 +507,8 @@ public class TownyUniverse {
     }
     
     @NotNull
-    public List<Resident> getResidents() {
-    	return new ArrayList<>(residents.values()); 
+    public Collection<Resident> getResidents() {
+    	return Collections.unmodifiableCollection(residents.values()); 
 	}
 
 	public Trie getResidentsTrie() {
@@ -565,7 +567,8 @@ public class TownyUniverse {
 		return t;
 	}
 	
-	public List<Town> getTowns(@NotNull String... names) {
+	@NotNull
+	public Collection<Town> getTowns(@NotNull String... names) {
 		Objects.requireNonNull(names);
 		
 		List<Town> matches = new ArrayList<>(names.length);
@@ -576,7 +579,7 @@ public class TownyUniverse {
 			}
 		}
 		
-		return matches;
+		return Collections.unmodifiableList(matches);
 	}
 
 	/**
@@ -778,7 +781,7 @@ public class TownyUniverse {
 		return n;
 	}
 
-	public List<Nation> getNations(@NotNull String... names) { 
+	public Collection<Nation> getNations(@NotNull String... names) { 
 		Objects.requireNonNull(names); 
 		
 		List<Nation> matches = new ArrayList<>(names.length);
@@ -788,7 +791,7 @@ public class TownyUniverse {
 			} catch (NotRegisteredException ignored) {
 			}
 		}
-		return matches;
+		return Collections.unmodifiableCollection(matches);
 	}
 
 	public Nation newNation(@NotNull String name) throws AlreadyRegisteredException, NotRegisteredException {
@@ -895,8 +898,9 @@ public class TownyUniverse {
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 	}
 	
-	public List<Nation> getNations() {
-		return new ArrayList<>(nations.values());
+	@NotNull
+	public Collection<Nation> getNations() {
+		return Collections.unmodifiableCollection(nations.values());
 	}
 	
 	@Deprecated
@@ -998,7 +1002,8 @@ public class TownyUniverse {
 		worldNameMap.put(name.toLowerCase(), newWorld);
 	}
 	
-	public List<TownyWorld> getWorlds() { return new ArrayList<>(worlds.values()); }
+	@NotNull
+	public Collection<TownyWorld> getWorlds() { return Collections.unmodifiableCollection(worlds.values()); }
 	
 	@Deprecated
     public Map<String, TownyWorld> getWorldMap() {
@@ -1256,8 +1261,9 @@ public class TownyUniverse {
 		return townBlockMap;
 	}
 	
-	public List<TownBlock> getTownBlocks() {
-		return new ArrayList<>(townBlocks.values());
+	@NotNull
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 	
 	public void addTownBlock(@NotNull TownBlock townBlock) throws AlreadyRegisteredException {
@@ -1278,7 +1284,6 @@ public class TownyUniverse {
 
 				// Check if homeblock
 				if (townBlock.isHomeBlock()) {
-					System.out.println("Setting homeblock for " + town);
 					town.forceSetHomeBlock(townBlock);
 				}
 			}

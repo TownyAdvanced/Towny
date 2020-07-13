@@ -63,6 +63,7 @@ import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -1172,7 +1173,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 		}
 		
-		List<Nation> nationsToSort = TownyUniverse.getInstance().getNations();
+		Collection<Nation> nationsToSort = TownyUniverse.getInstance().getNations();
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
@@ -1249,7 +1250,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        return;
 	    }
 
-	    final List<Nation> nations = nationsToSort;
+	    final List<Nation> nations = new ArrayList<>(nationsToSort);
 	    final Comparator comp = comparator;
 	    final int pageNumber = page;
 		try {
@@ -1259,7 +1260,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
-			return;
 		}
 
 	}
@@ -1550,7 +1550,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationRevokeInviteTown(Object sender,Nation nation, List<Town> towns) {
+	private static void nationRevokeInviteTown(Object sender,Nation nation, Collection<Town> towns) {
 
 		for (Town town : towns) {
 			if (InviteHandler.inviteIsActive(nation, town)) {
@@ -1583,7 +1583,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param invited the Town(s) being invited to the Nation
 	 * @throws TownyException executed when the arraylist (invited) returns empty (no valid town was entered)
 	 */
-	public static void nationAdd(Player player, Nation nation, List<Town> invited) throws TownyException {
+	public static void nationAdd(Player player, Nation nation, Collection<Town> invited) throws TownyException {
 
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
@@ -1676,7 +1676,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param towns - List of Town(s) being added to Nation.
 	 * @throws AlreadyRegisteredException - Shouldn't happen but could.
 	 */
-	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
+	public static void nationAdd(Nation nation, Collection<Town> towns) throws AlreadyRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		for (Town town : towns) {
@@ -1717,7 +1717,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nationKick(player, nation, townyUniverse.getTowns(names));
 	}
 
-	public static void nationKick(CommandSender sender, Nation nation, List<Town> kicking) {
+	public static void nationKick(CommandSender sender, Nation nation, Collection<Town> kicking) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		ArrayList<Town> remove = new ArrayList<>();

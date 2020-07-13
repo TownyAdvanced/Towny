@@ -321,7 +321,7 @@ public class TownyFormatter {
 			// We're going to supplant the first TownyWorld so that the forceexpl/forcefire/forcepvp tests below do not have trouble.
 			// While this is a bit of a dirty hack, the same commit as this one also stops players from unclaiming their homeblock,
 			// without moving it first so this should not occur too often.
-			world = TownyUniverse.getInstance().getWorlds().get(0);
+			world = TownyUniverse.getInstance().getWorlds().iterator().next();
 		}
 
 		// ___[ Raccoon City (PvP) (Open) ]___

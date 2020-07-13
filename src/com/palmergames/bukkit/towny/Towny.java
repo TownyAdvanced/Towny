@@ -225,19 +225,19 @@ public class Towny extends JavaPlugin {
 		
 		Resident loadedResident = null;
 		if (TownyUniverse.getInstance().getResidents().size() > 0) {
-			loadedResident = TownyUniverse.getInstance().getResidents().get(0);
+			loadedResident = TownyUniverse.getInstance().getResidents().iterator().next();
 			ReflectionUtil.dump(loadedResident);
 		}
 		
 		TownBlock loadedTownBlock;
 		if (TownyUniverse.getInstance().getTownBlocks().size() > 0) {
-			loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().get(0);
+			loadedTownBlock = TownyUniverse.getInstance().getTownBlocks().iterator().next();
 			ReflectionUtil.dump(loadedTownBlock);
 		}
 		
 		Town loadedTown;
 		if (TownyUniverse.getInstance().getTowns().size() > 0) {
-			loadedTown = TownyUniverse.getInstance().getTowns().get(0);
+			loadedTown = TownyUniverse.getInstance().getTowns().iterator().next();
 			ReflectionUtil.dump(loadedTown);
 		}
 		

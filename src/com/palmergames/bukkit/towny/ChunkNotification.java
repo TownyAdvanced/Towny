@@ -99,7 +99,6 @@ public class ChunkNotification {
 
 		try {
 			toTownBlock = to.getTownBlock();
-			TownyMessaging.sendErrorMsg("tp = " + to.getTownBlock());
 			toPlotType = toTownBlock.getType();
 			if (toTownBlock.hasPlotObjectGroup())
 				toPlotGroup = toTownBlock.getPlotObjectGroup();

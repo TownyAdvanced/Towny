@@ -1,37 +1,19 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.DeleteNationEvent;
-import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
-import com.palmergames.bukkit.towny.event.DeleteTownEvent;
-import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
-import com.palmergames.bukkit.towny.event.RenameNationEvent;
-import com.palmergames.bukkit.towny.event.RenameResidentEvent;
-import com.palmergames.bukkit.towny.event.RenameTownEvent;
-import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
-import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
-import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -39,10 +21,8 @@ import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -84,17 +64,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public List<Resident> getResidents(Player player, String[] names) {
+	public Collection<Resident> getResidents(Player player, String[] names) {
 		return universe.getResidents(player, names);
 	}
 
 	@Override
-	public List<Resident> getResidents(String[] names) {
+	public Collection<Resident> getResidents(String[] names) {
 		return universe.getResidents(names);
 	}
 
 	@Override
-	public List<Resident> getResidents() {
+	public Collection<Resident> getResidents() {
 		return universe.getResidents();
 	}
 
@@ -104,7 +84,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public List<Town> getTowns(String[] names) {
+	public Collection<Town> getTowns(String[] names) {
 		return universe.getTowns(names);
 	}
 
@@ -128,12 +108,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public List<Nation> getNations(String[] names) {
+	public Collection<Nation> getNations(String[] names) {
 		return universe.getNations(names);
 	}
 
 	@Override
-	public List<Nation> getNations() {
+	public Collection<Nation> getNations() {
 		return universe.getNations();
 	}
 
@@ -153,7 +133,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public List<TownyWorld> getWorlds() {
+	public Collection<TownyWorld> getWorlds() {
 		return universe.getWorlds();
 	}
 

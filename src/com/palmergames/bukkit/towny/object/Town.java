@@ -53,10 +53,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private transient List<Resident> residents = new ArrayList<>();
-	private transient List<Resident> outlaws = new ArrayList<>();
+	private final transient List<Resident> residents = new ArrayList<>();
+	private final transient List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
-	private List<Location> jailSpawns = new ArrayList<>();
+	private final List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
 
 	@ForeignKey(reference = Nation.class)
@@ -291,7 +291,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	//@SaveGetter(keyName = "assistants")
 	public List<Resident> getAssistants() {
-
 		List<Resident> assistants = new ArrayList<>();
 		
 		for (Resident assistant: residents) {

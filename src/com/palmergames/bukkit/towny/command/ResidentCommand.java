@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -639,7 +640,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(line);
 	}
 
-	public static void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
+	public static void residentFriendAdd(Player player, Resident resident, Collection<Resident> invited) {
 
 		ArrayList<Resident> remove = new ArrayList<>();
 
@@ -705,7 +706,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
+	public static void residentFriendRemove(Player player, Resident resident, Collection<Resident> kicking) {
 
 		List<Resident> remove = new ArrayList<>();
 		List<Resident> toKick = new ArrayList<>(kicking);

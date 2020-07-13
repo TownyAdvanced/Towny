@@ -32,7 +32,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +43,7 @@ import java.util.UUID;
 )
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
 	@OneToMany(tableName = "friends")
-	private transient List<Resident> friends = new ArrayList<>();
+	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class)
 	private UUID townID = null;

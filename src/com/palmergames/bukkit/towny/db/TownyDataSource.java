@@ -267,13 +267,13 @@ public abstract class TownyDataSource {
 	}
 
 	// Database functions
-	abstract public List<Resident> getResidents(Player player, String[] names);
+	abstract public Collection<Resident> getResidents(Player player, String[] names);
 
-	abstract public List<Resident> getResidents();
+	abstract public Collection<Resident> getResidents();
 	
 	abstract public List<PlotGroup> getAllPlotGroups();
 
-	abstract public List<Resident> getResidents(String[] names);
+	abstract public Collection<Resident> getResidents(String[] names);
 
 	abstract public Resident getResident(String name) throws NotRegisteredException;
 
@@ -287,7 +287,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean hasNation(String name);
 
-	abstract public List<Town> getTowns(String[] names);
+	abstract public Collection<Town> getTowns(String[] names);
 
 	abstract public List<Town> getTowns();
 
@@ -295,9 +295,9 @@ public abstract class TownyDataSource {
 
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
 
-	abstract public List<Nation> getNations(String[] names);
+	abstract public Collection<Nation> getNations(String[] names);
 
-	abstract public List<Nation> getNations();
+	abstract public Collection<Nation> getNations();
 
 	abstract public Nation getNation(String name) throws NotRegisteredException;
 
@@ -305,7 +305,7 @@ public abstract class TownyDataSource {
 
 	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
 
-	abstract public List<TownyWorld> getWorlds();
+	abstract public Collection<TownyWorld> getWorlds();
 
 	abstract public TownyWorld getTownWorld(String townName);
 

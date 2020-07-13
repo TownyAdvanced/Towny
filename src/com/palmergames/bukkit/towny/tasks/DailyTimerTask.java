@@ -22,6 +22,8 @@ import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -173,8 +175,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectNationTaxes() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		List<Nation> nations = townyUniverse.getNations();
-		ListIterator<Nation> nationItr = nations.listIterator();
+		Collection<Nation> nations = townyUniverse.getNations();
+		Iterator<Nation> nationItr = nations.iterator();
 		Nation nation;
 
 		while (nationItr.hasNext()) {
@@ -455,8 +457,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	public void collectNationCosts() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Nation> nations = universe.getNations();
-		ListIterator<Nation> nationItr = nations.listIterator();
+		Collection<Nation> nations = universe.getNations();
+		Iterator<Nation> nationItr = nations.iterator();
 		Nation nation;
 
 		while (nationItr.hasNext()) {

@@ -154,7 +154,6 @@ public class TownyPerms {
 				orig.clear();
 				
 				if (World.isUsingTowny()) {
-					TownyMessaging.sendErrorMsg("Flag 18");
 					/*
 					 * Fill with the fresh perm nodes
 					 */
@@ -251,7 +250,6 @@ public class TownyPerms {
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
 		// Start by adding the default perms everyone gets
 		Set<String> permList = new HashSet<>(getDefault());
-		TownyMessaging.sendErrorMsg("Flag 19");
 		//Check for town membership
 		if (resident.hasTown()) {
 			try {

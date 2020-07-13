@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.ListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.LocationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
@@ -14,7 +13,6 @@ import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.TownListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyPermissionsHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownyWorldHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.UUIDHandler;
@@ -132,7 +130,6 @@ public abstract class DatabaseHandler {
 				
 				TownyWorld wrappedWorld = new TownyWorld(world.getUID(), world.getName());
 				TownyUniverse.getInstance().addWorld(wrappedWorld);
-				TownyMessaging.sendErrorMsg("got here");
 				// Save
 				save(wrappedWorld);
 			} catch (AlreadyRegisteredException e) {
@@ -176,7 +173,6 @@ public abstract class DatabaseHandler {
 			Type rawType = ReflectionUtil.getRawType(obj.getClass());
 			TypeAdapter<T> adapter = (TypeAdapter<T>) getAdapter(rawType);
 			if (adapter == null) {
-				System.out.println("[Towny] No adapter found for " + rawType); // FIXME DEBUG
 				// Resort to iterator
 				return arrayToString(obj, type);
 			}
