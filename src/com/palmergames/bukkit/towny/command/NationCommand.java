@@ -1405,17 +1405,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(remainingNation.getKing(), String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", ")));
 				}
 			}
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 				try {
 					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), nation, remainingNation));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
-			});
-			
-			// Send confirmation.
-			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(king.getName()), confirmation);
+			})
+			.sendTo(BukkitTools.getPlayerExact(king.getName()));
 		}
 	}
 
@@ -1436,7 +1434,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 			}
 
-			if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 			}
 			
@@ -1467,14 +1465,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Nation nation = resident.getTown().getNation();
-				Confirmation confirmation = new Confirmation(() -> {
+				Confirmation.runOnAccept(() -> {
 					TownyUniverse.getInstance().getDataSource().removeNation(nation);
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-				});
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+				.sendTo(player);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
 			}
 		else
 			try {
@@ -1486,7 +1483,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
 			}
 	}
 

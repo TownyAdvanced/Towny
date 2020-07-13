@@ -940,11 +940,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					Confirmation confirmation = new Confirmation(() -> {
+					Confirmation.runOnAccept(() -> {
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
-					});
-					ConfirmationHandler.sendConfirmation(sender, confirmation);
+					})
+						.sendTo(sender);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -1239,11 +1239,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					Confirmation confirmation = new Confirmation(() -> {
+					Confirmation.runOnAccept(() -> {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-					});
-					ConfirmationHandler.sendConfirmation(sender, confirmation); // It takes the nation, an admin deleting another town has no confirmation.
+					})
+					.sendTo(sender); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1698,12 +1698,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			};
 			
 			if (sender != null) {
-				Confirmation confirmation = new Confirmation(purgeHandler);
-				ConfirmationHandler.sendConfirmation(sender, confirmation);
+				Confirmation.runOnAccept(purgeHandler)
+				.sendTo(sender);
 			}
 		} else { // isConsole
 			final String finalDays = days;
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 				int numDays;
 				boolean townless = false;
 				if (finalDays.startsWith("townless")) {
@@ -1714,9 +1714,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
-			});
-			
-			ConfirmationHandler.sendConfirmation(sender, confirmation);
+			})
+			.sendTo(sender);
 		}
 	}
 

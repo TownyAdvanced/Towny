@@ -24,7 +24,7 @@ public class ConfirmCommand extends BukkitCommand {
 		}
 		
 		// Handle the confirmation.
-		ConfirmationHandler.handleConfirmation(commandSender);
+		ConfirmationHandler.acceptConfirmation(commandSender);
 		return true;
 	}
 }

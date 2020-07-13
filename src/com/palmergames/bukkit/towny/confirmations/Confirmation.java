@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.confirmations;
 /**
  * An object which stores information about confirmations. While this 
  * object itself is immutable and threadsafe, async operations within
- * its handlers may not be. Use async judiciously.
+ * its handlers may not be thus, use async judiciously.
  * 
  * @author Suneet Tipirneni (Siris)
  */
@@ -14,55 +14,44 @@ public class Confirmation {
 	private final String title;
 	private final int duration;
 	private final boolean isAsync;
-	
+
+	/**
+	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
+	 * 
+	 * @param acceptHandler The runnable to run on accepting the confirmation.
+	 * @return A new confirmation builder with the given accept handler.
+	 */
 	public static ConfirmationBuilder runOnAccept(Runnable acceptHandler) {
 		ConfirmationBuilder builder = new ConfirmationBuilder();
 		builder.acceptHandler = acceptHandler;
 		return builder;
 	}
-	
+
+	/**
+	 * Creates a new {@link ConfirmationBuilder} with the given
+	 * accept handler.
+	 * 
+	 * @param acceptHandler The runnable to run when the confirmation is accepted.
+	 * @return A new builder with the given accept handler.
+	 */
 	public static ConfirmationBuilder runOnAcceptAsync(Runnable acceptHandler) {
 		ConfirmationBuilder builder = new ConfirmationBuilder();
 		builder.acceptHandler = acceptHandler;
 		builder.runAsync = true;
 		return builder;
 	}
-	
-	protected Confirmation(ConfirmationBuilder builder) {
-		this.acceptHandler = builder.getAcceptHandler();
-		this.cancelHandler = builder.getCancelHandler();
-		this.title = builder.getTitle();
-		this.duration = builder.getDuration();
-		this.isAsync = builder.runAsync;
-	}
-	
-	/**
-	 * Creates a new confirmation object.
-	 *
-	 * @param acceptHandler The handler to run after accepting the command.
-	 */
-	public Confirmation(Runnable acceptHandler) {
-		this.acceptHandler = acceptHandler;
-		this.cancelHandler = null;
-		this.duration = 20;
-		this.title = null;
-		this.isAsync = false;
-	}
 
 	/**
-	 * Creates a new confirmation object.
-	 *
-	 * @param acceptHandler The handler to run after accepting the command.
-	 * @param title The title of the confirmation message.
-	 * @param duration The amount of time to allow for the confirmation to be processed.   
-	 *          
+	 * Internal use only.
+	 * 
+	 * @param builder The builder to construct from.
 	 */
-	public Confirmation(Runnable acceptHandler, String title, int duration) {
-		this.acceptHandler = acceptHandler;
-		this.cancelHandler = null;
-		this.title = title;
-		this.duration = duration;
-		this.isAsync = false;
+	protected Confirmation(ConfirmationBuilder builder) {
+		this.acceptHandler = builder.acceptHandler;
+		this.cancelHandler = builder.cancelHandler;
+		this.title = builder.title;
+		this.duration = builder.duration;
+		this.isAsync = builder.runAsync;
 	}
 	
 	/**
