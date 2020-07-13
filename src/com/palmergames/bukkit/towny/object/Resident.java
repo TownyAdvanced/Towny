@@ -885,10 +885,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void setTownID(@Nullable UUID townID) throws AlreadyRegisteredException {
-		if (this.townID != null && townID != null) {
-			if (!this.townID.equals(townID)) {
-				throw new AlreadyRegisteredException();
-			}
+		if (this.townID != null && !this.townID.equals(townID)) {
+			throw new AlreadyRegisteredException();
 		} else {
 			this.townID = townID;
 			setTitle("");
