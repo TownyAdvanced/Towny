@@ -3312,6 +3312,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_ACTIVE_PHASE_DURATION_MINUTES);
 	}
 
+	public static int getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_FIRST_WARNING_MINUTES_TO_EXPIRY);
+	}
+
+	public static int getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() {
+		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_SECOND_WARNING_MINUTES_TO_EXPIRY);
+	}
+
 	public static int getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() {
 		return getInt(ConfigNodes.WAR_SIEGE_BATTLE_SESSIONS_EXPIRED_PHASE_DURATION_MINUTES);
 	}

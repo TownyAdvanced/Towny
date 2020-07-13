@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.*;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
@@ -27,92 +26,126 @@ public class SiegeWarBattleSessionUtil {
 				continue;
 
 			try {
-				BattleSession battleSession = null;
-				//Process progress of existing session
 				if (player.hasMetadata(METADATA_TAG_NAME)) {
-					battleSession = (BattleSession)player.getMetadata(METADATA_TAG_NAME).get(0).value();
-					if(battleSession.isExpired()) {
-						//Expired Session found. If deletion time has arrived, nuke session
-						if(System.currentTimeMillis() >= battleSession.getDeletionTime()) {
-							player.removeMetadata(METADATA_TAG_NAME, Towny.getPlugin());
-							TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_ended"));
-						}
-					} else {
-						//Active Session found. If expiry time has arrived, set session to expired
-						if(System.currentTimeMillis() >= battleSession.getExpiryTime()) {
-							battleSession.setExpired(true);
-							battleSession.setDeletionTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
-						}
-					}
-				}
+					//PLAYER HAS SESSION
+					BattleSession battleSession = (BattleSession) player.getMetadata(METADATA_TAG_NAME).get(0).value();
 
-				boolean playerInPeacefulTown = false;
-				boolean playerInOwnTown = false;
-
-				//Check if resident in in a peaceful town
-				TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
-				if(townBlockAtPlayerLocation != null
-					&& townBlockAtPlayerLocation.getTown().isPeaceful())
-				{
-					playerInPeacefulTown = true;
-				}
-
-				//Check if resident is in their own town
-				if(!playerInPeacefulTown) {
-					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-					if (resident.hasTown()
-						&& townBlockAtPlayerLocation != null
-						&& resident.getTown() == townBlockAtPlayerLocation.getTown())
-					{
-						playerInOwnTown = true;
-					}
-				}
-
-				//If player is in an area where they should get battle fatigue, process initiation/effects
-				if(!playerInPeacefulTown
-					&& !playerInOwnTown
-					&& SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation()))
-				{
-					if (!player.hasMetadata(METADATA_TAG_NAME)) {
-						battleSession = new BattleSession();
-						battleSession.setExpiryTime(System.currentTimeMillis() + (int)(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
-						player.setMetadata(METADATA_TAG_NAME, new FixedMetadataValue(Towny.getPlugin(), battleSession));
-						long timeRemainingMillis = (int)(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-						String timeRemainingString = TimeMgmt.getFormattedTimeValue(timeRemainingMillis);
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_started"), timeRemainingString));
+					//Delete session is deletion time has been reached
+					if (battleSession.isExpired() && System.currentTimeMillis() >= battleSession.getDeletionTime()) {
+						player.removeMetadata(METADATA_TAG_NAME, Towny.getPlugin());
+						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_ended"));
 						continue;
 					}
 
-					//Check effect of expired session
-					if(battleSession.isExpired()) {
-						long timeRemainingMillis = battleSession.getDeletionTime() - System.currentTimeMillis();
-						String timeRemainingString = TimeMgmt.getFormattedTimeValue(timeRemainingMillis);
+					//No punish if player in in a peaceful town
+					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
+					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
+						continue;
+					}
 
-						if(battleSession.isWarningGiven()) {
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_expired"), timeRemainingString));
-							int effectDurationTicks = (int)(TimeTools.convertToTicks(TownySettings.getShortInterval() + 5));
-							Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
-								public void run() {
-									List<PotionEffect> potionEffects = new ArrayList<>();
-									potionEffects.add(new PotionEffect(PotionEffectType.BLINDNESS, effectDurationTicks, 4));
-									potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 4));
-									potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 4));
-									potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 2));
-									player.addPotionEffects(potionEffects);
-									player.setHealth(1);
-								}
-							});
+					//No punish if player is in their own town
+					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (resident.hasTown()
+						&& townBlockAtPlayerLocation != null
+						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
+						continue;
+					}
+
+					//No punish if player is far from all siege zones
+					if (!SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
+						continue;
+					}
+
+					//Warn if first warning time has been reached
+					if (!battleSession.isFirstWarningGiven()) {
+						if (System.currentTimeMillis() >= battleSession.getFirstWarningTime()) {
+							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_warning"), timeUntilExpiry));
+							battleSession.setFirstWarningGiven(true);
 						} else {
-							battleSession.setWarningGiven(true);
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_expired_warning"), timeRemainingString));
+							continue;
 						}
 					}
 
-				} else {
-					//Player not in an area where they can get battle fatigue. Reset warning if applicable
-					if(battleSession != null && battleSession.isExpired() && battleSession.isWarningGiven()) {
-						battleSession.setWarningGiven(false);
+					//Warn if second warning time has been reached
+					if (!battleSession.isSecondWarningGiven()) {
+						//phase 2
+						if (System.currentTimeMillis() >= battleSession.getSecondWarningTime()) {
+							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_warning"), timeUntilExpiry));
+							battleSession.setSecondWarningGiven(true);
+						} else {
+							continue;
+						}
 					}
+
+					//Expire session if expiry time has been reached
+					if (!battleSession.isExpired()) {
+						//phase 3
+						if (System.currentTimeMillis() >= battleSession.getExpiryTime()) {
+							battleSession.setExpired(true);
+						} else {
+							continue;
+						}
+					}
+
+					//Punish player
+					int effectDurationTicks = (int) (TimeTools.convertToTicks(TownySettings.getShortInterval() + 5));
+					Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
+						public void run() {
+							List<PotionEffect> potionEffects = new ArrayList<>();
+							potionEffects.add(new PotionEffect(PotionEffectType.BLINDNESS, effectDurationTicks, 4));
+							potionEffects.add(new PotionEffect(PotionEffectType.POISON, effectDurationTicks, 4));
+							potionEffects.add(new PotionEffect(PotionEffectType.WEAKNESS, effectDurationTicks, 4));
+							potionEffects.add(new PotionEffect(PotionEffectType.SLOW, effectDurationTicks, 2));
+							player.addPotionEffects(potionEffects);
+							player.setHealth(1);
+						}
+					});
+					String timeRemainingString = TimeMgmt.getFormattedTimeValue(battleSession.getDeletionTime() - System.currentTimeMillis());
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_expired"), timeRemainingString));
+
+				} else {
+					//PLAYER DOES NOT HAVE SESSION
+
+					//No session if player in in a peaceful town
+					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
+					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
+						continue;
+					}
+
+					//No session if player is in their own town
+					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (resident.hasTown()
+						&& townBlockAtPlayerLocation != null
+						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
+						continue;
+					}
+
+					//No punish if player is far from all siege zones
+					if (!SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
+						continue;
+					}
+
+					//Create new battle session
+					BattleSession battleSession = new BattleSession();
+					int activePhaseDurationMillis = (int) (TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					int expiredPhaseDurationMillis = (int) (TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					long expiryTime = System.currentTimeMillis() + activePhaseDurationMillis;
+					long deleteTime = expiryTime + expiredPhaseDurationMillis;
+					long firstWarningTime = expiryTime - (int) (TownySettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					long secondWarningTime = expiryTime - (int) (TownySettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+
+					battleSession.setExpiryTime(expiryTime);
+					battleSession.setDeletionTime(deleteTime);
+					battleSession.setFirstWarningTime(firstWarningTime);
+					battleSession.setSecondWarningTime(secondWarningTime);
+
+					player.setMetadata(METADATA_TAG_NAME, new FixedMetadataValue(Towny.getPlugin(), battleSession));
+
+					String totalActiveTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					String restTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_started"), totalActiveTimeString, restTimeString));
 				}
 			} catch (Exception e) {
 				try {

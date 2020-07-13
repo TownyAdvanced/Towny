@@ -2263,6 +2263,14 @@ public enum ConfigNodes {
 			"war.siege.battle_sessions.expired_phase_duration_minutes",
 			"15",
 			"# This value determines the duration of the battle session expired phase."),
+	WAR_SIEGE_BATTLE_SESSIONS_FIRST_WARNING_MINUTES_TO_EXPIRY(
+			"war.siege.battle_sessions.first_warning_minutes_to_expiry",
+			"5",
+			"# This value determines the number of minutes between first warning and expiry."),
+	WAR_SIEGE_BATTLE_SESSIONS_SECOND_WARNING_MINUTES_TO_EXPIRY(
+			"war.siege.battle_sessions.second_warning_minutes_to_expiry",
+			"1",
+			"# This value determines the number of minutes between second warning and expiry."),
 
 	//Siege zone block/use restrictions
 	WAR_SIEGE_ZONE_BLOCK_PLACEMENT_RESTRICTIONS_ENABLED(

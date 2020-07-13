@@ -1324,9 +1324,10 @@ msg_war_siege_peaceful_town_left_nation: "&b%s has peacefully left %s."
 msg_set_siege_immunities: 'All town siege immunities set to %d hours.'
 
 #Battle sessions
-msg_war_siege_battle_session_started: '&6[War]&2 Battle session started. You are free to enter any siege-zone for the next %s.'
-msg_war_siege_battle_session_expired_warning: '&6[War]&c Battle session expired. To avoid battle-fatigue, leave the siege-zone immediately (and/or return to your own town). [Session End-Time: %s]'
-msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle-fatigue active. To remove this effect, leave the siege-zone (and/or return to your own town). [Session End-Time: %s]'
+
+msg_war_siege_battle_session_started: '&6[War]&2 Battle session started. You are free to enter any siege-zone for the next %s. After that you will get a %s rest from battle.'
+msg_war_siege_battle_session_warning: '&6[War]&c Your battle session will expire in %s. To avoid battle-fatigue, leave the siege-zone (and/or return to your own town).'
+msg_war_siege_battle_session_expired: '&6[War]&c Battle session expired. Battle-fatigue active. To remove this effect, leave the siege-zone (and/or return to your own town). You can return in %s.'
 msg_war_siege_battle_session_ended: '&6[War]&2 Battle session ended. The next time you enter a siege-zone, a new battle session will begin.'
 
 #Siege-zone block placement restrictions

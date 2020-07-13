@@ -5,28 +5,37 @@ package com.palmergames.bukkit.towny.war.siegewar.objects;
  *
  * A battle session represents a period of time,
  * in which a player's siege-fighting-time is being automatically moderated.
- *
- * A battle session starts when a player enters a siege zone, and has 2 phases
- * phase 1 - active - In this phase, the player can attend any siege
- * phase 2 - expired - In this phase the player must stay away from all sieges
+ * 
+ * A session has a number of phases
+ * phase 1 - active  (default 55 mins)
+ * phase 2 - active but first warning given  (default 4 mins)
+ * phase 3 - active but second warning given (default 1 min)
+ * phase 4 - expired (default 15 mins)
  * 
  * This mechanic is useful to control the amount of time players are spending fighting during a siege.
  * This can be expected to generally reduce stress and exhaustion for players.
  * This is particularly important as sieges are generally moderately long (e.g. 3 days).
  * 
- * The feature enable switch, and duration of phases, are set in the configuration file.
+ * The feature enable switch, and duration of the phases, are set in the configuration file.
  **
  * @author Goosius
  */
 public class BattleSession {
-	private boolean expired;
-	private boolean warningGiven;
+
+	private long firstWarningTime;
+	private boolean firstWarningGiven;
+	private long secondWarningTime;
+	private boolean secondWarningGiven;
 	private long expiryTime;
+	private boolean expired;
 	private long deletionTime;
 	
 	public BattleSession() {
+		firstWarningTime = 0;
+		firstWarningGiven = false;
+		secondWarningTime = 0;
+		secondWarningGiven = false;
 		expired = false;
-		warningGiven = false;
 		expiryTime = 0;
 		deletionTime = 0;
 	}
@@ -39,12 +48,12 @@ public class BattleSession {
 		this.expired = expired;
 	}
 
-	public boolean isWarningGiven() {
-		return warningGiven;
+	public boolean isFirstWarningGiven() {
+		return firstWarningGiven;
 	}
 
-	public void setWarningGiven(boolean warningGiven) {
-		this.warningGiven = warningGiven;
+	public void setFirstWarningGiven(boolean firstWarningGiven) {
+		this.firstWarningGiven = firstWarningGiven;
 	}
 
 	public long getExpiryTime() {
@@ -61,5 +70,29 @@ public class BattleSession {
 
 	public void setDeletionTime(long deletionTime) {
 		this.deletionTime = deletionTime;
+	}
+
+	public long getFirstWarningTime() {
+		return firstWarningTime;
+	}
+
+	public void setFirstWarningTime(long firstWarningTime) {
+		this.firstWarningTime = firstWarningTime;
+	}
+
+	public long getSecondWarningTime() {
+		return secondWarningTime;
+	}
+
+	public void setSecondWarningTime(long secondWarningTime) {
+		this.secondWarningTime = secondWarningTime;
+	}
+
+	public boolean isSecondWarningGiven() {
+		return secondWarningGiven;
+	}
+
+	public void setSecondWarningGiven(boolean secondWarningGiven) {
+		this.secondWarningGiven = secondWarningGiven;
 	}
 }
