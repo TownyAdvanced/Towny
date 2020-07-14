@@ -1,13 +1,11 @@
 package com.palmergames.bukkit.towny.database.handler;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.ListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
-import com.palmergames.bukkit.towny.database.dbHandlers.NationListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.TownBlockHandler;
@@ -21,7 +19,6 @@ import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SaveGetter;
 import com.palmergames.bukkit.towny.database.type.TypeAdapter;
 import com.palmergames.bukkit.towny.database.type.TypeContext;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -44,16 +41,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -406,7 +399,7 @@ public abstract class DatabaseHandler {
 		return SQLStringType.MEDIUM_TEXT.getColumnName();
 	}
 	
-	public abstract void upgrade(TownyDataSource legacyDataSource);
+	public abstract void upgrade();
 
 	// ---------- DB operation Methods ----------
 	
@@ -431,6 +424,8 @@ public abstract class DatabaseHandler {
 	 * @param objs The objects to save.
 	 */
 	public final void save(Saveable @NotNull ... objs) {
+		Validate.notNull(objs);
+		
 		for (Saveable obj : objs) {
 			save(obj);
 		}
