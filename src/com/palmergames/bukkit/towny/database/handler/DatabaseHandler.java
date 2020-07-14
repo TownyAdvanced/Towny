@@ -179,7 +179,6 @@ public abstract class DatabaseHandler {
 
 		// Get the parameterized type.
 		Type genericType = ReflectionUtil.getTypeOfIterable(type);
-		System.out.println("Iterable type = " + genericType);
 
 		// Iterate through it, and build the list string.
 		while (iterator.hasNext()) {
@@ -226,8 +225,6 @@ public abstract class DatabaseHandler {
 			if (ReflectionUtil.isCollection(rawTypeClass)) { ;
 				// Get the adapter for the raw type, make sure the type is a
 				TypeAdapter<?> adapter = fitAdapterFromClass(rawTypeClass, ReflectionUtil::isCollection);
-				System.out.println("raw type class = " + rawTypeClass);
-				System.out.println("Str = " + str);
 				if (adapter != null) {
 					// Get a collection the adapter
 					Collection<?> collection = (Collection<?>) adapter.fromStoredString(str);
@@ -238,7 +235,6 @@ public abstract class DatabaseHandler {
 						// Check if collection from the adapter has any elements
 						if (!collection.isEmpty()) {
 							for (Object s : collection) {
-								System.out.println("s = " + s);
 								// Make sure it's converting from a string
 								if (s instanceof String) {
 									P element = fromStoredString((String) s, parameterizedType);
