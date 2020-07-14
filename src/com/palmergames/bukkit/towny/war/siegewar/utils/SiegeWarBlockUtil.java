@@ -24,44 +24,64 @@ import java.util.List;
 public class SiegeWarBlockUtil {
 
 	/**
-	 * This method gets a list of adjacent townblocks, either N, S, E or W.
+	 * This method gets a list of adjacent cardinal townblocks, either N, S, E or W.
 	 * 
 	 * @param player the player
 	 * @param block the block to start from
-	 * @return list of nearby townblocks
+	 * @return list of adjacent cardinal townblocks
 	 */
-	public static List<TownBlock> getAdjacentTownBlocks(Player player, Block block) {
+	public static List<TownBlock> getCardinalAdjacentTownBlocks(Player player, Block block) {
+		List<Coord> coOrdinates = new ArrayList<>();
+		Coord startingCoOrdinate = Coord.parseCoord(block);
+		coOrdinates.add(startingCoOrdinate.add(0,-1));
+		coOrdinates.add(startingCoOrdinate.add(0,1));
+		coOrdinates.add(startingCoOrdinate.add(1,0));
+		coOrdinates.add(startingCoOrdinate.add(-1,0));
+		return getTownBlocks(player, coOrdinates);
+	}
+
+	/**
+	 * This method gets a list of adjacent non-cardinal townblocks, either NE, SE, SW or NW.
+	 *
+	 * @param player the player
+	 * @param block the block to start from
+	 * @return list of adjacent noncardinal townblocks
+	 */
+	public static List<TownBlock> getNonCardinalAdjacentTownBlocks(Player player, Block block) {
+		List<Coord> coOrdinates = new ArrayList<>();
+		Coord startingCoOrdinate = Coord.parseCoord(block);
+		coOrdinates.add(startingCoOrdinate.add(1,-1));
+		coOrdinates.add(startingCoOrdinate.add(1,1));
+		coOrdinates.add(startingCoOrdinate.add(-1,1));
+		coOrdinates.add(startingCoOrdinate.add(-1,-1));
+		return getTownBlocks(player, coOrdinates);
+	}
+
+	private static List<TownBlock> getTownBlocks(Player player, List<Coord> coOrdinatesToSearch) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld;
-		List<TownBlock> nearbyTownBlocks = new ArrayList<>();
+		List<TownBlock> townBlocks = new ArrayList<>();
 
 		try {
 			townyWorld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e) {
-			return nearbyTownBlocks;
+			return townBlocks;
 		}
 
-		List<Coord> nearbyCoOrdinates =new ArrayList<>();
-		Coord blockCoordinate = Coord.parseCoord(block);
-		nearbyCoOrdinates.add(blockCoordinate.add(0,-1));
-		nearbyCoOrdinates.add(blockCoordinate.add(0,1));
-		nearbyCoOrdinates.add(blockCoordinate.add(1,0));
-		nearbyCoOrdinates.add(blockCoordinate.add(-1,0));
-
-		TownBlock nearbyTownBlock = null;
-		for(Coord nearbyCoord: nearbyCoOrdinates){
+		TownBlock townBlock = null;
+		for(Coord nearbyCoord: coOrdinatesToSearch){
 			if(townyWorld.hasTownBlock(nearbyCoord)) {
 
-				try {nearbyTownBlock = townyWorld.getTownBlock(nearbyCoord);
+				try {townBlock = townyWorld.getTownBlock(nearbyCoord);
 				} catch (NotRegisteredException e) {}
 
-				if (nearbyTownBlock.hasTown()) {
-					nearbyTownBlocks.add(nearbyTownBlock);
+				if (townBlock.hasTown()) {
+					townBlocks.add(townBlock);
 				}
 			}
 		}
 
-		return nearbyTownBlocks;
+		return townBlocks;
 	}
 
 	/**

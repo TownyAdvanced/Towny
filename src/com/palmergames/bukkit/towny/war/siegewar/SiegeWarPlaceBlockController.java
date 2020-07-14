@@ -9,10 +9,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBattleSessionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import org.bukkit.Material;
@@ -21,6 +19,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -168,28 +167,45 @@ public class SiegeWarPlaceBlockController {
 	 */
 	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
 
-		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
-		if (nearbyTownBlocks.size() == 0)
-			return false;   //No town blocks are nearby. Normal block placement
+		List<TownBlock> nearbyCardinalTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 
-		if(nearbyTownBlocks.size() > 1) {
-			//More than one town block nearby. Error
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_town_blocks_nearby"));
+		//If no townblocks are nearby, do normal block placement
+		if (nearbyCardinalTownBlocks.size() == 0)
+			return false;
+
+		//Ensure that only one of the cardinal points has a townblock
+		if(nearbyCardinalTownBlocks.size() > 1) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_adjacent_cardinal_town_blocks"));
 			event.setBuild(false);
 			event.setCancelled(true);
 			return true;
 		}
-		
+
 		//Get nearby town
-		Town town = null;
-		if(nearbyTownBlocks.get(0).hasTown()) {
+		Town town;
+		if(nearbyCardinalTownBlocks.get(0).hasTown()) {
 			try {
-				town = nearbyTownBlocks.get(0).getTown();
+				town = nearbyCardinalTownBlocks.get(0).getTown();
 			} catch (NotRegisteredException e) {
 				return false;
 			}
 		} else {
 			return false;
+		}
+
+		//Ensure that there is only one town adjacent
+		List<TownBlock> adjacentTownBlocks = new ArrayList<>();
+		adjacentTownBlocks.addAll(nearbyCardinalTownBlocks);
+		adjacentTownBlocks.addAll(SiegeWarBlockUtil.getNonCardinalAdjacentTownBlocks(player, block));
+		for(TownBlock adjacentTownBlock: adjacentTownBlocks) {
+			try {
+				if (adjacentTownBlock.hasTown() && adjacentTownBlock.getTown() != town) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_adjacent_towns"));
+					event.setBuild(false);
+					event.setCancelled(true);
+					return true;
+				}
+			} catch (NotRegisteredException nre) {}
 		}
 
 		//If the town has a siege where the player's nation is already attacking, 
@@ -231,7 +247,7 @@ public class SiegeWarPlaceBlockController {
 				AttackTown.processAttackTownRequest(
 					player,
 					block,
-					nearbyTownBlocks.get(0),
+					nearbyCardinalTownBlocks.get(0),
 					town,
 					event);
 			}
@@ -297,7 +313,7 @@ public class SiegeWarPlaceBlockController {
 		if(townyWorld.hasTownBlock(blockCoord))
 			return false;   //The chest is being placed in a town. Normal block placement
 
-		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
+		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 		if (nearbyTownBlocks.size() == 0)
 			return false;   //No town blocks are nearby. Normal block placement
 
