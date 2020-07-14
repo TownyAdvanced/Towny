@@ -178,7 +178,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"title",
 		"surname",
 		"plot",
-		"siegeimmunities"
+		"siegeimmunities town",
+		"siegeimmunities all towns in nation",
+		"siegeimmunities all towns"
+
 	);
 	
 
@@ -1362,7 +1365,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "title [resident] [title]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "surname [resident] [surname]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "plot [town]", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities [hours]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities town [town_name] [hours]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities all towns in nation [nation_name] [hours]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities all to-wns [hours]", ""));
 			return;
 		}
 
@@ -1511,22 +1516,45 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SIEGEIMMUNITIES.getNode(split[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			int hoursRemaining;
-			long siegeImmunityEndTime;
-			try {
-				hoursRemaining = Integer.parseInt(split[1]);
-				siegeImmunityEndTime = System.currentTimeMillis() + (hoursRemaining * (int)TimeMgmt.ONE_HOUR_IN_MILLIS);
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set siegeimmunities 24");
-				return;
-			}
-
-			for(Town town: new ArrayList<>(townyUniverse.getDataSource().getTowns()))  {
-				town.setSiegeImmunityEndTime(siegeImmunityEndTime);
+			if (split.length == 4 && split[1].equalsIgnoreCase("town")) {
+				//1 town
+				Town town = townyUniverse.getDataSource().getTown(split[2]);
+				long durationMillis = (long)(Long.parseLong(split[3]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
+				town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
 				townyUniverse.getDataSource().saveTown(town);
-			}
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_set_siege_immunities_town"), split[2], split[3]));
 
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_set_siege_immunities"), hoursRemaining));
+			} else if (split.length == 7
+				&& split[1].equalsIgnoreCase("all")
+				&& split[2].equalsIgnoreCase("towns")
+				&& split[3].equalsIgnoreCase("in")
+				&& split[4].equalsIgnoreCase("nation")) {
+				//All towns in nation
+				Nation nation = townyUniverse.getDataSource().getNation(split[5]);
+				long durationMillis = (long)(Long.parseLong(split[6]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
+				for(Town town: nation.getTowns()) {
+					town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
+					townyUniverse.getDataSource().saveTown(town);
+				}
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_set_siege_immunities_nation"), split[5], split[6]));
+
+			} else if(split.length == 4 
+				&& split[1].equalsIgnoreCase("all")
+				&& split[2].equalsIgnoreCase("towns")) {
+				//All towns 
+				long durationMillis = (long)(Long.parseLong(split[3]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
+				for(Town town: new ArrayList<>(townyUniverse.getDataSource().getTowns()))  {
+					town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
+					townyUniverse.getDataSource().saveTown(town);
+				}
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_set_siege_immunities_all"), split[3]));
+			} else {
+
+				sender.sendMessage(ChatTools.formatTitle("/townyadmin set siegeimmunities"));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set", "siegeimmunities town [town_name] [hours]", ""));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set", "siegeimmunities all towns in nation [nation_name] [hours]", ""));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set", "siegeimmunities all towns [hours]", ""));
+			}
 
 		} else if (split[0].equalsIgnoreCase("plot")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode(split[0].toLowerCase())))
