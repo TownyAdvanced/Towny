@@ -91,9 +91,6 @@ public class TownyUniverse {
         saveDbType = TownySettings.getSaveDatabase();
         loadDbType = TownySettings.getLoadDatabase();
         
-        // Setup any defaults before we load the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
-        
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         
         clearAll();

@@ -7,12 +7,11 @@ import java.util.TimerTask;
 
 public abstract class TownyTimerTask extends TimerTask {
 
-	protected TownyUniverse universe;
-	protected Towny plugin;
+	protected final TownyUniverse universe;
+	protected final Towny plugin;
 
 	public TownyTimerTask(Towny plugin) {
 		this.plugin = plugin;
 		this.universe = TownyUniverse.getInstance();
-		
 	}
 }

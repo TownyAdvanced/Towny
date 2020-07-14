@@ -34,11 +34,13 @@ import java.util.List;
 public class TownClaim extends Thread {
 
 	Towny plugin;
-	private volatile Player player;
+	private final Player player;
 	private Location outpostLocation;
 	private volatile Town town;
-	private List<WorldCoord> selection;
-	private boolean outpost, claim, forced;
+	private final List<WorldCoord> selection;
+	private boolean outpost;
+	private final boolean claim;
+	private final boolean forced;
 
 	/**
 	 * @param plugin reference to towny
