@@ -9,7 +9,7 @@ public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
 	String title;
-	int duration;
+	int duration = 20;
 	boolean runAsync;
 
 	/**
