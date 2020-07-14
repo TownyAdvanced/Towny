@@ -18,7 +18,7 @@ public class InviteHandler {
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	
-	private static List<Invite> activeInvites = new ArrayList<>();
+	private static final List<Invite> activeInvites = new ArrayList<>();
 
 	public static void initialize(Towny plugin) {
 

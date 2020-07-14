@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -13,49 +14,34 @@ import org.bukkit.entity.Entity;
  */
 public class Coord {
 
-	protected static int cellSize = 16;
-	protected int x, z;
+	private static final int cellSize = TownySettings.getTownBlockSize(); // This should never change during runtime.
+	private final int x;
+	private final int z;
 
 	public Coord(int x, int z) {
-
 		this.x = x;
 		this.z = z;
 	}
 
 	public Coord(Coord coord) {
-
 		this.x = coord.getX();
 		this.z = coord.getZ();
 	}
 
 	public int getX() {
-
 		return x;
 	}
 
-	public void setX(int x) {
-
-		this.x = x;
-	}
-
 	public int getZ() {
-
 		return z;
 	}
 
-	public void setZ(int z) {
-
-		this.z = z;
-	}
-
 	public Coord add(int xOffset, int zOffset) {
-
 		return new Coord(getX() + xOffset, getZ() + zOffset);
 	}
 
 	@Override
 	public int hashCode() {
-
 		int result = 17;
 		result = 27 * result + x;
 		result = 27 * result + z;
@@ -64,7 +50,6 @@ public class Coord {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		if (obj == this)
 			return true;
 		if (!(obj instanceof Coord))
@@ -85,6 +70,7 @@ public class Coord {
 
 	/**
 	 * Convert a value to the grid cell counterpart
+	 * 
 	 * @param value x/z integer
 	 * @return cell position
 	 */
@@ -100,40 +86,29 @@ public class Coord {
 	 * @param x - X int (Coordinates)
 	 * @param z - Z int (Coordinates)
 	 * @return a new instance of Coord.
-	 * 
 	 */
 	public static Coord parseCoord(int x, int z) {
 		return new Coord(toCell(x), toCell(z));
 	}
 
 	public static Coord parseCoord(Entity entity) {
-
 		return parseCoord(entity.getLocation());
 	}
 
 	public static Coord parseCoord(Location loc) {
-
 		return parseCoord(loc.getBlockX(), loc.getBlockZ());
 	}
 
 	public static Coord parseCoord(Block block) {
-
 		return parseCoord(block.getX(), block.getZ());
 	}
 
 	@Override
 	public String toString() {
-
 		return getX() + "," + getZ();
 	}
 
-	public static void setCellSize(int cellSize) {
-
-		Coord.cellSize = cellSize;
-	}
-
 	public static int getCellSize() {
-
 		return cellSize;
 	}
 }
