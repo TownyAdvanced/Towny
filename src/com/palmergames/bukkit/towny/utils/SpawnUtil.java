@@ -341,7 +341,7 @@ public class SpawnUtil {
 			} else {
 			// Sending the confirmation.
 				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(travelCost));
-				Confirmation confirmation = new Confirmation(() -> {		
+				Confirmation.runOnAccept(() -> {		
 					// Actual taking of monies here.
 					// Show message if we are using an Economy and are charging for spawn travel.
 					try {
@@ -351,9 +351,9 @@ public class SpawnUtil {
 						}
 					} catch (EconomyException ignored) {
 					}
-				});
-				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+				.setTitle(title)
+				.sendTo(player);
 			}
 		// No Cost so skip confirmation system.
 		} else {

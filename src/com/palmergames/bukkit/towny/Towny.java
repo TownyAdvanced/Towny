@@ -105,7 +105,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;

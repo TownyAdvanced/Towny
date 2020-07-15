@@ -136,7 +136,7 @@ public class TownClaim extends Thread {
 			int townSize = town.getTownBlocks().size();
 			
 			// Send confirmation message,
-			Confirmation confirmation = new Confirmation(() -> { 
+			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
 				if (TownySettings.getClaimRefundPrice() > 0.0) {
 					try {
@@ -146,8 +146,8 @@ public class TownClaim extends Thread {
 						e.printStackTrace();
 					}
 				}
-			});
-			ConfirmationHandler.sendConfirmation(player, confirmation);
+			})
+			.sendTo(player);
 		}
 
 		if (!towns.isEmpty()) {
