@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -848,6 +847,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 		} catch (Exception x) {
+			x.printStackTrace();
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
@@ -1087,19 +1087,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// Must already be an outlaw
 					TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
 					return;
-				} catch (EmptyTownException e) {
-					e.printStackTrace();
 				}
 
 			} else if (target != null && split[0].equalsIgnoreCase("remove")) {
-				try {
+				if (town.hasOutlaw(target)) {
 					town.removeOutlaw(target);
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_undeclared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
 					if (admin)
 						TownyMessaging.sendMsg(sender, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
-				} catch (NotRegisteredException e) {
+				} else {
 					// Must already not be an outlaw
 					TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_err_player_not_an_outlaw"));
 					return;
@@ -2532,7 +2530,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		townyDataSource.newTown(name);
 		Town town = townyDataSource.getTown(name);
-		town.addResident(resident);
+		resident.setTown(town);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
@@ -2655,9 +2653,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		try {
 			townRemoveResident(town, resident);
-		} catch (EmptyTownException et) {
-			townyUniverse.getDataSource().removeTown(et.getTown());
-
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -2840,10 +2835,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 			if (town.hasOutlaw(newMember)) {
-				try {
-					town.removeOutlaw(newMember);
-				} catch (NotRegisteredException ignored) {
-				}
+				town.removeOutlaw(newMember);
 			}
 		}
 
@@ -2864,7 +2856,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {
 
-		town.addResident(resident);
+		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().saveResident(resident);
@@ -2912,13 +2904,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 	}
 
-	public static void townRemoveResident(Town town, Resident resident) throws EmptyTownException, NotRegisteredException {
+	public static void townRemoveResident(Town town, Resident resident) throws NotRegisteredException {
 
-		town.removeResident(resident);
-		plugin.deleteCache(resident.getName());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		if (!town.hasResident(resident))
+			throw new NotRegisteredException();
+		resident.removeTown();
+
 	}
 
 	
@@ -2950,10 +2941,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					townRemoveResident(town, member);
 				} catch (NotRegisteredException e) {
 					kicking.remove(member);
-				} catch (EmptyTownException e) {
-					// You can't kick yourself and only the mayor can kick
-					// assistants
-					// so there will always be at least one resident.
 				}
 			}
 		}
