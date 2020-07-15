@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
@@ -364,7 +363,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				// Make sure the element is removed from the iterator, to 
 				// prevent concurrent modification exceptions.
 				townBlockIterator.remove();
-				townBlock.setResident(null); // Concurrent Modification!
+				townBlock.setResident(null);
 				
 				try {
 					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
