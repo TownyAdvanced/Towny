@@ -50,9 +50,9 @@ public class SiegeWarBlockUtil {
 	public static List<TownBlock> getNonCardinalAdjacentTownBlocks(Player player, Block block) {
 		List<Coord> coOrdinates = new ArrayList<>();
 		Coord startingCoOrdinate = Coord.parseCoord(block);
-		coOrdinates.add(startingCoOrdinate.add(1,-1));
-		coOrdinates.add(startingCoOrdinate.add(1,1));
 		coOrdinates.add(startingCoOrdinate.add(-1,1));
+		coOrdinates.add(startingCoOrdinate.add(1,1));
+		coOrdinates.add(startingCoOrdinate.add(1,-1));
 		coOrdinates.add(startingCoOrdinate.add(-1,-1));
 		return getTownBlocks(player, coOrdinates);
 	}
