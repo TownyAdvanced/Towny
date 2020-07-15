@@ -19,29 +19,35 @@ public class Coord {
 	private final int z;
 
 	public Coord(int x, int z) {
+
 		this.x = x;
 		this.z = z;
 	}
 
 	public Coord(Coord coord) {
+
 		this.x = coord.getX();
 		this.z = coord.getZ();
 	}
 
 	public int getX() {
+
 		return x;
 	}
 
 	public int getZ() {
+
 		return z;
 	}
 
 	public Coord add(int xOffset, int zOffset) {
+
 		return new Coord(getX() + xOffset, getZ() + zOffset);
 	}
 
 	@Override
 	public int hashCode() {
+
 		int result = 17;
 		result = 27 * result + x;
 		result = 27 * result + z;
@@ -50,6 +56,7 @@ public class Coord {
 
 	@Override
 	public boolean equals(Object obj) {
+
 		if (obj == this)
 			return true;
 		if (!(obj instanceof Coord))
@@ -70,7 +77,6 @@ public class Coord {
 
 	/**
 	 * Convert a value to the grid cell counterpart
-	 * 
 	 * @param value x/z integer
 	 * @return cell position
 	 */
@@ -86,29 +92,35 @@ public class Coord {
 	 * @param x - X int (Coordinates)
 	 * @param z - Z int (Coordinates)
 	 * @return a new instance of Coord.
+	 * 
 	 */
 	public static Coord parseCoord(int x, int z) {
 		return new Coord(toCell(x), toCell(z));
 	}
 
 	public static Coord parseCoord(Entity entity) {
+
 		return parseCoord(entity.getLocation());
 	}
 
 	public static Coord parseCoord(Location loc) {
+
 		return parseCoord(loc.getBlockX(), loc.getBlockZ());
 	}
 
 	public static Coord parseCoord(Block block) {
+
 		return parseCoord(block.getX(), block.getZ());
 	}
 
 	@Override
 	public String toString() {
+
 		return getX() + "," + getZ();
 	}
 
 	public static int getCellSize() {
+
 		return cellSize;
 	}
 }

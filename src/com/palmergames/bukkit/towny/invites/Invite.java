@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
  * @author Articdive
  */
 public interface Invite {
+
 	/**
 	 * @return - Playername of who sent the invite or null (Console).
 	 */
