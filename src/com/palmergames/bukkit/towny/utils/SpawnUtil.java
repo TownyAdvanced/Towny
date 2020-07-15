@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -341,7 +340,7 @@ public class SpawnUtil {
 			} else {
 			// Sending the confirmation.
 				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(travelCost));
-				Confirmation confirmation = new Confirmation(() -> {		
+				Confirmation.runOnAccept(() -> {		
 					// Actual taking of monies here.
 					// Show message if we are using an Economy and are charging for spawn travel.
 					try {
@@ -351,9 +350,9 @@ public class SpawnUtil {
 						}
 					} catch (EconomyException ignored) {
 					}
-				});
-				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+				.setTitle(title)
+				.sendTo(player);
 			}
 		// No Cost so skip confirmation system.
 		} else {

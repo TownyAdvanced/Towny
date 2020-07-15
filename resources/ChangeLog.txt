@@ -4724,3 +4724,16 @@ v0.92.0.11:
     - {town_motd} : show the town's townboard.
     - {town_residents} : show the number of residents of the town.
     - {town_residents_online} : show the number of online residents (including npcs) of the town.
+0.96.2.4:
+  - Confirmation System QOL Improvements/Changes, courtesy of Siris with PR #4167.
+  - Add hex support to lang files, courtesy of Siris with PR #4161.
+  - Add resident to town claim event, courtesy of Siris with PR #4156.
+  - Add namespacing for commands run by clickable text, courtesy of Siris with PR #4147.
+  - New PlaceholderAPI placeholders, courtesy of Yldales with PR #4160.
+    - %townyadvanced_town_prefix%: Display the config-defined prefix of the player's town (ex: ruins, settlement, ...)
+    - %townyadvanced_town_postfix%: Display the config-defined postfix of the player's nation (ex: ruins, settlement, ...)
+    - %townyadvanced_nation_prefix%: Display the config-defined prefix of the player's town (ex: lands, realms, ...)
+    - %townyadvanced_nation_postfix%: Display the config-defined postfix of the player's nation (ex: lands, realms, ...)
+    - %townyadvanced_player_jailed%: Display true is the player is jailed, otherwise false.
+    - %townyadvanced_player_plot_type%: Display the townblock's type at the resident's location (ex: shop), or "" if none.
+    - %townyadvanced_player_plot_owner%: Display true if the resident is owning the townblock at his location.
