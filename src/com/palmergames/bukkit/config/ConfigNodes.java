@@ -2428,10 +2428,15 @@ public enum ConfigNodes {
 			"war.common.peaceful_towns.traveller_disallowed_zones_override",
 			"true",
 			"# If this value is true, then residents of peaceful towns are not affected by disallowed zones when spawning."),
-	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_DURATION_DAYS(
-			"war.common.peaceful_towns.new_town_peacefulness_duration_days",
+	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED(
+			"war.common.peaceful_towns.new_town_peacefulness_enabled",
+			"true",
+			"# If this setting is true, then new towns start peaceful"),
+	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS(
+			"war.common.peaceful_towns.new_town_confirmation_requirement_days",
 			"3",
-			"# If this value is greater than 0, then new towns will start as peaceful, and with an active countdown to non-peacefulness."),
+			"# This setting applies only in the first week after a town is founded.",
+			"# The value determines the countdown duration to be applied to any peacefulness switch."),
 
 	//Post-Respawn Peacefulness
 	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(

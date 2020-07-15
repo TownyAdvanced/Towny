@@ -1137,13 +1137,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				} else {
-					//On first load of system, give each existing town the temporary new town peacefulness effect
-					int newTownPeacefulnessDays = TownySettings.getWarCommonPeacefulTownsNewTownPeacefulnessDurationDays();
-					if(newTownPeacefulnessDays > 0){
-						town.setPeaceful(true);
-						town.setDesiredPeacefulnessValue(false);
-						town.setPeacefulnessChangeConfirmationCounterDays(newTownPeacefulnessDays);
-					}
+					//On first load of system, give each existing town the new town effect
+					town.setPeaceful(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
 				}
 
 				line = keys.get("desiredPeacefulnessValue");

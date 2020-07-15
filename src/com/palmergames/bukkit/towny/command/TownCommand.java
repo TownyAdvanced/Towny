@@ -63,6 +63,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -1686,22 +1687,29 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if(admin) {
+					town.setDesiredPeacefulnessValue(!town.isPeaceful());
 					town.setPeacefulnessChangeConfirmationCounterDays(1);
 					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
 				} else {
 					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
-						
+
 						//Here, no countdown is in progress, and the town wishes to change peacefulness status
 						town.setDesiredPeacefulnessValue(!town.isPeaceful());
-						int counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+
+						int counterValue;
+						if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
+							counterValue = TownySettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
+						} else {
+							counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+						}
 						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
-						
+
 						//Send message to town
 						if (town.getDesiredPeacefulnessValue())
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_peaceful"), counterValue));
 						else
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_war_common_town_declared_non_peaceful"), counterValue));
-						
+
 						//Remove any military nation ranks of residents
 						for(Resident peacefulTownResident: town.getResidents()) {
 							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
@@ -1710,7 +1718,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								}
 							}
 						}
-						
+
 					} else {
 						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
 						town.setDesiredPeacefulnessValue(town.isPeaceful());

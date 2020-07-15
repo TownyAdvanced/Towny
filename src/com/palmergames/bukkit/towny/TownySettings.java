@@ -3382,7 +3382,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE);
 	}
 
-	public static int getWarCommonPeacefulTownsNewTownPeacefulnessDurationDays() {
-		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_DURATION_DAYS);
+	public static boolean getWarCommonNewTownPeacefulnessEnabled() {
+		return getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED);
+	}
+
+	public static int getWarCommonPeacefulTownsNewTownConfirmationRequirementDays() {
+		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS);
 	}
 }
