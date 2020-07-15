@@ -37,25 +37,6 @@ public class SiegeWarBattleSessionUtil {
 						continue;
 					}
 
-					//No punish if player in in a peaceful town
-					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
-						continue;
-					}
-
-					//No punish if player is in their own town
-					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-					if (resident.hasTown()
-						&& townBlockAtPlayerLocation != null
-						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
-						continue;
-					}
-
-					//No punish if player is far from all siege zones
-					if (!SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
-						continue;
-					}
-
 					//Warn if first warning time has been reached
 					if (!battleSession.isFirstWarningGiven()) {
 						if (System.currentTimeMillis() >= battleSession.getFirstWarningTime()) {
@@ -87,6 +68,25 @@ public class SiegeWarBattleSessionUtil {
 						} else {
 							continue;
 						}
+					}
+
+					//No punish if player in in a peaceful town
+					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
+					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
+						continue;
+					}
+
+					//No punish if player is in their own town
+					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+					if (resident.hasTown()
+						&& townBlockAtPlayerLocation != null
+						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
+						continue;
+					}
+
+					//No punish if player is far from all siege zones
+					if (!SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
+						continue;
 					}
 
 					//Punish player
