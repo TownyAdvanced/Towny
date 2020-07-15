@@ -346,7 +346,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
-		List residents = new ArrayList<String>();
+		List<String> residents = new ArrayList<>();
 
 		// Build up a list of residents from any existing legacy residents.txt files.
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
