@@ -31,7 +31,7 @@ public class SiegeWarBattleSessionUtil {
 					BattleSession battleSession = (BattleSession) player.getMetadata(METADATA_TAG_NAME).get(0).value();
 
 					//Delete session is deletion time has been reached
-					if (battleSession.isExpired() && System.currentTimeMillis() >= battleSession.getDeletionTime()) {
+					if (System.currentTimeMillis() >= battleSession.getDeletionTime()) {
 						player.removeMetadata(METADATA_TAG_NAME, Towny.getPlugin());
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_ended"));
 						continue;
