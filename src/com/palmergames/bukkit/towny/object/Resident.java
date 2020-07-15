@@ -420,9 +420,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void removeAllFriends() {
-
-		for (Resident resident : new ArrayList<>(friends))
-			removeFriend(resident);
+		// Wipe the array.
+		friends.clear();
 	}
 
 	public void updatePerms() {
