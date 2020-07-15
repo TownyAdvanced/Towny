@@ -31,7 +31,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -358,12 +357,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			// No residents.txt any more.
 		}
 		File residentFolder = new File(dataFolderPath + File.separator + "residents");
-		File[] residentFiles = residentFolder.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File residentFolder) {
-				return residentFolder.getName().toLowerCase().endsWith(".txt"); 
-			}
-		});
+		File[] residentFiles = residentFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".txt"));
+		assert residentFiles != null;
 		for (File resident : residentFiles) {
 			// Don't load resident files if they weren't in the residents.txt file.
 			String name = resident.getName().replace(".txt", "");
