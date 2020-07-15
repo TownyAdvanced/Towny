@@ -65,11 +65,11 @@ public class SiegeWarDeathController {
 			//Find nearest eligible siege
 			for (Siege candidateSiege : universe.getDataSource().getSieges()) {
 
-				//Is siege in a different world
-				if(!deadPlayer.getLocation().getWorld().getName().equalsIgnoreCase(candidateSiege.getFlagLocation().getWorld().getName()))
+				//Skip if player is not is siege-zone
+				if(!SiegeWarDistanceUtil.isInSiegeZone(deadPlayer, candidateSiege))
 					continue;
 
-				//If siege further than the confirmed candidate ?
+				//Skip if candidate-siege is further than the confirmed-candidate-siege ?
 				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
 				if(confirmedCandidateSiege != null && candidateSiegeDistanceToPlayer > confirmedCandidateDistanceToPlayer)
 					continue;
