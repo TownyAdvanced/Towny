@@ -29,7 +29,9 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
 public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
@@ -349,22 +351,33 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		} catch (EmptyTownException e1) {
 			TownyUniverse.getInstance().getDataSource().removeTown(town);
 		}
+
+		// Use an iterator to be able to keep track of element modifications.
+		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
 		
-		for (TownBlock townBlock : new ArrayList<>(townBlocks)) {
+		while (townBlockIterator.hasNext()) {
+			TownBlock townBlock = townBlockIterator.next();
+
 			// Do not remove Embassy plots
 			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				townBlock.setResident(null);
+				
+				// Make sure the element is removed from the iterator, to 
+				// prevent concurrent modification exceptions.
+				townBlockIterator.remove();
+				townBlock.setResident(null); // Concurrent Modification!
+				
 				try {
 					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
 				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-				
+
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
 			}
 		}
+		
 		try {
 			setTown(null);
 			
