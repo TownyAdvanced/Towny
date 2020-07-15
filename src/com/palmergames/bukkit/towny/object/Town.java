@@ -53,13 +53,14 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
-	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
+	private double commercialPlotPrice, embassyPlotPrice;
+	private double spawnCost = TownySettings.getSpawnTravelCost();
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String townBoard = "/town set board [msg]";
+	private String townBoard = TownySettings.getTownDefaultBoard();
 	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
@@ -113,10 +114,12 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			throw new AlreadyRegisteredException();
 		else {
 			addTownBlockMap(townBlock);
-			if (townBlocks.size() == 1 && !hasHomeBlock())
+			if (townBlocks.size() < 2 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
-				} catch (TownyException ignored) {}
+				} catch (TownyException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 
