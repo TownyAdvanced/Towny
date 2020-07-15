@@ -20,7 +20,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 	final String mayor = TownySettings.getLangString("mayor_sing");
 	final String king = TownySettings.getLangString("king_sing");
 	
-	private Towny plugin;
+	private final Towny plugin;
 
 	/**
 	 * Since we register the expansion inside our own plugin, we can simply use this

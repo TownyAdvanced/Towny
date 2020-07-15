@@ -10,8 +10,8 @@ public class RenameTownEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private String oldName;
-    private Town town;
+    private final String oldName;
+    private final Town town;
 
     @Override
     public HandlerList getHandlers() {

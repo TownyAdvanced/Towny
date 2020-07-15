@@ -14,8 +14,9 @@ public class EventWarEndEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private List<Town> warringTowns = new ArrayList<>();
 	private List<Nation> warringNations = new ArrayList<>();
-	private Town winningTown;
-	private double townWinnings, nationWinnings;
+	private final Town winningTown;
+	private final double townWinnings;
+	private final double nationWinnings;
 
 	@Override
 	public HandlerList getHandlers() {

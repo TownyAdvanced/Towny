@@ -9,8 +9,8 @@ public class RenameResidentEvent extends Event{
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	private String oldName;
-	private Resident resident;
+	private final String oldName;
+	private final Resident resident;
 
 	@Override
 	public HandlerList getHandlers() {

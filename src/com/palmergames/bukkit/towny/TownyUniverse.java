@@ -58,7 +58,7 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;

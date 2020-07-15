@@ -7,10 +7,10 @@ import org.bukkit.event.HandlerList;
 
 public class NationRemoveEnemyEvent extends Event {
 
-	private static HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 
-	private Nation enemy;
-	private Nation nation;
+	private final Nation enemy;
+	private final Nation nation;
 
 	@Override
 	public HandlerList getHandlers() {

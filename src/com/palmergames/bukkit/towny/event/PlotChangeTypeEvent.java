@@ -8,9 +8,9 @@ import org.bukkit.event.HandlerList;
 
 public class PlotChangeTypeEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
-    private TownBlockType oldType;
-    private TownBlockType newType;
-    private TownBlock townBlock;
+    private final TownBlockType oldType;
+    private final TownBlockType newType;
+    private final TownBlock townBlock;
 
     @Override
     public HandlerList getHandlers() {

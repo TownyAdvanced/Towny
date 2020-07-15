@@ -12,9 +12,9 @@ import com.palmergames.bukkit.towny.object.Town;
 
 public class EventWarStartEvent extends Event{
 	private static final HandlerList handlers = new HandlerList();
-	private List<Town> warringTowns = new ArrayList<>();
-	private List<Nation> warringNations = new ArrayList<>();
-	private double warSpoils;
+	private final List<Town> warringTowns;
+	private final List<Nation> warringNations;
+	private final double warSpoils;
 
 	@Override
 	public HandlerList getHandlers() {
