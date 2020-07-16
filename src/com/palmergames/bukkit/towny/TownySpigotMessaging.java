@@ -31,10 +31,6 @@ public class TownySpigotMessaging {
 			this.base = base;
 		}
 
-		public static TextComponent of(TextComponent base) {
-			return new TextComponent(base);
-		}
-
 		public TextComponent getBase() {
 			return base;
 		}
