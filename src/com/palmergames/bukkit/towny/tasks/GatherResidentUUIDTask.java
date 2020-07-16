@@ -19,9 +19,9 @@ import org.bukkit.Bukkit;
  * @author ElgarL
  * 
  */
-public class GatherResidentUUIDTask extends Thread {
+public class GatherResidentUUIDTask implements Runnable {
 
-	Towny plugin;
+	private Towny plugin;
 	private final static Queue<Resident> queue = new ConcurrentLinkedQueue<>();
 
 	/**
@@ -31,7 +31,6 @@ public class GatherResidentUUIDTask extends Thread {
 
 		super();
 		this.plugin = plugin;
-		this.setPriority(NORM_PRIORITY);
 	}
 
 	@Override
@@ -40,7 +39,7 @@ public class GatherResidentUUIDTask extends Thread {
 			TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 			return;
 		}
-		Resident resident = queue.peek();
+		Resident resident = queue.poll();
 		if (resident.hasUUID())
 			return;
 		if (resident.isNPC())
@@ -54,17 +53,15 @@ public class GatherResidentUUIDTask extends Thread {
 				uuid = BukkitTools.getUUIDFromResident(resident);
 			} catch (IOException e) {
 				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " no longer has an account. Removing this resident from the database.");
-				queue.remove(resident);
-				Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> {
-					TownyUniverse.getInstance().getDataSource().removeResident(resident);
-				}, 20);
+				Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin,
+					() -> TownyUniverse.getInstance().getDataSource().removeResident(resident),
+					20);
 				return;	
 			}
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");
 			else {
 				TownyMessaging.sendDebugMsg("Could not resolve UUID for resident: " + resident.getName() + ", sorry! Gather task will try again in a minute.");
-				queue.remove(resident);
 				queue.add(resident);
 				TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
@@ -79,9 +76,7 @@ public class GatherResidentUUIDTask extends Thread {
 	private void applyUUID(Resident resident, UUID uuid, String source) {
 		resident.setUUID(uuid);
 		TownyUniverse.getInstance().getDataSource().saveResident(resident);
-		queue.remove(resident);
-		TownySettings.uuidCount++;
+		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
-		return;
 	}
 }

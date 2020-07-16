@@ -275,7 +275,7 @@ public class Towny extends JavaPlugin {
 		if (!TownySettings.getUUIDPercent().equals("100%")) {
 			if (TownySettings.isGatheringResidentUUIDS())
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
-			System.out.println("[Towny] " + TownySettings.uuidCount + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
+			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
 			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
 		
