@@ -62,7 +62,7 @@ public class TownySettings {
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
-	public static int uuidCount;
+	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -2960,9 +2960,17 @@ public class TownySettings {
 		return "<50%";
 	}
 
+	public static int getUUIDCount() {
+		return uuidCount;
+	}
+	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
 		
+	}
+	
+	public static void incrementUUIDCount() {
+		uuidCount++;
 	}
 }
 

@@ -176,7 +176,7 @@ public abstract class TownyDataSource {
 				//return false;
 			} else {
 				if (resident.hasUUID())
-					TownySettings.uuidCount++;
+					TownySettings.incrementUUIDCount();
 				else
 					GatherResidentUUIDTask.addResident(resident);
 			}
