@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.database.handler.LoadContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ResidentListHandler implements SerializationHandler<List<Resident>> {
 	
@@ -32,13 +33,11 @@ public class ResidentListHandler implements SerializationHandler<List<Resident>>
 
 	@Override
 	public String toStoredString(SaveContext context, List<Resident> obj) {
-		StringBuilder output = new StringBuilder("[");
+		StringJoiner joiner = new StringJoiner(",");
 		for (Resident r : obj) {
-			output.append(r.getUniqueIdentifier()).append(",");
+			joiner.add(r.getUniqueIdentifier().toString());
 		}
 		
-		output.append(']');
-		
-		return output.toString();
+		return "[" + joiner.toString() + "]";
 	}
 }
