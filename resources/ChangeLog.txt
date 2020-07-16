@@ -4758,3 +4758,4 @@ v0.92.0.11:
 0.96.2.5:
   - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
   - Make fields/objects that don't change Immutable, courtesy of Siris with PR #4171.
+  - Fix HoverEvent deprecation and add adapter to for backwards compatibility, courtesy of Siris with PR #4173.
