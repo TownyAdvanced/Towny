@@ -69,11 +69,6 @@ public class SiegeWarDeathController {
 				if(!SiegeWarDistanceUtil.isInSiegeZone(deadPlayer, candidateSiege))
 					continue;
 
-				//Skip if candidate-siege is further than the confirmed-candidate-siege ?
-				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
-				if(confirmedCandidateSiege != null && candidateSiegeDistanceToPlayer > confirmedCandidateDistanceToPlayer)
-					continue;
-
 				//Is player eligible ?
 				if (deadResidentTown.hasSiege()
 					&& deadResidentTown.getSiege().getStatus().isActive()
@@ -103,10 +98,13 @@ public class SiegeWarDeathController {
 					continue;
 				}
 
-				//Now we know candidate is closer than current confirmed candidate, and player is eligible
-				confirmedCandidateSiege = candidateSiege;
-				confirmedCandidateSiegePlayerSide = candidateSiegePlayerSide;
-				confirmedCandidateDistanceToPlayer = candidateSiegeDistanceToPlayer;
+				//Confirm candidate siege if it is 1st viable one OR closer than confirmed candidate
+				candidateSiegeDistanceToPlayer = deadPlayer.getLocation().distance(candidateSiege.getFlagLocation());
+				if(confirmedCandidateSiege == null || candidateSiegeDistanceToPlayer < confirmedCandidateDistanceToPlayer) {
+					confirmedCandidateSiege = candidateSiege;
+					confirmedCandidateSiegePlayerSide = candidateSiegePlayerSide;
+					confirmedCandidateDistanceToPlayer = candidateSiegeDistanceToPlayer;
+				}
 			}
 
 			//If player is confirmed as close to one or more sieges in which they are eligible to be involved, 
