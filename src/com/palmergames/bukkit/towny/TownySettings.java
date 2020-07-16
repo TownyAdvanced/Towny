@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -291,7 +292,7 @@ public class TownySettings {
 				TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
 			}
 			String resVersion = newLanguage.getString("version");
-			String langVersion = TownySettings.getLangString("version");
+			String langVersion = Translation.of("version");
 			
 			if (!langVersion.equalsIgnoreCase(resVersion)) {
 				language = newLanguage;

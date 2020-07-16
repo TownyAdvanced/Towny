@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public class OutpostUtil {
 	
@@ -30,34 +31,34 @@ public class OutpostUtil {
 
 		// The config can be set up to dole out numbers of outposts to towns based on resident counts/belonging to a nation.
 		if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+			throw new TownyException(String.format(Translation.of("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 
 		// The config can be set to require a number of residents in a town before an outpost can be made.
 		if (TownySettings.getAmountOfResidentsForOutpost() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForOutpost())
-			throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
+			throw new TownyException(Translation.of("msg_err_not_enough_residents"));
 
 		// Outposts can be limited per resident, with permission nodes.
 		int maxOutposts = TownySettings.getMaxResidentOutposts(resident);
 		if (!isAdmin && maxOutposts != -1 && (maxOutposts <= resident.getTown().getAllOutpostSpawns().size()))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_max_outposts_own"), maxOutposts));
+			throw new TownyException(String.format(Translation.of("msg_max_outposts_own"), maxOutposts));
 
 		// Outposts can have a minimum required distance from homeblocks. 
 		if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));
+			throw new TownyException(String.format(Translation.of("msg_too_close2"), Translation.of("homeblock")));
 
 		// Outposts can have a minimum required distance from other towns' townblocks.
 		if (!isPlotSetOutpost) {
 			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
-				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+				throw new TownyException(String.format(Translation.of("msg_too_close2"), Translation.of("townblock")));
 			// Outposts can have a minimum required distance from other outposts.
 			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot())
-				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+				throw new TownyException(String.format(Translation.of("msg_too_close2"), Translation.of("townblock")));
 		} else {
 			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks())
-				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+				throw new TownyException(String.format(Translation.of("msg_too_close2"), Translation.of("townblock")));
 			// Outposts can have a minimum required distance from other outposts.
 			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceForOutpostsFromPlot())
-				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+				throw new TownyException(String.format(Translation.of("msg_too_close2"), Translation.of("townblock")));
 
 		}
 

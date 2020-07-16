@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -75,7 +76,7 @@ public class TownyBlockListener implements Listener {
 				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
+				TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
 			}
 			return;
 		}
@@ -141,7 +142,7 @@ public class TownyBlockListener implements Listener {
 				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
+					TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
 				}
 				return;
 			} else {
@@ -156,7 +157,7 @@ public class TownyBlockListener implements Listener {
 				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_configured"));
 			event.setCancelled(true);
 		}
 

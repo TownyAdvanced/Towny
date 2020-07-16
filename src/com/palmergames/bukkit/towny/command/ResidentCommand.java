@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -96,18 +97,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	static {
 		output.add(ChatTools.formatTitle("/resident"));
-		output.add(ChatTools.formatCommand("", "/resident", "", TownySettings.getLangString("res_1")));
-		output.add(ChatTools.formatCommand("", "/resident", TownySettings.getLangString("res_2"), TownySettings.getLangString("res_3")));
-		output.add(ChatTools.formatCommand("", "/resident", "list", TownySettings.getLangString("res_4")));
+		output.add(ChatTools.formatCommand("", "/resident", "", Translation.of("res_1")));
+		output.add(ChatTools.formatCommand("", "/resident", Translation.of("res_2"), Translation.of("res_3")));
+		output.add(ChatTools.formatCommand("", "/resident", "list", Translation.of("res_4")));
 		output.add(ChatTools.formatCommand("", "/resident", "tax", ""));
 		output.add(ChatTools.formatCommand("", "/resident", "jail", ""));
 		output.add(ChatTools.formatCommand("", "/resident", "toggle", "[mode]...[mode]"));
-		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + TownySettings.getLangString("res_5")));
-		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
-		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
+		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + Translation.of("res_5")));
+		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + Translation.of("res_2"), Translation.of("res_6")));
+		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + Translation.of("res_2") + " ", Translation.of("res_7")));
 		output.add(ChatTools.formatCommand("", "/resident", "spawn", ""));
-		// output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"),
-		// "/resident", "delete " + TownySettings.getLangString("res_2"), ""));
+		// output.add(ChatTools.formatCommand(Translation.of("admin_sing"),
+		// "/resident", "delete " + Translation.of("res_2"), ""));
 	}
 
 	public ResidentCommand(Towny instance) {
@@ -212,7 +213,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resident, player));
 				});
 			} catch (NotRegisteredException x) {
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+				throw new TownyException(String.format(Translation.of("msg_err_not_registered_1"), split[0]));
 			}
 		}
 		
@@ -230,7 +231,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
 				} catch (NotRegisteredException x) {
-					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
+					throw new TownyException(Translation.of("msg_err_not_registered"));
 				}
 
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -241,43 +242,43 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("list")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_LIST.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				listResidents(player);
 
 			} else if (split[0].equalsIgnoreCase("tax")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				try {
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(resident));
 				} catch (NotRegisteredException x) {
-					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
+					throw new TownyException(Translation.of("msg_err_not_registered"));
 				}
 			
 			} else if (split[0].equalsIgnoreCase("jail")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				if (!TownySettings.isAllowingBail()) {
-					TownyMessaging.sendErrorMsg(player, Colors.Red + TownySettings.getLangString("msg_err_bail_not_enabled"));
+					TownyMessaging.sendErrorMsg(player, Colors.Red + Translation.of("msg_err_bail_not_enabled"));
 					return;
 				}
 				
 				if (split.length == 1 ) {
 					player.sendMessage(ChatTools.formatTitle("/resident jail"));
 					player.sendMessage(ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));
 					return;
 				}
 
 				if (!townyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_you_aren't currently jailed"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_you_aren't currently jailed"));
 					return;
 				}
 				if (split[1].equalsIgnoreCase("paybail")) {
@@ -293,18 +294,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						resident.setJailed(false);
 						resident.setJailSpawn(0);
 						resident.setJailTown("");
-						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + TownySettings.getLangString("msg_has_paid_bail"));
+						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + Translation.of("msg_has_paid_bail"));
 						player.teleport(resident.getTown().getSpawn());
 						townyUniverse.getDataSource().saveResident(resident);
 					} else {
-						TownyMessaging.sendErrorMsg(player, Colors.Red + TownySettings.getLangString("msg_err_unable_to_pay_bail"));
+						TownyMessaging.sendErrorMsg(player, Colors.Red + Translation.of("msg_err_unable_to_pay_bail"));
 					}
 				} else {
 					player.sendMessage(ChatTools.formatTitle("/resident jail"));
 					player.sendMessage(ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					player.sendMessage(Colors.LightBlue + TownySettings.getLangString("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));					
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
+					player.sendMessage(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));					
 				}
 
 			} else if (split[0].equalsIgnoreCase("set")) {
@@ -326,7 +327,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("friend")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_FRIEND.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				residentFriend(player, newSplit, false, null);
@@ -334,21 +335,21 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("spawn")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				SpawnUtil.sendToTownySpawn(player, split, resident, TownySettings.getLangString("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
+				SpawnUtil.sendToTownySpawn(player, split, resident, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
 
 			} else {
 
 				try {
 					final Resident resident = townyUniverse.getDataSource().getResident(split[0]);
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						throw new TownyException(Translation.of("msg_err_command_disable"));
 					}
 					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player)));
 				} catch (NotRegisteredException x) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+					throw new TownyException(String.format(Translation.of("msg_err_not_registered_1"), split[0]));
 				}
 
 			}
@@ -375,7 +376,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} catch (NotRegisteredException e) {
 			// unknown resident
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
+			throw new TownyException(String.format(Translation.of("msg_err_not_registered"), player.getName()));
 		}
 
 		if (newSplit.length == 0) {
@@ -390,13 +391,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "map", ""));			
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "spy", ""));
 
-			TownyMessaging.sendMsg(resident, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(resident.getModes(), ",")));
+			TownyMessaging.sendMsg(resident, (Translation.of("msg_modes_set") + StringMgmt.join(resident.getModes(), ",")));
 			return;
 
 		}
 
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		TownyPermission perm = resident.getPermissions();
 
@@ -404,7 +405,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (newSplit[0].equalsIgnoreCase("spy")) {
 			
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
 			resident.toggleMode(newSplit, true);
 			return;
@@ -414,9 +415,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
 			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown()  && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 				if (CooldownTimerTask.hasCooldown(resident.getTown().getName(), CooldownType.PVP))
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
+					throw new TownyException(String.format(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
+					throw new TownyException(String.format(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
 			}			
 			perm.pvp = !perm.pvp;
@@ -449,14 +450,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 */
 	private void notifyPerms(Player player, TownyPermission perm) {
 
-		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+		TownyMessaging.sendMsg(player, Translation.of("msg_set_perms"));
 		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 	}
 
 	public void listResidents(Player player) {
 
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
+		player.sendMessage(ChatTools.formatTitle(Translation.of("res_list")));
 		String colour;
 		ArrayList<String> formatedList = new ArrayList<>();
 		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
@@ -476,7 +477,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	
 	public void listResidents(CommandSender sender) {
 
-		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
+		sender.sendMessage(ChatTools.formatTitle(Translation.of("res_list")));
 		String colour;
 		ArrayList<String> formatedList = new ArrayList<>();
 		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
@@ -509,8 +510,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatCommand("", "/resident set", "perm ...", "'/resident set perm' " + TownySettings.getLangString("res_5")));
-			player.sendMessage(ChatTools.formatCommand("", "/resident set", "mode ...", "'/resident set mode' " + TownySettings.getLangString("res_5")));
+			player.sendMessage(ChatTools.formatCommand("", "/resident set", "perm ...", "'/resident set perm' " + Translation.of("res_5")));
+			player.sendMessage(ChatTools.formatCommand("", "/resident set", "mode ...", "'/resident set mode' " + Translation.of("res_5")));
 		} else {
 			Resident resident;
 			try {
@@ -521,7 +522,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET.getNode(split[0].toLowerCase())))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if (split[0].equalsIgnoreCase("perm")) {
 
@@ -534,7 +535,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				setMode(player, newSplit);
 			} else {
 
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
+				TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_invalid_property"), "town"));
 				return;
 
 			}
@@ -548,11 +549,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatCommand("", "/resident set mode", "clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident set mode", "[mode] ...[mode]", ""));
-			player.sendMessage(ChatTools.formatCommand("Mode", "map", "", TownySettings.getLangString("mode_1")));
-			player.sendMessage(ChatTools.formatCommand("Mode", "townclaim", "", TownySettings.getLangString("mode_2")));
-			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
-			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
-			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "map", "", Translation.of("mode_1")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "townclaim", "", Translation.of("mode_2")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", Translation.of("mode_3")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", Translation.of("mode_4")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", Translation.of("mode_5")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Mode", "constantplotborder", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Mode", "plotborder", "", ""));
@@ -560,7 +561,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			// null ? "flag" :
 			// FlagWarConfig.getFlagBaseMaterial().name().toLowerCase());
 			// player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "",
-			// String.format(TownySettings.getLangString("mode_6"),
+			// String.format(Translation.of("mode_6"),
 			// warFlagMaterial)));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim town nation general", ""));
 
@@ -574,7 +575,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		List<String> list = Arrays.asList(split);
 		if ((list.contains("spy")) && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
 			return;
 		}
 
@@ -586,8 +587,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "add " + TownySettings.getLangString("res_2"), ""));
-			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "remove " + TownySettings.getLangString("res_2"), ""));
+			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "add " + Translation.of("res_2"), ""));
+			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "remove " + Translation.of("res_2"), ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "list", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "clear", ""));
 		} else {
@@ -624,7 +625,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static void residentFriendList(Player player, Resident resident) {
 		
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("friend_list")));
+		player.sendMessage(ChatTools.formatTitle(Translation.of("friend_list")));
 		String colour;
 		ArrayList<String> formatedList = new ArrayList<>();
 		for (Resident friends : resident.getFriends()) {
@@ -679,7 +680,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		 */
 		if (invited.size() > 0) {
 
-			StringBuilder msg = new StringBuilder(TownySettings.getLangString("res_friend_added"));
+			StringBuilder msg = new StringBuilder(Translation.of("res_friend_added"));
 
 			for (Resident newFriend : invited) {
 
@@ -688,20 +689,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				if (p != null) {
 
-					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
+					TownyMessaging.sendMsg(p, String.format(Translation.of("msg_friend_add"), player.getName()));
 
 				}
 
 			}
 
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg.append(TownySettings.getLangString("msg_to_list"));
+			msg.append(Translation.of("msg_to_list"));
 			TownyMessaging.sendMsg(player, msg.toString());
 			TownyUniverse.getInstance().getDataSource().saveResident(resident);
 
 		} else {
 
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 
 		}
 	}
@@ -721,20 +722,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				toKick.remove(friend);
 
 		if (toKick.size() > 0) {
-			StringBuilder msg = new StringBuilder(TownySettings.getLangString("msg_removed"));
+			StringBuilder msg = new StringBuilder(Translation.of("msg_removed"));
 			Player p;
 			for (Resident member : toKick) {
 				msg.append(member.getName()).append(", ");
 				p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
-					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
+					TownyMessaging.sendMsg(p, String.format(Translation.of("msg_friend_remove"), player.getName()));
 			}
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg.append(TownySettings.getLangString("msg_from_list"));
+			msg.append(Translation.of("msg_from_list"));
 			TownyMessaging.sendMsg(player, msg.toString());
 			TownyUniverse.getInstance().getDataSource().saveResident(resident);
 		} else
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 
 	}
 }

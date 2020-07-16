@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
@@ -29,7 +30,7 @@ public class AreaSelectionUtil {
 			if (pos.getTownyWorld().isClaimable())
 				out.add(pos);
 			else
-				throw new TownyException(TownySettings.getLangString("msg_not_claimable"));
+				throw new TownyException(Translation.of("msg_not_claimable"));
 		} else {
 			if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("rect")) {
@@ -37,7 +38,7 @@ public class AreaSelectionUtil {
 				} else if (args[0].equalsIgnoreCase("circle")) {
 					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
 				} else {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), StringMgmt.join(args, " ")));
+					throw new TownyException(String.format(Translation.of("msg_err_invalid_property"), StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) {
 				out = selectWorldCoordAreaRect(owner, pos, args);
@@ -49,7 +50,7 @@ public class AreaSelectionUtil {
 						tb.setOutpost(true);
 						out.add(pos);
 					} else {
-						throw new TownyException(TownySettings.getLangString("msg_err_unclaim_not_outpost"));
+						throw new TownyException(Translation.of("msg_err_unclaim_not_outpost"));
 						// Lang String required.
 					}
 				}
@@ -62,7 +63,7 @@ public class AreaSelectionUtil {
 					// Treat as rect to serve for backwards capability.
 					out = selectWorldCoordAreaRect(owner, pos, args);
 				} catch (NumberFormatException e) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), args[0]));
+					throw new TownyException(String.format(Translation.of("msg_err_invalid_property"), args[0]));
 				}
 			}
 		}
@@ -96,11 +97,11 @@ public class AreaSelectionUtil {
 					try {
 						r = Integer.parseInt(args[0]);
 					} catch (NumberFormatException e) {
-						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
+						throw new TownyException(Translation.of("msg_err_invalid_radius"));
 					}
 				}
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(String.format(Translation.of("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
 				}
 					
 				if (r > 1000)
@@ -110,7 +111,7 @@ public class AreaSelectionUtil {
 						if (out.size() < available)
 							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
 			} else {
-				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
+				throw new TownyException(Translation.of("msg_err_invalid_radius"));
 			}
 		}
 
@@ -141,12 +142,12 @@ public class AreaSelectionUtil {
 					try {
 						r = Integer.parseInt(args[0]);
 					} catch (NumberFormatException e) {
-						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
+						throw new TownyException(Translation.of("msg_err_invalid_radius"));
 					}
 				}
 				
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(String.format(Translation.of("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
 				}
 				
 				if (r > 1000)
@@ -156,7 +157,7 @@ public class AreaSelectionUtil {
 						if ((x * x + z * z <= r * r) && (out.size() < available))
 							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
 			} else {
-				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
+				throw new TownyException(Translation.of("msg_err_invalid_radius"));
 			}
 		}
 

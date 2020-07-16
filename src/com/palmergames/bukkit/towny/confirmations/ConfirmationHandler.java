@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -48,7 +49,7 @@ public class ConfirmationHandler {
 		
 		// Run the cancel handler.
 		confirmation.getCancelHandler().run();
-		TownyMessaging.sendMsg(sender, TownySettings.getLangString("successful_cancel"));
+		TownyMessaging.sendMsg(sender, Translation.of("successful_cancel"));
 	}
 
 	/**

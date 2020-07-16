@@ -4,9 +4,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public enum SpawnType {
 
-	RESIDENT(TownySettings.getLangString("res_sing")),
-	TOWN(TownySettings.getLangString("town_sing")),
-	NATION(TownySettings.getLangString("nation_sing"));
+	RESIDENT(Translation.of("res_sing")),
+	TOWN(Translation.of("town_sing")),
+	NATION(Translation.of("nation_sing"));
 
 	private String typeName;
 	

@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
@@ -716,7 +717,7 @@ public class Towny extends JavaPlugin {
 		else if (s.equalsIgnoreCase("off"))
 			return false;
 		else
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+			throw new Exception(String.format(Translation.of("msg_err_invalid_input"), " on/off."));
 	}
 
 	/**

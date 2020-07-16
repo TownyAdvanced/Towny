@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -15,10 +16,10 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
  */
 public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 
-	final String nomad = TownySettings.getLangString("nomad_sing");
-	final String res = TownySettings.getLangString("res_sing");
-	final String mayor = TownySettings.getLangString("mayor_sing");
-	final String king = TownySettings.getLangString("king_sing");
+	final String nomad = Translation.of("nomad_sing");
+	final String res = Translation.of("res_sing");
+	final String mayor = Translation.of("mayor_sing");
+	final String king = Translation.of("king_sing");
 	
 	private final Towny plugin;
 
@@ -464,14 +465,14 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return tag;
 		case "town_ranks": // %townyadvanced_town_ranks%
 			if (resident.isMayor())
-				rank = TownySettings.getLangString("mayor_sing");
+				rank = Translation.of("mayor_sing");
 			else if (!resident.getTownRanks().isEmpty())
 				rank = StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", "));
 			return rank;
 			
 		case "nation_ranks": // %townyadvanced_nation_ranks%
 			if (resident.isKing())
-				rank = TownySettings.getLangString("king_sing");
+				rank = Translation.of("king_sing");
 			else if (!resident.getNationRanks().isEmpty())
 				rank = StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", "));
 			return rank;

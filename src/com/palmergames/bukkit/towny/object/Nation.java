@@ -62,7 +62,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4) {
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
+			throw new TownyException(Translation.of("msg_err_tag_too_long"));
 		}
 		this.tag = text.toUpperCase().trim();
 		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this, this.tag));
@@ -224,7 +224,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public Location getNationSpawn() throws TownyException {
 		if(nationSpawn == null){
-			throw new TownyException(TownySettings.getLangString("msg_err_nation_has_not_set_a_spawn_location"));
+			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
 		}
 
 		return nationSpawn;
@@ -236,27 +236,27 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setNationSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
+			throw new TownyException(String.format(Translation.of("msg_cache_block_error_wild"), "set spawn"));
 
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
 
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 			if(!townBlock.hasTown()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 			if(townBlock.getTown() != this.getCapital()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 		} else {
 			if(!townBlock.hasTown()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
 			}
 
 			if(!towns.contains(townBlock.getTown())){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
 			}
 		}
 
@@ -446,8 +446,8 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_left_nation"), this.getName()));
-						TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName()));
+						TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_town_left_nation"), this.getName()));
+						TownyMessaging.sendPrefixedNationMessage(this, String.format(Translation.of("msg_nation_town_left"), town.getName()));
 						this.remove(town);
 						it.remove();
 					}
@@ -488,7 +488,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public void setNeutral(boolean neutral) throws TownyException {
 
 		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
+			throw new TownyException(Translation.of("msg_err_fight_like_king"));
 		else {
 			if (neutral) {
 				for (Resident resident : getResidents()) {
@@ -507,9 +507,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
-			throw new TownyException(TownySettings.getLangString("msg_err_king_not_in_nation"));
+			throw new TownyException(Translation.of("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
-			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
+			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
@@ -528,7 +528,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedNationMessage(this, String.format(Translation.of("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
@@ -542,13 +542,13 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
 		//if (!isKing(resident))// && !hasAssistant(resident))
-		//	throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
+		//	throw new TownyException(Translation.of("msg_no_access_nation_bank"));
 
 		if (TownySettings.isUsingEconomy()) {
 			if (!getAccount().payTo(amount, resident, "Nation Withdraw"))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+				throw new TownyException(Translation.of("msg_err_no_money"));
 		} else
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+			throw new TownyException(Translation.of("msg_err_no_economy"));
 	}
 
 	@Override
@@ -629,7 +629,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
 			receivedinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
+			throw new TooManyInvitesException(String.format(Translation.of("msg_err_nation_has_too_many_requests"),this.getName()));
 		}
 	}
 
@@ -648,7 +648,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
 			sentinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_invites"));
+			throw new TooManyInvitesException(Translation.of("msg_err_nation_sent_too_many_invites"));
 		}
 	}
 
@@ -661,7 +661,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
 			sentallyinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
+			throw new TooManyInvitesException(Translation.of("msg_err_nation_sent_too_many_requests"));
 		}
 	}
 	

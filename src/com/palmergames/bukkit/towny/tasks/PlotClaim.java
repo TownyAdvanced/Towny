@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -67,9 +68,9 @@ public class PlotClaim extends Thread {
 
 		if (player != null){
 			if (claim)
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_claim"));
+				TownyMessaging.sendMsg(player, Translation.of("msg_process_claim"));
 			else
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_unclaim"));
+				TownyMessaging.sendMsg(player, Translation.of("msg_process_unclaim"));
 		}
 
 		if (selection != null) {
@@ -85,7 +86,7 @@ public class PlotClaim extends Thread {
 						if (worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
 							try {
 								if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getResident(), "Plot Group - Buy From Seller")) {
-									TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_money_purchase_plot"));
+									TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_money_purchase_plot"));
 									break;
 								}
 							} catch (NotRegisteredException e) {
@@ -95,11 +96,11 @@ public class PlotClaim extends Thread {
 								double bankcap = TownySettings.getTownBankCap();
 								if (bankcap > 0) {
 									if (worldCoord.getTownBlock().getPlotObjectGroup().getPrice() + worldCoord.getTownBlock().getPlotObjectGroup().getTown().getAccount().getHoldingBalance() > bankcap)
-										throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+										throw new TownyException(String.format(Translation.of("msg_err_deposit_capped"), bankcap));
 								}
 								
 								if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getTown(), "Plot Group - Buy From Town")) {
-									TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_money_purchase_plot"));
+									TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_money_purchase_plot"));
 									break;
 								}
 							}
@@ -114,7 +115,7 @@ public class PlotClaim extends Thread {
 						
 							worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
 							worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
-							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
+							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(Translation.of("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 							
 							TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
 							break;
@@ -129,7 +130,7 @@ public class PlotClaim extends Thread {
 					@SuppressWarnings("unused")
 					TownyWorld world = worldCoord.getTownyWorld();
 				} catch (NotRegisteredException e) {
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+					TownyMessaging.sendMsg(player, Translation.of("msg_err_not_configured"));
 					continue;
 				}
 				try {
@@ -166,14 +167,14 @@ public class PlotClaim extends Thread {
 		if (player != null) {
 			if (claim) {
 				if ((selection != null) && (selection.size() > 0) && (claimed > 0)) {
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? TownySettings.getLangString("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+					TownyMessaging.sendMsg(player, Translation.of("msg_claimed") + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				} else {
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_not_claimed_1"));
+					TownyMessaging.sendMsg(player, Translation.of("msg_not_claimed_1"));
 				}
 			} else if (selection != null) {
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? TownySettings.getLangString("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, Translation.of("msg_unclaimed") + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			} else {
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed"));
+				TownyMessaging.sendMsg(player, Translation.of("msg_unclaimed"));
 			}
 		}
 		
@@ -205,7 +206,7 @@ public class PlotClaim extends Thread {
 				PlotGroup group = townBlock.getPlotObjectGroup();
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
-					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+					throw new TownyException(Translation.of("msg_err_not_part_town"));
 				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 				try {
 					Resident owner = townBlock.getPlotObjectGroup().getResident();
@@ -222,7 +223,7 @@ public class PlotClaim extends Thread {
 						}
 
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + group.getTownBlocks().size() > maxPlots)
-							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
+							throw new TownyException(String.format(Translation.of("msg_max_plot_own"), maxPlots));
 
 						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotObjectGroup().getPrice()));
 						
@@ -237,7 +238,7 @@ public class PlotClaim extends Thread {
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						if (i >= worldCoords.size() - 2) {
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_successfully_bought_group_x"),resident.getName(), group.getName()));
+							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_successfully_bought_group_x"),resident.getName(), group.getName()));
 						}
 
 						// Update any caches for this WorldCoord
@@ -246,7 +247,7 @@ public class PlotClaim extends Thread {
 						//Plot isn't for sale but re-possessing for town.
 
 						if (TownySettings.isUsingEconomy() && !town.getAccount().payTo(0.0, owner, "Plot - Buy Back"))
-							throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
+							throw new TownyException(Translation.of("msg_town_no_money_purchase_plot"));
 
 						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
 						townBlock.setResident(resident);
@@ -261,14 +262,14 @@ public class PlotClaim extends Thread {
 						
 					} else {
 						//Should never reach here.
-						throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), owner.getName()));
+						throw new AlreadyRegisteredException(String.format(Translation.of("msg_already_claimed"), owner.getName()));
 					}
 
 				} catch (NotRegisteredException e) {
 					//Plot has no owner so it's the town selling it
 
 					if (townBlock.getPlotObjectGroup().getPrice() == -1) {
-						throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
+						throw new TownyException(Translation.of("msg_err_plot_nfs"));
 					}
 
 					townBlock.setResident(resident);
@@ -279,7 +280,7 @@ public class PlotClaim extends Thread {
 					
 				}
 			} catch (NotRegisteredException e) {
-				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+				throw new TownyException(Translation.of("msg_err_not_part_town"));
 			}
 			
 		}
@@ -293,7 +294,7 @@ public class PlotClaim extends Thread {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			Town town = townBlock.getTown();
 			if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
-				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+				throw new TownyException(Translation.of("msg_err_not_part_town"));
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 			try {
@@ -303,7 +304,7 @@ public class PlotClaim extends Thread {
 					// Plot is for sale
 
 					if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(townBlock.getPlotPrice(), owner, "Plot - Buy From Seller"))
-						throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
+						throw new TownyException(Translation.of("msg_no_money_purchase_plot"));
 
 					int maxPlots = TownySettings.getMaxResidentPlots(resident);
 					int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
@@ -314,7 +315,7 @@ public class PlotClaim extends Thread {
 					}
 					
 					if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
-						throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
+						throw new TownyException(String.format(Translation.of("msg_max_plot_own"), maxPlots));
 
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
 					townBlock.setPlotPrice(-1);
@@ -333,7 +334,7 @@ public class PlotClaim extends Thread {
 					//Plot isn't for sale but re-possessing for town.
 
 					if (TownySettings.isUsingEconomy() && !town.getAccount().payTo(0.0, owner, "Plot - Buy Back"))
-						throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
+						throw new TownyException(Translation.of("msg_town_no_money_purchase_plot"));
 
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
 					townBlock.setResident(null);
@@ -349,23 +350,23 @@ public class PlotClaim extends Thread {
 					return true;
 				} else {
 					//Should never reach here.
-					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), owner.getName()));
+					throw new AlreadyRegisteredException(String.format(Translation.of("msg_already_claimed"), owner.getName()));
 				}
 
 			} catch (NotRegisteredException e) {
 				//Plot has no owner so it's the town selling it
 
 				if (townBlock.getPlotPrice() == -1)
-					throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
+					throw new TownyException(Translation.of("msg_err_plot_nfs"));
 				
 				double bankcap = TownySettings.getTownBankCap();
 				if (bankcap > 0) {
 					if (townBlock.getPlotPrice() + town.getAccount().getHoldingBalance() > bankcap)
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+						throw new TownyException(String.format(Translation.of("msg_err_deposit_capped"), bankcap));
 				}
 
 				if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(townBlock.getPlotPrice(), town, "Plot - Buy From Town"))
-					throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
+					throw new TownyException(Translation.of("msg_no_money_purchase_plot"));
 
 				townBlock.setPlotPrice(-1);
 				townBlock.setResident(resident);
@@ -377,7 +378,7 @@ public class PlotClaim extends Thread {
 				return true;
 			}
 		} catch (NotRegisteredException e) {
-			throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+			throw new TownyException(Translation.of("msg_err_not_part_town"));
 		}
 	}
 
@@ -396,7 +397,7 @@ public class PlotClaim extends Thread {
 			plugin.updateCache(worldCoord);
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException(TownySettings.getLangString("msg_not_own_place"));
+			throw new TownyException(Translation.of("msg_not_own_place"));
 		}
 
 		return true;
@@ -436,10 +437,10 @@ public class PlotClaim extends Thread {
 			townBlock.setType(townBlock.getType());
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 			
-			TownyMessaging.sendMessage(BukkitTools.getPlayer(resident.getName()), String.format(TownySettings.getLangString("msg_admin_has_given_you_a_plot"), worldCoord.toString()));
+			TownyMessaging.sendMessage(BukkitTools.getPlayer(resident.getName()), String.format(Translation.of("msg_admin_has_given_you_a_plot"), worldCoord.toString()));
 		} catch (NotRegisteredException e) {
 			//Probably not owned by a town.
-			throw new TownyException(TownySettings.getLangString("msg_not_claimed_1"));			
+			throw new TownyException(Translation.of("msg_not_claimed_1"));			
 
 		}
 	}

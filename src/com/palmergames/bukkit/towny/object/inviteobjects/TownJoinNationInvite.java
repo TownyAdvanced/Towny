@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,9 @@ public class TownJoinNationInvite implements Invite {
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(Translation.of("msg_deny_invite"), town.getName()));
 		} else {
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("nation_revoke_invite"), nation.getName()));
 		}
 	}
 }
