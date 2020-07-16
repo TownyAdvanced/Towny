@@ -4757,3 +4757,4 @@ v0.92.0.11:
     - When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.
 0.96.2.5:
   - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
+  - Make fields/objects that don't change Immutable, courtesy of Siris with PR #4171.
