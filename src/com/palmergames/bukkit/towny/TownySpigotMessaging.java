@@ -18,50 +18,27 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 public class TownySpigotMessaging {
-	
-	interface TextComponentHoverAdapter {
-		void setHoverEvent(HoverEvent.Action action, String text);
-	}
-	
-	static abstract class AbstractHoverAdapter implements TextComponentHoverAdapter {
+	@SuppressWarnings("deprecation")
+	final static class HoverCompatibilityWrapper {
+		
 		final TextComponent base;
-
-		private AbstractHoverAdapter(TextComponent base) {
+		
+		public HoverCompatibilityWrapper(TextComponent base) {
 			this.base = base;
 		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	final static class LegacyHoverAdapter extends AbstractHoverAdapter {
 		
-		private LegacyHoverAdapter(TextComponent base) {
-			super(base);
-		}
+		public void setHoverText(String hoverText) {
+			if (Towny.is116Plus()) {
+				base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
+				return;
+			}
 
-		@Override
-		public void setHoverEvent(HoverEvent.Action action, String hoverText) {
 			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
 		}
 	}
 	
-	final static class ModernHoverAdapter extends AbstractHoverAdapter {
-		
-		private ModernHoverAdapter(TextComponent base) {
-			super(base);
-		}
-
-		@Override
-		public void setHoverEvent(HoverEvent.Action action, String text) {
-			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(text)));
-		}
-	}
-	
-	private static TextComponentHoverAdapter adaptTextComponent(TextComponent base) {
-		if (Towny.is116Plus()) {
-			return new ModernHoverAdapter(base);
-		}
-		
-		return new LegacyHoverAdapter(base);
+	private static HoverCompatibilityWrapper adaptForHover(TextComponent base) {
+		return new HoverCompatibilityWrapper(base);
 	}
 	
 	public static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
@@ -114,12 +91,12 @@ public class TownySpigotMessaging {
 
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = new TextComponent(ChatColor.GREEN + confirmline.replace('/', '[').concat("]"));
-		adaptTextComponent(confirmComponent).setHoverEvent(HoverEvent.Action.SHOW_TEXT, TownySettings.getLangString("msg_confirmation_spigot_hover_accept"));
+		adaptForHover(confirmComponent).setHoverText(TownySettings.getLangString("msg_confirmation_spigot_hover_accept"));
 		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + confirmline.replace("/","")));
 
 		// Create cancel button based on given params.
 		TextComponent cancelComponent = new TextComponent(ChatColor.GREEN + cancelline.replace('/', '[').concat("]"));
-		adaptTextComponent(cancelComponent).setHoverEvent(HoverEvent.Action.SHOW_TEXT, TownySettings.getLangString("msg_confirmation_spigot_hover_cancel"));
+		adaptForHover(cancelComponent).setHoverText(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel"));
 		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + cancelline.replace("/","")));
 		
 		// Use spigot to send the message.
@@ -171,7 +148,7 @@ public class TownySpigotMessaging {
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 			
-			adaptTextComponent(townName).setHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
+			adaptForHover(townName).setHoverText(hoverText);
 			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:town spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
@@ -191,12 +168,12 @@ public class TownySpigotMessaging {
 		TextComponent backButton = new TextComponent("<<<");
 		backButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page - 1)));
-		adaptTextComponent(backButton).setHoverEvent(HoverEvent.Action.SHOW_TEXT, TownySettings.getLangString("msg_hover_previous_page"));
+		adaptForHover(backButton).setHoverText(TownySettings.getLangString("msg_hover_previous_page"));
 		
 		TextComponent forwardButton = new TextComponent(">>>");
 		forwardButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
-		adaptTextComponent(forwardButton).setHoverEvent(HoverEvent.Action.SHOW_TEXT, TownySettings.getLangString("msg_hover_next_page"));
+		adaptForHover(forwardButton).setHoverText(TownySettings.getLangString("msg_hover_next_page"));
 		
 		TextComponent pageText = new TextComponent("   " + TownySettings.getListPageMsg(page, total) + "   ");
 
@@ -278,7 +255,7 @@ public class TownySpigotMessaging {
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 
 
-			adaptTextComponent(nationName).setHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
+			adaptForHover(nationName).setHoverText(hoverText);
 			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:nation spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
