@@ -8,9 +8,9 @@ import org.bukkit.event.HandlerList;
 
 public class PlotChangeOwnerEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
-    private Resident oldowner;
-    private Resident newowner;
-    private TownBlock townBlock;
+    private final Resident oldowner;
+    private final Resident newowner;
+    private final TownBlock townBlock;
 
     @Override
     public HandlerList getHandlers() {

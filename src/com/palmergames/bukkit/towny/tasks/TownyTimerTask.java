@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 
 public abstract class TownyTimerTask implements Runnable {
 
-	protected TownyUniverse universe;
-	protected Towny plugin;
+	protected final TownyUniverse universe;
+	protected final Towny plugin;
 
 	public TownyTimerTask(Towny plugin) {
 		this.plugin = plugin;

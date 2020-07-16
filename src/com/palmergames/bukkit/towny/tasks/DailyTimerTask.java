@@ -31,8 +31,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
-	private List<String> removedTowns = new ArrayList<>();
-	private List<String> removedNations = new ArrayList<>();
+	private final List<String> removedTowns = new ArrayList<>();
+	private final List<String> removedNations = new ArrayList<>();
 
 	public DailyTimerTask(Towny plugin) {
 

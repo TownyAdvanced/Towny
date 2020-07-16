@@ -7,9 +7,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.Bukkit;
 
 public class NationTransactionEvent extends Event {
-	private Nation nation;
+	private final Nation nation;
 	private static final HandlerList handlers = new HandlerList();
-	private Transaction transaction;
+	private final Transaction transaction;
 
 	public NationTransactionEvent(Nation nation, Transaction transaction) {
 		super(!Bukkit.getServer().isPrimaryThread());

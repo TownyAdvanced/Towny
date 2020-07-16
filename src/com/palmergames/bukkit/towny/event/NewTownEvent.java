@@ -10,7 +10,7 @@ public class NewTownEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Town town;
+    private final Town town;
 
     @Override
     public HandlerList getHandlers() {

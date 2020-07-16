@@ -11,8 +11,8 @@ public class TownUnclaimEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Town town;
-    private WorldCoord worldCoord;
+    private final Town town;
+    private final WorldCoord worldCoord;
 
     @Override
     public HandlerList getHandlers() {

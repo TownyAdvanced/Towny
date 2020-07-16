@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -13,8 +14,9 @@ import org.bukkit.entity.Entity;
  */
 public class Coord {
 
-	protected static int cellSize = 16;
-	protected int x, z;
+	private static final int cellSize = TownySettings.getTownBlockSize(); // This should never change during runtime.
+	private final int x;
+	private final int z;
 
 	public Coord(int x, int z) {
 
@@ -33,19 +35,9 @@ public class Coord {
 		return x;
 	}
 
-	public void setX(int x) {
-
-		this.x = x;
-	}
-
 	public int getZ() {
 
 		return z;
-	}
-
-	public void setZ(int z) {
-
-		this.z = z;
 	}
 
 	public Coord add(int xOffset, int zOffset) {
@@ -125,11 +117,6 @@ public class Coord {
 	public String toString() {
 
 		return getX() + "," + getZ();
-	}
-
-	public static void setCellSize(int cellSize) {
-
-		Coord.cellSize = cellSize;
 	}
 
 	public static int getCellSize() {
