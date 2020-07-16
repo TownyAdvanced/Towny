@@ -340,6 +340,24 @@ public class TownySettings {
 		return data;
 	}
 
+	/**
+	 * @deprecated As of 0.96.2.5+ use {@link Translation#of(String)} instead.
+	 * Gets the lang string from the key.
+	 * 
+	 * @param root The key for the language string.
+	 * @return The translated lang string.
+	 */
+	@Deprecated
+	public static String getLangString(String root) {
+		String data = Translation.of(root);
+
+		if (data == null) {
+			sendError(root.toLowerCase() + " from " + config.getString("language"));
+			return "";
+		}
+		return StringMgmt.translateHexColors(parseSingleLineString(data));
+	}
+
 	public static String getConfigLang(ConfigNodes node) {
 
 		return parseSingleLineString(getString(node));
