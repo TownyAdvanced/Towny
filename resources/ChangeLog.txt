@@ -4755,3 +4755,5 @@ v0.92.0.11:
   - New Config Option: plugin.database.gather_resident_uuids
     - default: true
     - When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.
+0.96.2.5:
+  - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
