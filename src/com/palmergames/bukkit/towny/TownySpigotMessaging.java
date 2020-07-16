@@ -24,39 +24,35 @@ public class TownySpigotMessaging {
 	}
 	
 	static abstract class AbstractHoverAdapter implements TextComponentHoverAdapter {
-		
 		final TextComponent base;
 
 		private AbstractHoverAdapter(TextComponent base) {
 			this.base = base;
 		}
-
-		public TextComponent getBase() {
-			return base;
-		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	final static class LegacyHoverAdapter extends AbstractHoverAdapter {
+		
 		private LegacyHoverAdapter(TextComponent base) {
 			super(base);
 		}
 
 		@Override
 		public void setHoverEvent(HoverEvent.Action action, String hoverText) {
-			getBase().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
+			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
 		}
 	}
 	
 	final static class ModernHoverAdapter extends AbstractHoverAdapter {
-
+		
 		private ModernHoverAdapter(TextComponent base) {
 			super(base);
 		}
 
 		@Override
 		public void setHoverEvent(HoverEvent.Action action, String text) {
-			getBase().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(text)));
+			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(text)));
 		}
 	}
 	
