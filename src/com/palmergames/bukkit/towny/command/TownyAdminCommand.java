@@ -1554,7 +1554,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void reloadLangs() {
 		String rootFolder = TownyUniverse.getInstance().getRootFolder();
 		try {
-			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_reload_error"));
 			e.printStackTrace();
@@ -1600,7 +1600,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			String rootFolder = TownyUniverse.getInstance().getRootFolder();
 			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
-			TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_reload_error"));
 			e.printStackTrace();
