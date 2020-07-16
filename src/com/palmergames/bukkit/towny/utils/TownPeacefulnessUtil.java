@@ -200,8 +200,8 @@ public class TownPeacefulnessUtil {
 		ListIterator<Town> townItr = towns.listIterator();
 		Town peacefulTown = null;
 		Coord peacefulTownCoord;
-		Town guardianTown = null;
-		double guardianTownSignificance = 0;
+		Town guardianTown;
+		double guardianTownSignificance;
 		double candidateTownSignificance;
 		double candidateTownDistance;
 		Coord candidateTownCoord;
@@ -211,6 +211,8 @@ public class TownPeacefulnessUtil {
 
 		while (townItr.hasNext()) {
 			try {
+				guardianTown = null;
+				guardianTownSignificance = 0;
 				peacefulTown = townItr.next();
 				if (!townyUniverse.getDataSource().hasTown(peacefulTown.getName())) 
 					continue;
