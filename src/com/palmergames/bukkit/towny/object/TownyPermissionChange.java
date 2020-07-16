@@ -11,9 +11,9 @@ public class TownyPermissionChange {
 		ALL_PERMS, SINGLE_PERM, PERM_LEVEL, ACTION_TYPE, RESET
 	}
 
-	private Object[] args;
-	private Action changeAction;
-	private boolean changeValue;
+	private final Object[] args;
+	private final Action changeAction;
+	private final boolean changeValue;
 
 	public TownyPermissionChange(Action changeAction, boolean changeValue, Object... args) {
 		this.changeAction = changeAction;

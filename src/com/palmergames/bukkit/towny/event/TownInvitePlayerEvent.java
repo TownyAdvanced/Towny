@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 public class TownInvitePlayerEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private PlayerJoinTownInvite invite;
+	private final PlayerJoinTownInvite invite;
 
 	@Override
 	public HandlerList getHandlers() {

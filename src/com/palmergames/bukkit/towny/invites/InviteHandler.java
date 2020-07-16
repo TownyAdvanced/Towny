@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class InviteHandler {
 	}
 	
 	public static List<Invite> getActiveInvites() {
-		return activeInvites;
+		return Collections.unmodifiableList(activeInvites);
 	}
 	
 	public static boolean inviteIsActive(Invite invite) {

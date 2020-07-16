@@ -10,10 +10,10 @@ public class NationPreAddEnemyEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
-	private String enemyName;
-	private Nation enemy;
-	private String nationName;
-	private Nation nation;
+	private final String enemyName;
+	private final Nation enemy;
+	private final String nationName;
+	private final Nation nation;
 	private String cancelMessage = "Sorry this event was cancelled";
 
 	@Override

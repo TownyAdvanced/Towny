@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
@@ -37,6 +38,7 @@ public class TownyTimerHandler{
 	private static int teleportWarmupTask = -1;
 	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
+	private static int gatherResidentUUIDTask = -1;
 
 	public static void newDay() {
 
@@ -141,6 +143,19 @@ public class TownyTimerHandler{
 			drawSmokeTask = -1;
 		}
 	}
+	
+	public static void toggleGatherResidentUUIDTask(boolean on) {
+		if (on && !isGatherResidentUUIDTaskRunning()) {
+			gatherResidentUUIDTask = BukkitTools.scheduleAsyncRepeatingTask(new GatherResidentUUIDTask(plugin) , 1200, 40);
+			TownyMessaging.sendDebugMsg("Starting GatherResidentUUIDTask in 60 seconds.");
+			if (gatherResidentUUIDTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule gather resident UUID loop");
+		} else if (!on && isGatherResidentUUIDTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(gatherResidentUUIDTask);
+			gatherResidentUUIDTask = -1;
+			TownyMessaging.sendDebugMsg("Shutting down GatherResidentUUIDTask.");
+		}
+	}
 
 	public static boolean isTownyRepeatingTaskRunning() {
 
@@ -176,6 +191,11 @@ public class TownyTimerHandler{
 	public static boolean isDrawSmokeTaskRunning() {
 		
 		return drawSmokeTask != -1;
+	}
+
+	public static boolean isGatherResidentUUIDTaskRunning() {
+		
+		return gatherResidentUUIDTask != -1;
 	}
 	
 	/**

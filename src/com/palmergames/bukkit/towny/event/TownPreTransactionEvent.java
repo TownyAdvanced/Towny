@@ -10,9 +10,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.Bukkit;
 
 public class TownPreTransactionEvent extends Event implements Cancellable {
-	private Town town;
+	private final Town town;
 	private static final HandlerList handlers = new HandlerList();
-	private Transaction transaction;
+	private final Transaction transaction;
 	private String cancelMessage = "Sorry this event was cancelled.";
 	private boolean isCancelled = false;
 

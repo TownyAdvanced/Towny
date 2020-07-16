@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -18,7 +17,6 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -65,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -940,11 +939,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
-					Confirmation confirmation = new Confirmation(() -> {
+					Confirmation.runOnAccept(() -> {
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
-					});
-					ConfirmationHandler.sendConfirmation(sender, confirmation);
+					})
+						.sendTo(sender);
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
@@ -1239,11 +1238,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
 					townyUniverse.getDataSource().removeNation(nation);
 				} else {
-					Confirmation confirmation = new Confirmation(() -> {
+					Confirmation.runOnAccept(() -> {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-					});
-					ConfirmationHandler.sendConfirmation(sender, confirmation); // It takes the nation, an admin deleting another town has no confirmation.
+					})
+					.sendTo(sender); // It takes the nation, an admin deleting another town has no confirmation.
 				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
@@ -1378,9 +1377,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
+						newMayor.setUUID(UUID.randomUUID());
 
 						townyUniverse.getDataSource().saveResident(newMayor);
-						townyUniverse.getDataSource().saveResidentList();
 
 						// set for no upkeep as an NPC mayor is assigned
 						town.setHasUpkeep(false);
@@ -1398,17 +1397,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					town.setMayor(newMayor);
 
 					if (oldMayor.isNPC()) {
-						try {
-							town.removeResident(oldMayor);
-							townyUniverse.getDataSource().removeResident(oldMayor);
-							townyUniverse.getDataSource().removeResidentList(oldMayor);
-							// set upkeep again
-							town.setHasUpkeep(true);
-						} catch (EmptyTownException e) {
-							// Should never reach here as we are setting a new
-							// mayor before removing the old one.
-							e.printStackTrace();
-						}
+						oldMayor.removeTown();
+						townyUniverse.getDataSource().removeResident(oldMayor);
+						// set upkeep again
+						town.setHasUpkeep(true);
 					}
 					townyUniverse.getDataSource().saveTown(town);					
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_new_mayor"),newMayor.getName()));
@@ -1698,12 +1690,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			};
 			
 			if (sender != null) {
-				Confirmation confirmation = new Confirmation(purgeHandler);
-				ConfirmationHandler.sendConfirmation(sender, confirmation);
+				Confirmation.runOnAccept(purgeHandler)
+				.sendTo(sender);
 			}
 		} else { // isConsole
 			final String finalDays = days;
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 				int numDays;
 				boolean townless = false;
 				if (finalDays.startsWith("townless")) {
@@ -1714,9 +1706,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
-			});
-			
-			ConfirmationHandler.sendConfirmation(sender, confirmation);
+			})
+			.sendTo(sender);
 		}
 	}
 
@@ -1742,7 +1733,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						Resident resident = townyUniverse.getDataSource().getResident(name);
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							townyUniverse.getDataSource().removeResident(resident);
-							townyUniverse.getDataSource().removeResidentList(resident);
 							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
 						} else
 							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_online_or_npc"), name));

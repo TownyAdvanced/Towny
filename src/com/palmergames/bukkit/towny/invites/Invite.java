@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.invites;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 
 /**
+ * An object that represents an invitation.
+ * 
  * @author Articdive
  */
 public interface Invite {

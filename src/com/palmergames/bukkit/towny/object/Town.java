@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -204,13 +205,10 @@ public class Town extends Government implements TownBlockOwner {
 		return getAssistants().contains(resident);
 	}
 
-	public void addResident(Resident resident) throws AlreadyRegisteredException {
+	void addResident(Resident resident) throws AlreadyRegisteredException {
 
 		addResidentCheck(resident);
 		residents.add(resident);
-		resident.setTown(this);
-		
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
 
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
@@ -590,34 +588,7 @@ public class Town extends Government implements TownBlockOwner {
 		}
 	}
 
-	private void removeAllResidents() {
-
-		for (Resident resident : new ArrayList<>(residents))
-			remove(resident);
-	}
-
 	private void remove(Resident resident) {
-		
-		resident.setTitle("");
-		resident.setSurname("");
-		resident.updatePerms();
-
-		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-			
-			// Do not remove Embassy plots
-			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				townBlock.setResident(null);
-				try {
-					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-				
-				// Set the plot permissions to mirror the towns.
-				townBlock.setType(townBlock.getType());
-			}
-		}
 
 		if (isMayor(resident)) {
 
@@ -645,24 +616,12 @@ public class Town extends Government implements TownBlockOwner {
 							}
 						}
 				}
+				
+				// Town is not removing its last resident so be sure to save it.
+				TownyUniverse.getInstance().getDataSource().saveTown(this);
 			}
-
-		}
-
-		try {
-			/* 
-			 * Trigger a resident removal event if they are in a town.
-			 */
-			if (resident.hasTown()) {
-				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, resident.getTown()));
-			}
-			resident.setTown(null);
-		} catch (AlreadyRegisteredException ignored) {
-		} catch (IllegalStateException | NotRegisteredException e) {
-			e.printStackTrace();
 		}
 		residents.remove(resident);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 	
 	@Override
@@ -697,31 +656,6 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean hasHomeBlock() {
 		return homeBlock != null;
-	}
-
-	public void clear() throws EmptyNationException {
-
-		//Cleanup
-		removeAllResidents();
-		mayor = null;
-		residents.clear();
-		outlaws.clear();
-		homeBlock = null;
-		outpostSpawns.clear();
-		jailSpawns.clear();
-	
-//		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
-//			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
-//				world.removeTownBlocks(getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
-//				world.removeTown(this);
-//			}
-//		} catch (NotRegisteredException e) {
-//		}
-//		if (hasNation())
-//			try {
-//				nation.removeTown(this);
-//			} catch (NotRegisteredException e) {
-//			}
 	}
 
 	public boolean hasWorld() {
@@ -1064,11 +998,9 @@ public class Town extends Government implements TownBlockOwner {
 			}
 	}
 	
-	public void removeOutlaw(Resident resident) throws NotRegisteredException {
+	public void removeOutlaw(Resident resident) {
 
-		if (!hasOutlaw(resident))
-			throw new NotRegisteredException();
-		else 
+		if (hasOutlaw(resident))
 			outlaws.remove(resident);			
 	}
 

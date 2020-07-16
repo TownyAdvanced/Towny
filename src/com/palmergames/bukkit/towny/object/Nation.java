@@ -329,7 +329,6 @@ public class Nation extends Government {
 
 			boolean isCapital = town.isCapital();
 			remove(town);
-			TownyUniverse.getInstance().getDataSource().saveNation(this);
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -342,12 +341,10 @@ public class Nation extends Government {
 						numResidents = newCapital.getNumResidents();
 					}
 
-				if (tempCapital != null) {
+				if (tempCapital != null)
 					setCapital(tempCapital);
-					TownyUniverse.getInstance().getDataSource().saveNation(this);
-				}
-
 			}
+			TownyUniverse.getInstance().getDataSource().saveNation(this);
 		}
 	}
 

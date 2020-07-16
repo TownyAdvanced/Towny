@@ -10,10 +10,10 @@ import org.bukkit.event.HandlerList;
 
 public class PlotPreChangeTypeEvent extends Event implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
-    private TownBlockType newType;
-    private TownBlock townBlock;
+    private final TownBlockType newType;
+    private final TownBlock townBlock;
 	private String cancelMessage = "Sorry this event was cancelled";
-	private Resident resident;
+	private final Resident resident;
 	private boolean isCancelled = false;
 
     @Override

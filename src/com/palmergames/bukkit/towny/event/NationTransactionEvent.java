@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 
 public class NationTransactionEvent extends BankTransactionEvent {
 	
-	Nation nation;
+	final Nation nation;
 	
 	public NationTransactionEvent(Nation nation, Transaction transaction) {
 		super(nation.getAccount(), transaction);

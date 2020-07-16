@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -32,8 +31,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
-	private List<String> removedTowns = new ArrayList<>();
-	private List<String> removedNations = new ArrayList<>();
+	private final List<String> removedTowns = new ArrayList<>();
+	private final List<String> removedNations = new ArrayList<>();
 
 	public DailyTimerTask(Towny plugin) {
 
@@ -289,7 +288,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 */
 				if (townyUniverse.getDataSource().hasResident(resident.getName())) {
 
-					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC()) {
+					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
 							TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
 						} catch (TownyException e) {
@@ -306,21 +305,9 @@ public class DailyTimerTask extends TownyTimerTask {
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
 						removedResidents.add(resident.getName());
-						try {
-							
-							// reset this resident and remove him from the town.
-							resident.clear();
-							townyUniverse.getDataSource().saveTown(town);
-							
-						} catch (EmptyTownException e) {
-							
-							// No mayor so remove the town.
-							townyUniverse.getDataSource().removeTown(town);
-							
-						}
 						
-						townyUniverse.getDataSource().saveResident(resident);
-						
+						// remove this resident from the town.
+						resident.removeTown();
 					}
 				}
 			}

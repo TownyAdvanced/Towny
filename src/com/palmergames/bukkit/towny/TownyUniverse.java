@@ -58,7 +58,7 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -90,9 +90,6 @@ public class TownyUniverse {
 
         saveDbType = TownySettings.getSaveDatabase();
         loadDbType = TownySettings.getLoadDatabase();
-        
-        // Setup any defaults before we load the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         

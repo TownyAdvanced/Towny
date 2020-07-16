@@ -10,8 +10,8 @@ public class PlotPreClearEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled";
-	private TownBlock townBlock;
+	private final String cancelMessage = "Sorry this event was cancelled";
+	private final TownBlock townBlock;
 
 	@Override
 	public HandlerList getHandlers() {
