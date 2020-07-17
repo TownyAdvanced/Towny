@@ -126,7 +126,7 @@ public class TownyFormatter {
 					Translation.of("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off")));
 
 			if (townBlock.hasPlotObjectGroup())
-				out.add(String.format(Translation.of("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
@@ -158,9 +158,9 @@ public class TownyFormatter {
 		cal.setTimeInMillis(System.currentTimeMillis());
 		int lastOnlineYear = cal.get(Calendar.YEAR);
 		if (currentYear == lastOnlineYear)
-			out.add(String.format(Translation.of("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
 		else 
-			out.add(String.format(Translation.of("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
 
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
@@ -346,8 +346,8 @@ public class TownyFormatter {
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(String.format(Translation.of("status_town_size_part_1"), town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +  
-		            (TownySettings.isSellingBonusBlocks(town) ? String.format(Translation.of("status_town_size_part_2"), town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks(town)) : "") + 
+			out.add(Translation.of("status_town_size_part_1", town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +  
+		            (TownySettings.isSellingBonusBlocks(town) ? Translation.of("status_town_size_part_2", town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks(town)) : "") + 
 		            (town.getBonusBlocks() > 0 ? Translation.of("status_town_size_part_3", town.getBonusBlocks()) : "") + 
 		            (TownySettings.getNationBonusBlocks(town) > 0 ? Translation.of("status_town_size_part_4", TownySettings.getNationBonusBlocks(town)) : "") + 
 		            (town.isPublic() ? Translation.of("status_town_size_part_5") + 
@@ -360,13 +360,13 @@ public class TownyFormatter {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				if (town.hasOutpostSpawn())
 					if (!town.hasNation())
-						out.add(String.format(Translation.of("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
 						try {
 							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 						} catch (NotRegisteredException ignored) {}
-						out.add(String.format(Translation.of("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? Translation.of("status_town_outposts2", nationBonus) : "")
 							   );
 						}

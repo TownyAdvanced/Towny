@@ -115,7 +115,7 @@ public class PlotClaim extends Thread {
 						
 							worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
 							worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
-							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), String.format(Translation.of("msg_player_successfully_bought_group_x"), player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
+							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), Translation.of("msg_player_successfully_bought_group_x", player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 							
 							TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
 							break;
@@ -238,7 +238,7 @@ public class PlotClaim extends Thread {
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						if (i >= worldCoords.size() - 2) {
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_successfully_bought_group_x"),resident.getName(), group.getName()));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_successfully_bought_group_x", resident.getName(), group.getName()));
 						}
 
 						// Update any caches for this WorldCoord

@@ -148,8 +148,7 @@ public class SpawnUtil {
 
 				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels()
 						&& town.isOverOutpostLimit() && (Math.max(1, index) > town.getOutpostLimit())) {
-					throw new TownyException(String.format(Translation.of("msg_err_over_outposts_limit"),
-							town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+					throw new TownyException(Translation.of("msg_err_over_outposts_limit", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 				}
 
 				spawnLoc = town.getOutpostSpawn(Math.max(1, index));
@@ -262,21 +261,18 @@ public class SpawnUtil {
 
 				if (inTown == null && disallowedZones.contains("unclaimed"))
 					throw new TownyException(
-							String.format(Translation.of("msg_err_x_spawn_disallowed_from_x"),
-									spawnType.getTypeName(), Translation.of("msg_the_wilderness")));
+							Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_the_wilderness")));
 				if (inTown != null && resident.hasNation()
 						&& townyUniverse.getDataSource().getTown(inTown).hasNation()) {
 					Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
 					Nation playerNation = resident.getTown().getNation();
 					if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 						throw new TownyException(
-								String.format(Translation.of("msg_err_x_spawn_disallowed_from_x"),
-										spawnType.getTypeName(), Translation.of("msg_enemy_areas")));
+								Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_enemy_areas")));
 					if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation)
 							&& disallowedZones.contains("neutral"))
 						throw new TownyException(
-								String.format(Translation.of("msg_err_x_spawn_disallowed_from_x"),
-										spawnType.getTypeName(), Translation.of("msg_neutral_towns")));
+								Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_neutral_towns")));
 				}
 			}
 		}

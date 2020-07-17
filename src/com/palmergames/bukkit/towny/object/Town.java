@@ -266,11 +266,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
 
 		if (hasResident(resident))
-			throw new AlreadyRegisteredException(String.format(Translation.of("msg_err_already_in_town"), resident.getName(), getFormattedName()));
+			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), getFormattedName()));
 		else if (resident.hasTown())
 			try {
 				if (!resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(String.format(Translation.of("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
+					throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
 				e.printStackTrace();
 			}

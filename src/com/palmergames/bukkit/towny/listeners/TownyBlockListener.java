@@ -76,7 +76,7 @@ public class TownyBlockListener implements Listener {
 				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "destroy", block.getType().toString().toLowerCase()));
 			}
 			return;
 		}
@@ -142,7 +142,7 @@ public class TownyBlockListener implements Listener {
 				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "build", block.getType().toString().toLowerCase()));
 				}
 				return;
 			} else {

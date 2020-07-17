@@ -436,7 +436,7 @@ public class PlayerCacheUtil {
 							try {
 								playersNation = playersTown.getNation();
 							} catch (Exception e1) {							
-								cacheBlockErrMsg(player, String.format(Translation.of("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 								return false;
 							}
 							if (playersNation.equals(nearestNation)){
@@ -448,7 +448,7 @@ public class PlayerCacheUtil {
 									return false;
 								}
 							} else {
-								cacheBlockErrMsg(player, String.format(Translation.of("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 								return false;
 							}
 						}
@@ -501,7 +501,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_plot"), Translation.of("msg_cache_block_error_plot_friends"), Translation.of(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_friends"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_TOWN) {
@@ -526,7 +526,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_plot"), Translation.of("msg_cache_block_error_plot_town_members"), Translation.of(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_town_members"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_ALLY) {
@@ -551,7 +551,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_plot"), Translation.of("msg_cache_block_error_plot_allies"), Translation.of(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_allies"), Translation.of(action.toString())));
 				return false;
 
 			} else {
@@ -577,7 +577,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_plot"), Translation.of("msg_cache_block_error_plot_outsiders"), Translation.of(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_outsiders"), Translation.of(action.toString())));
 				return false;
 
 			}

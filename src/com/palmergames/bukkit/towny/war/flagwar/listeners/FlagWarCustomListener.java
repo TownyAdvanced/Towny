@@ -80,7 +80,7 @@ public class FlagWarCustomListener implements Listener {
 			}
 		}
 
-		plugin.getServer().broadcastMessage(String.format(Translation.of("msg_enemy_war_area_defended"), playerName, cell.getCellString()));
+		plugin.getServer().broadcastMessage(Translation.of("msg_enemy_war_area_defended", playerName, cell.getCellString()));
 
 		// Defender Reward
 		// It doesn't entirely matter if the attacker can pay.
@@ -106,11 +106,11 @@ public class FlagWarCustomListener implements Listener {
 				} else {
 					if (attackingPlayer.getAccount().payTo(FlagWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
-							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(Translation.of("msg_enemy_war_area_defended_attacker"), defendingPlayer.getFormattedName(), formattedMoney));
+							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_attacker", defendingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
 						}
 						try {
-							TownyMessaging.sendResidentMessage(defendingPlayer, String.format(Translation.of("msg_enemy_war_area_defended_defender"), attackingPlayer.getFormattedName(), formattedMoney));
+							TownyMessaging.sendResidentMessage(defendingPlayer, Translation.of("msg_enemy_war_area_defended_defender", attackingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
 						}
 					}
@@ -164,18 +164,18 @@ public class FlagWarCustomListener implements Listener {
 						defendingTown.getAccount().payTo(amount, attackingResident, reason);
 
 						// Message
-						moneyTranserMsg = String.format(Translation.of("msg_enemy_war_area_won_pillage"), attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
+						moneyTranserMsg = Translation.of("msg_enemy_war_area_won_pillage", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
 					} else if (amount < 0) {
 						// Attacker -> Defending Town (Rebuild cost)
 						amount = -amount; // Inverse the amount so it's positive.
 						String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
 						if (!attackingResident.getAccount().payTo(amount, defendingTown, reason)) {
 							// Could Not Pay Defending Town the Rebuilding Cost.
-							TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_enemy_war_area_won"), attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
+							TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 						}
 
 						// Message
-						moneyTranserMsg = String.format(Translation.of("msg_enemy_war_area_won_rebuilding"), attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
+						moneyTranserMsg = Translation.of("msg_enemy_war_area_won_rebuilding", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
 					}
 				} catch (EconomyException x) {
 					x.printStackTrace();
@@ -195,15 +195,15 @@ public class FlagWarCustomListener implements Listener {
 				}
 			} else {
 				
-				TownyMessaging.sendPrefixedTownMessage(attackingTown, String.format(Translation.of("msg_war_defender_keeps_claims")));
-				TownyMessaging.sendPrefixedTownMessage(defendingTown, String.format(Translation.of("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(attackingTown, Translation.of("msg_war_defender_keeps_claims"));
+				TownyMessaging.sendPrefixedTownMessage(defendingTown, Translation.of("msg_war_defender_keeps_claims"));
 			}
 
 			// Cleanup
 			plugin.updateCache(worldCoord);
 
 			// Event Message
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_enemy_war_area_won"), attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 
 			// Money Transfer message.
 			if (TownySettings.isUsingEconomy()) {

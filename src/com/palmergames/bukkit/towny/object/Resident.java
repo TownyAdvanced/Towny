@@ -112,7 +112,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
 		TownyMessaging.sendMsg(player, Translation.of("msg_you_have_been_sent_to_jail"));
-		TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", player.getName(), index));
 
 	}
 	
@@ -122,10 +122,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.setJailTown(" ");
 		if (!escaped) {
 			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else
 			try {
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_player_escaped_jail_into_wilderness", player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
 	}
 

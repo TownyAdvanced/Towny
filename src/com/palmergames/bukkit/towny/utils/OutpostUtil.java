@@ -31,7 +31,7 @@ public class OutpostUtil {
 
 		// The config can be set up to dole out numbers of outposts to towns based on resident counts/belonging to a nation.
 		if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
-			throw new TownyException(String.format(Translation.of("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+			throw new TownyException(Translation.of("msg_err_not_enough_outposts_free_to_claim", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 
 		// The config can be set to require a number of residents in a town before an outpost can be made.
 		if (TownySettings.getAmountOfResidentsForOutpost() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForOutpost())

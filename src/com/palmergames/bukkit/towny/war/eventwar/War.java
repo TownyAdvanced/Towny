@@ -246,7 +246,7 @@ public class War {
 			warSpoils.collect(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_activate_war_hud_tip")));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_activate_war_hud_tip"));
 			
 			EventWarStartEvent event = new EventWarStartEvent(warringTowns, warringNations, warSpoils.getHoldingBalance());
 			Bukkit.getServer().getPluginManager().callEvent(event);
@@ -271,7 +271,7 @@ public class War {
 			for (Town town : nation.getTowns())
 				if (warringTowns.contains(town))
 					towns++;
-			warParticipants.add(String.format(Translation.of("msg_war_participants"), nation.getName(), towns));			
+			warParticipants.add(Translation.of("msg_war_participants", nation.getName(), towns));			
 		}
 		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle("War Participants"));
 		TownyMessaging.sendPlainGlobalMessage(Translation.of("msg_war_participants_header"));
@@ -656,7 +656,7 @@ public class War {
 					}
 				}
 				if (count>0)
-					TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_jailbreak"), defenderTown, count));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, count));
 			}				
 		}
 		townyUniverse.getDataSource().saveTown(defenderTown);
@@ -719,7 +719,7 @@ public class War {
 				townyUniverse.getDataSource().saveTown(town);
 				townyUniverse.getDataSource().saveNation(attacker.getNation());
 				townyUniverse.getDataSource().saveNation(losingNation);
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 			} catch (EmptyNationException e) {
 				// if losingNation was a one-town nation then this.
 				try {
@@ -729,7 +729,7 @@ public class War {
 				townyUniverse.getDataSource().saveTown(town);
 				townyUniverse.getDataSource().saveNation(attacker.getNation());
 				townyUniverse.getDataSource().removeNation(losingNation);
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 			}
 		}
 		

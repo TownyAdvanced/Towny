@@ -326,7 +326,7 @@ public class FlagWar {
 
 					// Check if player can pay in worst case scenario.
 					if (balance < requiredAmount)
-						throw new TownyException(String.format(Translation.of("msg_err_insuficient_funds_future"), TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
+						throw new TownyException(Translation.of("msg_err_insuficient_funds_future", TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
 				}
 			} catch (EconomyException e) {
 				throw new TownyException(e.getError());
@@ -369,7 +369,7 @@ public class FlagWar {
 		townyUniverse.addWarZone(worldCoord);
 		plugin.updateCache(worldCoord);
 
-		TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_under_attack", landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
 		return true;
 	}
 
@@ -378,7 +378,7 @@ public class FlagWar {
 		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInTownForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(town).size();
 		if (onlinePlayerCount < requiredOnline)
-			throw new TownyException(String.format(Translation.of("msg_err_enemy_war_require_online"), requiredOnline, town.getFormattedName()));
+			throw new TownyException(Translation.of("msg_err_enemy_war_require_online", requiredOnline, town.getFormattedName()));
 	}
 
 	public static void checkIfNationHasMinOnlineForWar(Nation nation) throws TownyException {
@@ -386,7 +386,7 @@ public class FlagWar {
 		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInNationForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(nation).size();
 		if (onlinePlayerCount < requiredOnline)
-			throw new TownyException(String.format(Translation.of("msg_err_enemy_war_require_online"), requiredOnline, nation.getFormattedName()));
+			throw new TownyException(Translation.of("msg_err_enemy_war_require_online", requiredOnline, nation.getFormattedName()));
 	}
 
 	public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {

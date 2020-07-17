@@ -746,12 +746,12 @@ public class TownySettings {
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, fallenNation.getName()));
 	}
 	
 	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_SCORE_TOWN_ELIM"), town.getName(), n, fallenTown.getName(), fallenTownBlocks));
+		return parseString(Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, fallenTown.getName(), fallenTownBlocks));
 	}
 	
 	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
@@ -763,17 +763,17 @@ public class TownySettings {
 		} catch (NotRegisteredException e) {
 			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
 		}
-		return parseString(String.format(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
+		return parseString(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName));
 	}
 	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_SCORE_PLAYER_KILL"), attacker.getName(), dead.getName(), n, attackingTown.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), dead.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, Player defender, int n, Town attackingTown) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING"), attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeKingKilled(Nation kingsNation) {
@@ -788,18 +788,18 @@ public class TownySettings {
 	
 	public static String[] getWarTimeWinningNationSpoilsMsg(Nation winningNation, String money)
 	{
-		return parseString(String.format(Translation.of("MSG_WAR_WINNING_NATION_SPOILS"), winningNation.getName(), money));
+		return parseString(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), money));
 	}
 	
 	public static String[] getWarTimeWinningTownSpoilsMsg(Town winningTown, String money, int score)
 	{
-		return parseString(String.format(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS"), winningTown.getName(), money, score));
+		return parseString(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTown.getName(), money, score));
 	}
 	//Score Methods
 
 	public static String[] getCouldntPayTaxesMsg(TownyObject obj, String type) {
 
-		return parseString(String.format(Translation.of("MSG_COULDNT_PAY_TAXES"), obj.getName(), type));
+		return parseString(Translation.of("MSG_COULDNT_PAY_TAXES", obj.getName(), type));
 	}
 
 	public static String getPayedTownTaxMsg() {
@@ -834,12 +834,12 @@ public class TownySettings {
 
 	public static String[] getBuyResidentPlotMsg(String who, String owner, Double price) {
 
-		return parseString(String.format(Translation.of("MSG_BUY_RESIDENT_PLOT"), who, owner, price));
+		return parseString(Translation.of("MSG_BUY_RESIDENT_PLOT", who, owner, price));
 	}
 
 	public static String[] getPlotForSaleMsg(String who, WorldCoord worldCoord) {
 
-		return parseString(String.format(Translation.of("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
+		return parseString(Translation.of("MSG_PLOT_FOR_SALE", who, worldCoord.toString()));
 	}
 
 	public static String getMayorAbondonMsg() {
@@ -2681,7 +2681,7 @@ public class TownySettings {
 	
 	public static String getListPageMsg(int page, int total) {
 		 
-	    return parseString(String.format(Translation.of("LIST_PAGE"), page, total))[0];
+	    return parseString(Translation.of("LIST_PAGE", page, total))[0];
 	}
 	
 	public static String getListNotEnoughPagesMsg(int max) {
@@ -2690,27 +2690,27 @@ public class TownySettings {
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
-		return parseString(String.format(Translation.of("msg_war_a_player_has_no_town")));
+		return parseString(Translation.of("msg_war_a_player_has_no_town"));
 	}
 	
 	public static String[] getWarAPlayerHasNoNationMsg() {
-		return parseString(String.format(Translation.of("msg_war_a_player_has_no_nation")));
+		return parseString(Translation.of("msg_war_a_player_has_no_nation"));
 	}
 	
 	public static String[] getWarAPlayerHasANeutralNationMsg() {
-		return parseString(String.format(Translation.of("msg_war_a_player_has_a_neutral_nation")));
+		return parseString(Translation.of("msg_war_a_player_has_a_neutral_nation"));
 	}
 	
 	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
-		return parseString(String.format(Translation.of("msg_war_a_player_has_been_removed_from_war")));
+		return parseString(Translation.of("msg_war_a_player_has_been_removed_from_war"));
 	}
 	
 	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
-		return parseString(String.format(Translation.of("msg_war_player_cant_be_jailed_plot_fallen")));
+		return parseString(Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
 	}
 	
 	public static String[] getWarAPlayerIsAnAllyMsg() {
-		return parseString(String.format(Translation.of("msg_war_a_player_is_an_ally")));
+		return parseString(Translation.of("msg_war_a_player_is_an_ally"));
 	}
 	
 	public static boolean isNotificationUsingTitles() {

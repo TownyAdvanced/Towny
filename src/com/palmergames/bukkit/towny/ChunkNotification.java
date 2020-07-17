@@ -184,7 +184,7 @@ public class ChunkNotification {
 							if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 								Town nearestTown = null; 
 								nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-								return String.format(areaWildernessNotificationFormat, String.format(Translation.of("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+								return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
 							}
 						} catch (NotRegisteredException ignored) {
 						}
@@ -209,7 +209,7 @@ public class ChunkNotification {
 						if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 							Town nearestTown = null; 
 							nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-							return String.format(areaWildernessNotificationFormat, String.format(Translation.of("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+							return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
 						} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
 							return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
 						}

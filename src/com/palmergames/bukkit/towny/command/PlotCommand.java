@@ -316,7 +316,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(Translation.of("msg_max_plot_own", maxPlots));
 
 						if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(cost)))
-							throw new TownyException(String.format(Translation.of("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
+							throw new TownyException(Translation.of("msg_no_funds_claim", selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
 						if (cost != 0) {
 							String title = Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost));
@@ -506,7 +506,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									return true;
 								}
 							} catch (NumberFormatException e) {
-								player.sendMessage(String.format(Translation.of("msg_error_must_be_num")));
+								player.sendMessage(Translation.of("msg_error_must_be_num"));
 								return true;
 							}
 						}
@@ -598,7 +598,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
 						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "ally off", ""));
 						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
-						player.sendMessage(String.format(Translation.of("plot_perms"), "'friend'", "'resident'"));
+						player.sendMessage(Translation.of("plot_perms", "'friend'", "'resident'"));
 						player.sendMessage(Translation.of("plot_perms_1"));
 
 					} else if (split.length > 0) {
@@ -632,7 +632,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							plotTestOwner(resident, townBlock);
 							if (split.length == 1) {
 								townBlock.setName("");
-								TownyMessaging.sendMsg(player, String.format(Translation.of("msg_plot_name_removed")));
+								TownyMessaging.sendMsg(player, Translation.of("msg_plot_name_removed"));
 								townyUniverse.getDataSource().saveTownBlock(townBlock);
 								return true;
 							}
@@ -690,7 +690,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 											}
 										townyUniverse.getDataSource().saveTown(town);
 										townyUniverse.getDataSource().saveTownBlock(townBlock);
-										TownyMessaging.sendMessage(player, String.format(Translation.of("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
+										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
 									})
 									.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
@@ -1109,36 +1109,36 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					// Prevent plot pvp from being enabled if admin pvp is disabled
 					if (townBlock.getTown().isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
-						throw new TownyException(String.format(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp"), "adminDisabledPVP", "on"));
+						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminDisabledPVP", "on"));
 					
 					// Prevent plot pvp from being disabled if admin pvp is enabled
 					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
-						throw new TownyException(String.format(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp"), "adminEnabledPVP", "off"));
+						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
 
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					// Add a cooldown timer for this plot.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 						CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.PVP);
-					TownyMessaging.sendMessage(player, String.format(Translation.of("msg_changed_pvp"), "Plot", townBlock.getPermissions().pvp ? Translation.of("enabled") : Translation.of("disabled")));
+					TownyMessaging.sendMessage(player, Translation.of("msg_changed_pvp", "Plot", townBlock.getPermissions().pvp ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().explosion = !townBlock.getPermissions().explosion;
-					TownyMessaging.sendMessage(player, String.format(Translation.of("msg_changed_expl"), "the Plot", townBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled")));
+					TownyMessaging.sendMessage(player, Translation.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().fire = !townBlock.getPermissions().fire;
-					TownyMessaging.sendMessage(player, String.format(Translation.of("msg_changed_fire"), "the Plot", townBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled")));
+					TownyMessaging.sendMessage(player, Translation.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().mobs = !townBlock.getPermissions().mobs;
 					
-					TownyMessaging.sendMessage(player, String.format(Translation.of("msg_changed_mobs"), "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
+					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
@@ -1205,25 +1205,25 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Add a cooldown timer for this plot.
 						if (TownySettings.getPVPCoolDownTime() > 0)
 							CooldownTimerTask.addCooldownTimer(groupBlock.getWorldCoord().toString(), CooldownType.PVP);
-						endingMessage = String.format(Translation.of("msg_changed_pvp"), "Plot Group", groupBlock.getPermissions().pvp ? Translation.of("enabled") : Translation.of("disabled"));
+						endingMessage = Translation.of("msg_changed_pvp", "Plot Group", groupBlock.getPermissions().pvp ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 						groupBlock.getPermissions().explosion = !groupBlock.getPermissions().explosion;
-						endingMessage = String.format(Translation.of("msg_changed_fire"), "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
+						endingMessage = Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 						groupBlock.getPermissions().fire = !groupBlock.getPermissions().fire;
-						endingMessage =  String.format(Translation.of("msg_changed_fire"), "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
+						endingMessage =  Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 						groupBlock.getPermissions().mobs = !groupBlock.getPermissions().mobs;
-						endingMessage =  String.format(Translation.of("msg_changed_mobs"), "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled"));
+						endingMessage =  Translation.of("msg_changed_mobs", "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
@@ -1371,7 +1371,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("/plot group", "notforsale | nfs", "", "Ex: /plot group notforsale"));
 
 			if (townBlock.hasPlotObjectGroup())
-				TownyMessaging.sendMsg(player, String.format(Translation.of("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				TownyMessaging.sendMsg(player, Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			
 			return true;
 		}
@@ -1422,7 +1422,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 			townyUniverse.getDataSource().saveTown(town);
 
-			TownyMessaging.sendMsg(player, String.format(Translation.of("msg_plot_was_put_into_group_x"), townBlock.getX(), townBlock.getZ(), newGroup.getName()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), newGroup.getName()));
 
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode()))
@@ -1441,7 +1441,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			// Save
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-			TownyMessaging.sendMsg(player, String.format(Translation.of("msg_plot_was_removed_from_group_x"), townBlock.getX(), townBlock.getZ(), name));
+			TownyMessaging.sendMsg(player, Translation.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 
 		} else if (split[0].equalsIgnoreCase("rename")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_RENAME.getNode()))
@@ -1457,7 +1457,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			String oldName = townBlock.getPlotObjectGroup().getName();
 			// Change name;
 			TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotObjectGroup(), newName);
-			TownyMessaging.sendMsg(player, String.format(Translation.of("msg_plot_renamed_from_x_to_y"), oldName, newName));
+			TownyMessaging.sendMsg(player, Translation.of("msg_plot_renamed_from_x_to_y", oldName, newName));
 
 		} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode()))
@@ -1484,7 +1484,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_put_group_up_for_sale"), player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 			
 		} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE.getNode()))
@@ -1504,7 +1504,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_player_made_group_not_for_sale"), player.getName(), group.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TOGGLE.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -1647,7 +1647,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("/plot group", "notforsale | nfs", "", "Ex: /plot group notforsale"));
 
 			if (townBlock.hasPlotObjectGroup())
-				TownyMessaging.sendMsg(player, String.format(Translation.of("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				TownyMessaging.sendMsg(player, Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			
 			return true;
 		}

@@ -292,7 +292,7 @@ public class TownBlock extends TownyObject {
 		
 		// Test if we can pay first to throw an exception.
 		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
-			throw new EconomyException(String.format(Translation.of("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
+			throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
 
 		// Handle payment via a confirmation to avoid suprise costs.
 		if (cost > 0 && TownySettings.isUsingEconomy()) {
@@ -303,7 +303,7 @@ public class TownBlock extends TownyObject {
 				} catch (EconomyException ignored) {
 				}					
 
-				TownyMessaging.sendMessage(resident, String.format(Translation.of("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+				TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
 			
 				if (this.isJail())
 					try {

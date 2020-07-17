@@ -55,7 +55,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Collect taxes
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_new_day_tax")));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day_tax"));
 			try {
 				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
 				collectTownTaxes();
@@ -75,7 +75,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_new_day")));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day"));
 
 		// Automatically delete old residents
 		if (TownySettings.isDeletingOldResidents()) {
@@ -231,7 +231,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (localRemovedTowns != null) {
 				if (localRemovedTowns.size() == 1) 
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(Translation.of("msg_couldnt_pay_tax"), ChatTools.list(localRemovedTowns), "nation"));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_couldnt_pay_tax", ChatTools.list(localRemovedTowns), "nation"));
 				else
 					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localRemovedTowns, Translation.of("msg_couldnt_pay_nation_tax_multiple")));
 			}
@@ -314,7 +314,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (removedResidents != null) {
 				if (removedResidents.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_couldnt_pay_tax"), ChatTools.list(removedResidents), "town"));
+					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_couldnt_pay_tax", ChatTools.list(removedResidents), "town"));
 				else
 					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(removedResidents, Translation.of("msg_couldnt_pay_town_tax_multiple")));
 			}

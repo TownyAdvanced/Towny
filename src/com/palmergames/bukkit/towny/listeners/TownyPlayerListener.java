@@ -615,14 +615,14 @@ public class TownyPlayerListener implements Listener {
 		try {
 			if (TownyUniverse.getInstance().getDataSource().getResident(player.getName()).isJailed()) {
 				if ((event.getCause() == TeleportCause.COMMAND)) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(Translation.of("msg_err_jailed_players_no_teleport")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 					event.setCancelled(true);
 					return;
 				}
 				if (event.getCause() == TeleportCause.PLUGIN) 
 					return;
 				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(Translation.of("msg_err_jailed_players_no_teleport")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 					event.setCancelled(true);
 				}
 			}
@@ -648,7 +648,7 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name()))
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(Translation.of("msg_err_ender_pearls_disabled")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_ender_pearls_disabled"));
 					return;
 				}
 		
@@ -693,7 +693,7 @@ public class TownyPlayerListener implements Listener {
 				
 				if (townblockNation.hasEnemy(residentNation)) {
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(Translation.of("msg_err_no_sleep_in_enemy_inn")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_no_sleep_in_enemy_inn"));
 					return;
 				}
 			}
@@ -705,7 +705,7 @@ public class TownyPlayerListener implements Listener {
 		if (!isOwner && !isInnPlot) {
 
 			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(Translation.of("msg_err_cant_use_bed")));
+			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_cant_use_bed"));
 
 		}
 		
