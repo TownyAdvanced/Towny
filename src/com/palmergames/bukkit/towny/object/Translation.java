@@ -80,7 +80,7 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key, Object... args) {
-		return Translation.of(key, args);
+		return String.format(of(key), args);
 	}
 
 	private Translation() {}
