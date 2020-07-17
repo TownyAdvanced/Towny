@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
@@ -57,7 +58,7 @@ public class OnPlayerLogin implements Runnable {
 				resident = universe.getDataSource().getResident(player.getName());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
-					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_registration"), player.getName()));
+					TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUUID(player.getUniqueId());
@@ -153,7 +154,7 @@ public class OnPlayerLogin implements Runnable {
 								/*
 								 *  Warn that the town is due to be deleted.
 								 */
-								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
+								TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
 							}
 						} catch (EconomyException ex) {
 							// Economy error, so ignore it and try to continue.
@@ -169,7 +170,7 @@ public class OnPlayerLogin implements Runnable {
 								/*
 								 *  Warn that the nation is due to be deleted.
 								 */
-								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), nation.getName()));
+								TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", nation.getName()));
 							}
 						} catch (EconomyException ex) {
 							// Economy error, so ignore it and try to continue.

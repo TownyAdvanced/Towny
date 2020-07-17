@@ -4759,3 +4759,14 @@ v0.92.0.11:
   - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
   - Make fields/objects that don't change Immutable, courtesy of Siris with PR #4171.
   - Fix HoverEvent deprecation and add adapter to for backwards compatibility, courtesy of Siris with PR #4173.
+  - Fix nations not saving a true neutral status on flatfile databases.
+  - Fix load error on databases where neutral nations are present.
+  - Language files version bumped to 0.85.
+  - Fix incorrect message confirming /plot set reset.
+    - Closes #4179.
+  - Unify Town and Nation code, and introduce new Eco Account Mechanics, courtesy of Siris with #3988.
+  - New config option: economy.debt_prefix
+    - default: "[DEBT]-"
+    - The debt prefix for the debt eco account.
+  - Fix loading system files when loading all townblocks, courtesy of Siris with PR #4182.
+  - Move translation code to separate object and introduce new method: Translation.of(), courtesy of Siris with PR #4177.

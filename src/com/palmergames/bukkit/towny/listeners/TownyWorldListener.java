@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -16,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -204,7 +204,7 @@ public class TownyWorldListener implements Listener {
 
 			// If not reject the creation of the portal. No need to cancel event, bukkit does that automatically.
 			if (!bBuild) {
-				TownyMessaging.sendErrorMsg(event.getEntity(), TownySettings.getLangString("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
+				TownyMessaging.sendErrorMsg(event.getEntity(), Translation.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
 				event.setCancelled(true);
 				break;
 			}
