@@ -2484,7 +2484,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				} else
 					if (split[1].length() > 4)
-						throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
+						throw new TownyException(Translation.of("msg_err_tag_too_long"));
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
 

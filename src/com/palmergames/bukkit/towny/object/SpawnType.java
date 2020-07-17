@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownySettings;
-
 public enum SpawnType {
 
 	RESIDENT(Translation.of("res_sing")),

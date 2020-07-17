@@ -2178,7 +2178,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					} else
 						try {
 							if (split[1].length() > 4)
-								throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
+								throw new TownyException(Translation.of("msg_err_tag_too_long"));
 							town.setTag(NameValidation.checkAndFilterName(split[1]));
 							if (admin)
 								TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));

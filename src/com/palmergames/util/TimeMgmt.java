@@ -1,6 +1,5 @@
 package com.palmergames.util;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import java.util.ArrayList;

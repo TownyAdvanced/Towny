@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.command.commandobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.command.CommandSender;

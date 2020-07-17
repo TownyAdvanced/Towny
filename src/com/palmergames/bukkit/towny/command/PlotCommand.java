@@ -843,7 +843,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					perm.change(permChange);
 					townyUniverse.getDataSource().saveTownBlock(townBlock);
 
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms_reset_single"));
+					TownyMessaging.sendMsg(player, Translation.of("msg_set_perms_reset_single"));
 					// Reset all caches as this can affect everyone.
 					plugin.resetCache();
 
