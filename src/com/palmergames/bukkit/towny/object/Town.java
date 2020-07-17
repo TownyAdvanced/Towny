@@ -91,7 +91,7 @@ public class Town extends Government implements TownBlockOwner {
 			return;
 		}
 
-		addTownBlockMap(townBlock);
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
 		if (townBlocks.size() < 2 && !hasHomeBlock()) {
 			try {
 				setHomeBlock(townBlock);
