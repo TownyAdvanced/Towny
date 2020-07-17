@@ -690,7 +690,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 */
 	private boolean findNewMayor(String rank) {
 		boolean found = false;
-		for (Resident newMayor : new ArrayList<>(getRank(rank))) {
+		for (Resident newMayor : getRank(rank)) {
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
 				try {
 					setMayor(newMayor);
@@ -713,7 +713,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 */
 	private boolean findNewMayor() {
 		boolean found = false;
-		for (Resident newMayor : new ArrayList<>(getResidents())) {
+		for (Resident newMayor : getResidents()) {
 			if (newMayor != mayor) {
 				try {
 					setMayor(newMayor);
