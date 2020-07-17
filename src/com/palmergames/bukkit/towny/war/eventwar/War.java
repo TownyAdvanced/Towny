@@ -163,7 +163,7 @@ public class War {
 		else {
 			// Create a countdown timer
 			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
-				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format(Translation.of("war_starts_in_x"), TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, Translation.of("war_starts_in_x", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
 				if (id == -1) {
 					TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
 					end();
@@ -201,13 +201,13 @@ public class War {
 			if (!nation.isNeutral()) {
 				add(nation);
 				if (warringNations.contains(nation))
-					TownyMessaging.sendPrefixedNationMessage(nation, String.format(Translation.of("msg_war_join_nation"), nation.getName()));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_nation", nation.getName()));
 			} else if (!TownySettings.isDeclaringNeutral()) {
 				try {
 					nation.setNeutral(false);
 					add(nation);
 					if (warringNations.contains(nation))
-						TownyMessaging.sendPrefixedNationMessage(nation, String.format(Translation.of("msg_war_join_forced"), nation.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_forced", nation.getName()));
 				} catch (TownyException e) {
 					e.printStackTrace();
 				}
@@ -244,8 +244,8 @@ public class War {
 		// Seed spoils of war		
 		try {
 			warSpoils.collect(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_seeding_spoils_with"), TownySettings.getBaseSpoilsOfWar()));			
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_total_seeding_spoils"), warSpoils.getHoldingBalance()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
 			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_activate_war_hud_tip")));
 			
 			EventWarStartEvent event = new EventWarStartEvent(warringTowns, warringNations, warSpoils.getHoldingBalance());
@@ -379,7 +379,7 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 		}
 		if (numTownBlocks > 0) {
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_join"), town.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_war_join", town.getName()));
 			townScores.put(town, 0);
 			warringTowns.add(town);
 		}			
@@ -518,7 +518,7 @@ public class War {
 							TownyMessaging.sendMessageToMode(town, Colors.Gray + Translation.of("msg_war_nation_under_attack") + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 					for (Nation nation: townBlock.getTown().getNation().getAllies())
 						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendMessageToMode(nation , Colors.Gray + String.format(Translation.of("msg_war_nations_ally_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + Translation.of("msg_war_nations_ally_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 				}
 				else
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
@@ -530,10 +530,10 @@ public class War {
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
 					for (Town town: townBlock.getTown().getNation().getTowns())
 						if (town != townBlock.getTown())
-							TownyMessaging.sendMessageToMode(town, Colors.Gray + String.format(Translation.of("msg_war_nation_member_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(town, Colors.Gray + Translation.of("msg_war_nation_member_homeblock_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 					for (Nation nation: townBlock.getTown().getNation().getAllies())
 						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendMessageToMode(nation , Colors.Gray + String.format(Translation.of("msg_war_nation_ally_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + Translation.of("msg_war_nation_ally_homeblock_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 				}
 				else
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
@@ -629,7 +629,7 @@ public class War {
 				townyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
-				TownyMessaging.sendPrefixedTownMessage(defenderTown, String.format(Translation.of("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
+				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		} catch (EconomyException ignored) {}
 		
 		// Check to see if this is a special TownBlock
@@ -673,7 +673,7 @@ public class War {
 
 		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
 		warringNations.remove(nation);
-		TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_eliminated"), nation));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_eliminated", nation));
 		for (Town town : nation.getTowns())
 			if (warringTowns.contains(town))
 				remove(attacker, town);
@@ -790,20 +790,20 @@ public class War {
 	}
 	
 	private void sendEliminateMessage(String name) {
-		TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_war_eliminated"), name));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_eliminated", name));
 	}
 	
 	public void nationLeave(Nation nation) {
 
 		remove(nation);
-		TownyMessaging.sendGlobalMessage(String.format(Translation.of("MSG_WAR_FORFEITED"), nation.getName()));
+		TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_FORFEITED", nation.getName()));
 		checkEnd();
 	}
 
 	public void townLeave(Town town) {
 
 		remove(town);
-		TownyMessaging.sendGlobalMessage(String.format(Translation.of("MSG_WAR_FORFEITED"), town.getName()));
+		TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_FORFEITED", town.getName()));
 		checkEnd();
 	}
 

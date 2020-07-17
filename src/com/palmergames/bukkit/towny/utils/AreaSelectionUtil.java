@@ -38,7 +38,7 @@ public class AreaSelectionUtil {
 				} else if (args[0].equalsIgnoreCase("circle")) {
 					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
 				} else {
-					throw new TownyException(String.format(Translation.of("msg_err_invalid_property"), StringMgmt.join(args, " ")));
+					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) {
 				out = selectWorldCoordAreaRect(owner, pos, args);
@@ -63,7 +63,7 @@ public class AreaSelectionUtil {
 					// Treat as rect to serve for backwards capability.
 					out = selectWorldCoordAreaRect(owner, pos, args);
 				} catch (NumberFormatException e) {
-					throw new TownyException(String.format(Translation.of("msg_err_invalid_property"), args[0]));
+					throw new TownyException(Translation.of("msg_err_invalid_property", args[0]));
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public class AreaSelectionUtil {
 					}
 				}
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(Translation.of("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 				}
 					
 				if (r > 1000)
@@ -147,7 +147,7 @@ public class AreaSelectionUtil {
 				}
 				
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(Translation.of("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 				}
 				
 				if (r > 1000)

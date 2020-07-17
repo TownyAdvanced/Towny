@@ -416,7 +416,7 @@ public class PlayerCacheUtil {
 						return true;
 					} else {
 						// Don't have permission to build/destroy/switch/item_use here
-						cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_wild"), Translation.of(action.toString())));
+						cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
 						return false;
 					}
 				}
@@ -444,7 +444,7 @@ public class PlayerCacheUtil {
 									return true;
 								} else {
 									// Don't have permission to build/destroy/switch/item_use here
-									cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_wild"), Translation.of(action.toString())));
+									cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
 									return false;
 								}
 							} else {
@@ -616,7 +616,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_town_resident"), Translation.of(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_resident", Translation.of(action.toString())));
 			return false;
 		} else if (status == TownBlockStatus.TOWN_NATION) {
 			/*
@@ -649,7 +649,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_town_nation"), Translation.of(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_nation", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.TOWN_ALLY) {
@@ -684,7 +684,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_town_allies"), Translation.of(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_allies", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
@@ -715,7 +715,7 @@ public class PlayerCacheUtil {
 				}
 
 			}
-			cacheBlockErrMsg(player, String.format(Translation.of("msg_cache_block_error_town_outsider"), Translation.of(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_outsider", Translation.of(action.toString())));
 			return false;
 		}
 

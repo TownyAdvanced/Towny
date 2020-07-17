@@ -58,9 +58,9 @@ public class TownJoinNationInvite implements Invite {
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedNationMessage(nation, String.format(Translation.of("msg_deny_invite"), town.getName()));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_deny_invite", town.getName()));
 		} else {
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("nation_revoke_invite"), nation.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("nation_revoke_invite", nation.getName()));
 		}
 	}
 }

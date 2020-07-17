@@ -168,11 +168,11 @@ public class TownClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				TownyMessaging.sendMsg(player, String.format(Translation.of("msg_annexed_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, Translation.of("msg_annexed_area", (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if (world != null && world.isUsingPlotManagementRevert())
 					TownyMessaging.sendMsg(player, Translation.of("msg_wait_locked"));
 			} else if (forced) {
-				TownyMessaging.sendMsg(player, String.format(Translation.of("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, Translation.of("msg_admin_unclaim_area", (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if ((town != null) && (world != null && world.isUsingPlotManagementRevert()))
 					TownyMessaging.sendMsg(player, Translation.of("msg_wait_locked"));
 			}
@@ -182,7 +182,7 @@ public class TownClaim extends Thread {
 	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost, Player player) throws TownyException {
 
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
-				throw new AlreadyRegisteredException(String.format(Translation.of("msg_already_claimed"), "some town"));
+				throw new AlreadyRegisteredException(Translation.of("msg_already_claimed", "some town"));
 		else {
 			TownBlock townBlock = new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
 			townBlock.setTown(town);

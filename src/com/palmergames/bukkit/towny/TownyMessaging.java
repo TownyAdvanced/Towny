@@ -416,7 +416,7 @@ public class TownyMessaging {
 	public static void sendPrefixedTownMessage(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(String.format(Translation.of("default_town_prefix"), town.getName()) + line);
+			player.sendMessage(Translation.of("default_town_prefix", town.getName()) + line);
 	}
 
 	/**
@@ -432,7 +432,7 @@ public class TownyMessaging {
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			for (String line : lines) {
-				player.sendMessage(String.format(Translation.of("default_town_prefix"), town.getName()) + line);
+				player.sendMessage(Translation.of("default_town_prefix", town.getName()) + line);
 			}
 	}
 	
@@ -492,7 +492,7 @@ public class TownyMessaging {
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(String.format(Translation.of("default_nation_prefix"), nation.getName()) + line);
+			player.sendMessage(Translation.of("default_nation_prefix", nation.getName()) + line);
 	}
 
 	/**
@@ -519,7 +519,7 @@ public class TownyMessaging {
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
-				player.sendMessage(String.format(Translation.of("default_nation_prefix"), nation.getName()) + line);
+				player.sendMessage(Translation.of("default_nation_prefix", nation.getName()) + line);
 			}
 		}
 	}
@@ -702,20 +702,20 @@ public class TownyMessaging {
 		}
 		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = ChatColor.GREEN +  "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /t invite accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");

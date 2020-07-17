@@ -778,12 +778,12 @@ public class TownySettings {
 	
 	public static String[] getWarTimeKingKilled(Nation kingsNation) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_KING_KILLED"), kingsNation.getName()));
+		return parseString(Translation.of("MSG_WAR_KING_KILLED", kingsNation.getName()));
 	}
 	
 	public static String[] getWarTimeMayorKilled(Town mayorsTown) {
 
-		return parseString(String.format(Translation.of("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
+		return parseString(Translation.of("MSG_WAR_MAYOR_KILLED", mayorsTown.getName()));
 	}
 	
 	public static String[] getWarTimeWinningNationSpoilsMsg(Nation winningNation, String money)
@@ -819,17 +819,17 @@ public class TownySettings {
 
 	public static String[] getDelResidentMsg(Resident resident) {
 
-		return parseString(String.format(Translation.of("MSG_DEL_RESIDENT"), resident.getName()));
+		return parseString(Translation.of("MSG_DEL_RESIDENT", resident.getName()));
 	}
 
 	public static String[] getDelTownMsg(Town town) {
 
-		return parseString(String.format(Translation.of("MSG_DEL_TOWN"), town.getName()));
+		return parseString(Translation.of("MSG_DEL_TOWN", town.getName()));
 	}
 
 	public static String[] getDelNationMsg(Nation nation) {
 
-		return parseString(String.format(Translation.of("MSG_DEL_NATION"), nation.getName()));
+		return parseString(Translation.of("MSG_DEL_NATION", nation.getName()));
 	}
 
 	public static String[] getBuyResidentPlotMsg(String who, String owner, Double price) {
@@ -2686,7 +2686,7 @@ public class TownySettings {
 	
 	public static String getListNotEnoughPagesMsg(int max) {
 	 
-	    return parseString(String.format(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES"), max))[0];
+	    return parseString(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", max))[0];
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {

@@ -493,7 +493,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(msg);
 
 			} else {
-				msg = String.format(Translation.of("msg_err_invalid_property"), "'" + split[0] + "'");
+				msg = Translation.of("msg_err_invalid_property", "'" + split[0] + "'");
 				if (player != null)
 					TownyMessaging.sendErrorMsg(player, msg);
 				else
@@ -527,9 +527,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				Globalworld.setUsingDefault();
 				plugin.resetCache();
 				if (player != null)
-					TownyMessaging.sendMsg(player, String.format(Translation.of("msg_usedefault"), Globalworld.getName()));
+					TownyMessaging.sendMsg(player, Translation.of("msg_usedefault", Globalworld.getName()));
 				else
-					sender.sendMessage(String.format(Translation.of("msg_usedefault"), Globalworld.getName()));
+					sender.sendMessage(Translation.of("msg_usedefault", Globalworld.getName()));
 
 			} else if (split[0].equalsIgnoreCase("wildperm")) {
 
@@ -537,9 +537,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					// set default wildperm settings (/tw set wildperm)
 					Globalworld.setUsingDefault();
 					if (player != null)
-						TownyMessaging.sendMsg(player, String.format(Translation.of("msg_usedefault"), Globalworld.getName()));
+						TownyMessaging.sendMsg(player, Translation.of("msg_usedefault", Globalworld.getName()));
 					else
-						sender.sendMessage(String.format(Translation.of("msg_usedefault"), Globalworld.getName()));
+						sender.sendMessage(Translation.of("msg_usedefault", Globalworld.getName()));
 				} else
 					try {
 						List<String> perms = Arrays.asList(StringMgmt.remFirstArg(split));
@@ -582,7 +582,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 							sender.sendMessage(String.format(Translation.of("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreMaterials()));
 
 					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_invalid_input"), " on/off."));
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_input", " on/off."));
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildregen")) {
@@ -619,11 +619,11 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						else
 							sender.sendMessage(String.format(Translation.of("msg_set_wild_name"), Globalworld.getName(), split[1]));
 					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_invalid_input"), " on/off."));
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_input", " on/off."));
 					}
 			} else {
 				if (player != null)
-					TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_invalid_property"), "world"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "world"));
 				return;
 			}
 

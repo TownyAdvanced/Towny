@@ -939,7 +939,7 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 
 		if (to.getTownBlock().getTown().hasOutlaw(resident))
-			TownyMessaging.sendMsg(player, String.format(Translation.of("msg_you_are_an_outlaw_in_this_town"),to.getTownBlock().getTown()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_you_are_an_outlaw_in_this_town", to.getTownBlock().getTown()));
 	}
 
 

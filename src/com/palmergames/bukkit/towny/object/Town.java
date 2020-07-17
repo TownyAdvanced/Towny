@@ -529,7 +529,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = this.getHomeBlock().getCoord();
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(Translation.of("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					try {
 						nation.removeTown(this);
 					} catch (EmptyNationException e) {
@@ -539,7 +539,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				double distance;
 				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(Translation.of("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					try {
 						nation.removeTown(this);
 					} catch (EmptyNationException e) {
@@ -960,7 +960,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedTownMessage(this, String.format(Translation.of("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedTownMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}
@@ -1195,7 +1195,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			receivedinvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException(String.format(Translation.of("msg_err_town_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(Translation.of("msg_err_town_has_too_many_invites", this.getName()));
 		}
 	}
 

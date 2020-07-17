@@ -717,7 +717,7 @@ public class Towny extends JavaPlugin {
 		else if (s.equalsIgnoreCase("off"))
 			return false;
 		else
-			throw new Exception(String.format(Translation.of("msg_err_invalid_input"), " on/off."));
+			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
 	}
 
 	/**

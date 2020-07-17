@@ -92,7 +92,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 			if (!deletedTowns.isEmpty())
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_the_following_towns_were_deleted_for_having_0_claims"), String.join(", ", deletedTowns)));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_the_following_towns_were_deleted_for_having_0_claims", String.join(", ", deletedTowns)));
 		}
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -367,7 +367,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (lostPlots != null) {
 				if (lostPlots.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_couldnt_pay_plot_taxes"), ChatTools.list(lostPlots)));
+					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_couldnt_pay_plot_taxes", ChatTools.list(lostPlots)));
 				else
 					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(lostPlots, Translation.of("msg_couldnt_pay_plot_taxes_multiple")));
 			}
@@ -433,7 +433,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedTowns != null) {
 			if (removedTowns.size() == 1) 
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_bankrupt_town2"), removedTowns.get(0)));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_town2", removedTowns.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, Translation.of("msg_bankrupt_town_multiple")));
 		}	
@@ -488,7 +488,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		if (removedNations != null && !removedNations.isEmpty()) {
 			if (removedNations.size() == 1)
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_bankrupt_nation2"), removedNations.get(0)));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_nation2", removedNations.get(0)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, Translation.of("msg_bankrupt_nation_multiple")));
 		}

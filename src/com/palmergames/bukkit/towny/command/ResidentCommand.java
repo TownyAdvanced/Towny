@@ -213,7 +213,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resident, player));
 				});
 			} catch (NotRegisteredException x) {
-				throw new TownyException(String.format(Translation.of("msg_err_not_registered_1"), split[0]));
+				throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
 			}
 		}
 		
@@ -349,7 +349,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					}
 					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player)));
 				} catch (NotRegisteredException x) {
-					throw new TownyException(String.format(Translation.of("msg_err_not_registered_1"), split[0]));
+					throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
 				}
 
 			}
@@ -376,7 +376,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} catch (NotRegisteredException e) {
 			// unknown resident
-			throw new TownyException(String.format(Translation.of("msg_err_not_registered"), player.getName()));
+			throw new TownyException(Translation.of("msg_err_not_registered", player.getName()));
 		}
 
 		if (newSplit.length == 0) {
@@ -415,9 +415,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
 			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown()  && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 				if (CooldownTimerTask.hasCooldown(resident.getTown().getName(), CooldownType.PVP))
-					throw new TownyException(String.format(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
+					throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
-					throw new TownyException(String.format(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
+					throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
 			}			
 			perm.pvp = !perm.pvp;
@@ -535,7 +535,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				setMode(player, newSplit);
 			} else {
 
-				TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_invalid_property"), "town"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "town"));
 				return;
 
 			}
@@ -689,7 +689,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				if (p != null) {
 
-					TownyMessaging.sendMsg(p, String.format(Translation.of("msg_friend_add"), player.getName()));
+					TownyMessaging.sendMsg(p, Translation.of("msg_friend_add", player.getName()));
 
 				}
 
@@ -728,7 +728,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				msg.append(member.getName()).append(", ");
 				p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
-					TownyMessaging.sendMsg(p, String.format(Translation.of("msg_friend_remove"), player.getName()));
+					TownyMessaging.sendMsg(p, Translation.of("msg_friend_remove", player.getName()));
 			}
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg.append(Translation.of("msg_from_list"));

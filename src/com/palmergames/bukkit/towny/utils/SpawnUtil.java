@@ -65,8 +65,7 @@ public class SpawnUtil {
 		if (TownySettings.getSpawnCooldownTime() > 0
 				&& CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
 			throw new TownyException(
-					String.format(Translation.of("msg_err_cannot_spawn_x_seconds_remaining"),
-							CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
+					Translation.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
 
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
@@ -175,7 +174,7 @@ public class SpawnUtil {
 					if (playerNation == targetNation) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
 							throw new TownyException(
-									String.format(Translation.of("msg_err_ally_isnt_public"), town));
+									Translation.of("msg_err_ally_isnt_public", town));
 						else
 							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
 					} else if (targetNation.hasEnemy(playerNation)) {
@@ -184,7 +183,7 @@ public class SpawnUtil {
 					} else if (targetNation.hasAlly(playerNation)) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
 							throw new TownyException(
-									String.format(Translation.of("msg_err_ally_isnt_public"), town));
+									Translation.of("msg_err_ally_isnt_public", town));
 						else
 							townSpawnPermission = TownSpawnLevel.NATION_ALLY;
 					} else {
@@ -205,7 +204,7 @@ public class SpawnUtil {
 
 			// Prevent outlaws from spawning into towns they're considered an outlaw in.
 			if (!isTownyAdmin && town.hasOutlaw(resident))
-					throw new TownyException(String.format(Translation.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town"), town));
+					throw new TownyException(Translation.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town));
 
 			break;
 		case NATION:
@@ -333,20 +332,20 @@ public class SpawnUtil {
 			if (ignoreWarn) {
 				try {
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-						TownyMessaging.sendMsg(player, String.format(Translation.of("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(finalCost)));
+						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
 						initiateSpawn(player, finalLoc, isTownyAdmin);
 					}
 				} catch (EconomyException ignored) {
 				}
 			} else {
 			// Sending the confirmation.
-				String title = String.format(Translation.of("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(travelCost));
+				String title = Translation.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost));
 				Confirmation.runOnAccept(() -> {		
 					// Actual taking of monies here.
 					// Show message if we are using an Economy and are charging for spawn travel.
 					try {
 						if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-							TownyMessaging.sendMsg(player, String.format(Translation.of("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(finalCost)));
+							TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
 							initiateSpawn(player, finalLoc, isTownyAdmin);
 						}
 					} catch (EconomyException ignored) {
@@ -412,7 +411,7 @@ public class SpawnUtil {
 
 		if (TownyTimerHandler.isTeleportWarmupRunning()) {
 			// Use teleport warmup
-			TownyMessaging.sendMsg(player, String.format(Translation.of("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 		} else {
 			// Don't use teleport warmup

@@ -492,7 +492,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_del_nation"), e.getNation()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
@@ -1075,7 +1075,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
 			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_del_nation"), name));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
 			lock.unlock();
 		}
 	}

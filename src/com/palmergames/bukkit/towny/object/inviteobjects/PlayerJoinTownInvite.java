@@ -42,7 +42,7 @@ public class PlayerJoinTownInvite implements Invite {
 		Town town = getSender();
 		
 		TownCommand.townAddResident(town, resident);
-		TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_join_town"), resident.getName()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
 		
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
@@ -57,10 +57,10 @@ public class PlayerJoinTownInvite implements Invite {
 		town.deleteSentInvite(this);
 		
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_deny_invite"), resident.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_deny_invite", resident.getName()));
 			TownyMessaging.sendMsg(getReceiver(), Translation.of("successful_deny"));
 		} else {
-			TownyMessaging.sendMsg(resident, String.format(Translation.of("town_revoke_invite"), town.getName()));
+			TownyMessaging.sendMsg(resident, Translation.of("town_revoke_invite", town.getName()));
 		}
 	}
 }

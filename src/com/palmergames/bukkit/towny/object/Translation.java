@@ -79,7 +79,7 @@ public final class Translation {
 	 * @param args The arguments to format the localized string.   
 	 * @return The localized string.
 	 */
-	public static String of(String key, String... args) {
+	public static String of(String key, Object... args) {
 		return String.format(of(key), args);
 	}
 

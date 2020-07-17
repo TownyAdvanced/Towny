@@ -44,20 +44,20 @@ public class TownySpigotMessaging {
 	
 	public static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 				String secondline = "/towny:t invite accept " + invite.getSender().getName();
 				String thirdline = "/towny:t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = Translation.of("invitation_prefix") + String.format(Translation.of("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
 				String secondline = "/towny:n ally accept " + invite.getSender().getName();
 				String thirdline = "/towny:n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
@@ -142,9 +142,9 @@ public class TownySpigotMessaging {
 			
 			String spawnCost;
 
-			spawnCost = ChatColor.RESET + String.format(Translation.of("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 			
-			String hoverText = String.format(Translation.of("msg_click_spawn"), town) + "\n" + spawnCost;
+			String hoverText = Translation.of("msg_click_spawn", town) + "\n" + spawnCost;
 			
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
@@ -248,9 +248,9 @@ public class TownySpigotMessaging {
 
 			String spawnCost;
 
-			spawnCost = ChatColor.RESET + String.format(Translation.of("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
-			String hoverText = String.format(Translation.of("msg_click_spawn"), nation) + "\n" + spawnCost;
+			String hoverText = Translation.of("msg_click_spawn", nation) + "\n" + spawnCost;
 
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);

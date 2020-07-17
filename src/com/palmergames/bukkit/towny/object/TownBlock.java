@@ -313,7 +313,7 @@ public class TownBlock extends TownyObject {
 				
 				setType(type);
 			})
-				.setTitle(String.format(Translation.of("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)))
+				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 				.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 		// No payment required so just change the type.
 		} else {

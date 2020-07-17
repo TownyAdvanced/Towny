@@ -136,7 +136,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				Location loc = this.getTown().getSpawn();				
 				if (BukkitTools.isOnline(player.getName())) {
 					// Use teleport warmup
-					player.sendMessage(String.format(Translation.of("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(player, loc);
 				}
 				freeFromJail(player, index, false);
@@ -149,7 +149,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				Location loc = town.getJailSpawn(index);
 
 				// Use teleport warmup
-				player.sendMessage(String.format(Translation.of("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().jailTeleport(player, loc);
 
 				sendToJail(player, index, town);
@@ -157,7 +157,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 					if (days > 10000)
 						days = 10000;
 					this.setJailDays(days);
-					TownyMessaging.sendMsg(player, String.format(Translation.of("msg_you've_been_jailed_for_x_days"), days));
+					TownyMessaging.sendMsg(player, Translation.of("msg_you've_been_jailed_for_x_days", days));
 				}
 			} catch (TownyException e) {
 				e.printStackTrace();
@@ -747,7 +747,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			receivedinvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException(String.format(Translation.of("msg_err_player_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(Translation.of("msg_err_player_has_too_many_invites", this.getName()));
 		}
 	}
 

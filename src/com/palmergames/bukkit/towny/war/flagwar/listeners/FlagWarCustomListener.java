@@ -100,7 +100,7 @@ public class FlagWarCustomListener implements Listener {
 				if (defendingPlayer == null) {
 					if (attackingPlayer.getAccount().pay(FlagWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
-							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(Translation.of("msg_enemy_war_area_defended_greater_forces"), formattedMoney));
+							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
 						} catch (TownyException ignored) {
 						}
 				} else {

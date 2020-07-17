@@ -236,7 +236,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setNationSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
-			throw new TownyException(String.format(Translation.of("msg_cache_block_error_wild"), "set spawn"));
+			throw new TownyException(Translation.of("msg_cache_block_error_wild", "set spawn"));
 
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
 
@@ -446,8 +446,8 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_town_left_nation"), this.getName()));
-						TownyMessaging.sendPrefixedNationMessage(this, String.format(Translation.of("msg_nation_town_left"), town.getName()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
+						TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
 						this.remove(town);
 						it.remove();
 					}
@@ -528,7 +528,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedNationMessage(this, String.format(Translation.of("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}
@@ -629,7 +629,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
 			receivedinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(String.format(Translation.of("msg_err_nation_has_too_many_requests"),this.getName()));
+			throw new TooManyInvitesException(Translation.of("msg_err_nation_has_too_many_requests", this.getName()));
 		}
 	}
 

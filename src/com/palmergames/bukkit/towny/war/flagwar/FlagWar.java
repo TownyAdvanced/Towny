@@ -60,14 +60,14 @@ public class FlagWar {
 
 		// Check if area is already under attack.
 		if (currentData != null)
-			throw new Exception(String.format(Translation.of("msg_err_enemy_war_cell_already_under_attack"), currentData.getNameOfFlagOwner()));
+			throw new Exception(Translation.of("msg_err_enemy_war_cell_already_under_attack", currentData.getNameOfFlagOwner()));
 
 		String playerName = cell.getNameOfFlagOwner();
 
 		// Check that the user is under his limit of active warflags.
 		int futureActiveFlagCount = getNumActiveFlags(playerName) + 1;
 		if (futureActiveFlagCount > FlagWarConfig.getMaxActiveFlagsPerPerson())
-			throw new Exception(String.format(Translation.of("msg_err_enemy_war_reached_max_active_flags"), FlagWarConfig.getMaxActiveFlagsPerPerson()));
+			throw new Exception(Translation.of("msg_err_enemy_war_reached_max_active_flags", FlagWarConfig.getMaxActiveFlagsPerPerson()));
 
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
@@ -264,9 +264,9 @@ public class FlagWar {
 
 		// Check Peace
 		if (landOwnerNation.isNeutral())
-			throw new TownyException(String.format(Translation.of("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
+			throw new TownyException(Translation.of("msg_err_enemy_war_is_peaceful", landOwnerNation.getFormattedName()));
 		if (!townyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
-			throw new TownyException(String.format(Translation.of("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
+			throw new TownyException(Translation.of("msg_err_enemy_war_is_peaceful", attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online
 		checkIfTownHasMinOnlineForWar(landOwnerTown);
@@ -287,7 +287,7 @@ public class FlagWar {
 
 				// Check that the user can pay for the warflag.
 				if (balance < costToPlaceWarFlag)
-					throw new TownyException(String.format(Translation.of("msg_err_insuficient_funds_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
+					throw new TownyException(Translation.of("msg_err_insuficient_funds_warflag", TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 
 				// Check that the user can pay the fines from losing/winning all future warflags.
 				int activeFlagCount = getNumActiveFlags(attackingResident.getName());
@@ -352,7 +352,7 @@ public class FlagWar {
 			if (costToPlaceWarFlag > 0) {
 				try {
 					attackingResident.getAccount().pay(costToPlaceWarFlag, "War - WarFlag Cost");
-					TownyMessaging.sendResidentMessage(attackingResident, String.format(Translation.of("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
+					TownyMessaging.sendResidentMessage(attackingResident, Translation.of("msg_enemy_war_purchased_warflag", TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
