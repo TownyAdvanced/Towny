@@ -48,8 +48,8 @@ public class TownyFormatter {
 
 	public static void initialize() {}
 
-	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList owner, Player player) {
-		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, owner);
+	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
+		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 

@@ -38,7 +38,6 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
@@ -148,21 +147,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"help",
 		"list"
 	);
-	
-	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
-	private static final Comparator<Nation> BY_NAME = Comparator.comparing(TownyObject::getName);
-	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
-		try {
-			return Double.compare(n2.getAccount().getHoldingBalance(), n1.getAccount().getHoldingBalance());
-		} catch (EconomyException e) {
-			throw new RuntimeException("Failed to get balance. Aborting.");
-		}
-	};
-	private static final Comparator<Nation> BY_TOWNBLOCKS_CLAIMED = (n1, n2) -> {
-			return Double.compare(n2.getNumTownblocks(), n1.getNumTownblocks());
-	};
-	private static final Comparator<Nation> BY_NUM_TOWNS = (n1, n2) -> n2.getTowns().size() - n1.getTowns().size();
-	private static final Comparator<Nation> BY_NUM_ONLINE = (n1, n2) -> TownyAPI.getInstance().getOnlinePlayers(n2).size() - TownyAPI.getInstance().getOnlinePlayers(n1).size();
 
 	static {
 

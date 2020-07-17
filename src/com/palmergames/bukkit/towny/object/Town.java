@@ -100,11 +100,6 @@ public class Town extends Government implements TownBlockOwner {
 		}
 	}
 	
-	private void removeTownBlockMap(TownBlock townBlock) {
-		townBlocks.remove(townBlock.getWorldCoord());
-	}
-
-	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
 		if (hasTownBlock(worldCoord))
 			return townBlocks.get(worldCoord);
