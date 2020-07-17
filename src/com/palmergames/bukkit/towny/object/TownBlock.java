@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
 
 @SavedEntity(
@@ -311,7 +312,7 @@ public class TownBlock extends TownyObject {
 			Confirmation.runOnAccept(() -> {
 		
 				try {
-					resident.getAccount().pay(cost, String.format("Plot set to %s", type));
+					resident.getAccount().withdraw(cost, String.format("Plot set to %s", type));
 				} catch (EconomyException ignored) {
 				}					
 
@@ -408,15 +409,18 @@ public class TownBlock extends TownyObject {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TownBlock townBlock = (TownBlock) o;
+		return x == townBlock.x &&
+			z == townBlock.z &&
+			world.equals(townBlock.world);
+	}
 
-		if (obj == this)
-			return true;
-		if (!(obj instanceof TownBlock))
-			return false;
-
-		TownBlock o = (TownBlock) obj;
-		return this.getX() == o.getX() && this.getZ() == o.getZ() && this.getWorld() == o.getWorld();
+	@Override
+	public int hashCode() {
+		return Objects.hash(world, x, z);
 	}
 
 	public void clear() {

@@ -1,15 +1,16 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
+import com.palmergames.bukkit.towny.object.economy.adapter.ReserveEconomyAdapter;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
+import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
+import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import net.tnemc.core.Reserve;
-import net.tnemc.core.economy.EconomyAPI;
-import net.tnemc.core.economy.ExtendedEconomyAPI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -17,34 +18,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
  * Economy handler to interface with Register or Vault directly.
  * 
  * @author ElgarL
- * 
+ * @author Suneet Tipirneni (Siris)
  */
-@SuppressWarnings("deprecation")
 public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
-	
-	private static Economy vaultEconomy = null;
-
-	private static EconomyAPI reserveEconomy = null;
-
+	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
-
 	private static String version = "";
-
+	
 	public enum EcoType {
 		NONE, VAULT, RESERVE
 	}
+	
+	public static String getServerAccount() {
+		return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+	}
 
 	public static void initialize(Towny plugin) {
-
 		TownyEconomyHandler.plugin = plugin;
 	}
 
@@ -52,7 +49,6 @@ public class TownyEconomyHandler {
 	 * @return the economy type we have detected.
 	 */
 	public static EcoType getType() {
-
 		return Type;
 	}
 
@@ -62,7 +58,6 @@ public class TownyEconomyHandler {
 	 * @return true if we found one.
 	 */
 	public static boolean isActive() {
-
 		return (Type != EcoType.NONE);
 	}
 
@@ -70,17 +65,15 @@ public class TownyEconomyHandler {
 	 * @return The current economy providers version string
 	 */
 	public static String getVersion() {
-
 		return version;
 	}
 
 	/**
 	 * Internal function to set the version string.
 	 * 
-	 * @param version
+	 * @param version The version of this eco.
 	 */
 	private static void setVersion(String version) {
-
 		TownyEconomyHandler.version = version;
 	}
 
@@ -89,9 +82,9 @@ public class TownyEconomyHandler {
 	 * 
 	 * @return true if successful.
 	 */
-	public static Boolean setupEconomy() {
+	public static boolean setupEconomy() {
 
-		Plugin economyProvider = null;
+		Plugin economyProvider;
 
 		/*
 		 * Attempt to find Vault for Economy handling
@@ -102,12 +95,12 @@ public class TownyEconomyHandler {
 				/*
 				 * Flag as using Vault hooks
 				 */
-				vaultEconomy = vaultEcoProvider.getProvider();
+				economy = new VaultEconomyAdapter(vaultEcoProvider.getProvider());
 				setVersion(String.format("%s %s", vaultEcoProvider.getProvider().getName(), "via Vault" ));
 				Type = EcoType.VAULT;
 				return true;
 			}
-		} catch (NoClassDefFoundError ex) {
+		} catch (NoClassDefFoundError ignored) {
 		}
 
 		/*
@@ -118,8 +111,8 @@ public class TownyEconomyHandler {
 			/*
 			 * Flat as using Reserve Hooks.
 			 */
-			reserveEconomy = ((Reserve) economyProvider).economy();
-			setVersion(String.format("%s %s", reserveEconomy.name(), "via Reserve" ));
+			economy = new ReserveEconomyAdapter(((Reserve) economyProvider).economy());
+			setVersion(String.format("%s %s", ((Reserve) economyProvider).economy().name(), "via Reserve" ));
 			Type = EcoType.RESERVE;
 			return true;
 		}
@@ -130,54 +123,35 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	/**
-	 * Returns the relevant player's economy account
-	 * 
-	 * @param accountName - Name of the player's account (usually playername)
-	 * @return - The relevant player's economy account
-	 */
-	@SuppressWarnings("unused")
-	private static Object getEconomyAccount(String accountName) {
-
-		switch (Type) {
-
-		case RESERVE:
-			if(reserveEconomy instanceof ExtendedEconomyAPI)
-				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
-			break;
-		
-		default:
-			break;
-
-		}
-
-		return null;
-	}
 	
-	/**
-	 * Check if account exists
-	 * 
-	 * @param accountName the economy account to check
-	 * @return true if the account exists
-	 */
-	public static boolean hasEconomyAccount(String accountName) {
-
-		switch (Type) {
-
-		case RESERVE:
-		    return reserveEconomy.hasAccountDetail(accountName).success();
-			
-		case VAULT:
-			return vaultEconomy.hasAccount(accountName);
-			
-		default:
-			break;
-
-		}
-
-		return false;
-	}
+	// This was removed because:
+	// 1.) Only we should handle concrete account classes
+	// 2.) This was unused anyways.
+//	/**
+//	 * Returns the relevant player's economy account
+//	 * 
+//	 * @param accountName - Name of the player's account (usually playername)
+//	 * @return - The relevant player's economy account
+//	 */
+//	@SuppressWarnings("unused")
+//	private static Object getEconomyAccount(String accountName) {
+//
+//		switch (Type) {
+//
+//		case RESERVE:
+//			if(reserveEconomy instanceof ExtendedEconomyAPI)
+//				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
+//			break;
+//		
+//		default:
+//			break;
+//
+//		}
+//
+//		return null;
+//	}
 	
+	// We don't even use UUID's right now?
 	/**
 	 * Check if account exists
 	 * 
@@ -185,19 +159,19 @@ public class TownyEconomyHandler {
 	 * @return true if the account exists
 	 */
 	public static boolean hasEconomyAccount(UUID uniqueId) {
-		switch (Type) {
-
-		case RESERVE:
-		    return reserveEconomy.hasAccountDetail(uniqueId).success();
-			
-		case VAULT:
-			return vaultEconomy.hasAccount(Bukkit.getOfflinePlayer(uniqueId));
-			
-		default:
-			break;
-
-		}
-
+//		switch (Type) {
+//
+//		case RESERVE:
+//		    return reserveEconomy.hasAccountDetail(uniqueId).success();
+//			
+//		case VAULT:
+//			return vaultEconomy.hasAccount(Bukkit.getOfflinePlayer(uniqueId));
+//			
+//		default:
+//			break;
+//
+//		}
+//
 		return false;
 	}
 
@@ -207,32 +181,7 @@ public class TownyEconomyHandler {
 	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
-
-		try {
-			switch (Type) {
-
-			case RESERVE:
-				reserveEconomy.deleteAccountDetail(accountName);
-				break;
-				
-			case VAULT: // Attempt to zero the account as Vault provides no delete method.
-				if (!vaultEconomy.hasAccount(accountName))
-					vaultEconomy.createPlayerAccount(accountName);
-				
-				vaultEconomy.withdrawPlayer(accountName, (vaultEconomy.getBalance(accountName)));
-
-				return;
-				
-			default:
-				break;
-
-			}
-
-
-		} catch (NoClassDefFoundError e) {
-		}
-
-		return;
+		economy.deleteAccount(accountName);
 	}
 
 	/**
@@ -243,28 +192,8 @@ public class TownyEconomyHandler {
 	 * @return double containing the total in the account
 	 */
 	public static double getBalance(String accountName, World world) {
-
-		switch (Type) {
-
-		case RESERVE:
-			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
-				if(!reserveEconomy.createAccountDetail(accountName).success()) return 0.0;
-			}
-
-			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
-
-		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
-
-			return vaultEconomy.getBalance(accountName);
-			
-		default:
-			break;
-
-		}
-
-		return 0.0;
+		checkNewAccount(accountName);
+		return economy.getBalance(accountName, world);
 	}
 
 	/**
@@ -275,13 +204,24 @@ public class TownyEconomyHandler {
 	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
-	public static boolean hasEnough(String accountName, Double amount, World world) {
-
-		if (getBalance(accountName, world) >= amount)
-			return true;
-
-		return false;
+	public static boolean hasEnough(String accountName, double amount, World world) {
+		TownyMessaging.sendErrorMsg(getBalance(accountName, world) + "");
+		return getBalance(accountName, world) >= amount;
 	}
+	
+	private static boolean runPreChecks(Transaction transaction, String accountName) {
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
+		BukkitTools.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(transaction.getPlayer(), preEvent.getCancelMessage());
+			return false;
+		}
+
+		checkNewAccount(accountName);
+		return true;
+	}
+	
 
 	/**
 	 * Attempts to remove an amount from an account
@@ -291,42 +231,21 @@ public class TownyEconomyHandler {
 	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtract(String accountName, Double amount, World world) {
+	public static boolean subtract(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
-		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount.intValue());
+		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
-
-		BukkitTools.getPluginManager().callEvent(preEvent);
-
-		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+		
+		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
-
-		switch (Type) {
-
-		case RESERVE:
-			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
-				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
-			}
-			
+		
+		if (economy.subtract(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
-			return reserveEconomy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
-
-		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
-			
-			BukkitTools.getPluginManager().callEvent(event);
-			return vaultEconomy.withdrawPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
-			
-		default:
-			break;
-
+			return true;
 		}
-
+		
 		return false;
 	}
 
@@ -338,68 +257,27 @@ public class TownyEconomyHandler {
 	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean add(String accountName, Double amount, World world) {
+	public static boolean add(String accountName, double amount, World world) {
 
 		Player player = Bukkit.getServer().getPlayer(accountName);
-		Transaction transaction = new Transaction(TransactionType.ADD, player, amount.intValue());
+		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
-		BukkitTools.getPluginManager().callEvent(preEvent);
-		
-		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
 
-		switch (Type) {
-
-		case RESERVE:
-			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
-				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
-			}
-
+		if (economy.add(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
-			return reserveEconomy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
-
-		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
-			
-			Bukkit.getPluginManager().callEvent(event);
-			return vaultEconomy.depositPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
-			
-		default:
-			break;
-
+			return true;
 		}
 
 		return false;
 	}
 
-	public static boolean setBalance(String accountName, Double amount, World world) {
-
-		switch (Type) {
-
-		case RESERVE:
-			if (!reserveEconomy.hasAccountDetail(accountName).success()) {
-				if(!reserveEconomy.createAccountDetail(accountName).success()) return false;
-			}
-
-			return reserveEconomy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
-
-		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
-
-			return vaultEconomy.depositPlayer(accountName, (amount - vaultEconomy.getBalance(accountName))).type == EconomyResponse.ResponseType.SUCCESS;
-			
-		default:
-			break;
-
-		}
-
-		return false;
+	public static boolean setBalance(String accountName, double amount, World world) {
+		checkNewAccount(accountName);
+		return economy.setBalance(accountName, amount, world);
 	}
 
 	/**
@@ -410,27 +288,42 @@ public class TownyEconomyHandler {
 	 */
 	public static String getFormattedBalance(double balance) {
 
-		try {
-			switch (Type) {
-
-			case RESERVE:
-				return reserveEconomy.format(new BigDecimal(balance));
-
-			case VAULT:
-				return vaultEconomy.format(balance);
-				
-			default:
-				break;
-
-			}
-
-		} catch (Exception InvalidAPIFunction) {
+		String formattedBalance = economy.getFormattedBalance(balance);
+		if (formattedBalance != null) {
+			return formattedBalance;
 		}
 
 		return String.format("%.2f", balance);
 
 	}
 
+	/**
+	 * Adds money to the server account (used for towny closed economy.)
+	 * 
+	 * @param amount The amount to deposit.
+	 * @param world The world of the deposit.
+	 * @return A boolean indicating success.
+	 */
+	public static boolean addToServer(double amount, World world) {
+		return add(getServerAccount(), amount, world);
+	}
 
+	/**
+	 * Removes money to the server account (used for towny closed economy.)
+	 *
+	 * @param amount The amount to withdraw.
+	 * @param world The world of the withdraw.
+	 * @return A boolean indicating success.
+	 */
+	public static boolean subtractFromServer(double amount, World world) {
+		return subtract(getServerAccount(), amount, world);
+	}
+	
+	private static void checkNewAccount(String accountName) {
+		// Check if the account exists, if not create one.
+		if (!economy.hasAccount(accountName)) {
+			economy.newAccount(accountName);
+		}
+	}
 
 }

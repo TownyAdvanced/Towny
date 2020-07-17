@@ -260,7 +260,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles();
+		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		boolean mismatched = false;
 		int mismatchedCount = 0;
@@ -279,13 +279,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					world = getWorld(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
-				File[] townBlockFiles = worldFolder.listFiles();
+				File[] townBlockFiles = worldFolder.listFiles((file)->file.getName().endsWith(".data"));
 				int total = 0;
 				for (File townBlockFile : townBlockFiles) {
-					if (!townBlockFile.getName().endsWith(".data") || townBlockFile.getName().equalsIgnoreCase("deleted")) {
-						// File is not a townblock.data file or is the deleted folder.
-						continue;
-					}
 					String[] coords = townBlockFile.getName().split("_");
 					String[] size = coords[2].split("\\.");
 					// Do not load a townBlockFile if it does not use teh currently set town_block_size.
@@ -717,7 +713,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadTown(Town town) {
-		
 		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
@@ -769,9 +764,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
-				town.setTownBoard(keys.get("townBoard"));
-				
+
+				line = "townBoard";
+				town.setBoard(keys.get("townBoard"));
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -1020,6 +1016,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			} finally {
 				//saveTown(town);
@@ -1068,9 +1065,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("nationBoard");
 				if (line != null)
 					try {
-						nation.setNationBoard(line);
+						nation.setBoard(line);
 					} catch (Exception e) {
-						nation.setNationBoard("");
+						nation.setBoard("");
 					}
 
 				line = keys.get("mapColorHexCode");
@@ -1545,6 +1542,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							town = getTown(line.trim());
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + ", deleting " + path);
+							e.printStackTrace();
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
@@ -1762,7 +1760,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 //
 //		list.add(newLine);
 //		// Town Board
-//		list.add("townBoard=" + town.getTownBoard());
+//		list.add("townBoard=" + town.getBoard());
 //		// tag
 //		list.add("tag=" + town.getTag());
 //		// Town Protection
@@ -1893,7 +1891,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
 
-		list.add("nationBoard=" + nation.getNationBoard());
+		list.add("nationBoard=" + nation.getBoard());
 
 		list.add("mapColorHexCode=" + nation.getMapColorHexCode());
 
@@ -1916,9 +1914,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("registered=" + nation.getRegistered());
         
         // Spawn
-		if (nation.hasNationSpawn()) {
+		if (nation.hasSpawn()) {
 			try {
-				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + nation.getNationSpawn().getX() + "," + nation.getNationSpawn().getY() + "," + nation.getNationSpawn().getZ() + "," + nation.getNationSpawn().getPitch() + "," + nation.getNationSpawn().getYaw());
+				list.add("nationSpawn=" + nation.getSpawn().getWorld().getName() + "," + nation.getSpawn().getX() + "," + nation.getSpawn().getY() + "," + nation.getSpawn().getZ() + "," + nation.getSpawn().getPitch() + "," + nation.getSpawn().getYaw());
 			} catch (TownyException ignored) { }
 		}
 

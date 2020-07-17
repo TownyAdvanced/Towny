@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -50,6 +51,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -687,7 +689,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										//Make them pay, ignoring exception because we already know they can pay.
 										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
 											try {
-												town.getAccount().pay(TownySettings.getOutpostCost(), "Plot Set Outpost");
+												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
 											}
 										townyUniverse.getDatabaseHandler().save(town, townBlock);
@@ -1394,7 +1396,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 
 				// Don't add the group to the town data if it's already there.
-				if (town.hasObjectGroupName(newGroup.getName())) {
+				if (town.hasPlotGroupName(newGroup.getName())) {
 					newGroup = town.getPlotObjectGroupFromName(newGroup.getName());
 				}
 
@@ -1551,8 +1553,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 				
 				Runnable permHandler = () -> {
+
+					Iterator<TownBlock> townBlockIterator = plotGroup.getTownBlocks().iterator();
+					
+					if (!townBlockIterator.hasNext()) {
+						return;
+					}
+					
 					// Test the waters
-					TownBlock tb = plotGroup.getTownBlocks().get(0);
+					TownBlock tb = townBlockIterator.next();
 
 					// setTownBlockPermissions returns a towny permission change object
 					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, tb, StringMgmt.remArgs(split, 2));
@@ -1560,8 +1569,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (permChange != null) {
 
 						// A simple index loop starting from the second element
-						for (int i = 1; i < plotGroup.getTownBlocks().size(); ++i) {
-							tb = plotGroup.getTownBlocks().get(i);
+						while (townBlockIterator.hasNext()) {
+							tb = townBlockIterator.next();
 
 							tb.getPermissions().change(permChange);
 
@@ -1574,8 +1583,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						plugin.resetCache();
-
-						TownyPermission perm = plotGroup.getTownBlocks().get(0).getPermissions();
+						
+						TownyPermission perm = Iterables.getFirst(plotGroup.getTownBlocks(), null).getPermissions();
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));

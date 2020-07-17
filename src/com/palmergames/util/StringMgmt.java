@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import net.md_5.bungee.api.ChatColor;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -64,19 +65,18 @@ public class StringMgmt {
 		return str;
 	}
 
-	public static String join(List<?> arr) {
-
-		return join(arr, " ");
+	public static String join(Collection<?> args) {
+		return join(args, " ");
 	}
 
-	public static String join(List<?> arr, String separator) {
-
-		if (arr == null || arr.size() == 0)
-			return "";
-		String out = arr.get(0).toString();
-		for (int i = 1; i < arr.size(); i++)
-			out += separator + arr.get(i);
-		return out;
+	public static String join(Collection<?> args, String separator) {
+		StringJoiner joiner = new StringJoiner(separator);
+		
+		for (Object o : args) {
+			joiner.add(o.toString());
+		}
+		
+		return joiner.toString();
 	}
 
 	public static String join(Object[] arr) {
