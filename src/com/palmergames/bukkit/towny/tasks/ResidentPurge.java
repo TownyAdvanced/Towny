@@ -8,6 +8,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author ElgarL
@@ -43,17 +44,22 @@ public class ResidentPurge extends Thread {
 
 		message("Scanning for old residents...");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		for (Resident resident : new ArrayList<>(townyUniverse.getDataSource().getResidents())) {
+
+		Iterator<Resident> iterator = townyUniverse.getDataSource().getResidents().iterator();
+		
+		while (iterator.hasNext()) {
+			Resident resident = iterator.next();
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
 				if (townless && resident.hasTown()) {
 					continue;
 				}
 				count++;
 				message("Deleting resident: " + resident.getName());
+				iterator.remove();
 				townyUniverse.getDataSource().removeResident(resident);
 			}
 		}
-
+		
 		message("Resident purge complete: " + count + " deleted.");
 
 	}

@@ -399,9 +399,13 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	private void removeAllTowns() {
-
-		for (Town town : new ArrayList<>(towns))
+		Iterator<Town> iterator = towns.iterator();
+		
+		while (iterator.hasNext()) {
+			Town town = iterator.next();
+			iterator.remove();
 			remove(town);
+		}
 	}
 
 	public void setTaxes(double taxes) {

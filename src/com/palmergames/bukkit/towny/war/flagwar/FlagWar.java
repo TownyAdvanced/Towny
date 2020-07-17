@@ -26,6 +26,7 @@ import org.bukkit.event.Cancellable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,11 @@ public class FlagWar {
 
 	
 		try {
-			for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
+			Iterator<CellUnderAttack> iterator = cellsUnderAttack.values().iterator();
+			
+			while (iterator.hasNext()) {
+				CellUnderAttack cell = iterator.next();
+				iterator.remove();
 				attackCanceled(cell);
 			}
 		} catch (NullPointerException ignored) {

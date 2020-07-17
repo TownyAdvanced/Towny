@@ -624,7 +624,7 @@ public class TownyFormatter {
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
-							for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
+							for (TownBlock townBlock : resident.getTownBlocks()) {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
 

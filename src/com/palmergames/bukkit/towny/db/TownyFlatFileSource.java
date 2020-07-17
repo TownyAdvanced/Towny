@@ -1872,7 +1872,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Outpost Spawns
 		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
 		if (town.hasOutpostSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
+			for (Location spawn : town.getAllOutpostSpawns()) {
 				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
 			}
 		list.add(outpostArray.toString());
@@ -1880,7 +1880,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Jail Spawns
 		StringBuilder jailArray = new StringBuilder("jailspawns=");
 		if (town.hasJailSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
+			for (Location spawn : town.getAllJailSpawns()) {
 				jailArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
 			}
 		list.add(jailArray.toString());
@@ -2224,7 +2224,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveRegenList() {
         
         try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
-            for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
+            for (PlotBlockData plot : TownyRegenAPI.getPlotChunks().values())
                 fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + newLine);
             
         } catch (Exception e) {
@@ -2293,7 +2293,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
             
             // Push the plot height, then the plot block data types.
             fout.writeInt(plotChunk.getHeight());
-            for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+            for (String block : plotChunk.getBlockList()) {
                 fout.writeUTF(block);
             }
             

@@ -654,7 +654,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (isMayor(resident)) {
 
 			if (residents.size() > 1) {
-				for (Resident assistant : new ArrayList<>(getAssistants()))
+				for (Resident assistant : getAssistants())
 					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
 						try {
 							setMayor(assistant);
@@ -666,7 +666,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					}
 				if (isMayor(resident)) {
 					// Still mayor and no assistants so pick a resident to be mayor
-					for (Resident newMayor : new ArrayList<>(getResidents()))
+					for (Resident newMayor : getResidents())
 						if (newMayor != resident) {
 							try {
 								setMayor(newMayor);

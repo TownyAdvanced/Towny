@@ -39,6 +39,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -384,9 +385,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTownBlocks(Town town) {
-
-		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
+		// Use an iterator since we're modifying the backing collection.
+		Iterator<TownBlock> iterator = town.getTownBlocks().iterator();
+		
+		while (iterator.hasNext()) {
+			TownBlock townBlock = iterator.next();
+			iterator.remove();
 			removeTownBlock(townBlock);
+		}
 	}
 
 	@Override
@@ -543,7 +549,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
-		for (Nation toCheck : new ArrayList<>(universe.getNationsMap().values()))
+		for (Nation toCheck : universe.getNationsMap().values()) {
 			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
 				try {
 					if (toCheck.hasAlly(nation))
@@ -556,7 +562,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					e.printStackTrace();
 				}
 			}
-
+		}
+		
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
 

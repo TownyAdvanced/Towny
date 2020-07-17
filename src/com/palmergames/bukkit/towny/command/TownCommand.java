@@ -80,6 +80,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -2798,7 +2799,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		for (Resident newMember : new ArrayList<>(invited)) {
+		// Use an iterator since we're modifying the backing collection.
+		Iterator<Resident> iterator = invited.iterator();
+		
+		while (iterator.hasNext()) {
+			Resident newMember = iterator.next();
+
 			try {
 
 				TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
@@ -2808,30 +2814,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
 					return;
 				}
-				
+
 				// only add players with the right permissions.
 				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not
-																				// online
+					// online
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
-					invited.remove(newMember);
+					iterator.remove();
 				} else if (!townyUniverse.getPermissionSource().has(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
-					invited.remove(newMember);
+					iterator.remove();
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown() ));
-					invited.remove(newMember);
+					iterator.remove();
 				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_resident_doesnt_meet_invite_cooldown"), newMember));
-					invited.remove(newMember);
+					iterator.remove();
 				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
 					TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_unable_to_add_more_residents_without_nation"), TownySettings.getMaxNumResidentsWithoutNation()));
-					invited.remove(newMember);
+					iterator.remove();
 				} else {
 					town.addResidentCheck(newMember);
 					townInviteResident(name,town, newMember);
 				}
 			} catch (TownyException e) {
-				invited.remove(newMember);
+				iterator.remove();
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
 			if (town.hasOutlaw(newMember)) {
@@ -2928,19 +2934,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (sender instanceof Player)
 			player = (Player) sender;
 
-		for (Resident member : new ArrayList<>(kicking)) {
+		// Use an iterator since we're modifying the backing collection.
+		Iterator<Resident> iterator = kicking.iterator();
+		
+		while (iterator.hasNext()) {
+			Resident member = iterator.next();
+
 			if (resident == member) {
 				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_you_cannot_kick_yourself"));
-				kicking.remove(member);				
+				iterator.remove();
 			}
 			if (member.isMayor() || town.hasAssistant(member)) {
 				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_you_cannot_kick_this_resident"), member));
-				kicking.remove(member);
+				iterator.remove();
 			} else {
 				try {
 					townRemoveResident(town, member);
 				} catch (NotRegisteredException e) {
-					kicking.remove(member);
+					iterator.remove();
 				}
 			}
 		}

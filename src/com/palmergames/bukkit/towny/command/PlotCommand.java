@@ -50,6 +50,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -263,13 +264,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						double cost = 0;
 
+						// Use an iterator since we're modifying the backing collection.
+						Iterator<WorldCoord> iterator = selection.iterator();
+
 						// Remove any plots Not for sale (if not the mayor) and
 						// tally up costs.
-						for (WorldCoord worldCoord : new ArrayList<>(selection)) {
+						while (iterator.hasNext()) {
+							WorldCoord worldCoord = iterator.next();
+
 							try {
 								TownBlock block = worldCoord.getTownBlock();
 								double price = block.getPlotPrice();
-								
+
 								if (block.hasPlotObjectGroup()) {
 									// This block is part of a group, special tasks need to be done.
 									PlotGroup group = block.getPlotObjectGroup();
@@ -284,22 +290,22 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										// Execute the plot claim.
 										new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
 									})
-									.setTitle(String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue"))
-									.sendTo(player);
-									
+										.setTitle(String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue"))
+										.sendTo(player);
+
 									return true;
 								}
-								
+
 								// Check if a plot has a price.
 								if (price > -1)
 									cost += block.getPlotPrice();
 								else {
 									if (!block.getTown().isMayor(resident)) // ||
 										// worldCoord.getTownBlock().getTown().hasAssistant(resident))
-										selection.remove(worldCoord);
+										iterator.remove();
 								}
 							} catch (NotRegisteredException e) {
-								selection.remove(worldCoord);
+								iterator.remove();
 							}
 						}
 

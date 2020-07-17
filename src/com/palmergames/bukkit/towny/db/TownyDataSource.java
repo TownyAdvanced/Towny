@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -169,7 +170,7 @@ public abstract class TownyDataSource {
 		List<Resident> toRemove = new ArrayList<>();
 		TownySettings.setUUIDCount(0);
 		
-		for (Resident resident : new ArrayList<>(getResidents()))
+		for (Resident resident : getResidents())
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				toRemove.add(resident);

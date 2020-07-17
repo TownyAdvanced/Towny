@@ -1638,13 +1638,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             // Outpost Spawns
             StringBuilder outpostArray = new StringBuilder();
             if (town.hasOutpostSpawn())
-                for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
+                for (Location spawn : town.getAllOutpostSpawns()) {
                     outpostArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
                 }
             twn_hm.put("outpostSpawns", outpostArray.toString());
             StringBuilder jailArray = new StringBuilder();
             if (town.hasJailSpawn())
-                for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
+                for (Location spawn : town.getAllJailSpawns()) {
                     jailArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#").append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch()).append("#").append(spawn.getYaw()).append(";");
                 }
             twn_hm.put("jailSpawns", jailArray.toString());
@@ -1900,7 +1900,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		            
 		            // Push the plot height, then the plot block data types.
 		            fout.writeInt(plotChunk.getHeight());
-		            for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+		            for (String block : plotChunk.getBlockList()) {
 		                fout.writeUTF(block);
 		            }
 		            
@@ -2279,7 +2279,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public boolean saveRegenList() {
 
         try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
-            for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
+            for (PlotBlockData plot : TownyRegenAPI.getPlotChunks().values())
                 fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + System.getProperty("line.separator"));
             
         } catch (Exception e) {
