@@ -31,12 +31,12 @@ import java.util.List;
 public class PlotClaim extends Thread {
 
 	Towny plugin;
-	private volatile Player player;
-	private volatile Resident resident;
-	@SuppressWarnings("unused")
-	private volatile TownyWorld world;
-	private List<WorldCoord> selection;
-	private boolean claim, admin, groupClaim;
+	private final Player player;
+	private final Resident resident;
+	private final List<WorldCoord> selection;
+	private final boolean claim;
+	private final boolean admin;
+	private final boolean groupClaim;
 
 	/**
 	 * @param plugin reference to towny
@@ -126,7 +126,8 @@ public class PlotClaim extends Thread {
 
 				// Make sure this is a valid world (mainly when unclaiming).
 				try {
-					this.world = worldCoord.getTownyWorld();
+					@SuppressWarnings("unused")
+					TownyWorld world = worldCoord.getTownyWorld();
 				} catch (NotRegisteredException e) {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 					continue;

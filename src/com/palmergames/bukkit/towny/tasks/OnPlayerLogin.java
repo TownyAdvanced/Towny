@@ -62,10 +62,11 @@ public class OnPlayerLogin implements Runnable {
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUniqueIdentifier(player.getUniqueId());
+				TownySettings.incrementUUIDCount();
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
-						town.addResident(resident);
+						resident.setTown(town);
 						town.save();
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
@@ -92,8 +93,10 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-					if (!resident.hasUniqueIdentifier())
-						resident.setUniqueIdentifier(player.getUniqueId());
+				}
+				if (!resident.hasUniqueIdentifier()) {
+					resident.setUniqueIdentifier(player.getUniqueId());
+					TownySettings.incrementUUIDCount();
 				}
 				resident.save();
 				

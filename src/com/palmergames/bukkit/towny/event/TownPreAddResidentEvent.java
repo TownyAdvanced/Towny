@@ -10,9 +10,9 @@ import org.bukkit.event.HandlerList;
 public class TownPreAddResidentEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private String townName;
-	private Town town;
-	private Resident resident;
+	private final String townName;
+	private final Town town;
+	private final Resident resident;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 	

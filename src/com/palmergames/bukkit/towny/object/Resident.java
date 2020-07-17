@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -10,7 +11,9 @@ import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
+import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -34,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -365,12 +369,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		return friends;
 	}
 
-	public boolean removeFriend(Resident resident) throws NotRegisteredException {
+	public void removeFriend(Resident resident) {
 
 		if (hasFriend(resident))
-			return friends.remove(resident);
-		else
-			throw new NotRegisteredException();
+			friends.remove(resident);
 	}
 
 	public boolean hasFriend(Resident resident) {
@@ -387,25 +389,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void removeAllFriends() {
-
-		for (Resident resident : new ArrayList<>(friends))
-			try {
-				removeFriend(resident);
-			} catch (NotRegisteredException ignored) {}
-	}
-
-	public void clear() throws EmptyTownException {
-
-		removeAllFriends();
-		//setLastOnline(0);
-
-		if (hasTown())
-			try {
-				getTown().removeResident(this);
-				setTitle("");
-				setSurname("");
-				updatePerms();
-			} catch (NotRegisteredException ignored) {}
+		// Wipe the array.
+		friends.clear();
 	}
 
 	public void updatePerms() {

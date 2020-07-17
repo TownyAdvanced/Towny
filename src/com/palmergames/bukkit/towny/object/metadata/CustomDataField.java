@@ -3,9 +3,9 @@ package com.palmergames.bukkit.towny.object.metadata;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 
 public abstract class CustomDataField<T> {
-    private CustomDataFieldType type;
+    private final CustomDataFieldType type;
     private T value;
-    private String key;
+    private final String key;
     
     private String label;
     

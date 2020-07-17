@@ -10,8 +10,8 @@ public class PreNewTownEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	private Player player;
-	private String townName;
+	private final Player player;
+	private final String townName;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 	

@@ -24,10 +24,10 @@ import java.util.List;
 
 public class MobRemovalTimerTask extends TownyTimerTask {
 
-	private Server server;
+	private final Server server;
 	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
-	private boolean isRemovingKillerBunny;
+	private final boolean isRemovingKillerBunny;
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 

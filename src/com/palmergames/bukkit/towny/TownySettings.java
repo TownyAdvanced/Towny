@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -307,13 +308,11 @@ public class TownySettings {
 	}
 
 	private static String[] parseString(String str) {
-
 		return parseSingleLineString(str).split("@");
 	}
 
 	public static String parseSingleLineString(String str) {
-
-		return str.replaceAll("&", "\u00A7");
+		return NameUtil.translateColorCodes(str);
 	}
 	
 	public static SpawnLevel getSpawnLevel(ConfigNodes node)
@@ -382,7 +381,7 @@ public class TownySettings {
 			sendError(root.toLowerCase() + " from " + config.getString("language"));
 			return "";
 		}
-		return parseSingleLineString(data);
+		return StringMgmt.translateHexColors(parseSingleLineString(data));
 	}
 
 	public static String getConfigLang(ConfigNodes node) {
@@ -1007,6 +1006,11 @@ public class TownySettings {
 	public static String getSaveDatabase() {
 
 		return getString(ConfigNodes.PLUGIN_DATABASE_SAVE);
+	}
+
+	public static boolean isGatheringResidentUUIDS() {
+		
+		return getBoolean(ConfigNodes.PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS);
 	}
 
 	// SQL
@@ -2956,9 +2960,17 @@ public class TownySettings {
 		return "<50%";
 	}
 
+	public static int getUUIDCount() {
+		return uuidCount;
+	}
+	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
 		
+	}
+	
+	public static void incrementUUIDCount() {
+		uuidCount++;
 	}
 }
 

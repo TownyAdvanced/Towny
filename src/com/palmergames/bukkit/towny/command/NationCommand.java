@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -1322,7 +1321,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!town.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
-				Confirmation confirmation = new Confirmation(() -> {				
+				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
 						town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost");
@@ -1336,10 +1335,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_nation"), player.getName(), StringMgmt.remUnderscore(name)));
 
-				});
-				// Send confirmation.
-				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+					.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
+					.sendTo(player);
+				
 			// Or, it is free, so just make the nation.
 			} else {
 				newNation(name, town);
@@ -1403,17 +1402,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(remainingNation.getKing(), String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", ")));
 				}
 			}
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 				try {
 					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), nation, remainingNation));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
-			});
-			
-			// Send confirmation.
-			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(king.getName()), confirmation);
+			})
+			.sendTo(BukkitTools.getPlayerExact(king.getName()));
 		}
 	}
 
@@ -1434,7 +1431,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 			}
 
-			if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 			}
 			
@@ -1463,14 +1460,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = townyUniverse.getResident(player.getName());
 				Nation nation = resident.getTown().getNation();
-				Confirmation confirmation = new Confirmation(() -> {
+				Confirmation.runOnAccept(() -> {
 					TownyUniverse.getInstance().removeNation(nation);
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
-				});
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+				.sendTo(player);
 			} catch (NotRegisteredException ex) {
 				TownyMessaging.sendErrorMsg(player, ex.getMessage());
-				return;
 			}
 		}
 		else
@@ -1483,7 +1479,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
 			}
 	}
 
@@ -2327,8 +2322,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							
 							// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 							if (!removedTowns.isEmpty()) {
+								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
 								final Nation finalNation = nation;
-								Confirmation confirmation = new Confirmation(() -> {
+								Confirmation.runOnAccept(() -> {
 									
 									try {
 										finalNation.setCapital(newCapital);										
@@ -2338,12 +2334,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
-										return;
 									}
-								});
-								String title = String.format(TownySettings.getLangString("msg_warn_the_following_towns_will_be_removed_from_your_nation"), StringMgmt.join(removedTowns, ", "));
-								confirmation.setTitle(title);
-								ConfirmationHandler.sendConfirmation(player, confirmation);
+								})
+								.setTitle(title)
+								.sendTo(player);
 								
 							// No towns will be removed, skip the Confirmation.
 							} else {
@@ -2438,7 +2432,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 						final Nation finalNation = nation;
                     	final String name = split[1];
-				    	Confirmation confirmation = new Confirmation(() -> {
+				    	Confirmation.runOnAccept(() -> {
 							try {
 								finalNation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 							} catch (EconomyException ignored) {}
@@ -2447,9 +2441,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								nationRename(player, finalNation, name);
 							else
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
-				    	});
-				    	confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
-                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+				    	})
+				    	.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
+						.sendTo(player);
+				    	
                     } else {
 						if (!NameValidation.isBlacklistName(split[1]))
 							nationRename(player, nation, split[1]);
@@ -2628,7 +2623,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().pay(cost, "Peaceful Nation Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_peaceful"));
 
-					nation.setNeutral(choice);
+					nation.toggleNeutral(choice);
 
 					// send message depending on if using an economy and charging
 					// for peaceful
@@ -2640,11 +2635,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isNeutral
 							() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 				} catch (TownyException e) {
-					try {
-						nation.setNeutral(false);
-					} catch (TownyException e1) {
-						e1.printStackTrace();
-					}
+					nation.setNeutral(false);
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());

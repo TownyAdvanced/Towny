@@ -3,9 +3,9 @@ package com.palmergames.bukkit.towny.object;
 import org.bukkit.entity.Player;
 
 public class Transaction {
-	private TransactionType type;
-	private Player player;
-	private int amount;
+	private final TransactionType type;
+	private final Player player;
+	private final int amount;
 	
 	public Transaction(TransactionType type, Player player, int amount) {
 		this.type = type;

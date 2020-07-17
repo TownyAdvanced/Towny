@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -19,7 +20,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 	final String mayor = TownySettings.getLangString("mayor_sing");
 	final String king = TownySettings.getLangString("king_sing");
 	
-	private Towny plugin;
+	private final Towny plugin;
 
 	/**
 	 * Since we register the expansion inside our own plugin, we can simply use this
@@ -114,6 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		} catch (NotRegisteredException e) {
 			return null;
 		}
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		String town = "";
 		String nation = "";
 		String balance = "";
@@ -485,6 +487,32 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = res;
 			}
 			return tag;
+		case "town_prefix": // %townyadvanced_town_prefix%
+			try {
+				return resident.hasTown() ? TownySettings.getTownPrefix(resident.getTown()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "town_postfix": // %townyadvanced_town_postfix%
+			try {
+				return resident.hasTown() ? TownySettings.getTownPostfix(resident.getTown()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "nation_prefix": // %townyadvanced_nation_prefix%
+			try {
+				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "nation_postfix": // %townyadvanced_nation_postfix%
+			try {
+				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "player_jailed": // %townyadvanced_player_jailed%
+			return String.valueOf(resident.isJailed());
+		case "player_plot_type": // %townyadvanced_player_plot_type%
+			return townblock != null ? townblock.getType().toString() : "";
+		case "player_plot_owner": // %townyadvanced_player_plot_owner%
+			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 		default:
 			return null;
 		}

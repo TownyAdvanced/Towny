@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TownyCustomListener implements Listener {
 	private final Towny plugin;
-	private Map<Player, Integer> playerActionTasks = new HashMap<>();
+	private final Map<Player, Integer> playerActionTasks = new HashMap<>();
 
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
@@ -122,7 +122,7 @@ public class TownyCustomListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerCreateTown(NewTownEvent event) {
 		Town town = event.getTown();
-		Double upkeep = TownySettings.getTownUpkeepCost(town);
+		double upkeep = TownySettings.getTownUpkeepCost(town);
 		if (TownySettings.isTaxingDaily() && upkeep > 0) {
 			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
 			String time = TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime());

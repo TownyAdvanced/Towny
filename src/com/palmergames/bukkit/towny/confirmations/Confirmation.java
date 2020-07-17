@@ -1,38 +1,57 @@
 package com.palmergames.bukkit.towny.confirmations;
 
 /**
- * An object which stores information about confirmations.
+ * An object which stores information about confirmations. While this 
+ * object itself is immutable and threadsafe, async operations within
+ * its handlers may not be thus, use async judiciously.
  * 
  * @author Suneet Tipirneni (Siris)
  */
 public class Confirmation {
 	
-	private Runnable handler;
-	private String title;
-	private int duration = 20;
-	private int taskID;
-	
+	private final Runnable acceptHandler;
+	private final Runnable cancelHandler;
+	private final String title;
+	private final int duration;
+	private final boolean isAsync;
+
 	/**
-	 * Creates a new confirmation object.
-	 *
-	 * @param handler The handler to run after accepting the command.
+	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
+	 * 
+	 * @param acceptHandler The runnable to run on accepting the confirmation.
+	 * @return A new confirmation builder with the given accept handler.
 	 */
-	public Confirmation(Runnable handler) {
-		this.setHandler(handler);
+	public static ConfirmationBuilder runOnAccept(Runnable acceptHandler) {
+		ConfirmationBuilder builder = new ConfirmationBuilder();
+		builder.acceptHandler = acceptHandler;
+		return builder;
 	}
 
 	/**
-	 * Creates a new confirmation object.
-	 *
-	 * @param handler The handler to run after accepting the command.
-	 * @param title The title of the confirmation message.
-	 * @param duration The amount of time to allow for the confirmation to be processed.   
-	 *          
+	 * Creates a new {@link ConfirmationBuilder} with the given
+	 * accept handler.
+	 * 
+	 * @param acceptHandler The runnable to run when the confirmation is accepted.
+	 * @return A new builder with the given accept handler.
 	 */
-	public Confirmation(Runnable handler, String title, int duration) {
-		this(handler);
-		this.title = title;
-		this.duration = duration;
+	public static ConfirmationBuilder runOnAcceptAsync(Runnable acceptHandler) {
+		ConfirmationBuilder builder = new ConfirmationBuilder();
+		builder.acceptHandler = acceptHandler;
+		builder.runAsync = true;
+		return builder;
+	}
+
+	/**
+	 * Internal use only.
+	 * 
+	 * @param builder The builder to construct from.
+	 */
+	protected Confirmation(ConfirmationBuilder builder) {
+		this.acceptHandler = builder.acceptHandler;
+		this.cancelHandler = builder.cancelHandler;
+		this.title = builder.title;
+		this.duration = builder.duration;
+		this.isAsync = builder.runAsync;
 	}
 	
 	/**
@@ -41,17 +60,18 @@ public class Confirmation {
 	 * 
 	 * @return The handler
 	 */
-	public Runnable getHandler() {
-		return handler;
+	public Runnable getAcceptHandler() {
+		return acceptHandler;
 	}
 
 	/**
-	 * Sets the handler for when the confirmation is accepted.
+	 * Gets the handler that contains the code to run
+	 * on cancellation.
 	 * 
-	 * @param handler The handler to run when the command is accepted.
+	 * @return The handler.
 	 */
-	public void setHandler(Runnable handler) {
-		this.handler = handler;
+	public Runnable getCancelHandler() {
+		return cancelHandler;
 	}
 
 	/**
@@ -62,15 +82,7 @@ public class Confirmation {
 	public String getTitle() {
 		return title;
 	}
-
-	/**
-	 * Sets the title of the confirmation message.
-	 * 
-	 * @param title The title to change to.
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	
 
 	/**
 	 * Gets the duration (in seconds) of this confirmation.
@@ -82,19 +94,11 @@ public class Confirmation {
 	}
 
 	/**
-	 * Sets the duration (in seconds) of this confirmation.
-	 *
-	 * @param duration Duration in seconds.
+	 * Whether the handers of this confirmation will run async or not.
+	 * 
+	 * @return true if async, false otherwise.
 	 */
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-	
-	protected void setTaskID(int taskID) {
-		this.taskID = taskID;
-	}
-	
-	protected int getTaskID() {
-		return taskID;
+	public boolean isAsync() {
+		return isAsync;
 	}
 }

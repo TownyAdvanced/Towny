@@ -8,8 +8,8 @@ import org.bukkit.event.HandlerList;
 public class NationTagChangeEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private String newTag;
-    private Nation nation;
+    private final String newTag;
+    private final Nation nation;
 
     @Override
     public HandlerList getHandlers() {

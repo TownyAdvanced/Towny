@@ -20,7 +20,7 @@ public class CancelCommand extends BukkitCommand {
 			return true;
 		}
 		
-		ConfirmationHandler.cancelConfirmation(commandSender);
+		ConfirmationHandler.revokeConfirmation(commandSender);
 		return true;
 	}
 }
