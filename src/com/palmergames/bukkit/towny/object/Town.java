@@ -660,11 +660,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	private void remove(Resident resident) {
-
 		// Mayoral succession.
 		if (isMayor(resident)) {
 			if (residents.size() > 1) {
-				System.out.println("TownySettings.getOrderOfMayoralSuccession() = " + TownySettings.getOrderOfMayoralSuccession());
 				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
 					if (findNewMayor(rank)) {
 						break;
@@ -692,9 +690,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 */
 	private boolean findNewMayor(String rank) {
 		boolean found = false;
-		System.out.println("getRank(rank = " + rank + ") = " + getRank(rank));
 		for (Resident newMayor : new ArrayList<>(getRank(rank))) {
-			System.out.println("newMayor = " + newMayor);
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
 				try {
 					setMayor(newMayor);
@@ -705,7 +701,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					e.printStackTrace();
 					found = false;
 				}
-				System.out.println("mayor = " + mayor);
 			}
 		}
 		return found;
@@ -719,7 +714,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	private boolean findNewMayor() {
 		boolean found = false;
 		for (Resident newMayor : new ArrayList<>(getResidents())) {
-			System.out.println("newMayor = " + newMayor);
 			if (newMayor != mayor) {
 				try {
 					setMayor(newMayor);
@@ -730,7 +724,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 					e.printStackTrace();
 					found = false;
 				}
-				System.out.println("mayor = " + mayor);
 			}
 		}
 		return found;
