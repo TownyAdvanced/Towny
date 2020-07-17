@@ -167,6 +167,7 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(residents);
 	}
 
+	@Deprecated
 	public List<Resident> getAssistants() {
 
 	    return getRank("assistant");
