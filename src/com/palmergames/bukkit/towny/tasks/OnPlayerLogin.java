@@ -61,17 +61,17 @@ public class OnPlayerLogin implements Runnable {
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUUID(player.getUniqueId());
+				TownySettings.incrementUUIDCount();
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
-						town.addResident(resident);
+						resident.setTown(town);
 						universe.getDataSource().saveTown(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
 				}
 				
 				universe.getDataSource().saveResident(resident);
-				universe.getDataSource().saveResidentList();
 				
 			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
 				// Should never happen
@@ -92,8 +92,10 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-					if (!resident.hasUUID())
-						resident.setUUID(player.getUniqueId());
+				}
+				if (!resident.hasUUID()) {
+					resident.setUUID(player.getUniqueId());
+					TownySettings.incrementUUIDCount();
 				}
 				universe.getDataSource().saveResident(resident);
 				

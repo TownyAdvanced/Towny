@@ -40,8 +40,12 @@ public enum NationSpawnLevel {
 			null,
 			null);
 
-	private ConfigNodes isAllowingConfigNode, ecoPriceConfigNode;
-	private String permissionNode, notAllowedLangNode, notAllowedLangNodeWar, notAllowedLangNodePeace;
+	private final ConfigNodes isAllowingConfigNode;
+	private final ConfigNodes ecoPriceConfigNode;
+	private final String permissionNode;
+	private final String notAllowedLangNode;
+	private final String notAllowedLangNodeWar;
+	private final String notAllowedLangNodePeace;
 
 	NationSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
 

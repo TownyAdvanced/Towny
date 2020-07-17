@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.invites;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 
 /**
+ * An object that represents an invitation.
+ * 
  * @author Articdive
  */
 public interface Invite {
@@ -15,12 +17,12 @@ public interface Invite {
 	/**
 	 * @return - Resident, Town or Nation as a TownyEconomyObject.
 	 */
-	TownyInviteReceiver getReceiver();
+	InviteReceiver getReceiver();
 
 	/**
 	 * @return - Resident, Town or Nation as TownyEconomyObject.
 	 */
-	TownyInviteSender getSender();
+	InviteSender getSender();
 
 	/**
 	 * @throws TownyException - Sends errors back up to be processed by the caller.

@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 public class DeletePlayerEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private String playerName;
+    private final String playerName;
 
     @Override
     public HandlerList getHandlers() {

@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Allows objects to contain townblocks to be accessed/manipulated. 
@@ -9,21 +9,14 @@ import java.util.List;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockOwner extends Permissible {
+public interface TownBlockOwner extends Permissible, Nameable {
 
 	/**
-	 * Sets the townblocks
-	 * 
-	 * @param townBlocks the townblocks to set.
-	 */
-	void setTownblocks(List<TownBlock> townBlocks);
-
-	/**
-	 * Gets the townblocks.
+	 * Gets the unmodifiable collection of townblocks.
 	 * 
 	 * @return The townblocks this object contains.
 	 */
-	List<TownBlock> getTownBlocks();
+	Collection<TownBlock> getTownBlocks();
 
 	/**
 	 * Checks whether object has townblock or not.

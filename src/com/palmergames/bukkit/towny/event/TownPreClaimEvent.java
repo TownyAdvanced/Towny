@@ -16,9 +16,9 @@ import org.bukkit.event.HandlerList;
 public class TownPreClaimEvent extends Event implements Cancellable{
 
     private static final HandlerList handlers = new HandlerList();
-    private TownBlock townBlock;
-    private Town town;
-    private Player player;
+    private final TownBlock townBlock;
+    private final Town town;
+    private final Player player;
     private boolean isCancelled = false;
     private String cancelMessage = TownySettings.getLangString("msg_claim_error");
 

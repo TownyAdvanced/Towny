@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -66,7 +66,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
 								.stream()
 								.map(Invite::getSender)
-								.map(TownyInviteSender::getName)
+								.map(InviteSender::getName)
 								.collect(Collectors.toList()), args[1]);
 						} catch (TownyException ignored) {}
 				}

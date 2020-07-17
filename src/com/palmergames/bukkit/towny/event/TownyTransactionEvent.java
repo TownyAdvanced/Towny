@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 
 public class TownyTransactionEvent extends Event {
 	
-	private Transaction transaction;
+	private final Transaction transaction;
 	private static final HandlerList handlers = new HandlerList();
 	
 	public TownyTransactionEvent(Transaction transaction) {

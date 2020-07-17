@@ -9,7 +9,7 @@ public class PreDeleteNationEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	private String nationName;
+	private final String nationName;
 	private boolean isCancelled = false;
 	
 	public PreDeleteNationEvent(String nation) {

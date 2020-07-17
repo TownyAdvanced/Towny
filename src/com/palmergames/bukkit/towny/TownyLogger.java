@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +22,7 @@ public class TownyLogger {
 	private static final TownyLogger instance = new TownyLogger();
 	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
 	
+	@SuppressWarnings("deprecation") // Until Mojang updates their log4j included with minecraft we have to use the deprecated methods.
 	private TownyLogger() {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration config = ctx.getConfiguration();
@@ -122,7 +123,7 @@ public class TownyLogger {
 		ctx.updateLoggers();
 	}
 	
-	public void logMoneyTransaction(EconomyAccount a, double amount, EconomyAccount b, String reason) {
+	public void logMoneyTransaction(Account a, double amount, Account b, String reason) {
 		
 		String sender;
 		String receiver;

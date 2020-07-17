@@ -10,8 +10,9 @@ import com.palmergames.bukkit.towny.object.Town;
 public class TownPreRenameEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private String oldName, newName;
-	private Town town;
+	private final String oldName;
+	private final String newName;
+	private final Town town;
 	private boolean isCancelled = false;
 
 	@Override

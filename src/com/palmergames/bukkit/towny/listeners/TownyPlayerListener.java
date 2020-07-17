@@ -77,6 +77,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handle events for all Player related events
@@ -156,8 +158,14 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if (!TownySettings.isTownRespawning())
+		if (!TownySettings.isTownRespawning()) {
 			return;
+		}
+		
+		// If respawn anchors have higher precedence than town spawns, use them instead.
+		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
+			return;
+		}
 		
 		Location respawn;
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
@@ -971,6 +979,15 @@ public class TownyPlayerListener implements Listener {
 
 			}
 		}
+		if (TownySettings.getKeepInventoryInArenas()) {
+			if (!keepInventory) {
+				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
+				if (tb != null && tb.getType() == TownBlockType.ARENA) {
+					event.setKeepInventory(true);
+					event.getDrops().clear();
+				}
+			}
+		}
 	}
 
 
@@ -988,16 +1005,18 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
-			
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
-			if (title.contains("{townname}")) {
-				String replacement = title.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-				title = replacement;
-			}
-			if (subtitle.contains("{townname}")) {
-				String replacement = subtitle.replace("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-				subtitle = replacement;
+			
+			HashMap<String, Object> placeholders = new HashMap<>();
+			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
+			placeholders.put("{town_motd}", to.getTownBlock().getTown().getBoard());
+			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
+			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()).size());
+
+			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
+				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
+				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 		}
@@ -1068,14 +1087,19 @@ public class TownyPlayerListener implements Listener {
 	/**
 	 * Blocks jailed players using blacklisted commands.
 	 * @param event - PlayerCommandPreprocessEvent
-	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) {
 		if (plugin.isError()) {
 			return;
 		}
-		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
+		Resident resident = null;
+		try {
+			resident = TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName());
+		} catch (NotRegisteredException e) {
+			// More than likely another plugin using a fake player to run a command. 
+		} 
+		if (resident == null || !resident.isJailed())
 			return;
 				
 		String[] split = event.getMessage().substring(1).split(" ");
