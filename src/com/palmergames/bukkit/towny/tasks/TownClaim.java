@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -34,11 +33,13 @@ import java.util.List;
 public class TownClaim extends Thread {
 
 	Towny plugin;
-	private volatile Player player;
+	private final Player player;
 	private Location outpostLocation;
 	private volatile Town town;
-	private List<WorldCoord> selection;
-	private boolean outpost, claim, forced;
+	private final List<WorldCoord> selection;
+	private boolean outpost;
+	private final boolean claim;
+	private final boolean forced;
 
 	/**
 	 * @param plugin reference to towny
@@ -85,7 +86,7 @@ public class TownClaim extends Thread {
 
 					if (claim) {
 						// Claim						
-						townClaim(town, worldCoord, outpost);
+						townClaim(town, worldCoord, outpost, player);
 						// Reset so we only flag the first plot as an outpost.
 						outpost = false;
 					} else {
@@ -136,7 +137,7 @@ public class TownClaim extends Thread {
 			int townSize = town.getTownBlocks().size();
 			
 			// Send confirmation message,
-			Confirmation confirmation = new Confirmation(() -> { 
+			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
 				if (TownySettings.getClaimRefundPrice() > 0.0) {
 					try {
@@ -146,8 +147,8 @@ public class TownClaim extends Thread {
 						e.printStackTrace();
 					}
 				}
-			});
-			ConfirmationHandler.sendConfirmation(player, confirmation);
+			})
+			.sendTo(player);
 		}
 
 		if (!towns.isEmpty()) {
@@ -177,7 +178,7 @@ public class TownClaim extends Thread {
 		}
 	}
 
-	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost) throws TownyException {
+	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost, Player player) throws TownyException {
 
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
 				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), "some town"));
@@ -206,7 +207,7 @@ public class TownClaim extends Thread {
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 			
 			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
+			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
 				
 		}
 	}

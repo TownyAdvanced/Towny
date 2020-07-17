@@ -15,10 +15,10 @@ public class PlayerChangePlotEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	private Player player;
-	private WorldCoord from;
-	private WorldCoord to;
-	private PlayerMoveEvent moveEvent;
+	private final Player player;
+	private final WorldCoord from;
+	private final WorldCoord to;
+	private final PlayerMoveEvent moveEvent;
 	
 	@Override
     public HandlerList getHandlers() {

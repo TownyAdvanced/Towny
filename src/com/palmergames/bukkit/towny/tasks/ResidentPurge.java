@@ -15,10 +15,10 @@ import java.util.ArrayList;
  */
 public class ResidentPurge extends Thread {
 
-	Towny plugin;
-	private CommandSender sender = null;
-	long deleteTime;
-	boolean townless;
+	final Towny plugin;
+	private final CommandSender sender;
+	final long deleteTime;
+	final boolean townless;
 
 	/**
 	 * @param plugin reference to Towny
@@ -51,7 +51,6 @@ public class ResidentPurge extends Thread {
 				count++;
 				message("Deleting resident: " + resident.getName());
 				townyUniverse.getDataSource().removeResident(resident);
-				townyUniverse.getDataSource().removeResidentList(resident);
 			}
 		}
 

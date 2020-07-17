@@ -10,7 +10,7 @@ public class NewNationEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Nation nation;
+    private final Nation nation;
 
     @Override
     public HandlerList getHandlers() {

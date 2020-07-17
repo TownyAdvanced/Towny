@@ -14,8 +14,8 @@ import org.bukkit.event.HandlerList;
 public class PreDeleteTownEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	private String townName;
-	private Town town;
+	private final String townName;
+	private final Town town;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 

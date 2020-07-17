@@ -4719,3 +4719,43 @@ v0.92.0.11:
     - Closes #4144.
   - Add Asynchronous Backup To Speed up Load Times, courtesy of Siris with PR #4136.
   - Fix jail days being able to crash mysql databases, jail days now max out at 10000.
+  - Added 3 placeholders for entering-towns title/subtitle messages, courtesy of Yldales with PR #4153.
+    - Along with the original {townname} option you may now also use the following on the notification.titles.town_title and notification.titles.town_subtitle lines:
+    - {town_motd} : show the town's townboard.
+    - {town_residents} : show the number of residents of the town.
+    - {town_residents_online} : show the number of online residents (including npcs) of the town.
+0.96.2.4:
+  - Confirmation System QOL Improvements/Changes, courtesy of Siris with PR #4167.
+  - Add hex support to lang files, courtesy of Siris with PR #4161.
+  - Add resident to town claim event, courtesy of Siris with PR #4156.
+  - Add namespacing for commands run by clickable text, courtesy of Siris with PR #4147.
+  - New PlaceholderAPI placeholders, courtesy of Yldales with PR #4160.
+    - %townyadvanced_town_prefix%: Display the config-defined prefix of the player's town (ex: ruins, settlement, ...)
+    - %townyadvanced_town_postfix%: Display the config-defined postfix of the player's nation (ex: ruins, settlement, ...)
+    - %townyadvanced_nation_prefix%: Display the config-defined prefix of the player's town (ex: lands, realms, ...)
+    - %townyadvanced_nation_postfix%: Display the config-defined postfix of the player's nation (ex: lands, realms, ...)
+    - %townyadvanced_player_jailed%: Display true is the player is jailed, otherwise false.
+    - %townyadvanced_player_plot_type%: Display the townblock's type at the resident's location (ex: shop), or "" if none.
+    - %townyadvanced_player_plot_owner%: Display true if the resident is owning the townblock at his location.
+  - Change to flatfile database: removal of residents.txt
+    - Towny will no longer save a residents.txt file.
+    - Residents are loaded into memory from their files in the towny\data\residents\ folder.
+    - After the first run, the towny\data\residents.txt will be deleted.
+    - This will remove a cause lag when new players join the server and reduce the ability for safemode to occur.
+  - Change to database: resident lists no longer saved in townname.txt files.
+    - A resident's town is now only stored in their residentname.txt file.
+    - This removes a possible chance for safemode to occur.
+  - New GatherResidentUUID task.
+    - Towny will now pro-actively gather resident UUIDs for residents in a background task.
+    - As long as the server is not already at 100% and the config setting below is true Towny will gather a UUID every 2 seconds.
+    - Gathering begins 60 seconds after the server starts up.
+    - It first asks the playercache on your server and if that fails it will ask the MojangAPI.
+    - This will prepare your server for the day Towny switches to supporting UUIDs in the database.
+    - Big thanks to creatorfromhell for his MojangAPI util.
+  - New Config Option: plugin.database.gather_resident_uuids
+    - default: true
+    - When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.
+0.96.2.5:
+  - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
+  - Make fields/objects that don't change Immutable, courtesy of Siris with PR #4171.
+  - Fix HoverEvent deprecation and add adapter to for backwards compatibility, courtesy of Siris with PR #4173.

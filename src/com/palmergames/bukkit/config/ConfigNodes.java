@@ -673,6 +673,12 @@ public enum ConfigNodes {
 			"# Valid load and save types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
+	
+	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
+			"true",
+			"",
+			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
+			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
 
 	PLUGIN_DATABASE_SQL_HEADER(
 			"plugin.database.sql",
@@ -1013,7 +1019,12 @@ public enum ConfigNodes {
 			"",
 			"# Requires the above using_titles to be set to true.",
 			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
-			"# You may use colour codes &f, &c and so on."),	
+			"# You may use colour codes &f, &c and so on.",
+			"# For town_title and town_subtitle you may use: ",
+			"# {townname} - Name of the town.",
+			"# {town_motd} - Shows the townboard message.",
+			"# {town_residents} - Shows the number of residents in the town.",
+			"# {town_residents_online} - Shows the number of residents online currently."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
 			"",

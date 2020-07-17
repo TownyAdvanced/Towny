@@ -19,14 +19,12 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.naming.InvalidNameException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -76,7 +74,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups"
 		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "residents.txt",
 			dataFolderPath + File.separator + "towns.txt",
 			dataFolderPath + File.separator + "nations.txt",
 			dataFolderPath + File.separator + "worlds.txt",
@@ -349,28 +346,44 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
+		List<String> residents = new ArrayList<>();
 
+		// Build up a list of residents from any existing legacy residents.txt files.
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
 			
-			while ((line = fin.readLine()) != null) {
-				if (!line.equals("")) {
-					try {
-						newResident(line);
-					} catch (AlreadyRegisteredException e) {
-						TownyMessaging.sendDebugMsg("Duplicate resident '" + line + "' found in residents.txt, ignoring.");
-						continue;
-					}
-				}
-			}
-
-			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
-			e.printStackTrace();
-			return false;
-			
+			while ((line = fin.readLine()) != null && !line.equals(""))
+				residents.add(line);
+		} catch (Exception ignored) {
+			// No residents.txt any more.
 		}
+		File residentFolder = new File(dataFolderPath + File.separator + "residents");
+		File[] residentFiles = residentFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".txt"));
+		assert residentFiles != null;
+		for (File resident : residentFiles) {
+			// Don't load resident files if they weren't in the residents.txt file.
+			String name = resident.getName().replace(".txt", "");
+			if (residents.size() > 0 && !residents.contains(name)) {
+				TownyMessaging.sendDebugMsg("Removing " + resident.getName() + " because they are not found in the residents.txt.");
+				deleteFile(resident.getAbsolutePath());
+				continue;
+			}
+				
+			try {
+				newResident(name);
+			} catch (NotRegisteredException e) {
+				// Thrown if the resident name does not pass the filters.
+				e.printStackTrace();
+				return false;
+			} catch (AlreadyRegisteredException ignored) {
+				// Should not be possible in flatfile.
+			}			
+		}
+
+		if (residents.size() > 0)
+			deleteFile(dataFolderPath + File.separator + "residents.txt");
+
+		return true;
+			
 	}
 	
 	@Override
@@ -620,6 +633,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setJailTown(line);
 				
+				line = keys.get("town");
+				if (line != null)
+					resident.setTown(getTown(line));
+
 				line = keys.get("title");
 				if (line != null)
 					resident.setTitle(line);
@@ -628,10 +645,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setSurname(line);
 				
-				line = keys.get("town");
-				if (line != null)
-					resident.setTown(getTown(line));
-
 				try {
 					line = keys.get("town-ranks");
 					if (line != null)
@@ -689,27 +702,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileTown);
 
-				line = keys.get("residents");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
-							try {
-								Resident resident = getResident(token);
-								if (resident != null) {
-									try {
-										town.addResident(resident);
-									} catch (AlreadyRegisteredException e) {
-										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
-									}
-								}
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
-							}
-						}
-					}
-				}
+//				line = keys.get("residents");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						if (!token.isEmpty()) {
+//							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
+//							try {
+//								Resident resident = getResident(token);
+//								if (resident != null) {
+//									try {
+//										town.addResident(resident);
+//									} catch (AlreadyRegisteredException e) {
+//										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+//									}
+//								}
+//							} catch (NotRegisteredException e) {
+//								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
+//							}
+//						}
+//					}
+//				}
 				
 				line = keys.get("outlaws");
 				if (line != null) {
@@ -1647,33 +1660,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveResidentList() {
-
-		List<String> list = new ArrayList<>();
-
-		for (Resident resident : getResidents()) {
-
-			try {
-
-				if (!list.contains(resident.getName()))
-					list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
-
-			} catch (InvalidNameException e) {
-
-				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file:" + resident.getName());
-			}
-		}
-
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "residents.txt"));
-
-		return true;
-
-	}
-
-	@Override
 	public boolean saveTownList() {
 
 		List<String> list = new ArrayList<>();
@@ -1806,8 +1792,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Name
 		list.add("name=" + town.getName());
-		// Residents
-		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
+//		// Residents
+//		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
 		// Mayor
 		if (town.hasMayor())
 			list.add("mayor=" + town.getMayor().getName());

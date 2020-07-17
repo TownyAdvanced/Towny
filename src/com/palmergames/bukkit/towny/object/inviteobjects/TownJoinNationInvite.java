@@ -5,8 +5,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
@@ -15,37 +13,37 @@ import java.util.List;
 
 public class TownJoinNationInvite implements Invite {
 
-	public TownJoinNationInvite(String directsender, TownyInviteSender sender, TownyInviteReceiver receiver) {
-		this.directsender = directsender;
+	private final String directSender;
+	private final Town receiver;
+	private final Nation sender;
+
+	public TownJoinNationInvite(String directSender, Nation sender, Town receiver) {
+		this.directSender = directSender;
 		this.sender = sender;
 		this.receiver = receiver;
 	}
-
-	private String directsender;
-	private TownyInviteReceiver receiver;
-	private TownyInviteSender sender;
-
+	
 	@Override
 	public String getDirectSender() {
-		return directsender;
+		return directSender;
 	}
 
 	@Override
-	public TownyInviteReceiver getReceiver() {
+	public Town getReceiver() {
 		return receiver;
 	}
 
 	@Override
-	public TownyInviteSender getSender() {
+	public Nation getSender() {
 		return sender;
 	}
 
 	@Override
 	public void accept() throws TownyException {
-		Town town = (Town) getReceiver();
+		Town town = getReceiver();
 		List<Town> towns = new ArrayList<>();
 		towns.add(town);
-		Nation nation = (Nation) getSender();
+		Nation nation = getSender();
 		NationCommand.nationAdd(nation, towns);
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
@@ -54,8 +52,8 @@ public class TownJoinNationInvite implements Invite {
 
 	@Override
 	public void decline(boolean fromSender) {
-		Town town = (Town) getReceiver();
-		Nation nation = (Nation) getSender();
+		Town town = getReceiver();
+		Nation nation = getSender();
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 		if (!fromSender) {

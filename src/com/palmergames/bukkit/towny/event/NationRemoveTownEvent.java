@@ -11,8 +11,8 @@ public class NationRemoveTownEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Town town;
-    private Nation nation;
+    private final Town town;
+    private final Nation nation;
 
     @Override
     public HandlerList getHandlers() {
