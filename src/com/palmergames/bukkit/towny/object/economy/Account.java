@@ -43,7 +43,11 @@ public abstract class Account implements Nameable {
 		// central auditor.
 		observers.add(GLOBAL_OBSERVER);
 	}
-	
+
+	public World getWorld() {
+		return world;
+	}
+
 	// Template methods
 	protected abstract boolean addMoney(double amount);
 	protected abstract boolean subtractMoney(double amount);

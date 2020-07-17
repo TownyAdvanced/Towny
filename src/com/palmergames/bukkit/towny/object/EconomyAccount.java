@@ -17,30 +17,23 @@ import java.util.UUID;
  */
 public class EconomyAccount extends Account {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
-	private World world;
-	private String name;
 
 	protected EconomyAccount(String name) {
 		super(name);
 	}
 	
 	protected EconomyAccount(String name, World world) {
-		this(name);
-		this.world = world;
+		super(name, world);
 	}
 
 	@Override
 	protected boolean addMoney(double amount) {
-		return TownyEconomyHandler.add(getName(), amount, world);
+		return TownyEconomyHandler.add(getName(), amount, getWorld());
 	}
 
 	@Override
 	protected boolean subtractMoney(double amount) {
-		return TownyEconomyHandler.subtract(getName(), amount, world);
-	}
-
-	public World getWorld() {
-		return world;
+		return TownyEconomyHandler.subtract(getName(), amount, getWorld());
 	}
 
 }
