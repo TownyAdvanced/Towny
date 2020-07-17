@@ -4759,3 +4759,8 @@ v0.92.0.11:
   - Minor task cleanup, courtesy of silverwolfg11 with PR #4174.
   - Make fields/objects that don't change Immutable, courtesy of Siris with PR #4171.
   - Fix HoverEvent deprecation and add adapter to for backwards compatibility, courtesy of Siris with PR #4173.
+  - Fix nations not saving a true neutral status on flatfile databases.
+  - Fix load error on databases where neutral nations are present.
+  - Language files version bumped to 0.85.
+  - Fix incorrect message confirming /plot set reset.
+    - Closes #4179.

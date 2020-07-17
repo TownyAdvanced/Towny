@@ -456,18 +456,22 @@ public class Nation extends Government {
 		return removedTowns;
 	}	
 
-	public void setNeutral(boolean neutral) throws TownyException {
+	public void toggleNeutral(boolean neutral) throws TownyException {
 
 		if (!TownySettings.isDeclaringNeutral() && neutral)
 			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
 		else {
-			if (neutral) {
-				for (Resident resident : getResidents()) {
+			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
+				for (Resident resident : getResidents())
 					FlagWar.removeAttackerFlags(resident.getName());
-				}
-			}
-			this.neutral = neutral;
+			
+			setNeutral(neutral);
 		}
+	}
+	
+	public void setNeutral(boolean neutral) {
+
+		this.neutral = neutral;
 	}
 
 	public boolean isNeutral() {

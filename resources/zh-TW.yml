@@ -1,5 +1,5 @@
 name: Towny
-version: 0.84
+version: 0.85
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1139,3 +1139,6 @@ msg_town_set_tax_max_percent_amount: "%s已將最大稅率設定為%s。"
 
 # Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
+
+# Added in 0.85
+msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'

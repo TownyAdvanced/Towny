@@ -202,14 +202,10 @@ public class War {
 				if (warringNations.contains(nation))
 					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
 			} else if (!TownySettings.isDeclaringNeutral()) {
-				try {
-					nation.setNeutral(false);
-					add(nation);
-					if (warringNations.contains(nation))
-						TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
+				nation.setNeutral(false);
+				add(nation);
+				if (warringNations.contains(nation))
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 			}
 		}
 

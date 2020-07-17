@@ -2645,7 +2645,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_peaceful"));
 
-					nation.setNeutral(choice);
+					nation.toggleNeutral(choice);
 
 					// send message depending on if using an economy and charging
 					// for peaceful
@@ -2657,11 +2657,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isNeutral
 							() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 				} catch (TownyException e) {
-					try {
-						nation.setNeutral(false);
-					} catch (TownyException e1) {
-						e1.printStackTrace();
-					}
+					nation.setNeutral(false);
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
