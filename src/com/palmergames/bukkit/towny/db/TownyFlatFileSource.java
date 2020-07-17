@@ -248,7 +248,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles();
+		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		boolean mismatched = false;
 		int mismatchedCount = 0;
@@ -263,13 +263,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					world = getWorld(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
-				File[] townBlockFiles = worldFolder.listFiles();
+				File[] townBlockFiles = worldFolder.listFiles((file)->file.getName().endsWith(".data"));
 				int total = 0;
 				for (File townBlockFile : townBlockFiles) {
-					if (!townBlockFile.getName().endsWith(".data") || townBlockFile.getName().equalsIgnoreCase("deleted")) {
-						// File is not a townblock.data file or is the deleted folder.
-						continue;
-					}
 					String[] coords = townBlockFile.getName().split("_");
 					String[] size = coords[2].split("\\.");
 					// Do not load a townBlockFile if it does not use teh currently set town_block_size.
