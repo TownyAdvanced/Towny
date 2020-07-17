@@ -21,7 +21,7 @@ public class EconomyAccount extends Account {
 	private String name;
 
 	protected EconomyAccount(String name) {
-		this.name = name;
+		super(name);
 	}
 	
 	protected EconomyAccount(String name, World world) {
@@ -37,10 +37,6 @@ public class EconomyAccount extends Account {
 	@Override
 	protected boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
-	}
-
-	protected EconomyAccount(String name) {
-		super(name);
 	}
 
 	public World getWorld() {

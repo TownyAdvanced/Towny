@@ -19,6 +19,7 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A class which represents the structure of objects that
@@ -41,8 +42,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	protected double taxes = -1;
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
-	protected Government(String name) {
-		super(name);
+	protected Government(UUID uniqueIdentifier) {
+		super(uniqueIdentifier);
 	}
 
 	@Override

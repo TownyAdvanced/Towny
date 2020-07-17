@@ -75,7 +75,7 @@ public class Nation extends Government {
 	
 	public Nation(UUID uniqueIdentifier, String name) {
 		this(uniqueIdentifier);
-		super(name);
+		this.setName(name);
 	}
 
 	/**
@@ -108,8 +108,6 @@ public class Nation extends Government {
 		
 		// Save nation
 		save();
-
-		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, this));
 		
 		// Set defaults
 		setBoard(TownySettings.getNationDefaultBoard());
@@ -628,52 +626,6 @@ public class Nation extends Government {
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return Collections.unmodifiableList(out);
-	}
-
-	public long getRegistered() {
-		return registered;
-	}
-
-	public void setRegistered(long registered) {
-		this.registered = registered;
-	}
-
-	@Override
-	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
-	}
-
-	@Override
-	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
-			receivedinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
-		}
-	}
-
-	@Override
-	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
-	}
-
-	@Override
-	public List<Invite> getSentInvites() {
-		return sentinvites;
-	}
-
-	@Override
-	public void newSentInvite(Invite invite) throws TooManyInvitesException {
-		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
-			sentinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_invites"));
-		}
-	}
-
-	@Override
-	public void deleteSentInvite(Invite invite) {
-		sentinvites.remove(invite);
 	}
 	
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {

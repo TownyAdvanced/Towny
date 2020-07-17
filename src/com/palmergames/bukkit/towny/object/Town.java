@@ -91,19 +91,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public Town(UUID uniqueIdentifier, String name) {
-		super(uniqueIdentifier, name);
+		this(uniqueIdentifier);
+		this.setName(name);
 		// Set defaults.
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
-	}
-
-	/*
-	 * Not used but required to Implement TownBlockOwner (non-Javadoc)
-	 * @see com.palmergames.bukkit.towny.object.TownBlockOwner#setTownblocks(java.util.List)
-	 */
-	@Override
-	public void setTownblocks(List<TownBlock> townblocks) {
-		//this.townBlocks = townblocks;
 	}
 
 	@Override
