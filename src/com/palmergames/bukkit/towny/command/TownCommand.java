@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -2922,7 +2923,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		if (!town.hasResident(resident))
 			throw new NotRegisteredException();
-		resident.removeTown();
+
+		try {
+			town.removeResident(resident);
+		} catch (EmptyTownException e) {
+			e.printStackTrace();
+		}
 
 	}
 

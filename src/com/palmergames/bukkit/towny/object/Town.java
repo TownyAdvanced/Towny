@@ -746,7 +746,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				}
 				
 				// Town is not removing its last resident so be sure to save it.
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				save();
 			}
 		}
 		residents.remove(resident);

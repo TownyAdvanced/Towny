@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -308,7 +309,11 @@ public class DailyTimerTask extends TownyTimerTask {
 						removedResidents.add(resident.getName());
 						
 						// remove this resident from the town.
-						resident.removeTown();
+						try {
+							town.removeResident(resident);
+						} catch (EmptyTownException | NotRegisteredException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

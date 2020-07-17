@@ -40,10 +40,10 @@ public class GatherResidentUUIDTask implements Runnable {
 			return;
 		}
 		Resident resident = queue.poll();
-		if (resident.hasUUID())
+		if (resident.hasUniqueIdentifier())
 			return;
 		if (resident.isNPC())
-			resident.setUUID(UUID.randomUUID());
+			resident.setUniqueIdentifier(UUID.randomUUID());
 		UUID uuid = BukkitTools.getUUIDSafely(resident.getName());
 
 		if (uuid != null)
@@ -74,7 +74,7 @@ public class GatherResidentUUIDTask implements Runnable {
 	}
 
 	private void applyUUID(Resident resident, UUID uuid, String source) {
-		resident.setUUID(uuid);
+		resident.setUniqueIdentifier(uuid);
 		TownyUniverse.getInstance().getDataSource().saveResident(resident);
 		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");

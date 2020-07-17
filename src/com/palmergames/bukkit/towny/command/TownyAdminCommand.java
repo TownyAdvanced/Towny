@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1396,7 +1397,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
-						newMayor.setUUID(UUID.randomUUID());
+						newMayor.setUniqueIdentifier(UUID.randomUUID());
 
 						newMayor.save();
 
@@ -1416,7 +1417,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					town.setMayor(newMayor);
 
 					if (oldMayor.isNPC()) {
-						oldMayor.removeTown();
+						try {
+							town.removeResident(oldMayor);
+						} catch (EmptyTownException e) {
+							e.printStackTrace();
+						}
 						townyUniverse.removeResident(oldMayor);
 						// set upkeep again
 						town.setHasUpkeep(true);

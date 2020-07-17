@@ -436,12 +436,6 @@ public class TownyUniverse {
 		if (resident.hasTown()) {
 			try {
 				Town town = resident.getTown();
-				// Clear the resident (removes the resident from the town too)
-				try {
-					resident.clear();
-				} catch (EmptyTownException e) {
-					removeTown(town);
-				}
 			} catch (NotRegisteredException e1) {
 				// Should never get thrown
 				e1.printStackTrace();
@@ -449,14 +443,10 @@ public class TownyUniverse {
 		}
 
 		// Remove the resident from outlaws in different towns
-		try {
-			for (Town townOutlaw : towns.values()) {
-				if (townOutlaw.hasOutlaw(resident)) {
-					townOutlaw.removeOutlaw(resident);
-				}
+		for (Town townOutlaw : towns.values()) {
+			if (townOutlaw.hasOutlaw(resident)) {
+				townOutlaw.removeOutlaw(resident);
 			}
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
 		}
 
 		// This should be called at the end, but to keep legacy behavior call it here.
@@ -466,13 +456,9 @@ public class TownyUniverse {
 		for (Resident toCheck : residents.values()) {
 			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
 			if (toCheck.hasFriend(resident)) {
-				try {
-					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
-					toCheck.removeFriend(resident);
-					toCheck.save();
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
+				toCheck.removeFriend(resident);
+				toCheck.save();
 			}
 		}
 		// Delete the residents file.
@@ -675,12 +661,6 @@ public class TownyUniverse {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
-		}
-
-		try {
-			town.clear();
-		} catch (EmptyNationException ignored) {
-			// Will never get called
 		}
 		
 		// Remove residents

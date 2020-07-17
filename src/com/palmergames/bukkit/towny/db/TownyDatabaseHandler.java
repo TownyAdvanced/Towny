@@ -260,11 +260,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeResidentList(Resident resident) {
-		universe.removeResident(resident);
-	}
-
-	@Override
 	public void removeTown(Town town) {
 		universe.removeTown(town);
 	}
