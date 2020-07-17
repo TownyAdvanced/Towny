@@ -73,22 +73,25 @@ public class SiegeWarDeathController {
 				if (deadResidentTown.hasSiege()
 					&& deadResidentTown.getSiege().getStatus().isActive()
 					&& deadResidentTown.getSiege() == candidateSiege
-					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+						|| hasTownMilitaryRank(deadResident))
 				) {
 					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending own-town
 
 				} else if (deadResidentTown.hasNation()
-					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 					&& candidateSiege.getDefendingTown().hasNation()
 					&& candidateSiege.getStatus().isActive()
+					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getDefendingTown().getNation()
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getDefendingTown().getNation()))) {
 
 					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending another town
 
 				} else if (deadResidentTown.hasNation()
-					&& universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 					&& candidateSiege.getStatus().isActive()
+					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getAttackingNation() 
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getAttackingNation()))) {
 
@@ -147,4 +150,17 @@ public class SiegeWarDeathController {
 		}
 	}
 
+	//LP Glitch mitigation (TODO - remove this pattern by resolving on the lp config side)
+	private static boolean hasTownMilitaryRank(Resident resident) {
+		return resident.isMayor()
+			|| resident.getTownRanks().contains("guard")
+			|| resident.getTownRanks().contains("sheriff");
+	}
+
+	private static boolean hasNationMilitaryRank(Resident resident) {
+		return resident.isKing()
+			|| resident.getNationRanks().contains("soldier")
+			|| resident.getNationRanks().contains("captain")
+			|| resident.getNationRanks().contains("general");
+	}
 }
