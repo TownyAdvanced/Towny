@@ -16,8 +16,8 @@ public class TownAddResidentEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Resident resident;
-    private Town town;
+    private final Resident resident;
+    private final Town town;
 
     @Override
     public HandlerList getHandlers() {

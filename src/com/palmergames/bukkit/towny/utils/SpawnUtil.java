@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,7 +19,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -210,7 +210,7 @@ public class SpawnUtil {
 			break;
 		case NATION:
 			nation = (Nation) townyObject;
-			spawnLoc = nation.getNationSpawn();
+			spawnLoc = nation.getSpawn();
 
 			// Determine conditions
 			if (isTownyAdmin) {
@@ -284,7 +284,7 @@ public class SpawnUtil {
 
 		double travelCost = 0.0;
 		String spawnPermission = null;
-		EconomyAccount payee = null;
+		Account payee = null;
 		// Figure out costs, payee and spawnPermmission slug for money.csv log.
 		switch (spawnType) {
 		case RESIDENT:
@@ -325,7 +325,7 @@ public class SpawnUtil {
 		// Cost to spawn, prompt with confirmation unless ignoreWarn is true.
 		if (TownySettings.isUsingEconomy() && travelCost > 0 && !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
 			final double finalCost = travelCost;
-			final EconomyAccount finalPayee = payee;
+			final Account finalPayee = payee;
 			final String finalSpawnPerm = spawnPermission;
 			final Location finalLoc = spawnLoc;
 			
@@ -341,7 +341,7 @@ public class SpawnUtil {
 			} else {
 			// Sending the confirmation.
 				String title = String.format(TownySettings.getLangString("msg_spawn_warn"), TownyEconomyHandler.getFormattedBalance(travelCost));
-				Confirmation confirmation = new Confirmation(() -> {		
+				Confirmation.runOnAccept(() -> {		
 					// Actual taking of monies here.
 					// Show message if we are using an Economy and are charging for spawn travel.
 					try {
@@ -351,9 +351,9 @@ public class SpawnUtil {
 						}
 					} catch (EconomyException ignored) {
 					}
-				});
-				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				})
+				.setTitle(title)
+				.sendTo(player);
 			}
 		// No Cost so skip confirmation system.
 		} else {

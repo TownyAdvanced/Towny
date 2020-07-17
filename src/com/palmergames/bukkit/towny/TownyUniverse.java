@@ -58,7 +58,7 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -90,9 +90,6 @@ public class TownyUniverse {
 
         saveDbType = TownySettings.getSaveDatabase();
         loadDbType = TownySettings.getLoadDatabase();
-        
-        // Setup any defaults before we load the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         
@@ -368,7 +365,7 @@ public class TownyUniverse {
 		Town t = towns.get(townName);
 
 		if (t != null) {
-			return t.hasObjectGroupName(groupName);
+			return t.hasPlotGroupName(groupName);
 		}
 
 		return false;
@@ -384,7 +381,7 @@ public class TownyUniverse {
     	List<PlotGroup> groups = new ArrayList<>();
     	
 		for (Town town : towns.values()) {
-			if (town.hasObjectGroups()) {
+			if (town.hasPlotGroups()) {
 				groups.addAll(town.getPlotObjectGroups());
 			}
 		}
@@ -441,7 +438,7 @@ public class TownyUniverse {
 		PlotGroup newGroup = new PlotGroup(id, name, town);
 		
 		// Check if there is a duplicate
-		if (town.hasObjectGroupName(newGroup.getName())) {
+		if (town.hasPlotGroupName(newGroup.getName())) {
 			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
 			throw new AlreadyRegisteredException();
 		}

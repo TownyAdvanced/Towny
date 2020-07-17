@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 
-	private Server server;
+	private final Server server;
 
 	public HealthRegenTimerTask(Towny plugin, Server server) {
 

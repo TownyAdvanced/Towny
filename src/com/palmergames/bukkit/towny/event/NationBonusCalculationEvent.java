@@ -10,9 +10,9 @@ import org.bukkit.event.HandlerList;
  * Event called whenever nation bonus blocks are being fetched.
  */
 public class NationBonusCalculationEvent extends Event {
-	private static HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 	
-	private Nation nation;
+	private final Nation nation;
 	private int bonusBlocks;
 	
 	public NationBonusCalculationEvent(Nation nation, int bonusBlocks) {

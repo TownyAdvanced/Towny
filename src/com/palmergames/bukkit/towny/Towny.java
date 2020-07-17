@@ -105,7 +105,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -224,6 +224,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
@@ -245,6 +246,7 @@ public class Towny extends JavaPlugin {
 	public boolean load() {
 
 		checkCitizens();
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
@@ -270,6 +272,13 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
+		if (!TownySettings.getUUIDPercent().equals("100%")) {
+			if (TownySettings.isGatheringResidentUUIDS())
+				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
+		} else 
+			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
+		
 		resetCache();
 
 		return true;

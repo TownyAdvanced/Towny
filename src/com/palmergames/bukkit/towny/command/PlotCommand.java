@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -8,7 +9,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
@@ -51,6 +51,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -276,7 +277,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									PlotGroup group = block.getPlotObjectGroup();
 
 									// Add the confirmation for claiming a plot group.
-									Confirmation confirmation = new Confirmation(() -> {
+									Confirmation.runOnAccept(() -> {
 										ArrayList<WorldCoord> coords = new ArrayList<>();
 
 										// Get worldcoords from plot group.
@@ -284,11 +285,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 										// Execute the plot claim.
 										new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
-									});
-									
-									String title = String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
-									confirmation.setTitle(title);
-									ConfirmationHandler.sendConfirmation(player, confirmation);
+									})
+									.setTitle(String.format(TownySettings.getLangString("msg_plot_group_claim_confirmation"), group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + TownySettings.getLangString("are_you_sure_you_want_to_continue"))
+									.sendTo(player);
 									
 									return true;
 								}
@@ -322,12 +321,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (cost != 0) {
 							String title = String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost));
-							Confirmation confirmation = new Confirmation(() ->  {	
+							Confirmation.runOnAccept(() ->  {	
 								// Start the claim task
 								new PlotClaim(plugin, player, resident, selection, true, false, false).start();
-							});
-							confirmation.setTitle(title);
-							ConfirmationHandler.sendConfirmation(player, confirmation);
+							})
+							.setTitle(title)
+							.sendTo(player);
 						} else {
 							// Start the claim task
 							new PlotClaim(plugin, player, resident, selection, true, false, false).start();
@@ -428,15 +427,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								});
 								
 								// Create confirmation.
-								Confirmation confirmation = new Confirmation(() -> {
+								Confirmation.runOnAccept(() -> {
 									new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start();
-								});
-
-								String title = String.format(TownySettings.getLangString("msg_plot_group_unclaim_confirmation"), block.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
-								confirmation.setTitle(title);
-								ConfirmationHandler.sendConfirmation(player, confirmation);
+								})
+								.setTitle(String.format(TownySettings.getLangString("msg_plot_group_unclaim_confirmation"), block.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue"))
+								.sendTo(player);
+								
 								return true;
-
 							}
 
 						} else {
@@ -676,7 +673,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										throw new TownyException(TownySettings.getLangString("msg_err_cannot_afford_to_set_outpost"));
 									 
 									// Create a confirmation for setting outpost.
-									Confirmation confirmation = new Confirmation(() -> {
+									Confirmation.runOnAccept(() -> {
 										townBlock.setOutpost(true);
 										 
 										try {
@@ -689,19 +686,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										//Make them pay, ignoring exception because we already know they can pay.
 										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
 											try {
-												town.getAccount().pay(TownySettings.getOutpostCost(), "Plot Set Outpost");
+												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
 											}
 										townyUniverse.getDataSource().saveTown(town);
 										townyUniverse.getDataSource().saveTownBlock(townBlock);
 										TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
-									});
-									// Set title.
-									String title = String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-									confirmation.setTitle(title);
-	
-									// Send the confirmation.
-									ConfirmationHandler.sendConfirmation(player, confirmation);
+									})
+									.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
+									.sendTo(player);
 	
 								}
 								return true;
@@ -849,11 +842,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					perm.change(permChange);
 					townyUniverse.getDataSource().saveTownBlock(townBlock);
 
-					if (townBlockHolder instanceof Town)
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
-					else
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
-
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms_reset_single"));
 					// Reset all caches as this can affect everyone.
 					plugin.resetCache();
 
@@ -1405,7 +1394,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 
 				// Don't add the group to the town data if it's already there.
-				if (town.hasObjectGroupName(newGroup.getName())) {
+				if (town.hasPlotGroupName(newGroup.getName())) {
 					newGroup = town.getPlotObjectGroupFromName(newGroup.getName());
 				}
 
@@ -1524,15 +1513,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-			
-			Confirmation confirmation = new Confirmation(() -> {
+			String title = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			Confirmation.runOnAccept(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
-			});
-
-			String title = String.format(TownySettings.getLangString("msg_plot_group_toggle_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
-			confirmation.setTitle(title);
-			ConfirmationHandler.sendConfirmation(player, confirmation);
+			})
+			.setTitle(title)
+			.sendTo(player);
 			
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
@@ -1570,8 +1557,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
 				
 				Runnable permHandler = () -> {
+
+					Iterator<TownBlock> townBlockIterator = plotGroup.getTownBlocks().iterator();
+					
+					if (!townBlockIterator.hasNext()) {
+						return;
+					}
+					
 					// Test the waters
-					TownBlock tb = plotGroup.getTownBlocks().get(0);
+					TownBlock tb = townBlockIterator.next();
 
 					// setTownBlockPermissions returns a towny permission change object
 					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockHolder, tb, StringMgmt.remArgs(split, 2));
@@ -1579,8 +1573,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (permChange != null) {
 
 						// A simple index loop starting from the second element
-						for (int i = 1; i < plotGroup.getTownBlocks().size(); ++i) {
-							tb = plotGroup.getTownBlocks().get(i);
+						while (townBlockIterator.hasNext()) {
+							tb = townBlockIterator.next();
 
 							tb.getPermissions().change(permChange);
 
@@ -1593,8 +1587,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						plugin.resetCache();
-
-						TownyPermission perm = plotGroup.getTownBlocks().get(0).getPermissions();
+						
+						TownyPermission perm = Iterables.getFirst(plotGroup.getTownBlocks(), null).getPermissions();
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockHolder instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
@@ -1602,12 +1596,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 				};
 
-				// Create confirmation.
-				Confirmation confirmation = new Confirmation(permHandler);
-				
 				String title = String.format(TownySettings.getLangString("msg_plot_group_set_perm_confirmation"), townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + TownySettings.getLangString("are_you_sure_you_want_to_continue");
-				confirmation.setTitle(title);
-				ConfirmationHandler.sendConfirmation(player, confirmation);
+				// Create confirmation.
+				Confirmation.runOnAccept(permHandler)
+					.setTitle(title)
+					.sendTo(player);
 				
 				return true;
 			}

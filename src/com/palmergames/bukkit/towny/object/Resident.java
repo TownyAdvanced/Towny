@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -13,8 +16,9 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -27,10 +31,13 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockHolder {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockHolder {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -47,15 +54,15 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
-	private List<String> modes = new ArrayList<>();
+	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
-	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
 
-	private List<String> townRanks = new ArrayList<>();
-	private List<String> nationRanks = new ArrayList<>();
+	private final List<String> townRanks = new ArrayList<>();
+	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
 		super(name);
@@ -150,6 +157,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 				sendToJail(player, index, town);
 				if (days > 0) {
+					if (days > 10000)
+						days = 10000;
 					this.setJailDays(days);
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
 				}
@@ -308,24 +317,80 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
 
-		if (town == null) {
-			this.town = null;
-			setTitle("");
-			setSurname("");
-			updatePerms();
-			return;
-		}
-
 		if (this.town == town)
 			return;
+
+		Towny.getPlugin().deleteCache(this.getName());
+		setTitle("");
+		setSurname("");
+		updatePerms();
+		
+
+		if (town == null) {
+			this.town = null;
+			return;
+		}
 
 		if (hasTown())
 			throw new AlreadyRegisteredException();
 
 		this.town = town;
-		setTitle("");
-		setSurname("");
-		updatePerms();
+		town.addResident(this);
+		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+	}
+	
+	public void removeTown() {
+		
+		if (!hasTown())
+			return;
+
+		Town town = this.town;
+		
+		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
+		try {
+			
+			town.removeResident(this);
+			
+		} catch (NotRegisteredException e1) {
+			e1.printStackTrace();
+		} catch (EmptyTownException e1) {
+			TownyUniverse.getInstance().getDataSource().removeTown(town);
+		}
+
+		// Use an iterator to be able to keep track of element modifications.
+		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
+		
+		while (townBlockIterator.hasNext()) {
+			TownBlock townBlock = townBlockIterator.next();
+
+			// Do not remove Embassy plots
+			if (townBlock.getType() != TownBlockType.EMBASSY) {
+				
+				// Make sure the element is removed from the iterator, to 
+				// prevent concurrent modification exceptions.
+				townBlockIterator.remove();
+				townBlock.setResident(null);
+				
+				try {
+					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+
+				// Set the plot permissions to mirror the towns.
+				townBlock.setType(townBlock.getType());
+			}
+		}
+		
+		try {
+			setTown(null);
+			
+		} catch (AlreadyRegisteredException ignored) {
+			// It cannot reach the point in the code at which the exception can be thrown.
+		}
+		
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	public void setFriends(List<Resident> newFriends) {
@@ -334,16 +399,13 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<Resident> getFriends() {
-
-		return friends;
+		return Collections.unmodifiableList(friends);
 	}
 
-	public boolean removeFriend(Resident resident) throws NotRegisteredException {
+	public void removeFriend(Resident resident) {
 
 		if (hasFriend(resident))
-			return friends.remove(resident);
-		else
-			throw new NotRegisteredException();
+			friends.remove(resident);
 	}
 
 	public boolean hasFriend(Resident resident) {
@@ -360,25 +422,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public void removeAllFriends() {
-
-		for (Resident resident : new ArrayList<>(friends))
-			try {
-				removeFriend(resident);
-			} catch (NotRegisteredException ignored) {}
-	}
-
-	public void clear() throws EmptyTownException {
-
-		removeAllFriends();
-		//setLastOnline(0);
-
-		if (hasTown())
-			try {
-				town.removeResident(this);
-				setTitle("");
-				setSurname("");
-				updatePerms();
-			} catch (NotRegisteredException ignored) {}
+		// Wipe the array.
+		friends.clear();
 	}
 
 	public void updatePerms() {
@@ -480,12 +525,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 //	}	
 	
 	public List<String> getModes() {
-
-		return this.modes;
+		return Collections.unmodifiableList(modes);
 	}
 	
 	public boolean hasMode(String mode) {
-
 		return this.modes.contains(mode.toLowerCase());
 	}
 	
@@ -587,7 +630,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<String> getTownRanks() {
-		return townRanks;
+		return Collections.unmodifiableList(townRanks);
 	}
 	
 	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change. 
@@ -649,7 +692,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<String> getNationRanks() {
-		return nationRanks;
+		return Collections.unmodifiableList(nationRanks);
 	}
 
 	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change.
@@ -694,14 +737,14 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
+		return Collections.unmodifiableList(receivedInvites);
 	}
 
 	@Override
 	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
+		if (receivedInvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
 			// We use 9 because if it is = 9 it adds the tenth
-			receivedinvites.add(invite);
+			receivedInvites.add(invite);
 
 		} else {
 			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
@@ -710,7 +753,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
+		receivedInvites.remove(invite);
 	}
 
 	public void addMetaData(CustomDataField md) {
@@ -726,7 +769,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
+	public Account getAccount() {
 		if (account == null) {
 
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);
@@ -791,14 +834,13 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			return getTitle() + " " + getName();
 	}
 
-	@Override
-	public void setTownblocks(List<TownBlock> townBlocks) {
-		this.townBlocks = townBlocks;
+	public void setTownblocks(Collection<TownBlock> townBlocks) {
+		this.townBlocks = new ArrayList<>(townBlocks);
 	}
 
 	@Override
-	public List<TownBlock> getTownBlocks() {
-		return townBlocks;
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks);
 	}
 
 	@Override

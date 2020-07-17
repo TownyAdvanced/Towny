@@ -69,7 +69,7 @@ public class TownyAPI {
         try {
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             Nation nation = resident.getTown().getNation();
-            return nation.getNationSpawn();
+            return nation.getSpawn();
         } catch (TownyException x) {
             return null;
         }
@@ -129,41 +129,6 @@ public class TownyAPI {
         }
         return players;
     }
-    
-    /**
-     * Gets all online {@link Player}s for a specific {@link Town}.
-     *
-     * @param town {@link Town} of which you want all the online {@link Player}s.
-     * @return {@link List} of all online {@link Player}s in the specified {@link Town}.
-     */
-    public List<Player> getOnlinePlayers(Town town) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        for (Player player : BukkitTools.getOnlinePlayers()) {
-            if (player != null) {
-                if (town.hasResident(player.getName())) {
-                    players.add(player);
-                }
-            }
-        }
-        return players;
-    }
-    
-    /**
-     * Gets all online {@link Player}s for a specific {@link Nation}.
-     *
-     * @param nation {@link Nation} of which you want all the online {@link Player}s.
-     * @return {@link List} of all online {@link Player}s in the specified {@link Nation}.
-     */
-    public List<Player> getOnlinePlayers(Nation nation) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        for (Town town : nation.getTowns()) {
-            players.addAll(getOnlinePlayers(town));
-        }
-        return players;
-    }
-    
     
     /** 
      * Gets all online {@link Player}s for a specific {@link Nation}s alliance.

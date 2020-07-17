@@ -14,7 +14,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 		PVP(TownySettings.getPVPCoolDownTime()),
 		TELEPORT(TownySettings.getSpawnCooldownTime());
 		
-		private int seconds;
+		private final int seconds;
 		
 		private int getSeconds() {
 			return seconds;
