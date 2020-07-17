@@ -63,12 +63,12 @@ public enum NationSpawnLevel {
 			boolean war = TownyAPI.getInstance().isWarTime();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
+				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
 			else if(level == NSpawnLevel.PEACE && war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodePeace));
+				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
-			throw new TownyException(TownySettings.getLangString(notAllowedLangNode));
+			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 
