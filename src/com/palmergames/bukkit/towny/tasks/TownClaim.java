@@ -112,7 +112,7 @@ public class TownClaim extends Thread {
 		
 			if (!claim && TownySettings.getClaimRefundPrice() > 0.0) {
 				try {
-					town.getAccount().collect(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
+					town.getAccount().deposit(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
 					TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
 				} catch (EconomyException e) {
 					e.printStackTrace();
@@ -142,7 +142,7 @@ public class TownClaim extends Thread {
 				TownClaim.townUnclaimAll(plugin, town);
 				if (TownySettings.getClaimRefundPrice() > 0.0) {
 					try {
-						town.getAccount().collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
+						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
 						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
 					} catch (EconomyException e) {
 						e.printStackTrace();

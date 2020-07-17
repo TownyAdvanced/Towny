@@ -83,7 +83,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			teleportQueue.remove(resident);
 			if ((resident.getTeleportCost() != 0) && (TownySettings.isUsingEconomy())) {
 				try {
-					resident.getAccount().collect(resident.getTeleportCost(), Translation.of("msg_cost_spawn_refund"));
+					resident.getAccount().deposit(resident.getTeleportCost(), Translation.of("msg_cost_spawn_refund"));
 					resident.setTeleportCost(0);
 					TownyMessaging.sendResidentMessage(resident, Translation.of("msg_cost_spawn_refund"));
 				} catch (EconomyException e) {

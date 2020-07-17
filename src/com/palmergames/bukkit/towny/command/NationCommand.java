@@ -27,10 +27,11 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
-import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -40,6 +41,8 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
+import com.palmergames.bukkit.towny.object.comparators.NationComparators;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -145,21 +148,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"help",
 		"list"
 	);
-	
-	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
-	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
-	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
-		try {
-			return Double.compare(n2.getAccount().getHoldingBalance(), n1.getAccount().getHoldingBalance());
-		} catch (EconomyException e) {
-			throw new RuntimeException("Failed to get balance. Aborting.");
-		}
-	};
-	private static final Comparator<Nation> BY_TOWNBLOCKS_CLAIMED = (n1, n2) -> {
-			return Double.compare(n2.getNumTownblocks(), n1.getNumTownblocks());
-	};
-	private static final Comparator<Nation> BY_NUM_TOWNS = (n1, n2) -> n2.getTowns().size() - n1.getTowns().size();
-	private static final Comparator<Nation> BY_NUM_ONLINE = (n1, n2) -> TownyAPI.getInstance().getOnlinePlayers(n2).size() - TownyAPI.getInstance().getOnlinePlayers(n1).size();
 
 	static {
 
@@ -267,7 +255,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 											// Get names of sent invites
 											.stream()
 											.map(Invite::getReceiver)
-											.map(TownyInviteReceiver::getName)
+											.map(InviteReceiver::getName)
 											// Collect sent invite names and check with the last arg without the hyphen
 											.collect(Collectors.toList()), args[args.length - 1].substring(1))
 											// Add the hyphen back to the beginning
@@ -291,7 +279,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 									return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getReceivedInvites()
 									.stream()
 									.map(Invite::getSender)
-									.map(TownyInviteSender::getName)
+									.map(InviteSender::getName)
 									.collect(Collectors.toList()), args[args.length - 1]);
 								} catch (TownyException ignore) {}
 						}
@@ -1128,8 +1116,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			if (!resident.getAccount().payTo(amount, nation, "Nation Deposit"))
-				throw new TownyException(Translation.of("msg_insuf_funds"));
+			// Deposit into bank.
+			nation.depositToBank(resident, amount);
 
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
@@ -1146,7 +1134,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param split  - Current command arguments.
 	 * @throws TownyException - Thrown when player does not have permission node.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked"})
 	public void listNations(CommandSender sender, String[] split) throws TownyException {
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -1175,7 +1163,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
-		Comparator<Nation> comparator = BY_NUM_RESIDENTS;
+		Comparator<? extends Government> comparator = GovernmentComparators.BY_NUM_RESIDENTS;
 		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) {
@@ -1189,27 +1177,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (split[i].equalsIgnoreCase("residents")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_NUM_RESIDENTS;
+						comparator = GovernmentComparators.BY_NUM_RESIDENTS;
 					} else if (split[i].equalsIgnoreCase("balance")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_BALANCE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_BANK_BALANCE;
+						comparator = GovernmentComparators.BY_BANK_BALANCE;
 					} else if (split[i].equalsIgnoreCase("towns")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_NUM_TOWNS;
+						comparator = NationComparators.BY_NUM_TOWNS;
 					} else if (split[i].equalsIgnoreCase("name")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_NAME.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_NAME;						
+						comparator = GovernmentComparators.BY_NAME;						
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNBLOCKS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_TOWNBLOCKS_CLAIMED;
+						comparator = NationComparators.BY_TOWNBLOCKS_CLAIMED;
 					} else if (split[i].equalsIgnoreCase("online")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_ONLINE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = BY_NUM_ONLINE;
+						comparator = GovernmentComparators.BY_NUM_ONLINE;
 					} else {
 						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_nation"));
 						return;
@@ -1249,16 +1237,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	    }
 
 	    final List<Nation> nations = nationsToSort;
-	    final Comparator comp = comparator;
+	    final Comparator<Nation> comp = (Comparator<Nation>) comparator;
 	    final int pageNumber = page;
 		try {
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-				Collections.sort(nations, comp);
+				nations.sort(comp);
 				sendList(sender, nations, pageNumber, total);
 			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
-			return;
 		}
 
 	}
@@ -1324,7 +1311,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
-						town.getAccount().pay(TownySettings.getNewNationPrice(), "New Nation Cost");
+						town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost");
 					} catch (EconomyException ignored) {
 					}
 					try {
@@ -2392,7 +2379,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				try{
-					nation.setNationSpawn(player.getLocation());
+					nation.setSpawn(player.getLocation());
 					TownyMessaging.sendMsg(player, Translation.of("msg_set_nation_spawn"));
 				} catch (TownyException e){
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2462,7 +2449,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     	final String name = split[1];
 				    	Confirmation.runOnAccept(() -> {
 							try {
-								finalNation.getAccount().pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
+								finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 							} catch (EconomyException ignored) {}
 								
 		                    if (!NameValidation.isBlacklistName(name))
@@ -2496,7 +2483,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
 				} else
-
+					if (split[1].length() > 4)
+						throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
 
@@ -2590,7 +2578,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (line.length() > 159)
 						line = line.substring(0, 159);
 
-					nation.setNationBoard(line);
+					nation.setBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);
 				}
 			} else if (split[0].equalsIgnoreCase("mapcolor")) {
@@ -2655,10 +2643,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					boolean choice = !nation.isNeutral();
 					double cost = TownySettings.getNationNeutralityCost();
 
-					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().pay(cost, "Peaceful Nation Cost"))
+					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
 
-					nation.setNeutral(choice);
+					nation.toggleNeutral(choice);
 
 					// send message depending on if using an economy and charging
 					// for peaceful
@@ -2670,11 +2658,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
 							() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 				} catch (TownyException e) {
-					try {
-						nation.setNeutral(false);
-					} catch (TownyException e1) {
-						e1.printStackTrace();
-					}
+					nation.setNeutral(false);
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());

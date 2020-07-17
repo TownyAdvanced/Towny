@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class InviteHandler {
 		return false;
 	}
 	
-	public static boolean inviteIsActive(TownyInviteSender sender, TownyInviteReceiver receiver) {
+	public static boolean inviteIsActive(InviteSender sender, InviteReceiver receiver) {
 		for (Invite activeInvite : activeInvites) {
 			if (activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
 				return true;
@@ -70,13 +71,13 @@ public class InviteHandler {
 		return false;
 	}
 
-	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver) {
-		List<Invite> invites = receiver.getReceivedInvites();
+	public static int getReceivedInvitesAmount(InviteReceiver receiver) {
+		Collection<Invite> invites = receiver.getReceivedInvites();
 		return invites.size();
 	}
 
-	public static int getSentInvitesAmount(TownyInviteSender sender) {
-		List<Invite> invites = sender.getSentInvites();
+	public static int getSentInvitesAmount(InviteSender sender) {
+		Collection<Invite> invites = sender.getSentInvites();
 		return invites.size();
 	}
 
@@ -97,7 +98,7 @@ public class InviteHandler {
 		return amount;
 	}
 
-	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver) {
+	public static int getReceivedInvitesMaxAmount(InviteReceiver receiver) {
 
 		int amount = 0;
 		if (receiver instanceof Resident) {
@@ -124,7 +125,7 @@ public class InviteHandler {
 		return amount;
 	}
 
-	public static int getSentInvitesMaxAmount(TownyInviteSender sender) {
+	public static int getSentInvitesMaxAmount(InviteSender sender) {
 		int amount = 0;
 		if (sender instanceof Town) {
 			if (TownySettings.getMaximumInvitesSentTown() == 0) {

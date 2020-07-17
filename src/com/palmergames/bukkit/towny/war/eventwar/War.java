@@ -192,7 +192,7 @@ public class War {
 		Bukkit.getServer().getPluginManager().callEvent(preEvent);
 		if (preEvent.getWarSpoils() != 0.0)
 			try {
-				warSpoils.collect(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
+				warSpoils.deposit(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
 			} catch (EconomyException ignored) {
 			}
 
@@ -203,14 +203,10 @@ public class War {
 				if (warringNations.contains(nation))
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_nation", nation.getName()));
 			} else if (!TownySettings.isDeclaringNeutral()) {
-				try {
-					nation.setNeutral(false);
-					add(nation);
-					if (warringNations.contains(nation))
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_forced", nation.getName()));
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
+				nation.setNeutral(false);
+				add(nation);
+				if (warringNations.contains(nation))
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_forced", nation.getName()));
 			}
 		}
 
@@ -243,7 +239,7 @@ public class War {
 
 		// Seed spoils of war		
 		try {
-			warSpoils.collect(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
+			warSpoils.deposit(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_activate_war_hud_tip"));

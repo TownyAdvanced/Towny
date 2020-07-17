@@ -2570,6 +2570,10 @@ public class TownySettings {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
 	}
+	
+	public static String getDebtAccountPrefix() {
+		return getString(ConfigNodes.ECO_DEBT_PREFIX);
+	}
 
 	public static String getNationAccountPrefix() {
 

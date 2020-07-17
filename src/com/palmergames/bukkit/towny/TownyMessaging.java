@@ -564,7 +564,7 @@ public class TownyMessaging {
 		String tbColor1 = Translation.of("townboard_message_colour_1");
 		String tbColor2 = Translation.of("townboard_message_colour_2");
 		
-		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getTownBoard());
+		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**
@@ -577,7 +577,7 @@ public class TownyMessaging {
 		String nbColor1 = Translation.of("nationboard_message_colour_1");
 		String nbColor2 = Translation.of("nationboard_message_colour_2");
 
-		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getNationBoard());
+		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/**

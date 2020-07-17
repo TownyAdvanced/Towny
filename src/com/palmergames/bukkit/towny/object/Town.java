@@ -5,21 +5,16 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.invites.Invite;
-import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -34,68 +29,50 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends TownyObject implements ResidentList, TownyInviter, ObjectGroupManageable<PlotGroup>, Bank, TownBlockOwner {
+public class Town extends Government implements TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private List<Resident> residents = new ArrayList<>();
-	private List<Resident> outlaws = new ArrayList<>();
+	private final List<Resident> residents = new ArrayList<>();
+	private final List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
-	private List<Location> jailSpawns = new ArrayList<>();
+	private final List<Location> jailSpawns = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
-	private double taxes = TownySettings.getTownDefaultTax();
 	private double plotTax= TownySettings.getTownDefaultPlotTax();
 	private double commercialPlotTax = TownySettings.getTownDefaultShopTax();
 	private double plotPrice = 0.0;
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
-	private double spawnCost = TownySettings.getSpawnTravelCost();
 	private Nation nation;
 	private boolean hasUpkeep = true;
-	private boolean isPublic = TownySettings.getTownDefaultPublic();
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
-	private boolean isOpen = TownySettings.getTownDefaultOpen();
-	private String townBoard = TownySettings.getTownDefaultBoard();
-	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
-	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
-	private long registered;
-	private transient List<Invite> receivedinvites = new ArrayList<>();
-	private transient List<Invite> sentinvites = new ArrayList<>();
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private EconomyAccount account;
-	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final TownyPermission permissions = new TownyPermission();
 
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-	}
-
-	/*
-	 * Not used but required to Implement TownBlockOwner (non-Javadoc)
-	 * @see com.palmergames.bukkit.towny.object.TownBlockOwner#setTownblocks(java.util.List)
-	 */
-	@Override
-	public void setTownblocks(List<TownBlock> townblocks) {
-		//this.townBlocks = townblocks;
+		
+		// Set defaults.
+		setOpen(TownySettings.getTownDefaultOpen());
+		setBoard(TownySettings.getTownDefaultBoard());
 	}
 
 	@Override
-	public List<TownBlock> getTownBlocks() {
-		List<TownBlock> townBlockList = new ArrayList<>();
-		townBlockList.addAll(townBlocks.values());
-		return townBlockList;
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 
 	@Override
@@ -113,7 +90,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (hasTownBlock(townBlock))
 			throw new AlreadyRegisteredException();
 		else {
-			addTownBlockMap(townBlock);
+			townBlocks.put(townBlock.getWorldCoord(), townBlock);
 			if (townBlocks.size() < 2 && !hasHomeBlock())
 				try {
 					setHomeBlock(townBlock);
@@ -122,22 +99,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				}
 		}
 	}
-
-	public void addTownBlockMap(TownBlock townBlock) {
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);
-	}
-	
-	/**
-	 * Handles removing townblocks from both the Town's townblock hashmap.
-	 * 
-	 * Called by {@link Town#removeTownBlock(TownBlock)}
-	 * 
-	 * @param townBlock to be removed.
-	 */
-	public void removeTownBlockMap(TownBlock townBlock) {
-		townBlocks.remove(townBlock.getWorldCoord());
-	}
-
 	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
 		if (hasTownBlock(worldCoord))
@@ -147,26 +108,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
-	}
-	
-	public void setTag(String text) throws TownyException {
-
-		if (text.length() > 4)
-			throw new TownyException(Translation.of("msg_err_tag_too_long"));
-		this.tag = text.toUpperCase();
-		if (this.tag.matches(" "))
-			this.tag = "";
-		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag, this));
-	}
-
-	public String getTag() {
-
-		return tag;
-	}
-
-	public boolean hasTag() {
-
-		return !tag.isEmpty();
 	}
 
 	public Resident getMayor() {
@@ -182,10 +123,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
+	@Override
 	public double getTaxes() {
-
-		setTaxes(taxes); //make sure the tax level is right.
-		return taxes;
+		setTaxes(taxes);
+		return taxes == -1 ? TownySettings.getTownDefaultTax() : taxes;
 	}
 
 	public void setMayor(Resident mayor) throws TownyException {
@@ -223,8 +164,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 	@Override
 	public List<Resident> getResidents() {
-
-		return residents;
+		return Collections.unmodifiableList(residents);
 	}
 
 	public List<Resident> getAssistants() {
@@ -235,7 +175,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			if (assistant.hasTownRank("assistant"))
 				assistants.add(assistant);
 		}
-		return assistants;
+		return Collections.unmodifiableList(assistants);
 	}
 
 	@Override
@@ -387,15 +327,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	public boolean isFire() {
 
 		return this.permissions.fire;
-	}
-
-	public void setTownBoard(String townBoard) {
-
-		this.townBoard = townBoard;
-	}
-
-	public String getTownBoard() {
-		return townBoard;
 	}
 
 	public void setBonusBlocks(int bonusBlocks) {
@@ -684,9 +615,9 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 		residents.remove(resident);
 	}
-
+	
+	@Override
 	public void setSpawn(Location spawn) throws TownyException {
-
 		if (!hasHomeBlock())
 			throw new TownyException(Translation.of("msg_err_homeblock_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
@@ -702,62 +633,46 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @param spawn - Location to forcefully set as town spawn
 	 */
 	public void forceSetSpawn(Location spawn) {
-
 		this.spawn = spawn;
-
 	}
 
-	/**
-	 * Gets the Town's spawn location
-	 * 
-	 * @return Location of the town spawn
-	 * @throws TownyException if no town spawn has been set (null)
-	 */
+	@Override
 	public Location getSpawn() throws TownyException {
-
 		if (hasHomeBlock() && spawn != null) {
 			return spawn;
-		}
-
-		else {
+		} else {
 			this.spawn = null;
 			throw new TownyException(Translation.of("msg_err_town_has_not_set_a_spawn_location"));
 		}
 	}
 
-	public boolean hasSpawn() {
-
-		return (hasHomeBlock() && spawn != null);
-	}
-
 	public boolean hasHomeBlock() {
-
 		return homeBlock != null;
 	}
 
 	public boolean hasWorld() {
-
 		return world != null;
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock){
+	public void removeTownBlock(TownBlock townBlock) {
 
-		if (!hasTownBlock(townBlock))
-			return;
-		else {
+		if (hasTownBlock(townBlock)) {
 			// Remove the spawn point for this outpost.
-			if (townBlock.isOutpost())
+			if (townBlock.isOutpost()) {
 				removeOutpostSpawn(townBlock.getCoord());
-			if (townBlock.isJail())
+			}
+			if (townBlock.isJail()) {
 				removeJailSpawn(townBlock.getCoord());
+			}
 			
 			// Clear the towns homeblock if this is it.
 			try {
-				if (getHomeBlock() == townBlock)
+				if (getHomeBlock() == townBlock) {
 					setHomeBlock(null);
+				}
 			} catch (TownyException ignored) {}
-			removeTownBlockMap(townBlock);
+			townBlocks.remove(townBlock.getWorldCoord());
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}
@@ -802,10 +717,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @param spawn - Location to set Outpost's spawn point
 	 */
 	public void forceAddOutpostSpawn(Location spawn) {
-
 		outpostSpawns.add(spawn);
-
-
 	}
 
 	/**
@@ -824,12 +736,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public int getMaxOutpostSpawn() {
-
 		return outpostSpawns.size();
 	}
 
 	public boolean hasOutpostSpawn() {
-
 		return (outpostSpawns.size() > 0);
 	}
 
@@ -839,7 +749,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @return List of outpostSpawns
 	 */
 	public List<Location> getAllOutpostSpawns() {
-
 		return outpostSpawns;
 	}
 
@@ -859,7 +768,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public double getPlotPrice() {
-
 		return plotPrice;
 	}
 
@@ -901,19 +809,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		return embassyPlotPrice;
 	}
-	
-	public void setSpawnCost(double spawnCost) {
-
-		this.spawnCost = spawnCost;
-	}
-
-	public double getSpawnCost() {
-
-		return spawnCost;
-	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
-
 		return hasHomeBlock() && townBlock == homeBlock;
 	}
 
@@ -922,7 +819,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public double getPlotTax() {
-
 		return plotTax;
 	}
 
@@ -931,7 +827,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public double getCommercialPlotTax() {
-
 		return commercialPlotTax;
 	}
 
@@ -940,18 +835,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public double getEmbassyPlotTax() {
-
 		return embassyPlotTax;
-	}
-
-	public void setOpen(boolean isOpen) {
-
-		this.isOpen = isOpen;
-	}
-
-	public boolean isOpen() {
-
-		return isOpen;
 	}
 
 	public void collect(double amount) throws EconomyException {
@@ -965,22 +849,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 				}
 			}
 			
-			getAccount().collect(amount, null);
+			getAccount().deposit(amount, null);
 		}
-
-	}
-
-	@Override
-	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-
-		//if (!isMayor(resident))// && !hasAssistant(resident))
-		//	throw new TownyException("You don't have access to the town's bank.");
-
-		if (TownySettings.isUsingEconomy()) {
-			if (!getAccount().payTo(amount, resident, "Town Withdraw"))
-				throw new TownyException(Translation.of("msg_err_no_money"));
-		} else
-			throw new TownyException(Translation.of("msg_err_no_economy"));
 
 	}
 
@@ -1008,19 +878,8 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			out.addAll(resident.getTreeString(depth + 2));
 		return out;
 	}
-
-	public void setPublic(boolean isPublic) {
-
-		this.isPublic = isPublic;
-	}
-
-	public boolean isPublic() {
-
-		return isPublic;
-	}
 	
 	public List<Location> getJailSpawns() {
-
 		return jailSpawns;
 	}
 
@@ -1061,7 +920,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @param spawn - Location to set a Jail's spawn
 	 */
 	public void forceAddJailSpawn(Location spawn) {
-
 		jailSpawns.add(spawn);
 	}
 
@@ -1073,7 +931,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @throws TownyException if there are no jail spawns set
 	 */
 	public Location getJailSpawn(Integer index) throws TownyException {
-
 		if (getMaxJailSpawn() == 0)
 			throw new TownyException(Translation.of("msg_err_town_has_no_jail_spawns_set"));
 
@@ -1081,12 +938,10 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	public int getMaxJailSpawn() {
-
 		return jailSpawns.size();
 	}
 
 	public boolean hasJailSpawn() {
-
 		return (jailSpawns.size() > 0);
 	}
 	
@@ -1096,18 +951,15 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 * @return List of jailSpawns
 	 */
 	public List<Location> getAllJailSpawns() {
-
 		return Collections.unmodifiableList(jailSpawns);
 	}
 
 	@Override
-	public List<Resident> getOutlaws() {
-
-		return outlaws;
+	public Collection<Resident> getOutlaws() {
+		return Collections.unmodifiableList(outlaws);
 	}
 	
 	public boolean hasOutlaw (String name) {
-		
 		for (Resident outlaw : outlaws)
 			if (outlaw.getName().equalsIgnoreCase(name))
 				return true;
@@ -1156,14 +1008,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		return uuid != null;
 	}
 
-	public void setRegistered(long registered) {
-		this.registered = registered;
-	}
-
-	public long getRegistered() {
-		return registered;
-	}
-
 	public void setOutpostSpawns(List<Location> outpostSpawns) {
 		this.outpostSpawns = outpostSpawns;
 	}
@@ -1184,57 +1028,16 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		}
 	}
 
-	@Override
-	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
-	}
-
-	@Override
-	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
-			receivedinvites.add(invite);
-
-		} else {
-			throw new TooManyInvitesException(Translation.of("msg_err_town_has_too_many_invites", this.getName()));
-		}
-	}
-
-	@Override
-	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
-	}
-
-	@Override
-	public List<Invite> getSentInvites() {
-		return sentinvites;
-	}
-
-	@Override
-	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
-		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
-			sentinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(Translation.of("msg_err_town_sent_too_many_invites"));
-		}
-	}
-
-	@Override
-	public void deleteSentInvite(Invite invite) {
-		sentinvites.remove(invite);
-	}
-
 	public int getOutpostLimit() {
 		return TownySettings.getMaxOutposts(this);
 	}
 
 	public boolean isOverOutpostLimit() {
-		
 		return (getMaxOutpostSpawn() > getOutpostLimit());
 
 	}
 	
 	public boolean isOverClaimed() {
-		
 		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
 	}
 	
@@ -1248,7 +1051,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
-
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 	
@@ -1269,9 +1071,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
-		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
-		
 		TownyMessaging.sendErrorMsg(group.toString());
 		
 		for (TownBlock townBlock : getTownBlocks()) {
@@ -1288,7 +1088,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public void addPlotGroup(PlotGroup group) {
-		if (!hasObjectGroups()) 
+		if (!hasPlotGroups()) 
 			plotGroups = new HashMap<>();
 		
 		plotGroups.put(group.getName(), group);
@@ -1296,7 +1096,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
-		if (hasObjectGroups() && plotGroups.remove(plotGroup.getName()) != null) {
+		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1307,20 +1107,17 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 
 	// Abstract to collection in case we want to change structure in the future
-	@Override
-	public Collection<PlotGroup> getObjectGroups() {
-		
+	public Collection<PlotGroup> getPlotGroups() {
 		if (plotGroups == null)
 			return null;
 		
-		return plotGroups.values();
+		return Collections.unmodifiableCollection(plotGroups.values());
 	}
 
 	// Method is inefficient compared to getting the group from name.
-	@Override
 	public PlotGroup getObjectGroupFromID(UUID ID) {
-		if (hasObjectGroups()) {
-			for (PlotGroup pg : getObjectGroups()) {
+		if (hasPlotGroups()) {
+			for (PlotGroup pg : getPlotGroups()) {
 				if (pg.getID().equals(ID)) 
 					return pg;
 			}
@@ -1328,20 +1125,18 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		
 		return null;
 	}
-
-	@Override
-	public boolean hasObjectGroups() {
+	
+	public boolean hasPlotGroups() {
 		return plotGroups != null;
 	}
 
 	// Override default method for efficient access
-	@Override
-	public boolean hasObjectGroupName(String name) {
-		return hasObjectGroups() && plotGroups.containsKey(name);
+	public boolean hasPlotGroupName(String name) {
+		return hasPlotGroups() && plotGroups.containsKey(name);
 	}
 
 	public PlotGroup getPlotObjectGroupFromName(String name) {
-		if (hasObjectGroups()) {
+		if (hasPlotGroups()) {
 			return plotGroups.get(name);
 		}
 		
@@ -1354,26 +1149,22 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	}
 	
 	public Collection<PlotGroup> getPlotObjectGroups() {
-		return getObjectGroups();
+		return getPlotGroups();
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
-		if (account == null) {
-			
-			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-			World world;
+	public double getBankCap() {
+		return TownySettings.getTownBankCap();
+	}
+	
+	public World getWorld() {
+		return hasWorld() ? BukkitTools.getWorld(getHomeblockWorld().getName()) :
+			BukkitTools.getWorlds().get(0);
+	}
 
-			if (hasWorld()) {
-				world = BukkitTools.getWorld(getHomeblockWorld().getName());
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
-			
-			account = new EconomyAccount(accountName, world);
-		}
-		
-		return account;
+	@Override
+	public String getBankAccountPrefix() {
+		return ECONOMY_ACCOUNT_PREFIX;
 	}
 
 	@Override
@@ -1447,7 +1238,7 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
-			return getAccount()._pay(amount);
+			return getAccount().withdraw(amount, null);
 		}
 	}
 
@@ -1461,15 +1252,16 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().collect(amount, reason);
+		return getAccount().deposit(amount, reason);
 	}
-	
+
 	/**
-	 * @deprecated As of 0.96.0.1, please use {@link Town#getHomeblockWorld()} instead.
-	 * @return {@link #getHomeblockWorld()}
+	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
+	 * 
+	 * @return getBoard()
 	 */
 	@Deprecated
-	public TownyWorld getWorld() {
-		return getHomeblockWorld();
+	public String getTownBoard() {
+		return getBoard();
 	}
 }

@@ -1025,7 +1025,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				town.getAccount().collect(amount, "Admin Deposit");
+				town.getAccount().deposit(amount, "Admin Deposit");
 				
 				// Send notifications
 				String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
@@ -1045,7 +1045,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				town.getAccount().pay(amount, "Admin Withdraw");
+				town.getAccount().withdraw(amount, "Admin Withdraw");
 				
 				// Send notifications
 				String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
@@ -1300,7 +1300,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				nation.getAccount().collect(amount, "Admin Deposit");
+				nation.getAccount().deposit(amount, "Admin Deposit");
 				
 				// Send notifications
 				String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("nation_sing"));
@@ -1321,7 +1321,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				nation.getAccount().pay(amount, "Admin Withdraw");
+				nation.getAccount().withdraw(amount, "Admin Withdraw");
 				
 				// Send notifications
 				String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("nation_sing"));
@@ -2116,14 +2116,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			for (Nation nation : TownyUniverse.getInstance().getNationsMap().values()) {
 				try {
-					nation.getAccount().collect(amount, reason);
+					nation.getAccount().deposit(amount, reason);
 				} catch (EconomyException e) {
 				}
 			}
 			
 			for (Town town : TownyUniverse.getInstance().getTownsMap().values()) {
 				try {
-					town.getAccount().collect(amount, reason);
+					town.getAccount().deposit(amount, reason);
 				} catch (EconomyException e) {
 				}
 			}

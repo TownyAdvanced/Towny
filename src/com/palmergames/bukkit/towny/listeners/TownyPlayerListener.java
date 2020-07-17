@@ -1011,7 +1011,7 @@ public class TownyPlayerListener implements Listener {
 			
 			HashMap<String, Object> placeholders = new HashMap<>();
 			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
+			placeholders.put("{town_motd}", to.getTownBlock().getTown().getBoard());
 			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()).size());
 
