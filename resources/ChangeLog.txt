@@ -4768,4 +4768,4 @@ v0.92.0.11:
   - New config option: economy.debt_prefix
     - default: "[DEBT]-"
     - The debt prefix for the debt eco account.
-		
+  - Fix loading system files when loading all townblocks, courtesy of Siris with PR #4182.
