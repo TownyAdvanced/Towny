@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public class NationAllyNationInvite implements Invite {
 
@@ -42,8 +42,8 @@ public class NationAllyNationInvite implements Invite {
 			receiverNation.addAlly(senderNation);
 			senderNation.addAlly(receiverNation);
 			
-			TownyMessaging.sendPrefixedNationMessage(receiverNation, String.format(TownySettings.getLangString("msg_added_ally"), senderNation.getName()));
-			TownyMessaging.sendPrefixedNationMessage(senderNation, String.format(TownySettings.getLangString("msg_accept_ally"), receiverNation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
 			
 			receiverNation.deleteReceivedInvite(this);
 			senderNation.deleteSentAllyInvite(this);
@@ -61,9 +61,9 @@ public class NationAllyNationInvite implements Invite {
 		senderNation.deleteSentAllyInvite(this);
 		
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedNationMessage(senderNation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receiverNation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_deny_ally", Translation.of("nation_sing") + ": " + receiverNation.getName()));
 		} else {
-			TownyMessaging.sendPrefixedNationMessage(receiverNation, String.format(TownySettings.getLangString("nation_revoke_ally"), senderNation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("nation_revoke_ally", senderNation.getName()));
 		}
 	}
 }

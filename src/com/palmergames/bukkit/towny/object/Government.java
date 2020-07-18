@@ -55,7 +55,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (receivedInvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
 			receivedInvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(String.format(Translation.of("msg_err_town_has_too_many_invites", this.getName())));
 		}
 	}
 
@@ -74,7 +74,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
 			sentInvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
+			throw new TooManyInvitesException(Translation.of("msg_err_town_sent_too_many_invites"));
 		}
 	}
 
@@ -184,7 +184,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public final void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
+			throw new TownyException(Translation.of("msg_err_tag_too_long"));
 		
 		if (text.length() < 4) {
 			return;
@@ -224,10 +224,10 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 */
 	public final void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!getAccount().payTo(amount, resident, getName() + " - " + " Withdraw")) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+			throw new TownyException(Translation.of("msg_err_no_money"));
 		}
 	}
 
@@ -241,10 +241,10 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 */
 	public final void depositToBank(Resident resident, int amount) throws EconomyException, TownyException {
 		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!resident.getAccount().payTo(amount, getAccount(), "Deposit from " + resident.getName())) {
-			throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
+			throw new TownyException(Translation.of("msg_insuf_funds"));
 		}
 	}
 

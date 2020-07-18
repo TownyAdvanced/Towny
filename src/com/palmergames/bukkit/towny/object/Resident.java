@@ -114,8 +114,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.setJailed(true);
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
-		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_you_have_been_sent_to_jail"));
-		TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
+		TownyMessaging.sendMsg(player, Translation.of("msg_you_have_been_sent_to_jail"));
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", player.getName(), index));
 
 	}
 	
@@ -124,11 +124,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.removeJailSpawn();
 		this.setJailTown(" ");
 		if (!escaped) {
-			TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else
 			try {
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_player_escaped_jail_into_wilderness", player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
 	}
 
@@ -139,7 +139,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				Location loc = this.getTown().getSpawn();				
 				if (BukkitTools.isOnline(player.getName())) {
 					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(player, loc);
 				}
 				freeFromJail(player, index, false);
@@ -152,7 +152,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				Location loc = town.getJailSpawn(index);
 
 				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().jailTeleport(player, loc);
 
 				sendToJail(player, index, town);
@@ -160,7 +160,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 					if (days > 10000)
 						days = 10000;
 					this.setJailDays(days);
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
+					TownyMessaging.sendMsg(player, Translation.of("msg_you've_been_jailed_for_x_days", days));
 				}
 			} catch (TownyException e) {
 				e.printStackTrace();
@@ -312,7 +312,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (hasTown())
 			return town;
 		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
+			throw new NotRegisteredException(Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -555,7 +555,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
@@ -564,7 +564,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -574,7 +574,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.modes.clear();
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
-			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
+			TownyMessaging.sendErrorMsg(Translation.of("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
 	}
 	
@@ -590,7 +590,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 
 
@@ -747,7 +747,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			receivedInvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(Translation.of("msg_err_player_has_too_many_invites", this.getName()));
 		}
 	}
 

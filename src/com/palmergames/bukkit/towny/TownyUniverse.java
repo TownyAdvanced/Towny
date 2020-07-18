@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -78,7 +79,7 @@ public class TownyUniverse {
         
         try {
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+            Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
         } catch (IOException | TownyException e) {
