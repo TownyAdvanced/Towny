@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -14,12 +16,12 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
  */
 public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 
-	final String nomad = TownySettings.getLangString("nomad_sing");
-	final String res = TownySettings.getLangString("res_sing");
-	final String mayor = TownySettings.getLangString("mayor_sing");
-	final String king = TownySettings.getLangString("king_sing");
+	final String nomad = Translation.of("nomad_sing");
+	final String res = Translation.of("res_sing");
+	final String mayor = Translation.of("mayor_sing");
+	final String king = Translation.of("king_sing");
 	
-	private Towny plugin;
+	private final Towny plugin;
 
 	/**
 	 * Since we register the expansion inside our own plugin, we can simply use this
@@ -114,6 +116,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		} catch (NotRegisteredException e) {
 			return null;
 		}
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		String town = "";
 		String nation = "";
 		String balance = "";
@@ -462,14 +465,14 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return tag;
 		case "town_ranks": // %townyadvanced_town_ranks%
 			if (resident.isMayor())
-				rank = TownySettings.getLangString("mayor_sing");
+				rank = Translation.of("mayor_sing");
 			else if (!resident.getTownRanks().isEmpty())
 				rank = StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", "));
 			return rank;
 			
 		case "nation_ranks": // %townyadvanced_nation_ranks%
 			if (resident.isKing())
-				rank = TownySettings.getLangString("king_sing");
+				rank = Translation.of("king_sing");
 			else if (!resident.getNationRanks().isEmpty())
 				rank = StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", "));
 			return rank;
@@ -485,6 +488,32 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					tag = res;
 			}
 			return tag;
+		case "town_prefix": // %townyadvanced_town_prefix%
+			try {
+				return resident.hasTown() ? TownySettings.getTownPrefix(resident.getTown()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "town_postfix": // %townyadvanced_town_postfix%
+			try {
+				return resident.hasTown() ? TownySettings.getTownPostfix(resident.getTown()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "nation_prefix": // %townyadvanced_nation_prefix%
+			try {
+				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "nation_postfix": // %townyadvanced_nation_postfix%
+			try {
+				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
+			} catch (NotRegisteredException ignored) {
+			}
+		case "player_jailed": // %townyadvanced_player_jailed%
+			return String.valueOf(resident.isJailed());
+		case "player_plot_type": // %townyadvanced_player_plot_type%
+			return townblock != null ? townblock.getType().toString() : "";
+		case "player_plot_owner": // %townyadvanced_player_plot_owner%
+			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 		default:
 			return null;
 		}

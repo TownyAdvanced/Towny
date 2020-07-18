@@ -3,11 +3,7 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
-import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -29,16 +25,13 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -347,7 +340,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 
 	@Override
-	public void upgrade(TownyDataSource legacyDataSource) {
+	public void upgrade() {
 
     	System.out.println("Beginning upgrade process...\nLoading from Legacy DB...");
 

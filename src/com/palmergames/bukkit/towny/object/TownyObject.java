@@ -72,16 +72,6 @@ public abstract class TownyObject implements Nameable, Saveable {
 		return getName();
 	}
 
-	/**
-	 * Get the formatted name, usually replacing the "_" with a space.
-	 * For example: <code>"Object_Name"</code> would be <code>"Object Name"</code>
-	 * 
-	 * @return The formatted name.
-	 */
-	public String getFormattedName() {
-		return getName().replaceAll("_", " ");
-	}
-
 	public void addMetaData(CustomDataField<?> md) {
 		if (getMetadata() == null)
 			metadata = new HashSet<>();

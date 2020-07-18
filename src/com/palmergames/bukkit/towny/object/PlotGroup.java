@@ -6,8 +6,9 @@ import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -111,14 +112,13 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Saveable {
 		if (townBlocks != null)
 			townBlocks.remove(townBlock);
 	}
-
-	@Override
+	
 	public void setTownblocks(List<TownBlock> townBlocks) {
 		this.townBlocks = townBlocks;
 	}
 
-	public List<TownBlock> getTownBlocks() {
-		return townBlocks;
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks);
 	}
 
 	@Override

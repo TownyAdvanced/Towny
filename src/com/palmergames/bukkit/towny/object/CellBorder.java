@@ -18,7 +18,7 @@ public class CellBorder extends WorldCoord {
 			WALL, CORNER
 		}
 
-		private Type type;
+		private final Type type;
 
 		Section(Type type) {
 

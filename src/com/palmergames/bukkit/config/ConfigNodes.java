@@ -666,6 +666,12 @@ public enum ConfigNodes {
 			"# Valid load and save types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
+	
+	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
+			"true",
+			"",
+			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
+			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
 
 	PLUGIN_DATABASE_SQL_HEADER(
 			"plugin.database.sql",
@@ -1284,6 +1290,11 @@ public enum ConfigNodes {
 			"economy.nation_rename_cost",
 			"0",
 			"# The cost of renaming a nation."),
+	ECO_DEBT_PREFIX(
+		"economy.debt_prefix",
+		"[DEBT]-",
+		"# The debt prefix for the debt eco account"
+	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",

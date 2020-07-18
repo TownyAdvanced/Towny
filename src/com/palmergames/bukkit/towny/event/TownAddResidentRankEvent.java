@@ -15,9 +15,9 @@ public class TownAddResidentRankEvent extends Event
 {
 	private static final HandlerList handlers = new HandlerList();
 	
-    private Resident resident;
-    private String rank;
-    private Town town;
+    private final Resident resident;
+    private final String rank;
+    private final Town town;
     
     public TownAddResidentRankEvent(Resident resident, String rank, Town town) {
         super(!Bukkit.getServer().isPrimaryThread());

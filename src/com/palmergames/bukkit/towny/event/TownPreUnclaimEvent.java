@@ -12,7 +12,7 @@ import org.bukkit.event.HandlerList;
 public class TownPreUnclaimEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private TownBlock townBlock;
+    private final TownBlock townBlock;
     private Town town;
     private boolean isCancelled = false;
 

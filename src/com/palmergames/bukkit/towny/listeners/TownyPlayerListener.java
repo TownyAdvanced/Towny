@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -582,7 +583,7 @@ public class TownyPlayerListener implements Listener {
 				&& !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN.getNode()) 
 				&& resident.getTeleportRequestTime() > 0) {
 			TeleportWarmupTimerTask.abortTeleportRequest(resident);
-			TownyMessaging.sendMsg(resident, ChatColor.RED + TownySettings.getLangString("msg_err_teleport_cancelled"));
+			TownyMessaging.sendMsg(resident, ChatColor.RED + Translation.of("msg_err_teleport_cancelled"));
 		}
 
 		try {
@@ -625,14 +626,14 @@ public class TownyPlayerListener implements Listener {
 		try {
 			if (TownyUniverse.getInstance().getResident(player.getUniqueId()).isJailed()) {
 				if ((event.getCause() == TeleportCause.COMMAND)) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_jailed_players_no_teleport")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 					event.setCancelled(true);
 					return;
 				}
 				if (event.getCause() == TeleportCause.PLUGIN) 
 					return;
 				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_jailed_players_no_teleport")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 					event.setCancelled(true);
 				}
 			}
@@ -658,7 +659,7 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name()))
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_ender_pearls_disabled")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_ender_pearls_disabled"));
 					return;
 				}
 		
@@ -703,7 +704,7 @@ public class TownyPlayerListener implements Listener {
 				
 				if (townblockNation.hasEnemy(residentNation)) {
 					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_no_sleep_in_enemy_inn")));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_no_sleep_in_enemy_inn"));
 					return;
 				}
 			}
@@ -715,7 +716,7 @@ public class TownyPlayerListener implements Listener {
 		if (!isOwner && !isInnPlot) {
 
 			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_cant_use_bed")));
+			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_cant_use_bed"));
 
 		}
 		
@@ -767,7 +768,7 @@ public class TownyPlayerListener implements Listener {
 						|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 					if (!WarZoneConfig.isAllowingItemUseInWarZone()) {
 						cancelState = true;
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_use_item"));
 					}
 					return cancelState;
 				}
@@ -788,7 +789,7 @@ public class TownyPlayerListener implements Listener {
 			}
 
 		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_configured"));
 			cancelState = true;
 			return cancelState;
 		}
@@ -833,7 +834,7 @@ public class TownyPlayerListener implements Listener {
 		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_use_switches"));
 				return true;
 			}
 			return false;
@@ -949,7 +950,7 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
 
 		if (to.getTownBlock().getTown().hasOutlaw(resident))
-			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_are_an_outlaw_in_this_town"),to.getTownBlock().getTown()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_you_are_an_outlaw_in_this_town", to.getTownBlock().getTown()));
 	}
 
 
@@ -1021,7 +1022,7 @@ public class TownyPlayerListener implements Listener {
 			
 			HashMap<String, Object> placeholders = new HashMap<>();
 			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-			placeholders.put("{town_motd}", to.getTownBlock().getTown().getTownBoard());
+			placeholders.put("{town_motd}", to.getTownBlock().getTown().getBoard());
 			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()).size());
 
@@ -1115,7 +1116,7 @@ public class TownyPlayerListener implements Listener {
 				
 		String[] split = event.getMessage().substring(1).split(" ");
 		if (TownySettings.getJailBlacklistedCommands().contains(split[0])) {
-			TownyMessaging.sendErrorMsg(event.getPlayer(), TownySettings.getLangString("msg_you_cannot_use_that_command_while_jailed"));
+			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_you_cannot_use_that_command_while_jailed"));
 			event.setCancelled(true);
 		}
 	}

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -56,7 +57,7 @@ public class TownyFormatter {
 	public static List<String> getFormattedResidents(Town town) {
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
-		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
+		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + Translation.of("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 	}
 
@@ -64,20 +65,20 @@ public class TownyFormatter {
 
 		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
 
-		return new ArrayList<>(ChatTools.listArr(residents, TownySettings.getLangString("outlaws") + " "));
+		return new ArrayList<>(ChatTools.listArr(residents, Translation.of("outlaws") + " "));
 
 	}
 	
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
-		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), TownySettings.getLangString("res_format_list_1"), TownySettings.getLangString("res_format_list_2"), TownySettings.getLangString("res_format_list_3")));
+		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
 	}
 	
 	public static List<String> getFormattedTowns(String prefix, List<Town> townList) {
 		
 		Town[] arrayTowns = townList.toArray(new Town[0]);
 
-		return ChatTools.listArr(getFormattedNames(arrayTowns), String.format(embassyTownListPrefixFormat, prefix, townList.size(), TownySettings.getLangString("res_format_list_1"), TownySettings.getLangString("res_format_list_2"), TownySettings.getLangString("res_format_list_3")));
+		return ChatTools.listArr(getFormattedNames(arrayTowns), String.format(embassyTownListPrefixFormat, prefix, townList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
 	}
 
 	public static String[] getFormattedNames(List<Resident> residentList) {
@@ -114,18 +115,18 @@ public class TownyFormatter {
 			}
 			
 
-			out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
+			out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
 			if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
-				out.add(TownySettings.getLangString("status_plot_type") + townBlock.getType().toString());							
-			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
-			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
-			out.add(TownySettings.getLangString("status_pvp") + ((!preventPVP) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-					TownySettings.getLangString("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-					TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? TownySettings.getLangString("status_on"):TownySettings.getLangString("status_off")) + 
-					TownySettings.getLangString("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+				out.add(Translation.of("status_plot_type") + townBlock.getType().toString());							
+			out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
+			out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
+			out.add(Translation.of("status_pvp") + ((!preventPVP) ? Translation.of("status_on"): Translation.of("status_off")) + 
+					Translation.of("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
+					Translation.of("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
+					Translation.of("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off")));
 
 			if (townBlock.hasPlotObjectGroup())
-				out.add(String.format(TownySettings.getLangString("status_plot_group_name_and_size"), townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
@@ -146,7 +147,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<>();
 
 		// ___[ King Harlus ]___
-		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
+		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? Translation.of("online2") : "")));
 
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
@@ -157,31 +158,31 @@ public class TownyFormatter {
 		cal.setTimeInMillis(System.currentTimeMillis());
 		int lastOnlineYear = cal.get(Calendar.YEAR);
 		if (currentYear == lastOnlineYear)
-			out.add(String.format(TownySettings.getLangString("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
 		else 
-			out.add(String.format(TownySettings.getLangString("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
 
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 		// if (resident._getTownBlocks().size() > 0) {
-		out.add(String.format(TownySettings.getLangString("owner_of_x_plots"), resident.getTownBlocks().size()));
-		out.add(TownySettings.getLangString("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
-		out.add(TownySettings.getLangString("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
-		out.add(TownySettings.getLangString("status_pvp") + ((resident.getPermissions().pvp) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("explosions") + ((resident.getPermissions().explosion) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("firespread") + ((resident.getPermissions().fire) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("mobspawns") + ((resident.getPermissions().mobs) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
+		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
+		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
+		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
 		// }
 
 		// Bank: 534 coins
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
-				out.add(String.format(TownySettings.getLangString("status_bank"), resident.getAccount().getHoldingFormattedBalance()));
+				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
 
 		// Town: Camelot
-		String line = TownySettings.getLangString("status_town");
+		String line = Translation.of("status_town");
 		if (!resident.hasTown())
-			line += TownySettings.getLangString("status_no_town");
+			line += Translation.of("status_no_town");
 		else
 			try {
 				line += resident.getTown().getFormattedName();
@@ -207,29 +208,29 @@ public class TownyFormatter {
 		} catch (NotRegisteredException ignored) {}
 		
 		if (townEmbassies.size() > 0) {
-			out.addAll(getFormattedTowns(TownySettings.getLangString("status_embassy_town"), townEmbassies));
+			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
 		}
 			
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
+				out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
 		}
 		
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
-				out.add(TownySettings.getLangString("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
+				out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
 		}
 		
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
-			out.add(String.format(TownySettings.getLangString("jailed_in_town"), resident.getJailTown()) + ( resident.hasJailDays() ? String.format(TownySettings.getLangString("msg_jailed_for_x_days"), resident.getJailDays()) :  ""));
+			out.add(Translation.of("jailed_in_town", resident.getJailTown()) + ( resident.hasJailDays() ? Translation.of("msg_jailed_for_x_days", resident.getJailDays()) :  ""));
 		}
 		
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
-		out.addAll(getFormattedResidents(TownySettings.getLangString("status_friends"), friends));
+		out.addAll(getFormattedResidents(Translation.of("status_friends"), friends));
 		
 		out.addAll(getExtraFields(resident));
 		
@@ -248,9 +249,9 @@ public class TownyFormatter {
 		List<String> ranklist = new ArrayList<>();
 
 		String towntitle = town.getFormattedName();
-		towntitle += TownySettings.getLangString("rank_list_title");
+		towntitle += Translation.of("rank_list_title");
 		ranklist.add(ChatTools.formatTitle(towntitle));
-		ranklist.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
+		ranklist.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
 
 		getRanks(town, ranklist);
 		return ranklist;
@@ -326,32 +327,32 @@ public class TownyFormatter {
 
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
-		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? TownySettings.getLangString("status_title_pvp") : "");
-		title += (town.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
+		title += (town.isOpen() ? Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
+			out.add(Translation.of("status_town_board", town.getBoard()));
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
 		long registered= town.getRegistered();
 		if (registered != 0) {
-			out.add(String.format(TownySettings.getLangString("status_founded"), registeredFormat.format(town.getRegistered())));
+			out.add(Translation.of("status_founded", registeredFormat.format(town.getRegistered())));
 		}
 
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_size_part_1"), town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +  
-		            (TownySettings.isSellingBonusBlocks(town) ? String.format(TownySettings.getLangString("status_town_size_part_2"), town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks(town)) : "") + 
-		            (town.getBonusBlocks() > 0 ? String.format(TownySettings.getLangString("status_town_size_part_3"), town.getBonusBlocks()) : "") + 
-		            (TownySettings.getNationBonusBlocks(town) > 0 ? String.format(TownySettings.getLangString("status_town_size_part_4"), TownySettings.getNationBonusBlocks(town)) : "") + 
-		            (town.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + 
-		            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawn()) : TownySettings.getLangString("status_no_town"))  + "]" 
-		            				: (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : TownySettings.getLangString("status_no_town")) + "]") : "")
+			out.add(Translation.of("status_town_size_part_1", town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +  
+		            (TownySettings.isSellingBonusBlocks(town) ? Translation.of("status_town_size_part_2", town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks(town)) : "") + 
+		            (town.getBonusBlocks() > 0 ? Translation.of("status_town_size_part_3", town.getBonusBlocks()) : "") + 
+		            (TownySettings.getNationBonusBlocks(town) > 0 ? Translation.of("status_town_size_part_4", TownySettings.getNationBonusBlocks(town)) : "") + 
+		            (town.isPublic() ? Translation.of("status_town_size_part_5") + 
+		            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawn()) : Translation.of("status_no_town"))  + "]" 
+		            				: (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : Translation.of("status_no_town")) + "]") : "")
 		           );
 		} catch (TownyException ignored) {}
 
@@ -359,47 +360,47 @@ public class TownyFormatter {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				if (town.hasOutpostSpawn())
 					if (!town.hasNation())
-						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
 						try {
 							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 						} catch (NotRegisteredException ignored) {}
-						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
-								(nationBonus > 0 ? String.format(TownySettings.getLangString("status_town_outposts2"), nationBonus) : "")
+						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+								(nationBonus > 0 ? Translation.of("status_town_outposts2", nationBonus) : "")
 							   );
 						}
 					
 				else 
-					out.add(String.format(TownySettings.getLangString("status_town_outposts3"), town.getOutpostLimit()));
+					out.add(Translation.of("status_town_outposts3", town.getOutpostLimit()));
 			} else if (town.hasOutpostSpawn()) {
-				out.add(String.format(TownySettings.getLangString("status_town_outposts4"), town.getMaxOutpostSpawn()));
+				out.add(Translation.of("status_town_outposts4", town.getMaxOutpostSpawn()));
 			}
 		}
 
 		// Permissions: B=rao D=--- S=ra-
-		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
-		out.add(TownySettings.getLangString("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
-		out.add(TownySettings.getLangString("explosions2") + ((town.isBANG() || world.isForceExpl()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
-				TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
+		out.add(Translation.of("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
+		out.add(Translation.of("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
+		out.add(Translation.of("explosions2") + ((town.isBANG() || world.isForceExpl()) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
 		// | Bank: 534 coins
 		String bankString = "";
 		if (TownySettings.isUsingEconomy()) {
 			if (TownyEconomyHandler.isActive()) {
-				bankString = String.format(TownySettings.getLangString("status_bank"), town.getAccount().getHoldingFormattedBalance());
+				bankString = Translation.of("status_bank", town.getAccount().getHoldingFormattedBalance());
 				if (town.hasUpkeep())
-					bankString += String.format(TownySettings.getLangString("status_bank_town2"), BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-					bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
+				bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), town.getMayor().getFormattedName()));
+		out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
 
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<>();
@@ -409,7 +410,7 @@ public class TownyFormatter {
 
 		// Nation: Azur Empire
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), town.getNation().getFormattedName()) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
+			out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : "" ));
 		} catch (TownyException ignored) {}
 
 		// Residents [12]: James, Carry, Mason
@@ -419,9 +420,9 @@ public class TownyFormatter {
 			String[] entire = residents;
 			residents = new String[36];
 			System.arraycopy(entire, 0, residents, 0, 35);
-			residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+			residents[35] = Translation.of("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
+		out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));		
 
 		out.addAll(getExtraFields(town));
 		
@@ -441,36 +442,36 @@ public class TownyFormatter {
 
 		// ___[ Azur Empire (Open)]___
 		String title = nation.getFormattedName();
-		title += (nation.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		title += (nation.isOpen() ? Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Created Date
 		long registered = nation.getRegistered();
 		if (registered != 0) {
-			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
+			out.add(Translation.of("status_founded", registeredFormat.format(nation.getRegistered())));
 		}
 		// Bank: 534 coins
 		String line = "";
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
-				line = String.format(TownySettings.getLangString("status_bank"), nation.getAccount().getHoldingFormattedBalance());
+				line = Translation.of("status_bank", nation.getAccount().getHoldingFormattedBalance());
 
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
-					line += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getNationUpkeepCost(nation));
+					line += Translation.of("status_bank_town2", TownySettings.getNationUpkeepCost(nation));
 
 			}
 
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += TownySettings.getLangString("status_nation_peaceful");
+			line += Translation.of("status_nation_peaceful");
 		}
 		
 		if (nation.isPublic()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
 			try {
-				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
+				line += (nation.isPublic() ? Translation.of("status_town_size_part_5") + (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawn()).toString() : Translation.of("status_no_town")) + "]" : "");
 			} catch (TownyException ignored) {
 			}
 		}		
@@ -481,8 +482,8 @@ public class TownyFormatter {
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
-			out.add(String.format(TownySettings.getLangString("status_nation_king"), nation.getCapital().getMayor().getFormattedName()) + 
-					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
+			out.add(Translation.of("status_nation_king", nation.getCapital().getMayor().getFormattedName()) + 
+					Translation.of("status_nation_tax", nation.getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<>();
@@ -513,9 +514,9 @@ public class TownyFormatter {
 			String[] entire = towns2;
 			towns2 = new String[12];
 			System.arraycopy(entire, 0, towns2, 0, 11);
-			towns2[11] = TownySettings.getLangString("status_town_reslist_overlength");
+			towns2[11] = Translation.of("status_town_reslist_overlength");
 		}		
-		out.addAll(ChatTools.listArr(towns2, String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));
+		out.addAll(ChatTools.listArr(towns2, Translation.of("status_nation_towns", nation.getNumTowns())));
 		
 		// Allies [4]: James Nation, Carry Territory, Mason Country
 		String[] allies = getFormattedNames(nation.getAllies().toArray(new Nation[0]));
@@ -523,18 +524,18 @@ public class TownyFormatter {
 			String[] entire = allies;
 			allies = new String[12];
 			System.arraycopy(entire, 0, allies, 0, 11);
-			allies[11] = TownySettings.getLangString("status_town_reslist_overlength");
+			allies[11] = Translation.of("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(allies, String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
+		out.addAll(ChatTools.listArr(allies, Translation.of("status_nation_allies", nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
 		String[] enemies = getFormattedNames(nation.getEnemies().toArray(new Nation[0]));
 		if (enemies.length > 10) {
 			String[] entire = enemies;
 			enemies = new String[12];
 			System.arraycopy(entire, 0, enemies, 0, 11);
-			enemies[11] = TownySettings.getLangString("status_town_reslist_overlength");
+			enemies[11] = Translation.of("status_town_reslist_overlength");
 		}
-        out.addAll(ChatTools.listArr(enemies, String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+        out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
 
 		out.addAll(getExtraFields(nation));
 		
@@ -554,38 +555,38 @@ public class TownyFormatter {
 
 		// ___[ World (PvP) ]___
 		String title = world.getFormattedName();
-		title += ((world.isPVP() || world.isForcePVP()) ? TownySettings.getLangString("status_title_pvp") : "");
-		title += (world.isClaimable() ? TownySettings.getLangString("status_world_claimable") : TownySettings.getLangString("status_world_noclaims"));
+		title += ((world.isPVP() || world.isForcePVP()) ? Translation.of("status_title_pvp") : "");
+		title += (world.isClaimable() ? Translation.of("status_world_claimable") : Translation.of("status_world_noclaims"));
 		out.add(ChatTools.formatTitle(title));
 
 		if (!world.isUsingTowny()) {
-			out.add(TownySettings.getLangString("msg_set_use_towny_off"));
+			out.add(Translation.of("msg_set_use_towny_off"));
 		} else {
 			// ForcePvP: No | Fire: Off
-			out.add(TownySettings.getLangString("status_world_forcepvp") + (world.isForcePVP() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
-					TownySettings.getLangString("status_world_fire") + (world.isFire() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
-					TownySettings.getLangString("status_world_forcefire") + (world.isForceFire() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+			out.add(Translation.of("status_world_forcepvp") + (world.isForcePVP() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
+					Translation.of("status_world_fire") + (world.isFire() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
+					Translation.of("status_world_forcefire") + (world.isForceFire() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
 				   );
-			out.add(TownySettings.getLangString("explosions2") + ": " + (world.isExpl() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
-				    TownySettings.getLangString("status_world_forceexplosion") + (world.isForceExpl() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+			out.add(Translation.of("explosions2") + ": " + (world.isExpl() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
+				    Translation.of("status_world_forceexplosion") + (world.isForceExpl() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
 				   );
-			out.add(TownySettings.getLangString("status_world_worldmobs") + (world.hasWorldMobs() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
-				    TownySettings.getLangString("status_world_forcetownmobs") + (world.isForceTownMobs() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+			out.add(Translation.of("status_world_worldmobs") + (world.hasWorldMobs() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
+				    Translation.of("status_world_forcetownmobs") + (world.isForceTownMobs() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
 				   );
-			out.add(Colors.Green + (world.isWarAllowed() ? TownySettings.getLangString("msg_set_war_allowed_on") : TownySettings.getLangString("msg_set_war_allowed_off")));
+			out.add(Colors.Green + (world.isWarAllowed() ? Translation.of("msg_set_war_allowed_on") : Translation.of("msg_set_war_allowed_off")));
 			// Using Default Settings: Yes
 			// out.add(Colors.Green + "Using Default Settings: " +
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
 			// + "No"));
 
-			out.add(TownySettings.getLangString("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? TownySettings.getLangString("status_on_good") : TownySettings.getLangString("status_off_bad")) + Colors.Gray + " | " + 
-			        TownySettings.getLangString("status_world_explrevert") + (world.isUsingPlotManagementWildRevert() ? TownySettings.getLangString("status_on_good") : TownySettings.getLangString("status_off_bad")));
+			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " + 
+			        Translation.of("status_world_explrevert") + (world.isUsingPlotManagementWildRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
 			// Wilderness:
 			// Build, Destroy, Switch
 			// Ignored Blocks: 34, 45, 64
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
-			out.add("    " + TownySettings.getLangString("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+			out.add("    " + Translation.of("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
 
 			out.addAll(getExtraFields(world));
 		}
@@ -612,15 +613,15 @@ public class TownyFormatter {
 		if (resident.hasTown()) {
 			try {
 				town = resident.getTown();
-				out.add(String.format(TownySettings.getLangString("owner_of_x_plots"),resident.getTownBlocks().size()));
+				out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
 
 				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
-					out.add(TownySettings.getLangString("status_res_taxexempt"));
+					out.add(Translation.of("status_res_taxexempt"));
 				} else {
 					if (town.isTaxPercentage()) {
-						out.add(String.format(TownySettings.getLangString("status_res_tax"), resident.getAccount().getHoldingBalance() * town.getTaxes() / 100));
+						out.add(Translation.of("status_res_tax", resident.getAccount().getHoldingBalance() * town.getTaxes() / 100));
 					} else {
-						out.add(String.format(TownySettings.getLangString("status_res_tax"), town.getTaxes()));
+						out.add(Translation.of("status_res_tax", town.getTaxes()));
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
@@ -628,9 +629,9 @@ public class TownyFormatter {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
 
-							out.add(TownySettings.getLangString("status_res_plottax") + plotTax);
+							out.add(Translation.of("status_res_plottax") + plotTax);
 						}
-						out.add(TownySettings.getLangString("status_res_totaltax") + (town.getTaxes() + plotTax));
+						out.add(Translation.of("status_res_totaltax") + (town.getTaxes() + plotTax));
 					}
 				}
 

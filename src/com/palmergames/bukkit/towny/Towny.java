@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
@@ -115,7 +116,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -270,6 +271,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
@@ -291,6 +293,7 @@ public class Towny extends JavaPlugin {
 	public boolean load() {
 
 		checkCitizens();
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
@@ -316,6 +319,13 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
+		if (!TownySettings.getUUIDPercent().equals("100%")) {
+			if (TownySettings.isGatheringResidentUUIDS())
+				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
+		} else 
+			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
+		
 		resetCache();
 
 		return true;
@@ -747,7 +757,7 @@ public class Towny extends JavaPlugin {
 		else if (s.equalsIgnoreCase("off"))
 			return false;
 		else
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
 	}
 
 	/**

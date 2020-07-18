@@ -26,14 +26,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.tasks.BackupTask;
-import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -59,7 +58,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -122,7 +120,7 @@ public class TownyUniverse {
         
         try {
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+            Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
         } catch (IOException | TownyException e) {
@@ -134,9 +132,6 @@ public class TownyUniverse {
 
         saveDbType = TownySettings.getSaveDatabase();
         loadDbType = TownySettings.getLoadDatabase();
-        
-        // Setup any defaults before we loadString the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         
@@ -200,7 +195,7 @@ public class TownyUniverse {
             // Load all the world files in.
 			
 			if (isLegacy) {
-				databaseHandler.upgrade(dataSource);
+				databaseHandler.upgrade();
 			} else {
 				databaseHandler.loadAll();
 			}
@@ -442,12 +437,6 @@ public class TownyUniverse {
 		if (resident.hasTown()) {
 			try {
 				Town town = resident.getTown();
-				// Clear the resident (removes the resident from the town too)
-				try {
-					resident.clear();
-				} catch (EmptyTownException e) {
-					removeTown(town);
-				}
 			} catch (NotRegisteredException e1) {
 				// Should never get thrown
 				e1.printStackTrace();
@@ -455,14 +444,10 @@ public class TownyUniverse {
 		}
 
 		// Remove the resident from outlaws in different towns
-		try {
-			for (Town townOutlaw : towns.values()) {
-				if (townOutlaw.hasOutlaw(resident)) {
-					townOutlaw.removeOutlaw(resident);
-				}
+		for (Town townOutlaw : towns.values()) {
+			if (townOutlaw.hasOutlaw(resident)) {
+				townOutlaw.removeOutlaw(resident);
 			}
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
 		}
 
 		// This should be called at the end, but to keep legacy behavior call it here.
@@ -472,13 +457,9 @@ public class TownyUniverse {
 		for (Resident toCheck : residents.values()) {
 			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
 			if (toCheck.hasFriend(resident)) {
-				try {
-					TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
-					toCheck.removeFriend(resident);
-					toCheck.save();
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
+				toCheck.removeFriend(resident);
+				toCheck.save();
 			}
 		}
 		// Delete the residents file.
@@ -681,12 +662,6 @@ public class TownyUniverse {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
-		}
-
-		try {
-			town.clear();
-		} catch (EmptyNationException ignored) {
-			// Will never get called
 		}
 		
 		// Remove residents
@@ -1119,7 +1094,7 @@ public class TownyUniverse {
 		Town t = towns.get(townName);
 
 		if (t != null) {
-			return t.hasObjectGroupName(groupName);
+			return t.hasPlotGroupName(groupName);
 		}
 
 		return false;
@@ -1135,7 +1110,7 @@ public class TownyUniverse {
     	List<PlotGroup> groups = new ArrayList<>();
     	
 		for (Town town : towns.values()) {
-			if (town.hasObjectGroups()) {
+			if (town.hasPlotGroups()) {
 				groups.addAll(town.getPlotObjectGroups());
 			}
 		}
@@ -1203,7 +1178,7 @@ public class TownyUniverse {
 		PlotGroup newGroup = new PlotGroup(id, name, town);
 		
 		// Check if there is a duplicate
-		if (town.hasObjectGroupName(newGroup.getName())) {
+		if (town.hasPlotGroupName(newGroup.getName())) {
 			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
 			throw new AlreadyRegisteredException();
 		}

@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -16,11 +16,11 @@ import org.bukkit.event.HandlerList;
 public class TownPreClaimEvent extends Event implements Cancellable{
 
     private static final HandlerList handlers = new HandlerList();
-    private TownBlock townBlock;
-    private Town town;
-    private Player player;
+    private final TownBlock townBlock;
+    private final Town town;
+    private final Player player;
     private boolean isCancelled = false;
-    private String cancelMessage = TownySettings.getLangString("msg_claim_error");
+    private String cancelMessage = Translation.of("msg_claim_error");
 
     @Override
     public HandlerList getHandlers() {

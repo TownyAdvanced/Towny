@@ -328,7 +328,7 @@ public class TownyRegenAPI {
 //
 //		}
 //
-//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
+//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), Translation.of("msg_undo_complete"));
 //
 //	}
 

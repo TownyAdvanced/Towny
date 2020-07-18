@@ -21,13 +21,13 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.naming.InvalidNameException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -260,7 +260,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles();
+		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
 		TownyMessaging.sendDebugMsg("Folders found " + worldFolders.length);
 		boolean mismatched = false;
 		int mismatchedCount = 0;
@@ -279,13 +279,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					world = getWorld(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
-				File[] townBlockFiles = worldFolder.listFiles();
+				File[] townBlockFiles = worldFolder.listFiles((file)->file.getName().endsWith(".data"));
 				int total = 0;
 				for (File townBlockFile : townBlockFiles) {
-					if (!townBlockFile.getName().endsWith(".data") || townBlockFile.getName().equalsIgnoreCase("deleted")) {
-						// File is not a townblock.data file or is the deleted folder.
-						continue;
-					}
 					String[] coords = townBlockFile.getName().split("_");
 					String[] size = coords[2].split("\\.");
 					// Do not load a townBlockFile if it does not use teh currently set town_block_size.
@@ -371,28 +367,44 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
+		List<String> residents = new ArrayList<>();
 
+		// Build up a list of residents from any existing legacy residents.txt files.
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
 			
-			while ((line = fin.readLine()) != null) {
-				if (!line.equals("")) {
-					try {
-						newResident(line);
-					} catch (AlreadyRegisteredException e) {
-						TownyMessaging.sendDebugMsg("Duplicate resident '" + line + "' found in residents.txt, ignoring.");
-						continue;
-					}
-				}
-			}
-
-			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
-			e.printStackTrace();
-			return false;
-			
+			while ((line = fin.readLine()) != null && !line.equals(""))
+				residents.add(line);
+		} catch (Exception ignored) {
+			// No residents.txt any more.
 		}
+		File residentFolder = new File(dataFolderPath + File.separator + "residents");
+		File[] residentFiles = residentFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".txt"));
+		assert residentFiles != null;
+		for (File resident : residentFiles) {
+			// Don't load resident files if they weren't in the residents.txt file.
+			String name = resident.getName().replace(".txt", "");
+			if (residents.size() > 0 && !residents.contains(name)) {
+				TownyMessaging.sendDebugMsg("Removing " + resident.getName() + " because they are not found in the residents.txt.");
+				deleteFile(resident.getAbsolutePath());
+				continue;
+			}
+				
+			try {
+				newResident(name);
+			} catch (NotRegisteredException e) {
+				// Thrown if the resident name does not pass the filters.
+				e.printStackTrace();
+				return false;
+			} catch (AlreadyRegisteredException ignored) {
+				// Should not be possible in flatfile.
+			}			
+		}
+
+		if (residents.size() > 0)
+			deleteFile(dataFolderPath + File.separator + "residents.txt");
+
+		return true;
+			
 	}
 	
 	@Override
@@ -642,6 +654,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setJailTown(line);
 				
+				line = keys.get("town");
+				if (line != null)
+					resident.setTown(getTown(line));
+
 				line = keys.get("title");
 				if (line != null)
 					resident.setTitle(line);
@@ -650,10 +666,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setSurname(line);
 				
-				line = keys.get("town");
-				if (line != null)
-					resident.setTown(getTown(line));
-
 				try {
 					line = keys.get("town-ranks");
 					if (line != null)
@@ -701,7 +713,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadTown(Town town) {
-		
 		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
@@ -711,27 +722,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileTown);
 
-				line = keys.get("residents");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
-							try {
-								Resident resident = getResident(token);
-								if (resident != null) {
-									try {
-										town.addResident(resident);
-									} catch (AlreadyRegisteredException e) {
-										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
-									}
-								}
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
-							}
-						}
-					}
-				}
+//				line = keys.get("residents");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						if (!token.isEmpty()) {
+//							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
+//							try {
+//								Resident resident = getResident(token);
+//								if (resident != null) {
+//									try {
+//										town.addResident(resident);
+//									} catch (AlreadyRegisteredException e) {
+//										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+//									}
+//								}
+//							} catch (NotRegisteredException e) {
+//								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
+//							}
+//						}
+//					}
+//				}
 				
 				line = keys.get("outlaws");
 				if (line != null) {
@@ -753,9 +764,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
-				town.setTownBoard(keys.get("townBoard"));
-				
+
+				line = "townBoard";
+				town.setBoard(keys.get("townBoard"));
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -1004,6 +1016,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			} finally {
 				//saveTown(town);
@@ -1052,9 +1065,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("nationBoard");
 				if (line != null)
 					try {
-						nation.setNationBoard(line);
+						nation.setBoard(line);
 					} catch (Exception e) {
-						nation.setNationBoard("");
+						nation.setBoard("");
 					}
 
 				line = keys.get("mapColorHexCode");
@@ -1529,6 +1542,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							town = getTown(line.trim());
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + ", deleting " + path);
+							e.printStackTrace();
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
@@ -1654,33 +1668,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveResidentList() {
-
-		List<String> list = new ArrayList<>();
-
-		for (Resident resident : getResidents()) {
-
-			try {
-
-				if (!list.contains(resident.getName()))
-					list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
-
-			} catch (InvalidNameException e) {
-
-				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file:" + resident.getName());
-			}
-		}
-
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "residents.txt"));
-
-		return true;
-
-	}
-
-	@Override
 	public boolean saveTownList() {
 
 		List<String> list = new ArrayList<>();
@@ -1773,7 +1760,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 //
 //		list.add(newLine);
 //		// Town Board
-//		list.add("townBoard=" + town.getTownBoard());
+//		list.add("townBoard=" + town.getBoard());
 //		// tag
 //		list.add("tag=" + town.getTag());
 //		// Town Protection
@@ -1904,7 +1891,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
 
-		list.add("nationBoard=" + nation.getNationBoard());
+		list.add("nationBoard=" + nation.getBoard());
 
 		list.add("mapColorHexCode=" + nation.getMapColorHexCode());
 
@@ -1927,9 +1914,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("registered=" + nation.getRegistered());
         
         // Spawn
-		if (nation.hasNationSpawn()) {
+		if (nation.hasSpawn()) {
 			try {
-				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + nation.getNationSpawn().getX() + "," + nation.getNationSpawn().getY() + "," + nation.getNationSpawn().getZ() + "," + nation.getNationSpawn().getPitch() + "," + nation.getNationSpawn().getYaw());
+				list.add("nationSpawn=" + nation.getSpawn().getWorld().getName() + "," + nation.getSpawn().getX() + "," + nation.getSpawn().getY() + "," + nation.getSpawn().getZ() + "," + nation.getSpawn().getPitch() + "," + nation.getSpawn().getYaw());
 			} catch (TownyException ignored) { }
 		}
 

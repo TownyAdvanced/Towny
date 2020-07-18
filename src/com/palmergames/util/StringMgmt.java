@@ -1,8 +1,15 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import net.md_5.bungee.api.ChatColor;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -22,19 +29,54 @@ public class StringMgmt {
 		return "{" + joiner.toString() + "}";
 	}
 
-	public static String join(List<?> arr) {
+	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(#[a-fA-F0-9]{6})");
+	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
+	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
+	
+	public static String translateHexColors(String str) {
+		if (!Towny.is116Plus()) {
+			return str;
+		}
 
-		return join(arr, " ");
+		final Matcher hexMatcher = hexPattern.matcher(str);
+		final Matcher ampMatcher = ampersandPattern.matcher(str);
+		final Matcher bracketMatcher = bracketPattern.matcher(str);
+
+		while (hexMatcher.find()) {
+			String hex = hexMatcher.group();
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+		}
+
+		while (ampMatcher.find()) {
+			String hex = ampMatcher.group().replace("&", "");
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+			str = str.replace("&", "");
+		}
+
+		while (bracketMatcher.find()) {
+			String hex = bracketMatcher.group().replace("{", "").replace("}", "");
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+			str = str.replace("{", "").replace("}", "");
+		}
+
+		return str;
 	}
 
-	public static String join(List<?> arr, String separator) {
+	public static String join(Collection<?> args) {
+		return join(args, " ");
+	}
 
-		if (arr == null || arr.size() == 0)
-			return "";
-		String out = arr.get(0).toString();
-		for (int i = 1; i < arr.size(); i++)
-			out += separator + arr.get(i);
-		return out;
+	public static String join(Collection<?> args, String separator) {
+		StringJoiner joiner = new StringJoiner(separator);
+		
+		for (Object o : args) {
+			joiner.add(o.toString());
+		}
+		
+		return joiner.toString();
 	}
 
 	public static String join(Object[] arr) {

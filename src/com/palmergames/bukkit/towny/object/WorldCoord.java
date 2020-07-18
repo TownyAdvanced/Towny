@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class WorldCoord extends Coord {
 
-	private String worldName;
+	private final String worldName;
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
@@ -34,7 +34,7 @@ public class WorldCoord extends Coord {
 	}
 
 	public Coord getCoord() {
-		return new Coord(x, z);
+		return new Coord(getX(), getZ());
 	}
 
 	@Deprecated
@@ -80,8 +80,8 @@ public class WorldCoord extends Coord {
 
 		int hash = 17;
 		hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
-		hash = hash * 27 + x;
-		hash = hash * 27 + z;
+		hash = hash * 27 + getX();
+		hash = hash * 27 + getZ();
 		return hash;
 	}
 
@@ -94,11 +94,11 @@ public class WorldCoord extends Coord {
 
 		if (!(obj instanceof WorldCoord)) {
 			Coord that = (Coord) obj;
-			return this.x == that.x && this.z == that.z;
+			return this.getX() == that.getZ() && this.getZ() == that.getZ();
 		}
 
 		WorldCoord that = (WorldCoord) obj;
-		return this.x == that.x && this.z == that.z && (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
+		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.worldName, that.worldName));
 	}
 
 	@Override

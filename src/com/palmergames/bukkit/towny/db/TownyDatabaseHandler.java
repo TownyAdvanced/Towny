@@ -14,6 +14,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -260,11 +265,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeResidentList(Resident resident) {
-		universe.removeResident(resident);
-	}
-
-	@Override
 	public void removeTown(Town town) {
 		universe.removeTown(town);
 	}
@@ -412,7 +412,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
 			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), name));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
 			lock.unlock();
 		}
 	}
