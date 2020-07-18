@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -496,7 +497,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
@@ -1080,7 +1081,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
 			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), name));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
 			lock.unlock();
 		}
 	}
