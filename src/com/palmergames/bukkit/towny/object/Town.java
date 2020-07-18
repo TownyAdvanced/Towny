@@ -200,7 +200,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean hasAssistant(Resident resident) {
 
-		return hasRank(resident, "assistant");
+		return resident.hasTownRank("assistant");
 	}
 
 	public boolean hasRank(Resident resident, String rank) {
