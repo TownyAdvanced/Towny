@@ -74,12 +74,12 @@ public enum TownSpawnLevel {
 			boolean war = TownyAPI.getInstance().isWarTime() || FlagWar.isUnderAttack(town);
 			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
+				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
 			else if(level == SpawnLevel.PEACE && war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodePeace));
+				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
-			throw new TownyException(TownySettings.getLangString(notAllowedLangNode));
+			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 
