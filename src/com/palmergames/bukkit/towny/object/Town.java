@@ -205,6 +205,10 @@ public class Town extends Government implements TownBlockOwner {
 
 		return resident.hasTownRank("assistant");
 	}
+	
+	public boolean hasResidentWithRank(Resident resident, String rank) {
+		return hasResident(resident) && resident.hasTownRank(rank);
+	}
 
 	void addResident(Resident resident) throws AlreadyRegisteredException {
 

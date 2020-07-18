@@ -1605,7 +1605,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
-            twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
+            twn_hm.put("assistants", StringMgmt.join(town.getRank("assistant"), "#"));
             twn_hm.put("townBoard", town.getBoard());
             twn_hm.put("tag", town.getTag());
             twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));

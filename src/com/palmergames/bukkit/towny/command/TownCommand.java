@@ -2938,7 +2938,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_yourself"));
 				kicking.remove(member);				
 			}
-			if (member.isMayor() || town.hasAssistant(member)) {
+			if (member.isMayor() || town.hasResidentWithRank(member, "assistant")) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_this_resident", member));
 				kicking.remove(member);
 			} else {
