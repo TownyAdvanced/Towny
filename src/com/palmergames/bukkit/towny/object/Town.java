@@ -198,6 +198,7 @@ public class Town extends Government implements TownBlockOwner {
 		return residents.contains(resident);
 	}
 
+	@Deprecated
 	public boolean hasAssistant(Resident resident) {
 
 		return resident.hasTownRank("assistant");
