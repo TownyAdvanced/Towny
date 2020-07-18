@@ -851,7 +851,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 		} catch (Exception x) {
-			x.printStackTrace();
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
