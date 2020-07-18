@@ -4770,3 +4770,4 @@ v0.92.0.11:
     - The debt prefix for the debt eco account.
   - Fix loading system files when loading all townblocks, courtesy of Siris with PR #4182.
   - Move translation code to separate object and introduce new method: Translation.of(), courtesy of Siris with PR #4177.
+  - Add Mayoral Succession, courtesy of DocW with PR #4107.
