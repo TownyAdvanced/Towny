@@ -333,7 +333,7 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
+			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getBoard()));
 		} catch (NullPointerException ignored) {
 		}
 		// Created Date
@@ -470,7 +470,7 @@ public class TownyFormatter {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
 			try {
-				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
+				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
 			} catch (TownyException ignored) {
 			}
 		}		

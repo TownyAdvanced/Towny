@@ -403,7 +403,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
-						if (!town.getAccount().pay(upkeep, "Town Upkeep")) {
+						if (!town.getAccount().withdraw(upkeep, "Town Upkeep")) {
 							townyUniverse.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 						}
@@ -416,14 +416,14 @@ public class DailyTimerTask extends TownyTimerTask {
 
 							for (TownBlock townBlock : plots) {
 								if (townBlock.hasResident())
-									townBlock.getResident().getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									townBlock.getResident().getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 								else
-									town.getAccount().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									town.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 							}
 
 						} else {
 							// Not paying plot owners so just pay the town
-							town.getAccount().pay(upkeep, "Negative Town Upkeep");
+							town.getAccount().withdraw(upkeep, "Negative Town Upkeep");
 						}
 
 					}
@@ -464,24 +464,20 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (upkeep > 0) {
 					// Town is paying upkeep
 
-					if (!nation.getAccount().pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+					if (!nation.getAccount().withdraw(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 						townyUniverse.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {
-						if (!nation.getAccount().pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
-							try {
-								nation.setNeutral(false);
-							} catch (TownyException e) {
-								e.printStackTrace();
-							}
+						if (!nation.getAccount().withdraw(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
+							nation.setNeutral(false);
 							townyUniverse.getDataSource().saveNation(nation);
 							TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getLangString("msg_nation_not_peaceful"));
 						}
 					}
 					
 				} else if (upkeep < 0) {
-					nation.getAccount().pay(upkeep, "Negative Nation Upkeep");
+					nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
 				}
 			}
 		}
