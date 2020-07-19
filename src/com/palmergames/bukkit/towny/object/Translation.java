@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
@@ -22,14 +23,21 @@ import java.util.ResourceBundle;
  */
 public final class Translation {
 	
-	private static class LanguageContext {
-		final String language;
-		final String country;
-		
-		LanguageContext(String language, String country) {
-			this.language = language;
-			this.country = country;
-		}
+	private static final HashMap<String, Locale> legacyKeys = new HashMap<>(12);
+	
+	static {
+		legacyKeys.put("english.yml", new Locale("en", "US"));
+		legacyKeys.put("chinese.yml", new Locale("zh", "CN"));
+		legacyKeys.put("es-mx.yml", new Locale("es", "MX"));
+		legacyKeys.put("french.yml", new Locale("fr", "FR"));
+		legacyKeys.put("italian.yml", new Locale("it", "IT"));
+		legacyKeys.put("norwegian.yml", new Locale("no", "NO"));
+		legacyKeys.put("pt-br.yml", new Locale("pr","BR"));
+		legacyKeys.put("korean.yml", new Locale("ko"));
+		legacyKeys.put("german.yml", new Locale("de", "DE"));
+		legacyKeys.put("russian.yml", new Locale("ru", "RU"));
+		legacyKeys.put("spanish.yml", new Locale("es"));
+		legacyKeys.put("polish.yml", new Locale("pl", "PL"));
 	}
 	
 	public static ResourceBundle language;
@@ -52,13 +60,16 @@ public final class Translation {
 		}
 
 		Locale locale;
-		if (country == null) {
+		if (legacyKeys.containsKey(val)) {
+			locale = legacyKeys.get(val);
+		}else if (country == null) {
 			locale =  new Locale(lang);
 		} else {
 			locale = new Locale(lang, country);
 		}
 
-		String fileName = "translation_" + val + ".properties";
+		String fileName = "translation_" + locale.getLanguage() + "_"
+			+ (locale.getCountry() == null ? "" : locale.getCountry()) + ".properties";
 		InputStream inputStream = Towny.getPlugin().getResource(fileName);
 		
 		if (inputStream == null) {
