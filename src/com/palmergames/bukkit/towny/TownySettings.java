@@ -3358,10 +3358,6 @@ public class TownySettings {
 		return battleSessionsForbiddenBucketMaterials;
 	}
 
-	public static int getWarSiegePeacefulTownsGuardianTownPopulationRequirement() {
-		return getInt(ConfigNodes.WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_POPULATION_REQUIREMENT);
-	}
-
 	public static int getWarSiegePeacefulTownsGuardianTownPlotsRequirement() {
 		return getInt(ConfigNodes.WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_PLOTS_REQUIREMENT);
 	}

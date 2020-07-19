@@ -12,10 +12,13 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class TownPeacefulnessUtil {
 
@@ -51,7 +54,7 @@ public class TownPeacefulnessUtil {
 
 				if(TownySettings.getWarSiegeEnabled()) {
 					if (town.isPeaceful()) {
-						message = String.format(TownySettings.getLangString("msg_war_siege_town_became_peaceful"), town.getFormattedName(), TownySettings.getWarSiegePeacefulTownsGuardianTownPopulationRequirement(), TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement());
+						message = String.format(TownySettings.getLangString("msg_war_siege_town_became_peaceful"), town.getFormattedName());
 					} else {
 						message = String.format(TownySettings.getLangString("msg_war_siege_town_became_non_peaceful"), town.getFormattedName());
 					}
@@ -192,89 +195,76 @@ public class TownPeacefulnessUtil {
 			}
 		}
 	}
-	
+
+	/**
+	 * This method is a cleanup of peaceful town assignments
+	 * 
+	 * Cycle peaceful towns
+	 * - If town's nation is valid, skip and go to next town
+	 * - If town's nation is invalid, reassign nation status
+	 */
 	public static void evaluatePeacefulTownNationAssignments() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town peacefulTown = null;
-		Coord peacefulTownCoord;
-		Town guardianTown;
-		double guardianTownSignificance;
-		double candidateTownSignificance;
-		double candidateTownDistance;
-		Coord candidateTownCoord;
-		int guardianTownPopulationRequirement = TownySettings.getWarSiegePeacefulTownsGuardianTownPopulationRequirement();
-		int guardianTownPlotsRequirement = TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement();
-		int guardianTownMaxDistanceRequirementTownblocks = TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement();
 
+		CYCLE_ALL_TOWNS:
 		while (townItr.hasNext()) {
+			peacefulTown = townItr.next();
+
 			try {
-				guardianTown = null;
-				guardianTownSignificance = 0;
-				peacefulTown = townItr.next();
-				if (!townyUniverse.getDataSource().hasTown(peacefulTown.getName())) 
+				//Skip if town is non-peaceful
+				if (!peacefulTown.isPeaceful())
 					continue;
-				if(!peacefulTown.isPeaceful())
-					continue;
-				if(!peacefulTown.hasHomeBlock())
-					continue;
-				peacefulTownCoord = peacefulTown.getHomeBlock().getCoord();
 
-				//Find guardian town
-				List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
-				for(Town candidateTown: candidateTowns) {
+				//Find guardian towns
+				Set<Town> guardianTowns = getValidGuardianTowns(peacefulTown);
 
-					if(!candidateTown.isPeaceful()
-						&& !candidateTown.hasSiege()
-						&& candidateTown.hasHomeBlock()
-						&& peacefulTown.getHomeBlock().getWorld().getName().equalsIgnoreCase(candidateTown.getHomeBlock().getWorld().getName())
-						&& candidateTown.getNumResidents() >= guardianTownPopulationRequirement
-						&& candidateTown.getTownBlocks().size() >= guardianTownPlotsRequirement)
-					{
-						//Check distance
-						candidateTownCoord = candidateTown.getHomeBlock().getCoord();
-						candidateTownDistance = Math.sqrt(Math.pow(candidateTownCoord.getX() - peacefulTownCoord.getX(), 2) + Math.pow(candidateTownCoord.getZ() - peacefulTownCoord.getZ(), 2));
-						if(candidateTownDistance > guardianTownMaxDistanceRequirementTownblocks)
-							continue;
-
-						if(guardianTown == null) {
-							//set as best candidate
-							guardianTown = candidateTown;
-							guardianTownSignificance = guardianTown.getNumResidents() * guardianTown.getTownBlocks().size();
-						} else {
-							//compare with previous best candidate
-							candidateTownSignificance = candidateTown.getNumResidents() * candidateTown.getTownBlocks().size();
-							if(candidateTownSignificance > guardianTownSignificance){
-								guardianTown = candidateTown;
-								guardianTownSignificance = candidateTownSignificance;
-							}
-						}
+				//If the nation assignment ok?
+				if (peacefulTown.hasNation()) {
+					for (Town guardianTown : guardianTowns) {
+						if (peacefulTown.getNation() == guardianTown.getNation())
+							continue CYCLE_ALL_TOWNS; //No change needed
 					}
+				} else {
+					if (guardianTowns.size() == 0)
+						continue; //No change needed
 				}
 
-				//Did we find a guardian town which also has a nation ?
-				if(guardianTown != null && guardianTown.hasNation()) {
+				//Nation status change needed
+				if (guardianTowns.size() == 0) {
+					//Guardian town list was empty. Peaceful town leaves nation
+					Nation previousNation = peacefulTown.getNation();
+					townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_left_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName()));
+					if(previousNation.getNumTowns() == 0) {
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), previousNation.getName()));
+					}
+				} else {
+					//Find guardian nation (the one with the largest guardian town)
+					Town topGuardianTown = null;
+					for(Town guardianTown: guardianTowns) {
+						if(topGuardianTown == null || guardianTown.getTownBlocks().size() > topGuardianTown.getTownBlocks().size()) {
+							topGuardianTown = guardianTown;
+						}
+					}
+					Nation guardianNation = topGuardianTown.getNation();
+
+					//Change town's nation
 					if (peacefulTown.hasNation()) {
-						if (guardianTown.getNation() != peacefulTown.getNation()) {
-							//Transfer peaceful town from one nation to another
-							Nation previousNation = peacefulTown.getNation();
-							townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
-							townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianTown.getNation());
-							TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_changed_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName(), guardianTown.getNation().getFormattedName()));
+						//Peaceful town moves from one nation to another
+						Nation previousNation = peacefulTown.getNation();
+						townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
+						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_changed_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName(), guardianNation.getFormattedName()));
+						if(previousNation.getNumTowns() == 0) {
+							TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), previousNation.getName()));
 						}
 					} else {
 						//Peaceful town joins nation
-						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianTown.getNation());
-						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_joined_nation"), peacefulTown.getFormattedName(), guardianTown.getNation().getFormattedName()));
-					}
-				} else {
-					if(peacefulTown.hasNation()) {
-						//Peaceful town leaves nation
-						Nation previousNation = peacefulTown.getNation();
-						townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
-						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_left_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName()));
+						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_joined_nation"), peacefulTown.getFormattedName(), guardianNation.getFormattedName()));
 					}
 				}
 			} catch (Exception e) {
@@ -286,5 +276,47 @@ public class TownPeacefulnessUtil {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static Set<Nation> getValidGuardianNations(Town peacefulTown) {
+		Set<Town> validGuardianTowns = getValidGuardianTowns(peacefulTown);
+		Set<Nation> validGuardianNations = new HashSet<>();
+		for(Town validGuardianTown: validGuardianTowns) {
+			try {
+				validGuardianNations.add(validGuardianTown.getNation());
+			} catch (NotRegisteredException e) {}
+		}
+		return validGuardianNations;
+	}
+	
+	public static Set<Town> getValidGuardianTowns(Town peacefulTown) {
+		Set<Town> validGuardianTowns = new HashSet<>();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		try {
+			int guardianTownPlotsRequirement = TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement();
+			int guardianTownMaxDistanceRequirementTownblocks = TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement();
+	
+			//Find valid guardian nations
+			List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
+			for(Town candidateTown: candidateTowns) {
+				if(!candidateTown.isPeaceful()
+					&& candidateTown.hasNation()
+					&& candidateTown.getTownBlocks().size() >= guardianTownPlotsRequirement
+					&& SiegeWarDistanceUtil.areTownsClose(peacefulTown, candidateTown, guardianTownMaxDistanceRequirementTownblocks)) {
+					validGuardianTowns.add(candidateTown);
+				}
+			}
+		} catch (Exception e) {
+			try {
+				System.out.println("Problem getting valid guardian nations for - " + peacefulTown.getName());
+			} catch (Exception e2) {
+				System.out.println("Problem getting valid guardian nations (could not read peaceful town name)");
+			}
+			e.printStackTrace();
+		}
+
+		//Return result
+		return validGuardianTowns;
 	}
 }

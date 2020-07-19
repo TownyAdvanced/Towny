@@ -48,6 +48,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -68,6 +69,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -856,8 +858,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful())
-				throw new Exception(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"));
+			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
+				Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
+				if(!validGuardianNations.contains(nation)) {
+					throw new Exception(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"), 
+						town.getName(),
+						nation.getName(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement())); 
+				}
+			}
 
 			// Check if the command is not cancelled
 			NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
@@ -1462,10 +1472,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownySettings.getWarSiegeEnabled()) {
 
-				//Peaceful towns cannot leave
-				if(TownySettings.getWarCommonPeacefulTownsEnabled()
-					&& town.isPeaceful())
-					throw new TownyException(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_leave_nation"), TownySettings.calcTownLevel(town)));
+				//If a peaceful town has no options, we don't let it revolt
+				if(TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
+					Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
+					if(validGuardianNations.size() == 0) {
+						throw new TownyException(
+							String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_zero"), 
+							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
+							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+					} else if(validGuardianNations.size() == 1)
+						throw new TownyException(String.format(
+							TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_one"), 
+							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
+							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+				}
 
 				if (TownySettings.getWarSiegeTownLeaveDisabled()) {
 
@@ -1678,7 +1698,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"));
+					TownyMessaging.sendErrorMsg(player, 
+						String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_join_nation"), 
+						town.getName(), 
+						nation.getName(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()
+					));
 					remove.add(town);
 					continue;
 				}
@@ -1793,14 +1819,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : kicking) {
-
-			//Peaceful towns cannot be kicked
-			if (TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarCommonPeacefulTownsEnabled()
-				&& town.isPeaceful()) {
-				TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_cannot_be_kicked"), TownySettings.calcTownLevel(town)));
-				return;
-			}
 
 			if (town.isCapital())
 				remove.add(town);

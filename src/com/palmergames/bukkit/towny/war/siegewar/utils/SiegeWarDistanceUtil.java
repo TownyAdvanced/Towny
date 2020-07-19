@@ -2,7 +2,11 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import org.bukkit.Bukkit;
@@ -193,7 +197,34 @@ public class SiegeWarDistanceUtil {
 	public static boolean isInTimedPointZone(Entity entity, Siege siege) {
 		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getTownBlockSize());
 	}
-	
+
+	public static boolean areTownsClose(Town town1, Town town2, int radiusTownblocks) {
+		try {
+			if(town1.hasHomeBlock() && town2.hasHomeBlock()) {
+				return areCoordsClose(
+					town1.getHomeBlock().getWorld(),
+					town1.getHomeBlock().getCoord(),
+					town2.getHomeBlock().getWorld(),
+					town2.getHomeBlock().getCoord(),
+					radiusTownblocks
+				);
+			} else {
+				return false;
+			}
+		} catch(TownyException te) {
+			return false;
+		}
+	}
+
+	private static boolean areCoordsClose(TownyWorld world1, Coord coord1, TownyWorld world2, Coord coord2, int radiusTownblocks) {
+		if(!world1.getName().equalsIgnoreCase(world2.getName()))
+			return false;
+
+		double distanceTownblocks = Math.sqrt(Math.pow(coord1.getX() - coord2.getX(), 2) + Math.pow(coord1.getZ() - coord2.getZ(), 2));
+
+		return distanceTownblocks < radiusTownblocks;
+	}
+
 	private static boolean areLocationsClose(Location location1, Location location2, int radius) {
 		if(!location1.getWorld().getName().equalsIgnoreCase(location2.getWorld().getName()))
 			return false;
