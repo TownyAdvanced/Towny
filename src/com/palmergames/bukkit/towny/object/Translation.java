@@ -1,14 +1,20 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -33,7 +39,8 @@ public final class Translation {
 	// if the file is not found it will load the default from resource
 	public static void loadLanguage() throws IOException {
 		
-		String[] configVal = TownySettings.getString(ConfigNodes.LANGUAGE).split("_");
+		String val = TownySettings.getString(ConfigNodes.LANGUAGE);
+		String[] configVal = val.split("_");
 		
 		String lang;
 		String country = null;
@@ -50,9 +57,36 @@ public final class Translation {
 		} else {
 			locale = new Locale(lang, country);
 		}
+
+		String fileName = "translation_" + val + ".properties";
+		InputStream inputStream = Towny.getPlugin().getResource(fileName);
 		
-		language = ResourceBundle.getBundle("translation", locale);
+		if (inputStream == null) {
+			loadCustomLang();
+			return;
+		}
+
+		File dest = new File(Towny.getPlugin().getDataFolder() + File.separator
+			+ "settings" + File.separator + fileName);
+
+		FileMgmt.save(inputStream, dest);
 		
+		try {
+			language = ResourceBundle.getBundle("translation", locale);
+		} catch (MissingResourceException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private static void loadCustomLang() throws IOException {
+
+		String lang = TownySettings.getString(ConfigNodes.LANGUAGE);
+		File langPath = new File(Towny.getPlugin().getDataFolder() + "/settings/" + lang + ".properties");
+
+		InputStream inputStream = new FileInputStream(langPath);
+
+		language = new PropertyResourceBundle(inputStream);
 	}
 
 	private static String parseSingleLineString(String str) {

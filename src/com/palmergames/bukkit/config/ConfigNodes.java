@@ -13,7 +13,7 @@ public enum ConfigNodes {
 	LANGUAGE(
 			"language",
 			"en_US",
-			"# The language file you wish to use"),
+			"# The language file you wish to use, excluding the (.properties)"),
 	PERMS(
 			"permissions",
 			"",

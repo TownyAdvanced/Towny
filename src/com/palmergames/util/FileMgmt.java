@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,6 +151,20 @@ public class FileMgmt {
 
 		return file;
 	}
+	
+	public static void save(InputStream is, File dest) throws IOException {
+		
+		OutputStream out = new FileOutputStream(dest);
+		
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = is.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		
+		out.close();
+		is.close();
+	}
 
 	// pass a resource name and it will return it's contents as a string
 	public static String convertStreamToString(String name) throws IOException {
@@ -171,6 +186,7 @@ public class FileMgmt {
 				try {
 					is.close();
 				} catch (NullPointerException e) {
+					e.printStackTrace();
 					//Failed to open a stream
 					throw new IOException();
 				}
