@@ -27,7 +27,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +45,7 @@ public class Town extends Government implements TownBlockOwner {
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private final transient List<Resident> residents = new ArrayList<>();
-	private final List<Resident> outlaws = new ArrayList<>();
+	private final Set<UUID> outlaws = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private final List<Location> jailSpawns = new ArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
@@ -60,7 +63,6 @@ public class Town extends Government implements TownBlockOwner {
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
-	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	
@@ -175,15 +177,14 @@ public class Town extends Government implements TownBlockOwner {
 		UUID newNatUUID = nation != null ? nation.getUniqueIdentifier() : null;
 		
 		// Ignore if the nation is the same (including if both are null)
-		if (nationID == newNatUUID ||
-			(nationID != null && nationID.equals(newNatUUID)))
+		if (Objects.equals(nationID, newNatUUID))
 			return;
 
 		if (newNatUUID != null && hasNation()) {
 			throw new AlreadyRegisteredException();
 		}
 
-		this.nationID = nation.getUniqueIdentifier();
+		this.nationID = newNatUUID;
 		TownyPerms.updateTownPerms(this);
 		TownyUniverse.getInstance().getDatabaseHandler().save(this);
 	}
@@ -987,44 +988,44 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public Collection<Resident> getOutlaws() {
-		return Collections.unmodifiableList(outlaws);
-	}
-	
-	public boolean hasOutlaw (String name) {
-		for (Resident outlaw : outlaws)
-			if (outlaw.getName().equalsIgnoreCase(name))
-				return true;
-		return false;		
+		if (outlaws.isEmpty())
+			return Collections.emptyList();
+			
+		List<Resident> residentOutlaws = new ArrayList<>(outlaws.size());
+		for (UUID outlawUUID : outlaws) {
+			try {
+				residentOutlaws.add(TownyUniverse.getInstance().getResident(outlawUUID));
+			} catch (NotRegisteredException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return residentOutlaws;
 	}
 	
 	public boolean hasOutlaw(Resident outlaw) {
-
-		return outlaws.contains(outlaw);
+		return outlaws.contains(outlaw.getUniqueIdentifier());
 	}
 	
 	public void addOutlaw(Resident resident) throws AlreadyRegisteredException {
-
 		addOutlawCheck(resident);
-		outlaws.add(resident);
+		outlaws.add(resident.getUniqueIdentifier());
 	}
 	
 	public void addOutlawCheck(Resident resident) throws AlreadyRegisteredException {
 
 		if (hasOutlaw(resident))
 			throw new AlreadyRegisteredException(Translation.of("msg_err_resident_already_an_outlaw"));
-		else if (resident.hasTown())
-			try {
-				if (resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(Translation.of("msg_err_not_outlaw_in_your_town"));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
+		else if (resident.hasTown()) {
+			if (resident.getTownID().equals(this.getUniqueIdentifier()))
+				throw new AlreadyRegisteredException(Translation.of("msg_err_not_outlaw_in_your_town"));
+		}
 	}
 	
 	public void removeOutlaw(Resident resident) {
 
 		if (hasOutlaw(resident))
-			outlaws.remove(resident);			
+			outlaws.remove(resident.getUniqueIdentifier());			
 	}
 
 	public UUID getUuid() {
