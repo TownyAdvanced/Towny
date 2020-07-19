@@ -325,5 +325,13 @@ public class TownyEconomyHandler {
 			economy.newAccount(accountName);
 		}
 	}
+	
+	public static void newAccount(String accountName) {
+		economy.newAccount(accountName);
+	}
+	
+	public static boolean hasAccount(String accountName) {
+		return economy.hasAccount(accountName);
+	}
 
 }
