@@ -1068,26 +1068,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					town.setMetadata(line.trim());
 
 				line = keys.get("ruined");
-				if (line != null) {
+				if (line != null)
 					try {
 						town.setRuined(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 						town.setRuined(false);
 					}
-				} else {
-					//Migrate legacy ruins
-					//Todo - remove after sw trail
-					String ruinDurationRemainingHours = keys.get("ruinDurationRemainingHours");
-					if(ruinDurationRemainingHours != null) {
-						try {
-							int hours = Integer.parseInt(ruinDurationRemainingHours);
-							if(hours > 0) {
-								town.setRuined(true);
-							}
-						} catch (Exception e) {
-						}
-					}
-				}
 
 				line = keys.get("ruinDurationRemainingHours");
 				if (line != null) {
@@ -1118,8 +1104,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setSiegeImmunityEndTime(0);
 					}
 				} else {
-					 //On first load of system, give each existing town the new town cooldown
-					long siegeImmunityEndTime = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * TimeMgmt.ONE_HOUR_IN_MILLIS);
+					 //On first load of system, give each existing town 0-60 minutes
+					long siegeImmunityEndTime = System.currentTimeMillis() + (long)(Math.random() * TimeMgmt.ONE_HOUR_IN_MILLIS);
 					town.setSiegeImmunityEndTime(siegeImmunityEndTime);
 				}
 
@@ -1131,15 +1117,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 				line = keys.get("peaceful");
-				if (line != null) {
+				if (line != null)
 					try {
 						town.setPeaceful(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				} else {
-					//On first load of system, give each existing town the new town effect
-					town.setPeaceful(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
-				}
 
 				line = keys.get("desiredPeacefulnessValue");
 				if (line != null)
