@@ -1,9 +1,21 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.lang.Validate;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +26,14 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -292,6 +308,33 @@ public class FileMgmt {
 				// Move file to new directory
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
 
+			}
+		}
+	}
+	
+	public static String getFileTimeStamp() {
+		long t = System.currentTimeMillis();
+		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
+	}
+	
+	public static void tar(File destination, File... sources) throws IOException {
+
+		try (TarArchiveOutputStream archive = new TarArchiveOutputStream(new GzipCompressorOutputStream(new FileOutputStream(destination)))) {
+			for (File source : sources) {
+				Files.walk(source.toPath()).forEach((path -> {
+					File file = path.toFile();
+
+					if (!file.isDirectory()) {
+						TarArchiveEntry entry_1 = new TarArchiveEntry(file, file.toString());
+						try (FileInputStream fis = new FileInputStream(file)) {
+							archive.putArchiveEntry(entry_1);
+							IOUtils.copy(fis, archive);
+							archive.closeArchiveEntry();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}));
 			}
 		}
 	}

@@ -697,9 +697,9 @@ public enum ConfigNodes {
 			"90d"),
 	PLUGIN_FLATFILE_BACKUP(
 			"plugin.database.flatfile_backup",
-			"zip",
+			"tar",
 			"",
-			"# Valid entries are: zip, none."),
+			"# Valid entries are: zip and/or tar (both for tar.gz) and none."),
 
 	PLUGIN_INTERFACING("plugin.interfacing", "", ""),
 	PLUGIN_MODS(

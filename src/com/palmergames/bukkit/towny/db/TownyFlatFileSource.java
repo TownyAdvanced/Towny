@@ -144,7 +144,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public synchronized boolean backup() throws IOException {
 		String backupType = TownySettings.getFlatFileBackupType();
 		long t = System.currentTimeMillis();
-		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
+		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
 		FileMgmt.checkOrCreateFolders(
 				rootFolderPath,
 				rootFolderPath + File.separator + "backup");
@@ -156,11 +156,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
 				return true;
 			}
-			case "zip": {
-				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
-						new File(dataFolderPath),
-						new File(logFolderPath),
-						new File(settingsFolderPath));
+			case "zip":
+			case "tar": {
+				FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
 				return true;
 			}
 			default:
