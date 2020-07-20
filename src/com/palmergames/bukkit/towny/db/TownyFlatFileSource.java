@@ -144,7 +144,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public synchronized boolean backup() throws IOException {
 		String backupType = TownySettings.getFlatFileBackupType();
 		long t = System.currentTimeMillis();
-		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
+		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
 		FileMgmt.checkOrCreateFolders(
 				rootFolderPath,
 				rootFolderPath + File.separator + "backup");
