@@ -4777,3 +4777,7 @@ v0.92.0.11:
 0.96.2.6: 
   - Fix firespread bypass for obsidian and netherrack not working.
     - Closes #4199.
+  - Make sure debt accounts start with zeroed out balance, courtesy of Siris with PR #4193.
+    - Closes #4192.
+    - Also fixes closed-economy-support.
+    - Closes #4188.
