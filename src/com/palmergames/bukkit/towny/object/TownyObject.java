@@ -84,7 +84,7 @@ public abstract class TownyObject implements Nameable {
 	}
 
 	public boolean hasMeta() {
-		return metadata == null;
+		return metadata != null;
 	}
 
 	public boolean hasMeta(String key) {
