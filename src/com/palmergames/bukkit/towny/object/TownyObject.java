@@ -75,16 +75,12 @@ public abstract class TownyObject implements Nameable {
 		
 		return Collections.unmodifiableCollection(metadata.values());
 	}
-
-	public Map<String, CustomDataField<?>> getMetaMap() {
-		if (metadata == null)
-			return Collections.emptyMap();
-
-		return Collections.unmodifiableMap(metadata);
-	}
 	
 	public CustomDataField<?> getMetadata(String key) {
-		return getMetaMap().get(key);
+		if(metadata != null)
+			return metadata.get(key);
+		
+		return null;
 	}
 
 	public boolean hasMeta() {
@@ -92,7 +88,10 @@ public abstract class TownyObject implements Nameable {
 	}
 
 	public boolean hasMeta(String key) {
-		return getMetaMap().containsKey(key);
+		if (metadata != null)
+			return metadata.containsKey(key);
+		
+		return false;
 	}
 
 	public void setMetadata(String str) {
