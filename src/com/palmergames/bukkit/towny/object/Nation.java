@@ -29,11 +29,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-public class Nation extends Government {
+public class Nation extends Government implements TownBlockHolder {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -47,6 +49,7 @@ public class Nation extends Government {
 	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
+	
 	@SuppressWarnings("unused")
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 
@@ -588,14 +591,6 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(sentAllyInvites);
 	}
 	
-	public int getNumTownblocks() {
-		int townBlocksClaimed = 0;
-		for (Town towns : this.getTowns()) {
-			townBlocksClaimed = townBlocksClaimed + towns.getTownBlocks().size();
-		}
-		return townBlocksClaimed;
-	}
-	
 	public Resident getKing() {
 		return capital.getMayor();
 	}
@@ -742,5 +737,25 @@ public class Nation extends Government {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
+	}
+
+	@Override
+	public Collection<TownBlock> getTownBlocks() {
+		ArrayList<TownBlock> townBlocks = new ArrayList<>();
+		for (Town town : towns) {
+			townBlocks.addAll(town.getTownBlocks());
+		}
+		return Collections.unmodifiableList(townBlocks);
+	}
+
+	@Override
+	public boolean hasTownBlock(TownBlock townBlock) {
+		for (Town town: towns) {
+			if (town.hasTownBlock(townBlock)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

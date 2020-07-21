@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.TownBlockManager;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -40,7 +41,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.comparators.TownComparators;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -1280,7 +1280,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_TOWNBLOCKS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = TownComparators.BY_TOWNBLOCKS_CLAIMED;
+						comparator = GovernmentComparators.BY_TOWNBLOCKS_OWNED;
 					} else if (split[i].equalsIgnoreCase("online")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_ONLINE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -3190,7 +3190,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	// wrapper function for non friend setting of perms
-	public static void setTownBlockOwnerPermissions(Player player, TownBlockHolder townBlockHolder, String[] split) {
+	public static void setTownBlockOwnerPermissions(Player player, TownBlockManager townBlockHolder, String[] split) {
 
 		setTownBlockPermissions(player, townBlockHolder, townBlockHolder.getPermissions(), split, false);
 	}

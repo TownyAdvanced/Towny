@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object.comparators;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.TownBlockHolder;
 import com.palmergames.bukkit.towny.object.TownyObject;
 
 import java.util.Comparator;
@@ -36,4 +37,7 @@ public class GovernmentComparators {
 			return -1;
 		}
 	};
+	
+	public static final Comparator<? extends Government> BY_TOWNBLOCKS_OWNED = Comparator
+		.comparingInt(t -> t.getTownBlocks().size());
 }

@@ -1193,7 +1193,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNBLOCKS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = NationComparators.BY_TOWNBLOCKS_CLAIMED;
+						comparator = GovernmentComparators.BY_TOWNBLOCKS_OWNED;
 					} else if (split[i].equalsIgnoreCase("online")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_ONLINE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
