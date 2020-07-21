@@ -1803,7 +1803,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 
 		// Assistants
-		list.add("assistants=" + StringMgmt.join(town.getAssistants(), ","));
+		list.add("assistants=" + StringMgmt.join(town.getRank("assistant"), ","));
 
 		list.add(newLine);
 		// Town Board
