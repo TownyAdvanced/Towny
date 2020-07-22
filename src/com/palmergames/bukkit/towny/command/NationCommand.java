@@ -528,7 +528,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_nation_name"));
 				else if (split.length >= 2) {
 
-					if (!resident.isMayor() && !resident.getTown().hasAssistant(resident))
+					if (!resident.isMayor() && !resident.getTown().hasResidentWithRank(resident, "assistant"))
 						throw new TownyException(Translation.of("msg_peasant_right"));
 					
 					boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownySettings.isUsingEconomy();

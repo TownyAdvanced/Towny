@@ -4770,3 +4770,17 @@ v0.92.0.11:
     - The debt prefix for the debt eco account.
   - Fix loading system files when loading all townblocks, courtesy of Siris with PR #4182.
   - Move translation code to separate object and introduce new method: Translation.of(), courtesy of Siris with PR #4177.
+  - Add Mayoral Succession, courtesy of DocW with PR #4107.
+  - Fix stacktrace showing when /t {foo} hits an exception.
+  - Clean up deprecated Assistant related code.
+  - Add town.hasResidentWithRank(Resident, String);
+0.96.2.6: 
+  - Fix firespread bypass for obsidian and netherrack not working.
+    - Closes #4199.
+  - Make sure debt accounts start with zeroed out balance, courtesy of Siris with PR #4193.
+    - Closes #4192.
+    - Also fixes closed-economy-support.
+    - Closes #4188.
+0.96.2.7:
+  - Fix %townyadvanced_nation_prefix% returning the nation prefix.
+    - Closes #4202.

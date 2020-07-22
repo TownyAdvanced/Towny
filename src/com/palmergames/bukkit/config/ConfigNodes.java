@@ -559,6 +559,13 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
 	),
+	GTOWN_ORDER_OF_MAYORAL_SUCCESSION(
+			"global_town_settings.order_of_mayoral_succession",
+			"assistant",
+			"# # The ranks to be given preference when assigning a new mayor, listed in order of descending preference.",
+			"# All ranks should be as defined in `townyperms.yml`.",
+			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
+	),
 	
 	GNATION_SETTINGS(
 			"global_nation_settings",
