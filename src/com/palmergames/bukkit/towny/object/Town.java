@@ -102,11 +102,11 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		ruined = false;
 		ruinDurationRemainingHours = 0;
 		revoltImmunityEndTime = 0;
-		siegeImmunityEndTime = System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
+		siegeImmunityEndTime = 0;
 		siege = null;
 		occupied = false;
-		peaceful = TownySettings.getWarCommonNewTownPeacefulnessEnabled();
-		desiredPeacefulnessValue = TownySettings.getWarCommonNewTownPeacefulnessEnabled();
+		peaceful = false;
+		desiredPeacefulnessValue = false;
 		peacefulnessChangeConfirmationCounterDays = 0;
 	}
 

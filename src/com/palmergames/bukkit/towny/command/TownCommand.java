@@ -85,6 +85,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
+
 /**
  * Send a list of all town help commands to player Command: /town
  */
@@ -2703,6 +2705,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				e.printStackTrace();
 			}
 		}
+
+		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
+		town.setPeaceful(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
+		town.setDesiredPeacefulnessValue(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
 		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
