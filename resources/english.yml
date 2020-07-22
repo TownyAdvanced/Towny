@@ -1300,7 +1300,6 @@ status_town_peacefulness_status_change_timer: '&2Countdown To Peacefulness Statu
 msg_war_common_town_declared_peaceful: '&bPeacefulness Declared!. The town will be confirmed as peaceful in %d day(s).'
 msg_war_common_town_declared_non_peaceful: '&bNon-Peacefulness Declared!. The town will be confirmed as non-peaceful in %d day(s).'
 msg_war_common_town_peacefulness_countdown_cancelled: '&bThe peacefulness status change countdown was cancelled.'
-
 msg_war_common_town_became_peaceful: '&b%s has been confirmed as Peaceful. PVP is now forced off.'
 msg_war_common_town_became_non_peaceful: '&b%s has been confirmed as Not-Peaceful. PVP is no longer forced off.'
 msg_war_common_peaceful_town_cannot_toggle_pvp: '&cCannot toggle PVP in peaceful towns. It is forced off.'
@@ -1313,10 +1312,10 @@ msg_war_siege_err_cannot_attack_peaceful_town: '&6[War]&c You cannot attack a pe
 msg_war_siege_peaceful_town_cannot_join_nation: 'c%s [PEACEFUL] cannot join %s, because the nation does not have a guardian town nearby (within %d chunks). A guardian town is a non-peaceful nation town with at least %d plots.'
 msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_zero: '&cYou cannot revolt at this time, because there are no guardian towns nearby (within %d chunks). A guardian town is a non-peaceful nation town with at least %d plots.'
 msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_one:  '&cYou cannot revolt at this time, because there is only 1 guardian town nearby (within %d chunks). A guardian town is a non-peaceful nation town with at least %d plots.'
-
 msg_war_siege_peaceful_town_changed_nation: "&b%s has peacefully changed hands, moving from %s to %s."
 msg_war_siege_peaceful_town_joined_nation: "&b%s has peacefully joined %s."
 msg_war_siege_peaceful_town_left_nation: "&b%s has peacefully left %s."
+msg_war_siege_warning_peaceful_town_should_not_create_nation: '&cYou are about to make a peaceful town into a nation capital. This is usually a bad idea, because the nation could fall without a fight.'
 
 #Siege immunities
 msg_set_siege_immunities_town: 'Siege immunity for town %s set to %s hours.'

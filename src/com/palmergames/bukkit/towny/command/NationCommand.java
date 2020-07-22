@@ -1367,6 +1367,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				});
 				// Send confirmation.
+				if(TownySettings.getWarSiegeEnabled() 
+					&& TownySettings.getWarCommonPeacefulTownsEnabled()
+					&& town.isPeaceful()) {
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
+				}
 				confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
 				ConfirmationHandler.sendConfirmation(player, confirmation);
 			// Or, it is free, so just make the nation.
