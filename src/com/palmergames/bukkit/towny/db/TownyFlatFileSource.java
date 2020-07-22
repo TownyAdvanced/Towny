@@ -720,14 +720,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						resident.setPermissions(line);
 				} catch (Exception e) {}
 
-				line = keys.get("postTownLeavePeacefulEnabled");
-				if (line != null)
-					resident.setPostTownLeavePeacefulEnabled(Boolean.parseBoolean(line));
-
-				line = keys.get("postTownLeavePeacefulHoursRemaining");
-				if (line != null)
-					resident.setPostTownLeavePeacefulHoursRemaining(Integer.parseInt(line));
-
 				line = keys.get("nationRefundAmount");
 				if (line != null)
 					resident.setNationRefundAmount(Integer.parseInt(line));
@@ -2025,10 +2017,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
-
-		// Town-related Peacefulness
-		list.add("postTownLeavePeacefulEnabled=" + resident.isPostTownLeavePeacefulEnabled());
-		list.add("postTownLeavePeacefulHoursRemaining=" + resident.getPostTownLeavePeacefulHoursRemaining());
 
 		//Nation refund amount
 		list.add("nationRefundAmount=" + resident.getNationRefundAmount());

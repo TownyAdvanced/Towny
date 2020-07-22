@@ -817,18 +817,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
 				try {
-					resident.setPostTownLeavePeacefulEnabled(rs.getBoolean("postTownLeavePeacefulEnabled"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				try {
-					resident.setPostTownLeavePeacefulHoursRemaining(rs.getInt("postTownLeavePeacefulHoursRemaining"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				try {
 					resident.setNationRefundAmount(rs.getInt("nationRefundAmount"));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -1724,11 +1712,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-
-			//Town-related Peacefulness
-			res_hm.put("postTownLeavePeacefulEnabled", resident.isPostTownLeavePeacefulEnabled());
-			res_hm.put("postTownLeavePeacefulHoursRemaining", resident.getPostTownLeavePeacefulHoursRemaining());
-			res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
+            res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
 
 			if (resident.hasMeta())
 				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));

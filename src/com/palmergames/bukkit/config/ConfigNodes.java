@@ -2378,11 +2378,6 @@ public enum ConfigNodes {
 			"5",
 			"# This value determines how long it takes to confirm a town peacefulness status change.",
 			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
-	WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS(
-			"war.common.peaceful_towns.resident_post_leave_peacefulness_duration_hours",
-			"72",
-			"# This value determines how long a resident remains 'peaceful' after they leave a peaceful town.",
-			"# In this time they cannot inflict PVP damage, or (in Siegewar) gain nation-military ranks."),
 	WAR_COMMON_PEACEFUL_TOWNS_VISITOR_T_SPAWN_OVERRIDE(
 			"war.common.peaceful_towns.visitor_t_spawn_override",
 			"true",

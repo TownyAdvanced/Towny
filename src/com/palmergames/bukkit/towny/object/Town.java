@@ -694,9 +694,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 			if(TownySettings.getWarSiegeEnabled())
 				SiegeWarMembershipController.evaluateTownRemoveResident(this, resident);
 
-			if(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
-				TownPeacefulnessUtil.grantPostTownLeavePeacefulnessToResident(resident);
-
 			remove(resident);
 
 			if (getNumResidents() == 0) {

@@ -25,10 +25,6 @@ public class HourlyTimerTask extends TownyTimerTask {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
 
-		if(TownySettings.getWarCommonPeacefulTownsEnabled()) {
-			TownPeacefulnessUtil.updatePostTownLeavePeacefulnessCounters();
-		}
-
 		if(TownySettings.getWarSiegeEnabled()) {
 			SiegeWarTimerTaskController.updatePopulationBasedSiegePointModifiers();
 		}
