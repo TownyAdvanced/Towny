@@ -233,14 +233,6 @@ public class SiegeWarBannerControlUtil {
 				siegePoints = siege.getBannerControllingResidents().size() * TownySettings.getWarSiegePointsForAttackerOccupation();
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
-				//Pillage
-				double maximumPillageAmount = TownySettings.getWarSiegeMaximumPillageAmountPerPlot() * siege.getDefendingTown().getTownBlocks().size();
-				if(TownySettings.getWarSiegePillagingEnabled()
-					&& TownySettings.isUsingEconomy()
-					&& siege.getDefendingTown().getSiege().getTotalPillageAmount() < maximumPillageAmount)
-				{
-					SiegeWarMoneyUtil.pillageTown(siege.getBannerControllingResidents(), siege.getAttackingNation(), siege.getDefendingTown());
-				}
 				//Save siege zone
 				TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 			break;

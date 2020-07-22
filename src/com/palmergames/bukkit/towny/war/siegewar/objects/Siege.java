@@ -42,7 +42,6 @@ public class Siege {
     private long startTime;           //Start of siege
     private long scheduledEndTime;    //Scheduled end of siege
     private long actualEndTime;       //Actual end time of siege
-	private double totalPillageAmount;     //The total amount pillaged so far from the town
 	private Location siegeBannerLocation;
 	private int siegePoints;
 	private double warChestAmount;
@@ -155,18 +154,6 @@ public class Siege {
 		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
 
-	public double getTotalPillageAmount() {
-		return totalPillageAmount;
-	}
-
-	public void setTotalPillageAmount(double totalPillageAmount) {
-		this.totalPillageAmount = totalPillageAmount;
-	}
-
-	public void increaseTotalPillageAmount(double pillageAmount) {
-    	this.totalPillageAmount += pillageAmount;
-	}
-	
 	public String getName() {
 		return name;
 	}

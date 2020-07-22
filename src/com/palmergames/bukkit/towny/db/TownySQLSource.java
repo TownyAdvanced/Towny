@@ -1283,7 +1283,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				siege.setStartTime(rs.getLong("actualStartTime"));
 				siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
 				siege.setActualEndTime(rs.getLong("actualEndTime"));
-				siege.setTotalPillageAmount(rs.getDouble("totalPillageAmount"));
             }
 
             return true;
@@ -1911,7 +1910,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			sg_hm.put("actualStartTime", 0);
 			sg_hm.put("scheduledEndTime", 0);
 			sg_hm.put("actualEndTime", 0);
-			sg_hm.put("totalPillageAmount", 0d);
 
 			UpdateDB("SIEGES", sg_hm, Collections.singletonList("name"));
 

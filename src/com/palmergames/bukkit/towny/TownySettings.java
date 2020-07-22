@@ -3137,24 +3137,12 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_RESIDENT_POST_LEAVE_PEACEFULNESS_DURATION_HOURS);
 	}
 
-	public static boolean getWarSiegePillagingEnabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_PILLAGING_ENABLED);
-	}
-
-	public static double getWarSiegePillageAmountPerPlot() {
-		return getDouble(ConfigNodes.WAR_SIEGE_PILLAGE_AMOUNT_PER_PLOT);
-	}
-
 	public static boolean getWarCommonPostRespawnPeacefulnessEnabled() {
 		return getBoolean(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED);
 	}
 
 	public static int getWarCommonPostRespawnPeacefulnessDurationSeconds() {
 		return getInt(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_DURATION_SECONDS);
-	}
-
-	public static double getWarSiegeMaximumPillageAmountPerPlot() {
-		return getDouble(ConfigNodes.WAR_SIEGE_MAXIMUM_PILLAGE_AMOUNT_PER_PLOT);
 	}
 
 	public static boolean getWarSiegeBesiegedTownRecruitmentDisabled() {

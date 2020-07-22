@@ -128,7 +128,6 @@ public class SQL_Schema {
 		columns.add("`actualStartTime` BIGINT");
 		columns.add("`scheduledEndTime` BIGINT");
 		columns.add("`actualEndTime` BIGINT");
-		columns.add("`totalPillageAmount` float NOT NULL");
 		return columns;
 	}
 	

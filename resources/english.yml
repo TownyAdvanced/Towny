@@ -1177,8 +1177,6 @@ msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered of %s by 
 msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered of %s by %s!'
 msg_siege_war_town_ruined_from_plunder: '&6[War]&b %s has been reduced to ruins by %s!'
 msg_siege_war_town_bankrupted_from_plunder: '&6[War]&b %s has been bankrupted by %s!'
-msg_siege_war_town_ruined_from_pillage: '&6[War]&b %s has been reduced to ruins due to pillaging by the soldiers of %s!'
-msg_siege_war_town_bankrupted_from_pillage: '&6[War]&b %s has been bankrupted due to pillaging by the soldiers of %s!'
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!.'
 msg_siege_war_attacking_troops_at_siege_banner: '&6[War]&b Siege on %s > Attackers are at the siege banner.'
 msg_siege_war_defending_troops_at_siege_banner: '&6[War]&b Siege on %s > Town defenders are at the siege banner.'
