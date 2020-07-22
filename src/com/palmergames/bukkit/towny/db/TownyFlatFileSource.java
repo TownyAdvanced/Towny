@@ -164,6 +164,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					new File(settingsFolderPath));
 				return true;
 			}
+			case "legacyzip":
+				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
+				return true;
 			default:
 			case "none": {
 				return false;
