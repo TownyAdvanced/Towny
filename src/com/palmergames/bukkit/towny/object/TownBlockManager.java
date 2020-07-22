@@ -3,7 +3,10 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
-public interface TownBlockManager extends TownBlockHolder, Permissible {
+/**
+ * Represents an object that holds and manipulates a collection of townblocks.
+ */
+public interface TownBlockManager extends TownBlockHolder, Permissible, Nameable {
 	/**
 	 * Adds a townblock to the list of existing townblocks.
 	 *

@@ -38,6 +38,6 @@ public class GovernmentComparators {
 		}
 	};
 	
-	public static final Comparator<? extends Government> BY_TOWNBLOCKS_OWNED = Comparator
+	public static final Comparator<? extends TownBlockHolder> BY_TOWNBLOCKS_OWNED = Comparator
 		.comparingInt(t -> t.getTownBlocks().size());
 }

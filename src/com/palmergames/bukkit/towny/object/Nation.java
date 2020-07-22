@@ -29,10 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class Nation extends Government implements TownBlockHolder {
@@ -608,7 +606,7 @@ public class Nation extends Government implements TownBlockHolder {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
-	public void removeMetaData(CustomDataField md) {
+	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveNation(this);

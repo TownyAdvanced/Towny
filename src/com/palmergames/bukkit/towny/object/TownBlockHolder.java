@@ -3,13 +3,13 @@ package com.palmergames.bukkit.towny.object;
 import java.util.Collection;
 
 /**
- * Allows objects to contain townblocks to be accessed/manipulated. 
+ * Represents and object that contains townblocks. 
  * 
  * @author EdgarL
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockHolder extends Nameable {
+public interface TownBlockHolder {
 
 	/**
 	 * Gets the unmodifiable collection of townblocks.
