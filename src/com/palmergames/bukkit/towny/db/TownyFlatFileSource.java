@@ -157,6 +157,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				return true;
 			}
 			case "zip":
+				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
+				return true;
 			case "tar": {
 				FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
 					new File(dataFolderPath),
@@ -164,12 +169,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					new File(settingsFolderPath));
 				return true;
 			}
-			case "legacyzip":
-				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
-					new File(dataFolderPath),
-					new File(logFolderPath),
-					new File(settingsFolderPath));
-				return true;
 			default:
 			case "none": {
 				return false;
