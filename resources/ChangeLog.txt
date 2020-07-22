@@ -4781,3 +4781,6 @@ v0.92.0.11:
     - Closes #4192.
     - Also fixes closed-economy-support.
     - Closes #4188.
+0.96.2.7:
+  - Fix %townyadvanced_nation_prefix% returning the nation prefix.
+    - Closes #4202.
