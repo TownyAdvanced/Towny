@@ -874,6 +874,12 @@ public enum ConfigNodes {
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
 			"# 54 - chest ...etc"),
+	PROT_FIRE_SPREAD_BYPASS(
+			"protection.fire_spread_bypass_materials",
+			"NETHERRACK,SOUL_SAND,SOUL_SOIL",
+			"",
+			"# Materials which can be lit on fire even when firespread is disabled.",
+			"# Still requires the use of the flint and steel."),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",

@@ -4784,3 +4784,13 @@ v0.92.0.11:
 0.96.2.7:
   - Fix %townyadvanced_nation_prefix% returning the nation prefix.
     - Closes #4202.
+  - New Config Option: protection.fire_spread_bypass_materials
+    - Default: NETHERRACK,SOUL_SAND,SOUL_SOIL
+    - Materials which can be lit on fire even when firespread is disabled.
+    - Still requires the use of the flint and steel.
+    - Closes #4204.
+  - Firespread rules in Town no longer overrides single townblocks' firespread settings. 
+  - API: added TownyAPI.getInstance().getTownyWorld(String name)
+    - Returns TownyWorld or null.
+  - API: added TownyAPI.getInstance().getTown(Location location)
+    - Returns Town or null.
