@@ -2706,7 +2706,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 
-		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
+		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS));
 		town.setPeaceful(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
 		town.setDesiredPeacefulnessValue(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
 		
