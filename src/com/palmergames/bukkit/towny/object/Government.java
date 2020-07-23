@@ -190,7 +190,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 			return;
 		}
 		
-		this.tag = text.toUpperCase().substring(0,3);
+		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new GovernmentTagChangeEvent(this.tag, this));
