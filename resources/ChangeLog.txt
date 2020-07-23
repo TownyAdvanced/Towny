@@ -4794,3 +4794,13 @@ v0.92.0.11:
     - Returns TownyWorld or null.
   - API: added TownyAPI.getInstance().getTown(Location location)
     - Returns Town or null.
+  - Fix nation tags being cut short, courtesy of silverwolfg11 with PR #4205.
+  - Metadata Improvements, courtesy of silverwolfg11 with PR #4186.
+  - Do compression via tar and not zip, courtesy of Siris with PR #4195.
+    - Tar does a lot better when unicode characters are being used in the database.
+    - You can go back to using zip at your own risk, if that's your thing.
+  - Removed Config Option: plugin.database.flatfile_backup
+  - New Config Option: plugin.database.flatfile_backup_type
+    - default: tar
+    - Valid entries are: tar for tar.gz and zip for zip, use none for no backup.
+  - Allow for nations and towns to set tags less than 4 characters.

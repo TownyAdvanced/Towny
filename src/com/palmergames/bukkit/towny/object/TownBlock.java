@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
-import java.util.HashSet;
 import java.util.Objects;
 
 public class TownBlock extends TownyObject {
