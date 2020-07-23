@@ -12,7 +12,7 @@ public enum ConfigNodes {
 			"# This is for showing the changelog on updates.  Please do not edit."),
 	LANGUAGE(
 			"language",
-			"en_US",
+			"english",
 			"# The language file you wish to use, excluding the (.properties)"),
 	PERMS(
 			"permissions",

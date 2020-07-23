@@ -26,7 +26,7 @@ public final class Translation {
 	private static final HashMap<String, Locale> legacyKeys = new HashMap<>(12);
 	
 	static {
-		legacyKeys.put("english.yml", new Locale("en", "US"));
+		legacyKeys.put("english.yml", Locale.getDefault());
 		legacyKeys.put("chinese.yml", new Locale("zh", "CN"));
 		legacyKeys.put("es-mx.yml", new Locale("es", "MX"));
 		legacyKeys.put("french.yml", new Locale("fr", "FR"));
@@ -38,6 +38,7 @@ public final class Translation {
 		legacyKeys.put("russian.yml", new Locale("ru", "RU"));
 		legacyKeys.put("spanish.yml", new Locale("es"));
 		legacyKeys.put("polish.yml", new Locale("pl", "PL"));
+		legacyKeys.put("english", Locale.getDefault());
 	}
 	
 	public static ResourceBundle language;
