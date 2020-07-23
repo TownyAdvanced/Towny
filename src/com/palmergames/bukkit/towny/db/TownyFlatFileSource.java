@@ -157,11 +157,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
 				return true;
 			}
-			case "zip": {
+			case "zip":
 				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
-						new File(dataFolderPath),
-						new File(logFolderPath),
-						new File(settingsFolderPath));
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
+				return true;
+			case "tar": {
+				FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
 				return true;
 			}
 			default:

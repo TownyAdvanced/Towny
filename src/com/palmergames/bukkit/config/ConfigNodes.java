@@ -703,10 +703,10 @@ public enum ConfigNodes {
 			"plugin.database.backups_are_deleted_after",
 			"90d"),
 	PLUGIN_FLATFILE_BACKUP(
-			"plugin.database.flatfile_backup",
-			"zip",
+			"plugin.database.flatfile_backup_type",
+			"tar",
 			"",
-			"# Valid entries are: zip, none."),
+			"# Valid entries are: tar for tar.gz and zip for zip, use none for no backup."),
 
 	PLUGIN_INTERFACING("plugin.interfacing", "", ""),
 	PLUGIN_MODS(
