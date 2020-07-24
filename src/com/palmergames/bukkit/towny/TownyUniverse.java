@@ -153,6 +153,9 @@ public class TownyUniverse {
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}
+
+		ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+		migrator.addTownLevelProperty("test", "test");
         
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {

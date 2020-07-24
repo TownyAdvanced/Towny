@@ -6,8 +6,10 @@ package com.palmergames.bukkit.config.migration;
 class Change {
 	MigrationType type;
 	String path;
+	String key;
 	String value;
 	WorldMigrationAction worldAction;
+	
 
 	@Override
 	public String toString() {

@@ -9,11 +9,13 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.Version;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -50,30 +52,37 @@ public class ConfigMigrator {
 				}
 			}
 		}
+		config.save();
 	}
 	
 	private void performChange(Change change) {
-		String diff;
 		switch (change.type) {
 			case OVERWRITE:
-				diff = change.path;
+				config.set(change.path, change.value);
 				break;
 			case APPEND:
 				String base = config.getString(change.path);
-				diff = base + change.value;
+				config.set(change.path, base + change.value);
+				break;
+			case TOWN_LEVEL_ADD:
+				addTownLevelProperty(change.key, change.value);
+				break;
+			case NATION_LEVEL_ADD:
+				addNationLevelProperty(change.key, change.value);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
 
-		// Perform change.
-		System.out.println("Updating " + change.path + "...");
-		config.set(change.path, diff);
+		if (change.path != null) {
+			// Perform change.
+			System.out.println("Updating " + change.path + "...");
+		}
 		
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
-				change.worldAction.getAction().accept(world,  diff);
+				change.worldAction.getAction().accept(world, config.getString(change.path) + change.value);
 			}
 		}
 	}
@@ -88,5 +97,25 @@ public class ConfigMigrator {
 		Reader reader = new InputStreamReader(file);
 
 		return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
+	}
+	
+	public void addTownLevelProperty(String key, String value) {
+		 List<Map<?, ?>> mapList = config.getMapList("levels.town_level");
+		
+		 for (Map<?, ?> map : mapList) {
+			 ((Map<String, String>)map).put(key, value);
+		 }
+		 
+		 config.set("levels.town_level", mapList);
+	}
+
+	public void addNationLevelProperty(String key, String value) {
+		List<Map<?, ?>> mapList = config.getMapList("levels.nation_level");
+
+		for (Map<?, ?> map : mapList) {
+			((Map<String, String>)map).put(key, value);
+		}
+
+		config.set("levels.nation_level", mapList);
 	}
 }

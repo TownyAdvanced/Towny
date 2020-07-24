@@ -46,9 +46,9 @@
     "version": "0.96.2.4",
     "changes": [
       {
-        "type": "OVERWRITE",
-        "path": "notification.plot.forsale",
-        "value": "heheh another one"
+        "type": "TOWN_LEVEL_ADD",
+        "key": "foo",
+        "value": "bar"
       }
     ]
   }
