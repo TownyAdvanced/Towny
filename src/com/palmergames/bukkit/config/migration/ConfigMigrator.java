@@ -9,8 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.Version;
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
