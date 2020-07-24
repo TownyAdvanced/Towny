@@ -1064,7 +1064,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					nation.removeTown(town);
 					
 					townyUniverse.getDataSource().saveNation(nation);
-					townyUniverse.getDataSource().saveNationList();
 
 					plugin.resetCache();
 
@@ -1072,7 +1071,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 				} catch (EmptyNationException en) {
 					townyUniverse.getDataSource().removeNation(en.getNation());
-					townyUniverse.getDataSource().saveNationList();
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", en.getNation().getName()));
 				} finally {
 					townyUniverse.getDataSource().saveTown(town);

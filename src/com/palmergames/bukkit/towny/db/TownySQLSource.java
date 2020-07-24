@@ -2252,22 +2252,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Save keys
 	 */
 
-    @Override
-    public boolean saveTownList() {
-
-        return true;
-    }
-
 	@Override
 	public boolean savePlotGroupList() {
 		return true;
 	}
-
-	@Override
-    public boolean saveNationList() {
-
-        return true;
-    }
 
     @Override
     public boolean saveWorldList() {

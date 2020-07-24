@@ -527,7 +527,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);
-		saveTownList();
 		
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 	}
@@ -595,7 +594,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		plugin.resetCache();
-		saveNationList();
 
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 	}
@@ -756,7 +754,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 
 			saveTown(town);
-			saveTownList();
 			savePlotGroupList();
 			saveWorld(town.getHomeblockWorld());
 
@@ -845,7 +842,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			saveNation(nation);
-			saveNationList();
 
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
@@ -1073,7 +1069,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			String name = en.getNation().getName();
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
-			universe.getDataSource().saveNationList();
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
 			lock.unlock();
 		}

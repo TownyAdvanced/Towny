@@ -1354,7 +1354,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		townyUniverse.getDataSource().saveTown(town);
 		townyUniverse.getDataSource().saveNation(nation);
-		townyUniverse.getDataSource().saveNationList();
 
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
 
@@ -1428,7 +1427,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.removeTown(town);
 			
 			townyUniverse.getDataSource().saveNation(nation);
-			townyUniverse.getDataSource().saveNationList();
 
 			plugin.resetCache();
 
@@ -1439,7 +1437,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} catch (EmptyNationException en) {
 			townyUniverse.getDataSource().removeNation(en.getNation());
-			townyUniverse.getDataSource().saveNationList();
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", en.getNation().getName()));
 		} finally {
 			townyUniverse.getDataSource().saveTown(town);
@@ -2607,7 +2604,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			townyUniverse.getDataSource().saveNation(nation);
-			townyUniverse.getDataSource().saveNationList();
 		}
 	}
 
