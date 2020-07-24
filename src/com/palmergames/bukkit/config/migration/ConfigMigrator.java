@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -73,11 +74,9 @@ public class ConfigMigrator {
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
 
-		if (change.path != null) {
-			// Perform change.
-			Towny.getPlugin().getLogger().info("Updating " + change.path + "...");
-		}
-		
+		if (change.path != null)
+			TownyMessaging.sendDebugMsg("Updating config at " + change.path + "...");
+
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
@@ -100,6 +99,7 @@ public class ConfigMigrator {
 	
 	public void addTownLevelProperty(String key, String value) {
 		 List<Map<?, ?>> mapList = config.getMapList("levels.town_level");
+		 TownyMessaging.sendDebugMsg("Updating town_level with " + key + " set to " + value);
 		
 		 for (Map<?, ?> map : mapList) {
 			 ((Map<String, String>)map).put(key, value);
@@ -110,6 +110,7 @@ public class ConfigMigrator {
 
 	public void addNationLevelProperty(String key, String value) {
 		List<Map<?, ?>> mapList = config.getMapList("levels.nation_level");
+		TownyMessaging.sendDebugMsg("Updating nation_level with " + key + " set to " + value);
 
 		for (Map<?, ?> map : mapList) {
 			((Map<String, String>)map).put(key, value);
