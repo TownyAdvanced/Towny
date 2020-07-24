@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
@@ -236,7 +235,7 @@ public class TownySettings {
 			}
 
 			setDefaults(version, file);
-			
+
 			config.save();
 
 			loadCachedObjects();

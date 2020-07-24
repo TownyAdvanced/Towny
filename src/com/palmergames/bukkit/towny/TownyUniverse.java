@@ -149,7 +149,7 @@ public class TownyUniverse {
         
         // Only migrate if the user just updated.
         if (!lastRunVersion.equals(curVersion)) {
-			System.out.println("Performing Config Migrations...");
+			System.out.println("[Towny] Performing Config Migrations...");
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}

@@ -46,7 +46,6 @@ public abstract class TownyDataSource {
 	final Lock lock = new ReentrantLock();
 	protected final Towny plugin;
 	protected final TownyUniverse universe;
-	private Runnable completionHandler;
 
 	TownyDataSource(Towny plugin, TownyUniverse universe) {
 		this.plugin = plugin;
