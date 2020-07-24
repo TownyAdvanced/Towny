@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.Version;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -76,7 +75,7 @@ public class ConfigMigrator {
 
 		if (change.path != null) {
 			// Perform change.
-			System.out.println("Updating " + change.path + "...");
+			Towny.getPlugin().getLogger().info("Updating " + change.path + "...");
 		}
 		
 		// Address any changes to the world files.
@@ -117,5 +116,21 @@ public class ConfigMigrator {
 		}
 
 		config.set("levels.nation_level", mapList);
+	}
+
+	/**
+	 * Represents a collection of changes.
+	 */
+	static final class Migration {
+		Version version;
+		List<Change> changes;
+	
+		@Override
+		public String toString() {
+			return "Migration{" +
+				"version=" + version +
+				", changes=" + changes +
+				'}';
+		}
 	}
 }
