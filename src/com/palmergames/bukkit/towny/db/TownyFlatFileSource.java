@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -46,9 +47,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.HashSet;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
@@ -156,11 +157,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
 				return true;
 			}
-			case "zip": {
+			case "zip":
 				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
-						new File(dataFolderPath),
-						new File(logFolderPath),
-						new File(settingsFolderPath));
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
+				return true;
+			case "tar": {
+				FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+					new File(dataFolderPath),
+					new File(logFolderPath),
+					new File(settingsFolderPath));
 				return true;
 			}
 			default:
@@ -1766,14 +1773,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("protectionStatus=" + resident.getPermissions().toString());
 
 		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (resident.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = resident.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
+		list.add("metadata=" + serializeMetadata(resident));
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1887,14 +1887,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (town.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = town.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
+		list.add("metadata=" + serializeMetadata(town));
 		
 		/*
 		 *  Make sure we only save in async
@@ -1976,14 +1969,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isOpen=" + nation.isOpen());
 
 		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (nation.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = nation.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
+		list.add("metadata=" + serializeMetadata(nation));
 		
 		/*
 		 *  Make sure we only save in async
@@ -2112,14 +2098,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("warAllowed=" + world.isWarAllowed());
 
 		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (world.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = world.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		list.add("metadata=" + md.toString());
+		list.add("metadata=" + serializeMetadata(world));
 		
 		/*
 		 *  Make sure we only save in async
@@ -2188,15 +2167,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("locked=" + townBlock.isLocked());
 		
 		// Metadata
-		StringBuilder md = new StringBuilder();
-		if (townBlock.hasMeta()) {
-			HashSet<CustomDataField<?>> tdata = townBlock.getMetadata();
-			for (CustomDataField<?> cdf : tdata) {
-				md.append(cdf.toString()).append(";");
-			}
-		}
-		
-		list.add("metadata=" + md.toString());
+		list.add("metadata=" + serializeMetadata(townBlock));
 		
 		// Group ID
 		StringBuilder groupID = new StringBuilder();
@@ -2216,6 +2187,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 
+	}
+
+
+	private String serializeMetadata(TownyObject obj) {
+		if (!obj.hasMeta())
+			return "";
+
+		StringJoiner serializer = new StringJoiner(";");
+		for (CustomDataField<?> cdf : obj.getMetadata()) {
+			serializer.add(cdf.toString());
+		}
+
+		return serializer.toString();
 	}
 
 	@Override

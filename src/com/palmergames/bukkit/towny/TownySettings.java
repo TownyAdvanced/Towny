@@ -1467,6 +1467,16 @@ public class TownySettings {
 		return getItemUseMaterials().contains(mat);
 	}
 	
+	public static List<String> getFireSpreadBypassMaterials() {
+		
+		return getStrArr(ConfigNodes.PROT_FIRE_SPREAD_BYPASS);
+	}
+	
+	public static boolean isFireSpreadBypassMaterial(String mat) {
+		
+		return getFireSpreadBypassMaterials().contains(mat);
+	}
+	
 	public static List<String> getUnclaimedZoneIgnoreMaterials() {
 
 		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);

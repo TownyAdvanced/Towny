@@ -138,6 +138,12 @@
             <version>2.10.4</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.20</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
