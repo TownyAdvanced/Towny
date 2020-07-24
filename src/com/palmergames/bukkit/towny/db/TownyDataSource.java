@@ -46,6 +46,7 @@ public abstract class TownyDataSource {
 	final Lock lock = new ReentrantLock();
 	protected final Towny plugin;
 	protected final TownyUniverse universe;
+	private Runnable completionHandler;
 
 	TownyDataSource(Towny plugin, TownyUniverse universe) {
 		this.plugin = plugin;
@@ -348,4 +349,8 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	
+	public void onComplete(Runnable completionHandler) {
+		this.completionHandler = completionHandler;
+	} 
 }

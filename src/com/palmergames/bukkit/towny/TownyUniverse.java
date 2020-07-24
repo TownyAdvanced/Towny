@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
@@ -23,6 +24,7 @@ import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
@@ -141,6 +143,16 @@ public class TownyUniverse {
             System.out.println("[Towny] Error: Unsupported save format!");
             return false;
         }
+        
+        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        
+        // Only migrate if the user just updated.
+        if (!lastRunVersion.equals(curVersion)) {
+			System.out.println("Performing Config Migrations...");
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			migrator.migrate();
+		}
         
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
