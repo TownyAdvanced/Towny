@@ -31,25 +31,5 @@
         "worldAction": "UPDATE_WORLD_UNCLAIM_DELETE"
       }
     ]
-  },
-  {
-    "version": "0.96.2.3",
-    "changes": [
-      {
-        "type": "OVERWRITE",
-        "path": "notification.format",
-        "value": "This is a test"
-      }
-    ]
-  },
-  {
-    "version": "0.96.2.4",
-    "changes": [
-      {
-        "type": "TOWN_LEVEL_ADD",
-        "key": "foo",
-        "value": "bar"
-      }
-    ]
   }
 ]
