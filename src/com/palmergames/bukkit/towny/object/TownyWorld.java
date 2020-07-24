@@ -733,12 +733,14 @@ public class TownyWorld extends TownyObject {
 		return warZones.contains(coord);
 	}
 
+	@Override
 	public void addMetaData(CustomDataField md) {
 		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 
+	@Override
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 

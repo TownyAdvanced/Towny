@@ -1462,6 +1462,16 @@ public class TownySettings {
 		return getItemUseMaterials().contains(mat);
 	}
 	
+	public static List<String> getFireSpreadBypassMaterials() {
+		
+		return getStrArr(ConfigNodes.PROT_FIRE_SPREAD_BYPASS);
+	}
+	
+	public static boolean isFireSpreadBypassMaterial(String mat) {
+		
+		return getFireSpreadBypassMaterials().contains(mat);
+	}
+	
 	public static List<String> getUnclaimedZoneIgnoreMaterials() {
 
 		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
@@ -2885,6 +2895,10 @@ public class TownySettings {
 	
 	public static boolean isTownListRandom() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
+	}
+
+	public static List<String> getOrderOfMayoralSuccession() {
+		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
 	}
 
 	public static boolean isWarAllowed() {

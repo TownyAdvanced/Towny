@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
-import java.util.HashSet;
 import java.util.Objects;
 
 public class TownBlock extends TownyObject {
@@ -30,7 +29,6 @@ public class TownBlock extends TownyObject {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField<?>> metadata = null;
 	private PlotGroup plotGroup;
 
 	//Plot level permissions
@@ -434,43 +432,16 @@ public class TownBlock extends TownyObject {
 		return this.getType() == TownBlockType.JAIL;
 	}
 	
+	@Override
 	public void addMetaData(CustomDataField md) {
-		if (getMetadata() == null)
-			metadata = new HashSet<>();
-		
-		getMetadata().add(md);
+		super.addMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 	
+	@Override
 	public void removeMetaData(CustomDataField md) {
-		if (!hasMeta())
-			return;
-		
-		getMetadata().remove(md);
-
-		if (getMetadata().size() == 0)
-			this.metadata = null;
-
+		super.removeMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
-	}
-
-	public HashSet<CustomDataField<?>> getMetadata() {
-		return metadata;
-	}
-
-	public boolean hasMeta() {
-		return getMetadata() != null;
-	}
-
-	public void setMetadata(String str) {
-		
-		if (metadata == null)
-			metadata = new HashSet<>();
-		
-		String[] objects = str.split(";");
-		for (String object : objects) {
-			metadata.add(CustomDataField.load(object));
-		}
 	}
 	
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }

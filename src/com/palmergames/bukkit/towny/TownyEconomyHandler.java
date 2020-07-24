@@ -205,7 +205,6 @@ public class TownyEconomyHandler {
 	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, double amount, World world) {
-		TownyMessaging.sendErrorMsg(getBalance(accountName, world) + "");
 		return getBalance(accountName, world) >= amount;
 	}
 	
@@ -324,6 +323,14 @@ public class TownyEconomyHandler {
 		if (!economy.hasAccount(accountName)) {
 			economy.newAccount(accountName);
 		}
+	}
+	
+	public static void newAccount(String accountName) {
+		economy.newAccount(accountName);
+	}
+	
+	public static boolean hasAccount(String accountName) {
+		return economy.hasAccount(accountName);
 	}
 
 }
