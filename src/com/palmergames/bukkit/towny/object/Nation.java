@@ -606,6 +606,7 @@ public class Nation extends Government implements TownBlockHolder {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
+	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
