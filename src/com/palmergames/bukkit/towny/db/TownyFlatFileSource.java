@@ -141,7 +141,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean backup() throws IOException {
+	public boolean backup() throws IOException {
 		String backupType = TownySettings.getFlatFileBackupType();
 		long t = System.currentTimeMillis();
 		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
@@ -184,7 +184,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     }
     
     @Override
-	public synchronized void deleteUnusedResidents() {
+	public void deleteUnusedResidents() {
 
 		String path;
 		Set<String> names;

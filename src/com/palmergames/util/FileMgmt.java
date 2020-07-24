@@ -453,7 +453,7 @@ public final class FileMgmt {
 		}
 	}
 
-	public synchronized static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
+	public static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
 
 		synchronized (mutex) {
 
