@@ -4804,3 +4804,5 @@ v0.92.0.11:
     - default: tar
     - Valid entries are: tar for tar.gz and zip for zip, use none for no backup.
   - Allow for nations and towns to set tags less than 4 characters.
+0.96.2.8:
+  - Fix Nations generating debt accounts.
