@@ -1013,6 +1013,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (SQLException ignored) {
 					
 				}
+				
+				try {
+					line = rs.getString("nation");
+					if (line != null && !line.isEmpty()) {
+						Nation nation = null;
+						try {
+							nation = getNation(line);
+						} catch (NotRegisteredException ignored) {
+							// Town tried to load a nation that doesn't exist, do not set nation.
+						}
+						if (nation != null)
+							town.setNation(nation);
+					}					
+							
+				} catch (SQLException ignored) {
+					
+				}
 
                 s.close();
                 return true;
@@ -1050,7 +1067,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         if (!token.isEmpty()) {
                             Town town = getTown(token);
                             if (town != null)
-                                nation.addTown(town);
+                            	town.setNation(nation);
                         }
                     }
                 }
@@ -1691,12 +1708,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> nat_hm = new HashMap<>();
             nat_hm.put("name", nation.getName());
-            nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
             nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
-            nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());

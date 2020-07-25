@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -2985,14 +2984,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
 					town.getNation().setCapital(newCapital);
 					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-						try {
-							town.getNation().removeTown(town);
-							townyUniverse.getDataSource().saveTown(town);
-							townyUniverse.getDataSource().saveNation(nation);
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_capital_not_enough_residents_left_nation", town.getName()));
-						} catch (EmptyNationException e) {
-							e.printStackTrace();
-						}
+						town.removeNation();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_capital_not_enough_residents_left_nation", town.getName()));
 					}
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_not_enough_residents_no_longer_capital", newCapital.getName()));
 					return;
@@ -3010,14 +3003,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
 			}
 		} else if ((!town.isCapital()) && (TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-			try {
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_town_not_enough_residents_left_nation", town.getName()));
-				town.getNation().removeTown(town);
-				townyUniverse.getDataSource().saveTown(town);
-				townyUniverse.getDataSource().saveNation(nation);
-			} catch (EmptyNationException e) {
-				e.printStackTrace();
-			}
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_town_not_enough_residents_left_nation", town.getName()));
+			town.removeNation();
 		}
 	}
 

@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -1341,7 +1340,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
-		nation.addTown(town);
+		town.setNation(nation);
 		nation.setCapital(town);
 		nation.setUuid(UUID.randomUUID());
 		nation.setRegistered(System.currentTimeMillis());
@@ -1424,9 +1423,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 			}
 			
-			nation.removeTown(town);
-			
-			townyUniverse.getDataSource().saveNation(nation);
+			town.removeNation();
 
 			plugin.resetCache();
 
@@ -1435,11 +1432,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
-		} catch (EmptyNationException en) {
-			townyUniverse.getDataSource().removeNation(en.getNation());
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", en.getNation().getName()));
-		} finally {
-			townyUniverse.getDataSource().saveTown(town);
 		}
 	}
 
@@ -1669,7 +1661,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		for (Town town : towns) {
 			if (!town.hasNation()) {
-				nation.addTown(town);
+				town.setNation(nation);
 				townyUniverse.getDataSource().saveTown(town);
 				TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_join_nation", town.getName()));
 			}
@@ -1713,31 +1705,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Town town : kicking)
 			if (town.isCapital())
 				remove.add(town);
-			else
-				try {
-					nation.removeTown(town);
-					/*
-					 * Remove all resident titles/nationRanks before saving the town itself.
-					 */
-					List<Resident> titleRemove = new ArrayList<>(town.getResidents());
+			else if (!nation.getTowns().contains(town))
+				remove.add(town);
+			else { 
+				town.removeNation();
+				/*
+				 * Remove all resident titles/nationRanks before saving the town itself.
+				 */
+				List<Resident> titleRemove = new ArrayList<>(town.getResidents());
 
-					for (Resident res : titleRemove) {
-						if (res.hasTitle() || res.hasSurname()) {
-							res.setTitle("");
-							res.setSurname("");
-						}
-						res.updatePermsForNationRemoval(); // Clears the nationRanks.
-						townyUniverse.getDataSource().saveResident(res);
+				for (Resident res : titleRemove) {
+					if (res.hasTitle() || res.hasSurname()) {
+						res.setTitle("");
+						res.setSurname("");
 					}
-					
-					townyUniverse.getDataSource().saveTown(town);
-				} catch (NotRegisteredException e) {
-					remove.add(town);
-				} catch (EmptyNationException e) {
-					// You can't kick yourself and only the mayor can kick
-					// assistants
-					// so there will always be at least one resident.
+					res.updatePermsForNationRemoval(); // Clears the nationRanks.
+					townyUniverse.getDataSource().saveResident(res);
 				}
+				
+				townyUniverse.getDataSource().saveTown(town);
+			}
+
 
 		for (Town town : remove)
 			kicking.remove(town);

@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NationAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -146,20 +148,56 @@ public class Town extends Government implements TownBlockOwner {
 			throw new NotRegisteredException(Translation.of("msg_err_town_doesnt_belong_to_any_nation"));
 	}
 
+	public void removeNation() {
+
+		if (!hasNation())
+			return;
+		
+		Nation nation = this.nation;
+				
+		for (Resident res : getResidents()) {
+			if (res.hasTitle() || res.hasSurname()) {
+				res.setTitle("");
+				res.setSurname("");
+			}
+			res.updatePermsForNationRemoval();
+			TownyUniverse.getInstance().getDataSource().saveResident(res);
+		}
+
+		try {
+			nation.removeTown(this);
+		} catch (EmptyNationException e) {
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation().getName()));
+		}
+		
+		try {
+			setNation(null);
+		} catch (AlreadyRegisteredException ignored) {
+			// Cannot occur when setting null;
+		}
+		
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
+	}
+	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
+
+		if (this.nation == nation)
+			return;
 
 		if (nation == null) {
 			this.nation = null;
-			TownyPerms.updateTownPerms(this);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
 			return;
 		}
-		if (this.nation == nation)
-			return;
+
 		if (hasNation())
 			throw new AlreadyRegisteredException();
+
 		this.nation = nation;
+		nation.addTown(this);
 		TownyPerms.updateTownPerms(this);
+		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
 	}
 
 	@Override
@@ -474,21 +512,13 @@ public class Town extends Government implements TownBlockOwner {
 				Coord townCoord = this.getHomeBlock().getCoord();
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
 					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
-					try {
-						nation.removeTown(this);
-					} catch (EmptyNationException e) {
-						e.printStackTrace();
-					}
+					removeNation();
 				}
 				double distance;
 				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
-					try {
-						nation.removeTown(this);
-					} catch (EmptyNationException e) {
-						e.printStackTrace();
-					}
+					removeNation();
 				}	
 			}
 			

@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -27,7 +26,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -40,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -481,19 +480,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();
 
-		try {
-			if (town.hasNation()) {
-				Nation nation = town.getNation();
-				// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
-				if (nation.hasTown(town)) {
-					nation.removeTown(town);
-				}
-			}
-		} catch (EmptyNationException e) {
-			removeNation(e.getNation());
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation()));
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+		if (town.hasNation()) {
+			town.removeNation();
 		}
 
 		for (Resident resident : toSave) {
@@ -1040,37 +1028,24 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @author LlmDl
 	 */
-	public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws NotRegisteredException, AlreadyRegisteredException {
+	public void mergeNation(Nation succumbingNation, Nation prevailingNation) {
 		
 		lock.lock();
-		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
-		Town lastTown = null;
-		try {
-			succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
-			for (Town town : towns) {			
-				lastTown = town;
-				for (Resident res : town.getResidents()) {
-					if (res.hasTitle() || res.hasSurname()) {
-						res.setTitle("");
-						res.setSurname("");
-					}
-					res.updatePermsForNationRemoval();
-					saveResident(res);
+		Iterator<Town> towns = succumbingNation.getTowns().iterator();
+		while (towns.hasNext()) {
+			try {
+				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+				Town town = towns.next();
+				town.removeNation();
+				try {
+					town.setNation(prevailingNation);
+				} catch (AlreadyRegisteredException ignored) {
 				}
-				succumbingNation.removeTown(town);
-				prevailingNation.addTown(town);
 				saveTown(town);
+			} catch (EconomyException ignored) {			
 			}
-		} catch (EconomyException ignored) {
-		} catch (EmptyNationException en) {
-			// This is the intended end-result of the merge.
-			prevailingNation.addTown(lastTown);
-			saveTown(lastTown);
-			String name = en.getNation().getName();
-			universe.getDataSource().removeNation(en.getNation());
-			saveNation(prevailingNation);
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
-			lock.unlock();
+			towns.remove();
 		}
+		lock.unlock();
 	}
 }

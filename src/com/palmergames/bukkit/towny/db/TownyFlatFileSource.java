@@ -1017,6 +1017,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
+				
+				line = keys.get("nation");
+				if (line != null && !line.isEmpty()) {
+					Nation nation = null;
+					try {
+						nation = getNation(line);
+					} catch (NotRegisteredException ignored) {
+						// Town tried to load a nation that doesn't exist, do not set nation.
+					}
+					if (nation != null)
+						town.setNation(nation);
+				}
+					
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1053,7 +1066,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
 								Town town = getTown(token);
 								if (town != null) {
-									nation.addTown(town);
+									town.setNation(nation);
 								}
 							} catch (NotRegisteredException e) {
 								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a town in the nation file of " + nation.getName() + ".txt. The town " + token + " does not exist, removing it from nation... (Will require editing of the nation file if it is the capital)");
@@ -1902,8 +1915,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
-		list.add("towns=" + StringMgmt.join(nation.getTowns(), ","));
-
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
 
@@ -1913,8 +1924,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		if (nation.hasTag())
 			list.add("tag=" + nation.getTag());
-
-		list.add("assistants=" + StringMgmt.join(nation.getAssistants(), ","));
 
 		list.add("allies=" + StringMgmt.join(nation.getAllies(), ","));
 

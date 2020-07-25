@@ -5,8 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.NationAddTownEvent;
-import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -37,7 +35,6 @@ public class Nation extends Government {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
-	//private List<Resident> assistants = new ArrayList<Resident>();
 	private final List<Town> towns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
@@ -171,18 +168,8 @@ public class Nation extends Government {
 		return towns.contains(town);
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
-
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else if (town.hasNation())
-			throw new AlreadyRegisteredException();
-		else {
-			towns.add(town);
-			town.setNation(this);
-			
-			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
-		}
+	public void addTown(Town town) {
+		towns.add(town);
 	}
 
 	public void setCapital(Town capital) {
@@ -193,7 +180,6 @@ public class Nation extends Government {
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
 		}
-		//TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	public Town getCapital() {
@@ -321,64 +307,44 @@ public class Nation extends Government {
 		return numResidents;
 	}
 
-	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
+	/**
+	 * Should only be called by Town.removeNation();
+	 * Removes town from {@link #towns} list and will choose a
+	 * new Capital if necessary.
+	 * 
+	 * @param town - Town to remove from nation.
+	 * @throws EmptyNationException - Thrown when last town is being removed.
+	 */
+	protected void removeTown(Town town) throws EmptyNationException {
 
-		if (!hasTown(town))
-			throw new NotRegisteredException();
-		else {
+		boolean isCapital = town.isCapital();
+		remove(town);
 
-			boolean isCapital = town.isCapital();
-			remove(town);
+		if (getNumTowns() == 0) {
+			throw new EmptyNationException(this);
+		} else if (isCapital) {
+			int numResidents = 0;
+			Town tempCapital = null;
+			for (Town newCapital : getTowns())
+				if (newCapital.getNumResidents() > numResidents) {
+					tempCapital = newCapital;
+					numResidents = newCapital.getNumResidents();
+				}
 
-			if (getNumTowns() == 0) {
-				throw new EmptyNationException(this);
-			} else if (isCapital) {
-				int numResidents = 0;
-				Town tempCapital = null;
-				for (Town newCapital : getTowns())
-					if (newCapital.getNumResidents() > numResidents) {
-						tempCapital = newCapital;
-						numResidents = newCapital.getNumResidents();
-					}
-
-				if (tempCapital != null)
-					setCapital(tempCapital);
-			}
-			TownyUniverse.getInstance().getDataSource().saveNation(this);
+			if (tempCapital != null)
+				setCapital(tempCapital);
 		}
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	private void remove(Town town) {
 
-		//removeAssistantsIn(town);
-		try {
-			town.setNation(null);
-		} catch (AlreadyRegisteredException ignored) {
-		}
-		
-		/*
-		 * Remove all resident titles/nationRanks before saving the town itself.
-		 */
-		List<Resident> titleRemove = new ArrayList<>(town.getResidents());
-
-		for (Resident res : titleRemove) {
-			if (res.hasTitle() || res.hasSurname()) {
-				res.setTitle("");
-				res.setSurname("");
-			}
-			res.updatePermsForNationRemoval(); // Clears the nationRanks.
-			TownyUniverse.getInstance().getDataSource().saveResident(res);
-		}
-		
 		towns.remove(town);
-		
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
 	private void removeAllTowns() {
 
-		for (Town town : new ArrayList<>(towns))
-			remove(town);
+		towns.clear();
 	}
 
 	public void setTaxes(double taxes) {
@@ -691,7 +657,7 @@ public class Nation extends Government {
 	}
 
 	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#pay(double, String)} instead.
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#withdraw(double, String)} instead.
 	 *
 	 * @param amount value to deduct from the player's account
 	 * @param reason leger memo stating why amount is deducted
