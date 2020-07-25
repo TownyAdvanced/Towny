@@ -45,7 +45,10 @@ public class BankAccount extends Account {
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
-		this.debtAccount = new DebtAccount(this);
+		if (name.startsWith(TownySettings.getTownAccountPrefix()))
+			this.debtAccount = new DebtAccount(this);
+		else 
+			this.debtAccount = null;
 		this.debtCap = 0;
 	}
 
@@ -146,7 +149,7 @@ public class BankAccount extends Account {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean isBankrupt() throws EconomyException {
-		return debtAccount.getHoldingBalance() > 0;
+		return debtAccount != null && debtAccount.getHoldingBalance() > 0;
 	}
 	
 	private boolean addDebt(double amount) throws EconomyException {
@@ -195,7 +198,8 @@ public class BankAccount extends Account {
 	@Override
 	public void removeAccount() {
 		// Make sure to remove debt account
-		TownyEconomyHandler.removeAccount(debtAccount.getName());
+		if (debtAccount != null)
+			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
 	}
 }
