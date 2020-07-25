@@ -1699,7 +1699,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void nationKick(CommandSender sender, Nation nation, List<Town> kicking) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : kicking)
@@ -1707,25 +1706,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				remove.add(town);
 			else if (!nation.getTowns().contains(town))
 				remove.add(town);
-			else { 
+			else 
 				town.removeNation();
-				/*
-				 * Remove all resident titles/nationRanks before saving the town itself.
-				 */
-				List<Resident> titleRemove = new ArrayList<>(town.getResidents());
-
-				for (Resident res : titleRemove) {
-					if (res.hasTitle() || res.hasSurname()) {
-						res.setTitle("");
-						res.setSurname("");
-					}
-					res.updatePermsForNationRemoval(); // Clears the nationRanks.
-					townyUniverse.getDataSource().saveResident(res);
-				}
-				
-				townyUniverse.getDataSource().saveTown(town);
-			}
-
 
 		for (Town town : remove)
 			kicking.remove(town);
@@ -1742,7 +1724,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg = new StringBuilder(Translation.of("msg_nation_kicked", sender.getName(), msg.toString()));
 			TownyMessaging.sendPrefixedNationMessage(nation, msg.toString());
-			townyUniverse.getDataSource().saveNation(nation);
 
 			plugin.resetCache();
 		} else

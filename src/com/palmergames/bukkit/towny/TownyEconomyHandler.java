@@ -321,7 +321,6 @@ public class TownyEconomyHandler {
 	private static void checkNewAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
-			System.out.println("No economy account for " + accountName);
 			economy.newAccount(accountName);
 		}
 	}
