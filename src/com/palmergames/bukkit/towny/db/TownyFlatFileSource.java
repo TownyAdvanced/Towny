@@ -717,29 +717,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Town: " + town.getName());
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileTown);
-
-//				line = keys.get("residents");
-//				if (line != null) {
-//					tokens = line.split(",");
-//					for (String token : tokens) {
-//						if (!token.isEmpty()) {
-//							TownyMessaging.sendDebugMsg("Town (" + town.getName() + ") Fetching Resident: " + token);							
-//							try {
-//								Resident resident = getResident(token);
-//								if (resident != null) {
-//									try {
-//										town.addResident(resident);
-//									} catch (AlreadyRegisteredException e) {
-//										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
-//									}
-//								}
-//							} catch (NotRegisteredException e) {
-//								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
-//							}
-//						}
-//					}
-//				}
 				
+				line = keys.get("mayor");
+				if (line != null)
+					try {
+						town.setMayor(getResident(line));
+					} catch (TownyException e1) {
+						e1.getMessage();
+						if (town.getResidents().size() == 0)
+							deleteTown(town);
+						return true;						
+					}
+
 				line = keys.get("outlaws");
 				if (line != null) {
 					tokens = line.split(",");
@@ -756,10 +745,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-				
-				line = keys.get("mayor");
-				if (line != null)
-					town.setMayor(getResident(line));
 
 				line = "townBoard";
 				town.setBoard(keys.get("townBoard"));
@@ -1766,8 +1751,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Name
 		list.add("name=" + town.getName());
-//		// Residents
-//		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
 		// Mayor
 		if (town.hasMayor())
 			list.add("mayor=" + town.getMayor().getName());

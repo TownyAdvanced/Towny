@@ -1393,7 +1393,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					// Delete the resident if the old mayor was an NPC.
 					Resident oldMayor = town.getMayor();
 
-					town.setMayor(newMayor);
+					town.setResidentToMayor(newMayor);
 
 					if (oldMayor.isNPC()) {
 						oldMayor.removeTown();
@@ -1403,7 +1403,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 					townyUniverse.getDataSource().saveTown(town);					
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_new_mayor", newMayor.getName()));
-					// TownyMessaging.sendMessage(player, msg);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 				}

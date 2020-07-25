@@ -821,31 +821,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
-//                line = rs.getString("residents");
-//                if (line != null) {
-//                    search = (line.contains("#")) ? "#" : ",";
-//                    tokens = line.split(search);
-//                    for (String token : tokens) {
-//                        if (!token.isEmpty()) {
-//                            Resident resident = getResident(token);
-//                            if (resident != null)
-//                                town.addResident(resident);
-//                        }
-//                    }
-//                }
 
-                town.setMayor(getResident(rs.getString("mayor")));
-                // line = rs.getString("assistants");
-                // if (line != null) {
-                // tokens = line.split(",");
-                // for (String token : tokens) {
-                // if (!token.isEmpty()) {
-                // Resident assistant = getResident(token);
-                // if ((assistant != null) && (town.hasResident(assistant)))
-                // town.addAssistant(assistant);
-                // }
-                // }
-                // }
+                try {
+					town.setMayor(getResident(rs.getString("mayor")));
+				} catch (TownyException e1) {
+					e1.getMessage();
+					if (town.getResidents().size() == 0)
+						deleteTown(town);
+					return true;						
+				}				
+
                 town.setBoard(rs.getString("townBoard"));
                 line = rs.getString("tag");
                 if (line != null)
@@ -1601,7 +1586,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> twn_hm = new HashMap<>();
             twn_hm.put("name", town.getName());
-//            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
@@ -1632,7 +1616,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				twn_hm.put("metadata", "");
         
-            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
             twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#" + town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#" + town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw() : "");
             // Outpost Spawns

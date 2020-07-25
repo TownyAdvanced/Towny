@@ -129,13 +129,32 @@ public class Town extends Government implements TownBlockOwner {
 		return taxes == -1 ? TownySettings.getTownDefaultTax() : taxes;
 	}
 
+	/**
+	 * Sets a resident to become mayor. Used only in database loading.
+	 * 
+	 * @param mayor - Town Resident to make into mayor.
+	 * @throws TownyException - When given mayor is not a resident.
+	 */
 	public void setMayor(Resident mayor) throws TownyException {
 
 		if (!hasResident(mayor))
 			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
+		
+		setResidentToMayor(mayor);
+	}
+	
+	/**
+	 * Sets a town resident to become mayor.
+	 * 
+	 * @param mayor - Resident to become mayor.
+	 */
+	public void setResidentToMayor(Resident mayor) {
+		if (!hasResident(mayor))
+			return;
+				
 		this.mayor = mayor;
 		
-		TownyPerms.assignPermissions(mayor, null);
+		TownyPerms.assignPermissions(mayor, null);	
 	}
 
 	public Nation getNation() throws NotRegisteredException {
@@ -626,15 +645,9 @@ public class Town extends Government implements TownBlockOwner {
 		boolean found = false;
 		for (Resident newMayor : getRank(rank)) {
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
-				try {
-					setMayor(newMayor);
-					found = true;
-					break;
-				} catch (TownyException e) {
-					// Error setting mayor.
-					e.printStackTrace();
-					found = false;
-				}
+				setResidentToMayor(newMayor);
+				found = true;
+				break;
 			}
 		}
 		return found;
@@ -649,15 +662,9 @@ public class Town extends Government implements TownBlockOwner {
 		boolean found = false;
 		for (Resident newMayor : getResidents()) {
 			if (newMayor != mayor) {
-				try {
-					setMayor(newMayor);
-					found = true;
-					break;
-				} catch (TownyException e) {
-					// Error setting mayor.
-					e.printStackTrace();
-					found = false;
-				}
+				setResidentToMayor(newMayor);
+				found = true;
+				break;
 			}
 		}
 		return found;
