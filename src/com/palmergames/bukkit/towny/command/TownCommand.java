@@ -1927,6 +1927,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 							String oldMayor = town.getMayor().getName();
 							Resident newMayor = townyUniverse.getDataSource().getResident(split[1]);
+							if (!town.hasResident(split[1]))
+								throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 							town.setMayor(newMayor);
 							TownyPerms.assignPermissions(townyUniverse.getDataSource().getResident(oldMayor), null);
 							plugin.deleteCache(oldMayor);

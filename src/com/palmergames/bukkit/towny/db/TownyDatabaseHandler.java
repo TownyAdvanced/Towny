@@ -968,12 +968,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setLastOnline(lastOnline);
 			if (uuid != null)
 				resident.setUUID(uuid);
-			if(isMayor){
-				try {
-					town.setMayor(resident);
-				} catch (TownyException ignored) {
-				}
-			}
+			if(isMayor)
+				town.setMayor(resident);
 			if (isNPC)
 				resident.setNPC(true);
 			resident.setJailed(isJailed);
