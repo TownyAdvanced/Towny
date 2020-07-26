@@ -981,7 +981,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (uuid != null)
 				resident.setUUID(uuid);
 			if(isMayor)
-				town.setResidentToMayor(resident);
+				town.setMayor(resident);
 			if (isNPC)
 				resident.setNPC(true);
 			resident.setJailed(isJailed);

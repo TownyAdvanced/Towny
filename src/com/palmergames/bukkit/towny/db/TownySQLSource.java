@@ -823,11 +823,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             while (rs.next()) {
 
                 try {
-					town.setMayor(getResident(rs.getString("mayor")));
+					town.forceSetMayor(getResident(rs.getString("mayor")));
 				} catch (TownyException e1) {
 					e1.getMessage();
 					if (town.getResidents().size() == 0)
 						deleteTown(town);
+					else 
+						town.findNewMayor();
+
 					return true;						
 				}				
 

@@ -1393,7 +1393,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					// Delete the resident if the old mayor was an NPC.
 					Resident oldMayor = town.getMayor();
 
-					town.setResidentToMayor(newMayor);
+					town.setMayor(newMayor);
 
 					if (oldMayor.isNPC()) {
 						oldMayor.removeTown();

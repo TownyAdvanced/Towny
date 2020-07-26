@@ -135,12 +135,12 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param mayor - Town Resident to make into mayor.
 	 * @throws TownyException - When given mayor is not a resident.
 	 */
-	public void setMayor(Resident mayor) throws TownyException {
+	public void forceSetMayor(Resident mayor) throws TownyException {
 
 		if (!hasResident(mayor))
 			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 		
-		setResidentToMayor(mayor);
+		setMayor(mayor);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * 
 	 * @param mayor - Resident to become mayor.
 	 */
-	public void setResidentToMayor(Resident mayor) {
+	public void setMayor(Resident mayor) {
 		if (!hasResident(mayor))
 			return;
 				
@@ -616,23 +616,28 @@ public class Town extends Government implements TownBlockOwner {
 		// Mayoral succession.
 		if (isMayor(resident)) {
 			if (residents.size() > 1) {
-				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
-					if (findNewMayor(rank)) {
-						break;
-					}
-				}
-				if (isMayor(resident)) {
-					// Still mayor and no one with a rank in the order of mayoral succession
-					// (`TownySettings.getOrderOfMayoralSuccession()`) so pick a resident to be mayor.
-					findNewMayor();
-				}
-				
+				findNewMayor();
+
 				// Town is not removing its last resident so be sure to save it.
 				TownyUniverse.getInstance().getDataSource().saveTown(this);
 			}
 		}
 		// Remove resident.
 		residents.remove(resident);
+	}
+	
+	/** 
+	 * Begins search for new mayor.
+	 * 
+	 */
+	public void findNewMayor() {
+		for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
+			if (findNewMayor(rank)) {
+				return;
+			}
+		}
+		// No one has the rank to suceed the mayor, choose a resident.
+		findNewMayorCatchAll();
 	}
 
 	/**
@@ -645,7 +650,7 @@ public class Town extends Government implements TownBlockOwner {
 		boolean found = false;
 		for (Resident newMayor : getRank(rank)) {
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
-				setResidentToMayor(newMayor);
+				setMayor(newMayor);
 				found = true;
 				break;
 			}
@@ -658,11 +663,11 @@ public class Town extends Government implements TownBlockOwner {
 	 * 
 	 * @return found - whether or not a new mayor was found
 	 */
-	private boolean findNewMayor() {
+	private boolean findNewMayorCatchAll() {
 		boolean found = false;
 		for (Resident newMayor : getResidents()) {
 			if (newMayor != mayor) {
-				setResidentToMayor(newMayor);
+				setMayor(newMayor);
 				found = true;
 				break;
 			}

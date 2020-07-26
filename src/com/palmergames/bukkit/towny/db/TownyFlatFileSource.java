@@ -721,11 +721,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					try {
-						town.setMayor(getResident(line));
+						town.forceSetMayor(getResident(line));
 					} catch (TownyException e1) {
 						e1.getMessage();
 						if (town.getResidents().size() == 0)
 							deleteTown(town);
+						else 
+							town.findNewMayor();
+
 						return true;						
 					}
 
