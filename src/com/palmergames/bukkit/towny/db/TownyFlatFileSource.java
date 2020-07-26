@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -1056,28 +1057,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Nation: " + nation.getName());
 			try {
 				HashMap<String, String> keys = loadFileIntoHashMap(fileNation);
-				
-				line = keys.get("towns");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							try {
-								TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
-								Town town = getTown(token);
-								if (town != null) {
-									town.setNation(nation);
-								}
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a town in the nation file of " + nation.getName() + ".txt. The town " + token + " does not exist, removing it from nation... (Will require editing of the nation file if it is the capital)");
-							}
-						}
-					}
-				}
-				
+
 				line = keys.get("capital");
 				if (line != null)
-					nation.setCapital(getTown(line));
+					try {
+						nation.forceSetCapital(getTown(line));
+					} catch (EmptyNationException e1) {
+						System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+						removeNation(nation);
+						return true;
+					}
 				
 				line = keys.get("nationBoard");
 				if (line != null)

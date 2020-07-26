@@ -172,6 +172,26 @@ public class Nation extends Government {
 		towns.add(town);
 	}
 
+	/**
+	 * Only to be called from the loading methods.
+	 * 
+	 * @param capital - Town to make capital.
+	 * @throws EmptyNationException Thrown when no capital can be set.
+	 */
+	public void forceSetCapital(Town capital) throws EmptyNationException {
+
+		if (towns.isEmpty())
+			throw new EmptyNationException(this);
+		
+		try {
+			if (capital.getNation().equals(this))
+				setCapital(capital);
+		} catch (NotRegisteredException e) {
+		}
+		if (!findNewCapital())
+			throw new EmptyNationException(this);
+	}
+	
 	public void setCapital(Town capital) {
 
 		this.capital = capital;
@@ -185,6 +205,29 @@ public class Nation extends Government {
 	public Town getCapital() {
 
 		return capital;
+	}
+	
+	/**
+	 * Finds the town in the nation with the most residents and makes it the capital.
+	 * 
+	 * @return whether it successfully set a capital.
+	 */
+	private boolean findNewCapital() {
+		
+		int numResidents = 0;
+		Town tempCapital = null;
+		for (Town newCapital : getTowns())
+			if (newCapital.getNumResidents() > numResidents) {
+				tempCapital = newCapital;
+				numResidents = newCapital.getNumResidents();
+			}
+
+		if (tempCapital != null) {
+			setCapital(tempCapital);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -323,19 +366,12 @@ public class Nation extends Government {
 		if (getNumTowns() == 0) {
 			throw new EmptyNationException(this);
 		} else if (isCapital) {
-			int numResidents = 0;
-			Town tempCapital = null;
-			for (Town newCapital : getTowns())
-				if (newCapital.getNumResidents() > numResidents) {
-					tempCapital = newCapital;
-					numResidents = newCapital.getNumResidents();
-				}
-
-			if (tempCapital != null)
-				setCapital(tempCapital);
+			findNewCapital();
 		}
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
+	
+
 
 	private void remove(Town town) {
 

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -1059,19 +1060,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
-                line = rs.getString("towns");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Town town = getTown(token);
-                            if (town != null)
-                            	town.setNation(nation);
-                        }
-                    }
-                }
-                nation.setCapital(getTown(rs.getString("capital")));
+
+            	try {
+					nation.forceSetCapital(getTown(rs.getString("capital")));
+				} catch (EmptyNationException e1) {
+					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					removeNation(nation);
+					break;
+				}
                 
                 line = rs.getString("nationBoard");
                 if (line != null)
@@ -1618,7 +1614,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> twn_hm = new HashMap<>();
             twn_hm.put("name", town.getName());
-//            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
