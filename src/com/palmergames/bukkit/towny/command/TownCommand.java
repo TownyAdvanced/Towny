@@ -1782,11 +1782,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (town.getHomeblockWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 
-			if(TownySettings.getWarCommonPeacefulTownsEnabled() 
-				&& (town.isPeaceful() || town.getDesiredPeacefulnessValue())) {
-				throw new TownyException(TownySettings.getLangString("msg_war_common_peaceful_town_cannot_toggle_pvp"));
-			}
-
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 				&& town.hasSiege()

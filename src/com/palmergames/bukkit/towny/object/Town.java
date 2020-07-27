@@ -370,11 +370,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (isAdminDisabledPVP()) 
 			return false;
 
-		//Peaceful town
-		if (TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful()) {
-			return false;
-		}
-
 		//Under siege
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
@@ -407,7 +402,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-			&& !(TownySettings.getWarCommonPeacefulTownsEnabled() && isPeaceful())
 			&& siege != null
 			&& siege.getStatus().isActive()) {
 			return true;
