@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.PostLoad;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
@@ -48,8 +49,10 @@ public class Nation extends Government {
 	private transient final List<Town> towns = new ArrayList<>();
 	
 	@OneToMany(tableName = "allies")
+	@PostLoad
 	private List<Nation> allies = new ArrayList<>();
 	@OneToMany(tableName = "enemies")
+	@PostLoad
 	private List<Nation> enemies = new ArrayList<>();
 	private UUID capital;
 	private boolean neutral = false;

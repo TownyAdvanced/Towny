@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.database.handler.annotations.PostLoad;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
@@ -42,6 +43,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	private static final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
 	private static final File relationshipDir = new File(Towny.getPlugin().getDataFolder() + "/data/relationship/");
+	private final Map<Field, Map<Saveable, String>> postLoadFields = new HashMap<>();
 	
 	// Create files
 	static {
@@ -95,7 +97,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 	
 	@Nullable
-	public <T> T load(@NotNull File file, @NotNull Class<T> clazz) {
+	public <T extends Saveable> T load(@NotNull File file, @NotNull Class<T> clazz) {
 		Validate.notNull(clazz);
 		Validate.notNull(file);
 		
@@ -115,20 +117,33 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 
 		Validate.isTrue(obj != null);
+		// Load all fields except the post load ones
 		List<Field> fields = ReflectionUtil.getNonTransientFields(obj);
 
 		HashMap<String, String> values = loadFileIntoHashMap(file);
 		for (Field field : fields) {
-			Type type = field.getGenericType();
-			Class<?> classType = field.getType();
-			field.setAccessible(true);
+			String fieldValue = values.get(field.getName());
 
-			String fieldName = field.getName();
-
-			if (values.get(fieldName) == null) {
+			if (field.isAnnotationPresent(PostLoad.class)) {
+				addToPostLoad(field, obj, fieldValue);
 				continue;
 			}
 			
+			loadField(obj, field, fieldValue);
+		}
+		
+		return obj;
+	}
+	
+	private void loadField(Saveable obj, Field field, String fieldValue) {
+		Type type = field.getGenericType();
+		Class<?> classType = field.getType();
+		field.setAccessible(true);
+
+		if (fieldValue == null) {
+			return;
+		}
+
 //			// If there is a default value that already exists,
 //			// make sure we are adapting to the same default value type.
 //			try {
@@ -139,30 +154,34 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 //				}
 //			} catch (IllegalAccessException e) {
 //			}
-			
-			Object value;
 
-			if (ReflectionUtil.isPrimitive(type)) {
-				value = loadPrimitive(values.get(fieldName), type);
-			} else if (field.getType().isEnum()) {
-				value = ReflectionUtil.loadEnum(values.get(fieldName), classType);
-			} else {
-				value = fromStoredString(values.get(fieldName), type);
-			}
+		Object value;
 
-			if (value == null) {
-				// ignore it as another already allocated value may be there.
-				continue;
-			}
-
-			try {
-				field.set(obj, value);
-			} catch (IllegalAccessException e) {
-				throw new TownyRuntimeException(e.getMessage());
-			}
+		if (ReflectionUtil.isPrimitive(type)) {
+			value = loadPrimitive(fieldValue, type);
+		} else if (field.getType().isEnum()) {
+			value = ReflectionUtil.loadEnum(fieldValue, classType);
+		} else {
+			value = fromStoredString(fieldValue, type);
 		}
+
+		if (value == null) {
+			// ignore it as another already allocated value may be there.
+			return;
+		}
+
+		try {
+			field.set(obj, value);
+		} catch (IllegalAccessException e) {
+			throw new TownyRuntimeException(e.getMessage());
+		}
+	}
+	
+	private void addToPostLoad(Field field, Saveable object, String value) {
+		Map<Saveable, String> objectValueMap = postLoadFields.computeIfAbsent(field,
+												(f) -> new HashMap<>());
 		
-		return obj;
+		objectValueMap.put(object, value);
 	}
 
 	public HashMap<String, String> loadFileIntoHashMap(File file) {
@@ -275,6 +294,23 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		} catch (IOException e) {
 			throw new TownyRuntimeException(e.getMessage());
 		}
+	}
+	
+	@Override
+	public void completeLoad() {
+		// Post load fields
+		if (postLoadFields.isEmpty())
+			return;
+
+		for (Map.Entry<Field, Map<Saveable, String>> fieldEntry : postLoadFields.entrySet()) {
+			Field field = fieldEntry.getKey();
+
+			for (Map.Entry<Saveable, String> objEntry : fieldEntry.getValue().entrySet()) {
+				loadField(objEntry.getKey(), field, objEntry.getValue());
+			}
+		}
+		
+		postLoadFields.clear();
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {

@@ -447,6 +447,8 @@ public abstract class DatabaseHandler {
 	public abstract void loadAllNations();
 	public abstract void loadAllTowns();
 	public abstract void loadAllTownBlocks();
+	
+	protected abstract void completeLoad();
 
 	/**
 	 * Loads all necessary objects for the database.
@@ -459,6 +461,7 @@ public abstract class DatabaseHandler {
 		loadAllTownBlocks();
 		// Loads all the bukkit worlds if they haven't been loaded.
 		loadWorlds();
+		completeLoad();
 	}
 	
 	public final void saveAll() {

@@ -523,6 +523,11 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			});
 	}
 
+	@Override
+	protected void completeLoad() {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	// Returns the SQL table name from a savable object.
 	@Nullable
 	private <T extends Saveable> String getTableName(@NotNull Class<T> type) {
