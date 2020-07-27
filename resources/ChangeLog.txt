@@ -4816,3 +4816,4 @@ v0.92.0.11:
     - Closes #4220.
   - Fix cancelling a spawn causing an NPE.
     - Closes #4218.
+  - Fix being able to confirm cancelled confirmations.

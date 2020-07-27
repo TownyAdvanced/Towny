@@ -44,6 +44,7 @@ public class ConfirmationHandler {
 		
 		Bukkit.getScheduler().cancelTask(context.taskID);
 		Confirmation confirmation = context.confirmation;
+		confirmations.remove(sender);
 		
 		// Run the cancel handler.
 		if (confirmation.getCancelHandler() != null)
