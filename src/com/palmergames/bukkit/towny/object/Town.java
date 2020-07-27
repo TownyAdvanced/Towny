@@ -199,6 +199,8 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
+	 * @param resident - Resident to check for a rank.
+	 * 
 	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead. 
 	 */
 	public boolean hasAssistant(Resident resident) {
