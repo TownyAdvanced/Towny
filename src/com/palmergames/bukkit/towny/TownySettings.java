@@ -3369,4 +3369,13 @@ public class TownySettings {
 	public static int getWarCommonPeacefulTownsNewTownConfirmationRequirementDays() {
 		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS);
 	}
+
+	public static int getBannerControlHorizontalDistanceBlocks() {
+		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_HORIZONTAL_DISTANCE_BLOCKS);
+	}
+
+	public static int getBannerControlVerticalDistanceBlocks() {
+		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_VERTICAL_DISTANCE_BLOCKS);
+	}
+
 }

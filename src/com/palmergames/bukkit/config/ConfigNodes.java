@@ -2109,6 +2109,14 @@ public enum ConfigNodes {
 			"150",
 			"# The radius of the 'siege zone' ",
 		    "# Various siege related effects can apply in this zone e.g. lose points on death, keep inv on death, cannot claim here."),
+	WAR_SIEGE_BANNER_CONTROL_HORIZONTAL_DISTANCE_BLOCKS(
+			"war.siege.distances.banner_control_horizontal_distance_blocks",
+			"16",
+			"# This is the horizontal distance a soldier must be from the banner to get banner control."),
+	WAR_SIEGE_BANNER_CONTROL_VERTICAL_DISTANCE_BLOCKS(
+			"war.siege.distances.banner_control_vertical_distance_blocks",
+			"16",
+			"# This is the vertical distance a soldier must be from the banner to get banner control."),
 	WAR_SIEGE_LEADERSHIP_AURA_RADIUS_BLOCKS(
 		"war.siege.distances.leadership_aura_radius_blocks",
 			"50",

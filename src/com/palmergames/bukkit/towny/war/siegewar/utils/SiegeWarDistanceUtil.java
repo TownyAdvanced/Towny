@@ -195,7 +195,7 @@ public class SiegeWarDistanceUtil {
 	}
 
 	public static boolean isInTimedPointZone(Entity entity, Siege siege) {
-		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getTownBlockSize());
+		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getBannerControlHorizontalDistanceBlocks(), TownySettings.getBannerControlVerticalDistanceBlocks());
 	}
 
 	public static boolean areTownsClose(Town town1, Town town2, int radiusTownblocks) {
@@ -230,5 +230,22 @@ public class SiegeWarDistanceUtil {
 			return false;
 
 		return location1.distance(location2) < radius;
+	}
+
+	private static boolean areLocationsClose(Location location1, Location location2, int maxHorizontalDistance, int maxVerticalDistance) {
+		if(!location1.getWorld().getName().equalsIgnoreCase(location2.getWorld().getName()))
+			return false;
+
+		//Check horizontal distance
+		double xzDistance = Math.sqrt(Math.pow(location1.getX() - location2.getX(), 2) + Math.pow(location1.getZ() - location2.getZ(), 2));
+		if(xzDistance > maxHorizontalDistance)
+			return false;
+
+		//Check vertical distance
+		double yDistance = Math.abs(Math.abs(location1.getY() - location2.getY()));
+		if(yDistance > maxVerticalDistance)
+			return false;
+
+		return true;
 	}
 }
