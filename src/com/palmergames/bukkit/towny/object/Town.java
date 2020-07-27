@@ -200,7 +200,10 @@ public class Town extends Government implements TownBlockOwner {
 
 	/**
 	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead. 
+	 * @param resident Resident to check
+	 * @return Currently, runs {@link Resident#hasTownRank(String)} to return the assistant.   
 	 */
+	@Deprecated
 	public boolean hasAssistant(Resident resident) {
 
 		return resident.hasTownRank("assistant");
