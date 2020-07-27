@@ -760,20 +760,22 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 		return spawnCost;
 	}
-	
+
 	public List<Town> getTownsUnderSiegeAttack() {
 		List<Town> result = new ArrayList<>();
 		for(Siege siege: sieges) {
-			result.add(siege.getDefendingTown());
+			if(siege.getStatus().isActive()) {
+				result.add(siege.getDefendingTown());
+			}
 		}
 		return result;
 	}
 
-	//Note - Do not return a town if our nation just invaded it
 	public List<Town> getTownsUnderSiegeDefence() {
 		List<Town> result = new ArrayList<Town>();
 		for(Town town: towns) {
-			if(town.hasSiege() && town.getSiege().getAttackingNation() != this) {
+			if(town.hasSiege() 
+				&& town.getSiege().getStatus().isActive()) {
 				result.add(town);
 			}
 		}
