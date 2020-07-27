@@ -76,10 +76,6 @@ import java.util.stream.Collectors;
 public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> nation_help = new ArrayList<>();
-	private static final List<String> king_help = new ArrayList<>();
-	private static final List<String> alliesstring = new ArrayList<>();
-	private static final List<String> invite = new ArrayList<>();
 	private static final List<String> nationTabCompletes = Arrays.asList(
 		"list",
 		"online",
@@ -148,61 +144,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"help",
 		"list"
 	);
-
-	static {
-
-		// Basic nation help screen.
-		nation_help.add(ChatTools.formatTitle("/nation"));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "", Translation.of("nation_help_1")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", Translation.of("nation_help_2"), Translation.of("nation_help_3")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "list", Translation.of("nation_help_4")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "townlist (nation)", ""));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "allylist (nation)", ""));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "enemylist (nation)", ""));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "online", Translation.of("nation_help_9")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", Translation.of("nation_help_10")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "join (nation)", "Used to join open nations."));		
-		nation_help.add(ChatTools.formatCommand(Translation.of("res_sing"), "/nation", "deposit [$]", ""));
-		nation_help.add(ChatTools.formatCommand(Translation.of("mayor_sing"), "/nation", "leave", Translation.of("nation_help_5")));
-		nation_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "king ?", Translation.of("nation_help_7")));
-		nation_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/nation", "new " + Translation.of("nation_help_2") + " [capital]", Translation.of("nation_help_8")));
-		nation_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/nation", "delete " + Translation.of("nation_help_2"), ""));
-		nation_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/nation", "say", "[message]"));
-
-		// King specific help screen.
-		king_help.add(ChatTools.formatTitle(Translation.of("king_help_1")));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "withdraw [$]", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "[add/kick] [town] .. [town]", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "rank [add/remove] " + Translation.of("res_2"), "[Rank]"));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "set [] .. []", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "toggle [] .. []", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "ally [] .. [] " + Translation.of("nation_help_2"), Translation.of("king_help_2")));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "enemy [add/remove] " + Translation.of("nation_help_2"), Translation.of("king_help_3")));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "delete", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "merge {nation}", ""));
-		king_help.add(ChatTools.formatCommand(Translation.of("king_sing"), "/nation", "say", "[message]"));
-
-		// Used for inviting allies to the nation.
-		alliesstring.add(ChatTools.formatTitle("/nation invite"));
-		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add [nation]", Translation.of("nation_ally_help_1")));
-		if (TownySettings.isDisallowOneWayAlliance()) {
-			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add -[nation]", Translation.of("nation_ally_help_7")));
-		}
-		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally remove [nation]", Translation.of("nation_ally_help_2")));
-		if (TownySettings.isDisallowOneWayAlliance()) {
-			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally sent", Translation.of("nation_ally_help_3")));
-			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally received", Translation.of("nation_ally_help_4")));
-			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally accept [nation]", Translation.of("nation_ally_help_5")));
-			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally deny [nation]", Translation.of("nation_ally_help_6")));
-		}
-
-		// Used for inviting Towns to the nation.
-		invite.add(ChatTools.formatTitle("/town invite"));
-		invite.add(ChatTools.formatCommand("", "/nation", "invite [town]", Translation.of("nation_invite_help_1")));
-		invite.add(ChatTools.formatCommand("", "/nation", "invite -[town]", Translation.of("nation_invite_help_2")));
-		invite.add(ChatTools.formatCommand("", "/nation", "invite sent", Translation.of("nation_invite_help_3")));
-
-	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -374,7 +315,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if (args == null) {
-				for (String line : nation_help)
+				for (String line : HelpMenus.nation_help)
 					player.sendMessage(line);
 				parseNationCommand(player, args);
 			} else {
@@ -396,7 +337,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
-			for (String line : nation_help)
+			for (String line : HelpMenus.nation_help)
 				sender.sendMessage(line);
 
 		} else if (split[0].equalsIgnoreCase("list")) {
@@ -437,7 +378,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				});
 
 			else if (split[0].equalsIgnoreCase("?"))
-				for (String line : nation_help)
+				for (String line : HelpMenus.nation_help)
 					player.sendMessage(line);
 			else if (split[0].equalsIgnoreCase("list")) {
 
@@ -874,7 +815,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			List<String> messages = new ArrayList<>();
 
 
-			for (String msg : invite) {
+			for (String msg : HelpMenus.nation_invite) {
 				messages.add(Colors.strip(msg));
 			}
 			messages.add(sent);
@@ -884,7 +825,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				for (String msg : invite) {
+				for (String msg : HelpMenus.nation_invite) {
 					player.sendMessage(Colors.strip(msg));
 				}
 				return;
@@ -1476,7 +1417,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationKing(Player player, String[] split) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
-			for (String line : king_help)
+			for (String line : HelpMenus.king_help)
 				player.sendMessage(line);
 	}
 
@@ -1767,7 +1708,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationAlly(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length <= 0) {
-			TownyMessaging.sendMessage(player, alliesstring);
+			TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
 			return;
 		}
 
@@ -1860,7 +1801,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} else {
 			if (!TownySettings.isDisallowOneWayAlliance()){
-				TownyMessaging.sendMessage(player, alliesstring);
+				TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
 				return;
 			}
 		}
@@ -1989,7 +1930,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else {
-				TownyMessaging.sendMessage(player, alliesstring);
+				TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
 				return;
 			}
 		}

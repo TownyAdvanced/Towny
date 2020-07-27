@@ -4,6 +4,7 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.command.HelpMenus;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -31,6 +32,7 @@ public final class Translation {
 		// read the (language).yml into memory
 		language = new CommentedConfiguration(file);
 		language.load();
+		HelpMenus.loadHelpMenus();
 		CommentedConfiguration newLanguage = new CommentedConfiguration(file);
 		
 		try {

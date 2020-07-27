@@ -41,7 +41,6 @@ import java.util.List;
 public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> output = new ArrayList<>();
 	private static final List<String> residentTabCompletes = Arrays.asList(
 		"friend",
 		"list",
@@ -93,23 +92,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"perm",
 		"mode"
 	);
-	
-
-	static {
-		output.add(ChatTools.formatTitle("/resident"));
-		output.add(ChatTools.formatCommand("", "/resident", "", Translation.of("res_1")));
-		output.add(ChatTools.formatCommand("", "/resident", Translation.of("res_2"), Translation.of("res_3")));
-		output.add(ChatTools.formatCommand("", "/resident", "list", Translation.of("res_4")));
-		output.add(ChatTools.formatCommand("", "/resident", "tax", ""));
-		output.add(ChatTools.formatCommand("", "/resident", "jail", ""));
-		output.add(ChatTools.formatCommand("", "/resident", "toggle", "[mode]...[mode]"));
-		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + Translation.of("res_5")));
-		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + Translation.of("res_2"), Translation.of("res_6")));
-		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + Translation.of("res_2") + " ", Translation.of("res_7")));
-		output.add(ChatTools.formatCommand("", "/resident", "spawn", ""));
-		// output.add(ChatTools.formatCommand(Translation.of("admin_sing"),
-		// "/resident", "delete " + Translation.of("res_2"), ""));
-	}
 
 	public ResidentCommand(Towny instance) {
 
@@ -118,7 +100,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -126,7 +108,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if (args == null) {
-				for (String line : output)
+				for (String line : HelpMenus.resident_help)
 					player.sendMessage(line);
 				parseResidentCommand(player, args);
 			} else {
@@ -198,7 +180,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			
-			for (String line : output)
+			for (String line : HelpMenus.resident_help)
 				sender.sendMessage(line);
 			
 		} else if (split[0].equalsIgnoreCase("list")) {
@@ -236,7 +218,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
-				for (String line : output)
+				for (String line : HelpMenus.resident_help)
 					player.sendMessage(line);
 
 			} else if (split[0].equalsIgnoreCase("list")) {

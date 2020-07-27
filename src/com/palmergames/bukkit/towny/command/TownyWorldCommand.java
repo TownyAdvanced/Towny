@@ -36,10 +36,7 @@ import java.util.List;
 public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> townyworld_help = new ArrayList<>();
-	private static final List<String> townyworld_help_console = new ArrayList<>();
-	private static final List<String> townyworld_set = new ArrayList<>();
-	private static final List<String> townyworld_set_console = new ArrayList<>();
+
 	private static TownyWorld Globalworld;
 	
 	private static final List<String> townyWorldTabCompletes = Arrays.asList(
@@ -82,28 +79,6 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
-		townyworld_help.add(ChatTools.formatTitle("/townyworld"));
-		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "", Translation.of("world_help_1")));
-		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", Translation.of("world_help_2"), Translation.of("world_help_3")));
-		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "list", Translation.of("world_help_4")));
-		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "toggle", ""));
-		townyworld_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyworld", "set [] .. []", ""));
-		townyworld_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyworld", "regen", Translation.of("world_help_5")));
-
-		townyworld_set.add(ChatTools.formatTitle("/townyworld set"));
-		townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildname [name]", ""));
-
-		townyworld_help_console.add(ChatTools.formatTitle("/townyworld"));
-		townyworld_help_console.add(ChatTools.formatCommand("", "/townyworld {world}", "", Translation.of("world_help_1")));
-		townyworld_help_console.add(ChatTools.formatCommand("", "/townyworld {world}", Translation.of("world_help_2"), Translation.of("world_help_3")));
-		townyworld_help_console.add(ChatTools.formatCommand("", "/townyworld {world}", "list", Translation.of("world_help_4")));
-		townyworld_help_console.add(ChatTools.formatCommand("", "/townyworld {world}", "toggle", ""));
-		townyworld_help_console.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyworld {world}", "set [] .. []", ""));
-		townyworld_help_console.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyworld {world}", "regen", Translation.of("world_help_5")));
-
-		townyworld_set_console.add(ChatTools.formatTitle("/townyworld set"));
-		townyworld_set_console.add(ChatTools.formatCommand("", "/townyworld {world} set", "wildname [name]", ""));
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
@@ -116,10 +91,6 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			parseWorldFromConsole(sender, args);
 		}
 
-		townyworld_set_console.clear();
-		townyworld_help_console.clear();
-		townyworld_set.clear();
-		townyworld_help.clear();
 		Globalworld = null;
 		return true;
 	}
@@ -149,7 +120,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		Player player = null;
 
 		if ((split.length == 0) || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : townyworld_help_console)
+			for (String line : HelpMenus.townyworld_help_console)
 				sender.sendMessage(line);
 			return;
 		}
@@ -160,12 +131,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}		
 
 		if (split[0].equalsIgnoreCase("set")) {
-			for (String line : townyworld_set_console) {
+			for (String line : HelpMenus.townyworld_set_console) {
 				sender.sendMessage(line);
 			}
 		}
 		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
-			for (String line : townyworld_help_console) {
+			for (String line : HelpMenus.townyworld_help_console) {
 				sender.sendMessage(line);
 			}
 		} else {
@@ -234,10 +205,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("?")) {
 				if (player == null) {
-					for (String line : townyworld_help)
+					for (String line : HelpMenus.townyworld_help)
 						sender.sendMessage(line);
 				} else
-					for (String line : townyworld_help)
+					for (String line : HelpMenus.townyworld_help)
 						player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("list")) {
 
@@ -513,10 +484,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			if (player == null) {
-				for (String line : townyworld_set)
+				for (String line : HelpMenus.townyworld_set)
 					sender.sendMessage(line);
 			} else {
-				for (String line : townyworld_set)
+				for (String line : HelpMenus.townyworld_set)
 					player.sendMessage(line);
 			}
 		} else {

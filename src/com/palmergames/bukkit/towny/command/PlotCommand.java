@@ -63,24 +63,6 @@ import java.util.UUID;
 public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	public static final List<String> output = new ArrayList<>();
-
-	static {
-		output.add(ChatTools.formatTitle("/plot"));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/plot claim", "", Translation.of("msg_block_claim")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/plot claim", "[rect/circle] [radius]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/plot perm", "[hud]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot notforsale", "", Translation.of("msg_plot_nfs")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot notforsale", "[rect/circle] [radius]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot forsale [$]", "", Translation.of("msg_plot_fs")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot forsale [$]", "within [rect/circle] [radius]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot evict", "" , ""));		
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot clear", "", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing") + "/" + Translation.of("mayor_sing"), "/plot set ...", "", Translation.of("msg_plot_fs")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/plot toggle", "[pvp/fire/explosion/mobs]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/plot group", "?", ""));
-		output.add(Translation.of("msg_nfs_abr"));
-	}
 	
 	private static final List<String> plotTabCompletes = Arrays.asList(
 		"claim",
@@ -142,7 +124,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -159,7 +141,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (args == null) {
-				for (String line : output)
+				for (String line : HelpMenus.plot_help)
 					player.sendMessage(line);
 			} else {
 				try {
@@ -172,8 +154,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		} else
 			// Console
-			for (String line : output)
+			for (String line : HelpMenus.plot_help)
 				sender.sendMessage(Colors.strip(line));
+		
 		return true;
 	}
 	
@@ -234,7 +217,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			for (String line : output)
+			for (String line : HelpMenus.plot_help)
 				player.sendMessage(line);
 		} else {
 

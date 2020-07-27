@@ -46,7 +46,8 @@ public class ConfirmationHandler {
 		Confirmation confirmation = context.confirmation;
 		
 		// Run the cancel handler.
-		confirmation.getCancelHandler().run();
+		if (confirmation.getCancelHandler() != null)
+			confirmation.getCancelHandler().run();
 		TownyMessaging.sendMsg(sender, Translation.of("successful_cancel"));
 	}
 

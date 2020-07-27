@@ -36,18 +36,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		TownySettings.getDenyCommand()
 	);
 	
-	@SuppressWarnings("unused")
 	private static Towny plugin;
-	private static final List<String> invite_help = new ArrayList<>();
-
-	static {
-
-		invite_help.add(ChatTools.formatTitle("/invite"));
-		invite_help.add(ChatTools.formatCommand("", "/invite", TownySettings.getAcceptCommand() + " [town]", Translation.of("invite_help_1")));
-		invite_help.add(ChatTools.formatCommand("", "/invite", TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2")));
-		invite_help.add(ChatTools.formatCommand("", "/invite", "list", Translation.of("invite_help_3")));
-
-	}
 
 	public InviteCommand(Towny instance) {
 		plugin = instance;
@@ -78,7 +67,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -90,18 +79,19 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else
 			// Console
-			for (String line : invite_help)
+			for (String line : HelpMenus.invite_help)
 				sender.sendMessage(Colors.strip(line));
+		
 		return true;
 	}
 
 	private void parseInviteCommand(final Player player, String[] split) {
 		if (split.length == 0) { // So they just type /invite , We should probably send them to the help menu. Done.
-			for (String line : invite_help) {
+			for (String line : HelpMenus.invite_help) {
 				player.sendMessage(line);
 			}
 		} else if (split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
-			for (String line : invite_help) {
+			for (String line : HelpMenus.invite_help) {
 				player.sendMessage(line);
 			}
 		} else if (split[0].equalsIgnoreCase("list")) {
