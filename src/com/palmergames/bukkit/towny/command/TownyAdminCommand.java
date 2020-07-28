@@ -410,9 +410,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : HelpMenus.ta_help) {
-				sender.sendMessage(line);
-			}
+			HelpMenu.TA_HELP.send(sender);
 		} else {
 
 			if (split[0].equalsIgnoreCase("set")) {
@@ -725,8 +723,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseAdminUnclaimCommand(String[] split) {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			for (String line : HelpMenus.ta_unclaim)
-				((CommandSender) getSender()).sendMessage(line);
+			HelpMenu.TA_UNCLAIM.send((CommandSender) getSender());
 		} else {
 
 			if (isConsole) {

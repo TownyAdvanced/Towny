@@ -79,21 +79,15 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else
 			// Console
-			for (String line : HelpMenus.invite_help)
-				sender.sendMessage(Colors.strip(line));
+			HelpMenu.INVITE_HELP.send(sender);
 		
 		return true;
 	}
 
 	private void parseInviteCommand(final Player player, String[] split) {
-		if (split.length == 0) { // So they just type /invite , We should probably send them to the help menu. Done.
-			for (String line : HelpMenus.invite_help) {
-				player.sendMessage(line);
-			}
-		} else if (split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
-			for (String line : HelpMenus.invite_help) {
-				player.sendMessage(line);
-			}
+		// So they just type /invite , We should probably send them to the help menu. Done.
+		if (split.length == 0 || split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
+			HelpMenu.INVITE_HELP.send(player);
 		} else if (split[0].equalsIgnoreCase("list")) {
 			parseInviteList(player, split);
 		} else if (split[0].equalsIgnoreCase(TownySettings.getAcceptCommand())) {

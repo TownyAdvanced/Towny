@@ -315,8 +315,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if (args == null) {
-				for (String line : HelpMenus.nation_help)
-					player.sendMessage(line);
+				HelpMenu.NATION_HELP.send(player);
 				parseNationCommand(player, args);
 			} else {
 				parseNationCommand(player, args);
@@ -337,8 +336,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
-			for (String line : HelpMenus.nation_help)
-				sender.sendMessage(line);
+			HelpMenu.NATION_HELP.send(sender);
 
 		} else if (split[0].equalsIgnoreCase("list")) {
 
@@ -378,8 +376,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				});
 
 			else if (split[0].equalsIgnoreCase("?"))
-				for (String line : HelpMenus.nation_help)
-					player.sendMessage(line);
+					HelpMenu.NATION_HELP.send(player);
 			else if (split[0].equalsIgnoreCase("list")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode()))
@@ -815,7 +812,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			List<String> messages = new ArrayList<>();
 
 
-			for (String msg : HelpMenus.nation_invite) {
+			for (String msg : HelpMenu.NATION_INVITE.getLines()) {
 				messages.add(Colors.strip(msg));
 			}
 			messages.add(sent);
@@ -825,9 +822,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				for (String msg : HelpMenus.nation_invite) {
-					player.sendMessage(Colors.strip(msg));
-				}
+				HelpMenu.NATION_INVITE.send(player);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
@@ -1417,8 +1412,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationKing(Player player, String[] split) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
-			for (String line : HelpMenus.king_help)
-				player.sendMessage(line);
+			HelpMenu.KING_HELP.send(player);
 	}
 
 	/**
@@ -1708,7 +1702,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationAlly(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length <= 0) {
-			TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
+			TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
 			return;
 		}
 
@@ -1801,7 +1795,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} else {
 			if (!TownySettings.isDisallowOneWayAlliance()){
-				TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
+				TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
 				return;
 			}
 		}
@@ -1930,7 +1924,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else {
-				TownyMessaging.sendMessage(player, HelpMenus.alliesstring);
+				TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
 				return;
 			}
 		}

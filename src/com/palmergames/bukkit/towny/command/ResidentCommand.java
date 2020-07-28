@@ -108,8 +108,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if (args == null) {
-				for (String line : HelpMenus.resident_help)
-					player.sendMessage(line);
+				HelpMenu.RESIDENT_HELP.send(player);
 				parseResidentCommand(player, args);
 			} else {
 				parseResidentCommand(player, args);
@@ -179,10 +178,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void parseResidentCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			
-			for (String line : HelpMenus.resident_help)
-				sender.sendMessage(line);
-			
+			HelpMenu.RESIDENT_HELP.send(sender);
 		} else if (split[0].equalsIgnoreCase("list")) {
 
 			listResidents(sender);
@@ -217,9 +213,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-
-				for (String line : HelpMenus.resident_help)
-					player.sendMessage(line);
+				
+				HelpMenu.RESIDENT_HELP.send(player);
 
 			} else if (split[0].equalsIgnoreCase("list")) {
 

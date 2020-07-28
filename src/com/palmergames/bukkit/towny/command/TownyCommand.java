@@ -123,9 +123,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console output
 			if (args.length == 0) {
-				for (String line : HelpMenus.towny_general_help) {
-					sender.sendMessage(Colors.strip(line));
-				}
+				HelpMenu.GENERAL_HELP.send(sender);
 			} else if (args[0].equalsIgnoreCase("tree")) {
 				for (String line : TownyUniverse.getInstance().getTreeString(0)) {
 					sender.sendMessage(line);
@@ -189,14 +187,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private void parseTownyCommand(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0) {
-			for (String line : HelpMenus.towny_general_help)
-				player.sendMessage(line);
-
+			HelpMenu.GENERAL_HELP.send(player);
 			return;
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : HelpMenus.towny_help)
-				player.sendMessage(Colors.strip(line));
-
+			HelpMenu.HELP.send(player);
 			return;
 		}
 
