@@ -1180,7 +1180,7 @@ msg_siege_war_town_bankrupted_from_plunder: '&6[War]&b %s has been bankrupted by
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!.'
 msg_siege_war_attacking_troops_at_siege_banner: '&6[War]&b Siege on %s > Attackers are at the siege banner.'
 msg_siege_war_defending_troops_at_siege_banner: '&6[War]&b Siege on %s > Town defenders are at the siege banner.'
-msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. If you remain outside the town, and within %d blocks of the siege-banner, for %s, you will gain banner control (or be added to the banner control list). Do not go invisible, flying, or under a block (world dependent).'
+msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. Remain close to the siege-banner (%d blocks horizonally, %d blocks vertically), outside the town, not invisible/flying, and not under a block (world dependant), for %s. If your session succeeds, you will gain banner control for your side (or be added to the banner control list).'
 msg_siege_war_banner_control_session_success: '&6[War]&b Banner control session succeeded!. You have been added to the banner control list.'
 msg_siege_war_banner_control_gained_by_attacker: '&6[War]&b Siege on %s > The attackers have gained banner control.'
 msg_siege_war_banner_control_gained_by_defender: '&6[War]&b Siege on %s > The defenders have gained banner control.'

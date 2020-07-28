@@ -111,7 +111,11 @@ public class SiegeWarBannerControlUtil {
 		siege.addBannerControlSession(player, bannerControlSession);
 
 		//Notify Player
-		TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_siege_war_banner_control_session_started"), TownySettings.getTownBlockSize(), TimeMgmt.getFormattedTimeValue(sessionDurationMillis)));
+		TownyMessaging.sendMsg(player, String.format(
+			TownySettings.getLangString("msg_siege_war_banner_control_session_started"), 
+			TownySettings.getBannerControlHorizontalDistanceBlocks(),
+			TownySettings.getBannerControlVerticalDistanceBlocks(),
+			TimeMgmt.getFormattedTimeValue(sessionDurationMillis)));
 
 		//Make player glow (which also shows them a timer)
 		int effectDurationSeconds = (TownySettings.getWarSiegeBannerControlSessionDurationMinutes() * 60) + (int)TownySettings.getShortInterval(); 
