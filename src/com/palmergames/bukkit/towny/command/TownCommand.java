@@ -841,10 +841,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			}
 
-			List<String> messages = new ArrayList<>(HelpMenu.TOWN_INVITE.getLines());
-			messages.add(sent);
-			messages.add(received);
-			player.sendMessage(messages.toArray(new String[0]));
+			HelpMenu.TOWN_INVITE.send(player);
+			TownyMessaging.sendMessage(player, sent);
+			TownyMessaging.sendMessage(player, received);
 			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]

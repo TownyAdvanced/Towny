@@ -808,16 +808,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_SEE_HOME.getNode())) {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			}
-			String[] msgs;
-			List<String> messages = new ArrayList<>();
-
-
-			for (String msg : HelpMenu.NATION_INVITE.getLines()) {
-				messages.add(Colors.strip(msg));
-			}
-			messages.add(sent);
-			msgs = messages.toArray(new String[0]);
-			player.sendMessage(msgs);
+			HelpMenu.NATION_INVITE.send(player);
+			TownyMessaging.sendMessage(player, sent);
 			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
@@ -1702,7 +1694,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationAlly(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length <= 0) {
-			TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
+			HelpMenu.ALLIES_STRING.send(player);
 			return;
 		}
 

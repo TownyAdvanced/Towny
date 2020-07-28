@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -305,13 +303,7 @@ public enum HelpMenu {
 	}
 
 	public void send(CommandSender sender) {
-		boolean isConsole = !(sender instanceof Player);
-		for (String line : lines) {
-			if (isConsole)
-				line = Colors.strip(line);
-
-			sender.sendMessage(line);
-		}
+		TownyMessaging.sendMessage(sender, lines);
 	}
 
 	// Class to ease making menus
