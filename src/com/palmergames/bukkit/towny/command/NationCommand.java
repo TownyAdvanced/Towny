@@ -1787,7 +1787,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} else {
 			if (!TownySettings.isDisallowOneWayAlliance()){
-				TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
+				HelpMenu.ALLIES_STRING.send(player);
 				return;
 			}
 		}
@@ -1916,7 +1916,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else {
-				TownyMessaging.sendMessage(player, HelpMenu.ALLIES_STRING.getLines());
+				HelpMenu.ALLIES_STRING.send(player);
 				return;
 			}
 		}
