@@ -387,10 +387,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-					
-				for (String line : HelpMenus.town_help)
-					sender.sendMessage(line);
-				
+			HelpMenu.TOWN_HELP.send(sender);
 		} else if (split[0].equalsIgnoreCase("list")) {
 
 			listTowns(sender, split);
@@ -428,10 +425,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				});
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-
-				for (String line : HelpMenus.town_help)
-					player.sendMessage(line);
-
+				HelpMenu.TOWN_HELP.send(player);
+				
 			} else if (split[0].equalsIgnoreCase("here")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_HERE.getNode()))
@@ -845,24 +840,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_SEE_HOME.getNode())) {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			}
-			String[] msgs;
-			List<String> messages = new ArrayList<>();
 
-
-			for (String msg : HelpMenus.town_invite) {
-				messages.add(Colors.strip(msg));
-			}
-			messages.add(sent);
-			messages.add(received);
-			msgs = messages.toArray(new String[0]);
-			player.sendMessage(msgs);
+			HelpMenu.TOWN_INVITE.send(player);
+			TownyMessaging.sendMessage(player, sent);
+			TownyMessaging.sendMessage(player, received);
 			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				for (String msg : HelpMenus.town_invite) {
-					player.sendMessage(Colors.strip(msg));
-				}
+				HelpMenu.TOWN_INVITE.send(player);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]

@@ -120,8 +120,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		Player player = null;
 
 		if ((split.length == 0) || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : HelpMenus.townyworld_help_console)
-				sender.sendMessage(line);
+			HelpMenu.TOWNYWORLD_HELP_CONSOLE.send(sender);
 			return;
 		}
 		
@@ -131,14 +130,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}		
 
 		if (split[0].equalsIgnoreCase("set")) {
-			for (String line : HelpMenus.townyworld_set_console) {
-				sender.sendMessage(line);
-			}
+			HelpMenu.TOWNYWORLD_SET_CONSOLE.send(sender);
 		}
 		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
-			for (String line : HelpMenus.townyworld_help_console) {
-				sender.sendMessage(line);
-			}
+			HelpMenu.TOWNYWORLD_HELP_CONSOLE.send(sender);
 		} else {
 			try {
 				Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(split[0].toLowerCase());
@@ -204,12 +199,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split[0].equalsIgnoreCase("?")) {
-				if (player == null) {
-					for (String line : HelpMenus.townyworld_help)
-						sender.sendMessage(line);
-				} else
-					for (String line : HelpMenus.townyworld_help)
-						player.sendMessage(line);
+				HelpMenu.TOWNYWORLD_HELP.send(sender);
 			} else if (split[0].equalsIgnoreCase("list")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
@@ -483,13 +473,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	public void worldSet(Player player, CommandSender sender, String[] split) {
 
 		if (split.length == 0) {
-			if (player == null) {
-				for (String line : HelpMenus.townyworld_set)
-					sender.sendMessage(line);
-			} else {
-				for (String line : HelpMenus.townyworld_set)
-					player.sendMessage(line);
-			}
+			HelpMenu.TOWNYWORLD_SET.send(sender);
 		} else {
 
 			if (split[0].equalsIgnoreCase("usedefault")) {

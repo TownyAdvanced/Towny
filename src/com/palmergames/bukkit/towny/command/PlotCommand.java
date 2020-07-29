@@ -141,8 +141,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (args == null) {
-				for (String line : HelpMenus.plot_help)
-					player.sendMessage(line);
+				HelpMenu.PLOT_HELP.send(player);
+
 			} else {
 				try {
 					return parsePlotCommand(player, args);
@@ -154,8 +154,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		} else
 			// Console
-			for (String line : HelpMenus.plot_help)
-				sender.sendMessage(Colors.strip(line));
+			HelpMenu.PLOT_HELP.send(sender);
 		
 		return true;
 	}
@@ -217,8 +216,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			for (String line : HelpMenus.plot_help)
-				player.sendMessage(line);
+			HelpMenu.PLOT_HELP.send(player);
 		} else {
 
 			Resident resident;
