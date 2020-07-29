@@ -4818,3 +4818,4 @@ v0.92.0.11:
     - Closes #4218.
   - Fix being able to confirm cancelled confirmations.
   - Clean up HelpMenu, courtesy of silverwolfg11 with PR #4223.
+  - Fix new day task not collecting taxes properly, courtesy of silverwolfg11 with PR #4225.
