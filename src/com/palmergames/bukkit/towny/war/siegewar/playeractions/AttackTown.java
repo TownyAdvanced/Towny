@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -91,6 +89,19 @@ public class AttackTown {
 
             if(nationOfAttackingPlayer.getNumActiveAttackSieges() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
+
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = defendingTown.getHomeBlock().getCoord();
+				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_nation_homeblock_in_another_world"));
+				}
+				double distance;
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				if (distance > TownySettings.getNationRequiresProximity()) {
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_not_close_enough_to_nation"));
+				}
+			}
 
             //Setup attack
             attackTown(block, nationOfAttackingPlayer, defendingTown);

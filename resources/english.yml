@@ -1222,6 +1222,7 @@ msg_err_siege_war_cannot_attack_siege_immunity: '&6[War]&c The target town has s
 msg_err_siege_war_cannot_place_banner_far_above_town: 'The siege banner cannot be placed on a much higher elevation than the town. Try placing the banner at a lower elevation'
 msg_err_siege_war_cannot_join_siege: '&6[War]&c You cannot attack a town while it is under siege by another nation.'
 msg_err_siege_war_nation_has_too_many_active_siege_attacks: '&6[War]&c Your nation is at the maximum number of concurrent siege-attacks. To start another attack, one or more of the current attacks must finish.'
+msg_err_siege_war_town_not_close_enough_to_nation: '&6[War]&c The town is too far away from your nation capital to be attacked.'
 #Abandon
 msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks: '&6[War]&c You cannot abandon because there are no active siege banners nearby.'
 msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon because your nation is not attacking in this area.'
