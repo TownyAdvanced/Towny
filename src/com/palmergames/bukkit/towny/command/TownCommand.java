@@ -2793,7 +2793,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		try {
 			townRemoveResident(town, resident);
 		} catch (EmptyTownException et) {
-			townyUniverse.getDataSource().removeTown(et.getTown());
+			townyUniverse.getDataSource().removeTown(et.getTown(), false);
 
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());

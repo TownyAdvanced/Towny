@@ -957,7 +957,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} else { //isConsole
 					Confirmation confirmation = new Confirmation(() -> {
 						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-						TownyUniverse.getInstance().getDataSource().removeTown(town);
+						TownyUniverse.getInstance().getDataSource().removeTown(town, false);
 					});
 					ConfirmationHandler.sendConfirmation(sender, confirmation);
 				}

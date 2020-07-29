@@ -316,7 +316,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.clear();
 			
 		} catch (EmptyTownException e) {
-			removeTown(town);
+			removeTown(town, false);
 
 		} catch (NotRegisteredException e) {
 			// town not registered
@@ -493,7 +493,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			resident.clear();
 		} catch (EmptyTownException ex) {
-			removeTown(ex.getTown());
+			removeTown(ex.getTown(), false);
 		}
 		// Delete the residents file.
 		deleteResident(resident);

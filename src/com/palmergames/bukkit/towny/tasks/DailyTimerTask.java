@@ -84,7 +84,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Town town : TownyUniverse.getInstance().getTownsMap().values()) {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
-					TownyUniverse.getInstance().getDataSource().removeTown(town);
+					TownyUniverse.getInstance().getDataSource().removeTown(town, false);
 				}
 			}
 			if (!deletedTowns.isEmpty())
@@ -372,7 +372,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						} catch (EmptyTownException e) {
 							
 							// No mayor so remove the town.
-							townyUniverse.getDataSource().removeTown(town);
+							townyUniverse.getDataSource().removeTown(town, false);
 							
 						}
 						
