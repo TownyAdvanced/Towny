@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -246,7 +247,17 @@ public class TownClaim extends Thread {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-			TownyUniverse.getInstance().getDataSource().removeTownBlocks(town);
+			// Prevent removing the homeblock
+			Collection<TownBlock> townBlocks = new ArrayList<>(town.getTownBlocks());
+			for (TownBlock townBlock : townBlocks) {
+				try {
+					if (!town.hasHomeBlock() || !townBlock.equals(town.getHomeBlock())) {
+						TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock);
+					}
+				} catch (TownyException ignore) {
+				}
+			}
+			
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_abandoned_area_1"));
 
 		}, 1);
