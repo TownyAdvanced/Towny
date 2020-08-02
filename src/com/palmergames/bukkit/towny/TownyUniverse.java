@@ -62,6 +62,7 @@ public class TownyUniverse {
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private CompletableFuture<Void> backupFuture;
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -127,7 +128,7 @@ public class TownyUniverse {
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
             
             // Run both the backup cleanup and backup async.
-            CompletableFuture
+            backupFuture = CompletableFuture
                 .runAsync(new CleanupBackupTask())
                 .thenRunAsync(new BackupTask());
 
@@ -198,6 +199,11 @@ public class TownyUniverse {
             warEvent.toggleEnd();
         }
     }
+    
+    public void finishTasks() {
+    	// Join into main thread for proper termination.
+		backupFuture.join();
+	}
     
     public void addWarZone(WorldCoord worldCoord) {
         try {
