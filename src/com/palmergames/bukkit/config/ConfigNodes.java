@@ -2070,7 +2070,7 @@ public enum ConfigNodes {
 			"# This setting is important to prevent an attacker and defender colluding to establish a suitable siege immunity time."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
-			"0",
+			"120",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
@@ -2395,11 +2395,11 @@ public enum ConfigNodes {
 			"# If this value is true, then residents of peaceful towns are not affected by disallowed zones when spawning."),
 	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED(
 			"war.common.peaceful_towns.new_town_peacefulness_enabled",
-			"true",
+			"false",
 			"# If this setting is true, then new towns start peaceful"),
 	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS(
 			"war.common.peaceful_towns.new_town_confirmation_requirement_days",
-			"3",
+			"2",
 			"# This setting applies only in the first week after a town is founded.",
 			"# The value determines the countdown duration to be applied to any peacefulness switch."),
 
