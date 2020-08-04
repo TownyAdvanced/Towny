@@ -1997,11 +1997,6 @@ public enum ConfigNodes {
 			"# The attacking side population consists of the residents of the attacking nation, and allies.",
 			"# The defending side population consists of the residents of the defending town, and nation + allies if applicable.",
 			"# The level of the boost is configured in separate configs. See the scoring section of this file."),
-	WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED(
-			"war.siege.switches.invisibility_splash_potions_in_siege_zone_disabled",
-			"true",
-			"# If this setting is true, then invisibility splash potions are disabled in the siegezone.",
-			"# This prevents the exploit of one side throwing these potions at the other to stop then gaining banner control."),
 	WAR_SIEGE_COUNTERATTACK_BOOSTER_ENABLED(
 			"war.siege.switches.counterattack_booster_enabled",
 			"false",

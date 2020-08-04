@@ -3276,10 +3276,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED);
 	}
 
-	public static boolean isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_INVISIBILITY_SPLASH_POTIONS_IN_SIEGE_ZONE_DISABLED);
-	}
-
 	public static boolean isWarSiegeCounterattackBoosterEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_COUNTERATTACK_BOOSTER_ENABLED);
 	}

@@ -169,8 +169,8 @@ public class SiegeWarBannerControlUtil {
 		if(!player.isOnline())
 			return false; // Player offline
 
-		if(player.isFlying() || player.getPotionEffect(PotionEffectType.INVISIBILITY) != null)
-			return false;   // Player is flying or invisible
+		if(player.isFlying())
+			return false;   // Player is flying
 
 		if(!SiegeWarPointsUtil.isPlayerInTimedPointZone(player, siege))
 			return false; //player is not in the timed point zone

@@ -418,7 +418,6 @@ public class TownyEntityListener implements Listener {
 	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
-	 * Also prevent lingering invis potions in siegezones
 	 * 
 	 *  @param event - LingeringPotionSplashEvent
 	 */
@@ -427,26 +426,6 @@ public class TownyEntityListener implements Listener {
 		ThrownPotion potion = event.getEntity();
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = null;
-
-		//For siegewar, prevent lingering invis potions being used in the siegezone
-		if (TownySettings.getWarSiegeEnabled()
-			&& TownySettings.isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled()) {
-			//Is it an invis. potion?
-			for (PotionEffect effect : event.getEntity().getEffects()) {
-				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
-					//Was potion thrown near an active siegezone ?
-					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
-						if (siege.getStatus().isActive()
-							&& SiegeWarDistanceUtil.isInSiegeZone(event.getEntity(), siege)) {
-							event.setCancelled(true);
-							if (event.getEntity().getShooter() instanceof Player){
-								TownyMessaging.sendErrorMsg(event.getEntity().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
-							}
-						}
-					}
-				}
-			}
-		}
 
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
@@ -1179,38 +1158,6 @@ public class TownyEntityListener implements Listener {
 				event.getEntity().setMetadata(PlayerHealthRegainLimiterUtil.METADATA_KEY_NAME, new FixedMetadataValue(Towny.getPlugin(), previousHealthRegainAmount + eventHealthRegainAmount ));
 			} else {
 				event.setCancelled(true);
-			}
-		}
-	}
-
-	/**
-	 * For siegewar
-	 * - Prevent splash potions of invis being used in the siegzone
-	 * - This could be exploited to stop an enemy from gaining banner control
-	 *
-	 * @param event - PotionSplashEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPotionSplash(PotionSplashEvent event) {
-
-		if (TownySettings.getWarSiegeEnabled() 
-			&& TownySettings.isWarSiegeInvisibilitySplashPotionsInSiegeZoneDisabled()) {
-
-			//Is it an invis. potion?
-			for (PotionEffect effect : event.getPotion().getEffects()) {
-
-				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
-					//Was potion splashed near an active siegezone ?
-					for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
-						if (siege.getStatus().isActive()
-							&& SiegeWarDistanceUtil.isInSiegeZone(event.getEntity(), siege)) {
-							event.setCancelled(true);
-							if (event.getPotion().getShooter() instanceof Player){
-								TownyMessaging.sendErrorMsg(event.getPotion().getShooter(), TownySettings.getLangString("msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone"));
-							}
-						}
-					}
-				}
 			}
 		}
 	}

@@ -1180,7 +1180,7 @@ msg_siege_war_town_bankrupted_from_plunder: '&6[War]&b %s has been bankrupted by
 msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!.'
 msg_siege_war_attacking_troops_at_siege_banner: '&6[War]&b Siege on %s > Attackers are at the siege banner.'
 msg_siege_war_defending_troops_at_siege_banner: '&6[War]&b Siege on %s > Town defenders are at the siege banner.'
-msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. Remain close to the siege-banner (%d blocks horizonally, %d blocks vertically), outside the town, not invisible/flying, and not under a block (world dependant), for %s. If your session succeeds, you will gain banner control for your side (or be added to the banner control list).'
+msg_siege_war_banner_control_session_started: '&6[War]&b Banner control session started. Remain close to the siege-banner (%d blocks horizonally, %d blocks vertically), outside the town, not flying, and not under a block (world dependant), for %s. If your session succeeds, you will gain banner control for your side (or be added to the banner control list).'
 msg_siege_war_banner_control_session_success: '&6[War]&b Banner control session succeeded!. You have been added to the banner control list.'
 msg_siege_war_banner_control_gained_by_attacker: '&6[War]&b Siege on %s > The attackers have gained banner control.'
 msg_siege_war_banner_control_gained_by_defender: '&6[War]&b Siege on %s > The defenders have gained banner control.'
@@ -1248,10 +1248,8 @@ msg_err_siege_war_banner_support_block_not_stable: "&6[War]&c You cannot place t
 # Spawn
 msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town: '&6[War]&c Only town residents can spawn into a besieged town or siege zone (unless the target town is peaceful).'
 #Banner control
-msg_siege_war_banner_control_session_failure: '&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, too far from the banner, invisible, flying, or under a block (world-dependent).'
+msg_siege_war_banner_control_session_failure: '&6[War]&c Banner control session failed!. Common causes for this include: Going into the town, too far from the banner, flying, or under a block (world-dependent).'
 msg_war_siege_zone_milk_bucket_forbidden_while_attempting_banner_control: 'You cannot use this item while in a banner control session.'
-#Siegezone Invis. Splash/lingering Potion Blocker
-msg_err_siege_war_cannot_use_thrown_invisibility_potions_in_siegezone: 'You cannot use splash/lingering potions of invisibility in a siege zone.'
 
 #Town Info Siege Section
 status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
