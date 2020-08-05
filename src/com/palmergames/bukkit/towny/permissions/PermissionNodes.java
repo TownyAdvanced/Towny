@@ -89,7 +89,6 @@ public enum PermissionNodes {
 	TOWNY_NATION_SIEGE_ABANDON("towny.nation.siege.abandon"),
 	TOWNY_NATION_SIEGE_INVADE("towny.nation.siege.invade"),
 	TOWNY_NATION_SIEGE_PLUNDER("towny.nation.siege.plunder"),
-	
 	/*
 	 * Town command permissions
 	 */
@@ -391,8 +390,11 @@ public enum PermissionNodes {
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
 	TOWNY_MAX_PLOTS("towny_maxplots"),
 	TOWNY_EXTRA_PLOTS("towny_extraplots"),
-	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
-	
+	TOWNY_MAX_OUTPOSTS("towny_maxoutposts"),
+
+	// Siegewar related war sickness immunities
+	TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA("towny.siege.war.immune.to.war.nausea"),
+	TOWNY_SIEGE_WAR_IMMUNE_TO_BATTLE_FATIGUE("towny.siege.war.immune.to.battle.fatigue");
 
 	private String value;
 

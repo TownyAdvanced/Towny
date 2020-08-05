@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
@@ -86,7 +87,11 @@ public class TownPeacefulnessUtil {
 				//Don't apply to towny admins
 				if(TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
 					continue;
-				
+
+				//Dont apply if player has the immunity perm
+				if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA.getNode()))
+					continue;
+
 				//Don't apply to non-peaceful players
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				if(!(resident.hasTown()&& resident.getTown().isPeaceful()))

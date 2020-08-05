@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
@@ -23,6 +24,10 @@ public class SiegeWarBattleSessionUtil {
 		for(Player player: BukkitTools.getOnlinePlayers()) {
 			//Don't apply to towny admins
 			if(TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+				continue;
+
+			//Dont apply if player has the immunity perm
+			if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SIEGE_WAR_IMMUNE_TO_BATTLE_FATIGUE.getNode()))
 				continue;
 
 			try {
