@@ -107,7 +107,7 @@ public class ObjectSerializer {
 
 		// If iterable store as a list.
 		if (ReflectionUtil.isIterableType(obj.getClass())) {
-			System.out.println("Got here"); // FIXME DEBUG
+			System.out.println("[Towny] Class " + obj.getClass().getName() + " is iterable! Converting iterable to string..."); // FIXME DEBUG
 			return iterableToString(obj, type);
 		}
 
@@ -214,7 +214,7 @@ public class ObjectSerializer {
 		// This will get an adapter for a class from its interfaces, and its super classes
 		// as long as those pass the filter provided.
 		TypeAdapter<?> adapter = getAdapter(clazz);
-		if (adapter == null) {
+		if (adapter == null && clazz != Object.class) {
 			for (Class<?> clazzInterface : clazz.getInterfaces()) {
 				if (fitFilter.test(clazz) &&
 					(adapter = getAdapter(clazzInterface)) != null)
@@ -245,7 +245,7 @@ public class ObjectSerializer {
 		}
 	}
 
-	public static final <T> @Nullable T deserialize(String str, Type type) {
+	public static <T> @Nullable T deserialize(String str, Type type) {
 		if (str.isEmpty()) {
 			return null;
 		}
@@ -272,7 +272,7 @@ public class ObjectSerializer {
 		return registeredAdapters.get(type);
 	}
 
-	protected static final Object loadPrimitive(String str, Type type) {
+	protected static Object loadPrimitive(String str, Type type) {
 
 		if (!ReflectionUtil.isPrimitive(type)) {
 			throw new UnsupportedOperationException(type + " is not primitive, cannot parse");

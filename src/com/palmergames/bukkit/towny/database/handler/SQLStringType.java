@@ -19,4 +19,12 @@ public enum SQLStringType {
 	public String getColumnName() {
 		return columnName;
 	}
+
+	public String getDefinition() {
+		return getColumnName();
+	}
+	
+	public String getDefinition(int length) {
+		return getDefinition() + (length > 0 ? " ("  + length + ")" : "");
+	}
 }

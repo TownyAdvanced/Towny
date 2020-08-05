@@ -21,6 +21,11 @@ public class TypeAdapter<T> {
 	LoadHandler<T> loadHandler;
 	SaveHandler<T> saveHandler;
 
+	public TypeAdapter(LoadHandler<T> loadHandler, SaveHandler<T> saveHandler) {
+		this.loadHandler = loadHandler;
+		this.saveHandler = saveHandler;
+	}
+
 	/**
 	 * Returns a custom string representation of the given object to be
 	 * saved in flatfile.
@@ -56,11 +61,6 @@ public class TypeAdapter<T> {
 		return loadHandler.loadString(str);
 	}
 	
-	public TypeAdapter(LoadHandler<T> loadHandler, SaveHandler<T> saveHandler) {
-		this.loadHandler = loadHandler;
-		this.saveHandler = saveHandler;
-	}
-	
 	public String getSQLColumnDefinition() {
 		if (saveHandler != null) {
 			try {
@@ -68,9 +68,7 @@ public class TypeAdapter<T> {
 				SQLString sqlAnnotation = saveMethod.getAnnotation(SQLString.class);
 
 				if (sqlAnnotation != null) {
-					SQLStringType type = sqlAnnotation.stringType();
-					return type.getColumnName() +
-						(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
+					return sqlAnnotation.stringType().getDefinition(sqlAnnotation.length());
 				}
 			} catch (ReflectiveOperationException exception) {
 				TownyMessaging.sendErrorMsg(exception.getMessage());
