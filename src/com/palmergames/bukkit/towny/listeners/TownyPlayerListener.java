@@ -30,7 +30,6 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.PostRespawnPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
@@ -157,11 +156,6 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-
-		//Activate post-spawn damage immunity
-		if(TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()) {
-			PostRespawnPeacefulnessUtil.grantPostRespawnPeacefulness(player);
-		}
 
 		if (!TownySettings.isTownRespawning())
 			return;

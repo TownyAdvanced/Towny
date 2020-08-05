@@ -2403,19 +2403,6 @@ public enum ConfigNodes {
 			"# This setting applies only in the first week after a town is founded.",
 			"# The value determines the countdown duration to be applied to any peacefulness switch."),
 
-	//Post-Respawn Peacefulness
-	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED(
-			"war.common.post_respawn_peacefulness.enabled",
-			"true",
-			"# If this value is true, then spawn camping is prevented/reduced by the following automatic measure: ",
-			"# - After spawning, a player will be immune to all damage, and cannot inflict damage, for a short time (typically less than a minute).",
-			"# - Thus, during a siege, even if the enemy has breached the town walls, a spawning player has time to get to (or create) a safe location."),
-	WAR_COMMON_POST_RESPAWN_PEACEFULNESS_DURATION_SECONDS(
-			"war.common.post_respawn_peacefulness.duration_seconds",
-			"40",
-			"# This value determines the minimum duration after spawning in which a player is marked peaceful.",
-			"# The value will not be this precise in practice, but limited by the short timer tick interval."),
-
 	//Player Health Regain Limiter
 	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED(
 			"war.common.player_health_regain_limiter.enabled",

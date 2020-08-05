@@ -3133,14 +3133,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_CONFIRMATION_REQUIREMENT_DAYS);
 	}
 
-	public static boolean getWarCommonPostRespawnPeacefulnessEnabled() {
-		return getBoolean(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_ENABLED);
-	}
-
-	public static int getWarCommonPostRespawnPeacefulnessDurationSeconds() {
-		return getInt(ConfigNodes.WAR_COMMON_POST_RESPAWN_PEACEFULNESS_DURATION_SECONDS);
-	}
-
 	public static boolean getWarSiegeBesiegedTownRecruitmentDisabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_BESIEGED_TOWN_RECRUITMENT_DISABLED);
 	}

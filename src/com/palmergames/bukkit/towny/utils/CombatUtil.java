@@ -148,14 +148,10 @@ public class CombatUtil {
 				 * status, else the world.
 				 * Check the defenders TownBlock and it's Town for their PvP
 				 * status, else the world
-				 * Check if the attacker has respawn related peacefulness
-				 * Check if the attacker has town related peacefulness
 				 */
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 					|| preventPvP(world, attackerTB)
 					|| preventPvP(world, defenderTB)
-					|| (TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()
-						&& PostRespawnPeacefulnessUtil.doesPlayerHavePostRespawnPeacefulness(attackingPlayer))
 					)
 				{
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);

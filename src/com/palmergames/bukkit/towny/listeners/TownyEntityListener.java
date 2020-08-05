@@ -18,13 +18,10 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.PostRespawnPeacefulnessUtil;
 import com.palmergames.bukkit.towny.utils.PlayerHealthRegainLimiterUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -102,14 +99,6 @@ public class TownyEntityListener implements Listener {
 
 			if(event.isCancelled())
 				return; //Already cancelled
-
-			if(TownySettings.getWarCommonPostRespawnPeacefulnessEnabled()
-				&& event.getEntity() instanceof Player
-				&& PostRespawnPeacefulnessUtil.doesPlayerHavePostRespawnPeacefulness((Player)event.getEntity()))
-			{
-				event.setCancelled(true);
-				return;
-			}
 
 		} catch (Exception e) {
 			System.out.println("Problem listening for entity damage");
