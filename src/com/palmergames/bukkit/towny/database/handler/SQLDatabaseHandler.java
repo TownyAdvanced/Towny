@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.LoadSetter;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
 import com.palmergames.bukkit.towny.database.handler.annotations.PrimaryKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyRuntimeException;
@@ -122,7 +123,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 			
 			Type parameterizedType = ReflectionUtil.getTypeOfIterable(field);
 			
-			String columnDef = getSQLColumnDefinition(parameterizedType);
+			String columnDef = ObjectSerializer.getSQLColumnDefinition(parameterizedType);
 			
 			String foreignKey = "";
 			
@@ -302,13 +303,11 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 
 		Map<String, Object> values = rowToMap(rs);
 		for (Field field : fields) {
-			Type type = field.getGenericType();
-			Class<?> classType = field.getType();
 			field.setAccessible(true);
 
 			String fieldName = field.getName();
 
-			Object value = getAdaptedObject(values.get(fieldName), type, classType);
+			Object value = getAdaptedObject(values.get(fieldName), field);
 
 			if (value == null) {
 				// ignore it as another already allocated value may be there.
@@ -333,15 +332,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 		return obj;
 	}
 	
-	private Object getAdaptedObject(Object value, Type type, Class<?> classType) {
-		if (value instanceof String) {
+	private Object getAdaptedObject(Object value, Field field) {
+		if (value instanceof String && field.getType() != String.class) {
 			String stringValue = (String) value;
-			if (!ReflectionUtil.isPrimitive(type)) {
-				value = fromStoredString(stringValue, classType);
-			} else if (classType.isEnum()) {
-				// Assume value is a string
-				value = ReflectionUtil.loadEnum(stringValue, classType);
-			}
+			return ObjectSerializer.deserializeField(field, stringValue);
 		}
 		return value;
 	}
@@ -419,7 +413,10 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 						}
 						
 						Object rsObj = rs.getObject("referenceValue");
-						rsObj = getAdaptedObject(rsObj, parameterizedType, (Class<?>) parameterizedType);
+						
+						if (rsObj instanceof String && parameterizedType != String.class) {
+							rsObj = ObjectSerializer.deserialize((String) rsObj, parameterizedType);
+						}
 						
 						if (rsObj != null)
 							lastCollection.add(rsObj);
@@ -602,7 +599,7 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 				insertionValue = value.toString();
 			}
 		} else {
-			insertionValue = toStoredString(value, type);
+			insertionValue = ObjectSerializer.serialize(value, type);
 			// Sanitize the input.
 			// Replace " with \"
 			insertionValue = insertionValue.replace("\"", "\\\"");
@@ -616,5 +613,23 @@ public class SQLDatabaseHandler extends DatabaseHandler {
 	@Override
 	public void upgrade() {
 		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+
+	// This method is in this class because TypeAdapter is not exposed
+	protected final String getSQLColumnDefinition(Field field) {
+		Class<?> type = field.getType();
+
+		if (type == String.class) {
+			SQLString sqlAnnotation = field.getAnnotation(SQLString.class);
+
+			if (sqlAnnotation != null) {
+				SQLStringType sqlType = sqlAnnotation.stringType();
+				return sqlType.getColumnName() +
+					(sqlAnnotation.length() > 0 ? "(" + sqlAnnotation.length() + ")" : "");
+			}
+		}
+
+		return ObjectSerializer.getSQLColumnDefinition(type);
 	}
 }

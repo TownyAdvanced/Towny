@@ -2,9 +2,7 @@ package com.palmergames.bukkit.towny.database.dbHandlers;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.database.handler.LoadContext;
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
-import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SaveHandler;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -17,10 +15,10 @@ import java.util.UUID;
 public class TownBlockHandler implements LoadHandler<TownBlock>, SaveHandler<TownBlock> {
 	
 	@Override
-	public String toStoredString(SaveContext context, TownBlock obj) {
+	public String toStoredString(TownBlock obj) {
 
 		StringJoiner joiner = new StringJoiner(";");
-		joiner.add(context.toStoredString(obj.getWorld(), TownyWorld.class));
+		joiner.add(serialize(obj.getWorld()));
 		joiner.add(obj.getX() + "");
 		joiner.add(obj.getZ() + "");
 		
@@ -28,7 +26,7 @@ public class TownBlockHandler implements LoadHandler<TownBlock>, SaveHandler<Tow
 	}
 
 	@Override
-	public TownBlock loadString(LoadContext context, String str) {
+	public TownBlock loadString(String str) {
 		
 		String elements = StringUtils.substringBetween(str, "{", "}");
 		String[] townBlockElements = elements.split(";");

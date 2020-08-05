@@ -10,10 +10,13 @@ package com.palmergames.bukkit.towny.database.handler;
 public interface SaveHandler<T> {
 	/**
 	 * Converts from object to save-able file string.
-	 * 
-	 * @param context The save convert.
+	 *
 	 * @param obj The object to convert to a saveable string.
 	 * @return The String representation of the object.
 	 */
-	String toStoredString(SaveContext context, T obj);
+	String toStoredString(T obj);
+	
+	default String serialize(Object obj) {
+		return ObjectSerializer.serialize(obj);
+	}
 }

@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.database.dbHandlers;
 
-import com.palmergames.bukkit.towny.database.handler.LoadContext;
-import com.palmergames.bukkit.towny.database.handler.SaveContext;
 import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -10,7 +8,7 @@ import org.bukkit.World;
 
 public class LocationHandler implements SerializationHandler<Location> {
 	@Override
-	public Location loadString(LoadContext context, String str) {
+	public Location loadString(String str) {
 
 		String elements = StringUtils.substringBetween(str, "{", "}");
 		String[] tokens = elements.split(";");
@@ -39,7 +37,7 @@ public class LocationHandler implements SerializationHandler<Location> {
 	}
 
 	@Override
-	public String toStoredString(SaveContext context, Location obj) {
+	public String toStoredString(Location obj) {
 		World world = obj.getWorld();
 		double x = obj.getX();
 		double y = obj.getY();

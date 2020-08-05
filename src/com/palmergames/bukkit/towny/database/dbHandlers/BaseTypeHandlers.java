@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BaseTypeHandlers {
-	public static final LoadHandler<Integer> INTEGER_HANDLER = (context, str) -> Integer.parseInt(str);
+	public static final LoadHandler<Integer> INTEGER_HANDLER = Integer::parseInt;
 	
-	public static final LoadHandler<String> STRING_HANDLER = (context, str) -> str;
+	public static final LoadHandler<String> STRING_HANDLER = (str) -> str;
 	
-	public static final LoadHandler<List<String>> STRING_LIST_HANDLER = (context, str) -> {
+	public static final LoadHandler<List<String>> STRING_LIST_HANDLER = (str) -> {
 		
 		String strCopy = str.replace("[", "")
 							.replace("]", "");

@@ -1,13 +1,10 @@
 package com.palmergames.bukkit.towny.database.type;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.database.handler.LoadContext;
-import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
-import com.palmergames.bukkit.towny.database.handler.SQLStringType;
-import com.palmergames.bukkit.towny.database.handler.SaveContext;
-import com.palmergames.bukkit.towny.database.handler.SaveHandler;
-import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.LoadHandler;
+import com.palmergames.bukkit.towny.database.handler.SQLStringType;
+import com.palmergames.bukkit.towny.database.handler.SaveHandler;
+import com.palmergames.bukkit.towny.database.handler.annotations.SQLString;
 
 import java.lang.reflect.Method;
 
@@ -20,8 +17,7 @@ import java.lang.reflect.Method;
  * @author Suneet Tipirneni (Siris)
  */
 public class TypeAdapter<T> {
-
-	DatabaseHandler databaseHandler;
+	
 	LoadHandler<T> loadHandler;
 	SaveHandler<T> saveHandler;
 
@@ -41,8 +37,7 @@ public class TypeAdapter<T> {
 		}
 		
 		// Call handler.
-		SaveContext saveContext = new SaveContext(databaseHandler);
-		return saveHandler.toStoredString(saveContext, object);
+		return saveHandler.toStoredString(object);
 	}
 
 	/**
@@ -57,13 +52,11 @@ public class TypeAdapter<T> {
 		if (loadHandler == null) {
 			return null;
 		}
-
-		LoadContext loadContext = new LoadContext(databaseHandler);
-		return loadHandler.loadString(loadContext, str);
+		
+		return loadHandler.loadString(str);
 	}
 	
-	public TypeAdapter(DatabaseHandler dataBaseHandler, LoadHandler<T> loadHandler, SaveHandler<T> saveHandler) {
-		this.databaseHandler = dataBaseHandler;
+	public TypeAdapter(LoadHandler<T> loadHandler, SaveHandler<T> saveHandler) {
 		this.loadHandler = loadHandler;
 		this.saveHandler = saveHandler;
 	}
@@ -71,7 +64,7 @@ public class TypeAdapter<T> {
 	public String getSQLColumnDefinition() {
 		if (saveHandler != null) {
 			try {
-				Method saveMethod = saveHandler.getClass().getMethod("toStoredString", SaveContext.class, Object.class);
+				Method saveMethod = saveHandler.getClass().getMethod("toStoredString", Object.class);
 				SQLString sqlAnnotation = saveMethod.getAnnotation(SQLString.class);
 
 				if (sqlAnnotation != null) {

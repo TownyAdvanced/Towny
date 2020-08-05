@@ -43,7 +43,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	
 	private static final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
 	private static final File relationshipDir = new File(Towny.getPlugin().getDataFolder() + "/data/relationship/");
-	private final Map<Field, Map<Saveable, String>> postLoadFields = new HashMap<>();
+	private Map<Field, Map<Saveable, String>> postLoadFields = new HashMap<>();
 	
 	// Create files
 	static {
@@ -136,8 +136,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 	
 	private void loadField(Saveable obj, Field field, String fieldValue) {
-		Type type = field.getGenericType();
-		Class<?> classType = field.getType();
 		field.setAccessible(true);
 
 		if (fieldValue == null) {
@@ -155,15 +153,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 //			} catch (IllegalAccessException e) {
 //			}
 
-		Object value;
-
-		if (ReflectionUtil.isPrimitive(type)) {
-			value = loadPrimitive(fieldValue, type);
-		} else if (field.getType().isEnum()) {
-			value = ReflectionUtil.loadEnum(fieldValue, classType);
-		} else {
-			value = fromStoredString(fieldValue, type);
-		}
+		Object value = ObjectSerializer.deserializeField(field, fieldValue);
 
 		if (value == null) {
 			// ignore it as another already allocated value may be there.
@@ -310,12 +300,13 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			}
 		}
 		
-		postLoadFields.clear();
+		// Re-initialize the map to get rid of extra array allocation
+		postLoadFields = new HashMap<>();
 	}
 
 	private void convertMapData(Map<String, ObjectContext> from, Map<String, String> to) {
 		for (Map.Entry<String, ObjectContext> entry : from.entrySet()) {
-			String valueStr = toStoredString(entry.getValue().getValue(), entry.getValue().getType());
+			String valueStr = ObjectSerializer.serialize(entry.getValue().getValue(), entry.getValue().getType());
 			to.put(entry.getKey(), valueStr);
 		}
 	}
