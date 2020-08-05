@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.PlayerHealthRegainLimiterUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
@@ -57,15 +56,12 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -1109,45 +1105,6 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(true);
 			}
 		} catch (NotRegisteredException ignored) {
-		}
-			
-			
-	}
-
-	/**
-	 * Prevent players regaining health too quickly
-	 *
-	 * @param event - EntityRegainHealthEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
-
-		if (TownySettings.isPlayerHealthRegainLimiterEnabled()
-			&& event.getEntity() instanceof Player) {
-
-			//Read previous health regain for the current tick
-			double previousHealthRegainAmount;
-			if (!event.getEntity().hasMetadata(PlayerHealthRegainLimiterUtil.METADATA_KEY_NAME)) {
-				previousHealthRegainAmount = 0;
-			} else {
-				previousHealthRegainAmount = event.getEntity().getMetadata(PlayerHealthRegainLimiterUtil.METADATA_KEY_NAME).get(0).asInt();
-			}
-
-			//Calculate health regain for this event
-			double eventHealthRegainAmount;
-			if (previousHealthRegainAmount + event.getAmount() <= TownySettings.getPlayerHealthRegainLimiterMaxAmountPerShortTick()) {
-				eventHealthRegainAmount = event.getAmount();
-			} else {
-				eventHealthRegainAmount = TownySettings.getPlayerHealthRegainLimiterMaxAmountPerShortTick() - previousHealthRegainAmount;
-			}
-
-			//Adjust health regain for this event
-			if (eventHealthRegainAmount > 0) {
-				event.setAmount(eventHealthRegainAmount);
-				event.getEntity().setMetadata(PlayerHealthRegainLimiterUtil.METADATA_KEY_NAME, new FixedMetadataValue(Towny.getPlugin(), previousHealthRegainAmount + eventHealthRegainAmount ));
-			} else {
-				event.setCancelled(true);
-			}
 		}
 	}
 }

@@ -3256,14 +3256,6 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_MAX_POPULATION_BASED_POINTS_BOOST);
 	}
 
-	public static boolean isPlayerHealthRegainLimiterEnabled() {
-		return getBoolean(ConfigNodes.WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED);
-	}
-
-	public static double getPlayerHealthRegainLimiterMaxAmountPerShortTick() {
-		return getDouble(ConfigNodes.WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK);
-	}
-
 	public static boolean getWarCommonOccupiedTownUnClaimingDisabled() {
 		return getBoolean(ConfigNodes.WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED);
 	}

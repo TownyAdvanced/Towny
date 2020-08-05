@@ -2403,28 +2403,6 @@ public enum ConfigNodes {
 			"# This setting applies only in the first week after a town is founded.",
 			"# The value determines the countdown duration to be applied to any peacefulness switch."),
 
-	//Player Health Regain Limiter
-	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_ENABLED(
-			"war.common.player_health_regain_limiter.enabled",
-			"false",
-			"# If this value is true,",
-			"# then player health regain is limited to a max amount for every 20 seconds (short-tick).",
-			"# ",
-			"# Backround: ",
-			"# * In vanilla combat, splash Health II potions are a critical mechanism for winning.",
-			"# * A player equipped with a full inventory of these potions can quickly replace their health 20 times over.",
-		    "# * A nation of dedicated players, having the resources to grind for these potions, can achieve this rollout, ", 
-			"# * A nation with casual players cannot achieve it.",
-		    "# * Thus casual nations, even if they have good PVP skill, have little chance against dedicated nations.",
-			"# ",
-			"# Configuration Outcomes:",
-			"# * If true, expect to see casual nations having more of an influence in world affairs",
-			"# * If false expect to see casual nations defeated and disappearing, with a few dedicated nations dominating"),
-	WAR_COMMON_PLAYER_HEALTH_REGAIN_LIMITER_MAX_AMOUNT_PER_SHORT_TICK(
-			"war.common.player_health_regain_limiter.max_amount_per_short_tick",
-			"10.0",
-			"# The value determines the max health regain amount per short tick."),
-
 	//Occupied town unclaiming
 	WAR_COMMON_OCCUPIED_TOWN_UNCLAIMING_DISABLED(
 			"war.common.occupied_towns.occupied_town_unclaiming_disabled",
