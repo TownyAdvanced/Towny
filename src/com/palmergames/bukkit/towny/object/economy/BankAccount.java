@@ -29,7 +29,7 @@ public class BankAccount extends Account {
 		public DebtAccount(Account account) {
 			// TNE doesn't play nice with "town-" on debt accounts.
 			super(DEBT_PREFIX + account.getName().replace("town-",""), account.getBukkitWorld());
-
+			
 			// Check if the account already exists, if not make sure the balance is set to 0
 			// as some eco configurations put a default amount in every new account.
 			if (!TownyEconomyHandler.hasAccount(getName())) {

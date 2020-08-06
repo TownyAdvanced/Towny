@@ -22,7 +22,7 @@ public class TownJoinNationInvite implements Invite {
 		this.sender = sender;
 		this.receiver = receiver;
 	}
-
+	
 	@Override
 	public String getDirectSender() {
 		return directSender;

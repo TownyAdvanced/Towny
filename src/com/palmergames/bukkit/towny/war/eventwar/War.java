@@ -239,7 +239,7 @@ public class War {
 
 		// Seed spoils of war		
 		try {
-			warSpoils.deposit(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");
+			warSpoils.deposit(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_activate_war_hud_tip"));

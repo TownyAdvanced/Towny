@@ -64,7 +64,7 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-
+		
 		// Set defaults.
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
