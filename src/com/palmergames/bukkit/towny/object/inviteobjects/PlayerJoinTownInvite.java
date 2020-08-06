@@ -6,15 +6,26 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 <<<<<<< Upstream, based on origin/master
 =======
 import com.palmergames.bukkit.towny.invites.Invite;
+<<<<<<< Upstream, based on origin/master
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 >>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
+=======
+>>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.command.CommandSender;
 
+<<<<<<< Upstream, based on origin/master
 public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
+=======
+public class PlayerJoinTownInvite implements Invite {
+
+	private final String directSender;
+	private final Resident receiver;
+	private final Town sender;
+>>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
 
 <<<<<<< Upstream, based on origin/master
 	public PlayerJoinTownInvite(CommandSender directSender, Resident receiver, Town sender) {
