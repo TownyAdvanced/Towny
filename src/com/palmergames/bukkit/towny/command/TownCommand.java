@@ -2454,7 +2454,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation.runOnAccept(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost");
+						if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+							// Send economy message
+							TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					
