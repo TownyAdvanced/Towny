@@ -111,7 +111,7 @@ public class TownyAPI {
         }
         return null;
     }
-
+    
     /**
      * Gets all online {@link Player}s for a specific {@link ResidentList}.
      *
@@ -130,7 +130,7 @@ public class TownyAPI {
         }
         return players;
     }
-
+    
     /** 
      * Gets all online {@link Player}s for a specific {@link Nation}s alliance.
      * 

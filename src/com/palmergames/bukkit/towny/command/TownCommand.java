@@ -1316,10 +1316,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
 					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
-
 			if (town.isOpen())
 				output += Translation.of("status_title_open");
-
 			townsformatted.add(output);
 		}
 		

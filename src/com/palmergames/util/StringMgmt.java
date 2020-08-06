@@ -59,7 +59,7 @@ public class StringMgmt {
 	public static String join(Collection<?> args) {
 		return join(args, " ");
 	}
-	
+
 	public static String join(Collection<?> args, String separator) {
 		StringJoiner joiner = new StringJoiner(separator);
 		

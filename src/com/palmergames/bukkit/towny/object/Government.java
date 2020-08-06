@@ -122,7 +122,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets this to be open to any resident joining without
+	 * Sets this to be open to any resident joining without 
 	 * an invitation or not.
 	 *
 	 * @param isOpen true for invitation-less joining, false otherwise.
@@ -137,8 +137,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 *
 	 * @return true for invitation-less joining, false otherwise.
 	 */
-	public final boolean isOpen() {
-		return isOpen;
+	public final boolean isOpen() { 
+		return isOpen; 
 	}
 
 	/**
@@ -179,7 +179,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	/**
 	 * Sets the concise string representation of this object.
-	 *
+	 * 
 	 * @param text An upper-cased four or less letter string.
 	 * @throws TownyException Thrown on an error setting.
 	 */
@@ -196,7 +196,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	/**
 	 * Gets the concise string representation of this object.
-	 *
+	 * 
 	 * @return An upper-cased four or less letter string, representing the tag.
 	 */
 	public final String getTag() {
