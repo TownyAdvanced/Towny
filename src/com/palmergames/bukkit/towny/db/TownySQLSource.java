@@ -724,11 +724,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         TownyMessaging.sendDebugMsg("Loading resident " + resident.getName());
         if (!getContext())
             return false;
-        try (Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");) {
-        	
-            if (rs.next()) {
-            	return loadResident(resident, rs);
+        
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "RESIDENTS" + " WHERE name=?")) {
+		    ps.setString(1, resident.getName());
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadResident(resident, rs);
+				}
 			}
             
         } catch (SQLException e) {
@@ -889,10 +892,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 
-		try (Statement s = cntx.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'")) {
-			if (rs.next())
-				return loadTown(rs);
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name=?")) {
+			ps.setString(1, town.getName());
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return loadTown(rs);
+			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
 		}
@@ -1103,10 +1109,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public boolean loadNation(Nation nation) {
         if (!getContext())
             return false;
-        try (Statement s = cntx.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'")) {
-            if (rs.next()) {
-            	return loadNation(rs);
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "NATIONS WHERE name=?")) {
+        	ps.setString(1, nation.getName());
+        	
+        	try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadNation(rs);
+				}
 			}
         } catch (SQLException e) {
             TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
@@ -1267,11 +1276,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         if (!getContext())
             return false;
         
-        try (Statement s = cntx.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");) {
-
-            if (rs.next()) {
-            	return loadWorld(rs);
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
+        	ps.setString(1, world.getName());
+        	
+        	try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadWorld(rs);
+				}
 			}
         } catch (SQLException e) {
             TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + world.getName() + ")" + e.getMessage());
