@@ -51,6 +51,7 @@ public class Nation extends Government {
 		super(name);
 		
 		// Set defaults
+
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
