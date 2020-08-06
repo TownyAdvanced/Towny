@@ -26,7 +26,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -335,7 +334,7 @@ public class TownyAPI {
     }
     
     /**
-     * Check which {@link Resident}s are online in a {@link Residence}
+     * Check which {@link Resident}s are online in a {@link ResidentList}
      *
      * @param owner {@link ResidentList} to check for online {@link Resident}s.
      * @return {@link List} of {@link Resident}s that are online.
