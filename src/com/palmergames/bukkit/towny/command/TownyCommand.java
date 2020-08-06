@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -47,10 +48,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
 
-	private static final List<String> towny_general_help = new ArrayList<>();
-	private static final List<String> towny_help = new ArrayList<>();
-	private static final List<String> towny_top = new ArrayList<>();
-	private static final List<String> towny_war = new ArrayList<>();
+	private static List<String> towny_top = new ArrayList<>();
+	private static List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -97,26 +96,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"resident",
 		"town"
 	);
-	
-
-	static {
-		towny_general_help.add(ChatTools.formatTitle(TownySettings.getLangString("help_0")));
-		towny_general_help.add(TownySettings.getLangString("help_1"));
-		towny_general_help.add(ChatTools.formatCommand("", "/resident", "?", "") + ", " + ChatTools.formatCommand("", "/town", "?", "") + ", " + ChatTools.formatCommand("", "/nation", "?", "") + ", " + ChatTools.formatCommand("", "/plot", "?", "") + ", " + ChatTools.formatCommand("", "/towny", "?", ""));
-		towny_general_help.add(ChatTools.formatCommand("", "/tc", "[msg]", TownySettings.getLangString("help_2")) + ", " + ChatTools.formatCommand("", "/nc", "[msg]", TownySettings.getLangString("help_3")).trim());
-		towny_general_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin", "?", ""));
-
-		towny_help.add(ChatTools.formatTitle("/towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "", "General help for Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "map", "Displays a map of the nearby townblocks"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "Display the prices used with Economy"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "top", "Display highscores"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "time", "Display time until a new day"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "universe", "Displays stats"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "v", "Displays the version of Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "war", "'/towny war' for more info"));
-
-	}
 
 	public TownyCommand(Towny instance) {
 
@@ -144,15 +123,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console output
 			if (args.length == 0) {
-				for (String line : towny_general_help) {
-					sender.sendMessage(Colors.strip(line));
-				}
+				HelpMenu.GENERAL_HELP.send(sender);
 			} else if (args[0].equalsIgnoreCase("tree")) {
 				for (String line : TownyUniverse.getInstance().getTreeString(0)) {
 					sender.sendMessage(line);
 				}
 			} else if (args[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg(TownySettings.getLangString("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
 				sender.sendMessage(Colors.strip(towny_version));
 			else if (args[0].equalsIgnoreCase("war")) {
@@ -162,14 +139,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						sender.sendMessage(Colors.strip(line));
 				else
 					sender.sendMessage("The world isn't currently at war.");
-
-				towny_war.clear();
+				
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats())
 					sender.sendMessage(Colors.strip(line));
 			}
 
 		}
+		towny_war.clear();
 		return true;
 	}
 
@@ -210,14 +187,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private void parseTownyCommand(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0) {
-			for (String line : towny_general_help)
-				player.sendMessage(line);
-
+			HelpMenu.GENERAL_HELP.send(player);
 			return;
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : towny_help)
-				player.sendMessage(Colors.strip(line));
-
+			HelpMenu.HELP.send(player);
 			return;
 		}
 
@@ -225,7 +198,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("map")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
 					TownyAsciiMap.generateAndSend(plugin, player, 18);
@@ -233,6 +206,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					showMap(player);
 			} else if (split[0].equalsIgnoreCase("prices")) {
 				Town town = null;
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				if (split.length > 1) {
 					try {
 						town = townyUniverse.getDataSource().getTown(split[1]);
@@ -252,28 +228,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				TopCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				TownyMessaging.sendMsg(player, Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (split[0].equalsIgnoreCase("universe")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				for (String line : getUniverseStats())
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				player.sendMessage(towny_version);
 			} else if (split[0].equalsIgnoreCase("war")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
 					for (String line : towny_war)
@@ -287,7 +263,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					resident.toggleMode(split, true);
 				} else
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
 
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
@@ -319,7 +295,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				if (townyUniverse.getPermissionSource().has(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
 					plugin.getHUDManager().toggleWarHUD(p);
 				} else {
-					TownyMessaging.sendErrorMsg(p, TownySettings.getLangString("msg_err_command_disable"));
+					TownyMessaging.sendErrorMsg(p, Translation.of("msg_err_command_disable"));
 				}
 			}
 		}
@@ -357,14 +333,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			try {
 				page = Integer.parseInt(split[1]);
 				if (page < 0) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative"));
 					return;
 				} else if (page == 0) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
 					return;
 				}
 			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
 				return;
 			}
 		}

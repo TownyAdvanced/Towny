@@ -24,12 +24,12 @@ public class GovernmentComparators {
 	public static final Comparator<Government> BY_OPEN = (t1, t2) -> {
 
 		// Both are open, fallback to population comparison.
-		if (t1.isEffectivelyOpen() && t2.isEffectivelyOpen()) {
+		if (t1.isOpen() && t2.isOpen()) {
 			return t2.getResidents().size() - t1.getResidents().size();
 		}
 
 		// Less than.
-		if (t2.isEffectivelyOpen()) {
+		if (t2.isOpen()) {
 			return 1;
 		} else {
 			// Greater than.

@@ -29,13 +29,26 @@ public class BankAccount extends Account {
 		public DebtAccount(Account account) {
 			// TNE doesn't play nice with "town-" on debt accounts.
 			super(DEBT_PREFIX + account.getName().replace("town-",""), account.getBukkitWorld());
+
+			// Check if the account already exists, if not make sure the balance is set to 0
+			// as some eco configurations put a default amount in every new account.
+			if (!TownyEconomyHandler.hasAccount(getName())) {
+				try {
+					setBalance(0, "Initial Balance");
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
-		this.debtAccount = new DebtAccount(this);
+		if (name.startsWith(TownySettings.getTownAccountPrefix()))
+			this.debtAccount = new DebtAccount(this);
+		else 
+			this.debtAccount = null;
 		this.debtCap = 0;
 	}
 
@@ -136,7 +149,7 @@ public class BankAccount extends Account {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean isBankrupt() throws EconomyException {
-		return debtAccount.getHoldingBalance() > 0;
+		return debtAccount != null && debtAccount.getHoldingBalance() > 0;
 	}
 	
 	private boolean addDebt(double amount) throws EconomyException {
@@ -185,7 +198,8 @@ public class BankAccount extends Account {
 	@Override
 	public void removeAccount() {
 		// Make sure to remove debt account
-		TownyEconomyHandler.removeAccount(debtAccount.getName());
+		if (debtAccount != null)
+			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
 	}
 }

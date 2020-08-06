@@ -58,6 +58,9 @@ public enum ConfigNodes {
 			"town.default_open",
 			"false",
 			"# Default Open status of the town (are new towns open and joinable by anyone at creation?)"),
+	TOWN_DEF_BOARD("town.default_board", 
+			"/town set board [msg]",
+			"# Default town board"),
 	TOWN_DEF_TAXES(
 			"town.default_taxes", "", "# Default tax settings for new towns."),
 	TOWN_DEF_TAXES_TAX(
@@ -164,7 +167,25 @@ public enum ConfigNodes {
 			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
 			"# The debt can be repaid using /t deposit x.", 
 			"# Once all debt is repaid, the town immediately returns to a normal state."),
-
+		
+	NATION("nation", "", "", 
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |               New Nation Defaults                    | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################", ""),
+    NATION_DEF_PUBLIC(
+            "nation.default_public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
+    NATION_DEF_OPEN(
+            "nation.default_open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	NATION_DEF_BOARD("nation.default_board", 
+			"/nation set board [msg]",
+			"# Default nation board"),
+		
 	NWS(
 			"new_world_settings",
 			"",
@@ -259,7 +280,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED,TORCH,REDSTONE_WIRE,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,WOODEN_DOOR,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED,TORCH,REDSTONE_WIRE,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,WOODEN_DOOR,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,CRIMSON_SIGN,WARPED_SIGN,CRIMSON_WALL_SIGN,WARPED_WALL_SIGN,CRIMSON_DOOR,WARPED_DOOR,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -271,7 +292,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE(
 			"new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete",
-			"ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN",
+			"ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,CRIMSON_WALL_SIGN,CRIMSON_SIGN,WARPED_WALL_SIGN,WARPED_SIGN",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
 
@@ -299,7 +320,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK,WITHER_SKELETON_SKULL,WITHER_SKELETON_WALL_SKULL,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,BEACON",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK,WITHER_SKELETON_SKULL,WITHER_SKELETON_WALL_SKULL,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,BEACON,NETHER_GOLD_ORE,ANCIENT_DEBRIS,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_SIGN,CRIMSON_WALL_SIGN,WARPED_SIGN,WARPED_WALL_SIGN,LODESTONE,RESPAWN_ANCHOR",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
@@ -435,6 +456,10 @@ public enum ConfigNodes {
 			"enemy",
 			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
 			"# Allowed options: unclaimed,enemy,neutral"),
+	GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
+		"global_town_settings.respawn_anchor_higher_precendence",
+		"true",
+		"# When this is true, players will respawn to respawn anchors on death rather than their own town. 1.16+ only."),
 	GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS(
 			"global_town_settings.show_town_notifications",
 			"true",
@@ -515,6 +540,12 @@ public enum ConfigNodes {
 			"# If People should keep their inventories on death in a town",
 			"# Is not guaranteed to work with other keep inventory plugins!"
 	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA(
+		"global_town_settings.keep_inventory_on_death_in_arena",
+		"false",
+		"# If People should keep their inventories on death in an arena townblock",
+		"# Is not guaranteed to work with other keep inventory plugins!"
+	),
 	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_experience_on_death_in_town",
 			"false",
@@ -536,6 +567,13 @@ public enum ConfigNodes {
 			"global_town_settings.display_town_list_randomly",
 			"false",
 			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
+	),
+	GTOWN_ORDER_OF_MAYORAL_SUCCESSION(
+			"global_town_settings.order_of_mayoral_succession",
+			"assistant",
+			"# # The ranks to be given preference when assigning a new mayor, listed in order of descending preference.",
+			"# All ranks should be as defined in `townyperms.yml`.",
+			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
 	
 	GNATION_SETTINGS(
@@ -620,19 +658,12 @@ public enum ConfigNodes {
 			"0",
 			"# If higher than 0, it will limit how many towns can be joined into a nation.",
 			"# Does not affect existing nations that are already over the limit."),
-    GNATION_DEF_PUBLIC(
-            "global_nation_settings.default.public",
-            "false",
-            "# If set to true, any newly made nation will have their spawn set to public."),
-    GNATION_DEF_OPEN(
-            "global_nation_settings.default.open",
-            "false",
-            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	GNATION_SETTINGS_ALLOWED_NATION_COLORS(
 			"global_nation_settings.allowed_map_colors",
 			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
 			"# This setting determines the list of allowed nation map colors.",
 			"# The color codes are in hex format."),
+
 	PLUGIN(
 			"plugin",
 			"",
@@ -651,6 +682,12 @@ public enum ConfigNodes {
 			"# Valid load and save types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
+	
+	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
+			"true",
+			"",
+			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
+			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
 
 	PLUGIN_DATABASE_SQL_HEADER(
 			"plugin.database.sql",
@@ -675,10 +712,10 @@ public enum ConfigNodes {
 			"plugin.database.backups_are_deleted_after",
 			"90d"),
 	PLUGIN_FLATFILE_BACKUP(
-			"plugin.database.flatfile_backup",
-			"zip",
+			"plugin.database.flatfile_backup_type",
+			"tar",
 			"",
-			"# Valid entries are: zip, none."),
+			"# Valid entries are: tar for tar.gz and zip for zip, use none for no backup."),
 
 	PLUGIN_INTERFACING("plugin.interfacing", "", ""),
 	PLUGIN_MODS(
@@ -827,7 +864,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE",
+			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE,DIAMOND_AXE,GOLDEN_AXE,IRON_AXE,WOODEN_AXE,STONE_AXE,NETHERITE_AXE",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -841,11 +878,17 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME,POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE,BARREL,BREWING_STAND,LEAD,SWEET_BERRY_BUSH",
+			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME,POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE,BARREL,BREWING_STAND,LEAD,SWEET_BERRY_BUSH,CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE,CRIMSON_BUTTON,WARPED_BUTTON,POLISHED_BLACKSTONE_BUTTON,CRIMSON_DOOR,WARPED_DOOR,CRIMSON_FENCE_GATE,WARPED_FENCE_GATE,CRIMSON_TRAPDOOR,WARPED_TRAPDOOR,LODESTONE,RESPAWN_ANCHOR,TARGET",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
 			"# 54 - chest ...etc"),
+	PROT_FIRE_SPREAD_BYPASS(
+			"protection.fire_spread_bypass_materials",
+			"NETHERRACK,SOUL_SAND,SOUL_SOIL",
+			"",
+			"# Materials which can be lit on fire even when firespread is disabled.",
+			"# Still requires the use of the flint and steel."),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
@@ -991,7 +1034,12 @@ public enum ConfigNodes {
 			"",
 			"# Requires the above using_titles to be set to true.",
 			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
-			"# You may use colour codes &f, &c and so on."),	
+			"# You may use colour codes &f, &c and so on.",
+			"# For town_title and town_subtitle you may use: ",
+			"# {townname} - Name of the town.",
+			"# {town_motd} - Shows the townboard message.",
+			"# {town_residents} - Shows the number of residents in the town.",
+			"# {town_residents_online} - Shows the number of residents online currently."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
 			"",
@@ -1266,7 +1314,7 @@ public enum ConfigNodes {
 			"# The cost of renaming a nation."),
 	ECO_DEBT_PREFIX(
 		"economy.debt_prefix",
-		"DEBT-",
+		"debt-",
 		"# The debt prefix for the debt eco account"
 	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),

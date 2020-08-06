@@ -26,7 +26,7 @@ import java.util.List;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Government extends TownyObject implements BankEconomyHandler, Residence, Inviteable, SpawnLocation {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, SpawnLocation {
 	
 	protected BankAccount account;
 	protected Location spawn;
@@ -37,7 +37,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private boolean isPublic = false;
 	private boolean isOpen = false;
 	private long registered;
-	private double spawnCost;
+	private double spawnCost = TownySettings.getSpawnTravelCost();
 	protected double taxes = -1;
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
@@ -55,7 +55,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (receivedInvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
 			receivedInvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(String.format(Translation.of("msg_err_town_has_too_many_invites", this.getName())));
 		}
 	}
 
@@ -74,7 +74,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
 			sentInvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
+			throw new TooManyInvitesException(Translation.of("msg_err_town_sent_too_many_invites"));
 		}
 	}
 
@@ -102,7 +102,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets this to be hidden to other residents.
+	 * Sets the spawn to be visitable by non-member players,
+	 * also sets whether the homeblock coordinates are visible.
 	 *
 	 * @param isPublic false for not hidden, true otherwise.
 	 */
@@ -111,7 +112,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Whether this is hidden or not.
+	 * Whether the spawn is visitable by non-members,
+	 * and also whether the homeblock coordinates are visible.
 	 *
 	 * @return false for not hidden, true otherwise.
 	 */
@@ -120,7 +122,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets this to be open to anyone resident joining without 
+	 * Sets this to be open to any resident joining without
 	 * an invitation or not.
 	 *
 	 * @param isOpen true for invitation-less joining, false otherwise.
@@ -135,23 +137,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 *
 	 * @return true for invitation-less joining, false otherwise.
 	 */
-	public final boolean isOpen() { 
+	public final boolean isOpen() {
 		return isOpen;
-	}
-
-	/**
-	 * Consider the effects of other game elements on the open status
-	 * before return the effective status
-	 * @return The effective open status
-	 * */
-	public final boolean isEffectivelyOpen() {
-		try {
-			if (getAccount().isBankrupt())
-				return false;
-		} catch (EconomyException ee) {
-		} catch (Exception ex) {
-		}
-		return isOpen();
 	}
 
 	/**
@@ -173,7 +160,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets the cost of spawing to this location.
+	 * Sets the cost of spawning to this location.
 	 *
 	 * @param spawnCost The cost to spawn.
 	 */
@@ -182,7 +169,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Gets the cost of spawing to this location.
+	 * Gets the cost of spawning to this location.
 	 *
 	 * @return The cost to spawn.
 	 */
@@ -192,19 +179,16 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	/**
 	 * Sets the concise string representation of this object.
-	 * 
-	 * @param text A four or less letter string.
+	 *
+	 * @param text An upper-cased four or less letter string.
 	 * @throws TownyException Thrown on an error setting.
 	 */
 	public final void setTag(String text) throws TownyException {
-		if (text.length() > 4)
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 
-		if (text.length() < 4) {
-			return;
-		}
-		
-		this.tag = text.toUpperCase().substring(0,3);
+		if (text.length() > 4)
+			throw new TownyException(Translation.of("msg_err_tag_too_long"));
+
+		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new GovernmentTagChangeEvent(this.tag, this));
@@ -212,8 +196,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	/**
 	 * Gets the concise string representation of this object.
-	 * 
-	 * @return A four or less letter string, representing the tag.
+	 *
+	 * @return An upper-cased four or less letter string, representing the tag.
 	 */
 	public final String getTag() {
 		return tag;
@@ -238,10 +222,10 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 */
 	public final void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!getAccount().payTo(amount, resident, getName() + " - " + " Withdraw")) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+			throw new TownyException(Translation.of("msg_err_no_money"));
 		}
 	}
 
@@ -255,10 +239,10 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 */
 	public final void depositToBank(Resident resident, int amount) throws EconomyException, TownyException {
 		if (!TownySettings.isUsingEconomy()) {
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
+			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!resident.getAccount().payTo(amount, getAccount(), "Deposit from " + resident.getName())) {
-			throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
+			throw new TownyException(Translation.of("msg_insuf_funds"));
 		}
 	}
 
@@ -282,13 +266,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public abstract void setTaxes(double taxes);
 
 	/**
-	 * Gets the world in which this object resides.
-	 * 
-	 * @return The {@link World} this object is in.
-	 */
-	public abstract World getWorld();
-
-	/**
 	 * Gets the taxes as a percentage or as a flat number.
 	 * 
 	 * @return The tax number.
@@ -297,5 +274,11 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
-	
+
+	/**
+	 * Gets the world in which this object resides.
+	 * 
+	 * @return The {@link World} this object is in.
+	 */
+	public abstract World getWorld();
 }

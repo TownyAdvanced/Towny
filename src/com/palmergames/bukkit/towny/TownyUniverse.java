@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
@@ -14,12 +15,16 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.tasks.BackupTask;
+import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
@@ -34,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,13 +61,15 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
+    private String saveDbType;
+    private String loadDbType;
     
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -73,7 +81,7 @@ public class TownyUniverse {
         
         try {
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            TownySettings.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+            Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
         } catch (IOException | TownyException e) {
@@ -82,12 +90,9 @@ public class TownyUniverse {
         }
 		// Init logger
 		TownyLogger.getInstance();
-        
-        String saveDbType = TownySettings.getSaveDatabase();
-        String loadDbType = TownySettings.getLoadDatabase();
-        
-        // Setup any defaults before we load the dataSource.
-        Coord.setCellSize(TownySettings.getTownBlockSize());
+
+        saveDbType = TownySettings.getSaveDatabase();
+        loadDbType = TownySettings.getLoadDatabase();
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         
@@ -102,7 +107,6 @@ public class TownyUniverse {
         System.out.println("[Towny] Database loaded in " + time + "ms.");
         
         try {
-            dataSource.cleanupBackups();
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
                 case "ff":
@@ -121,19 +125,12 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            try {
-                dataSource.backup();
-                
-                if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    dataSource.deleteUnusedResidents();
-                }
-                
-            } catch (IOException e) {
-                System.out.println("[Towny] Error: Could not create backup.");
-                e.printStackTrace();
-                return false;
-            }
             
+            // Run both the backup cleanup and backup async.
+            CompletableFuture
+                .runAsync(new CleanupBackupTask())
+                .thenRunAsync(new BackupTask());
+
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
                 dataSource.saveAllWorlds();
@@ -146,6 +143,16 @@ public class TownyUniverse {
             System.out.println("[Towny] Error: Unsupported save format!");
             return false;
         }
+        
+        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        
+        // Only migrate if the user just updated.
+        if (!lastRunVersion.equals(curVersion)) {
+			System.out.println("[Towny] Performing Config Migrations...");
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			migrator.migrate();
+		}
         
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
@@ -548,5 +555,12 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-	
+
+	public String getSaveDbType() {
+		return saveDbType;
+	}
+
+	public String getLoadDbType() {
+		return loadDbType;
+	}
 }

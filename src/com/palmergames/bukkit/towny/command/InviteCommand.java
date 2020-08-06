@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -35,18 +36,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		TownySettings.getDenyCommand()
 	);
 	
-	@SuppressWarnings("unused")
 	private static Towny plugin;
-	private static final List<String> invite_help = new ArrayList<>();
-
-	static {
-
-		invite_help.add(ChatTools.formatTitle("/invite"));
-		invite_help.add(ChatTools.formatCommand("", "/invite", TownySettings.getAcceptCommand() + " [town]", TownySettings.getLangString("invite_help_1")));
-		invite_help.add(ChatTools.formatCommand("", "/invite", TownySettings.getDenyCommand() + " [town]", TownySettings.getLangString("invite_help_2")));
-		invite_help.add(ChatTools.formatCommand("", "/invite", "list", TownySettings.getLangString("invite_help_3")));
-
-	}
 
 	public InviteCommand(Towny instance) {
 		plugin = instance;
@@ -77,7 +67,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -89,20 +79,15 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else
 			// Console
-			for (String line : invite_help)
-				sender.sendMessage(Colors.strip(line));
+			HelpMenu.INVITE_HELP.send(sender);
+		
 		return true;
 	}
 
 	private void parseInviteCommand(final Player player, String[] split) {
-		if (split.length == 0) { // So they just type /invite , We should probably send them to the help menu. Done.
-			for (String line : invite_help) {
-				player.sendMessage(line);
-			}
-		} else if (split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
-			for (String line : invite_help) {
-				player.sendMessage(line);
-			}
+		// So they just type /invite , We should probably send them to the help menu. Done.
+		if (split.length == 0 || split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
+			HelpMenu.INVITE_HELP.send(player);
 		} else if (split[0].equalsIgnoreCase("list")) {
 			parseInviteList(player, split);
 		} else if (split[0].equalsIgnoreCase(TownySettings.getAcceptCommand())) {
@@ -123,7 +108,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
-		String received = TownySettings.getLangString("player_received_invites")
+		String received = Translation.of("player_received_invites")
 				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident))
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
@@ -142,7 +127,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(received);
 
 			} else {
-				throw new TownyException(TownySettings.getLangString("msg_err_player_no_invites"));
+				throw new TownyException(Translation.of("msg_err_player_no_invites"));
 			}
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -163,7 +148,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		List<Invite> invites = resident.getReceivedInvites();
 
 		if (invites.size() == 0) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_no_invites"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
 			return;
 		}
 		if (args.length >= 1) {
@@ -172,14 +157,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			try {
 				town = townyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 				return;
 			}
 		} else {
 			if (invites.size() == 1) { // Only 1 Invite.
 				town = (Town) invites.get(0).getSender();
 			} else {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_has_multiple_invites"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_has_multiple_invites"));
 				parseInviteList(player, null);
 				return;
 			}
@@ -200,7 +185,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));			
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));			
 
 
 	}
@@ -217,21 +202,21 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		List<Invite> invites = resident.getReceivedInvites();
 		if (invites.size() == 0) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_no_invites"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
 			return;
 		}
 		if (args.length >= 1) {
 			try {
 				town = townyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 				return;
 			}
 		} else {
 			if (invites.size() == 1) {
 				town = (Town) invites.get(0).getSender();
 			} else {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_has_multiple_invites"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_has_multiple_invites"));
 				parseInviteList(player, null);
 				return;
 			}
@@ -254,7 +239,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
 
 
 	}
@@ -262,10 +247,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public static void sendInviteList(Player player, List<Invite> list, int page, boolean fromSender) {
 
 		if (page < 0) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative"));
 			return;
 		} else if (page == 0) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
 			return;
 		}
 		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
@@ -295,32 +280,32 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (fromSender) {
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
 					output = Colors.Blue + ((Resident) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = TownySettings.getLangString("player_sing");
+					object = Translation.of("player_sing");
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
 						output = Colors.Blue + ((Town) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-						object = TownySettings.getLangString("town_sing");
+						object = Translation.of("town_sing");
 					}
 					if (invite.getReceiver() instanceof Nation) {
 						output = Colors.Blue + ((Nation) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-						object = TownySettings.getLangString("nation_sing");
+						object = Translation.of("nation_sing");
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
 				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getReceiver() instanceof Resident) {
-					object = TownySettings.getLangString("town_sing");
+					object = Translation.of("town_sing");
 				}
 				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation) {
-					object = TownySettings.getLangString("nation_sing");
+					object = Translation.of("nation_sing");
 				}
 			}
 			invitesformatted.add(output);
 		}
 
-		player.sendMessage(ChatTools.formatList(TownySettings.getLangString("invite_plu"),
-				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("invite_sent_by"),
+		player.sendMessage(ChatTools.formatList(Translation.of("invite_plu"),
+				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by"),
 				invitesformatted, TownySettings.getListPageMsg(page, total)
 		));
 	}

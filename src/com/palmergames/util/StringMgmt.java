@@ -1,10 +1,14 @@
 package com.palmergames.util;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import net.md_5.bungee.api.ChatColor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -15,10 +19,46 @@ import java.util.StringJoiner;
 
 public class StringMgmt {
 
+	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(#[a-fA-F0-9]{6})");
+	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
+	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
+	
+	public static String translateHexColors(String str) {
+		if (!Towny.is116Plus()) {
+			return str;
+		}
+
+		final Matcher hexMatcher = hexPattern.matcher(str);
+		final Matcher ampMatcher = ampersandPattern.matcher(str);
+		final Matcher bracketMatcher = bracketPattern.matcher(str);
+
+		while (hexMatcher.find()) {
+			String hex = hexMatcher.group();
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+		}
+
+		while (ampMatcher.find()) {
+			String hex = ampMatcher.group().replace("&", "");
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+			str = str.replace("&", "");
+		}
+
+		while (bracketMatcher.find()) {
+			String hex = bracketMatcher.group().replace("{", "").replace("}", "");
+			TownyMessaging.sendErrorMsg("Found hex " + hex);
+			str = str.replace(hex, ChatColor.of(hex).toString());
+			str = str.replace("{", "").replace("}", "");
+		}
+
+		return str;
+	}
+
 	public static String join(Collection<?> args) {
 		return join(args, " ");
 	}
-
+	
 	public static String join(Collection<?> args, String separator) {
 		StringJoiner joiner = new StringJoiner(separator);
 		

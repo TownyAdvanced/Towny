@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
@@ -57,21 +58,21 @@ public class OnPlayerLogin implements Runnable {
 				resident = universe.getDataSource().getResident(player.getName());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
-					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_registration"), player.getName()));
+					TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUUID(player.getUniqueId());
+				TownySettings.incrementUUIDCount();
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
 						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
-						town.addResident(resident);
+						resident.setTown(town);
 						universe.getDataSource().saveTown(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
 				}
 				
 				universe.getDataSource().saveResident(resident);
-				universe.getDataSource().saveResidentList();
 				
 			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
 				// Should never happen
@@ -92,8 +93,10 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else {
 					resident.setLastOnline(System.currentTimeMillis());
-					if (!resident.hasUUID())
-						resident.setUUID(player.getUniqueId());
+				}
+				if (!resident.hasUUID()) {
+					resident.setUUID(player.getUniqueId());
+					TownySettings.incrementUUIDCount();
 				}
 				universe.getDataSource().saveResident(resident);
 				
@@ -155,7 +158,7 @@ public class OnPlayerLogin implements Runnable {
 									if (!town.getAccount().isBankrupt()) //Is town already bankrupt?
 										TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_bankrupt"), town.getName()));
 								} else {
-									TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
+									TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
 								}
 							}
 						} catch (EconomyException ex) {
@@ -172,7 +175,7 @@ public class OnPlayerLogin implements Runnable {
 								/*
 								 *  Warn that the nation is due to be deleted.
 								 */
-								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), nation.getName()));
+								TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", nation.getName()));
 							}
 						} catch (EconomyException ex) {
 							// Economy error, so ignore it and try to continue.

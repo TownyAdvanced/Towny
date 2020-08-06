@@ -1,5 +1,9 @@
 package com.palmergames.util;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,14 +18,21 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class FileMgmt {
+public final class FileMgmt {
+	
+	private static final Object mutex = new Object();
+	
 	/**
 	 * Checks a folderPath to see if it exists, if it doesn't it will attempt
 	 * to create the folder at the designated path.
@@ -30,8 +41,10 @@ public class FileMgmt {
 	 * @return True if the folder exists or if it was successfully created.
 	 */
 	public static boolean checkOrCreateFolder(String folderPath) {
-		File file = new File(folderPath);
-		return file.exists() || file.mkdirs() || file.isDirectory();
+		synchronized (mutex) {
+			File file = new File(folderPath);
+			return file.exists() || file.mkdirs() || file.isDirectory();
+		}
 	}
 	
 	/**
@@ -58,14 +71,16 @@ public class FileMgmt {
 	 * @return True if the folder exists or if it was successfully created.
 	 */
 	public static boolean checkOrCreateFile(String filePath) {
-		File file = new File(filePath);
-		if (!checkOrCreateFolder(file.getParentFile().getPath())) {
-			return false;
-		}
-		try {
-			return file.exists() || file.createNewFile();
-		} catch (IOException e) {
-			return false;
+		synchronized (mutex) {
+			File file = new File(filePath);
+			if (!checkOrCreateFolder(file.getParentFile().getPath())) {
+				return false;
+			}
+			try {
+				return file.exists() || file.createNewFile();
+			} catch (IOException e) {
+				return false;
+			}
 		}
 	}
 	
@@ -87,7 +102,7 @@ public class FileMgmt {
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-		synchronized (sourceLocation) {
+		synchronized (mutex) {
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
 					targetLocation.mkdir();
@@ -116,68 +131,70 @@ public class FileMgmt {
 	}
 
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
+		synchronized (mutex) {
+			// open a handle to yml file
+			File file = new File(filePath);
 
-		// open a handle to yml file
-		File file = new File(filePath);
+			if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
+				return file;
 
-		if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
-			return file;
+			String resString;
 
-		String resString;
+			/*
+			 * create the file as it doesn't exist,
+			 * or it's the default file
+			 * so refresh just in case.
+			 */
+			checkOrCreateFile(filePath);
 
-		/*
-		 * create the file as it doesn't exist,
-		 * or it's the default file
-		 * so refresh just in case.
-		 */
-		checkOrCreateFile(filePath);
-
-		// Populate a new file
-		try {
-			resString = convertStreamToString("/" + resource);
-			FileMgmt.stringToFile(resString, filePath);
-
-		} catch (IOException e) {
-			// No resource file found
+			// Populate a new file
 			try {
-				resString = convertStreamToString("/" + defaultRes);
+				resString = convertStreamToString("/" + resource);
 				FileMgmt.stringToFile(resString, filePath);
-			} catch (IOException e1) {
-				// Default resource not found
-				e1.printStackTrace();
-			}
-		}
 
-		return file;
+			} catch (IOException e) {
+				// No resource file found
+				try {
+					resString = convertStreamToString("/" + defaultRes);
+					FileMgmt.stringToFile(resString, filePath);
+				} catch (IOException e1) {
+					// Default resource not found
+					e1.printStackTrace();
+				}
+			}
+
+			return file;
+		}
 	}
 
 	// pass a resource name and it will return it's contents as a string
 	public static String convertStreamToString(String name) throws IOException {
+		synchronized (mutex) {
+			if (name != null) {
+				Writer writer = new StringWriter();
+				InputStream is = FileMgmt.class.getResourceAsStream(name);
 
-		if (name != null) {
-			Writer writer = new StringWriter();
-			InputStream is = FileMgmt.class.getResourceAsStream(name);
-
-			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} catch (IOException e) {
-				System.out.println("Exception ");
-			} finally {
+				char[] buffer = new char[1024];
 				try {
-					is.close();
-				} catch (NullPointerException e) {
-					//Failed to open a stream
-					throw new IOException();
+					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+					int n;
+					while ((n = reader.read(buffer)) != -1) {
+						writer.write(buffer, 0, n);
+					}
+				} catch (IOException e) {
+					System.out.println("Exception ");
+				} finally {
+					try {
+						is.close();
+					} catch (NullPointerException e) {
+						//Failed to open a stream
+						throw new IOException();
+					}
 				}
+				return writer.toString();
+			} else {
+				return "";
 			}
-			return writer.toString();
-		} else {
-			return "";
 		}
 	}
 
@@ -189,24 +206,25 @@ public class FileMgmt {
 	 * @return Contents of file. String will be empty in case of any errors.
 	 */
 	public static String convertFileToString(File file) {
+		synchronized (mutex) {
+			if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
+				Writer writer = new StringWriter();
 
-		if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
-			Writer writer = new StringWriter();
-
-			char[] buffer = new char[1024];
-			try (InputStream is = new FileInputStream(file)) {
-				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
+				char[] buffer = new char[1024];
+				try (InputStream is = new FileInputStream(file)) {
+					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+					int n;
+					while ((n = reader.read(buffer)) != -1) {
+						writer.write(buffer, 0, n);
+					}
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("Exception ");
 				}
-				reader.close();
-			} catch (IOException e) {
-				System.out.println("Exception ");
+				return writer.toString();
+			} else {
+				return "";
 			}
-			return writer.toString();
-		} else {
-			return "";
 		}
 	}
 
@@ -227,14 +245,15 @@ public class FileMgmt {
 	 * @param file   File to write to.
 	 */
 	public static void stringToFile(String source, File file) {
+		synchronized (mutex) {
+			try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+				 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
-		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-			 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
-			
-			bufferedWriter.write(source);
-			
-		} catch (IOException e) {
-			System.out.println("Exception ");
+				bufferedWriter.write(source);
+
+			} catch (IOException e) {
+				System.out.println("Exception ");
+			}
 		}
 	}
 
@@ -246,25 +265,26 @@ public class FileMgmt {
 	 * @return true on success, false on IOException
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
-		File file = new File(targetLocation);
-		try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-			BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
-			
-			for (String aSource : source) {
-				bufferedWriter.write(aSource + System.getProperty("line.separator"));
-			}
+		synchronized (mutex) {
+			File file = new File(targetLocation);
+			try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
-			return true;
-		} catch (IOException e) {
-			System.out.println("Exception ");
-			return false;
+				for (String aSource : source) {
+					bufferedWriter.write(aSource + System.getProperty("line.separator"));
+				}
+
+				return true;
+			} catch (IOException e) {
+				System.out.println("Exception ");
+				return false;
+			}
 		}
 	}
 
 	// move a file to a sub directory
 	public static void moveFile(File sourceFile, String targetLocation) {
-
-		synchronized (sourceFile) {
+		synchronized (mutex) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
@@ -272,14 +292,13 @@ public class FileMgmt {
 					f.delete();
 				// Move file to new directory
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
-				
 			}
 		}
 	}
 	
 	public static void moveTownBlockFile(File sourceFile, String targetLocation, String townDir) {
 
-		synchronized (sourceFile) {
+		synchronized (mutex) {
 			if (sourceFile.isFile()) {
 				if (!townDir.isEmpty())
 					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
@@ -295,10 +314,41 @@ public class FileMgmt {
 			}
 		}
 	}
+	
+	public static String getFileTimeStamp() {
+		long t = System.currentTimeMillis();
+		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
+	}
+	
+	public static void tar(File destination, File... sources) throws IOException {
+		synchronized (mutex) {
+			try (TarArchiveOutputStream archive = 
+				new TarArchiveOutputStream(
+				new GzipCompressorOutputStream(
+				new FileOutputStream(destination)))) {
+				for (File source : sources) {
+					Files.walk(source.toPath()).forEach((path -> {
+						File file = path.toFile();
+
+						if (!file.isDirectory()) {
+							TarArchiveEntry entry_1 = new TarArchiveEntry(file, file.toString());
+							try (FileInputStream fis = new FileInputStream(file)) {
+								archive.putArchiveEntry(entry_1);
+								IOUtils.copy(fis, archive);
+								archive.closeArchiveEntry();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}));
+				}
+			}
+		}
+	}
 
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 
-		synchronized (sourceFolders) {
+		synchronized (mutex) {
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
 			for (File sourceFolder : sourceFolders)
 				recursiveZipDirectory(sourceFolder, output);
@@ -308,7 +358,7 @@ public class FileMgmt {
 
 	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
 
-		synchronized (sourceFolder) {
+		synchronized (mutex) {
 
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
@@ -337,7 +387,7 @@ public class FileMgmt {
 	 */
 	public static void deleteFile(File file) {
 
-		synchronized (file) {
+		synchronized (mutex) {
 
 			if (file.isDirectory()) {
 				File[] children = file.listFiles();
@@ -366,7 +416,7 @@ public class FileMgmt {
 	 */
 	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
 
-		synchronized (backupsDir) {
+		synchronized (mutex) {
 
 			TreeSet<Long> deleted = new TreeSet<>();
 			if (backupsDir.isDirectory()) {
@@ -403,9 +453,9 @@ public class FileMgmt {
 		}
 	}
 
-	public synchronized static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
+	public static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
 
-		synchronized (residentDir) {
+		synchronized (mutex) {
 
 			int count = 0;
 
@@ -436,6 +486,30 @@ public class FileMgmt {
 			}
 		}
 
+	}
+
+	/**
+	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
+	 *
+	 * @param file - File from which the HashMap will be made.
+	 * @return HashMap - Used for loading keys and values from object files. 
+	 */
+	public static HashMap<String, String> loadFileIntoHashMap(File file) {
+		synchronized (mutex) {
+			HashMap<String, String> keys = new HashMap<>();
+			try (FileInputStream fis = new FileInputStream(file);
+				 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+				Properties properties = new Properties();
+				properties.load(isr);
+				for (String key : properties.stringPropertyNames()) {
+					String value = properties.getProperty(key);
+					keys.put(key, String.valueOf(value));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return keys;
+		}
 	}
 	
 	@Deprecated

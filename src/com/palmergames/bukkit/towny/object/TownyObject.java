@@ -4,13 +4,16 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class TownyObject implements Nameable {
 	private String name;
-
-	private HashSet<CustomDataField<?>> metadata = null;
+	
+	private Map<String, CustomDataField<?>> metadata = null;
 	
 	protected TownyObject(String name) {
 		this.name = name;
@@ -50,38 +53,56 @@ public abstract class TownyObject implements Nameable {
 	}
 
 	public void addMetaData(CustomDataField<?> md) {
-		if (getMetadata() == null)
-			metadata = new HashSet<>();
-
-		getMetadata().add(md);
+		if (metadata == null)
+			metadata = new HashMap<>();
+		
+		metadata.put(md.getKey(), md);
 	}
 
 	public void removeMetaData(CustomDataField<?> md) {
 		if (!hasMeta())
 			return;
-
-		getMetadata().remove(md);
-
-		if (getMetadata().size() == 0)
+		
+		metadata.remove(md.getKey());
+		
+		if (metadata.isEmpty())
 			this.metadata = null;
 	}
-
-	public HashSet<CustomDataField<?>> getMetadata() {
-		return metadata;
+	
+	public Collection<CustomDataField<?>> getMetadata() {
+		if (metadata == null || metadata.isEmpty())
+			return Collections.emptyList();
+		
+		return Collections.unmodifiableCollection(metadata.values());
+	}
+	
+	public CustomDataField<?> getMetadata(String key) {
+		if(metadata != null)
+			return metadata.get(key);
+		
+		return null;
 	}
 
 	public boolean hasMeta() {
-		return getMetadata() != null;
+		return metadata != null;
+	}
+
+	public boolean hasMeta(String key) {
+		if (metadata != null)
+			return metadata.containsKey(key);
+		
+		return false;
 	}
 
 	public void setMetadata(String str) {
+		String[] objects = str.split(";");
 
 		if (metadata == null)
-			metadata = new HashSet<>();
-
-		String[] objects = str.split(";");
+			metadata = new HashMap<>(objects.length);
+		
 		for (String object : objects) {
-			metadata.add(CustomDataField.load(object));
+			CustomDataField<?> cdf = CustomDataField.load(object);
+			metadata.put(cdf.getKey(), cdf);
 		}
 	}
 	

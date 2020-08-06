@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -9,18 +8,19 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public class PlayerJoinTownInvite implements Invite {
+	
+	private final String directSender;
+	private final Resident receiver;
+	private final Town sender;
 
-	public PlayerJoinTownInvite(String directSender, InviteSender sender, InviteReceiver receiver) {
+	public PlayerJoinTownInvite(String directSender, Town sender, Resident receiver) {
 		this.directSender = directSender;
 		this.sender = sender;
 		this.receiver = receiver;
 	}
-
-	private String directSender;
-	private InviteReceiver receiver;
-	private InviteSender sender;
 
 	@Override
 	public String getDirectSender() {
@@ -28,36 +28,40 @@ public class PlayerJoinTownInvite implements Invite {
 	}
 
 	@Override
-	public InviteReceiver getReceiver() {
+	public Resident getReceiver() {
 		return receiver;
 	}
 
 	@Override
-	public InviteSender getSender() {
+	public Town getSender() {
 		return sender;
 	}
 	
 	@Override
 	public void accept() throws TownyException {
-		Resident resident = (Resident) getReceiver();
-		Town town = (Town) getSender();
+		Resident resident = getReceiver();
+		Town town = getSender();
+		
 		TownCommand.townAddResident(town, resident);
-		TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
+		
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 	}
 
 	@Override
 	public void decline(boolean fromSender) {
-		Resident resident = (Resident) getReceiver();
-		Town town = (Town) getSender();
+		Resident resident = getReceiver();
+		Town town = getSender();
+		
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
+		
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
-			TownyMessaging.sendMsg(getReceiver(), TownySettings.getLangString("successful_deny"));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_deny_invite", resident.getName()));
+			TownyMessaging.sendMsg(getReceiver(), Translation.of("successful_deny"));
 		} else {
-			TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
+			TownyMessaging.sendMsg(resident, Translation.of("town_revoke_invite", town.getName()));
 		}
 	}
 }

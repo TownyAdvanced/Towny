@@ -9,7 +9,7 @@ public class DeleteTownEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private String townName;
+    private final String townName;
 
     @Override
     public HandlerList getHandlers() {

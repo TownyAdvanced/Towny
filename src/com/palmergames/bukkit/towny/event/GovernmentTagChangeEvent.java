@@ -9,8 +9,8 @@ public class GovernmentTagChangeEvent extends TagChangeEvent {
 		super(newTag);
 		this.government = government;
 	}
-
-	public Government getTerritory() {
+	
+	public Government getGovernment() {
 		return government;
 	}
 }

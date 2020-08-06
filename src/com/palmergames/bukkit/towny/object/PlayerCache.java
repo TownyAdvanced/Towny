@@ -10,15 +10,15 @@ import java.util.HashMap;
 
 public class PlayerCache {
 
-	private HashMap<Material, Boolean> buildMatPermission = new HashMap<Material,Boolean>();
-	private HashMap<Material, Boolean> destroyMatPermission = new HashMap<Material,Boolean>();
-	private HashMap<Material, Boolean> switchMatPermission = new HashMap<Material,Boolean>();
-	private HashMap<Material, Boolean> itemUseMatPermission = new HashMap<Material,Boolean>();
+	private final HashMap<Material, Boolean> buildMatPermission = new HashMap<>();
+	private final HashMap<Material, Boolean> destroyMatPermission = new HashMap<>();
+	private final HashMap<Material, Boolean> switchMatPermission = new HashMap<>();
+	private final HashMap<Material, Boolean> itemUseMatPermission = new HashMap<>();
 	
-	private HashMap<Integer, HashMap<Byte, Boolean>> buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-	private HashMap<Integer, HashMap<Byte, Boolean>> destroyPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-	private HashMap<Integer, HashMap<Byte, Boolean>> switchPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-	private HashMap<Integer, HashMap<Byte, Boolean>> itemUsePermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+	private final HashMap<Integer, HashMap<Byte, Boolean>> buildPermission = new HashMap<>();
+	private final HashMap<Integer, HashMap<Byte, Boolean>> destroyPermission = new HashMap<>();
+	private final HashMap<Integer, HashMap<Byte, Boolean>> switchPermission = new HashMap<>();
+	private final HashMap<Integer, HashMap<Byte, Boolean>> itemUsePermission = new HashMap<>();
 	
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
@@ -186,10 +186,11 @@ public class PlayerCache {
 		townBlockStatus = null;
 		blockErrMsg = null;
 		
-		buildMatPermission = new HashMap<Material,Boolean>();
-		destroyMatPermission = new HashMap<Material,Boolean>();
-		switchMatPermission = new HashMap<Material,Boolean>();
-		itemUseMatPermission = new HashMap<Material,Boolean>();
+		// Clear all maps
+		buildMatPermission.clear();
+		destroyMatPermission.clear();
+		switchMatPermission.clear();
+		itemUseMatPermission.clear();
 //		
 //		// Pre 1.13 hashmaps here.
 //		buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();

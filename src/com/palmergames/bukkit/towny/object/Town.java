@@ -5,8 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -31,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends Government implements TownBlockOwner {
+public class Town extends Government implements TownBlockOwner, Residence {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -66,6 +64,9 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
+		// Set defaults.
+		setOpen(TownySettings.getTownDefaultOpen());
+		setBoard(TownySettings.getTownDefaultBoard());
 	}
 
 	@Override
@@ -98,11 +99,6 @@ public class Town extends Government implements TownBlockOwner {
 		}
 	}
 	
-	private void removeTownBlockMap(TownBlock townBlock) {
-		townBlocks.remove(townBlock.getWorldCoord());
-	}
-
-	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
 		if (hasTownBlock(worldCoord))
 			return townBlocks.get(worldCoord);
@@ -111,11 +107,6 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
-	}
-
-	@Override
-	public String getBoard() {
-		return board == null ? "/t set board [board]" : board;
 	}
 
 	public Resident getMayor() {
@@ -140,7 +131,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void setMayor(Resident mayor) throws TownyException {
 
 		if (!hasResident(mayor))
-			throw new TownyException(TownySettings.getLangString("msg_err_mayor_doesnt_belong_to_town"));
+			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);
@@ -151,7 +142,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (hasNation())
 			return nation;
 		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_town_doesnt_belong_to_any_nation"));
+			throw new NotRegisteredException(Translation.of("msg_err_town_doesnt_belong_to_any_nation"));
 	}
 
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -175,15 +166,21 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(residents);
 	}
 
+	@Deprecated
 	public List<Resident> getAssistants() {
 
-		List<Resident> assistants = new ArrayList<>();
+	    return getRank("assistant");
+	}
+
+	public List<Resident> getRank(String rank) {
+
+		List<Resident> residentsWithRank = new ArrayList<>();
 		
-		for (Resident assistant: residents) {
-			if (assistant.hasTownRank("assistant"))
-				assistants.add(assistant);
+		for (Resident resident: residents) {
+			if (resident.hasTownRank(rank))
+				residentsWithRank.add(resident);
 		}
-		return Collections.unmodifiableList(assistants);
+		return Collections.unmodifiableList(residentsWithRank);
 	}
 
 	@Override
@@ -200,28 +197,34 @@ public class Town extends Government implements TownBlockOwner {
 		return residents.contains(resident);
 	}
 
+	/**
+	 * @param resident - Resident to check for a rank.
+	 * 
+	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead. 
+	 */
 	public boolean hasAssistant(Resident resident) {
 
-		return getAssistants().contains(resident);
+		return resident.hasTownRank("assistant");
+	}
+	
+	public boolean hasResidentWithRank(Resident resident, String rank) {
+		return hasResident(resident) && resident.hasTownRank(rank);
 	}
 
-	public void addResident(Resident resident) throws AlreadyRegisteredException {
+	void addResident(Resident resident) throws AlreadyRegisteredException {
 
 		addResidentCheck(resident);
 		residents.add(resident);
-		resident.setTown(this);
-		
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
 
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
 
 		if (hasResident(resident))
-			throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), getFormattedName()));
+			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), getFormattedName()));
 		else if (resident.hasTown())
 			try {
 				if (!resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
+					throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
 				e.printStackTrace();
 			}
@@ -366,7 +369,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getTownBlockCostN(int inputN) throws TownyException {
 		
 		if (inputN < 0)
-			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
+			throw new TownyException(Translation.of("msg_err_negative"));
 
 		if (inputN == 0)
 			return inputN;
@@ -386,7 +389,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getBonusBlockCostN(int inputN) throws TownyException {
 		
 		if (inputN < 0)
-			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
+			throw new TownyException(Translation.of("msg_err_negative"));
 
 		int current = getPurchasedBlocks();
 		int n;
@@ -445,7 +448,7 @@ public class Town extends Government implements TownBlockOwner {
 			return false;
 		}
 		if (!hasTownBlock(homeBlock))
-			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_claim_over_this_town_block"));
+			throw new TownyException(Translation.of("msg_err_town_has_no_claim_over_this_town_block"));
 		this.homeBlock = homeBlock;
 
 		// Set the world as it may have changed
@@ -471,7 +474,7 @@ public class Town extends Government implements TownBlockOwner {
 				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = this.getHomeBlock().getCoord();
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					try {
 						nation.removeTown(this);
 					} catch (EmptyNationException e) {
@@ -481,7 +484,7 @@ public class Town extends Government implements TownBlockOwner {
 				double distance;
 				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					try {
 						nation.removeTown(this);
 					} catch (EmptyNationException e) {
@@ -591,90 +594,85 @@ public class Town extends Government implements TownBlockOwner {
 		}
 	}
 
-	private void removeAllResidents() {
-
-		for (Resident resident : new ArrayList<>(residents))
-			remove(resident);
+	private void remove(Resident resident) {
+		// Mayoral succession.
+		if (isMayor(resident)) {
+			if (residents.size() > 1) {
+				for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
+					if (findNewMayor(rank)) {
+						break;
+					}
+				}
+				if (isMayor(resident)) {
+					// Still mayor and no one with a rank in the order of mayoral succession
+					// (`TownySettings.getOrderOfMayoralSuccession()`) so pick a resident to be mayor.
+					findNewMayor();
+				}
+				
+				// Town is not removing its last resident so be sure to save it.
+				TownyUniverse.getInstance().getDataSource().saveTown(this);
+			}
+		}
+		// Remove resident.
+		residents.remove(resident);
 	}
 
-	private void remove(Resident resident) {
-		
-		resident.setTitle("");
-		resident.setSurname("");
-		resident.updatePerms();
-
-		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-			
-			// Do not remove Embassy plots
-			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				townBlock.setResident(null);
+	/**
+	 * Tries to find a new mayor from among the town's residents with the rank specified.
+	 * 
+	 * @param rank - the rank being checked for potential mayors
+	 * @return found - whether or not a new mayor was found
+	 */
+	private boolean findNewMayor(String rank) {
+		boolean found = false;
+		for (Resident newMayor : getRank(rank)) {
+			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
 				try {
-					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-				} catch (NotRegisteredException e) {
+					setMayor(newMayor);
+					found = true;
+					break;
+				} catch (TownyException e) {
+					// Error setting mayor.
 					e.printStackTrace();
-				}
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
-				
-				// Set the plot permissions to mirror the towns.
-				townBlock.setType(townBlock.getType());
-			}
-		}
-
-		if (isMayor(resident)) {
-
-			if (residents.size() > 1) {
-				for (Resident assistant : new ArrayList<>(getAssistants()))
-					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
-						try {
-							setMayor(assistant);
-							break;
-						} catch (TownyException e) {
-							// Error setting mayor.
-							e.printStackTrace();
-						}
-					}
-				if (isMayor(resident)) {
-					// Still mayor and no assistants so pick a resident to be mayor
-					for (Resident newMayor : new ArrayList<>(getResidents()))
-						if (newMayor != resident) {
-							try {
-								setMayor(newMayor);
-								break;
-							} catch (TownyException e) {
-								// Error setting mayor.
-								e.printStackTrace();
-							}
-						}
+					found = false;
 				}
 			}
-
 		}
-
-		try {
-			/* 
-			 * Trigger a resident removal event if they are in a town.
-			 */
-			if (resident.hasTown()) {
-				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, resident.getTown()));
-			}
-			resident.setTown(null);
-		} catch (AlreadyRegisteredException ignored) {
-		} catch (IllegalStateException | NotRegisteredException e) {
-			e.printStackTrace();
-		}
-		residents.remove(resident);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		return found;
 	}
 	
+	/**
+	 * Tries to find a new mayor from among the town's residents.
+	 * 
+	 * @return found - whether or not a new mayor was found
+	 */
+	private boolean findNewMayor() {
+		boolean found = false;
+		for (Resident newMayor : getResidents()) {
+			if (newMayor != mayor) {
+				try {
+					setMayor(newMayor);
+					found = true;
+					break;
+				} catch (TownyException e) {
+					// Error setting mayor.
+					e.printStackTrace();
+					found = false;
+				}
+			}
+		}
+		return found;
+	}
+
 	@Override
 	public void setSpawn(Location spawn) throws TownyException {
 		if (!hasHomeBlock())
-			throw new TownyException(TownySettings.getLangString("msg_err_homeblock_has_not_been_set"));
+			throw new TownyException(Translation.of("msg_err_homeblock_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ()) {
 			this.spawn = spawn;
 		} else
-			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_homeblock"));
+			throw new TownyException(Translation.of("msg_err_spawn_not_within_homeblock"));
 	}
 	
 	/**
@@ -692,37 +690,12 @@ public class Town extends Government implements TownBlockOwner {
 			return spawn;
 		} else {
 			this.spawn = null;
-			throw new TownyException(TownySettings.getLangString("msg_err_town_has_not_set_a_spawn_location"));
+			throw new TownyException(Translation.of("msg_err_town_has_not_set_a_spawn_location"));
 		}
 	}
 
 	public boolean hasHomeBlock() {
 		return homeBlock != null;
-	}
-
-	public void clear() throws EmptyNationException {
-
-		//Cleanup
-		removeAllResidents();
-		mayor = null;
-		residents.clear();
-		outlaws.clear();
-		homeBlock = null;
-		outpostSpawns.clear();
-		jailSpawns.clear();
-	
-//		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
-//			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
-//				world.removeTownBlocks(getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
-//				world.removeTown(this);
-//			}
-//		} catch (NotRegisteredException e) {
-//		}
-//		if (hasNation())
-//			try {
-//				nation.removeTown(this);
-//			} catch (NotRegisteredException e) {
-//			}
 	}
 
 	public boolean hasWorld() {
@@ -775,13 +748,13 @@ public class Town extends Government implements TownBlockOwner {
 		try {
 			TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
 			if (!outpost.isOutpost())
-				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_an_outpost_plot"));
+				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
+			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
 		}
 
 	}
@@ -805,7 +778,7 @@ public class Town extends Government implements TownBlockOwner {
 	public Location getOutpostSpawn(Integer index) throws TownyException {
 
 		if (getMaxOutpostSpawn() == 0 && TownySettings.isOutpostsLimitedByLevels())
-			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_outpost_spawns_set"));
+			throw new TownyException(Translation.of("msg_err_town_has_no_outpost_spawns_set"));
 
 		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1)));
 	}
@@ -919,7 +892,7 @@ public class Town extends Government implements TownBlockOwner {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedTownMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedTownMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}
@@ -960,20 +933,20 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void addJailSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
-			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
+			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
 			
 		removeJailSpawn(Coord.parseCoord(spawn));
 		
 		try {
 			TownBlock jail = TownyAPI.getInstance().getTownBlock(spawn);
 			if (!jail.isJail())
-				throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_jail_plot"));
+				throw new TownyException(Translation.of("msg_err_location_is_not_within_a_jail_plot"));
 				
 			jailSpawns.add(spawn);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
+			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
 		}
 
 	}
@@ -1007,7 +980,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public Location getJailSpawn(Integer index) throws TownyException {
 		if (getMaxJailSpawn() == 0)
-			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_jail_spawns_set"));
+			throw new TownyException(Translation.of("msg_err_town_has_no_jail_spawns_set"));
 
 		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
 	}
@@ -1055,21 +1028,19 @@ public class Town extends Government implements TownBlockOwner {
 	public void addOutlawCheck(Resident resident) throws AlreadyRegisteredException {
 
 		if (hasOutlaw(resident))
-			throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
+			throw new AlreadyRegisteredException(Translation.of("msg_err_resident_already_an_outlaw"));
 		else if (resident.hasTown())
 			try {
 				if (resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
+					throw new AlreadyRegisteredException(Translation.of("msg_err_not_outlaw_in_your_town"));
 			} catch (NotRegisteredException e) {
 				e.printStackTrace();
 			}
 	}
 	
-	public void removeOutlaw(Resident resident) throws NotRegisteredException {
+	public void removeOutlaw(Resident resident) {
 
-		if (!hasOutlaw(resident))
-			throw new NotRegisteredException();
-		else 
+		if (hasOutlaw(resident))
 			outlaws.remove(resident);			
 	}
 

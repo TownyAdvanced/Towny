@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -16,7 +15,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
-import java.util.HashSet;
 import java.util.Objects;
 
 public class TownBlock extends TownyObject {
@@ -31,7 +29,6 @@ public class TownBlock extends TownyObject {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField<?>> metadata = null;
 	private PlotGroup plotGroup;
 
 	//Plot level permissions
@@ -256,7 +253,7 @@ public class TownBlock extends TownyObject {
 		TownBlockType type = TownBlockType.lookup(typeName);
 
 		if (type == null)
-			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+			throw new TownyException(Translation.of("msg_err_not_block_type"));
 		
 		setType(type, resident);
 	}
@@ -294,18 +291,18 @@ public class TownBlock extends TownyObject {
 		
 		// Test if we can pay first to throw an exception.
 		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
-			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
+			throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
 
 		// Handle payment via a confirmation to avoid suprise costs.
 		if (cost > 0 && TownySettings.isUsingEconomy()) {
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 		
 				try {
 					resident.getAccount().withdraw(cost, String.format("Plot set to %s", type));
 				} catch (EconomyException ignored) {
 				}					
 
-				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+				TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
 			
 				if (this.isJail())
 					try {
@@ -314,9 +311,9 @@ public class TownBlock extends TownyObject {
 					}
 				
 				setType(type);
-			});
-			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)));
-			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(resident.getName()), confirmation);
+			})
+				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+				.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 		// No payment required so just change the type.
 		} else {
 			if (this.isJail())
@@ -435,43 +432,16 @@ public class TownBlock extends TownyObject {
 		return this.getType() == TownBlockType.JAIL;
 	}
 	
+	@Override
 	public void addMetaData(CustomDataField md) {
-		if (getMetadata() == null)
-			metadata = new HashSet<>();
-		
-		getMetadata().add(md);
+		super.addMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 	
+	@Override
 	public void removeMetaData(CustomDataField md) {
-		if (!hasMeta())
-			return;
-		
-		getMetadata().remove(md);
-
-		if (getMetadata().size() == 0)
-			this.metadata = null;
-
+		super.removeMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
-	}
-
-	public HashSet<CustomDataField<?>> getMetadata() {
-		return metadata;
-	}
-
-	public boolean hasMeta() {
-		return getMetadata() != null;
-	}
-
-	public void setMetadata(String str) {
-		
-		if (metadata == null)
-			metadata = new HashSet<>();
-		
-		String[] objects = str.split(";");
-		for (String object : objects) {
-			metadata.add(CustomDataField.load(object));
-		}
 	}
 	
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }
