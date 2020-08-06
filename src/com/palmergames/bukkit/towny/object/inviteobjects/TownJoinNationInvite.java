@@ -3,15 +3,8 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-<<<<<<< Upstream, based on origin/master
-=======
-import com.palmergames.bukkit.towny.invites.Invite;
-<<<<<<< Upstream, based on origin/master
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
-=======
->>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -20,25 +13,10 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< Upstream, based on origin/master
 public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 	
 	public TownJoinNationInvite(CommandSender directSender, Town receiver, Nation sender) {
 		super(directSender, receiver, sender);
-=======
-public class TownJoinNationInvite implements Invite {
-
-<<<<<<< Upstream, based on origin/master
-	public TownJoinNationInvite(String directsender, InviteSender sender, InviteReceiver receiver) {
-		this.directsender = directsender;
-=======
-	private final String directSender;
-	private final Town receiver;
-	private final Nation sender;
-
-	public TownJoinNationInvite(String directSender, Nation sender, Town receiver) {
-		this.directSender = directSender;
->>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
 		this.sender = sender;
 		this.receiver = receiver;
 	}
@@ -60,7 +38,6 @@ public class TownJoinNationInvite implements Invite {
 	@Override
 	public InviteSender getSender() {
 		return sender;
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 	}
 
 	@Override
