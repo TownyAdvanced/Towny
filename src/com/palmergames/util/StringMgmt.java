@@ -1,12 +1,13 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import net.md_5.bungee.api.ChatColor;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import net.md_5.bungee.api.ChatColor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

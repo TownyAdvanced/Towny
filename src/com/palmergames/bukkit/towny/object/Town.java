@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends Government implements TownBlockOwner, Residence {
+public class Town extends Government implements TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 

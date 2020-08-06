@@ -4,8 +4,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
-import com.palmergames.bukkit.towny.invites.InviteReceiver;
-import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TownJoinNationInvite implements Invite {
-
 
 	private final String directSender;
 	private final Town receiver;

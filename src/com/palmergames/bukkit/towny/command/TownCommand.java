@@ -3429,7 +3429,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 					double missingAmount = blockCost - town.getAccount().getHoldingBalance();
 					if (TownySettings.isUsingEconomy() && !town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
-				throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+						throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
