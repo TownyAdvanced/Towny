@@ -66,6 +66,7 @@ public class Town extends Government implements TownBlockOwner {
 		permissions.loadDefault(this);
 		
 		// Set defaults.
+		setTaxes(TownySettings.getTownDefaultTax());
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
 	}
@@ -116,17 +117,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setTaxes(double taxes) {
-		if (isTaxPercentage) {
-			this.taxes = Math.min(taxes, TownySettings.getMaxTownTaxPercent());
-		} else {
-			this.taxes = Math.min(taxes, TownySettings.getMaxTownTax());
-		}
-	}
-
-	@Override
-	public double getTaxes() {
-		setTaxes(taxes);
-		return taxes == -1 ? TownySettings.getTownDefaultTax() : taxes;
+		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxTownTaxPercent() : TownySettings.getMaxTownTax());
+		
+		// Fix invalid taxes
+		if (this.taxes < 0)
+			this.taxes = TownySettings.getTownDefaultTax();
 	}
 
 	public void setMayor(Resident mayor) throws TownyException {
