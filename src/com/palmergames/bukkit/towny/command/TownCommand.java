@@ -2369,7 +2369,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
-				town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n));
+				if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+					return;
+				}
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
