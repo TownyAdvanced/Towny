@@ -2369,7 +2369,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
-				town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n));
+				if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+					return;
+				}
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
@@ -2454,7 +2457,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation.runOnAccept(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost");
+						if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+							// Send economy message
+							TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					
