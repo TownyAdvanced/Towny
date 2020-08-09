@@ -67,8 +67,9 @@ public class DailyTimerTask extends TownyTimerTask {
 				
 				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 				
-			} catch (EconomyException ignored) {
-				System.out.println("Economy Exception");
+			} catch (EconomyException ex) {
+				TownyMessaging.sendErrorMsg("Economy Exception");
+				ex.printStackTrace();
 			} catch (TownyException e) {
 				// TODO king exception
 				e.printStackTrace();
