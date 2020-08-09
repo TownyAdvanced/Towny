@@ -12,7 +12,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.2.9</version>
+    <version>0.96.2.10</version>
 
     <licenses>
         <license>
@@ -113,10 +113,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>Xadzkon</groupId>
-            <artifactId>GroupManager</artifactId>
-            <version>0.2.0</version>
-            <scope>provided</scope>
+            <groupId>com.github.ElgarL</groupId>
+            <artifactId>groupmanager</artifactId>
+            <version>2.5</version>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
