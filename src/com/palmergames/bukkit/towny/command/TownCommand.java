@@ -3454,8 +3454,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 					throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-
-				List<WorldCoord> selection;
+				
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -3464,13 +3463,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
 					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
 				} else {
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 					if (selection.isEmpty())
 						throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 
 					if (selection.get(0).getTownBlock().isHomeBlock())
 						throw new TownyException(Translation.of("msg_err_cannot_unclaim_homeblock"));
+					
+					if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
+						// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_unclaim_homeblock"));
+					}
 					
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
