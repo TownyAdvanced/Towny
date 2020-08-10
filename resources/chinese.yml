@@ -251,7 +251,7 @@ msg_nation_set_name: '&b%s 重命国名为 %s.'
 
 msg_changed_pvp: "&c%s1PVP状态变更为 %s."
 msg_changed_public: "&c城镇的公开状态变更为 %s."
-msg_changed_expl: "&c%s 中的爆炸变更为 %s."
+msg_changed_expl: "&c%s 中的允许爆炸变更为 %s."
 msg_changed_fire: "&c%s 中的火势蔓延变更为 %s."
 msg_changed_mobs: "&c%s 中的怪物生成变更为 %s."
 msg_changed_taxpercent: "&c按比例收税模式变更为 %s."
@@ -718,8 +718,8 @@ status_off_bad: '&4关'
 status_forced: '&c强制'
 status_adjustable: '&a可调整'
 status_pvp: '&2PvP: '
-explosions: '  &2爆炸保护: '              # 用于 /plot perm, /res
-explosions2: '&2爆炸保护: '               # 用于 /town and /tw
+explosions: '  &2允许爆炸: '              # 用于 /plot perm, /res
+explosions2: '&2允许爆炸: '               # 用于 /town and /tw
 firespread: '  &2火势蔓延: '
 mobspawns: '  &2生物生成: '
 owner_of_x_plots: '&2拥有&a%s片土地'
