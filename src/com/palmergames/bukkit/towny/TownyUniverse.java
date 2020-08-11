@@ -205,8 +205,10 @@ public class TownyUniverse {
     }
     
     public void finishTasks() {
-    	// Join into main thread for proper termination.
-		backupFuture.join();
+    	if (backupFuture != null) {
+			// Join into main thread for proper termination.
+			backupFuture.join();
+		}
 	}
     
     public void addWarZone(WorldCoord worldCoord) {
