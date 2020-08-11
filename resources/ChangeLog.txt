@@ -4832,3 +4832,5 @@ v0.92.0.11:
   - Fix shaded dependencies, courtesy of silverwolfg11 with PR #4254.
   - Fix global_town_settings.maximum_number_residents_without_nation not actually accounting for a town that does have a nation.
     - Closes #4249.
+  - Fix a town moving the homeblock, nations changing their capital city not removing out-of-range towns when the nation-requires-proximity feature is enabled.
+    - Closes #4248.
