@@ -128,10 +128,8 @@ public class TownyUniverse {
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
             
             // Run both the backup cleanup and backup async.
-            backupFuture = CompletableFuture
-                .runAsync(new CleanupBackupTask())
-                .thenRunAsync(new BackupTask());
-
+			performBackup();
+           
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
                 dataSource.saveAllWorlds();
@@ -165,6 +163,12 @@ public class TownyUniverse {
         
         return true;
     }
+    
+    public void performBackup() {
+		backupFuture = CompletableFuture
+			.runAsync(new CleanupBackupTask())
+			.thenRunAsync(new BackupTask());
+	}
     
     private boolean loadDatabase(String loadDbType) {
         
