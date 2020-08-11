@@ -1239,7 +1239,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
-						town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost");
+						if (!town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					try {
@@ -1314,7 +1317,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				List<Town> towns = nation.getTowns();
 				towns.addAll(remainingNation.getTowns());
-				List<Town> removedTowns = remainingNation.recheckTownDistanceDryRun(towns);
+				List<Town> removedTowns = remainingNation.recheckTownDistanceDryRun(towns, remainingNation.getCapital());
 				if (!removedTowns.isEmpty()) {
 					TownyMessaging.sendMessage(nation.getKing(), Translation.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
 					TownyMessaging.sendMessage(remainingNation.getKing(), Translation.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
@@ -2260,7 +2263,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else {
 						// Do proximity tests.
 						if (TownySettings.getNationRequiresProximity() > 0 ) {
-							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns());
+							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), newCapital);
 							
 							// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 							if (!removedTowns.isEmpty()) {

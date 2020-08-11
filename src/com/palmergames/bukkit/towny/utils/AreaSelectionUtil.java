@@ -236,6 +236,18 @@ public class AreaSelectionUtil {
 			}
 		return out;
 	}
+	
+	public static boolean filterHomeBlock(Town town, List<WorldCoord> selection) {
+		WorldCoord homeCoord;
+		
+		try {
+			homeCoord = town.getHomeBlock().getWorldCoord();
+		} catch (TownyException ignore) {
+			return false;
+		}
+		
+		return selection.removeIf(worldCoord -> worldCoord.equals(homeCoord));
+	}
 
 	/**
 	 * Gives a list of townblocks that have membership to the specified group.
