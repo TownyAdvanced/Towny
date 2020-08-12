@@ -26,12 +26,17 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public final class FileMgmt {
 	
-	private static final Object mutex = new Object();
+	private static final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+	private static final Lock readLock = readWriteLock.readLock();
+	private static final Lock writeLock = readWriteLock.writeLock();
 	
 	/**
 	 * Checks a folderPath to see if it exists, if it doesn't it will attempt
@@ -41,10 +46,13 @@ public final class FileMgmt {
 	 * @return True if the folder exists or if it was successfully created.
 	 */
 	public static boolean checkOrCreateFolder(String folderPath) {
-		synchronized (mutex) {
-			File file = new File(folderPath);
-			return file.exists() || file.mkdirs() || file.isDirectory();
+		File file = new File(folderPath);
+		
+		if (file.exists() || file.isDirectory()) {
+			return true;
 		}
+		
+		return newDir(file);
 	}
 	
 	/**
@@ -71,16 +79,35 @@ public final class FileMgmt {
 	 * @return True if the folder exists or if it was successfully created.
 	 */
 	public static boolean checkOrCreateFile(String filePath) {
-		synchronized (mutex) {
-			File file = new File(filePath);
-			if (!checkOrCreateFolder(file.getParentFile().getPath())) {
-				return false;
-			}
-			try {
-				return file.exists() || file.createNewFile();
-			} catch (IOException e) {
-				return false;
-			}
+		File file = new File(filePath);
+		if (!checkOrCreateFolder(file.getParentFile().getPath())) {
+			return false;
+		}
+
+		if (file.exists()) {
+			return true;
+		}
+
+		return newFile(file);
+	}
+	
+	private static boolean newDir(File dir) {
+		try {
+			writeLock.lock();
+			return dir.mkdirs();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	private static boolean newFile(File file) {
+		try {
+			writeLock.lock();
+			return file.createNewFile();
+		} catch (IOException e) {
+			return false;
+		} finally {
+			writeLock.unlock();
 		}
 	}
 	
@@ -102,7 +129,8 @@ public final class FileMgmt {
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
 					targetLocation.mkdir();
@@ -127,11 +155,14 @@ public final class FileMgmt {
 				}
 				out.close();
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			// open a handle to yml file
 			File file = new File(filePath);
 
@@ -164,12 +195,17 @@ public final class FileMgmt {
 			}
 
 			return file;
+			
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	// pass a resource name and it will return it's contents as a string
 	public static String convertStreamToString(String name) throws IOException {
-		synchronized (mutex) {
+		
+		try {
+			readLock.lock();
 			if (name != null) {
 				Writer writer = new StringWriter();
 				InputStream is = FileMgmt.class.getResourceAsStream(name);
@@ -195,6 +231,8 @@ public final class FileMgmt {
 			} else {
 				return "";
 			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -206,7 +244,8 @@ public final class FileMgmt {
 	 * @return Contents of file. String will be empty in case of any errors.
 	 */
 	public static String convertFileToString(File file) {
-		synchronized (mutex) {
+		try {
+			readLock.lock();
 			if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
 				Writer writer = new StringWriter();
 
@@ -225,6 +264,8 @@ public final class FileMgmt {
 			} else {
 				return "";
 			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -245,7 +286,8 @@ public final class FileMgmt {
 	 * @param file   File to write to.
 	 */
 	public static void stringToFile(String source, File file) {
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 				 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
@@ -254,6 +296,8 @@ public final class FileMgmt {
 			} catch (IOException e) {
 				System.out.println("Exception ");
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
@@ -265,7 +309,8 @@ public final class FileMgmt {
 	 * @return true on success, false on IOException
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			File file = new File(targetLocation);
 			try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
@@ -279,12 +324,15 @@ public final class FileMgmt {
 				System.out.println("Exception ");
 				return false;
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	// move a file to a sub directory
 	public static void moveFile(File sourceFile, String targetLocation) {
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
@@ -293,16 +341,18 @@ public final class FileMgmt {
 				// Move file to new directory
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 	
 	public static void moveTownBlockFile(File sourceFile, String targetLocation, String townDir) {
-
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 			if (sourceFile.isFile()) {
 				if (!townDir.isEmpty())
 					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
-				else 
+				else
 					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted");
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
@@ -312,6 +362,8 @@ public final class FileMgmt {
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
 
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 	
@@ -321,11 +373,12 @@ public final class FileMgmt {
 	}
 	
 	public static void tar(File destination, File... sources) throws IOException {
-		synchronized (mutex) {
-			try (TarArchiveOutputStream archive = 
-				new TarArchiveOutputStream(
-				new GzipCompressorOutputStream(
-				new FileOutputStream(destination)))) {
+		try {
+			readLock.lock();
+			try (TarArchiveOutputStream archive =
+					 new TarArchiveOutputStream(
+						 new GzipCompressorOutputStream(
+							 new FileOutputStream(destination)))) {
 				for (File source : sources) {
 					Files.walk(source.toPath()).forEach((path -> {
 						File file = path.toFile();
@@ -343,23 +396,26 @@ public final class FileMgmt {
 					}));
 				}
 			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
-
-		synchronized (mutex) {
+		try {
+			readLock.lock();
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
 			for (File sourceFolder : sourceFolders)
 				recursiveZipDirectory(sourceFolder, output);
 			output.close();
+		} finally {
+			readLock.unlock();
 		}
 	}
 
 	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
-
-		synchronized (mutex) {
-
+		try {
+			readLock.lock();
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
 			int bytesIn;
@@ -376,6 +432,8 @@ public final class FileMgmt {
 					input.close();
 				}
 			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -386,9 +444,8 @@ public final class FileMgmt {
 	 * @param file - {@link File} to delete
 	 */
 	public static void deleteFile(File file) {
-
-		synchronized (mutex) {
-
+		try {
+			writeLock.lock();
 			if (file.isDirectory()) {
 				File[] children = file.listFiles();
 				if (children != null) {
@@ -404,6 +461,8 @@ public final class FileMgmt {
 				if (!file.delete())
 					System.out.println("Error: Could not delete file: " + file.getPath());
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
@@ -415,8 +474,8 @@ public final class FileMgmt {
 	 * @param deleteAfter - Maximum age of files, in milliseconds
 	 */
 	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
-
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 
 			TreeSet<Long> deleted = new TreeSet<>();
 			if (backupsDir.isDirectory()) {
@@ -450,12 +509,14 @@ public final class FileMgmt {
 			if (deleted.size() > 0) {
 				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	public static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
-
-		synchronized (mutex) {
+		try {
+			writeLock.lock();
 
 			int count = 0;
 
@@ -484,8 +545,9 @@ public final class FileMgmt {
 					}
 				}
 			}
+		} finally {
+			writeLock.unlock();
 		}
-
 	}
 
 	/**
@@ -495,7 +557,9 @@ public final class FileMgmt {
 	 * @return HashMap - Used for loading keys and values from object files. 
 	 */
 	public static HashMap<String, String> loadFileIntoHashMap(File file) {
-		synchronized (mutex) {
+		
+		try {
+			readLock.lock();
 			HashMap<String, String> keys = new HashMap<>();
 			try (FileInputStream fis = new FileInputStream(file);
 				 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
@@ -509,6 +573,8 @@ public final class FileMgmt {
 				e.printStackTrace();
 			}
 			return keys;
+		} finally {
+			readLock.unlock();
 		}
 	}
 	
