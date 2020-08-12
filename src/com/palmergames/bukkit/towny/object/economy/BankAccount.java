@@ -127,7 +127,7 @@ public class BankAccount extends Account {
 		try {
 			
 			// Check balance cap.
-			if (balanceCap != 0 && !(getHoldingBalance() + amount > balanceCap)) {
+			if (balanceCap != 0 && (getHoldingBalance() + amount > balanceCap)) {
 				return false;
 			}
 			
