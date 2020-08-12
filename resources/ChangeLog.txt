@@ -4837,3 +4837,9 @@ v0.92.0.11:
   - Fix colour codes in resident titles/surnames carrying on in the resident list seen on the /town status screens.
     - Closes #4250.
   - Correctly translate "allow explosion" in Chinese, courtesy of ishland with PR #4252.
+  - Concurrency QOL, courtesy of Siris with PR #4256.
+    - Improves locking of database for reads and writes in regards to synchronization.
+  - Remove exception printing stacktrace from invalid name in getTown(), courtesy of Siris with PR #4259.
+    - Closes #4257.
+  - Hotfix/bankcap bug, courtesy of Siris with PR #4260.
+    - Closes #4253.
