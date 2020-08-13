@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -70,11 +71,15 @@ public final class Translation {
 			locale = new Locale(lang, country);
 		}
 
-		String fileName = "translation_" + locale.getLanguage() + "_"
-			+ (locale.getCountry() == null ? "" : locale.getCountry()) + ".properties";
+		String fileName;
+		if (locale.getLanguage().equals("en")) {
+			fileName = "translation.properties";
+		} else {
+			fileName = "translation_" + locale.getLanguage() + "_"
+				+ (locale.getCountry() == null ? "" : locale.getCountry()) + ".properties";
+		}
+		
 		InputStream inputStream = Towny.getPlugin().getResource(fileName);
-
-		HelpMenu.loadMenus();
 		
 		if (inputStream == null) {
 			loadCustomLang();
@@ -88,6 +93,7 @@ public final class Translation {
 		
 		try {
 			language = ResourceBundle.getBundle("translation", locale);
+			HelpMenu.loadMenus();
 		} catch (MissingResourceException e) {
 			e.printStackTrace();
 		}
