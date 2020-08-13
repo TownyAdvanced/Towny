@@ -194,6 +194,10 @@ public class TownySettings {
 		return getNationLevel(calcNationLevel(nation));
 	}
 
+	public static CommentedConfiguration getConfig() {
+		return config;
+	}
+
 	public static int calcTownLevel(Town town) {
 //Creatorfromhell's PR for replacing SortedMap town and nation levels.
 //		Integer level = configTownLevel.floorKey(town.getNumResidents());
@@ -1460,6 +1464,16 @@ public class TownySettings {
 	public static boolean isItemUseMaterial(String mat) {
 
 		return getItemUseMaterials().contains(mat);
+	}
+	
+	public static List<String> getFireSpreadBypassMaterials() {
+		
+		return getStrArr(ConfigNodes.PROT_FIRE_SPREAD_BYPASS);
+	}
+	
+	public static boolean isFireSpreadBypassMaterial(String mat) {
+		
+		return getFireSpreadBypassMaterials().contains(mat);
 	}
 	
 	public static List<String> getUnclaimedZoneIgnoreMaterials() {
@@ -2885,6 +2899,10 @@ public class TownySettings {
 	
 	public static boolean isTownListRandom() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
+	}
+
+	public static List<String> getOrderOfMayoralSuccession() {
+		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
 	}
 
 	public static boolean isWarAllowed() {

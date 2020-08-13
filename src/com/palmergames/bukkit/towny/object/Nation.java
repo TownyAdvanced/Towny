@@ -432,18 +432,19 @@ public class Nation extends Government {
 	 * moved nation capital homeblock.
 	 * 
 	 * @param towns - The list of towns to check.
+	 * @param newCapital - The capital city from which to check the distance.
 	 * @throws TownyException - Generic TownyException
 	 * @return removedTowns - A list of Towns which would be removed under a real recheckTownDistance().
 	 */
-	public List<Town> recheckTownDistanceDryRun(List<Town> towns) throws TownyException {
+	public List<Town> recheckTownDistanceDryRun(List<Town> towns, Town newCapital) throws TownyException {
 		List<Town> removedTowns = new ArrayList<>();
-		if(capital != null) {
+		if(newCapital != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				final Coord capitalCoord = newCapital.getHomeBlock().getCoord();
 				
 				for (Town town : towns) {
 					Coord townCoord = town.getHomeBlock().getCoord();
-					if (!capital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
+					if (!newCapital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
 						continue;
 					}
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
@@ -613,6 +614,7 @@ public class Nation extends Government {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
+	@Override
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 

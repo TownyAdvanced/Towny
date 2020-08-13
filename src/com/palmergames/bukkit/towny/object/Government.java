@@ -38,7 +38,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private boolean isOpen = false;
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
-	protected double taxes = -1;
+	protected double taxes;
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
 	protected Government(String name) {
@@ -102,7 +102,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets this to be hidden to other residents.
+	 * Sets the spawn to be visitable by non-member players,
+	 * also sets whether the homeblock coordinates are visible.
 	 *
 	 * @param isPublic false for not hidden, true otherwise.
 	 */
@@ -111,7 +112,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Whether this is hidden or not.
+	 * Whether the spawn is visitable by non-members,
+	 * and also whether the homeblock coordinates are visible.
 	 *
 	 * @return false for not hidden, true otherwise.
 	 */
@@ -120,7 +122,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets this to be open to anyone resident joining without 
+	 * Sets this to be open to any resident joining without 
 	 * an invitation or not.
 	 *
 	 * @param isOpen true for invitation-less joining, false otherwise.
@@ -158,7 +160,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets the cost of spawing to this location.
+	 * Sets the cost of spawning to this location.
 	 *
 	 * @param spawnCost The cost to spawn.
 	 */
@@ -167,7 +169,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Gets the cost of spawing to this location.
+	 * Gets the cost of spawning to this location.
 	 *
 	 * @return The cost to spawn.
 	 */
@@ -178,19 +180,15 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * Sets the concise string representation of this object.
 	 * 
-	 * @param text A four or less letter string.
+	 * @param text An upper-cased four or less letter string.
 	 * @throws TownyException Thrown on an error setting.
 	 */
 	public final void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
 			throw new TownyException(Translation.of("msg_err_tag_too_long"));
-		
-		if (text.length() < 4) {
-			return;
-		}
-		
-		this.tag = text.toUpperCase().substring(0,3);
+
+		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new GovernmentTagChangeEvent(this.tag, this));
@@ -199,7 +197,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * Gets the concise string representation of this object.
 	 * 
-	 * @return A four or less letter string, representing the tag.
+	 * @return An upper-cased four or less letter string, representing the tag.
 	 */
 	public final String getTag() {
 		return tag;
@@ -268,13 +266,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public abstract void setTaxes(double taxes);
 
 	/**
-	 * Gets the world in which this object resides.
-	 * 
-	 * @return The {@link World} this object is in.
-	 */
-	public abstract World getWorld();
-
-	/**
 	 * Gets the taxes as a percentage or as a flat number.
 	 * 
 	 * @return The tax number.
@@ -283,5 +274,11 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
-	
+
+	/**
+	 * Gets the world in which this object resides.
+	 * 
+	 * @return The {@link World} this object is in.
+	 */
+	public abstract World getWorld();
 }

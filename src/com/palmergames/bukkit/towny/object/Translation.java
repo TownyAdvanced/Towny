@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -72,6 +73,8 @@ public final class Translation {
 		String fileName = "translation_" + locale.getLanguage() + "_"
 			+ (locale.getCountry() == null ? "" : locale.getCountry()) + ".properties";
 		InputStream inputStream = Towny.getPlugin().getResource(fileName);
+
+		HelpMenu.loadMenus();
 		
 		if (inputStream == null) {
 			loadCustomLang();

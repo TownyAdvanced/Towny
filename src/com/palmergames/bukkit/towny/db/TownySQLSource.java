@@ -1605,7 +1605,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
-            twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
+            twn_hm.put("assistants", StringMgmt.join(town.getRank("assistant"), "#"));
             twn_hm.put("townBoard", town.getBoard());
             twn_hm.put("tag", town.getTag());
             twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
@@ -1628,7 +1628,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			if (town.hasMeta())
-				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
+				twn_hm.put("metadata", StringMgmt.join(town.getMetadata(), ";"));
 			else
 				twn_hm.put("metadata", "");
         
@@ -1713,7 +1713,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("isOpen", nation.isOpen());
 
 			if (nation.hasMeta())
-				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
+				nat_hm.put("metadata", StringMgmt.join(nation.getMetadata(), ";"));
 			else
 				nat_hm.put("metadata", "");
 
@@ -1812,7 +1812,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("warAllowed", world.isWarAllowed());
 
 			if (world.hasMeta())
-				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(world.getMetadata()), ";"));
+				nat_hm.put("metadata", StringMgmt.join(world.getMetadata(), ";"));
 			else
 				nat_hm.put("metadata", "");
             
