@@ -109,7 +109,7 @@ public abstract class Account implements Nameable {
 	
 	protected boolean payToServer(double amount, String reason) throws EconomyException {
 		// Take money out.
-		withdraw(amount, reason);
+		TownyEconomyHandler.subtract(getName(), amount, getBukkitWorld());
 		
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
@@ -117,7 +117,7 @@ public abstract class Account implements Nameable {
 	
 	protected boolean payFromServer(double amount, String reason) throws EconomyException {
 		// Put money in.
-		deposit(amount, reason);
+		TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
 		
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
@@ -135,7 +135,7 @@ public abstract class Account implements Nameable {
 	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
 		
 		if (amount > getHoldingBalance()) {
-			throw new EconomyException("Not enough money");
+			return false;
 		}
 
 		return withdraw(amount, reason) && collector.deposit(amount, reason);

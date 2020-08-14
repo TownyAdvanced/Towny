@@ -48,10 +48,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
 
-	private static final List<String> towny_general_help = new ArrayList<>();
-	private static final List<String> towny_help = new ArrayList<>();
-	private static final List<String> towny_top = new ArrayList<>();
-	private static final List<String> towny_war = new ArrayList<>();
+	private static List<String> towny_top = new ArrayList<>();
+	private static List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -98,26 +96,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"resident",
 		"town"
 	);
-	
-
-	static {
-		towny_general_help.add(ChatTools.formatTitle(Translation.of("help_0")));
-		towny_general_help.add(Translation.of("help_1"));
-		towny_general_help.add(ChatTools.formatCommand("", "/resident", "?", "") + ", " + ChatTools.formatCommand("", "/town", "?", "") + ", " + ChatTools.formatCommand("", "/nation", "?", "") + ", " + ChatTools.formatCommand("", "/plot", "?", "") + ", " + ChatTools.formatCommand("", "/towny", "?", ""));
-		towny_general_help.add(ChatTools.formatCommand("", "/tc", "[msg]", Translation.of("help_2")) + ", " + ChatTools.formatCommand("", "/nc", "[msg]", Translation.of("help_3")).trim());
-		towny_general_help.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin", "?", ""));
-
-		towny_help.add(ChatTools.formatTitle("/towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "", "General help for Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "map", "Displays a map of the nearby townblocks"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "Display the prices used with Economy"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "top", "Display highscores"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "time", "Display time until a new day"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "universe", "Displays stats"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "v", "Displays the version of Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "war", "'/towny war' for more info"));
-
-	}
 
 	public TownyCommand(Towny instance) {
 
@@ -145,9 +123,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Console output
 			if (args.length == 0) {
-				for (String line : towny_general_help) {
-					sender.sendMessage(Colors.strip(line));
-				}
+				HelpMenu.GENERAL_HELP.send(sender);
 			} else if (args[0].equalsIgnoreCase("tree")) {
 				for (String line : TownyUniverse.getInstance().getTreeString(0)) {
 					sender.sendMessage(line);
@@ -163,14 +139,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						sender.sendMessage(Colors.strip(line));
 				else
 					sender.sendMessage("The world isn't currently at war.");
-
-				towny_war.clear();
+				
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats())
 					sender.sendMessage(Colors.strip(line));
 			}
 
 		}
+		towny_war.clear();
 		return true;
 	}
 
@@ -211,14 +187,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private void parseTownyCommand(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0) {
-			for (String line : towny_general_help)
-				player.sendMessage(line);
-
+			HelpMenu.GENERAL_HELP.send(player);
 			return;
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : towny_help)
-				player.sendMessage(Colors.strip(line));
-
+			HelpMenu.HELP.send(player);
 			return;
 		}
 

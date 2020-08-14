@@ -210,7 +210,7 @@ public class TownyMessaging {
 		if ((sender instanceof Player)) {
 			((Player) sender).sendMessage(line);
 		} else if (sender instanceof CommandSender) {
-			((CommandSender) sender).sendMessage(line);
+			((CommandSender) sender).sendMessage(Colors.strip(line));
 		} else if (sender instanceof Resident) {
 			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
 			if (p == null) {
@@ -227,24 +227,8 @@ public class TownyMessaging {
 	 * @param lines String array to send as message.
 	 */
 	public static void sendMessage(Object sender, String[] lines) {
-		boolean isPlayer = false;
-		if (sender instanceof Player) {
-			isPlayer = true;
-		}
-
-		for (String line : lines) {
-			if (isPlayer) {
-				((Player) sender).sendMessage(line);
-			} else if (sender instanceof CommandSender) {
-				((CommandSender) sender).sendMessage(line);
-			} else if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p == null) {
-					return;
-				}
-				p.sendMessage(Colors.strip(line));
-			}
-		}
+		for (String line : lines)
+			sendMessage(sender, line);
 	}
 
 	/**

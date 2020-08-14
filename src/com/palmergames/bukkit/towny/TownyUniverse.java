@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.database.handler.DatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.FlatFileDatabaseHandler;
 import com.palmergames.bukkit.towny.database.handler.SQLDatabaseHandler;
@@ -36,6 +37,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
@@ -100,6 +102,7 @@ public class TownyUniverse {
 	private final Map<String, TownyWorld> worldNameMap = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private CompletableFuture<Void> backupFuture;
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -183,7 +186,7 @@ public class TownyUniverse {
 //            CompletableFuture
 //                .runAsync(new CleanupBackupTask())
 //                .thenRunAsync(new BackupTask());
-
+           
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
                 //dataSource.saveAllWorlds(); // TODO: Replacement or not?
@@ -207,6 +210,16 @@ public class TownyUniverse {
             return false;
         }
         
+        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        
+        // Only migrate if the user just updated.
+        if (!lastRunVersion.equals(curVersion)) {
+			System.out.println("[Towny] Performing Config Migrations...");
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			migrator.migrate();
+		}
+        
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
             for (Town town : dataSource.getTowns()) {
@@ -217,6 +230,12 @@ public class TownyUniverse {
         
         return true;
     }
+
+	public void performBackup() {
+		backupFuture = CompletableFuture
+			.runAsync(new CleanupBackupTask())
+			.thenRunAsync(new BackupTask());
+	}
     
     public boolean loadLegacyDatabase(String loadDbType) {
         
@@ -251,6 +270,13 @@ public class TownyUniverse {
             warEvent.toggleEnd();
         }
     }
+    
+    public void finishTasks() {
+    	if (backupFuture != null) {
+			// Join into main thread for proper termination.
+			backupFuture.join();
+		}
+	}
     
     public void addWarZone(WorldCoord worldCoord) {
         try {

@@ -30,8 +30,13 @@ public class TownySpigotMessaging {
 		
 		public void setHoverText(String hoverText) {
 			if (Towny.is116Plus()) {
-				base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
-				return;
+				try {
+					base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
+					return;
+				} catch (Exception ignore) {
+					// The above code can throw a ClassNotFoundException if there is an old version of BungeeCord installed.
+					// Default to the code below.
+				}
 			}
 
 			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
@@ -52,14 +57,14 @@ public class TownySpigotMessaging {
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
 				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
-				String secondline = "/towny:t invite accept " + invite.getSender().getName();
-				String thirdline = "/towny:t invite deny " + invite.getSender().getName();
+				String secondline = "/t invite accept " + invite.getSender().getName();
+				String thirdline = "/t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
 				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
-				String secondline = "/towny:n ally accept " + invite.getSender().getName();
-				String thirdline = "/towny:n ally deny " + invite.getSender().getName();
+				String secondline = "/n ally accept " + invite.getSender().getName();
+				String thirdline = "/n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 		}

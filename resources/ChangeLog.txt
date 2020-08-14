@@ -4770,3 +4770,76 @@ v0.92.0.11:
     - The debt prefix for the debt eco account.
   - Fix loading system files when loading all townblocks, courtesy of Siris with PR #4182.
   - Move translation code to separate object and introduce new method: Translation.of(), courtesy of Siris with PR #4177.
+  - Add Mayoral Succession, courtesy of DocW with PR #4107.
+  - Fix stacktrace showing when /t {foo} hits an exception.
+  - Clean up deprecated Assistant related code.
+  - Add town.hasResidentWithRank(Resident, String);
+0.96.2.6: 
+  - Fix firespread bypass for obsidian and netherrack not working.
+    - Closes #4199.
+  - Make sure debt accounts start with zeroed out balance, courtesy of Siris with PR #4193.
+    - Closes #4192.
+    - Also fixes closed-economy-support.
+    - Closes #4188.
+0.96.2.7:
+  - Fix %townyadvanced_nation_prefix% returning the nation prefix.
+    - Closes #4202.
+  - New Config Option: protection.fire_spread_bypass_materials
+    - Default: NETHERRACK,SOUL_SAND,SOUL_SOIL
+    - Materials which can be lit on fire even when firespread is disabled.
+    - Still requires the use of the flint and steel.
+    - Closes #4204.
+  - Firespread rules in Town no longer overrides single townblocks' firespread settings. 
+  - API: added TownyAPI.getInstance().getTownyWorld(String name)
+    - Returns TownyWorld or null.
+  - API: added TownyAPI.getInstance().getTown(Location location)
+    - Returns Town or null.
+  - Fix nation tags being cut short, courtesy of silverwolfg11 with PR #4205.
+  - Metadata Improvements, courtesy of silverwolfg11 with PR #4186.
+  - Do compression via tar and not zip, courtesy of Siris with PR #4195.
+    - Tar does a lot better when unicode characters are being used in the database.
+    - You can go back to using zip at your own risk, if that's your thing.
+  - Removed Config Option: plugin.database.flatfile_backup
+  - New Config Option: plugin.database.flatfile_backup_type
+    - default: tar
+    - Valid entries are: tar for tar.gz and zip for zip, use none for no backup.
+  - Allow for nations and towns to set tags less than 4 characters.
+0.96.2.8:
+  - Fix Nations generating debt accounts.
+  - Hotfix: Fix file IO synchronization, courtesy of silverwolfg11 with PR #4210.
+  - Remove Manual Config Changes and Migrate them automatically instead, courtesy of Siris with PR #4209.
+    - Expect REQUIRED CHANGES in the updating process to become very infrequent.
+  - Fix for confirmations' clickable commands executing wrong command.
+    - Closes #4215.
+0.96.2.9: 
+  - Fix help menu's language strings not being retranslated when /ta reload lang is used.
+    - Closes #4220.
+  - Fix cancelling a spawn causing an NPE.
+    - Closes #4218.
+  - Fix being able to confirm cancelled confirmations.
+  - Clean up HelpMenu, courtesy of silverwolfg11 with PR #4223.
+  - Fix new day task not collecting taxes properly, courtesy of silverwolfg11 with PR #4225.
+0.96.2.10:
+  - Prevent residents from being able to unclaim homeblocks, courtesy of silverworlfg11 with PR #4228.
+    - Closes #4231.
+  - Fix ClassNotFound exception due to old bungeecord version, courtesy of silverwolfg11 with PR #4238.
+  - Fix taxes being below 0, courtesy of silverwolfg11 with PR #4243.
+  - Fix economy bug with town confirmation, courtesy of silverwolfg11 with PR #4241.
+  - GM Source fetching player suffix instead of prefix, courtesy of ElgarL with PR #4247.
+    - Also fixes GM repo and solves issue with building Towny from source.
+  - Update Reserve/TheNewChat maven repositories, courtesy of creatorfromhell with PR #4240.
+0.96.2.11:
+  - Fix shaded dependencies, courtesy of silverwolfg11 with PR #4254.
+  - Fix global_town_settings.maximum_number_residents_without_nation not actually accounting for a town that does have a nation.
+    - Closes #4249.
+  - Fix a town moving the homeblock, nations changing their capital city not removing out-of-range towns when the nation-requires-proximity feature is enabled.
+    - Closes #4248.
+  - Fix colour codes in resident titles/surnames carrying on in the resident list seen on the /town status screens.
+    - Closes #4250.
+  - Correctly translate "allow explosion" in Chinese, courtesy of ishland with PR #4252.
+  - Concurrency QOL, courtesy of Siris with PR #4256.
+    - Improves locking of database for reads and writes in regards to synchronization.
+  - Remove exception printing stacktrace from invalid name in getTown(), courtesy of Siris with PR #4259.
+    - Closes #4257.
+  - Hotfix/bankcap bug, courtesy of Siris with PR #4260.
+    - Closes #4253.

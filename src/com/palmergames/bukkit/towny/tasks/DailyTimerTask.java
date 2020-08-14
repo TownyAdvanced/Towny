@@ -21,13 +21,11 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.ChatTools;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -71,8 +69,9 @@ public class DailyTimerTask extends TownyTimerTask {
 				
 				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 				
-			} catch (EconomyException ignored) {
-				System.out.println("Economy Exception");
+			} catch (EconomyException ex) {
+				TownyMessaging.sendErrorMsg("Economy Exception");
+				ex.printStackTrace();
 			} catch (TownyException e) {
 				// TODO king exception
 				e.printStackTrace();
@@ -141,16 +140,12 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-
-		townyUniverse.getDataSource().cleanupBackups();
-		if (TownySettings.isBackingUpDaily())
-			try {
-				TownyMessaging.sendDebugMsg("Making backup.");
-				townyUniverse.getDataSource().backup();
-			} catch (IOException e) {
-				TownyMessaging.sendErrorMsg("Could not create backup.");
-				e.printStackTrace();
-			}
+		
+		// Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
+		if (TownySettings.isBackingUpDaily()) {
+			TownyMessaging.sendDebugMsg("Making backup.");
+			townyUniverse.performBackup();
+		}
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");

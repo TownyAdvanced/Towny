@@ -500,7 +500,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			}
 		case "nation_prefix": // %townyadvanced_nation_prefix%
 			try {
-				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
+				return resident.hasNation() ? TownySettings.getNationPrefix(resident.getTown().getNation()) : "";
 			} catch (NotRegisteredException ignored) {
 			}
 		case "nation_postfix": // %townyadvanced_nation_postfix%
