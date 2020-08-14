@@ -22,7 +22,7 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@PrimaryKey
 	private UUID uniqueIdentifier;
 	
-	private transient HashSet<CustomDataField<?>> metadata = null;
+	private transient Map<String, CustomDataField<?>>metadata = null;
 	
 	public TownyObject(UUID id) {
 		this.uniqueIdentifier = id;

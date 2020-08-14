@@ -638,7 +638,7 @@ public class Town extends Government implements TownBlockOwner {
 				}
 				
 				// Town is not removing its last resident so be sure to save it.
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				save();
 			}
 		}
 		// Remove resident.
@@ -652,6 +652,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return found - whether or not a new mayor was found
 	 */
 	private boolean findNewMayor(String rank) {
+		Resident mayor = getMayor();
 		boolean found = false;
 		for (Resident newMayor : getRank(rank)) {
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
@@ -675,6 +676,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return found - whether or not a new mayor was found
 	 */
 	private boolean findNewMayor() {
+		Resident mayor = getMayor();
 		boolean found = false;
 		for (Resident newMayor : getResidents()) {
 			if (newMayor != mayor) {

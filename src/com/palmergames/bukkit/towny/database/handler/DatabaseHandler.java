@@ -142,7 +142,7 @@ public abstract class DatabaseHandler {
 	 * 
 	 * @param objs The objects to save.
 	 */
-	public final void save(Saveable @NotNull ... objs) {
+	public final void save(@NotNull Saveable... objs) {
 		Validate.notNull(objs);
 		save(Arrays.asList(objs));
 	}
