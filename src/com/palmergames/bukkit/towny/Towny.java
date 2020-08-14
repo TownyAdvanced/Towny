@@ -284,6 +284,9 @@ public class Towny extends JavaPlugin {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
 		}
 
+		// Shutdown database handler
+		townyUniverse.getDatabaseHandler().shutdown();
+
 		this.townyUniverse = null;
 
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");

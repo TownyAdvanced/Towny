@@ -26,12 +26,13 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	private static final Map<Class<?>, File> fileDirectoryCache = new HashMap<>();
 	private static final File relationshipDir = new File(Towny.getPlugin().getDataFolder() + "/data/relationship/");
 	private Map<Field, Map<Saveable, String>> postLoadFields = new HashMap<>();
+
+	private final Map<UUID, QueuedObject> dbQueueMap = new HashMap<>();
 	
 	// Create files
 	static {
@@ -54,7 +57,15 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			}
 		}
 	}
+	
+	private void queueSave(Saveable obj, Map<String, String> insertionMap) {
+		QueuedObject qObj = new QueuedObject(obj, insertionMap);
+		synchronized (dbQueueMap) {
+			dbQueueMap.put(obj.getUniqueIdentifier(), qObj);
+		}
+	}
 
+	// Should be ran sync
 	@Override
 	public void save(@NotNull Saveable obj) {
 		// Validation/fail-fast safety
@@ -67,33 +78,65 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		
 		// Add save getter data.
 		convertMapData(getSaveGetterData(obj), saveMap);
-		
+		// Queue save
+		queueSave(obj, saveMap);
+	}
+
+
+	// Ran async
+	private void processSave(QueuedObject qObj) {
+		Saveable obj = qObj.getObject();
 		File dir = getFlatFileDirectory(obj.getClass());
-		
+
 		// Make sure parent dir exists
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
 				throw new TownyRuntimeException("Could not make Directories for " + obj);
 			}
 		}
-		
+
 		// Save
-		FileMgmt.mapToFile(saveMap, getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
+		FileMgmt.mapToFile(qObj.getInsertionMap(), getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
 	}
 
+	// Can be ran async or sync
 	@Override
 	public boolean delete(@NotNull Saveable obj) {
 		Validate.notNull(obj);
-		
+		queueSave(obj, null);
+		return true;
+	}
+	
+	private void processDelete(QueuedObject qObj) {
+		Saveable obj = qObj.getObject();
 		File objFile = getFlatFile(obj.getClass(), obj.getUniqueIdentifier());
-		
+
 		if (objFile.exists()) {
-			return objFile.delete();
+			objFile.delete();
 		} else {
 			TownyMessaging.sendErrorMsg("Cannot delete: " + objFile + ", it does not exist.");
-			return false;
+		}
+	}
+	
+	@Override
+	public void processDBQueue() {
+		Collection<QueuedObject> saveObjs;
+		synchronized (dbQueueMap) {
+			saveObjs = new ArrayList<>(dbQueueMap.values());
+			dbQueueMap.clear();
 		}
 		
+		if (saveObjs.isEmpty())
+			return;
+
+		for (QueuedObject saveObj : saveObjs) {
+			if (saveObj.isUpdate()) {
+				processSave(saveObj);
+			}
+			else {
+				processDelete(saveObj);
+			}
+		}
 	}
 	
 	@Nullable

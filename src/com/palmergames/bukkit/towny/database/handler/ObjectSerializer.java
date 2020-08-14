@@ -272,7 +272,7 @@ public class ObjectSerializer {
 		return registeredAdapters.get(type);
 	}
 
-	protected static Object loadPrimitive(String str, Type type) {
+	private static Object loadPrimitive(String str, Type type) {
 
 		if (!ReflectionUtil.isPrimitive(type)) {
 			throw new UnsupportedOperationException(type + " is not primitive, cannot parse");

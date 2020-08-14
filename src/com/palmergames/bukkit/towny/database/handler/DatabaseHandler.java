@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.database.handler;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.database.Saveable;
@@ -32,6 +33,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +43,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,6 +61,12 @@ import java.util.function.Predicate;
  */
 @SuppressWarnings("unchecked")
 public abstract class DatabaseHandler {
+	private final BukkitTask dbTask;
+	
+	public DatabaseHandler() {
+		dbTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Towny.getPlugin(),
+			this::processDBQueue, 5L, 60 * 20L); // Runs task every minute
+	}
 
 	Map<String, ObjectContext> getSaveGetterData(Saveable obj) {
 
@@ -114,14 +123,14 @@ public abstract class DatabaseHandler {
 	// ---------- DB operation Methods ----------
 	
 	/**
-	 * Saves the given object to the DB.
+	 * Queues the given object to be saved to the DB.
 	 *
 	 * @param obj The object to save.
 	 */
 	public abstract void save(@NotNull Saveable obj);
 
 	/**
-	 * Removes the given object from the DB.
+	 * Queues the given object to be removed from the DB.
 	 * 
 	 * @param obj The object to delete.
 	 * @return A boolean indicating if successful or not.
@@ -129,20 +138,17 @@ public abstract class DatabaseHandler {
 	public abstract boolean delete(@NotNull Saveable obj);
 
 	/**
-	 * Saves all given objects to the DB.
+	 * Queues all given objects to be saved to the DB.
 	 * 
 	 * @param objs The objects to save.
 	 */
 	public final void save(Saveable @NotNull ... objs) {
 		Validate.notNull(objs);
-		
-		for (Saveable obj : objs) {
-			save(obj);
-		}
+		save(Arrays.asList(objs));
 	}
 	
 	/**
-	 * Saves the objects to the database.
+	 * Queues the objects to be saved the database.
 	 * 
 	 * @param objs The objects to save.
 	 */
@@ -152,6 +158,20 @@ public abstract class DatabaseHandler {
 		for (Saveable obj : objs) {
 			save(obj);
 		}
+	}
+
+	/**
+	 * Process all the current queued objects in the DB queue.
+	 * This method should be ran off the main thread since it performs IO operations.
+	 */
+	public abstract void processDBQueue();
+
+	/**
+	 * Shutdown the database handler
+	 */
+	public void shutdown() {
+		dbTask.cancel();
+		processDBQueue();
 	}
 	
 	// These methods will differ greatly between inheriting classes,
