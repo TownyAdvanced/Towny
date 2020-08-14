@@ -216,11 +216,12 @@ public class Nation extends Government {
 		
 		int numResidents = 0;
 		Town tempCapital = null;
-		for (Town newCapital : getTowns())
+		for (Town newCapital : getTowns()) {
 			if (newCapital.getNumResidents() > numResidents) {
 				tempCapital = newCapital;
 				numResidents = newCapital.getNumResidents();
 			}
+		}
 
 		if (tempCapital != null) {
 			setCapital(tempCapital);
