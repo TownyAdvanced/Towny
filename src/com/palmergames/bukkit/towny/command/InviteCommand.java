@@ -109,7 +109,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		String received = Translation.of("player_received_invites")
-				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident))
+				.replace("%a", Integer.toString(resident.getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
 		try {

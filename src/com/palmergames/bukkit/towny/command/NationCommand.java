@@ -800,7 +800,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 		String sent = Translation.of("nation_sent_invites")
-				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown().getNation()))
+				.replace("%a", Integer.toString(resident.getTown().getNation().getSentInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown().getNation())));
 
@@ -1796,11 +1796,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (TownySettings.isDisallowOneWayAlliance()) {
 			String received = Translation.of("nation_received_requests")
-					.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown().getNation()))
+					.replace("%a", Integer.toString(resident.getTown().getNation().getSentInvites().size())
 					)
 					.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown().getNation())));
 			String sent = Translation.of("nation_sent_ally_requests")
-					.replace("%a", Integer.toString(InviteHandler.getSentAllyRequestsAmount(resident.getTown().getNation()))
+					.replace("%a", Integer.toString(resident.getTown().getNation().getSentAllyInvites().size())
 					)
 					.replace("%m", Integer.toString(InviteHandler.getSentAllyRequestsMaxAmount(resident.getTown().getNation())));
 			if (split[0].equalsIgnoreCase("sent")) {

@@ -8,10 +8,10 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 
 import java.io.InvalidObjectException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author - Articdive
@@ -20,7 +20,7 @@ public class InviteHandler {
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	
-	private static final List<Invite> activeInvites = new ArrayList<>();
+	private static final Set<Invite> activeInvites = new HashSet<>();
 
 	public static void initialize(Towny plugin) {
 
@@ -51,8 +51,8 @@ public class InviteHandler {
 		activeInvites.add(invite);
 	}
 	
-	public static List<Invite> getActiveInvites() {
-		return Collections.unmodifiableList(activeInvites);
+	public static Collection<Invite> getActiveInvites() {
+		return Collections.unmodifiableSet(activeInvites);
 	}
 	
 	public static boolean inviteIsActive(Invite invite) {
@@ -69,21 +69,6 @@ public class InviteHandler {
 				return true;
 		}
 		return false;
-	}
-
-	public static int getReceivedInvitesAmount(InviteReceiver receiver) {
-		Collection<Invite> invites = receiver.getReceivedInvites();
-		return invites.size();
-	}
-
-	public static int getSentInvitesAmount(InviteSender sender) {
-		Collection<Invite> invites = sender.getSentInvites();
-		return invites.size();
-	}
-
-	public static int getSentAllyRequestsAmount(Nation sender) {
-		List<Invite> invites = sender.getSentAllyInvites();
-		return invites.size();
 	}
 
 	public static int getSentAllyRequestsMaxAmount(Nation sender) {

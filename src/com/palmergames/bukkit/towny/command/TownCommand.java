@@ -827,11 +827,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
 		String received = Translation.of("town_received_invites")
-				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
+				.replace("%a", Integer.toString(resident.getTown().getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
 		String sent = Translation.of("town_sent_invites")
-				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown()))
+				.replace("%a", Integer.toString(resident.getTown().getSentInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
 
