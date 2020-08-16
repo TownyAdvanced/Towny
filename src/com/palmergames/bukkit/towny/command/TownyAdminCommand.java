@@ -117,7 +117,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"deposit",
 		"withdraw",
 		"outlaw",
-		"leavenation"
+		"leavenation",
+		"invite"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
