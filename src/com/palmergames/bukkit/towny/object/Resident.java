@@ -592,6 +592,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (notify)
 			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
+	
+	public Player getPlayer() {
+		return BukkitTools.getPlayer(getName());
+	}
 
 
 	public boolean addTownRank(String rank) throws AlreadyRegisteredException {

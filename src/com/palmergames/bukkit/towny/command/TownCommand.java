@@ -2754,7 +2754,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		plugin.resetCache();
 	}
 
-	public static void townAddResidents(Object sender, Town town, List<Resident> invited) {
+	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) {
 		String name;
 		boolean admin = false;
 		if (sender instanceof Player) {
@@ -2797,7 +2797,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					invited.remove(newMember);
 				} else {
 					town.addResidentCheck(newMember);
-					townInviteResident(name,town, newMember);
+					townInviteResident(sender, town, newMember);
 				}
 			} catch (TownyException e) {
 				invited.remove(newMember);
@@ -2832,9 +2832,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		townyUniverse.getDataSource().saveTown(town);
 	}
 
-	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
+	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
 
-		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, town, newMember);
+		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, newMember, town);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
@@ -3075,7 +3075,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param names - Names to add.
 	 * @throws TownyException - General Exception, or if Town's spawn has not been set
 	 */
-	public static void townAdd(Object sender, Town specifiedTown, String[] names) throws TownyException {
+	public static void townAdd(CommandSender sender, Town specifiedTown, String[] names) throws TownyException {
 
 		String name;
 		if (sender instanceof Player) {

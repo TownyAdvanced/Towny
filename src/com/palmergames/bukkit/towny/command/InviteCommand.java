@@ -257,7 +257,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if (page > total) {
 			return;
 		}
-		List<String> invitesformatted = new ArrayList<>();
+		List<String> invitesFormatted = new ArrayList<>();
 		int iMax = page * 10;
 		if ((page * 10) > list.size()) {
 			iMax = list.size();
@@ -265,30 +265,22 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		String object = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
-			String name = invite.getDirectSender();
-			if (name == null) {
-				name = "Console";
-			} else {
-				try {
-					name = TownyUniverse.getInstance().getDataSource().getResident(name).getName();
-				} catch (NotRegisteredException e) {
-					name = "Unknown";
-				}
-			}
+			String name = invite.getDirectSender().getName();
+			
 			// If it's from the sender, do it differently
 			String output = null;
 			if (fromSender) {
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
-					output = Colors.Blue + ((Resident) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
+					output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 					object = Translation.of("player_sing");
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
-						output = Colors.Blue + ((Town) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
+						output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 						object = Translation.of("town_sing");
 					}
 					if (invite.getReceiver() instanceof Nation) {
-						output = Colors.Blue + ((Nation) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
+						output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 						object = Translation.of("nation_sing");
 					}
 				}
@@ -301,12 +293,12 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 					object = Translation.of("nation_sing");
 				}
 			}
-			invitesformatted.add(output);
+			invitesFormatted.add(output);
 		}
 
 		player.sendMessage(ChatTools.formatList(Translation.of("invite_plu"),
 				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by"),
-				invitesformatted, TownySettings.getListPageMsg(page, total)
+			invitesFormatted, TownySettings.getListPageMsg(page, total)
 		));
 	}
 }

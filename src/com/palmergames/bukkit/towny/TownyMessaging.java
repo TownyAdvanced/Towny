@@ -96,19 +96,16 @@ public class TownyMessaging {
 	 * @param sender the Object sending the message
 	 * @param msg the message being sent
 	 */
-	public static void sendMsg(Object sender, String msg) {
+	public static void sendMsg(CommandSender sender, String msg) {
 		if (sender != null) {
-			if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p != null) {
-					p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
-				}
+			if (sender instanceof Player) {
+				Player p = (Player)sender;
+				p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
 			} else {
-				CommandSender toSend = (CommandSender) sender;
-				if (toSend instanceof ConsoleCommandSender) {
-					toSend.sendMessage(ChatColor.stripColor(msg));
+				if (sender instanceof ConsoleCommandSender) {
+					sender.sendMessage(ChatColor.stripColor(msg));
 				} else {
-					toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+					sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
 				}
 			}
 		} else {
@@ -116,6 +113,10 @@ public class TownyMessaging {
 		}
 		
 		sendDevMsg(msg);
+	}
+	
+	public static void sendMsg(Resident resident, String msg) {
+		sendMsg(resident.getPlayer(), msg);
 	}
 
 	// todo: these two can probably be consolidated

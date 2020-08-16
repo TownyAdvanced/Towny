@@ -1571,7 +1571,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
-		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(), nation, town);
+		TownJoinNationInvite invite = new TownJoinNationInvite(player, town, nation);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) { 
 				town.newReceivedInvite(invite);
@@ -1944,7 +1944,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void nationCreateAllyRequest(String sender, Nation nation, Nation receiver) throws TownyException {
+	private void nationCreateAllyRequest(CommandSender sender, Nation nation, Nation receiver) throws TownyException {
 		NationAllyNationInvite invite = new NationAllyNationInvite(sender, nation, receiver);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
@@ -2027,7 +2027,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!targetNation.hasEnemy(nation)) {
 					if (!targetNation.getCapital().getMayor().isNPC()) {
 						for (Nation newAlly : allies) {
-							nationCreateAllyRequest(player.getName(), nation, targetNation);
+							nationCreateAllyRequest(player, nation, targetNation);
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_ally_req_sent", newAlly.getName()));
 						}
 					} else {

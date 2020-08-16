@@ -391,12 +391,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 
-	private Object getSender() {
-
-		if (isConsole)
-			return sender;
-		else
-			return player;
+	private CommandSender getSender() {
+		return sender;
 	}
 
 	public boolean parseTownyAdminCommand(String[] split) throws TownyException {
