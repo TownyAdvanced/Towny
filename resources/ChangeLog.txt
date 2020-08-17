@@ -4848,3 +4848,4 @@ v0.92.0.11:
     - Closes #4272. 
   - Fix plot type setting costs causing townblocks to save with residential plot type.
     - Closes #4273. 
+  - Hotfix: Make "tar.gz" a valid config option, courtesy of Siris with PR #4267.
