@@ -162,6 +162,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					new File(logFolderPath),
 					new File(settingsFolderPath));
 				return true;
+			case "tar.gz":
 			case "tar": {
 				FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
 					new File(dataFolderPath),

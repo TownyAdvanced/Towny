@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -671,756 +672,874 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Load individual towny object
 	 */
 
+	@Override
+	public boolean loadResidents() {
+
+		TownyMessaging.sendDebugMsg("Loading Residents");
+
+		List<Resident> toRemove = new ArrayList<>();
+		TownySettings.setUUIDCount(0);
+		
+		if (!getContext())
+			return false;
+		try (Statement s = cntx.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
+
+			while(rs.next()) {
+				Resident resident;
+				try {
+					resident = getResident(rs.getString("name"));
+				} catch (Exception e) {
+					System.out.println("[Towny] Loading Error: Could not fetch a resident by name.");
+					e.printStackTrace();
+					continue;
+				}
+
+				if (!loadResident(resident, rs)) {
+					System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
+					toRemove.add(resident);
+				} else {
+					if (resident.hasUUID())
+						TownySettings.incrementUUIDCount();
+					else
+						GatherResidentUUIDTask.addResident(resident);
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
+		}
+		
+		// Remove any resident which failed to load.
+		for (Resident resident : toRemove) {
+			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
+			removeResident(resident);
+		}
+		
+		return true;
+	}
+
     @Override
     public boolean loadResident(Resident resident) {
 
         TownyMessaging.sendDebugMsg("Loading resident " + resident.getName());
         if (!getContext())
             return false;
-        try {
-            Statement s = cntx.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
-            String search;
+        
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "RESIDENTS" + " WHERE name=?")) {
+		    ps.setString(1, resident.getName());
 
-            while (rs.next()) {
-            	
-            	try {
-            		if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
-            			resident.setUUID(UUID.fromString(rs.getString("uuid")));
-            	} catch (Exception e) {
-                    e.printStackTrace();
-                }
-            	
-                try {
-                    resident.setLastOnline(rs.getLong("lastOnline"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setRegistered(rs.getLong("registered"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setNPC(rs.getBoolean("isNPC"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setJailed(rs.getBoolean("isJailed"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setJailSpawn(rs.getInt("JailSpawn"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setJailDays(rs.getInt("JailDays"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setJailTown(rs.getString("JailTown"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                String line = rs.getString("town");
-                if ((line != null) && (!line.isEmpty())) {
-                    resident.setTown(getTown(line));
-                    TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
-                }
-
-                try {
-                    resident.setTitle(rs.getString("title"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setSurname(rs.getString("surname"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                try {
-					line = rs.getString("town-ranks");
-					if ((line != null) && (!line.isEmpty())) {
-						search = (line.contains("#")) ? "#" : ",";
-						resident.setTownRanks(Arrays.asList((line.split(search))));
-						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
-					}
-				} catch (Exception e) {}
-
-				try {
-					line = rs.getString("nation-ranks");
-					if ((line != null) && (!line.isEmpty())) {
-						search = (line.contains("#")) ? "#" : ",";
-						resident.setNationRanks(Arrays.asList((line.split(search))));
-						TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
-					}
-				} catch (Exception e) {}
-
-                try {
-                    line = rs.getString("friends");
-                    if (line != null) {
-                        search = (line.contains("#")) ? "#" : ",";
-                        String[] tokens = line.split(search);
-                        for (String token : tokens) {
-                            if (!token.isEmpty()) {
-                                Resident friend = getResident(token);
-                                if (friend != null)
-                                    resident.addFriend(friend);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    resident.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-				try {
-					line = rs.getString("metadata");
-					if (line != null && !line.isEmpty()) {
-						resident.setMetadata(line);
-					}
-				} catch (SQLException ignored) {
-
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadResident(resident, rs);
 				}
-
-                s.close();
-                return true;
-            }
-            return false;
+			}
+            
         } catch (SQLException e) {
             TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Load resident unknown error");
-            e.printStackTrace();
         }
         return false;
     }
+    
+	private boolean loadResident(Resident resident, ResultSet rs) {
+		try {
+			String search;
 
-    @Override
-    public boolean loadTown(Town town) {
+			try {
+				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
+					resident.setUUID(UUID.fromString(rs.getString("uuid")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-        String line;
-        String[] tokens;
-        TownyMessaging.sendDebugMsg("Loading town " + town.getName());
-        if (!getContext())
-            return false;
+			try {
+				resident.setLastOnline(rs.getLong("lastOnline"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setRegistered(rs.getLong("registered"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setNPC(rs.getBoolean("isNPC"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setJailed(rs.getBoolean("isJailed"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setJailSpawn(rs.getInt("JailSpawn"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setJailDays(rs.getInt("JailDays"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setJailTown(rs.getString("JailTown"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-        try {
-            Statement s = cntx.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
-            String search;
+			String line = rs.getString("town");
+			if ((line != null) && (!line.isEmpty())) {
+				resident.setTown(getTown(line));
+				TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
+			}
 
-            while (rs.next()) {
-//                line = rs.getString("residents");
-//                if (line != null) {
-//                    search = (line.contains("#")) ? "#" : ",";
-//                    tokens = line.split(search);
-//                    for (String token : tokens) {
-//                        if (!token.isEmpty()) {
-//                            Resident resident = getResident(token);
-//                            if (resident != null)
-//                                town.addResident(resident);
-//                        }
-//                    }
-//                }
+			try {
+				resident.setTitle(rs.getString("title"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setSurname(rs.getString("surname"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-                town.setMayor(getResident(rs.getString("mayor")));
-                // line = rs.getString("assistants");
-                // if (line != null) {
-                // tokens = line.split(",");
-                // for (String token : tokens) {
-                // if (!token.isEmpty()) {
-                // Resident assistant = getResident(token);
-                // if ((assistant != null) && (town.hasResident(assistant)))
-                // town.addAssistant(assistant);
-                // }
-                // }
-                // }
-                town.setBoard(rs.getString("townBoard"));
-                line = rs.getString("tag");
-                if (line != null)
-                    try {
-                        town.setTag(line);
-                    } catch (TownyException e) {
-                        town.setTag("");
-                    }
-                town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-                town.setBonusBlocks(rs.getInt("bonus"));
-                town.setTaxPercentage(rs.getBoolean("taxpercent"));
-                town.setTaxes(rs.getFloat("taxes"));
-                town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
-                town.setPlotPrice(rs.getFloat("plotPrice"));
-                town.setPlotTax(rs.getFloat("plotTax"));
-                town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
-                town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
-                town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
-                town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
-                town.setSpawnCost(rs.getFloat("spawnCost"));
-                town.setOpen(rs.getBoolean("open"));
-                town.setPublic(rs.getBoolean("public"));
-                town.setConquered(rs.getBoolean("conquered"));
-                town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
-                town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
-
-                town.setPurchasedBlocks(rs.getInt("purchased"));
-
-                line = rs.getString("homeBlock");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    if (tokens.length == 3)
-                        try {
-                            TownyWorld world = getWorld(tokens[0]);
-
-                            try {
-                                int x = Integer.parseInt(tokens[1]);
-                                int z = Integer.parseInt(tokens[2]);
-                                TownBlock homeBlock =  TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
-                                town.forceSetHomeBlock(homeBlock);
-                            } catch (NumberFormatException e) {
-                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-                            } catch (NotRegisteredException e) {
-                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-                            } catch (TownyException e) {
-                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-                            }
-
-                        } catch (NotRegisteredException e) {
-                            TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-                        }
-                }
-
-                line = rs.getString("spawn");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    if (tokens.length >= 4)
-                        try {
-                            World world = plugin.getServerWorld(tokens[0]);
-                            double x = Double.parseDouble(tokens[1]);
-                            double y = Double.parseDouble(tokens[2]);
-                            double z = Double.parseDouble(tokens[3]);
-
-                            Location loc = new Location(world, x, y, z);
-                            if (tokens.length == 6) {
-                                loc.setPitch(Float.parseFloat(tokens[4]));
-                                loc.setYaw(Float.parseFloat(tokens[5]));
-                            }
-                            town.forceSetSpawn(loc);
-                        } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-                        }
-                }
-                // Load outpost spawns
-                line = rs.getString("outpostSpawns");
-                if (line != null) {
-                    String[] outposts = line.split(";");
-                    for (String spawn : outposts) {
-                        search = (line.contains("#")) ? "#" : ",";
-                        tokens = spawn.split(search);
-                        if (tokens.length >= 4)
-                            try {
-                                World world = plugin.getServerWorld(tokens[0]);
-                                double x = Double.parseDouble(tokens[1]);
-                                double y = Double.parseDouble(tokens[2]);
-                                double z = Double.parseDouble(tokens[3]);
-
-                                Location loc = new Location(world, x, y, z);
-                                if (tokens.length == 6) {
-                                    loc.setPitch(Float.parseFloat(tokens[4]));
-                                    loc.setYaw(Float.parseFloat(tokens[5]));
-                                }
-                                town.forceAddOutpostSpawn(loc);
-                            } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-                            }
-                    }
-                }
-                // Load jail spawns
-                line = rs.getString("jailSpawns");
-                if (line != null) {
-                    String[] jails = line.split(";");
-                    for (String spawn : jails) {
-                        search = (line.contains("#")) ? "#" : ",";
-                        tokens = spawn.split(search);
-                        if (tokens.length >= 4)
-                            try {
-                                World world = plugin.getServerWorld(tokens[0]);
-                                double x = Double.parseDouble(tokens[1]);
-                                double y = Double.parseDouble(tokens[2]);
-                                double z = Double.parseDouble(tokens[3]);
-
-                                Location loc = new Location(world, x, y, z);
-                                if (tokens.length == 6) {
-                                    loc.setPitch(Float.parseFloat(tokens[4]));
-                                    loc.setYaw(Float.parseFloat(tokens[5]));
-                                }
-                                town.forceAddJailSpawn(loc);
-                            } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-                            }
-                    }
-                }
-                line = rs.getString("outlaws");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Resident resident = getResident(token);
-                            if (resident != null)
-                                town.addOutlaw(resident);
-                        }
-                    }
-                }
-                try {
-                    town.setUuid(UUID.fromString(rs.getString("uuid")));
-                } catch (IllegalArgumentException | NullPointerException ee) {
-                    town.setUuid(UUID.randomUUID());
-                }
-
-                line = rs.getString("conqueredDays");
-                if (line != null)
-                	town.setConqueredDays(Integer.valueOf(line));
-                else 
-                	town.setConqueredDays(0);
-
-                try {
-                    line = rs.getString("registered");
-                    if (line != null) {
-                        town.setRegistered(Long.valueOf(line));
-                    } else {
-                        town.setRegistered(0);
-                    }
-                } catch (SQLException ignored) {
-
-                } catch (NumberFormatException | NullPointerException e) {
-                    town.setRegistered(0);
-                }
-
-				try {
-					line = rs.getString("metadata");
-					if (line != null && !line.isEmpty()) {
-						town.setMetadata(line);
-					}
-				} catch (SQLException ignored) {
-					
+			try {
+				line = rs.getString("town-ranks");
+				if ((line != null) && (!line.isEmpty())) {
+					search = (line.contains("#")) ? "#" : ",";
+					resident.setTownRanks(Arrays.asList((line.split(search))));
+					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 				}
+			} catch (Exception e) {
+			}
 
-                s.close();
-                return true;
-            }
-            s.close();
-            return false;
-        } catch (SQLException e) {
-            TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
-            e.printStackTrace();
-        }
-        return false;
-    }
+			try {
+				line = rs.getString("nation-ranks");
+				if ((line != null) && (!line.isEmpty())) {
+					search = (line.contains("#")) ? "#" : ",";
+					resident.setNationRanks(Arrays.asList((line.split(search))));
+					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
+				}
+			} catch (Exception e) {
+			}
+
+			try {
+				line = rs.getString("friends");
+				if (line != null) {
+					search = (line.contains("#")) ? "#" : ",";
+					String[] tokens = line.split(search);
+					for (String token : tokens) {
+						if (!token.isEmpty()) {
+							Resident friend = getResident(token);
+							if (friend != null)
+								resident.addFriend(friend);
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					resident.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+			}
+
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load resident unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean loadTowns() {
+		TownyMessaging.sendDebugMsg("Loading Towns");
+		if (!getContext())
+			return false;
+		
+		try (Statement s = cntx.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
+			while (rs.next()) {
+				if (!loadTown(rs)) {
+					System.out.println("[Towny] Loading Error: Could not read town data properly.");
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+	
+	@Override
+	public boolean loadTown(Town town) {
+		TownyMessaging.sendDebugMsg("Loading town " + town.getName());
+		if (!getContext())
+			return false;
+
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name=?")) {
+			ps.setString(1, town.getName());
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return loadTown(rs);
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
+		}
+
+		return false;
+	}
+    
+    public boolean loadTown(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String search;
+		try {
+			Town town = getTown(rs.getString("name"));
+
+			TownyMessaging.sendDebugMsg("Loading town " + town.getName());
+
+			town.setMayor(getResident(rs.getString("mayor")));
+			town.setBoard(rs.getString("townBoard"));
+			line = rs.getString("tag");
+			if (line != null)
+				try {
+					town.setTag(line);
+				} catch (TownyException e) {
+					town.setTag("");
+				}
+			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
+			town.setBonusBlocks(rs.getInt("bonus"));
+			town.setTaxPercentage(rs.getBoolean("taxpercent"));
+			town.setTaxes(rs.getFloat("taxes"));
+			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
+			town.setPlotPrice(rs.getFloat("plotPrice"));
+			town.setPlotTax(rs.getFloat("plotTax"));
+			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
+			town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
+			town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
+			town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
+			town.setSpawnCost(rs.getFloat("spawnCost"));
+			town.setOpen(rs.getBoolean("open"));
+			town.setPublic(rs.getBoolean("public"));
+			town.setConquered(rs.getBoolean("conquered"));
+			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
+
+			town.setPurchasedBlocks(rs.getInt("purchased"));
+
+			line = rs.getString("homeBlock");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length == 3)
+					try {
+						TownyWorld world = getWorld(tokens[0]);
+
+						try {
+							int x = Integer.parseInt(tokens[1]);
+							int z = Integer.parseInt(tokens[2]);
+							TownBlock homeBlock =  TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
+							town.forceSetHomeBlock(homeBlock);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+						}
+
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+					}
+			}
+
+			line = rs.getString("spawn");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						town.forceSetSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+			// Load outpost spawns
+			line = rs.getString("outpostSpawns");
+			if (line != null) {
+				String[] outposts = line.split(";");
+				for (String spawn : outposts) {
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = spawn.split(search);
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							town.forceAddOutpostSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						}
+				}
+			}
+			// Load jail spawns
+			line = rs.getString("jailSpawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = spawn.split(search);
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							town.forceAddJailSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						}
+				}
+			}
+			line = rs.getString("outlaws");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Resident resident = getResident(token);
+						if (resident != null)
+							town.addOutlaw(resident);
+					}
+				}
+			}
+			try {
+				town.setUuid(UUID.fromString(rs.getString("uuid")));
+			} catch (IllegalArgumentException | NullPointerException ee) {
+				town.setUuid(UUID.randomUUID());
+			}
+
+			int conqueredDays = rs.getInt("conqueredDays");
+			town.setConqueredDays(conqueredDays);
+			
+			try {
+				long registered = rs.getLong("registered");
+				town.setRegistered(registered);
+			} catch (Exception ignored) {
+				town.setRegistered(0);
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					town.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean loadNations() {
+		if (!getContext())
+			return false;
+		
+		try (Statement s = cntx.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
+			while (rs.next()) {
+				if (!loadNation(rs)) {
+					System.out.println("[Towny] Loading Error: Could not properly read nation data.");
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
+			return false;
+		}
+		return true;
+	}
 
     @Override
     public boolean loadNation(Nation nation) {
-
-        String line;
-        String[] tokens;
-        TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
         if (!getContext())
             return false;
-        try {
-            Statement s = cntx.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
-            String search;
-
-            while (rs.next()) {
-                line = rs.getString("towns");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Town town = getTown(token);
-                            if (town != null)
-                                nation.addTown(town);
-                        }
-                    }
-                }
-                nation.setCapital(getTown(rs.getString("capital")));
-                
-                line = rs.getString("nationBoard");
-                if (line != null)
-                    nation.setBoard(rs.getString("nationBoard"));
-                else
-                	nation.setBoard("");
-
-				line = rs.getString("mapColorHexCode");
-				if (line != null)
-					nation.setMapColorHexCode(line);
-				else
-					nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
-
-				nation.setTag(rs.getString("tag"));
-
-                line = rs.getString("allies");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Nation friend = getNation(token);
-                            if (friend != null)
-                                nation.addAlly(friend); // ("ally", friend);
-                        }
-                    }
-                }
-
-                line = rs.getString("enemies");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            Nation enemy = getNation(token);
-                            if (enemy != null)
-                                nation.addEnemy(enemy); // ("enemy", enemy);
-                        }
-                    }
-                }
-                nation.setTaxes(rs.getDouble("taxes"));
-                nation.setSpawnCost(rs.getFloat("spawnCost"));
-                nation.setNeutral(rs.getBoolean("neutral"));
-                try {
-                    nation.setUuid(UUID.fromString(rs.getString("uuid")));
-                } catch (IllegalArgumentException | NullPointerException ee) {
-                    nation.setUuid(UUID.randomUUID());
-                }
-
-                line = rs.getString("nationSpawn");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    if (tokens.length >= 4)
-                        try {
-                            World world = plugin.getServerWorld(tokens[0]);
-                            double x = Double.parseDouble(tokens[1]);
-                            double y = Double.parseDouble(tokens[2]);
-                            double z = Double.parseDouble(tokens[3]);
-
-                            Location loc = new Location(world, x, y, z);
-                            if (tokens.length == 6) {
-                                loc.setPitch(Float.parseFloat(tokens[4]));
-                                loc.setYaw(Float.parseFloat(tokens[5]));
-                            }
-                            nation.forceSetNationSpawn(loc);
-                        } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-                        }
-                }
-
-                nation.setPublic(rs.getBoolean("isPublic"));
-                
-                nation.setOpen(rs.getBoolean("isOpen"));
-
-                try {
-                    line = rs.getString("registered");
-                    if (line != null) {
-                        nation.setRegistered(Long.valueOf(line));
-                    } else {
-                        nation.setRegistered(0);
-                    }
-                } catch (SQLException ignored) {
-                } catch (NumberFormatException | NullPointerException e) {
-                    nation.setRegistered(0);
-                }
-
-    			try {
-    				line = rs.getString("metadata");
-    				if (line != null && !line.isEmpty()) {
-    					nation.setMetadata(line);
-    				}
-    			} catch (SQLException ignored) {
-
-    			}
-            }
-            s.close();
-            return true;
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "NATIONS WHERE name=?")) {
+        	ps.setString(1, nation.getName());
+        	
+        	try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadNation(rs);
+				}
+			}
         } catch (SQLException e) {
             TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Load Nation unknown error - ");
-            e.printStackTrace();
         }
         return false;
     }
+
+	public boolean loadNation(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String search;
+		try {
+			Nation nation = getNation(rs.getString("name"));
+
+			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
+
+			line = rs.getString("towns");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Town town = getTown(token);
+						if (town != null)
+							nation.addTown(town);
+					}
+				}
+			}
+			nation.setCapital(getTown(rs.getString("capital")));
+
+			line = rs.getString("nationBoard");
+			if (line != null)
+				nation.setBoard(rs.getString("nationBoard"));
+			else
+				nation.setBoard("");
+
+			line = rs.getString("mapColorHexCode");
+			if (line != null)
+				nation.setMapColorHexCode(line);
+			else
+				nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+
+			nation.setTag(rs.getString("tag"));
+
+			line = rs.getString("allies");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Nation friend = getNation(token);
+						if (friend != null)
+							nation.addAlly(friend); // ("ally", friend);
+					}
+				}
+			}
+
+			line = rs.getString("enemies");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Nation enemy = getNation(token);
+						if (enemy != null)
+							nation.addEnemy(enemy); // ("enemy", enemy);
+					}
+				}
+			}
+			nation.setTaxes(rs.getDouble("taxes"));
+			nation.setSpawnCost(rs.getFloat("spawnCost"));
+			nation.setNeutral(rs.getBoolean("neutral"));
+			try {
+				nation.setUuid(UUID.fromString(rs.getString("uuid")));
+			} catch (IllegalArgumentException | NullPointerException ee) {
+				nation.setUuid(UUID.randomUUID());
+			}
+
+			line = rs.getString("nationSpawn");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						nation.forceSetNationSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+
+			nation.setPublic(rs.getBoolean("isPublic"));
+
+			nation.setOpen(rs.getBoolean("isOpen"));
+
+			try {
+				line = rs.getString("registered");
+				if (line != null) {
+					nation.setRegistered(Long.parseLong(line));
+				} else {
+					nation.setRegistered(0);
+				}
+			} catch (SQLException ignored) {
+			} catch (NumberFormatException | NullPointerException e) {
+				nation.setRegistered(0);
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					nation.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+			}
+
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Nation SQL Error - " + e.getMessage());
+		} catch (TownyException ex) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
+			ex.printStackTrace();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean loadWorlds() {
+		if (!getContext())
+			return false;
+
+		try (Statement s = cntx.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
+
+			while (rs.next()) {
+				if (!loadWorld(rs)) {
+					System.out.println("[Towny] Loading Error: Could not read properly world data.");
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Error reading worlds from SQL database!");
+			return false;
+		}
+		return true;
+	}
 
     @Override
     public boolean loadWorld(TownyWorld world) {
-
-        String line;
-        boolean result;
-        long resultLong;
-        TownyMessaging.sendDebugMsg("Loading world " + world.getName());
         if (!getContext())
             return false;
-        try {
-            Statement s = cntx.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");
-            String search;
-
-            while (rs.next()) {
-                result = rs.getBoolean("claimable");
-                try {
-                    world.setClaimable(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("pvp");
-                try {
-                    world.setPVP(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("forcepvp");
-                try {
-                    world.setForcePVP(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("forcetownmobs");
-                try {
-                    world.setForceTownMobs(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("worldmobs");
-                try {
-                    world.setWorldMobs(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("firespread");
-                try {
-                    world.setFire(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("forcefirespread");
-                try {
-                    world.setForceFire(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("explosions");
-                try {
-                    world.setExpl(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("forceexplosions");
-                try {
-                    world.setForceExpl(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("endermanprotect");
-                try {
-                    world.setEndermanProtect(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("disableplayertrample");
-                try {
-                    world.setDisablePlayerTrample(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("disablecreaturetrample");
-                try {
-                    world.setDisableCreatureTrample(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("unclaimedZoneBuild");
-                try {
-                    world.setUnclaimedZoneBuild(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("unclaimedZoneDestroy");
-                try {
-                    world.setUnclaimedZoneDestroy(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("unclaimedZoneSwitch");
-                try {
-                    world.setUnclaimedZoneSwitch(result);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("unclaimedZoneItemUse");
-                try {
-                    world.setUnclaimedZoneItemUse(result);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("unclaimedZoneName");
-                try {
-                    world.setUnclaimedZoneName(line);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("unclaimedZoneIgnoreIds");
-                if (line != null)
-                    try {
-                        List<String> mats = new ArrayList<>();
-                        search = (line.contains("#")) ? "#" : ",";
-                        for (String split : line.split(search))
-                            if (!split.isEmpty())
-                            	mats.add(split);
-
-                        world.setUnclaimedZoneIgnore(mats);
-                    } catch (Exception ignored) {
-                    }
-
-                result = rs.getBoolean("usingPlotManagementDelete");
-                try {
-                    world.setUsingPlotManagementDelete(result);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("plotManagementDeleteIds");
-                if (line != null)
-                    try {
-                        List<String> mats = new ArrayList<>();
-                        search = (line.contains("#")) ? "#" : ",";
-                        for (String split : line.split(search))
-                            if (!split.isEmpty())
-                            	mats.add(split);
-
-                        world.setPlotManagementDeleteIds(mats);
-                    } catch (Exception ignored) {
-                    }
-
-                result = rs.getBoolean("usingPlotManagementMayorDelete");
-                try {
-                    world.setUsingPlotManagementMayorDelete(result);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("plotManagementMayorDelete");
-                if (line != null)
-                    try {
-                        List<String> materials = new ArrayList<>();
-                        search = (line.contains("#")) ? "#" : ",";
-                        for (String split : line.split(search))
-                            if (!split.isEmpty())
-                                try {
-                                    materials.add(split.toUpperCase().trim());
-                                } catch (NumberFormatException ignored) {
-                                }
-                        world.setPlotManagementMayorDelete(materials);
-                    } catch (Exception ignored) {
-                    }
-
-                result = rs.getBoolean("usingPlotManagementRevert");
-                try {
-                    world.setUsingPlotManagementRevert(result);
-                } catch (Exception ignored) {
-                }
-
-				/*
-				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-				 */
-                resultLong = rs.getLong("PlotManagementRevertSpeed");
-                try {
-                    world.setPlotManagementRevertSpeed(resultLong);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("plotManagementIgnoreIds");
-                if (line != null)
-                    try {
-                        List<String> mats = new ArrayList<>();
-                        search = (line.contains("#")) ? "#" : ",";
-                        for (String split : line.split(search))
-                            if (!split.isEmpty())
-                            	mats.add(split);
-
-                        world.setPlotManagementIgnoreIds(mats);
-                    } catch (Exception ignored) {
-                    }
-
-                result = rs.getBoolean("usingPlotManagementWildRegen");
-                try {
-                    world.setUsingPlotManagementWildRevert(result);
-                } catch (Exception ignored) {
-                }
-
-                line = rs.getString("plotManagementWildRegenEntities");
-                if (line != null)
-                    try {
-                        List<String> entities = new ArrayList<>();
-                        search = (line.contains("#")) ? "#" : ",";
-                        for (String split : line.split(search))
-                            if (!split.isEmpty())
-                                try {
-                                    entities.add(split.trim());
-                                } catch (NumberFormatException ignored) {
-                                }
-                        world.setPlotManagementWildRevertEntities(entities);
-                    } catch (Exception ignored) {
-                    }
-
-                resultLong = rs.getLong("plotManagementWildRegenSpeed");
-                try {
-                    world.setPlotManagementWildRevertDelay(resultLong);
-                } catch (Exception ignored) {
-                }
-
-                result = rs.getBoolean("usingTowny");
-                try {
-                    world.setUsingTowny(result);
-                } catch (Exception ignored) {
-                }
-                
-                result = rs.getBoolean("warAllowed");
-                try {
-                    world.setWarAllowed(result);
-                } catch (Exception ignored) {
-                }
-
-				try {
-					line = rs.getString("metadata");
-					if (line != null && !line.isEmpty()) {
-						world.setMetadata(line);
-					}
-				} catch (SQLException ignored) {
-
+        
+        try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
+        	ps.setString(1, world.getName());
+        	
+        	try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return loadWorld(rs);
 				}
-
-            }
-
-            s.close();
-            return true;
-
+			}
         } catch (SQLException e) {
             TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + world.getName() + ")" + e.getMessage());
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Load world unknown error - ");
-            e.printStackTrace();
         }
         return false;
-
     }
+
+	private boolean loadWorld(ResultSet rs) {
+		String line;
+		boolean result;
+		long resultLong;
+		String search;
+		String worldName = null;
+		try {
+			worldName = rs.getString("name");
+			TownyWorld world = getWorld(worldName);
+			
+			TownyMessaging.sendDebugMsg("Loading world " + world.getName());
+
+			result = rs.getBoolean("claimable");
+			try {
+				world.setClaimable(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("pvp");
+			try {
+				world.setPVP(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcepvp");
+			try {
+				world.setForcePVP(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcetownmobs");
+			try {
+				world.setForceTownMobs(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("worldmobs");
+			try {
+				world.setWorldMobs(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("firespread");
+			try {
+				world.setFire(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcefirespread");
+			try {
+				world.setForceFire(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("explosions");
+			try {
+				world.setExpl(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forceexplosions");
+			try {
+				world.setForceExpl(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("endermanprotect");
+			try {
+				world.setEndermanProtect(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("disableplayertrample");
+			try {
+				world.setDisablePlayerTrample(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("disablecreaturetrample");
+			try {
+				world.setDisableCreatureTrample(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneBuild");
+			try {
+				world.setUnclaimedZoneBuild(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneDestroy");
+			try {
+				world.setUnclaimedZoneDestroy(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneSwitch");
+			try {
+				world.setUnclaimedZoneSwitch(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneItemUse");
+			try {
+				world.setUnclaimedZoneItemUse(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimedZoneName");
+			try {
+				world.setUnclaimedZoneName(line);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimedZoneIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setUnclaimedZoneIgnore(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementDelete");
+			try {
+				world.setUsingPlotManagementDelete(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementDeleteIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setPlotManagementDeleteIds(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementMayorDelete");
+			try {
+				world.setUsingPlotManagementMayorDelete(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementMayorDelete");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.toUpperCase().trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementMayorDelete(materials);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementRevert");
+			try {
+				world.setUsingPlotManagementRevert(result);
+			} catch (Exception ignored) {
+			}
+
+			/*
+			 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
+			 */
+			resultLong = rs.getLong("PlotManagementRevertSpeed");
+			try {
+				world.setPlotManagementRevertSpeed(resultLong);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setPlotManagementIgnoreIds(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementWildRegen");
+			try {
+				world.setUsingPlotManagementWildRevert(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementWildRegenEntities");
+			if (line != null)
+				try {
+					List<String> entities = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								entities.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertEntities(entities);
+				} catch (Exception ignored) {
+				}
+
+			resultLong = rs.getLong("plotManagementWildRegenSpeed");
+			try {
+				world.setPlotManagementWildRevertDelay(resultLong);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("usingTowny");
+			try {
+				world.setUsingTowny(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("warAllowed");
+			try {
+				world.setWarAllowed(result);
+			} catch (Exception ignored) {
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					world.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+			}
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + (worldName != null ? worldName : "NULL") + ")" + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load world unknown error - ");
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	@Override
     public boolean loadTownBlocks() {
@@ -1433,123 +1552,129 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         if (!getContext())
             return false;
 
-        ResultSet rs;
+		TownBlock townBlock = null;
+        try (Statement s = cntx.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
+        	
+        	while (rs.next()) {
+				String worldName = rs.getString("world");
+				int x = rs.getInt("x");
+				int z = rs.getInt("z");
+				
+				try {
+					townBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(worldName, x, z));
+				} catch (NotRegisteredException ex) {
+					TownyMessaging.sendErrorMsg("Loading Error: Exception while fetching townblock: " + worldName + " " + x + " " + z +
+												" from memory!");
+					return false;
+				}
 
-        for (TownBlock townBlock : getAllTownBlocks()) {
-            //boolean set = false;
+				line = rs.getString("name");
+				if (line != null)
+					try {
+						townBlock.setName(line.trim());
+					} catch (Exception ignored) {
+					}
 
-            try {
-                Statement s = cntx.createStatement();
-                rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
+				line = rs.getString("price");
+				if (line != null)
+					try {
+						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
+					} catch (Exception ignored) {
+					}
 
-                while (rs.next()) {
-                    line = rs.getString("name");
-                    if (line != null)
-                        try {
-                            townBlock.setName(line.trim());
-                        } catch (Exception ignored) {
-                        }
+				line = rs.getString("town");
+				if (line != null) {
+					Town town;
+					try {
+						town = getTown(line.trim());
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
+						TownyUniverse.getInstance().removeTownBlock(townBlock);
+						deleteTownBlock(townBlock);
+						continue;
+					}
+					townBlock.setTown(town);
+					try {
+						town.addTownBlock(townBlock);
+						TownyWorld townyWorld = townBlock.getWorld();
+						if (townyWorld != null && !townyWorld.hasTown(town))
+							townyWorld.addTown(town);
+					} catch (AlreadyRegisteredException ignored) {
+					}
+				}
+				line = rs.getString("resident");
+				if (line != null && !line.isEmpty())
+					try {
+						Resident res = getResident(line.trim());
+						townBlock.setResident(res);
+					} catch (Exception ignored) {
+					}
 
-                    line = rs.getString("price");
-                    if (line != null)
-                        try {
-                            townBlock.setPlotPrice(Float.parseFloat(line.trim()));
-                        } catch (Exception ignored) {
-                        }
+				line = rs.getString("type");
+				if (line != null)
+					try {
+						townBlock.setType(Integer.parseInt(line));
+					} catch (Exception ignored) {
+					}
 
-                    line = rs.getString("town");
-                    if (line != null) {
-                        Town town;
+				boolean outpost = rs.getBoolean("outpost");
+				if (line != null && !line.isEmpty())
+					try {
+						townBlock.setOutpost(outpost);
+					} catch (Exception ignored) {
+					}
+
+				line = rs.getString("permissions");
+				if ((line != null) && !line.isEmpty())
+					try {
+						townBlock.setPermissions(line.trim().replaceAll("#", ","));
+						//set = true;
+					} catch (Exception ignored) {
+					}
+
+				result = rs.getBoolean("changed");
+				try {
+					townBlock.setChanged(result);
+				} catch (Exception ignored) {
+				}
+
+				result = rs.getBoolean("locked");
+				try {
+					townBlock.setLocked(result);
+				} catch (Exception ignored) {
+				}
+
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						townBlock.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+				}
+
+				try {
+					line = rs.getString("groupID");
+					if (line != null && !line.isEmpty()) {
 						try {
-							town = getTown(line.trim());
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
-							TownyUniverse.getInstance().removeTownBlock(townBlock);
-							deleteTownBlock(townBlock);
-							continue;
+							UUID groupID = UUID.fromString(line.trim());
+							PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
+							townBlock.setPlotObjectGroup(group);
+						} catch (Exception ignored) {
 						}
-                        townBlock.setTown(town);
-                        try {
-							town.addTownBlock(townBlock);
-							TownyWorld townyWorld = townBlock.getWorld();
-							if (townyWorld != null && !townyWorld.hasTown(town))
-								townyWorld.addTown(town);
-						} catch (AlreadyRegisteredException ignored) {
-						}
-                    }
-                    line = rs.getString("resident");
-                    if (line != null && !line.isEmpty())
-                        try {
-                            Resident res = getResident(line.trim());
-                            townBlock.setResident(res);
-                        } catch (Exception ignored) {
-                        }
 
-                    line = rs.getString("type");
-                    if (line != null)
-                        try {
-                            townBlock.setType(Integer.parseInt(line));
-                        } catch (Exception ignored) {
-                        }
-
-                    boolean outpost = rs.getBoolean("outpost");
-                    if (line != null && !line.isEmpty())
-                        try {
-                            townBlock.setOutpost(outpost);
-                        } catch (Exception ignored) {
-                        }
-
-                    line = rs.getString("permissions");
-                    if ((line != null) && !line.isEmpty())
-                        try {
-                            townBlock.setPermissions(line.trim().replaceAll("#", ","));
-                            //set = true;
-                        } catch (Exception ignored) {
-                        }
-
-                    result = rs.getBoolean("changed");
-                    try {
-                        townBlock.setChanged(result);
-                    } catch (Exception ignored) {
-                    }
-
-                    result = rs.getBoolean("locked");
-                    try {
-                        townBlock.setLocked(result);
-                    } catch (Exception ignored) {
-                    }
-                    
-					try {
-						line = rs.getString("metadata");
-						if (line != null && !line.isEmpty()) {
-							townBlock.setMetadata(line);
-						}
-					} catch (SQLException ignored) {
 					}
-					
-					try {
-						line = rs.getString("groupID");
-						if (line != null && !line.isEmpty()) {
-							try {
-								UUID groupID = UUID.fromString(line.trim());
-								PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
-								townBlock.setPlotObjectGroup(group);
-							} catch (Exception ignored) {}
-							
-						}
-					} catch (SQLException ignored) {
-					}
-    
-                }
-
-                s.close();
-
-            } catch (SQLException e) {
-                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: " + townBlock + " at line: " + line + " in the sql database");
-                e.printStackTrace();
-                return false;
-            }
-        }
+				} catch (SQLException ignored) {
+				}
+			}
+        	
+		} catch (SQLException ex) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: " + (townBlock != null ? townBlock : "NULL") +
+				" at line: " + line + " in the sql database");
+			ex.printStackTrace();
+			return false;
+		}
+        
         return true;
     }
 

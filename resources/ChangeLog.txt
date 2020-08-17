@@ -4843,3 +4843,10 @@ v0.92.0.11:
     - Closes #4257.
   - Hotfix/bankcap bug, courtesy of Siris with PR #4260.
     - Closes #4253.
+0.96.2.12:
+  - Fix claiming past townblock limit & claiming edge blocks showing wrong message.
+    - Closes #4272. 
+  - Fix plot type setting costs causing townblocks to save with residential plot type.
+    - Closes #4273. 
+  - Hotfix: Make "tar.gz" a valid config option, courtesy of Siris with PR #4267.
+  - Reduce mysql DB queries on startup, courtesy of silverwolfg11 with PR #4242.
