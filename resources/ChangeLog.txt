@@ -4843,3 +4843,5 @@ v0.92.0.11:
     - Closes #4257.
   - Hotfix/bankcap bug, courtesy of Siris with PR #4260.
     - Closes #4253.
+  - Fix claiming past townblock limit & claiming edge blocks showing wrong message.
+    - Closes #4272. 

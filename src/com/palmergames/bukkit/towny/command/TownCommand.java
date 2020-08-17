@@ -3372,6 +3372,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
+					
+					if (selection.size() == 0)
+						throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
+					
 					if ((selection.size() > 1) && (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
@@ -3528,7 +3532,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
 			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
 			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 0)
+			if (available - selection.size() < 1)
 				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 		}
 
