@@ -43,7 +43,7 @@ public final class Translation {
 		legacyKeys.put("english", Locale.getDefault());
 	}
 	
-	public static ResourceBundle language;
+	private static ResourceBundle language;
 
 	// This will read the language entry in the config.yml to attempt to load
 	// custom languages
