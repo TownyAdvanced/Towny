@@ -15,20 +15,20 @@ public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 
 	@Override
 	public void accept() throws TownyException {
-			Nation receiverNation = getReceiver();
-			Nation senderNation = getSender();
+		Nation receiverNation = getReceiver();
+		Nation senderNation = getSender();
 			
-			receiverNation.addAlly(senderNation);
-			senderNation.addAlly(receiverNation);
+		receiverNation.addAlly(senderNation);
+		senderNation.addAlly(receiverNation);
 			
-			TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
-			TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
+		TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
+		TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
 			
-			receiverNation.deleteReceivedInvite(this);
-			senderNation.deleteSentAllyInvite(this);
+		receiverNation.deleteReceivedInvite(this);
+		senderNation.deleteSentAllyInvite(this);
 			
-			TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
-			TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
+		TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
+		TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
 	}
 
 	@Override
