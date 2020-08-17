@@ -184,8 +184,10 @@ public class Nation extends Government {
 			throw new EmptyNationException(this);
 		
 		try {
-			if (capital.getNation().equals(this))
+			if (capital.getNation().equals(this)) {
 				setCapital(capital);
+				return;
+			}
 		} catch (NotRegisteredException e) {
 		}
 		if (!findNewCapital())
