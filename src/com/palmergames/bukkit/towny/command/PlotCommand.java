@@ -947,8 +947,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @throws EconomyException - Exception thrown if error with economy.
 	 */
 	private void setPlotType(Resident resident, WorldCoord worldCoord, TownBlockType type) throws TownyException, EconomyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		TownBlock townBlock = worldCoord.getTownBlock();
 
 		// Test we are allowed to work on this plot
@@ -966,7 +964,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			town.addJailSpawn(p.getLocation());
 		}
 
-		townyUniverse.getDataSource().saveTownBlock(townBlock);
+		
 	}
 
 	/**
