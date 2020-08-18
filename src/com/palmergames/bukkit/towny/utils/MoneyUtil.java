@@ -8,11 +8,14 @@ public class MoneyUtil {
 	/**
 	 * Get estimated value of town
 	 * Useful when calculating the allowed debt cap for a town
+	 * Covers new town costs, claimed land costs, purchased outposts costs.
 	 *
-	 * @param town  The town to consider
-	 * @return the estimate value of the town
+	 * @param town The town to estimate a value for.
+	 * @return the estimated monetary value of the town.
 	 */
 	public static double getEstimatedValueOfTown(Town town) {
-		return TownySettings.getNewTownPrice() + (town.getTownBlocks().size() * TownySettings.getClaimPrice());
+		return TownySettings.getNewTownPrice() // New Town cost. 
+				+ (town.getTownBlocks().size() * TownySettings.getClaimPrice()) // Claimed land costs. 
+				+ (town.getAllOutpostSpawns().size() * (TownySettings.getOutpostCost() - TownySettings.getClaimPrice())); // Outposts costs. 
 	}
 }
