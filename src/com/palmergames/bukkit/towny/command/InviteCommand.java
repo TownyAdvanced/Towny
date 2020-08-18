@@ -270,17 +270,15 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// If it's from the sender, do it differently
 			String output = null;
 			if (fromSender) {
+				output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
-					output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 					object = Translation.of("player_sing");
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
-						output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 						object = Translation.of("town_sing");
 					}
 					if (invite.getReceiver() instanceof Nation) {
-						output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 						object = Translation.of("nation_sing");
 					}
 				}
@@ -298,7 +296,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 		player.sendMessage(ChatTools.formatList(Translation.of("invite_plu"),
 				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by"),
-			invitesFormatted, TownySettings.getListPageMsg(page, total)
+				invitesFormatted, TownySettings.getListPageMsg(page, total)
 		));
 	}
 }
