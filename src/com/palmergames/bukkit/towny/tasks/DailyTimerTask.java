@@ -479,17 +479,17 @@ public class DailyTimerTask extends TownyTimerTask {
 			//Towns go into the bankrupt state
 			if (newlyBankruptTowns != null) {
 				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_bankrupt_by_upkeep"), newlyBankruptTowns.get(0)));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_town_bankrupt_by_upkeep", newlyBankruptTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, TownySettings.getLangString("msg_town_bankrupt_by_upkeep_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
 			}
 		} else {
 			//Towns get deleted
 			if (newlyBankruptTowns != null) {
 				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"), newlyBankruptTowns.get(0)));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_town2", newlyBankruptTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_bankrupt_town_multiple")));
 			}
 		}
 	}

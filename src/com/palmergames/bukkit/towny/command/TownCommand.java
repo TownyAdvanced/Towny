@@ -1485,7 +1485,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				try {
 					if(town.getAccount().isBankrupt())
-						throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_toggle_open"));
+						throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_toggle_open"));
 				} catch (EconomyException ee) {}
 
 				town.setOpen(!town.isOpen());
@@ -3099,7 +3099,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		try {
 			if (town.getAccount().isBankrupt())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_bankrupt_town_cannot_invite"));
+				throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_invite"));
 		} catch(EconomyException ee) {} 
 
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
@@ -3341,7 +3341,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				try {
 					if (town.getAccount().isBankrupt())
-						throw new TownyException(TownySettings.getLangString("msg_err_bankrupt_town_cannot_claim"));
+						throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
 				} catch (EconomyException ee) {}
 
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
