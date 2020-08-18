@@ -158,16 +158,7 @@ public enum ConfigNodes {
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
-	TOWN_BANKRUPTCY_ENABLED(
-			"town.bankruptcy_enabled",
-			"false",
-			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
-			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
-			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
-			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
-			"# The debt can be repaid using /t deposit x.", 
-			"# Once all debt is repaid, the town immediately returns to a normal state."),
-		
+	
 	NATION("nation", "", "", 
 			"############################################################",
 			"# +------------------------------------------------------+ #",
@@ -185,7 +176,7 @@ public enum ConfigNodes {
 	NATION_DEF_BOARD("nation.default_board", 
 			"/nation set board [msg]",
 			"# Default nation board"),
-		
+	
 	NWS(
 			"new_world_settings",
 			"",
@@ -1434,6 +1425,15 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
+	ECO_BANKRUPTCY_ENABLED(
+			"economy.bankruptcy.enabled",
+			"false",
+			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
+			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
+			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
+			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
+			"# The debt can be repaid using /t deposit x.", 
+			"# Once all debt is repaid, the town immediately returns to a normal state."),
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",

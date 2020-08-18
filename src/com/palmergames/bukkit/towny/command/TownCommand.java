@@ -3631,7 +3631,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town.depositToBank(resident, amount);
 			}
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
-
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
