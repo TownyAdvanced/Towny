@@ -2967,15 +2967,14 @@ public class TownySettings {
 	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
-		
+	}
+
+	public static boolean isTownBankruptcyEnabled() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
 	
 	public static void incrementUUIDCount() {
 		uuidCount++;
-	}
-
-	public static boolean isTownBankruptsyEnabled() {
-		return getBoolean(ConfigNodes.TOWN_BANKRUPTSY_ENABLED);
 	}
 }
 

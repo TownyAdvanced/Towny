@@ -1641,6 +1641,15 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
+	ECO_BANKRUPTCY_ENABLED(
+			"economy.bankruptcy.enabled",
+			"false",
+			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
+			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
+			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
+			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
+			"# The debt can be repaid using /t deposit x.", 
+			"# Once all debt is repaid, the town immediately returns to a normal state."),
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",

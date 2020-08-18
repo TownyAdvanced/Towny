@@ -30,8 +30,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
-	private List<String> newlyBankruptTowns = new ArrayList<>();
-	private List<String> removedNations = new ArrayList<>();
+	private final List<String> delinquentTowns = new ArrayList<>();
+	private final List<String> removedNations = new ArrayList<>();
 
 	public DailyTimerTask(Towny plugin) {
 
@@ -44,7 +44,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		long start = System.currentTimeMillis();
 		totalTownUpkeep = 0.0;
 		totalNationUpkeep = 0.0;
-		newlyBankruptTowns.clear();
+		delinquentTowns.clear();
 		removedNations.clear();
 
 		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
@@ -64,7 +64,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
 				collectNationCosts();
 				
-				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(newlyBankruptTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(delinquentTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 				
 			} catch (EconomyException ex) {
 				TownyMessaging.sendErrorMsg("Economy Exception");
@@ -433,20 +433,26 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (upkeep > 0) {
 						// Town is paying upkeep
 
-						if(!town.getAccount().pay(upkeep, "Town Upkeep")) {
-							if (TownySettings.isTownBankruptcyEnabled()) {
-								//Add debt to town
-								if(town.isBankrupt()) {
-									town.increaseTownDebt(upkeep, "Town Upkeep");
-								} else {
-									town.increaseTownDebt(upkeep - town.getAccount().getHoldingBalance(), "Town Upkeep");
-									town.getAccount().setBalance(0, "Town Upkeep");
-									newlyBankruptTowns.add(town.getName());
-								}
+						if (TownySettings.isTownBankruptcyEnabled()) {
+							//Bankruptcy enabled - Bankrupt town if it cannot pay
+							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+							if(town.getAccount().isBankrupt()) {
+								//Town already bankrupt
+								town.getAccount().withdraw(upkeep, "Town Upkeep"); 
 							} else {
-								//Delete town
-								townyUniverse.getDataSource().removeTown(town);
-								newlyBankruptTowns.add(town.getName());
+								//Town not bankrupt at this point
+								town.getAccount().withdraw(upkeep, "Town Upkeep");
+								if(town.getAccount().isBankrupt()) {
+									town.setOpen(false);
+									universe.getDataSource().saveTown(town);
+									delinquentTowns.add(town.getName());
+								}
+							}
+						} else {
+							//Bankruptcy disabled - Remove town if it cannot pay
+							if(!town.getAccount().withdraw(upkeep, "Town Upkeep")) {
+								universe.getDataSource().removeTown(town);
+								delinquentTowns.add(town.getName());
 							}
 						}
 
@@ -477,19 +483,19 @@ public class DailyTimerTask extends TownyTimerTask {
 		if(TownySettings.isTownBankruptcyEnabled()) {
 			plugin.resetCache(); //Allow perms change to take effect immediately
 			//Towns go into the bankrupt state
-			if (newlyBankruptTowns != null) {
-				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_town_bankrupt_by_upkeep", newlyBankruptTowns.get(0)));
+			if (delinquentTowns != null) {
+				if (delinquentTowns.size() == 1)
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_town_bankrupt_by_upkeep", delinquentTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(delinquentTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
 			}
 		} else {
 			//Towns get deleted
-			if (newlyBankruptTowns != null) {
-				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_town2", newlyBankruptTowns.get(0)));
+			if (delinquentTowns != null) {
+				if (delinquentTowns.size() == 1)
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_town2", delinquentTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_bankrupt_town_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(delinquentTowns, Translation.of("msg_bankrupt_town_multiple")));
 			}
 		}
 	}
