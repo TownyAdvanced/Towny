@@ -391,7 +391,7 @@ public class PlayerCacheUtil {
 				townBlock = pos.getTownBlock();
 				targetTown = townBlock.getTown();
 				if(targetTown.getAccount().isBankrupt())  {
-					cacheBlockErrMsg(player, TownySettings.getLangString("msg_err_bankrupt_town_cannot_build"));
+					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
 					return false;
 				}
 			} catch (NotRegisteredException e) {

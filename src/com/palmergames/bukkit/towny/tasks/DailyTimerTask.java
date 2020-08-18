@@ -275,15 +275,15 @@ public class DailyTimerTask extends TownyTimerTask {
 			if(TownySettings.isTownBankruptcyEnabled()) {
 				//Towns go into the bankrupt state
 				if (localNewlyBankruptTowns.size() == 1)
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_town_bankrupt_by_nation_tax"), ChatTools.list(localNewlyBankruptTowns)));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_bankrupt_by_nation_tax", ChatTools.list(localNewlyBankruptTowns)));
 				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyBankruptTowns, TownySettings.getLangString("msg_town_bankrupt_by_nation_tax_multiple")));
+					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyBankruptTowns, Translation.of("msg_town_bankrupt_by_nation_tax_multiple")));
 			} else {
 				//Towns get removed from nation
 				if (localNewlyBankruptTowns.size() == 1)
-					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_couldnt_pay_tax"), ChatTools.list(localNewlyBankruptTowns), "nation"));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_couldnt_pay_tax", ChatTools.list(localNewlyBankruptTowns), "nation"));
 				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyBankruptTowns, TownySettings.getLangString("msg_couldnt_pay_nation_tax_multiple")));
+					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyBankruptTowns, Translation.of("msg_couldnt_pay_nation_tax_multiple")));
 			}
 		}
 	}
@@ -505,17 +505,17 @@ public class DailyTimerTask extends TownyTimerTask {
 			//Towns go into the bankrupt state
 			if (newlyBankruptTowns != null) {
 				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_bankrupt_by_upkeep"), newlyBankruptTowns.get(0)));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_town_bankrupt_by_upkeep", newlyBankruptTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, TownySettings.getLangString("msg_town_bankrupt_by_upkeep_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
 			}
 		} else {
 			//Towns get deleted
 			if (newlyBankruptTowns != null) {
 				if (newlyBankruptTowns.size() == 1)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"), newlyBankruptTowns.get(0)));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_town2", newlyBankruptTowns.get(0)));
 				else
-					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));
+					TownyMessaging.sendGlobalMessage(ChatTools.list(newlyBankruptTowns, Translation.of("msg_bankrupt_town_multiple")));
 			}
 		}
 	}

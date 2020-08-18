@@ -156,7 +156,7 @@ public class OnPlayerLogin implements Runnable {
 								 */
 								if(TownySettings.isTownBankruptcyEnabled()) {
 									if (!town.getAccount().isBankrupt()) //Is town already bankrupt?
-										TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_bankrupt"), town.getName()));
+										TownyMessaging.sendMessage(resident, Translation.of("msg_warning_bankrupt", town.getName()));
 								} else {
 									TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
 								}
