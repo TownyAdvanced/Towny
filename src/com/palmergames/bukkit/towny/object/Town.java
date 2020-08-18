@@ -1235,6 +1235,19 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	/**
+	 * Whether a town is bankrupted.
+	 * 
+	 * @return true if bankrupt.
+	 */
+	public boolean isBankrupt() { 
+		try {
+			return getAccount().isBankrupt();
+		} catch (EconomyException ignored) {}
+
+		return false;
+	}
+	
+	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
 	 * @return The world this resides in.

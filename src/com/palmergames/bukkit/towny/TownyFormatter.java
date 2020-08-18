@@ -388,22 +388,14 @@ public class TownyFormatter {
 		// | Bank: 534 coins
 		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 			String bankString = "";
-			boolean bankrupt = false;
 
-			try {
-				bankrupt = town.getAccount().isBankrupt();
-			} catch (EconomyException e) {}
+			bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank" , town.getAccount().getHoldingFormattedBalance());
+			if (town.hasUpkeep())
+				bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+				bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
+			bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 
-			if(bankrupt) {
-				bankString = Translation.of("status_bank_bankrupt", town.getAccount().getHoldingFormattedBalance());
-			} else {
-				bankString = Translation.of("status_bank", town.getAccount().getHoldingFormattedBalance());
-				if (town.hasUpkeep())
-					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
-			}
 			out.add(bankString);
 		}
 
