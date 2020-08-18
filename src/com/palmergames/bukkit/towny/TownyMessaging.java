@@ -93,7 +93,7 @@ public class TownyMessaging {
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
 	 *
-	 * @param sender the Object sending the message
+	 * @param sender the CommandSender receiving the msg
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(CommandSender sender, String msg) {
@@ -115,6 +115,14 @@ public class TownyMessaging {
 		sendDevMsg(msg);
 	}
 	
+	/**
+	 * Sends a message (green) to the resident
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param resident to receive the msg
+	 * @param msg the message being sent
+	 */
 	public static void sendMsg(Resident resident, String msg) {
 		sendMsg(resident.getPlayer(), msg);
 	}

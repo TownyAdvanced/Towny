@@ -504,7 +504,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Look for residents inside of this town's jail and free them
 		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
-                jailedRes.setJailed(jailedRes, 0, town);
+                jailedRes.setJailed(0, town);
                 saveResident(jailedRes);
             }
 		}

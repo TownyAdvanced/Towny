@@ -1533,7 +1533,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if (jailTown != sendertown) {
 									throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
 								} else {
-									jailedresident.setJailedByMayor(jailedPlayer, index, sendertown, days);
+									jailedresident.setJailedByMayor(index, sendertown, days);
 									if (admin)
 										TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), index));
 									return;
@@ -1544,7 +1544,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							if (jailedresident.getTown() != sendertown)
 								throw new TownyException(Translation.of("msg_resident_not_your_town"));
 
-							jailedresident.setJailedByMayor(jailedPlayer, index, sendertown, days);
+							jailedresident.setJailedByMayor(index, sendertown, days);
 							if (admin)
 								TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), index));
 
