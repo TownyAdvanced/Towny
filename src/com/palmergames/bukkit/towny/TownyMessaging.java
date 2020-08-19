@@ -97,19 +97,18 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(CommandSender sender, String msg) {
-		if (sender != null) {
-			if (sender instanceof Player) {
-				Player p = (Player)sender;
-				p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
-			} else {
-				if (sender instanceof ConsoleCommandSender) {
-					sender.sendMessage(ChatColor.stripColor(msg));
-				} else {
-					sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
-				}
-			}
-		} else {
+		if (sender == null) {
 			sendErrorMsg("Sender cannot be null!");
+			return;
+		}
+		
+		if (sender instanceof Player) {
+			Player p = (Player)sender;
+			p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+		} else if (sender instanceof ConsoleCommandSender) {
+			sender.sendMessage(ChatColor.stripColor(msg));
+		} else {
+			sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
 		}
 		
 		sendDevMsg(msg);

@@ -110,7 +110,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
 	}
 	
-	public void sendToJail(Integer index, Town town) {
+	public void sendToJail(int index, Town town) {
 		this.setJailed(true);
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
@@ -119,7 +119,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	}
 	
-	public void freeFromJail(Integer index, boolean escaped) {
+	public void freeFromJail(int index, boolean escaped) {
 		this.setJailed(false);
 		this.removeJailSpawn();
 		this.setJailTown(" ");
@@ -132,7 +132,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			} catch (NotRegisteredException ignored) {}
 	}
 
-	public void setJailedByMayor(Integer index, Town town, Integer days) {
+	public void setJailedByMayor(int index, Town town, Integer days) {
 
 		if (this.isJailed) {
 			try {
@@ -216,7 +216,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return jailSpawn;
 	}
 
-	public void setJailSpawn(Integer index) {
+	public void setJailSpawn(int index) {
 
 		this.jailSpawn = index;
 
