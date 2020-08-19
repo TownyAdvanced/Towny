@@ -56,6 +56,10 @@ public class ChatTools {
 		return out;
 	}
 
+	public static String formatCommand(String command, String subCommand, String help) {
+		return formatCommand("", command, subCommand, help);
+	}
+
 	public static String formatCommand(String requirement, String command, String subCommand, String help) {
 
 		String out = "  ";

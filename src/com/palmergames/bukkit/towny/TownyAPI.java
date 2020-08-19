@@ -200,7 +200,7 @@ public class TownyAPI {
     /**
      * Returns {@link TownyWorld} unless it is null.
      * 
-     * @param world - the name of the world to get.
+     * @param worldName - the name of the world to get.
      * @return TownyWorld or null.
      */
     public TownyWorld getTownyWorld(String worldName) {

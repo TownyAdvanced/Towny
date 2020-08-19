@@ -94,8 +94,7 @@ import java.util.stream.Collectors;
 public class TownCommand extends BaseCommand implements CommandExecutor, TabCompleter {
 
 	private static Towny plugin;
-	private static final List<String> output = new ArrayList<>();
-	private static final List<String> invite = new ArrayList<>();
+
 	private static final List<String> townTabCompletes = Arrays.asList(
 		"here",
 		"leave",
@@ -188,36 +187,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"accept",
 		"deny"
 	);
-
-	static {
-		output.add(ChatTools.formatTitle("/town"));
-		output.add(ChatTools.formatCommand("", "/town", "", Translation.of("town_help_1")));
-		output.add(ChatTools.formatCommand("", "/town", "[town]", Translation.of("town_help_3")));
-		output.add(ChatTools.formatCommand("", "/town", "new [name]", Translation.of("town_help_11")));
-		output.add(ChatTools.formatCommand("", "/town", "here", Translation.of("town_help_4")));
-		output.add(ChatTools.formatCommand("", "/town", "list", ""));
-		output.add(ChatTools.formatCommand("", "/town", "online", Translation.of("town_help_10")));
-		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
-		output.add(ChatTools.formatCommand("", "/town", "reslist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "outlawlist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "plots", ""));
-		output.add(ChatTools.formatCommand("", "/town", "outlaw add/remove [name]", ""));
-		output.add(ChatTools.formatCommand("", "/town", "say", "[message]"));
-		output.add(ChatTools.formatCommand("", "/town", "spawn", Translation.of("town_help_5")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/town", "deposit [$]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/town", "rank add/remove [resident] [rank]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "mayor ?", Translation.of("town_help_8")));
-		output.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/town", "delete [town]", ""));
-		
-		invite.add(ChatTools.formatTitle("/town invite"));
-		invite.add(ChatTools.formatCommand("", "/town", "invite [player]", Translation.of("town_invite_help_1")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite -[player]", Translation.of("town_invite_help_2")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite sent", Translation.of("town_invite_help_3")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite received", Translation.of("town_invite_help_4")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", Translation.of("town_invite_help_5")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", Translation.of("town_invite_help_6")));
-	}
 
 	public TownCommand(Towny instance) {
 
@@ -394,7 +363,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -417,10 +386,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-					
-				for (String line : output)
-					sender.sendMessage(line);
-				
+			HelpMenu.TOWN_HELP.send(sender);
 		} else if (split[0].equalsIgnoreCase("list")) {
 
 			listTowns(sender, split);
@@ -458,10 +424,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				});
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-
-				for (String line : output)
-					player.sendMessage(line);
-
+				HelpMenu.TOWN_HELP.send(player);
+				
 			} else if (split[0].equalsIgnoreCase("here")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_HERE.getNode()))
@@ -875,24 +839,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_SEE_HOME.getNode())) {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			}
-			String[] msgs;
-			List<String> messages = new ArrayList<>();
 
-
-			for (String msg : invite) {
-				messages.add(Colors.strip(msg));
-			}
-			messages.add(sent);
-			messages.add(received);
-			msgs = messages.toArray(new String[0]);
-			player.sendMessage(msgs);
+			HelpMenu.TOWN_INVITE.send(player);
+			TownyMessaging.sendMessage(player, sent);
+			TownyMessaging.sendMessage(player, received);
 			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				for (String msg : invite) {
-					player.sendMessage(Colors.strip(msg));
-				}
+				HelpMenu.TOWN_INVITE.send(player);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
@@ -2216,18 +2171,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						// Test whether towns will be removed from the nation
 						if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
 							// Do a dry-run of the proximity test.
-							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns());
+							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
 							
 							// Oh no, some the nation will lose at least one town, better make a confirmation.
 							if (!removedTowns.isEmpty()) {
 								final Town finalTown = town;
 								final TownBlock finalTB = TownyAPI.getInstance().getTownBlock(player.getLocation());
+								final Nation finalNation = nation;
 								oldWorld = town.getHomeblockWorld();
 								Confirmation confirmation = Confirmation.runOnAccept(() -> {
 									try {
 										// Set town homeblock and run the recheckTownDistance for real.
 										finalTown.setHomeBlock(finalTB);
 										finalTown.setSpawn(player.getLocation());
+										finalNation.recheckTownDistance();
 										TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2412,7 +2369,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
-				town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n));
+				if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+					return;
+				}
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
@@ -2497,7 +2457,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation.runOnAccept(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost");
+						if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+							// Send economy message
+							TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					
@@ -2824,7 +2788,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
 					invited.remove(newMember);
-				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
+				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
 					invited.remove(newMember);
 				} else {
@@ -3476,8 +3440,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 					throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-
-				List<WorldCoord> selection;
+				
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -3486,13 +3449,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
 					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
 				} else {
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 					if (selection.isEmpty())
 						throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 
 					if (selection.get(0).getTownBlock().isHomeBlock())
 						throw new TownyException(Translation.of("msg_err_cannot_unclaim_homeblock"));
+					
+					if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
+						// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_unclaim_homeblock"));
+					}
 					
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();

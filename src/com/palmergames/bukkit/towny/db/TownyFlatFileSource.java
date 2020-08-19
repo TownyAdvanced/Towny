@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -140,7 +139,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean backup() throws IOException {
+	public boolean backup() throws IOException {
 		String backupType = TownySettings.getFlatFileBackupType();
 		long t = System.currentTimeMillis();
 		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
@@ -183,7 +182,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     }
     
     @Override
-	public synchronized void deleteUnusedResidents() {
+	public void deleteUnusedResidents() {
 
 		String path;
 		Set<String> names;
@@ -581,29 +580,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return files;
 	}
 	
-	
-	/**
-	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
-	 * 
-	 * @param file - File from which the HashMap will be made.
-	 * @return HashMap - Used for loading keys and values from object files. 
-	 */
-	private HashMap<String, String> loadFileIntoHashMap(File file) {
-		HashMap<String, String> keys = new HashMap<>();
-		try (FileInputStream fis = new FileInputStream(file);
-			InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {					
-					Properties properties = new Properties();
-					properties.load(isr);		
-					for (String key : properties.stringPropertyNames()) {
-						String value = properties.getProperty(key);
-						keys.put(key, String.valueOf(value));
-					}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}		
-		return keys;
-	}
-	
 	/*
 	 * Load individual towny objects
 	 */
@@ -617,7 +593,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (fileResident.exists() && fileResident.isFile()) {
 			TownyMessaging.sendDebugMsg("Loading Resident: " + resident.getName());
 			try {
-				HashMap<String, String> keys = loadFileIntoHashMap(fileResident);
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileResident);
 				
 				resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
 				
@@ -717,8 +693,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (fileTown.exists() && fileTown.isFile()) {
 			TownyMessaging.sendDebugMsg("Loading Town: " + town.getName());
 			try {
-				HashMap<String, String> keys = loadFileIntoHashMap(fileTown);
-				
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTown);
+
 				line = keys.get("mayor");
 				if (line != null)
 					try {
@@ -1044,8 +1020,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (fileNation.exists() && fileNation.isFile()) {
 			TownyMessaging.sendDebugMsg("Loading Nation: " + nation.getName());
 			try {
-				HashMap<String, String> keys = loadFileIntoHashMap(fileNation);
-
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileNation);
+				
 				line = keys.get("capital");
 				if (line != null)
 					try {
@@ -1212,7 +1188,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (fileWorld.exists() && fileWorld.isFile()) {
 			TownyMessaging.sendDebugMsg("Loading World: " + world.getName());
 			try {
-				HashMap<String, String> keys = loadFileIntoHashMap(fileWorld);
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileWorld);
 				
 				line = keys.get("claimable");
 				if (line != null)
@@ -1469,7 +1445,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (groupFile.exists() && groupFile.isFile()) {
 				String test = null;
 				try {
-					HashMap<String, String> keys = loadFileIntoHashMap(groupFile);
+					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
 
 					line = keys.get("groupName");
 					if (line != null)
@@ -1528,7 +1504,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
 
 				try {
-					HashMap<String, String> keys = loadFileIntoHashMap(fileTownBlock);			
+					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTownBlock);			
 
 					line = keys.get("town");
 					if (line != null) {
