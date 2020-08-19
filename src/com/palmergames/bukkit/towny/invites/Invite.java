@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
  */
 public interface Invite {
 	/**
-	 * Gets the sender of the confirmation
+	 * Gets the sender of the invitation
 	 * 
-	 * @return - The {@link CommandSender} of the confirmation.
+	 * @return - The {@link CommandSender} of the invitation.
 	 */
 	CommandSender getDirectSender();
 
