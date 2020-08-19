@@ -4850,3 +4850,5 @@ v0.92.0.11:
     - Closes #4273. 
   - Hotfix: Make "tar.gz" a valid config option, courtesy of Siris with PR #4267.
   - Reduce mysql DB queries on startup, courtesy of silverwolfg11 with PR #4242.
+  - Fix fake resident list in the config not matching full names.
+    - Closes #4157.
