@@ -391,7 +391,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Collection<TownBlock> getAllTownBlocks() {
-		return TownyUniverse.getInstance().getTownBlocks().values();
+		return TownyUniverse.getInstance().getTownBlocks();
 	}
 	
 	public List<PlotGroup> getAllPlotGroups() {
