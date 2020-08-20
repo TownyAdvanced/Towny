@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -50,7 +49,7 @@ public class TownBlock extends TownyObject {
 		try {
 			TownyUniverse.getInstance().addTownBlock(this);
 			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
+		} catch (NullPointerException ignored) {}
 	}
 
 	public Town getTown() throws NotRegisteredException {
@@ -67,15 +66,13 @@ public class TownBlock extends TownyObject {
 
 	public void setResident(Resident resident) {
 		boolean successful;
-		try {
-			if (hasResident())
-				this.resident.removeTownBlock(this);
-		} catch (NotRegisteredException ignored) {}
+		if (hasResident())
+			this.resident.removeTownBlock(this);
 		this.resident = resident;
+		
 		try {
-			resident.addTownBlock(this);
-			successful = true;
-		} catch (AlreadyRegisteredException | NullPointerException e) {
+			successful = resident.addTownBlock(this);
+		} catch (NullPointerException e) {
 			successful = false;
 		}
 		if (successful) { //Should not cause a NPE, is checkingg if resident is null and

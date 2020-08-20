@@ -846,22 +846,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public boolean hasTownBlock(TownBlock townBlock) {
-		return townBlocks.contains(townBlock);
+	public boolean addTownBlock(TownBlock townBlock) {
+		return townBlocks.add(townBlock);
 	}
 
 	@Override
-	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
-		if (hasTownBlock(townBlock))
-			throw new AlreadyRegisteredException();
-		else
-			townBlocks.add(townBlock);
-	}
-
-	@Override
-	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
-		if (!townBlocks.remove(townBlock))
-			throw new NotRegisteredException();
+	public boolean removeTownBlock(TownBlock townBlock) {
+		return townBlocks.remove(townBlock);
 	}
 
 	@Override

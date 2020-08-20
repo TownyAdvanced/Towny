@@ -76,29 +76,28 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 
-	@Override
-	public boolean hasTownBlock(TownBlock townBlock) {
-		return hasTownBlock(townBlock.getWorldCoord());
-	}
-
 	public boolean hasTownBlock(WorldCoord worldCoord) {
 		return townBlocks.containsKey(worldCoord);
 	}
 	
 	@Override
-	public void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException {
+	public boolean addTownBlock(TownBlock townBlock) {
 
-		if (hasTownBlock(townBlock))
-			throw new AlreadyRegisteredException();
-		else {
-			townBlocks.put(townBlock.getWorldCoord(), townBlock);
-			if (townBlocks.size() < 2 && !hasHomeBlock())
-				try {
-					setHomeBlock(townBlock);
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
+		if (townBlocks.contains(townBlock)) {
+			return false;
 		}
+
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+		if (townBlocks.size() < 2 && !hasHomeBlock()) {
+			try {
+				setHomeBlock(townBlock);
+			} catch (TownyException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
+		return false;
 	}
 	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
@@ -443,7 +442,8 @@ public class Town extends Government implements TownBlockOwner {
 			this.homeBlock = null;
 			return false;
 		}
-		if (!hasTownBlock(homeBlock))
+		
+		if (!townBlocks.contains(homeBlock))
 			throw new TownyException(Translation.of("msg_err_town_has_no_claim_over_this_town_block"));
 		this.homeBlock = homeBlock;
 
@@ -699,9 +699,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(TownBlock townBlock) {
 
-		if (hasTownBlock(townBlock)) {
+		if (townBlocks.contains(townBlock)) {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost()) {
 				removeOutpostSpawn(townBlock.getCoord());
@@ -716,9 +716,14 @@ public class Town extends Government implements TownBlockOwner {
 					setHomeBlock(null);
 				}
 			} catch (TownyException ignored) {}
+			
 			townBlocks.remove(townBlock.getWorldCoord());
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			
+			return true;
 		}
+		
+		return false;
 	}
 
 	@Override

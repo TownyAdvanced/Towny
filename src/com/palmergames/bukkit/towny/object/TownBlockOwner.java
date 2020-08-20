@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-
 import java.util.Collection;
 
 /**
@@ -13,7 +10,6 @@ import java.util.Collection;
  * @author Suneet Tipirneni (Siris)
  */
 public interface TownBlockOwner extends Permissible, Nameable {
-
 	/**
 	 * Gets the unmodifiable collection of townblocks.
 	 * 
@@ -22,26 +18,35 @@ public interface TownBlockOwner extends Permissible, Nameable {
 	Collection<TownBlock> getTownBlocks();
 
 	/**
-	 * Checks whether object has townblock or not.
+	 * Checks whether the object has the given townblock or not.
 	 * 
+	 * @deprecated As of version 0.96.2.11 and will be removed in a future release,
+	 * use {@link TownBlockOwner#getTownBlocks()} in conjunction
+	 * with {@link Collection#contains(Object)} instead.
+	 *
 	 * @param townBlock The townblock to check for.
 	 * @return A boolean indicating if it was found or not.
 	 */
-	boolean hasTownBlock(TownBlock townBlock);
+	@Deprecated
+	default boolean hasTownBlock(TownBlock townBlock) {
+		return getTownBlocks().contains(townBlock);
+	}
 
 	/**
 	 * Adds a townblock to the list of existing townblocks.
-	 * 
+	 *
 	 * @param townBlock The townblock to add.
-	 * @throws AlreadyRegisteredException When the townblock is already in the list.
+	 * @return true if adding the townblock was successful, false if the element was already in the
+	 * collection or any other error occurred.
 	 */
-	void addTownBlock(TownBlock townBlock) throws AlreadyRegisteredException;
+	boolean addTownBlock(TownBlock townBlock);
 
 	/**
 	 * Removes townblock from the list of existing townblocks.
 	 * 
 	 * @param townBlock The townblock to remove.
-	 * @throws NotRegisteredException Thrown when the townblock given is not in the list.
+	 * @return true if removing the townblock was successful, false if the element was not already in the
+	 * collection or any other error occurred.
 	 */
-	void removeTownBlock(TownBlock townBlock) throws NotRegisteredException;
+	boolean removeTownBlock(TownBlock townBlock);
 }

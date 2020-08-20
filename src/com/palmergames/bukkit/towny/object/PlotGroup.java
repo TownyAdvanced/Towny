@@ -93,16 +93,18 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner {
 
 	public boolean hasResident() { return resident != null; }
 	
-	public void addTownBlock(TownBlock townBlock) {
+	public boolean addTownBlock(TownBlock townBlock) {
 		if (townBlocks == null)
 			townBlocks = new ArrayList<>();
 		
-		townBlocks.add(townBlock);
+		return townBlocks.add(townBlock);
 	}
 
-	public void removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(TownBlock townBlock) {
 		if (townBlocks != null)
-			townBlocks.remove(townBlock);
+			return townBlocks.remove(townBlock);
+		
+		return false;
 	}
 	
 	public void setTownblocks(List<TownBlock> townBlocks) {
@@ -111,11 +113,6 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner {
 
 	public Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks);
-	}
-
-	@Override
-	public boolean hasTownBlock(TownBlock townBlock) {
-		return townBlocks.contains(townBlock);
 	}
 
 	public void setPrice(double price) {
