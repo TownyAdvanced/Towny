@@ -27,7 +27,8 @@ public class TownyCollections {
 		public final boolean add(E e) {
 			throw new UnsupportedOperationException();
 		}
-
+		
+		// The forwarded class.
 		abstract protected Collection<E> delegate();
 	}
 	/**
@@ -59,10 +60,10 @@ public class TownyCollections {
 	}
 
 	/**
-	 * Returns a {@link TownBlockLookupView} from the given map.
+	 * Returns an unmodifiable townblock collection with fast lookup from the given map.
 	 * 
 	 * @param map A map keyed by a world coord, and storing it's respective townblock.
-	 * @return A new townblock lookup view.
+	 * @return A new townblock collection with fast lookup.
 	 */
 	public static Collection<TownBlock> townBlockLookupView(Map<WorldCoord, TownBlock> map) {
 		return Collections.unmodifiableCollection(new TownBlockLookupView(map));
