@@ -14,6 +14,8 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownyCollections;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -49,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Lukas Mansour (Articdive)
  */
-public class TownyUniverse {
+public class TownyUniverse implements TownBlockOwner {
     private static TownyUniverse instance;
     private final Towny towny;
     
@@ -509,14 +511,16 @@ public class TownyUniverse {
 	 * 
 	 * @return townblocks hashmap read from townblock files.
 	 */	
-	public Map<WorldCoord, TownBlock> getTownBlocks() {
-		return townBlocks;
+	public Collection<TownBlock> getTownBlocks() {
+		return TownyCollections.townBlockLookupView(townBlocks);
 	}
 	
-	public void addTownBlock(TownBlock townBlock) {
-		if (hasTownBlock(townBlock.getWorldCoord()))
-			return;
+	public boolean addTownBlock(TownBlock townBlock) {
+		if (hasTownBlock(townBlock.getWorldCoord())) {
+			return false;
+		}
 		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+		return true;
 	}
 	/**
 	 * Does this WorldCoord have a TownBlock?
@@ -526,25 +530,25 @@ public class TownyUniverse {
 	public boolean hasTownBlock(WorldCoord worldCoord) {
 		return townBlocks.containsKey(worldCoord);
 	}
-
-	/**
-	 * Remove one townblock from the TownyUniverse townblock map.
-	 * @param townBlock to remove.
-	 */
-	public void removeTownBlock(TownBlock townBlock) {
-		
+	
+	public boolean removeTownBlock(TownBlock townBlock) {
 		if (removeTownBlock(townBlock.getWorldCoord())) {
+			boolean success = true;
 			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
+				if (townBlock.hasResident()) {
+					success = townBlock.getResident().removeTownBlock(townBlock);
+				}
+			} catch (NotRegisteredException ignored) {}
 			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
+				if (townBlock.hasTown()) {
+					success &= townBlock.getTown().removeTownBlock(townBlock);
+				}
+			} catch (NotRegisteredException ignored) {}
+			
+			return success;
 		}
+		
+		return false;
 	}
 	
 	/**

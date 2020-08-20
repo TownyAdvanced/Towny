@@ -99,49 +99,11 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
 	}
-	
-	/**
-	 * The purpose of this collection view is to allow the
-	 * Collection#contains method to gain the average O(1) lookup
-	 * runtime that the map in this class uses.
-	 * 
-	 * We can take advantage of the fact that we know
-	 * the hashed key is a member of the value.
-	 */
-	static final class TownBlockLookupView extends AbstractCollection<TownBlock> {
-		
-		final Map<WorldCoord, TownBlock> map;
-		
-		private TownBlockLookupView(Map<WorldCoord, TownBlock> map) {
-			this.map = map;
-		}
-		
-		public static Collection<TownBlock> from(Map<WorldCoord, TownBlock> map) {
-			// This is view, so modifications are prohibited.
-			return Collections.unmodifiableCollection(new TownBlockLookupView(map));
-		}
-		
-		@Override
-		public boolean contains(Object o) {
-			Validate.isTrue(o instanceof TownBlock);
-			return map.containsKey(((TownBlock) o).getWorldCoord());
-		}
-
-		@Override
-		public Iterator<TownBlock> iterator() {
-			return map.values().iterator();
-		}
-
-		@Override
-		public int size() {
-			return map.values().size();
-		}
-	}
 
 	@Override
 	public Collection<TownBlock> getTownBlocks() {
 		// Wrap into faster lookup view.
-		return TownBlockLookupView.from(townBlocks);
+		return TownyCollections.townBlockLookupView(townBlocks);
 	}
 	
 	@Override

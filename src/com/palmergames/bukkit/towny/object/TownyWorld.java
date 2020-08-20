@@ -118,7 +118,7 @@ public class TownyWorld extends TownyObject {
 	public Collection<TownBlock> getTownBlocks() {
 
 		List<TownBlock> townBlocks = new ArrayList<>();
-		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values())
+		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks())
 			if (townBlock.getWorld() == this)
 				townBlocks.add(townBlock);
 		return townBlocks;
