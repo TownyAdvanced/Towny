@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import org.bukkit.command.CommandSender;
 
+import java.util.Objects;
+
 abstract class AbstractInvite<S extends InviteSender, R extends InviteReceiver>
 	implements Invite {
 
@@ -31,5 +33,20 @@ abstract class AbstractInvite<S extends InviteSender, R extends InviteReceiver>
 	@Override
 	public S getSender() {
 		return sender;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof AbstractInvite)) return false;
+		AbstractInvite<?, ?> that = (AbstractInvite<?, ?>) o;
+		return Objects.equals(getDirectSender(), that.getDirectSender()) &&
+			Objects.equals(getReceiver(), that.getReceiver()) &&
+			Objects.equals(getSender(), that.getSender());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getDirectSender(), getReceiver(), getSender());
 	}
 }
