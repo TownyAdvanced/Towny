@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
-public class TownyCollections {
+public final class TownyCollections {
 	
 	private static abstract class AbstractCollectionView<E> extends AbstractCollection<E> {
 
