@@ -37,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Permissible {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;

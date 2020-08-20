@@ -9,7 +9,7 @@ import java.util.Collection;
  * @author Shade
  * @author Suneet Tipirneni (Siris)
  */
-public interface TownBlockOwner extends Permissible, Nameable {
+public interface TownBlockOwner {
 	/**
 	 * Gets the unmodifiable collection of townblocks.
 	 * 

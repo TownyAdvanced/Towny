@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.collect.ForwardingCollection;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -15,21 +16,25 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
-public class Town extends Government implements TownBlockOwner {
+public class Town extends Government implements TownBlockOwner, Permissible {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -60,7 +65,31 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
+	
+	static class TownBlockMap extends ForwardingCollection<TownBlock> {
+		final Map<WorldCoord, TownBlock> map;
+		
+		public static TownBlockMap from(Map<WorldCoord, TownBlock> map) {
+			return new TownBlockMap(map);
+		}
+		
+		private TownBlockMap(Map<WorldCoord, TownBlock> map) {
+			this.map = map;
+		}
 
+		@Override
+		public boolean contains(Object object) {
+			Validate.isTrue(object instanceof TownBlock);
+			return map.containsKey(((TownBlock)object).getWorldCoord());
+		}
+
+		@Override
+		protected Collection<TownBlock> delegate() {
+			return map.values();
+		}
+	}
+
+	
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -70,20 +99,55 @@ public class Town extends Government implements TownBlockOwner {
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
 	}
+	
+	/**
+	 * The purpose of this collection view is to allow the
+	 * Collection#contains method to gain the average O(1) lookup
+	 * runtime that the map in this class uses.
+	 * 
+	 * We can take advantage of the fact that we know
+	 * the hashed key is a member of the value.
+	 */
+	static final class TownBlockLookupView extends AbstractCollection<TownBlock> {
+		
+		final Map<WorldCoord, TownBlock> map;
+		
+		private TownBlockLookupView(Map<WorldCoord, TownBlock> map) {
+			this.map = map;
+		}
+		
+		public static Collection<TownBlock> from(Map<WorldCoord, TownBlock> map) {
+			// This is view, so modifications are prohibited.
+			return Collections.unmodifiableCollection(new TownBlockLookupView(map));
+		}
+		
+		@Override
+		public boolean contains(Object o) {
+			Validate.isTrue(o instanceof TownBlock);
+			return map.containsKey(((TownBlock) o).getWorldCoord());
+		}
+
+		@Override
+		public Iterator<TownBlock> iterator() {
+			return map.values().iterator();
+		}
+
+		@Override
+		public int size() {
+			return map.values().size();
+		}
+	}
 
 	@Override
 	public Collection<TownBlock> getTownBlocks() {
-		return Collections.unmodifiableCollection(townBlocks.values());
-	}
-
-	public boolean hasTownBlock(WorldCoord worldCoord) {
-		return townBlocks.containsKey(worldCoord);
+		// Wrap into faster lookup view.
+		return TownBlockLookupView.from(townBlocks);
 	}
 	
 	@Override
 	public boolean addTownBlock(TownBlock townBlock) {
 
-		if (townBlocks.contains(townBlock)) {
+		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
 			return false;
 		}
 
@@ -101,7 +165,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public TownBlock getTownBlock(WorldCoord worldCoord) {
-		if (hasTownBlock(worldCoord))
+		if (townBlocks.containsKey(worldCoord))
 			return townBlocks.get(worldCoord);
 		return null;
 	}
@@ -443,7 +507,7 @@ public class Town extends Government implements TownBlockOwner {
 			return false;
 		}
 		
-		if (!townBlocks.contains(homeBlock))
+		if (!townBlocks.containsKey(homeBlock.getWorldCoord()))
 			throw new TownyException(Translation.of("msg_err_town_has_no_claim_over_this_town_block"));
 		this.homeBlock = homeBlock;
 
@@ -701,7 +765,7 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public boolean removeTownBlock(TownBlock townBlock) {
 
-		if (townBlocks.contains(townBlock)) {
+		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost()) {
 				removeOutpostSpawn(townBlock.getCoord());
