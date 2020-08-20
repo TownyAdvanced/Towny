@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.google.common.collect.ForwardingCollection;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -16,19 +15,15 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -66,30 +61,6 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	
-	static class TownBlockMap extends ForwardingCollection<TownBlock> {
-		final Map<WorldCoord, TownBlock> map;
-		
-		public static TownBlockMap from(Map<WorldCoord, TownBlock> map) {
-			return new TownBlockMap(map);
-		}
-		
-		private TownBlockMap(Map<WorldCoord, TownBlock> map) {
-			this.map = map;
-		}
-
-		@Override
-		public boolean contains(Object object) {
-			Validate.isTrue(object instanceof TownBlock);
-			return map.containsKey(((TownBlock)object).getWorldCoord());
-		}
-
-		@Override
-		protected Collection<TownBlock> delegate() {
-			return map.values();
-		}
-	}
-
-	
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -117,6 +88,7 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 		if (townBlocks.size() < 2 && !hasHomeBlock()) {
 			try {
 				setHomeBlock(townBlock);
+				return true;
 			} catch (TownyException e) {
 				e.printStackTrace();
 				return false;
