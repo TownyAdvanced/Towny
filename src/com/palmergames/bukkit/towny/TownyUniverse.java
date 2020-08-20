@@ -504,17 +504,12 @@ public class TownyUniverse implements TownBlockOwner {
 			throw new NotRegisteredException();
 	}
 
-	/**
-	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
-	 * Populated at load time from townblocks folder's files.
-	 * 
-	 * 
-	 * @return townblocks read from townblock files.
-	 */	
+	@Override
 	public Collection<TownBlock> getTownBlocks() {
 		return TownyCollections.townBlockLookupView(townBlocks);
 	}
 	
+	@Override
 	public boolean addTownBlock(TownBlock townBlock) {
 		if (hasTownBlock(townBlock.getWorldCoord())) {
 			return false;
@@ -530,7 +525,8 @@ public class TownyUniverse implements TownBlockOwner {
 	public boolean hasTownBlock(WorldCoord worldCoord) {
 		return townBlocks.containsKey(worldCoord);
 	}
-	
+
+	@Override
 	public boolean removeTownBlock(TownBlock townBlock) {
 		if (removeTownBlock(townBlock.getWorldCoord())) {
 			boolean success = true;

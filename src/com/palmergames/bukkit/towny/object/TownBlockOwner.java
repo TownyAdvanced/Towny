@@ -18,21 +18,6 @@ public interface TownBlockOwner {
 	Collection<TownBlock> getTownBlocks();
 
 	/**
-	 * Checks whether the object has the given townblock or not.
-	 * 
-	 * @deprecated As of version 0.96.2.11 and will be removed in a future release,
-	 * use {@link TownBlockOwner#getTownBlocks()} in conjunction
-	 * with {@link Collection#contains(Object)} instead.
-	 *
-	 * @param townBlock The townblock to check for.
-	 * @return A boolean indicating if it was found or not.
-	 */
-	@Deprecated
-	default boolean hasTownBlock(TownBlock townBlock) {
-		return getTownBlocks().contains(townBlock);
-	}
-
-	/**
 	 * Adds a townblock to the list of existing townblocks.
 	 *
 	 * @param townBlock The townblock to add.
