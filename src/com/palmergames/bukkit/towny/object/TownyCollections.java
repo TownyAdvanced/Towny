@@ -9,6 +9,27 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class TownyCollections {
+	
+	private static abstract class AbstractCollectionView<E> extends AbstractCollection<E> {
+
+		@Override
+		public Iterator<E> iterator() { return delegate().iterator(); }
+
+		@Override
+		public int size() { return delegate().size(); }
+
+		@Override
+		public final boolean remove(Object o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public final boolean add(E e) {
+			throw new UnsupportedOperationException();
+		}
+
+		abstract protected Collection<E> delegate();
+	}
 	/**
 	 * The purpose of this collection view is to allow the
 	 * Collection#contains method to gain the average O(1) lookup
@@ -17,12 +38,12 @@ public class TownyCollections {
 	 * We can take advantage of the fact that we know
 	 * the hashed key is a member of the value.
 	 */
-	static final class TownBlockLookupView extends AbstractCollection<TownBlock> {
+	private static final class TownBlockLookupView extends AbstractCollectionView<TownBlock> {
 
 		final Map<WorldCoord, TownBlock> map;
 		final Collection<TownBlock> view;
 
-		private TownBlockLookupView(Map<WorldCoord, TownBlock> map) {
+		TownBlockLookupView(Map<WorldCoord, TownBlock> map) {
 			this.map = map;
 			this.view = Collections.unmodifiableCollection(map.values());
 		}
@@ -34,19 +55,7 @@ public class TownyCollections {
 		}
 
 		@Override
-		public Iterator<TownBlock> iterator() {
-			return view.iterator();
-		}
-
-		@Override
-		public int size() {
-			return view.size();
-		}
-
-		@Override
-		public boolean remove(Object o) {
-			throw new UnsupportedOperationException();
-		}
+		protected Collection<TownBlock> delegate() { return view; }
 	}
 
 	/**
