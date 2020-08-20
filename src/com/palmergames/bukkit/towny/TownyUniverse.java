@@ -509,7 +509,7 @@ public class TownyUniverse implements TownBlockOwner {
 	 * Populated at load time from townblocks folder's files.
 	 * 
 	 * 
-	 * @return townblocks hashmap read from townblock files.
+	 * @return townblocks read from townblock files.
 	 */	
 	public Collection<TownBlock> getTownBlocks() {
 		return TownyCollections.townBlockLookupView(townBlocks);
