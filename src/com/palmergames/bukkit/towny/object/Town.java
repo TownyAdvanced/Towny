@@ -103,10 +103,6 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 			return townBlocks.get(worldCoord);
 		return null;
 	}
-	
-	public ConcurrentHashMap<WorldCoord, TownBlock> getTownBlockMap() {
-		return townBlocks;
-	}
 
 	public Resident getMayor() {
 

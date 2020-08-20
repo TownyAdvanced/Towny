@@ -66,6 +66,6 @@ public final class TownyCollections {
 	 * @return A new townblock collection with fast lookup.
 	 */
 	public static Collection<TownBlock> townBlockLookupView(Map<WorldCoord, TownBlock> map) {
-		return Collections.unmodifiableCollection(new TownBlockLookupView(map));
+		return new TownBlockLookupView(map);
 	}
 }
