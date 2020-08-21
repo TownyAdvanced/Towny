@@ -4852,3 +4852,22 @@ v0.92.0.11:
   - Reduce mysql DB queries on startup, courtesy of silverwolfg11 with PR #4242.
   - Fix fake resident list in the config not matching full names.
     - Closes #4157.
+  - Town and Nation database refactor
+    - Removes towns.txt and nations.txt files on flatfile databases.
+      - Loads old towns.txt and nations.txt to ensure that orphaned files in the
+        towns & nations folders are not loaded. If successfully loaded, the
+        towns.txt and nations.txt files are deleted.
+    - Residents now store their Town, and Towns do not store their Residents.
+    - Towns now store their Nation, and Nations do not store their Towns.
+    - Towny now handles loading a mayor for a town intelligently.
+      - If a town attempts to set a mayor who is not part of the town, and the
+        town has no residents, the town will be deleted.
+      - Closes #4170.
+    - Towny now handles loading the capital of a nation intelligently.
+  - Little fixes for TownySQLSource:
+    - Hit TownySQLSource with the formatting stick.
+    - Add tar/tar.gz backups to the backup code.
+    - Make deletePlotGroup actually do something.
+  - Invite Cleanup, courtesy of Siris with PR #4269.
+  - Cleanup Confirmation class and properly implement async, courtesy of Siris with PR #4280.
+  - Remove Secondary POM file, courtesy of TheFlagCourier with PR #4278.
