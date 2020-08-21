@@ -111,7 +111,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								} catch (NotRegisteredException ignored) {
 								}
 								int index = resident.getJailSpawn();
-				            	resident.setJailed(resident , index, jailTown);
+				            	resident.setJailed(index, jailTown);
 				            }
 				            
 				        }.runTaskLater(this.plugin, 20);

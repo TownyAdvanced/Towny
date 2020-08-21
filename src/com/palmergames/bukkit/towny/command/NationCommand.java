@@ -799,7 +799,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 		String sent = Translation.of("nation_sent_invites")
-				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown().getNation()))
+				.replace("%a", Integer.toString(resident.getTown().getNation().getSentInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown().getNation())));
 
@@ -1560,7 +1560,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
-		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(), nation, town);
+		TownJoinNationInvite invite = new TownJoinNationInvite(player, town, nation);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) { 
 				town.newReceivedInvite(invite);
@@ -1762,11 +1762,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (TownySettings.isDisallowOneWayAlliance()) {
 			String received = Translation.of("nation_received_requests")
-					.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown().getNation()))
+					.replace("%a", Integer.toString(resident.getTown().getNation().getSentInvites().size())
 					)
 					.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown().getNation())));
 			String sent = Translation.of("nation_sent_ally_requests")
-					.replace("%a", Integer.toString(InviteHandler.getSentAllyRequestsAmount(resident.getTown().getNation()))
+					.replace("%a", Integer.toString(resident.getTown().getNation().getSentAllyInvites().size())
 					)
 					.replace("%m", Integer.toString(InviteHandler.getSentAllyRequestsMaxAmount(resident.getTown().getNation())));
 			if (split[0].equalsIgnoreCase("sent")) {
@@ -1910,7 +1910,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void nationCreateAllyRequest(String sender, Nation nation, Nation receiver) throws TownyException {
+	private void nationCreateAllyRequest(CommandSender sender, Nation nation, Nation receiver) throws TownyException {
 		NationAllyNationInvite invite = new NationAllyNationInvite(sender, nation, receiver);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
@@ -1993,7 +1993,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!targetNation.hasEnemy(nation)) {
 					if (!targetNation.getCapital().getMayor().isNPC()) {
 						for (Nation newAlly : allies) {
-							nationCreateAllyRequest(player.getName(), nation, targetNation);
+							nationCreateAllyRequest(player, nation, targetNation);
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_ally_req_sent", newAlly.getName()));
 						}
 					} else {

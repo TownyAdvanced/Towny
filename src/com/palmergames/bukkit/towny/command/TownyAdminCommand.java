@@ -116,7 +116,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"deposit",
 		"withdraw",
 		"outlaw",
-		"leavenation"
+		"leavenation",
+		"invite"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -343,6 +344,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 										} catch (TownyException ignore) {}
 								}
 							}
+						case "invite":
+							if (args.length == 4)
+								return getTownyStartingWith(args[3], "r");
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
@@ -390,12 +394,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 
-	private Object getSender() {
-
-		if (isConsole)
-			return sender;
-		else
-			return player;
+	private CommandSender getSender() {
+		return sender;
 	}
 
 	public boolean parseTownyAdminCommand(String[] split) throws TownyException {
