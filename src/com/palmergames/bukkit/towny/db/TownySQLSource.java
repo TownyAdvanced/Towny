@@ -804,7 +804,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				line = rs.getString("town-ranks");
 				if ((line != null) && (!line.isEmpty())) {
@@ -815,8 +815,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 			}
 
-			
-			try {
+      try {
 				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					search = (line.contains("#")) ? "#" : ",";
@@ -917,9 +916,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading town " + town.getName());
 
-            try {
+          try {
 				town.forceSetMayor(getResident(rs.getString("mayor")));
-			} catch (TownyException e1) {
+	          } catch (TownyException e1) {
 				e1.getMessage();
 				if (town.getResidents().size() == 0) {
 					deleteTown(town);
@@ -928,7 +927,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					town.findNewMayor();
 				}
 			}	
-			town.setBoard(rs.getString("townBoard"));
+
+            town.setBoard(rs.getString("townBoard"));
 			line = rs.getString("tag");
 			if (line != null)
 				try {
@@ -1062,6 +1062,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 			}
+
 			try {
 				town.setUuid(UUID.fromString(rs.getString("uuid")));
 			} catch (IllegalArgumentException | NullPointerException ee) {
@@ -1100,7 +1101,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			} catch (SQLException ignored) {				
 			}
-			
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
@@ -1179,7 +1180,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				removeNation(nation);
 				return true;
 			}
-
 			line = rs.getString("nationBoard");
 			if (line != null)
 				nation.setBoard(rs.getString("nationBoard"));
