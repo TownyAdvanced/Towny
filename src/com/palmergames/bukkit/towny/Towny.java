@@ -141,7 +141,6 @@ public class Towny extends JavaPlugin {
 		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		ConfirmationHandler.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
