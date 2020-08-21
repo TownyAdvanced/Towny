@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -81,7 +82,7 @@ public class TownyUniverse {
     boolean loadSettings() {
         
         try {
-            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
+            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion().toString());
             Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
             
@@ -143,11 +144,11 @@ public class TownyUniverse {
             return false;
         }
         
-        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
-        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        String verStr = TownySettings.getLastRunVersion(Towny.getPlugin().getVersion().toString());
+        Version lastRunVersion = new Version(StringMgmt.versionFormat(verStr));
         
         // Only migrate if the user just updated.
-        if (!lastRunVersion.equals(curVersion)) {
+        if (!lastRunVersion.equals(towny.getVersion())) {
 			System.out.println("[Towny] Performing Config Migrations...");
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();

@@ -1550,7 +1550,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 		try {
 			String rootFolder = TownyUniverse.getInstance().getRootFolder();
-			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion().toString());
 			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_reload_error"));

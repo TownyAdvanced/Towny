@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.Version;
+import com.palmergames.util.StringMgmt;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +41,8 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+		String str = TownySettings.getLastRunVersion(Towny.getPlugin().getVersion().toString());
+		Version configVersion = new Version(StringMgmt.versionFormat(str));
 		
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {

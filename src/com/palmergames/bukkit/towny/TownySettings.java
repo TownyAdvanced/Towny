@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -2082,7 +2083,7 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 
-	public static boolean isTownyUpdating(String currentVersion) {
+	public static boolean isTownyUpdating(Version currentVersion) {
 
 		if (isTownyUpToDate(currentVersion))
 			return false;
@@ -2090,9 +2091,9 @@ public class TownySettings {
 			return true; // Assume
 	}
 
-	public static boolean isTownyUpToDate(String currentVersion) {
+	public static boolean isTownyUpToDate(Version currentVersion) {
 
-		return currentVersion.equals(getLastRunVersion(currentVersion));
+		return currentVersion.equals(new Version(StringMgmt.versionFormat(getLastRunVersion("0.0.0.0"))));
 	}
 
 	public static String getLastRunVersion(String currentVersion) {
@@ -2100,7 +2101,7 @@ public class TownySettings {
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
 	}
 
-	public static void setLastRunVersion(String currentVersion) {
+	public static void setLastRunVersion(Version currentVersion) {
 
 		setProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
 		config.save();
