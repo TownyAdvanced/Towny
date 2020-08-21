@@ -14,8 +14,8 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockMap;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyCollections;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -31,6 +31,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class TownyUniverse implements TownBlockOwner {
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new TownBlockMap();
 	private CompletableFuture<Void> backupFuture;
     
     private final List<Resident> jailedResidents = new ArrayList<>();
@@ -505,8 +506,8 @@ public class TownyUniverse implements TownBlockOwner {
 	}
 
 	@Override
-	public Collection<TownBlock> getTownBlocks() {
-		return TownyCollections.townBlockLookupView(townBlocks);
+	public @NotNull Collection<TownBlock> getTownBlocks() {
+		return townBlocks.values();
 	}
 	
 	@Override

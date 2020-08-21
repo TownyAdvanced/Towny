@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 /**
@@ -15,6 +17,7 @@ public interface TownBlockOwner {
 	 * 
 	 * @return The townblocks this object contains.
 	 */
+	@NotNull
 	Collection<TownBlock> getTownBlocks();
 
 	/**

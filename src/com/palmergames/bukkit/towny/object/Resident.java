@@ -28,6 +28,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -841,7 +842,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public Collection<TownBlock> getTownBlocks() {
+	public @NotNull Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 

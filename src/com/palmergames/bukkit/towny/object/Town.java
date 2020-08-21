@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +25,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
@@ -58,7 +59,7 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final Map<WorldCoord, TownBlock> townBlocks = new TownBlockMap();
 	private final TownyPermission permissions = new TownyPermission();
 	
 	public Town(String name) {
@@ -72,9 +73,8 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	}
 
 	@Override
-	public Collection<TownBlock> getTownBlocks() {
-		// Wrap into faster lookup view.
-		return TownyCollections.townBlockLookupView(townBlocks);
+	public @NotNull Collection<TownBlock> getTownBlocks() {
+		return townBlocks.values();
 	}
 	
 	@Override
