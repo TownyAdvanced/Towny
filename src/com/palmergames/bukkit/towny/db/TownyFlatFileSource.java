@@ -64,6 +64,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			rootFolderPath,
 			dataFolderPath,
 			dataFolderPath + File.separator + "residents",
+			dataFolderPath + File.separator + "residents" + File.separator + "deleted",
 			dataFolderPath + File.separator + "towns",
 			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
 			dataFolderPath + File.separator + "nations",
@@ -2368,8 +2369,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public void deleteResident(Resident resident) {
 
 		File file = new File(getResidentFilename(resident));
-		if (file.exists())
-			file.delete();
+		if (file.exists()) {
+			FileMgmt.moveFile(file, ("deleted"));
+		}
 	}
 
 	@Override
