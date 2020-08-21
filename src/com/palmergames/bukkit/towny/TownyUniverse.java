@@ -126,9 +126,6 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            
-            // Run both the backup cleanup and backup async.
-			performBackup();
            
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
@@ -160,6 +157,9 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
+
+		// Run both the backup cleanup and backup async.
+		performBackup();
         
         return true;
     }

@@ -84,7 +84,6 @@ import java.util.Map;
  * 
  * @author Shade, ElgarL, LlmDl
  */
-
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private String version = "2.0.0";
