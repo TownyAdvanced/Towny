@@ -278,7 +278,7 @@ public class Towny extends JavaPlugin {
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
-			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
+			System.out.println("[Towny] All residents store UUIDs, upgrade prep complete.");
 		
 		resetCache();
 

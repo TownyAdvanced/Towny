@@ -4874,3 +4874,7 @@ v0.92.0.11:
 0.96.2.13:
   - Fix NPE caused by trying to delete an economy account before the EconomyHandler is set up.
   - On flatfile databases, move resident file into deleted folder instead of outright deleting them.
+  - Fix Towny deleting residents that do not load proper data.
+    - This was probably overly heavy-handed, usually happening when a resident loaded a town that didn't exist.
+    - Now resident will load with no town, if they have saved an invalid Town.
+    - Removed spammy debug messages from TownySQLSource.

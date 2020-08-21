@@ -785,43 +785,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				e.printStackTrace();
 			}
 
-			String line = rs.getString("town");
-			if ((line != null) && (!line.isEmpty())) {
-				resident.setTown(getTown(line));
-				TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
-			}
-
-			try {
-				resident.setTitle(rs.getString("title"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				resident.setSurname(rs.getString("surname"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			try {
-				line = rs.getString("town-ranks");
-				if ((line != null) && (!line.isEmpty())) {
-					search = (line.contains("#")) ? "#" : ",";
-					resident.setTownRanks(Arrays.asList((line.split(search))));
-					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
-				}
-			} catch (Exception e) {
-			}
-
-			try {
-				line = rs.getString("nation-ranks");
-				if ((line != null) && (!line.isEmpty())) {
-					search = (line.contains("#")) ? "#" : ",";
-					resident.setNationRanks(Arrays.asList((line.split(search))));
-					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
-				}
-			} catch (Exception e) {
-			}
-
+			String line;
 			try {
 				line = rs.getString("friends");
 				if (line != null) {
@@ -852,6 +816,48 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 
+			line = rs.getString("town");
+			if ((line != null) && (!line.isEmpty())) {
+				Town town = null;
+				try {
+					town = getTown(line);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
+					resident.setTown(null);
+				}
+				if (town != null) {
+					resident.setTown(getTown(line));
+
+					try {
+						resident.setTitle(rs.getString("title"));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					try {
+						resident.setSurname(rs.getString("surname"));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					try {
+						line = rs.getString("town-ranks");
+						if ((line != null) && (!line.isEmpty())) {
+							search = (line.contains("#")) ? "#" : ",";
+							resident.setTownRanks(Arrays.asList((line.split(search))));
+						}
+					} catch (Exception e) {
+					}
+
+					try {
+						line = rs.getString("nation-ranks");
+						if ((line != null) && (!line.isEmpty())) {
+							search = (line.contains("#")) ? "#" : ",";
+							resident.setNationRanks(Arrays.asList((line.split(search))));
+						}
+					} catch (Exception e) {
+					}
+				}
+			}
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
