@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1024,24 +1023,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				else
 					throw new TownyException(Translation.of("That town does not belong to a nation."));
 				
-				try {
-					nation.removeTown(town);
-					
-					townyUniverse.getDataSource().saveNation(nation);
-					townyUniverse.getDataSource().saveNationList();
-
-					plugin.resetCache();
-
-					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
-				} catch (EmptyNationException en) {
-					townyUniverse.getDataSource().removeNation(en.getNation());
-					townyUniverse.getDataSource().saveNationList();
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", en.getNation().getName()));
-				} finally {
-					townyUniverse.getDataSource().saveTown(town);
-				}
+				town.removeNation();
 				
+				plugin.resetCache();
+
+				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
+
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
@@ -1369,7 +1357,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 					townyUniverse.getDataSource().saveTown(town);					
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_new_mayor", newMayor.getName()));
-					// TownyMessaging.sendMessage(player, msg);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 				}

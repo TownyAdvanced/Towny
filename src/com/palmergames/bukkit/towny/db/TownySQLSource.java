@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -814,7 +815,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 			}
 
-			try {
+      try {
 				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					search = (line.contains("#")) ? "#" : ",";
@@ -915,8 +916,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading town " + town.getName());
 
-			town.setMayor(getResident(rs.getString("mayor")));
-			town.setBoard(rs.getString("townBoard"));
+          try {
+				town.forceSetMayor(getResident(rs.getString("mayor")));
+	          } catch (TownyException e1) {
+				e1.getMessage();
+				if (town.getResidents().size() == 0) {
+					deleteTown(town);
+					return true;
+				} else { 
+					town.findNewMayor();
+				}
+			}	
+
+            town.setBoard(rs.getString("townBoard"));
 			line = rs.getString("tag");
 			if (line != null)
 				try {
@@ -1050,6 +1062,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 			}
+
 			try {
 				town.setUuid(UUID.fromString(rs.getString("uuid")));
 			} catch (IllegalArgumentException | NullPointerException ee) {
@@ -1074,6 +1087,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 			
+			try {
+				line = rs.getString("nation");
+				if (line != null && !line.isEmpty()) {
+					Nation nation = null;
+					try {
+						nation = getNation(line);
+					} catch (NotRegisteredException ignored) {
+						// Town tried to load a nation that doesn't exist, do not set nation.
+					}
+					if (nation != null)
+						town.setNation(nation);
+				}
+			} catch (SQLException ignored) {				
+			}
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
@@ -1109,6 +1137,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public boolean loadNation(Nation nation) {
         if (!getContext())
             return false;
+
         try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "NATIONS WHERE name=?")) {
         	ps.setString(1, nation.getName());
         	
@@ -1144,8 +1173,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 			}
-			nation.setCapital(getTown(rs.getString("capital")));
-
+			try {
+				nation.forceSetCapital(getTown(rs.getString("capital")));
+			} catch (EmptyNationException e1) {
+				System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+				removeNation(nation);
+				return true;
+			}
 			line = rs.getString("nationBoard");
 			if (line != null)
 				nation.setBoard(rs.getString("nationBoard"));
@@ -1726,7 +1760,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> twn_hm = new HashMap<>();
             twn_hm.put("name", town.getName());
-//            twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
             twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
             twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
             twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
@@ -1757,7 +1790,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				twn_hm.put("metadata", "");
         
-            //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
             twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#" + town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#" + town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw() : "");
             // Outpost Spawns
@@ -1816,12 +1848,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         try {
             HashMap<String, Object> nat_hm = new HashMap<>();
             nat_hm.put("name", nation.getName());
-            nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
             nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
-            nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
@@ -2377,22 +2407,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Save keys
 	 */
 
-    @Override
-    public boolean saveTownList() {
-
-        return true;
-    }
-
 	@Override
 	public boolean savePlotGroupList() {
 		return true;
 	}
-
-	@Override
-    public boolean saveNationList() {
-
-        return true;
-    }
 
     @Override
     public boolean saveWorldList() {

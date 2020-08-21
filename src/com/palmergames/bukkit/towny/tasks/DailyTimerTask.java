@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -211,15 +210,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
 					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-						try {
-							localRemovedTowns.add(town.getName());							
-							nation.removeTown(town);							
-						} catch (EmptyNationException e) {
-							// Always has 1 town (capital) so ignore
-						} catch (NotRegisteredException ignored) {
-						}
-						townyUniverse.getDataSource().saveTown(town);
-						townyUniverse.getDataSource().saveNation(nation);
+						localRemovedTowns.add(town.getName());		
+						town.removeNation();
 					}
 				} else
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
