@@ -30,7 +30,7 @@ public interface TownBlockOwner {
 	/**
 	 * Checks whether the object has the given townblock or not.
 	 * 
-	 * @deprecated As of version 0.96.2.11 and will be removed in a future release,
+	 * @deprecated As of version 0.96.2.13 and will be removed in a future release,
 	 * use {@link TownBlockOwner#getTownBlocks()} in conjunction
 	 * with {@link Collection#contains(Object)} instead.
 	 *
