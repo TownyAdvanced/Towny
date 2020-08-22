@@ -78,7 +78,7 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	}
 	
 	@Override
-	public boolean addTownBlock(TownBlock townBlock) {
+	public boolean addTownBlock(@NotNull TownBlock townBlock) {
 
 		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
 			return false;
@@ -96,12 +96,6 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 		}
 		
 		return false;
-	}
-	
-	public TownBlock getTownBlock(WorldCoord worldCoord) {
-		if (townBlocks.containsKey(worldCoord))
-			return townBlocks.get(worldCoord);
-		return null;
 	}
 
 	public Resident getMayor() {
@@ -693,7 +687,7 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	}
 
 	@Override
-	public boolean removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
 
 		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
 			// Remove the spawn point for this outpost.

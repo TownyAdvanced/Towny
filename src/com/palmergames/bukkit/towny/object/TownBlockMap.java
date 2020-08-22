@@ -12,6 +12,10 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * A concurrent map which facilitates the storage of TownBlocks.
+ * 
+ * <p>The key advantage of this map is the fast lookup it provides when
+ * accessing it's value collection, instead of an O(n) lookup for values
+ * it maintains a O(1) value lookup time complexity</p>
  */
 public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock> {
 	
@@ -22,16 +26,8 @@ public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock>
 	public Collection<TownBlock> values() {
 		return new ValueLookupView(map.values());
 	}
-
-	/**
-	 * The purpose of this collection view is to allow the
-	 * Collection#contains method associated with Collection#values
-	 * to gain the average O(1) lookup runtime that the map
-	 * in this class uses.
-	 *
-	 * <p>We can take advantage of the fact that we know
-	 * the hashed key is a member of the value.</p>
-	 */
+	
+	// Values wrapper for lookup.
 	private final class ValueLookupView extends AbstractCollection<TownBlock> {
 		private final Collection<TownBlock> view;
 		
@@ -50,6 +46,12 @@ public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock>
 			Validate.isTrue(o instanceof TownBlock);
 			return TownBlockMap.this.containsKey(((TownBlock) o).getWorldCoord());
 		}
+	}
+
+	@Override
+	public boolean containsValue(Object value) {
+		Validate.isTrue(value instanceof TownBlock);
+		return map.containsKey(((TownBlock) value).getWorldCoord());
 	}
 
 	@Override

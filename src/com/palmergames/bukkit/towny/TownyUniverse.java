@@ -511,7 +511,7 @@ public class TownyUniverse implements TownBlockOwner {
 	}
 	
 	@Override
-	public boolean addTownBlock(TownBlock townBlock) {
+	public boolean addTownBlock(@NotNull TownBlock townBlock) {
 		if (hasTownBlock(townBlock.getWorldCoord())) {
 			return false;
 		}
@@ -528,7 +528,7 @@ public class TownyUniverse implements TownBlockOwner {
 	}
 
 	@Override
-	public boolean removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
 		if (removeTownBlock(townBlock.getWorldCoord())) {
 			boolean success = true;
 			try {

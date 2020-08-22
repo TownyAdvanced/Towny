@@ -847,12 +847,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public boolean addTownBlock(TownBlock townBlock) {
+	public boolean addTownBlock(@NotNull TownBlock townBlock) {
 		return townBlocks.add(townBlock);
 	}
 
 	@Override
-	public boolean removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
 		return townBlocks.remove(townBlock);
 	}
 

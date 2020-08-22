@@ -95,14 +95,14 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissibl
 
 	public boolean hasResident() { return resident != null; }
 	
-	public boolean addTownBlock(TownBlock townBlock) {
+	public boolean addTownBlock(@NotNull TownBlock townBlock) {
 		if (townBlocks == null)
 			townBlocks = new ArrayList<>();
 		
 		return townBlocks.add(townBlock);
 	}
 
-	public boolean removeTownBlock(TownBlock townBlock) {
+	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
 		if (townBlocks != null)
 			return townBlocks.remove(townBlock);
 		
