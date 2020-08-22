@@ -31,9 +31,7 @@ public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock>
 	private final class ValueLookupView extends AbstractCollection<TownBlock> {
 		private final Collection<TownBlock> view;
 		
-		ValueLookupView(Collection<TownBlock> view) {
-			this.view = view;
-		}
+		ValueLookupView(Collection<TownBlock> view) { this.view = view; }
 
 		@Override
 		public Iterator<TownBlock> iterator() { return view.iterator(); }
@@ -42,10 +40,7 @@ public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock>
 		public int size() { return view.size(); }
 
 		@Override
-		public boolean contains(Object o) {
-			Validate.isTrue(o instanceof TownBlock);
-			return TownBlockMap.this.containsKey(((TownBlock) o).getWorldCoord());
-		}
+		public boolean contains(Object o) { return TownBlockMap.this.containsValue(o); }
 	}
 
 	@Override
