@@ -4,10 +4,9 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,7 +15,7 @@ import java.util.UUID;
  */
 public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissible {
 	private Resident resident = null;
-	private List<TownBlock> townBlocks;
+	private final Map<WorldCoord,TownBlock> townBlocks = new TownBlockMap();
 	private double price = -1;
 	private Town town;
 	private TownyPermission permissions;
@@ -96,25 +95,25 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissibl
 	public boolean hasResident() { return resident != null; }
 	
 	public boolean addTownBlock(@NotNull TownBlock townBlock) {
-		if (townBlocks == null)
-			townBlocks = new ArrayList<>();
+		if (townBlocks.containsValue(townBlock)) {
+			return false;
+		}
 		
-		return townBlocks.add(townBlock);
+		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+		return true;
 	}
 
 	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
-		if (townBlocks != null)
-			return townBlocks.remove(townBlock);
+		if (!townBlocks.containsValue(townBlock)) {
+			return false;
+		}
 		
-		return false;
-	}
-	
-	public void setTownblocks(List<TownBlock> townBlocks) {
-		this.townBlocks = townBlocks;
+		townBlocks.remove(townBlock.getWorldCoord());
+		return true;
 	}
 
 	public @NotNull Collection<TownBlock> getTownBlocks() {
-		return Collections.unmodifiableCollection(townBlocks);
+		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 
 	public void setPrice(double price) {
