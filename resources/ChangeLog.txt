@@ -4878,3 +4878,5 @@ v0.92.0.11:
     - This was probably overly heavy-handed, usually happening when a resident loaded a town that didn't exist.
     - Now resident will load with no town, if they have saved an invalid Town.
     - Removed spammy debug messages from TownySQLSource.
+  - Hotfix/Delay backup until after initialization, courtesy of Siris with PR #4281.
+  - Readd TownyMessaging.sendMsg(Object, String) deprecated.

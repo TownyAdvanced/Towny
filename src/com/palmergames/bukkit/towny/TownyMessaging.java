@@ -714,5 +714,15 @@ public class TownyMessaging {
 			}
 		}
 	}
-
+	
+	/**
+	 * Deprecated as of 0.96.2.13 use {@link #sendMsg(CommandSender, String)} instead.
+	 * 
+	 * @param object - One receiving the message.
+	 * @param message - Message being sent.
+	 */
+	@Deprecated
+	public static void sendMsg(Object object, String message) {
+		sendMsg((CommandSender) object, message);
+	}
 }
