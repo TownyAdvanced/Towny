@@ -3,53 +3,32 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.command.CommandSender;
 
-public class NationAllyNationInvite implements Invite {
+public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 
-	private final String directSender;
-	private final Nation receiver;
-	private final Nation sender;
-
-	public NationAllyNationInvite(String directSender, Nation sender, Nation receiver) {
-		this.directSender = directSender;
-		this.sender = sender;
-		this.receiver = receiver;
-	}
-
-	@Override
-	public String getDirectSender() {
-		return directSender;
-	}
-
-	@Override
-	public Nation getReceiver() {
-		return receiver;
-	}
-
-	@Override
-	public Nation getSender() {
-		return sender;
+	public NationAllyNationInvite(CommandSender directSender, Nation receiver, Nation sender) {
+		super(directSender, receiver, sender);
 	}
 
 	@Override
 	public void accept() throws TownyException {
-			Nation receiverNation = getReceiver();
-			Nation senderNation = getSender();
+		Nation receiverNation = getReceiver();
+		Nation senderNation = getSender();
 			
-			receiverNation.addAlly(senderNation);
-			senderNation.addAlly(receiverNation);
+		receiverNation.addAlly(senderNation);
+		senderNation.addAlly(receiverNation);
 			
-			TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
-			TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
+		TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
+		TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
 			
-			receiverNation.deleteReceivedInvite(this);
-			senderNation.deleteSentAllyInvite(this);
+		receiverNation.deleteReceivedInvite(this);
+		senderNation.deleteSentAllyInvite(this);
 			
-			TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
-			TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
+		TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
+		TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
 	}
 
 	@Override

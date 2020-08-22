@@ -14,4 +14,4 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   echo "<settings><servers><server><id>github-towny</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
-                  mvn compile
+                  mvn compile -P github-action

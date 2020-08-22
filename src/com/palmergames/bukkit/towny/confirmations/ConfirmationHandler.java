@@ -16,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Suneet Tipirneni (Siris)
  */
 public class ConfirmationHandler {
+
+	private final static Towny plugin = Towny.getPlugin();
+	private final static Map<CommandSender, ConfirmationContext> confirmations = new ConcurrentHashMap<>();
 	
 	private static final class ConfirmationContext {
 		final Confirmation confirmation;
@@ -25,13 +28,6 @@ public class ConfirmationHandler {
 			this.confirmation = confirmation;
 			this.taskID = taskID;
 		}
-	}
-	
-	private static Towny plugin;
-	public static Map<CommandSender, ConfirmationContext> confirmations = new ConcurrentHashMap<>();
-
-	public static void initialize(Towny plugin) {
-		ConfirmationHandler.plugin = plugin;
 	}
 
 	/**
@@ -47,8 +43,10 @@ public class ConfirmationHandler {
 		confirmations.remove(sender);
 		
 		// Run the cancel handler.
-		if (confirmation.getCancelHandler() != null)
+		if (confirmation.getCancelHandler() != null) {
 			confirmation.getCancelHandler().run();
+		}
+		
 		TownyMessaging.sendMsg(sender, Translation.of("successful_cancel"));
 	}
 
@@ -82,11 +80,7 @@ public class ConfirmationHandler {
 		
 		int taskID;
 		long ticks = 20L * duration;
-		if (confirmation.isAsync()) {
-			taskID = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, handler, ticks).getTaskId();
-		} else {
-			taskID = Bukkit.getScheduler().runTaskLater(plugin, handler, ticks).getTaskId();
-		}
+		taskID = Bukkit.getScheduler().runTaskLater(plugin, handler, ticks).getTaskId();
 
 		// Cache the task.
 		confirmations.put(sender, new ConfirmationContext(confirmation, taskID));
@@ -104,14 +98,18 @@ public class ConfirmationHandler {
 		// Get handler
 		Runnable handler = context.confirmation.getAcceptHandler();
 
-		// Execute handler.
-		handler.run();
-
 		// Cancel task.
 		Bukkit.getScheduler().cancelTask(context.taskID);
-		
+
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
+
+		// Execute handler.
+		if (context.confirmation.isAsync()) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, handler);
+		} else {
+			Bukkit.getScheduler().runTask(plugin, handler);
+		}
 	}
 	
 	public static boolean hasConfirmation(CommandSender sender) {
