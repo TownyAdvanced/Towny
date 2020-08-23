@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, SpawnLocation {
 	
-	protected BankAccount account;
+	protected transient BankAccount account;
 	protected Location spawn;
 	protected String tag = "";
 	protected String board = null;
@@ -40,7 +40,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
 	protected double taxes;
-	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
+	private final transient AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
 	protected Government(UUID uniqueIdentifier) {
 		super(uniqueIdentifier);

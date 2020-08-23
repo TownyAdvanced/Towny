@@ -57,10 +57,7 @@ public class Nation extends Government {
 	private UUID capital;
 	private boolean neutral = false;
 	private String mapColorHexCode = "";
-	private String tag = "";
-	private long registered;
 	
-	@LoadSetter(setterName = "setNationSpawn")
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
 	@SuppressWarnings("unused")
