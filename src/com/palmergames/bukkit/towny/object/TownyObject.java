@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public abstract class TownyObject implements Nameable, Saveable {
 	private String name;
-	private boolean changed;
+	private transient boolean changed;
 	
 	@PrimaryKey
 	private UUID uniqueIdentifier;

@@ -179,8 +179,6 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	}
 	
 	private void loadField(Saveable obj, Field field, String fieldValue) {
-		field.setAccessible(true);
-
 		if (fieldValue == null) {
 			return;
 		}
@@ -196,6 +194,7 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 //			} catch (IllegalAccessException e) {
 //			}
 
+		field.setAccessible(true);
 		Object value = ObjectSerializer.deserializeField(field, fieldValue);
 
 		if (value == null) {
@@ -354,7 +353,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 	}
 
-	private <T extends Saveable> @NotNull File getFlatFile(@NotNull Class<T> type, @NotNull UUID id) {
+	@NotNull
+	private <T extends Saveable> File getFlatFile(@NotNull Class<T> type, @NotNull UUID id) {
 		Validate.notNull(type);
 		Validate.notNull(id);
 
@@ -363,7 +363,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return new File(dir.getPath() + "/" + id + ".txt");
 	}
 
-	private <T extends Saveable> @NotNull File getFlatFileDirectory(@NotNull Class<T> type) {
+	@NotNull
+	private <T extends Saveable> File getFlatFileDirectory(@NotNull Class<T> type) {
 		Validate.notNull(type);
 
 		// Check the cache
