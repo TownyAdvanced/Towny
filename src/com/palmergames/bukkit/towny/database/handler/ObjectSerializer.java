@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.database.handler;
 import com.palmergames.bukkit.towny.database.dbHandlers.BaseTypeHandlers;
 import com.palmergames.bukkit.towny.database.dbHandlers.ListHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.LocationHandler;
+import com.palmergames.bukkit.towny.database.dbHandlers.MetadataHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.NationHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.ResidentHandler;
 import com.palmergames.bukkit.towny.database.dbHandlers.SetHandler;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +34,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -48,6 +51,7 @@ public class ObjectSerializer {
 		registerAdapter(Integer.class, BaseTypeHandlers.INTEGER_HANDLER);
 		registerAdapter(new TypeContext<List<String>>(){}.getType(), BaseTypeHandlers.STRING_LIST_HANDLER);
 
+		registerAdapter(new TypeContext<Map<String, CustomDataField<?>>>(){}.getType(), new MetadataHandler());
 		registerAdapter(Resident.class, new ResidentHandler());
 		registerAdapter(Location.class, new LocationHandler());
 		registerAdapter(List.class, new ListHandler());
@@ -245,7 +249,7 @@ public class ObjectSerializer {
 		}
 	}
 
-	public static <T> @Nullable T deserialize(String str, Type type) {
+	public static <T> T deserialize(String str, Type type) {
 		if (str.isEmpty()) {
 			return null;
 		}

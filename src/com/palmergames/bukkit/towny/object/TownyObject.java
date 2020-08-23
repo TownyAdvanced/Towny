@@ -22,7 +22,7 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@PrimaryKey
 	private UUID uniqueIdentifier;
 	
-	private transient Map<String, CustomDataField<?>>metadata = null;
+	private Map<String, CustomDataField<?>>metadata = null;
 	
 	public TownyObject(UUID id) {
 		this.uniqueIdentifier = id;
@@ -116,7 +116,11 @@ public abstract class TownyObject implements Nameable, Saveable {
 		
 		return false;
 	}
-
+	
+	/**
+	 * Used by old database to load metadata.
+	 */
+	@Deprecated
 	public void setMetadata(String str) {
 		String[] objects = str.split(";");
 
