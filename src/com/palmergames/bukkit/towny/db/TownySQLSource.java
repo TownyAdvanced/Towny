@@ -1160,18 +1160,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
-			line = rs.getString("towns");
-			if (line != null) {
-				search = (line.contains("#")) ? "#" : ",";
-				tokens = line.split(search);
-				for (String token : tokens) {
-					if (!token.isEmpty()) {
-						Town town = getTown(token);
-						if (town != null)
-							nation.addTown(town);
-					}
-				}
-			}
 			try {
 				nation.forceSetCapital(getTown(rs.getString("capital")));
 			} catch (EmptyNationException e1) {
