@@ -4882,3 +4882,8 @@ v0.92.0.11:
   - Readd TownyMessaging.sendMsg(Object, String) deprecated.
   - Fix Towny deleting resident that do not load proper data on sql databases.
   - Fix Towny still trying to load a nation's town list on SQL servers.
+0.96.2.14:
+  - Fix /t list throwing an error on spigot servers when the economyhandler is not active.
+    - Sometimes caused by having vault without any economy plugin present.
+    - Closes #4284.
+  - Made TownySettings.isUsingEconomy also require that the TownyEconomyHandler.isActive(), to more easily handle when a server has not had their economy properly set up.

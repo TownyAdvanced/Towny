@@ -1095,7 +1095,7 @@ public class TownySettings {
 
 	public static boolean isUsingEconomy() {
 
-		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
+		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY) && TownyEconomyHandler.isActive();
 	}
 
 	public static boolean isFakeResident(String name) {
