@@ -4880,3 +4880,4 @@ v0.92.0.11:
     - Removed spammy debug messages from TownySQLSource.
   - Hotfix/Delay backup until after initialization, courtesy of Siris with PR #4281.
   - Readd TownyMessaging.sendMsg(Object, String) deprecated.
+  - Fix Towny deleting resident that do not load proper data on sql databases.
