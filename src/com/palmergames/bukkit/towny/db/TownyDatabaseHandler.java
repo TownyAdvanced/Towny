@@ -1030,7 +1030,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Iterator<Town> towns = succumbingNation.getTowns().iterator();
 		while (towns.hasNext()) {
 			try {
-				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+				if (TownySettings.isUsingEconomy())
+					succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 				Town town = towns.next();
 				town.removeNation();
 				try {

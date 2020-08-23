@@ -4887,3 +4887,4 @@ v0.92.0.11:
     - Sometimes caused by having vault without any economy plugin present.
     - Closes #4284.
   - Made TownySettings.isUsingEconomy also require that the TownyEconomyHandler.isActive(), to more easily handle when a server has not had their economy properly set up.
+  - Fix for servers that do not use an economy being unable to do many commands/operations and seeing [Towny] null. 
