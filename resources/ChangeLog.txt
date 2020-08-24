@@ -4888,3 +4888,4 @@ v0.92.0.11:
     - Closes #4284.
   - Made TownySettings.isUsingEconomy also require that the TownyEconomyHandler.isActive(), to more easily handle when a server has not had their economy properly set up.
   - Fix for servers that do not use an economy being unable to do many commands/operations and seeing [Towny] null. 
+  - Unmake TownySettings.isUsingEconomy also require that teh TownyEconomyHandler.isActive(), because we use isUsingEconomy to decide if we startup the economy handler (derp).
