@@ -2223,10 +2223,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public void deleteFile(String fileName) {
-
-		File file = new File(fileName);
-		if (file.exists())
-			file.delete();
+		ffQueryQueue.add(new PermanentDeleteFileTask(new File(fileName)));
 	}
 
 	@Override
