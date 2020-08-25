@@ -25,7 +25,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
+import com.palmergames.bukkit.towny.tasks.PermanentDeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -69,6 +71,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private final Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<>();
+	private final Queue<Runnable> ffQueryQueue = new ConcurrentLinkedQueue<>();
 	private BukkitTask task = null;
 
 	private final String dsn;
@@ -172,6 +175,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 			}
+			
+			while (!TownySQLSource.this.ffQueryQueue.isEmpty()) {
+				Runnable operation = TownySQLSource.this.ffQueryQueue.poll();
+				operation.run();
+			}
 
 		}, 5L, 5L);
 	}
@@ -190,6 +198,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} else {
 				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
 			}
+		}
+
+		while (!TownySQLSource.this.ffQueryQueue.isEmpty()) {
+			Runnable operation = TownySQLSource.this.ffQueryQueue.poll();
+			operation.run();
 		}
 	}
 
@@ -2197,10 +2210,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public void deletePlotData(PlotBlockData plotChunk) {
-
 		File file = new File(getPlotFilename(plotChunk));
-		if (file.exists())
-			file.delete();
+		ffQueryQueue.add(new PermanentDeleteFileTask(file));
 	}
 
 	private boolean isFile(String fileName) {
@@ -2249,13 +2260,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
-
 		HashMap<String, Object> twn_hm = new HashMap<>();
 		twn_hm.put("world", townBlock.getWorld().getName());
 		twn_hm.put("x", townBlock.getX());
 		twn_hm.put("z", townBlock.getZ());
 		DeleteDB("TOWNBLOCKS", twn_hm);
-
 	}
 
 	@Override
@@ -2447,39 +2456,38 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveRegenList() {
-
-		try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
-			for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
-				fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ()
+		ffQueryQueue.add(() -> {
+			try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
+				for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
+					fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ()
 						+ System.getProperty("line.separator"));
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
-			e.printStackTrace();
-			return false;
-
-		}
-
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
+				e.printStackTrace();
+			}
+		});
+		
 		return true;
 	}
 
 	@Override
 	public boolean saveSnapshotList() {
-		try (BufferedWriter fout = new BufferedWriter(
+		ffQueryQueue.add(() -> {
+			try (BufferedWriter fout = new BufferedWriter(
 				new FileWriter(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
-			while (TownyRegenAPI.hasWorldCoords()) {
-				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-				fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ()
+				while (TownyRegenAPI.hasWorldCoords()) {
+					WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+					fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ()
 						+ System.getProperty("line.separator"));
+				}
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
+				e.printStackTrace();
 			}
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
-			e.printStackTrace();
-			return false;
-
-		}
-
+		});
+		
 		return true;
 	}
 

@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.tasks.PermanentDeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -2331,7 +2332,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     @Override
 	public void deletePlotData(PlotBlockData plotChunk) {
 		File file = new File(getPlotFilename(plotChunk));
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new PermanentDeleteFileTask(file));
 	}
 
 	private boolean isFile(String fileName) {
@@ -2342,7 +2343,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public void deleteFile(String fileName) {
 		File file = new File(fileName);
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new PermanentDeleteFileTask(file));
 	}
 
 	@Override
