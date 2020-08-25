@@ -2267,7 +2267,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean backup() throws IOException {
+	public boolean backup() throws IOException {
 
 		TownyMessaging.sendMsg("Performing backup");
 		TownyMessaging.sendMsg("***** Warning *****");
