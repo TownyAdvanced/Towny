@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -52,7 +53,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
-	private final Queue<FlatFile_Task> queryQueue = new ConcurrentLinkedQueue<>();
+	private final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final BukkitTask task;
 
 	private final String newLine = System.getProperty("line.separator");
@@ -86,24 +87,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		 * Start our Async queue for pushing data to the database.
 		 */
 		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-			
 			while (!TownyFlatFileSource.this.queryQueue.isEmpty()) {
-				
-				FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
-				
-				try {
-					
-					FileMgmt.listToFile(query.list, query.path);
-					
-				} catch (NullPointerException ex) {
-					
-					if (query != null)
-						TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
-					
-				}
-				
+				Runnable operation = TownyFlatFileSource.this.queryQueue.poll();
+				operation.run();
 			}
-			
 		}, 5L, 5L);
 	}
 	
@@ -128,14 +115,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Make sure that *all* tasks are saved before shutting down.
 		while (!queryQueue.isEmpty()) {
-			FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
-
-			try {
-				FileMgmt.listToFile(query.list, query.path);
-			} catch (NullPointerException ex) {
-				if (query != null)
-					TownyMessaging.sendErrorMsg("Null Error saving to file - " + query.path);
-			}
+			Runnable operation = TownyFlatFileSource.this.queryQueue.poll();
+			operation.run();
 		}
 	}
 
@@ -1650,7 +1631,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add(group.getTown().getName() + "," + group.getID() + "," + group.getName());
 		}
 		
-		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "plotgroups.txt"));
+		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "plotgroups.txt"));
 		
 		return true;
 	}
@@ -1671,7 +1652,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "worlds.txt"));
+		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "worlds.txt"));
 
 		return true;
 
@@ -1730,7 +1711,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, getResidentFilename(resident)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getResidentFilename(resident)));
 
 		return true;
 
@@ -1843,7 +1824,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getTownFilename(town)));
 
 		return true;
 
@@ -1867,7 +1848,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("town=" + group.getTown().toString());
 		
 		// Save file
-		this.queryQueue.add(new FlatFile_Task(list, getPlotGroupFilename(group)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getPlotGroupFilename(group)));
 		
 		return true;
 	}
@@ -1921,7 +1902,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, getNationFilename(nation)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getNationFilename(nation)));
 
 		return true;
 
@@ -2050,7 +2031,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, getWorldFilename(world)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getWorldFilename(world)));
 
 		return true;
 
@@ -2130,7 +2111,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, getTownBlockFilename(townBlock)));
+		this.queryQueue.add(new FlatFileSaveTask(list, getTownBlockFilename(townBlock)));
 
 		return true;
 
@@ -2151,40 +2132,36 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveRegenList() {
-        
-        try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
-            for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
-                fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + newLine);
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
-            e.printStackTrace();
-            return false;
-            
-        }
+        queryQueue.add(() -> {
+			try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
+				for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values())) {
+					fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + newLine);
+				}
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
+				e.printStackTrace();
+			}
+		});
 
 		return true;
-
 	}
 
 	@Override
 	public boolean saveSnapshotList() {
-        
-        try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
-            while (TownyRegenAPI.hasWorldCoords()) {
-                WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-                fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
-            }
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
-            e.printStackTrace();
-            return false;
-            
-        }
+       queryQueue.add(() -> {
+		   try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
+			   while (TownyRegenAPI.hasWorldCoords()) {
+				   WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+				   fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
+			   }
 
-		return true;
-
+		   } catch (Exception e) {
+			   TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
+			   e.printStackTrace();
+		   }
+	   });
+       
+       return true;
 	}
 
 	/**
@@ -2195,44 +2172,44 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 	@Override
 	public boolean savePlotData(PlotBlockData plotChunk) {
-
-		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
-        
         String path = getPlotFilename(plotChunk);
-        try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
-            
-            switch (plotChunk.getVersion()) {
-                
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    /*
-                     * New system requires pushing
-                     * version data first
-                     */
-                    fout.write("VER".getBytes(StandardCharsets.UTF_8));
-                    fout.write(plotChunk.getVersion());
-                    
-                    break;
-                
-                default:
-                
-            }
-            
-            // Push the plot height, then the plot block data types.
-            fout.writeInt(plotChunk.getHeight());
-            for (String block : new ArrayList<>(plotChunk.getBlockList())) {
-                fout.writeUTF(block);
-            }
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
-            e.printStackTrace();
-            return false;
-        }
-		return true;
+        
+        queryQueue.add(() -> {
+			FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+			try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
 
+				switch (plotChunk.getVersion()) {
+
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+						/*
+						 * New system requires pushing
+						 * version data first
+						 */
+						fout.write("VER".getBytes(StandardCharsets.UTF_8));
+						fout.write(plotChunk.getVersion());
+
+						break;
+
+					default:
+
+				}
+
+				// Push the plot height, then the plot block data types.
+				fout.writeInt(plotChunk.getHeight());
+				for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+					fout.writeUTF(block);
+				}
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
+				e.printStackTrace();
+			}
+		});
+		
+		return true;
 	}
 
 	/**
@@ -2353,90 +2330,72 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     
     @Override
 	public void deletePlotData(PlotBlockData plotChunk) {
-
 		File file = new File(getPlotFilename(plotChunk));
-		if (file.exists())
-			file.delete();
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	private boolean isFile(String fileName) {
-
 		File file = new File(fileName);
 		return file.exists() && file.isFile();
-
 	}
 
 	@Override
 	public void deleteFile(String fileName) {
-
 		File file = new File(fileName);
-		if (file.exists())
-			file.delete();
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	@Override
 	public void deleteResident(Resident resident) {
-
 		File file = new File(getResidentFilename(resident));
-		if (file.exists()) {
-			FileMgmt.moveFile(file, ("deleted"));
-		}
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	@Override
 	public void deleteTown(Town town) {
-
 		File file = new File(getTownFilename(town));
-		if (file.exists()) {
-			FileMgmt.moveFile(file, ("deleted"));
-		}
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	@Override
 	public void deleteNation(Nation nation) {
-
 		File file = new File(getNationFilename(nation));
-		if (file.exists()) {
-			FileMgmt.moveFile(file, ("deleted"));
-		}
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	@Override
 	public void deleteWorld(TownyWorld world) {
-
 		File file = new File(getWorldFilename(world));
-		if (file.exists()) {
-			FileMgmt.moveFile(file, ("deleted"));
-		}
+		queryQueue.add(new DeleteFileTask(file));
 	}
 
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
 
 		File file = new File(getTownBlockFilename(townBlock));
-		if (file.exists()) {
-			// TownBlocks can end up being deleted because they do not contain valid towns.
-			// This will move a deleted townblock to either: 
-			// towny\townblocks\worldname\deleted\townname folder, or the
-			// towny\townblocks\worldname\deleted\ folder if there is not valid townname.
-			String name = null;
-			try {
-				name = townBlock.getTown().getName();
-			} catch (NotRegisteredException ignored) {
+		
+		queryQueue.add(() -> {
+			if (file.exists()) {
+				// TownBlocks can end up being deleted because they do not contain valid towns.
+				// This will move a deleted townblock to either: 
+				// towny\townblocks\worldname\deleted\townname folder, or the
+				// towny\townblocks\worldname\deleted\ folder if there is not valid townname.
+				String name = null;
+				try {
+					name = townBlock.getTown().getName();
+				} catch (NotRegisteredException ignored) {
+				}
+				if (name != null)
+					FileMgmt.moveTownBlockFile(file, "deleted", name);
+				else
+					FileMgmt.moveTownBlockFile(file, "deleted", "");
 			}
-			if (name != null)
-				FileMgmt.moveTownBlockFile(file, "deleted", name);
-			else
-				FileMgmt.moveTownBlockFile(file, "deleted", "");
-		}
+		});
 	}
 	
 	@Override
 	public void deletePlotGroup(PlotGroup group) {
     	File file = new File(getPlotGroupFilename(group));
-    	if (file.exists())
-    		file.delete();
-    	else
-    		TownyMessaging.sendErrorMsg("That file doesn't exist!");
+    	queryQueue.add(new DeleteFileTask(file));
 	}
 }
