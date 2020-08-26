@@ -88,7 +88,6 @@ public class SQL_Schema {
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
 		columns.add("`capital` mediumtext NOT NULL");
-		columns.add("`assistants` mediumtext NOT NULL");
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
@@ -494,13 +493,27 @@ public class SQL_Schema {
     		Statement s = cntx.createStatement();
     		s.executeUpdate(nation_update);
     		
-    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!2");
+    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
     		
     	} catch (SQLException ee) {
     		if (ee.getErrorCode() != 1060)
     			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
     	
     	}
+    	
+    	try {
+    		nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "DROP COLUMN `assistants`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(nation_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
+    	
+    	}    	
     	
     	/*
     	 * Update WORLDS 

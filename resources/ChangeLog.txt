@@ -4890,3 +4890,7 @@ v0.92.0.11:
   - Fix for servers that do not use an economy being unable to do many commands/operations and seeing [Towny] null. 
   - Unmake TownySettings.isUsingEconomy also require that teh TownyEconomyHandler.isActive(), because we use isUsingEconomy to decide if we startup the economy handler (derp).
   - Fix TownySQLSource#backup() being synchronized.
+0.96.2.15:
+  - Remove assistants column from nation table on mysql DBs.
+  - Improve error messages on loading towns/nations for mysql.
+  - Handle nations loading invalid capital. 

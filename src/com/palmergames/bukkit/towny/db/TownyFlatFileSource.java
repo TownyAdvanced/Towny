@@ -1034,15 +1034,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileNation);
 				
 				line = keys.get("capital");
-				if (line != null)
+				if (line != null) {
+					Town town = universe.getTownsMap().get(line);
 					try {
-						nation.forceSetCapital(getTown(line));
+						nation.forceSetCapital(town);
 					} catch (EmptyNationException e1) {
 						System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
 						removeNation(nation);
 						return true;
 					}
-				
+				}
 				line = keys.get("nationBoard");
 				if (line != null)
 					try {

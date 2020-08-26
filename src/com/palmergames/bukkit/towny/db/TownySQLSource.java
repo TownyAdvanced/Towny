@@ -906,10 +906,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String line;
 		String[] tokens;
 		String search;
+		String name = null;
 		try {
 			Town town = getTown(rs.getString("name"));
+			name = town.getName();
 
-			TownyMessaging.sendDebugMsg("Loading town " + town.getName());
+			TownyMessaging.sendDebugMsg("Loading town " + name);
 
 			try {
 				town.forceSetMayor(getResident(rs.getString("mayor")));
@@ -1103,9 +1105,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			return true;
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
+			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
+			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " unknown Error - ");
 			e.printStackTrace();
 		}
 
@@ -1155,13 +1157,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String line;
 		String[] tokens;
 		String search;
+		String name = null;
 		try {
 			Nation nation = getNation(rs.getString("name"));
+			name = nation.getName();
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
+			Town town = universe.getTownsMap().get(rs.getString("capital"));
 			try {
-				nation.forceSetCapital(getTown(rs.getString("capital")));
+				nation.forceSetCapital(town);
 			} catch (EmptyNationException e1) {
 				System.out.println(
 						"The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
@@ -1263,9 +1268,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			return true;
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation SQL Error - " + e.getMessage());
+			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
 		} catch (TownyException ex) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
+			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " unknown Error - ");
 			ex.printStackTrace();
 		}
 
@@ -2513,4 +2518,5 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				+ File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize()
 				+ ".data";
 	}
+
 }
