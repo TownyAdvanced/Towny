@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -848,7 +849,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public @NotNull Collection<TownBlock> getTownBlocks() {
+	@NotNull
+	public @UnmodifiableView Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 

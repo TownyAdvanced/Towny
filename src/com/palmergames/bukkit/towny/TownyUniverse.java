@@ -32,6 +32,7 @@ import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.File;
 import java.io.IOException;
@@ -506,7 +507,8 @@ public class TownyUniverse implements TownBlockOwner {
 	}
 
 	@Override
-	public @NotNull Collection<TownBlock> getTownBlocks() {
+	@NotNull
+	public @UnmodifiableView Collection<TownBlock> getTownBlocks() {
 		return townBlocks.values();
 	}
 	

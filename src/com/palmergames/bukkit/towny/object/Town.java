@@ -20,6 +20,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +76,8 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	}
 
 	@Override
-	public @NotNull Collection<TownBlock> getTownBlocks() {
+	@NotNull
+	public @UnmodifiableView Collection<TownBlock> getTownBlocks() {
 		return townBlocks.values();
 	}
 	

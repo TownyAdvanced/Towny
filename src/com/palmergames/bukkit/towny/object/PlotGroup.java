@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -112,7 +113,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissibl
 		return true;
 	}
 
-	public @NotNull Collection<TownBlock> getTownBlocks() {
+	@NotNull
+	public @UnmodifiableView Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 

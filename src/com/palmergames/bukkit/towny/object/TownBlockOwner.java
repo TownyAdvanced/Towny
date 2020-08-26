@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 
@@ -25,7 +26,8 @@ public interface TownBlockOwner {
 	 * 
 	 * @return The townblocks this object contains.
 	 */
-	@NotNull Collection<TownBlock> getTownBlocks();
+	@NotNull
+	@UnmodifiableView Collection<TownBlock> getTownBlocks();
 
 	/**
 	 * Checks whether the object has the given townblock or not.
