@@ -156,13 +156,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return StringMgmt.remUnderscore(nation);
 		case "town_balance": // %townyadvanced_town_balance%
 			try {
-				balance = resident.getTown().getAccount().getHoldingFormattedBalance();
+				if (TownySettings.isUsingEconomy())
+					balance = resident.getTown().getAccount().getHoldingFormattedBalance();
 			} catch (NotRegisteredException ignored) {
 			}
 			return balance;
 		case "nation_balance": // %townyadvanced_nation_balance%
 			try {
-				balance = resident.getTown().getNation().getAccount().getHoldingFormattedBalance();
+				if (TownySettings.isUsingEconomy())
+					balance = resident.getTown().getNation().getAccount().getHoldingFormattedBalance();
 			} catch (NotRegisteredException ignored) {
 			}
 			return balance;

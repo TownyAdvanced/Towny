@@ -535,6 +535,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				parseAdminTpPlotCommand(StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("depositall")) {
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
 				
@@ -975,6 +977,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				handleTownMetaCommand(player, town, split);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
+				
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				int amount;
 				
 				// Handle incorrect number of arguments
@@ -995,6 +1001,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, depositMessage);
 				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
 			} else if (split[1].equalsIgnoreCase("withdraw")) {
+				
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				int amount;
 
 				// Handle incorrect number of arguments
@@ -1239,6 +1249,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
+				
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				int amount;
 				
 				// Handle incorrect number of arguments
@@ -1260,6 +1274,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedNationMessage(nation, depositMessage);
 			}
 			else if (split[1].equalsIgnoreCase("withdraw")) {
+				
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				int amount;
 				
 				// Handle incorrect number of arguments

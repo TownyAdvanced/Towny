@@ -281,38 +281,38 @@ public class SpawnUtil {
 		double travelCost = 0.0;
 		String spawnPermission = null;
 		Account payee = null;
-		// Figure out costs, payee and spawnPermmission slug for money.csv log.
-		switch (spawnType) {
-		case RESIDENT:
-		case TOWN:
-			// Taking whichever is smaller, the cost of the spawn price set by the town, or
-			// the cost set in the config (which is the maximum a town can set their
-			// spawncost to.)
-			travelCost = Math.min(townSpawnPermission.getCost(town), townSpawnPermission.getCost());
-			spawnPermission = String.format(spawnType.getTypeName() + " (%s)", townSpawnPermission);
-			payee = town.getAccount();
-			break;
-		case NATION:
-			// Taking whichever is smaller, the cost of the spawn price set by the nation,
-			// or the cost set in the config (which is the maximum a nation can set their
-			// spawncost to.)
-			travelCost = Math.min(nationSpawnPermission.getCost(nation), nationSpawnPermission.getCost());
-			spawnPermission = String.format(spawnType.getTypeName() + " (%s)", nationSpawnPermission);
-			payee = nation.getAccount();
-			break;
+		if (TownySettings.isUsingEconomy()) {
+			// Figure out costs, payee and spawnPermmission slug for money.csv log.
+			switch (spawnType) {
+			case RESIDENT:
+			case TOWN:
+				// Taking whichever is smaller, the cost of the spawn price set by the town, or
+				// the cost set in the config (which is the maximum a town can set their
+				// spawncost to.)
+				travelCost = Math.min(townSpawnPermission.getCost(town), townSpawnPermission.getCost());
+				spawnPermission = String.format(spawnType.getTypeName() + " (%s)", townSpawnPermission);
+				payee = town.getAccount();
+				break;
+			case NATION:
+				// Taking whichever is smaller, the cost of the spawn price set by the nation,
+				// or the cost set in the config (which is the maximum a nation can set their
+				// spawncost to.)
+				travelCost = Math.min(nationSpawnPermission.getCost(nation), nationSpawnPermission.getCost());
+				spawnPermission = String.format(spawnType.getTypeName() + " (%s)", nationSpawnPermission);
+				payee = nation.getAccount();
+				break;
+			}
+			if (!TownySettings.isTownSpawnPaidToTown())	payee = EconomyAccount.SERVER_ACCOUNT;
+			
+			// Check if need/can pay.
+			try {
+				if ((!townyUniverse.getPermissionSource().has(player,
+						PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()))
+						&& (travelCost > 0 && (resident.getAccount().getHoldingBalance() < travelCost)))
+					throw new TownyException(notAffordMSG);
+			} catch (EconomyException ignored) {
+			}
 		}
-		if (!TownySettings.isTownSpawnPaidToTown())	payee = EconomyAccount.SERVER_ACCOUNT;
-		
-		// Check if need/can pay.
-		try {
-			if ((!townyUniverse.getPermissionSource().has(player,
-					PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()))
-					&& (travelCost > 0 && TownySettings.isUsingEconomy()
-							&& (resident.getAccount().getHoldingBalance() < travelCost)))
-				throw new TownyException(notAffordMSG);
-		} catch (EconomyException ignored) {
-		}
-
 		// Allow for a cancellable event right before a player would actually pay.
 		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {
 			return;

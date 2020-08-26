@@ -673,7 +673,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		List<Resident> toRemove = new ArrayList<>();
 		TownySettings.setUUIDCount(0);
 
 		if (!getContext())
@@ -692,24 +691,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				if (!loadResident(resident, rs)) {
-					System.out.println(
-							"[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
-					toRemove.add(resident);
-				} else {
-					if (resident.hasUUID())
-						TownySettings.incrementUUIDCount();
-					else
-						GatherResidentUUIDTask.addResident(resident);
+					System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
+					return false;
 				}
+				
+				if (resident.hasUUID())
+					TownySettings.incrementUUIDCount();
+				else
+					GatherResidentUUIDTask.addResident(resident);
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-		}
-
-		// Remove any resident which failed to load.
-		for (Resident resident : toRemove) {
-			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
-			removeResident(resident);
 		}
 
 		return true;
@@ -1168,18 +1160,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
-			line = rs.getString("towns");
-			if (line != null) {
-				search = (line.contains("#")) ? "#" : ",";
-				tokens = line.split(search);
-				for (String token : tokens) {
-					if (!token.isEmpty()) {
-						Town town = getTown(token);
-						if (town != null)
-							nation.addTown(town);
-					}
-				}
-			}
 			try {
 				nation.forceSetCapital(getTown(rs.getString("capital")));
 			} catch (EmptyNationException e1) {
@@ -2287,7 +2267,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean backup() throws IOException {
+	public boolean backup() throws IOException {
 
 		TownyMessaging.sendMsg("Performing backup");
 		TownyMessaging.sendMsg("***** Warning *****");

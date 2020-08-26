@@ -497,6 +497,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -556,6 +558,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nationSpawn(player, newSplit, ignoreWarning);
             }
 			else if (split[0].equalsIgnoreCase("deposit")) {
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

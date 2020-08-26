@@ -145,9 +145,10 @@ public class TownySpigotMessaging {
 				townName.addExtra(nextComponent);
 			}
 			
-			String spawnCost;
+			String spawnCost = "0.00";
 
-			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+			if (TownySettings.isUsingEconomy())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 			
 			String hoverText = Translation.of("msg_click_spawn", town) + "\n" + spawnCost;
 			
