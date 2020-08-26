@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
-import com.palmergames.bukkit.towny.tasks.PermanentDeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -2332,7 +2331,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     @Override
 	public void deletePlotData(PlotBlockData plotChunk) {
 		File file = new File(getPlotFilename(plotChunk));
-		queryQueue.add(new PermanentDeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, true));
 	}
 
 	private boolean isFile(String fileName) {
@@ -2343,31 +2342,31 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public void deleteFile(String fileName) {
 		File file = new File(fileName);
-		queryQueue.add(new PermanentDeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, true));
 	}
 
 	@Override
 	public void deleteResident(Resident resident) {
 		File file = new File(getResidentFilename(resident));
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, false));
 	}
 
 	@Override
 	public void deleteTown(Town town) {
 		File file = new File(getTownFilename(town));
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, false));
 	}
 
 	@Override
 	public void deleteNation(Nation nation) {
 		File file = new File(getNationFilename(nation));
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, false));
 	}
 
 	@Override
 	public void deleteWorld(TownyWorld world) {
 		File file = new File(getWorldFilename(world));
-		queryQueue.add(new DeleteFileTask(file));
+		queryQueue.add(new DeleteFileTask(file, false));
 	}
 
 	@Override
@@ -2397,6 +2396,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public void deletePlotGroup(PlotGroup group) {
     	File file = new File(getPlotGroupFilename(group));
-    	queryQueue.add(new DeleteFileTask(file));
+    	queryQueue.add(new DeleteFileTask(file, false));
 	}
 }

@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
-import com.palmergames.bukkit.towny.tasks.PermanentDeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -2211,7 +2210,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public void deletePlotData(PlotBlockData plotChunk) {
 		File file = new File(getPlotFilename(plotChunk));
-		ffQueryQueue.add(new PermanentDeleteFileTask(file));
+		ffQueryQueue.add(new DeleteFileTask(file, true));
 	}
 
 	private boolean isFile(String fileName) {
@@ -2223,7 +2222,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public void deleteFile(String fileName) {
-		ffQueryQueue.add(new PermanentDeleteFileTask(new File(fileName)));
+		ffQueryQueue.add(new DeleteFileTask(new File(fileName), true));
 	}
 
 	@Override
