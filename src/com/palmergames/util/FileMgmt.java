@@ -1,14 +1,21 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +27,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -575,6 +584,74 @@ public final class FileMgmt {
 			return keys;
 		} finally {
 			readLock.unlock();
+		}
+	}
+	
+	public static void writeRegenData(Collection<PlotBlockData> data, File file) {
+		try (BufferedWriter fout = new BufferedWriter(new FileWriter(file))) {
+			writeLock.lock();
+			for (PlotBlockData plot : data) {
+				fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() +
+					System.getProperty("line.separator"));
+			}
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
+			e.printStackTrace();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static void saveSnapshotData(File file) {
+		try (BufferedWriter fout = new BufferedWriter(new FileWriter(file))) {
+			writeLock.lock();
+			while (TownyRegenAPI.hasWorldCoords()) {
+				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+				fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() +
+					System.getProperty("line.separator"));
+			}
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
+			e.printStackTrace();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static void savePlotData(PlotBlockData data, File file, String path) {
+		FileMgmt.checkOrCreateFolder(file.getPath());
+		try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
+			writeLock.lock();
+			switch (data.getVersion()) {
+
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+					/*
+					 * New system requires pushing
+					 * version data first
+					 */
+					fout.write("VER".getBytes(StandardCharsets.UTF_8));
+					fout.write(data.getVersion());
+
+					break;
+
+				default:
+
+			}
+
+			// Push the plot height, then the plot block data types.
+			fout.writeInt(data.getHeight());
+			for (String block : new ArrayList<>(data.getBlockList())) {
+				fout.writeUTF(block);
+			}
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + file + ")");
+			e.printStackTrace();
+		} finally {
+			writeLock.unlock();
 		}
 	}
 	

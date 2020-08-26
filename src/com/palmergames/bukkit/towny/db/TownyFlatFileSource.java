@@ -43,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
@@ -2133,14 +2134,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
-			try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
-				for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values())) {
-					fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + newLine);
-				}
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
-				e.printStackTrace();
-			}
+        	File file = new File(dataFolderPath + File.separator + "regen.txt");
+			Collection<PlotBlockData> data = TownyRegenAPI.getPlotChunks().values();
+			FileMgmt.writeRegenData(data, file);
 		});
 
 		return true;
@@ -2149,16 +2145,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveSnapshotList() {
        queryQueue.add(() -> {
-		   try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
-			   while (TownyRegenAPI.hasWorldCoords()) {
-				   WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-				   fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
-			   }
-
-		   } catch (Exception e) {
-			   TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
-			   e.printStackTrace();
-		   }
+       	   File file = new File(dataFolderPath + File.separator + "snapshot_queue.txt");
+       	   FileMgmt.saveSnapshotData(file);
 	   });
        
        return true;
@@ -2175,38 +2163,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         String path = getPlotFilename(plotChunk);
         
         queryQueue.add(() -> {
-			FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
-			try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
-
-				switch (plotChunk.getVersion()) {
-
-					case 1:
-					case 2:
-					case 3:
-					case 4:
-						/*
-						 * New system requires pushing
-						 * version data first
-						 */
-						fout.write("VER".getBytes(StandardCharsets.UTF_8));
-						fout.write(plotChunk.getVersion());
-
-						break;
-
-					default:
-
-				}
-
-				// Push the plot height, then the plot block data types.
-				fout.writeInt(plotChunk.getHeight());
-				for (String block : new ArrayList<>(plotChunk.getBlockList())) {
-					fout.writeUTF(block);
-				}
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
-				e.printStackTrace();
-			}
+			File file = new File(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+			FileMgmt.savePlotData(plotChunk, file, path);
 		});
 		
 		return true;
