@@ -253,9 +253,6 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDatabaseHandler() != null && !error) {
-			townyUniverse.getDataSource().saveQueues(); // TODO Change to database
-		}
 
 		if (!error) {
 			FlagWar.onDisable();
@@ -280,14 +277,11 @@ public class Towny extends JavaPlugin {
 		try {
 			// Shut down our saving task.
 			System.out.println("[Towny] Finishing File IO Tasks...");
-			townyUniverse.getDataSource().finishTasks();
+			townyUniverse.getDatabaseHandler().shutdown();
 			townyUniverse.finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
 		}
-
-		// Shutdown database handler
-		townyUniverse.getDatabaseHandler().shutdown();
 
 		this.townyUniverse = null;
 

@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -73,6 +74,11 @@ public final class FileMgmt {
 			}
 		}
 		return true;
+	}
+	
+	public static boolean fileExists(String filePath) {
+		File file = new File(filePath);
+		return file.exists() && file.isFile();
 	}
 	
 	/**
@@ -329,21 +335,44 @@ public final class FileMgmt {
 		try {
 			writeLock.lock();
 			File file = new File(targetLocation);
-		TownyMessaging.sendErrorMsg("WHAT");
 			try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
 				for (String aSource : source) {
-					bufferedWriter.write(aSource + System.getProperty("line.separator"));
+					bufferedWriter.write(aSource);
+					bufferedWriter.newLine();
 				}
 
 				return true;
 			} catch (IOException e) {
-				System.out.println("Exception ");
+				e.printStackTrace();
 				return false;
 			}
 		} finally {
 			writeLock.unlock();
+		}
+	}
+	
+	public static void readLinesInFile(String filePath, String errorMsg, Consumer<String> lineReader) {
+		String line = null;
+
+		try (BufferedReader fin = new BufferedReader(
+			new InputStreamReader(
+				new FileInputStream(filePath),
+				StandardCharsets.UTF_8
+			)
+		)) {
+			while ((line = fin.readLine()) != null)
+				if (!line.isEmpty()) {
+					lineReader.accept(line);
+				}
+
+		} catch (Exception e) {
+			if (line != null)
+				errorMsg += " Error at line " + line + ".";
+
+			TownyMessaging.sendErrorMsg(errorMsg);
+			e.printStackTrace();
 		}
 	}
 

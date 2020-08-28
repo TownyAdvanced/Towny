@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author ElgarL
@@ -39,6 +40,12 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static  Set<Block> protectionPlaceholders = new HashSet<>();
+	
+	// Boolean to indicate whether to save the regen list (the PlotChunks)
+	private static final AtomicBoolean saveRegenList = new AtomicBoolean(false);
+	
+	// Indicate whether to save the list of worldcoords that need to be snapshot.
+	private static final AtomicBoolean saveSnapshotQueue = new AtomicBoolean(false);
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
@@ -82,6 +89,14 @@ public class TownyRegenAPI {
 		}
 		return null;
 	}
+	
+	public static void setSaveSnapshotQueue(boolean save) {
+		saveSnapshotQueue.set(save);
+	}
+	
+	public static boolean shouldSaveSnapshotQueue() {
+		return saveSnapshotQueue.get();
+	}
 
 	/**
 	 * @return the plotChunks which are being processed
@@ -113,11 +128,8 @@ public class TownyRegenAPI {
 	 * @param plotChunk - Chunk to remove (PlotBlockData)
 	 */
 	public static void deletePlotChunk(PlotBlockData plotChunk) {
-
-		if (PlotChunks.containsKey(getPlotKey(plotChunk))) {
-			PlotChunks.remove(getPlotKey(plotChunk));
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
-		}
+		PlotChunks.remove(getPlotKey(plotChunk));
+		saveRegenList.set(true);
 	}
 	
 	/**
@@ -132,8 +144,16 @@ public class TownyRegenAPI {
 			//plotChunk.initialize();
 			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
 			if (save)
-				TownyUniverse.getInstance().getDataSource().saveRegenList();
+				setSaveRegenList(true);
 		}
+	}
+
+	public static boolean shouldSaveRegenList() {
+		return saveRegenList.get();
+	}
+
+	public static void setSaveRegenList(boolean save) {
+		saveRegenList.set(false);
 	}
 
 	/**
@@ -557,5 +577,4 @@ public class TownyRegenAPI {
 
 		protectionPlaceholders.remove(block);
 	}
-
 }

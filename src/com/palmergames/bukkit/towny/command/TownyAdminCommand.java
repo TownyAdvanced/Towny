@@ -502,6 +502,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[0].equalsIgnoreCase("mysqldump")) {
 				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
+					// TODO Have the database handler do this!
 					TownyDataSource dataSource = new TownyFlatFileSource(plugin, townyUniverse);
 					dataSource.saveAll();
 					TownyMessaging.sendMsg(getSender(), Translation.of("msg_mysql_dump_success"));
