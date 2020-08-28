@@ -51,6 +51,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
@@ -2135,8 +2136,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
         	File file = new File(dataFolderPath + File.separator + "regen.txt");
-			Collection<PlotBlockData> data = TownyRegenAPI.getPlotChunks().values();
-			FileMgmt.writeRegenData(data, file);
+        	
+			Collection<String> lines = TownyRegenAPI.getPlotChunks().values().stream()
+				.map(data -> data.getWorldName() + "," + data.getX() + "," + data.getZ())
+				.collect(Collectors.toList());
+			
+			FileMgmt.listToFile(lines, file.getPath());
 		});
 
 		return true;
@@ -2145,8 +2150,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveSnapshotList() {
        queryQueue.add(() -> {
-       	   File file = new File(dataFolderPath + File.separator + "snapshot_queue.txt");
-       	   FileMgmt.saveSnapshotData(file);
+       		List<String> coords = new ArrayList<>();
+       		while (TownyRegenAPI.hasWorldCoords()) {
+			   	WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+			   	coords.add(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ());
+		    }
+       		
+       		FileMgmt.listToFile(coords, dataFolderPath + File.separator + "snapshot_queue.txt");
 	   });
        
        return true;

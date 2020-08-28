@@ -317,7 +317,7 @@ public final class FileMgmt {
 	 * @param targetLocation - Target location on Filesystem
 	 * @return true on success, false on IOException
 	 */
-	public static boolean listToFile(List<String> source, String targetLocation) {
+	public static boolean listToFile(Collection<String> source, String targetLocation) {
 		try {
 			writeLock.lock();
 			File file = new File(targetLocation);
@@ -584,37 +584,6 @@ public final class FileMgmt {
 			return keys;
 		} finally {
 			readLock.unlock();
-		}
-	}
-	
-	public static void writeRegenData(Collection<PlotBlockData> data, File file) {
-		try (BufferedWriter fout = new BufferedWriter(new FileWriter(file))) {
-			writeLock.lock();
-			for (PlotBlockData plot : data) {
-				fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() +
-					System.getProperty("line.separator"));
-			}
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
-			e.printStackTrace();
-		} finally {
-			writeLock.unlock();
-		}
-	}
-	
-	public static void saveSnapshotData(File file) {
-		try (BufferedWriter fout = new BufferedWriter(new FileWriter(file))) {
-			writeLock.lock();
-			while (TownyRegenAPI.hasWorldCoords()) {
-				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-				fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() +
-					System.getProperty("line.separator"));
-			}
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
-			e.printStackTrace();
-		} finally {
-			writeLock.unlock();
 		}
 	}
 	

@@ -57,6 +57,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -66,6 +67,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
 
@@ -2425,7 +2427,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean saveRegenList() {
 		ffQueryQueue.add(() -> {
 			File file = new File(dataFolderPath + File.separator + "regen.txt");
-			FileMgmt.writeRegenData(TownyRegenAPI.getPlotChunks().values(), file);
+
+			Collection<String> lines = TownyRegenAPI.getPlotChunks().values().stream()
+				.map(data -> data.getWorldName() + "," + data.getX() + "," + data.getZ())
+				.collect(Collectors.toList());
+
+			FileMgmt.listToFile(lines, file.getPath());
 		});
 		
 		return true;
@@ -2434,8 +2441,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveSnapshotList() {
 		ffQueryQueue.add(() -> {
-			File file = new File(dataFolderPath + File.separator + "snapshot_queue.txt");
-			FileMgmt.saveSnapshotData(file);
+			List<String> coords = new ArrayList<>();
+			while (TownyRegenAPI.hasWorldCoords()) {
+				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+				coords.add(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ());
+			}
+
+			FileMgmt.listToFile(coords, dataFolderPath + File.separator + "snapshot_queue.txt");
 		});
 		
 		return true;
