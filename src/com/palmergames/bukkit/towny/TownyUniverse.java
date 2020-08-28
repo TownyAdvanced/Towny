@@ -464,6 +464,14 @@ public class TownyUniverse {
 		if (resident.hasTown()) {
 			try {
 				Town town = resident.getTown();
+				if (town.hasResident(resident)) {
+					try {
+						town.removeResident(resident);
+					} catch (EmptyTownException ignore) {
+						// The expectation is that methods that call removeResident have 
+						// already properly dealt with this.
+					}
+				}
 			} catch (NotRegisteredException e1) {
 				// Should never get thrown
 				e1.printStackTrace();
@@ -472,9 +480,8 @@ public class TownyUniverse {
 
 		// Remove the resident from outlaws in different towns
 		for (Town townOutlaw : towns.values()) {
-			if (townOutlaw.hasOutlaw(resident)) {
-				townOutlaw.removeOutlaw(resident);
-			}
+			// Remove outlaw performs hasoutlaw check
+			townOutlaw.removeOutlaw(resident);
 		}
 
 		// This should be called at the end, but to keep legacy behavior call it here.
@@ -548,6 +555,12 @@ public class TownyUniverse {
 	}
 
 	public boolean hasTown(String name) {
+		// Perform name validation on hasTown
+    	try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException ignored) {
+		}
+    	
     	return townNamesMap.containsKey(name);
 	}
 
@@ -676,21 +689,10 @@ public class TownyUniverse {
 		TownyWorld townyWorld = town.getHomeblockWorld();
 
 		// Remove town from nation
-		try {
-			if (town.hasNation()) {
-				Nation nation = town.getNation();
-				// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
-				if (nation.hasTown(town)) {
-					nation.removeTown(town);
-				}
-			}
-		} catch (EmptyNationException e) {
-			removeNation(e.getNation());
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+		if (town.hasNation()) {
+			// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
+			town.removeNation();
 		}
-		
 		// Remove residents
 		for (Resident res : town.getResidents()) {
 			try {
@@ -702,10 +704,9 @@ public class TownyUniverse {
 		}
 
 		// Look for residents inside of this town's jail and free them
-		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
+		for (Resident jailedRes : this.getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
-				jailedRes.setJailed(jailedRes, 0, town);
-				jailedRes.save();
+				jailedRes.setJailed(0, town);
 			}
 		}
 

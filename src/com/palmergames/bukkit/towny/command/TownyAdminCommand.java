@@ -1728,6 +1728,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Resident resident = townyUniverse.getResident(name);
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
+							// Delete town if resident is the only one in it.
+							if (resident.hasTown()) {
+								Town residentTown = resident.getTown();
+								if (residentTown.getNumResidents() == 1) {
+									townyUniverse.removeTown(residentTown);
+								}
+							}
+							
 							townyUniverse.removeResident(resident);
 							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
 						} else

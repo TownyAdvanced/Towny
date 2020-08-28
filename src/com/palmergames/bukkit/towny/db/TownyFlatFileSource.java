@@ -730,11 +730,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading Town: " + town.getName());
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTown);
+				
+				// Load UUID from file for consistency
+				line = keys.get("uuid");
+				if (line != null) {
+					town.setUniqueIdentifier(UUID.fromString(line));
+				}
 
 				line = keys.get("mayor");
 				if (line != null)
 					try {
-						town.forceSetMayor(getResident(line));
+						town.setMayor(getResident(line));
 					} catch (TownyException e1) {
 						e1.getMessage();
 						if (town.getResidents().size() == 0)
@@ -1050,12 +1056,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileNation);
 				
+				// Load UUID from file for consistency
+				line = keys.get("uuid");
+				if (line != null) {
+					nation.setUniqueIdentifier(UUID.fromString(line));
+				}
+				
 				line = keys.get("capital");
 				if (line != null) {
-					Town town = universe.getTownsMap().get(line);
 					try {
-						nation.forceSetCapital(town);
-					} catch (EmptyNationException e1) {
+						Town town = universe.getTown(line);
+						nation.setCapital(town);
+					} catch (NotRegisteredException e1) {
 						System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
 						removeNation(nation);
 						return true;

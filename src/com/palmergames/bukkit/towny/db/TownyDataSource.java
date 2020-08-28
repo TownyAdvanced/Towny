@@ -61,12 +61,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadNations() && loadTowns() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -109,11 +109,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroups();
 
-	abstract public boolean saveTownList();
-
 	abstract public boolean savePlotGroupList();
-
-	abstract public boolean saveNationList();
 
 	abstract public boolean saveWorldList();
 
@@ -165,26 +161,17 @@ public abstract class TownyDataSource {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		List<Resident> toRemove = new ArrayList<>();
 		TownySettings.setUUIDCount(0);
-		
-		for (Resident resident : new ArrayList<>(getResidents()))
+
+		for (Resident resident : getResidents()) {
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
-				toRemove.add(resident);
-				//return false;
-			} else {
-				if (resident.hasUniqueIdentifier())
-					TownySettings.incrementUUIDCount();
-				else
-					GatherResidentUUIDTask.addResident(resident);
+				return false;
 			}
 
-		// Remove any resident which failed to loadString.
-		for (Resident resident : toRemove) {
-			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
-			removeResident(resident);
+			TownySettings.incrementUUIDCount();
 		}
+
 
 		return true;
 	}

@@ -695,11 +695,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 					return false;
 				}
-				
-				if (resident.hasUUID())
-					TownySettings.incrementUUIDCount();
-				else
-					GatherResidentUUIDTask.addResident(resident);
+
+				TownySettings.incrementUUIDCount();
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
@@ -915,7 +912,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading town " + name);
 
 			try {
-				town.forceSetMayor(getResident(rs.getString("mayor")));
+				town.setMayor(getResident(rs.getString("mayor")));
 			} catch (TownyException e1) {
 				e1.getMessage();
 				if (town.getResidents().size() == 0) {
@@ -1165,15 +1162,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
-			Town town = universe.getTownsMap().get(rs.getString("capital"));
-			try {
-				nation.forceSetCapital(town);
-			} catch (EmptyNationException e1) {
-				System.out.println(
-						"The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-				removeNation(nation);
-				return true;
-			}
+			Town town = universe.getTown(rs.getString("capital"));
+			nation.setCapital(town);
+			
 			line = rs.getString("nationBoard");
 			if (line != null)
 				nation.setBoard(rs.getString("nationBoard"));

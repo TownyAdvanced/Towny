@@ -205,18 +205,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 	
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-		
-		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(UUID.randomUUID(), filteredName));
-		universe.getTownsTrie().addKey(filteredName);
+		if (universe.hasTown(name))
+			throw new AlreadyRegisteredException("The town " + name + " is already in use.");
 		
 		// Start New DB - Add to new datastructures.
 		universe.newTown(name);
@@ -235,9 +225,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
 			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(UUID.randomUUID(), filteredName));
-		universe.getNationsTrie().addKey(filteredName);
 
 		// Start New DB - Add to new datastructures.
 		universe.newNation(name);
@@ -386,11 +373,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		lock.lock();
 		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
-		Town lastTown = null;
 		try {
 			succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
-			for (Town town : towns) {			
-				lastTown = town;
+			for (Town town : towns) {
 				for (Resident res : town.getResidents()) {
 					if (res.hasTitle() || res.hasSurname()) {
 						res.setTitle("");
@@ -399,21 +384,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					res.updatePermsForNationRemoval();
 					saveResident(res);
 				}
-				succumbingNation.removeTown(town);
-				prevailingNation.addTown(town);
-				//saveTown(town);
+				town.removeNation();
+				town.setNation(prevailingNation);
 			}
 		} catch (EconomyException ignored) {
-		} catch (EmptyNationException en) {
-			// This is the intended end-result of the merge.
-			prevailingNation.addTown(lastTown);
-			//saveTown(lastTown);
-			String name = en.getNation().getName();
-			universe.getDataSource().removeNation(en.getNation());
-			saveNation(prevailingNation);
-			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
-			lock.unlock();
 		}
 	}
 }

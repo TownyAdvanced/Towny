@@ -5,10 +5,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.NationAddTownEvent;
-import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
+import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
+import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -22,7 +21,6 @@ import com.palmergames.util.StringMgmt;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +31,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -77,7 +74,7 @@ public class Town extends Government implements TownBlockOwner {
 	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private transient final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 
 	public Town(UUID uniqueIdentifier) {
@@ -166,25 +163,33 @@ public class Town extends Government implements TownBlockOwner {
 
 		if (!hasResident(mayor))
 			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
-		this.mayorID = mayor.getUniqueIdentifier();
 		
+		this.mayorID = mayor.getUniqueIdentifier();
 		TownyPerms.assignPermissions(mayor, null);	
+	}
+
+	public void setNationID(UUID nationID) {
+		this.nationID = nationID;
 	}
 
 	public Nation getNation() throws NotRegisteredException {
 
-		if (hasNation())
-			return nation;
-		else
-			throw new NotRegisteredException(Translation.of("msg_err_town_doesnt_belong_to_any_nation"));
+		if (!hasNation()) {
+			throw new NotRegisteredException("This town has no nation");
+		}
+
+		return TownyUniverse.getInstance().getNation(nationID);
 	}
 
 	public void removeNation() {
+		
+		Nation nation;
 
-		if (!hasNation())
+		try {
+			nation = getNation();
+		} catch (NotRegisteredException ignore) {
 			return;
-
-		Nation nation = this.nation;
+		}
 
 		for (Resident res : getResidents()) {
 			if (res.hasTitle() || res.hasSurname()) {
@@ -192,7 +197,7 @@ public class Town extends Government implements TownBlockOwner {
 				res.setSurname("");
 			}
 			res.updatePermsForNationRemoval();
-			TownyUniverse.getInstance().getDataSource().saveResident(res);
+			res.save();
 		}
 
 		try {
@@ -208,7 +213,7 @@ public class Town extends Government implements TownBlockOwner {
 			// Cannot occur when setting null;
 		}
 
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		save();
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
 
@@ -271,6 +276,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead.
 	 * @return A true if the resident is an assistant, false otherwise.
 	 */
+	@Deprecated
 	public boolean hasAssistant(Resident resident) {
 
 		return resident.hasTownRank("assistant");
@@ -699,7 +705,10 @@ public class Town extends Government implements TownBlockOwner {
 		boolean found = false;
 		for (Resident newMayor : getRank(rank)) {
 			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
-				setMayor(newMayor);
+				try {
+					setMayor(newMayor);
+				} catch (TownyException ignore) {
+				}
 				found = true;
 				break;
 			}
@@ -717,7 +726,10 @@ public class Town extends Government implements TownBlockOwner {
 		boolean found = false;
 		for (Resident newMayor : getResidents()) {
 			if (newMayor != mayor) {
-				setMayor(newMayor);
+				try {
+					setMayor(newMayor);
+				} catch (TownyException ignore) {
+				}
 				found = true;
 				break;
 			}
@@ -1372,19 +1384,6 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
-	}
-	
-	public Nation getNation() throws NotRegisteredException {
-		
-		if (!hasNation()) {
-			throw new NotRegisteredException("This town has no nation");
-		}
-		
-		return TownyUniverse.getInstance().getNation(nationID);
-	}
-
-	public void setNationID(UUID nationID) {
-		this.nationID = nationID;
 	}
 
 	public UUID getMayorID() {

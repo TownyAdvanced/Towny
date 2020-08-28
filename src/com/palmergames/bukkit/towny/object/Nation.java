@@ -421,16 +421,14 @@ public class Nation extends Government {
 
 		if (getNumTowns() == 0) {
 			throw new EmptyNationException(this);
-		} else if (isCapital) {
-			findNewCapital();
-		}
+		} else if (isCapital && findNewCapital()) {
 			save();
+		}
 	}
 	
 
 
 	private void remove(Town town) {
-
 		towns.remove(town);
 	}
 
@@ -546,7 +544,7 @@ public class Nation extends Government {
 		if (!king.isMayor())
 			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		save();
 	}
 
 	public boolean hasResident(Resident resident) {
