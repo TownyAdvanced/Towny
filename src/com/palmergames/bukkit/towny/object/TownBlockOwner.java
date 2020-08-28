@@ -6,7 +6,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collection;
 
 /**
- * Allows objects to contain townblocks to be accessed/manipulated.
+ * Represents an object that contains and manipulates a collection of
+ * townblocks.
  * 
  * <p>All returned townblocks are unmodifiable views of the implemented 
  * collection. As a result, the conforming class must provide delegation
