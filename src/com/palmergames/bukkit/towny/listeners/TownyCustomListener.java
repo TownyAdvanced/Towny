@@ -124,7 +124,7 @@ public class TownyCustomListener implements Listener {
 	public void onPlayerCreateTown(NewTownEvent event) {
 		Town town = event.getTown();
 		double upkeep = TownySettings.getTownUpkeepCost(town);
-		if (TownySettings.isTaxingDaily() && upkeep > 0) {
+		if (TownySettings.isUsingEconomy() && TownySettings.isTaxingDaily() && upkeep > 0) {
 			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
 			String time = TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime());
 			TownyMessaging.sendTownMessagePrefixed(town, Translation.of("msg_new_town_advice", cost, time));

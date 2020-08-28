@@ -60,6 +60,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ReflectionUtil;
+import com.palmergames.bukkit.towny.utils.ReflectionUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -466,6 +467,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townLeave(player);
 
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
+				
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -503,6 +507,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
@@ -828,11 +835,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		Resident resident = townyUniverse.getResident(player.getName());
 
 		String received = Translation.of("town_received_invites")
-				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
+				.replace("%a", Integer.toString(resident.getTown().getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
 		String sent = Translation.of("town_sent_invites")
-				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown()))
+				.replace("%a", Integer.toString(resident.getTown().getSentInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
 
@@ -1534,7 +1541,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if (jailTown != sendertown) {
 									throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
 								} else {
-									jailedresident.setJailedByMayor(jailedPlayer, index, sendertown, days);
+									jailedresident.setJailedByMayor(index, sendertown, days);
 									if (admin)
 										TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), index));
 									return;
@@ -1545,7 +1552,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							if (jailedresident.getTown() != sendertown)
 								throw new TownyException(Translation.of("msg_resident_not_your_town"));
 
-							jailedresident.setJailedByMayor(jailedPlayer, index, sendertown, days);
+							jailedresident.setJailedByMayor(index, sendertown, days);
 							if (admin)
 								TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), index));
 
@@ -1884,6 +1891,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 							String oldMayor = town.getMayor().getName();
 							Resident newMayor = townyUniverse.getResident(split[1]);
+							if (!town.hasResident(split[1]))
+								throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 							town.setMayor(newMayor);
 							TownyPerms.assignPermissions(townyUniverse.getResident(oldMayor), null);
 							plugin.deleteCache(oldMayor);
@@ -2271,11 +2280,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			
 			town.save();
-
-			if (nation != null) {
+			if (nation != null)
 				nation.save();
-				// TownyUniverse.getDataSource().saveNationList();
-			}
 
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.
@@ -2538,18 +2544,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 
-		ReflectionUtil.dump(town);
-		
+		ReflectionUtil.dump(town); // FIXME DEBUG
+
 		townyUniverse.getDatabaseHandler().save(
 			resident,
 			townBlock,
 			town,
 			world
 		);
-		
+
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
-		
+
 		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
 
 		return town;
@@ -2767,7 +2773,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		plugin.resetCache();
 	}
 
-	public static void townAddResidents(Object sender, Town town, List<Resident> invited) {
+	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) {
 		String name;
 		boolean admin = false;
 		if (sender instanceof Player) {
@@ -2810,7 +2816,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					invited.remove(newMember);
 				} else {
 					town.addResidentCheck(newMember);
-					townInviteResident(name,town, newMember);
+					townInviteResident(sender, town, newMember);
 				}
 			} catch (TownyException e) {
 				invited.remove(newMember);
@@ -2845,9 +2851,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		town.save();
 	}
 
-	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
+	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
 
-		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, town, newMember);
+		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, newMember, town);
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
@@ -2972,13 +2978,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
 					town.getNation().setCapital(newCapital);
 					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-						try {
-							town.getNation().removeTown(town);
-							townyUniverse.getDatabaseHandler().save(town, nation);
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_capital_not_enough_residents_left_nation", town.getName()));
-						} catch (EmptyNationException e) {
-							e.printStackTrace();
-						}
+						town.removeNation();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_capital_not_enough_residents_left_nation", town.getName()));
 					}
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_not_enough_residents_no_longer_capital", newCapital.getName()));
 					return;
@@ -2987,7 +2988,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
 			townyUniverse.removeNation(town.getNation());
 
-			if (TownySettings.isRefundNationDisbandLowResidents()) {
+			if (TownySettings.isUsingEconomy() && TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
 					town.getAccount().withdraw(TownySettings.getNewNationPrice(), "nation refund");
 				} catch (EconomyException e) {
@@ -2996,14 +2997,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
 			}
 		} else if ((!town.isCapital()) && (TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-			try {
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_town_not_enough_residents_left_nation", town.getName()));
-				town.getNation().removeTown(town);
-				town.save();
-				townyUniverse.getDataSource().saveNation(nation);
-			} catch (EmptyNationException e) {
-				e.printStackTrace();
-			}
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_town_not_enough_residents_left_nation", town.getName()));
+			town.removeNation();
 		}
 	}
 
@@ -3092,7 +3087,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param names - Names to add.
 	 * @throws TownyException - General Exception, or if Town's spawn has not been set
 	 */
-	public static void townAdd(Object sender, Town specifiedTown, String[] names) throws TownyException {
+	public static void townAdd(CommandSender sender, Town specifiedTown, String[] names) throws TownyException {
 
 		String name;
 		if (sender instanceof Player) {
@@ -3389,6 +3384,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
+					
+					if (selection.size() == 0)
+						throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
+					
 					if ((selection.size() > 1) && (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
@@ -3427,19 +3426,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
 				}
 				
-				try {					
-					if (selection.size() == 1 && !outpost)
-						blockCost = town.getTownBlockCost();
-					else if (selection.size() == 1 && outpost)
-						blockCost = TownySettings.getOutpostCost();
-					else
-						blockCost = town.getTownBlockCostN(selection.size());
-
-					double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-					if (TownySettings.isUsingEconomy() && !town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
-						throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-				} catch (EconomyException e1) {
-					throw new TownyException("Economy Error");
+				if (TownySettings.isUsingEconomy()) {
+					try {					
+						if (selection.size() == 1 && !outpost)
+							blockCost = town.getTownBlockCost();
+						else if (selection.size() == 1 && outpost)
+							blockCost = TownySettings.getOutpostCost();
+						else
+							blockCost = town.getTownBlockCostN(selection.size());
+	
+						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
+						if (!town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
+							throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+					} catch (EconomyException e1) {
+						throw new TownyException("Economy Error");
+					}
 				}
 				new TownClaim(plugin, player, town, selection, outpost, true, false).start();
 			} catch (TownyException x) {
@@ -3545,22 +3546,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
 			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
 			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 0)
+			if (available - selection.size() < 1)
 				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 		}
 
 
-		try {
-			if (selection.size() == 1)
-				blockCost = town.getTownBlockCost();
-			else
-				blockCost = town.getTownBlockCostN(selection.size());
-
-			double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-			if (TownySettings.isUsingEconomy() && !((Town) owner).getAccount().canPayFromHoldings(blockCost))
-				throw new TownyException(Translation.of("msg_err_cant_afford_blocks2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-		} catch (EconomyException e1) {
-			throw new TownyException("Economy Error");
+		if (TownySettings.isUsingEconomy()) {
+			try {
+				if (selection.size() == 1)
+					blockCost = town.getTownBlockCost();
+				else
+					blockCost = town.getTownBlockCostN(selection.size());
+	
+				double missingAmount = blockCost - town.getAccount().getHoldingBalance();
+				if (TownySettings.isUsingEconomy() && !((Town) owner).getAccount().canPayFromHoldings(blockCost))
+					throw new TownyException(Translation.of("msg_err_cant_afford_blocks2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+			} catch (EconomyException e1) {
+				throw new TownyException("Economy Error");
+			}
 		}
 		
 		if (attachedToEdge && !isEdgeBlock(owner, selection) && !town.getTownBlocks().isEmpty()) {

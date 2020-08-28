@@ -95,7 +95,6 @@ import java.util.UUID;
  * 
  * @author Shade, ElgarL, LlmDl
  */
-
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private String version = "2.0.0";
@@ -151,7 +150,6 @@ public class Towny extends JavaPlugin {
 		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		ConfirmationHandler.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -323,7 +321,7 @@ public class Towny extends JavaPlugin {
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
-			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
+			System.out.println("[Towny] All residents store UUIDs, upgrade prep complete.");
 		
 		resetCache();
 

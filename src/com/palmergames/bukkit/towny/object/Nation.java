@@ -45,9 +45,7 @@ public class Nation extends Government {
 
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
-	//private List<Resident> assistants = new ArrayList<Resident>();
 	private transient final List<Town> towns = new ArrayList<>();
-	
 	@OneToMany(tableName = "allies")
 	@PostLoad
 	private List<Nation> allies = new ArrayList<>();
@@ -237,11 +235,11 @@ public class Nation extends Government {
 			} catch (NotRegisteredException ignore) {}
 		}
 
-		towns.add(town);
-		town.setNation(this);
-
-		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
-	}
+			towns.add(town);
+			town.setNation(this);
+			
+			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
+		}
 
 	public void setCapital(Town capital) {
 		this.capital = capital.getUniqueIdentifier();
@@ -250,7 +248,6 @@ public class Nation extends Government {
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
 		}
-		//save();
 	}
 
 	public Town getCapital() {
@@ -263,6 +260,30 @@ public class Nation extends Government {
 		}
 
 		return null;
+	}
+	
+	/**
+	 * Finds the town in the nation with the most residents and makes it the capital.
+	 * 
+	 * @return whether it successfully set a capital.
+	 */
+	private boolean findNewCapital() {
+		
+		int numResidents = 0;
+		Town tempCapital = null;
+		for (Town newCapital : getTowns()) {
+			if (newCapital.getNumResidents() > numResidents) {
+				tempCapital = newCapital;
+				numResidents = newCapital.getNumResidents();
+			}
+		}
+
+		if (tempCapital != null) {
+			setCapital(tempCapital);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -385,64 +406,37 @@ public class Nation extends Government {
 		return numResidents;
 	}
 
-	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
+	/**
+	 * Should only be called by Town.removeNation();
+	 * Removes town from {@link #towns} list and will choose a
+	 * new Capital if necessary.
+	 * 
+	 * @param town - Town to remove from nation.
+	 * @throws EmptyNationException - Thrown when last town is being removed.
+	 */
+	protected void removeTown(Town town) throws EmptyNationException {
 
-		if (!hasTown(town))
-			throw new NotRegisteredException();
-		else {
+		boolean isCapital = town.isCapital();
+		remove(town);
 
-			boolean isCapital = town.isCapital();
-			remove(town);
-
-			if (getNumTowns() == 0) {
-				throw new EmptyNationException(this);
-			} else if (isCapital) {
-				int numResidents = 0;
-				Town tempCapital = null;
-				for (Town newCapital : getTowns())
-					if (newCapital.getNumResidents() > numResidents) {
-						tempCapital = newCapital;
-						numResidents = newCapital.getNumResidents();
-					}
-
-				if (tempCapital != null)
-					setCapital(tempCapital);
-			}
-			save();
+		if (getNumTowns() == 0) {
+			throw new EmptyNationException(this);
+		} else if (isCapital) {
+			findNewCapital();
 		}
+			save();
 	}
+	
+
 
 	private void remove(Town town) {
 
-		//removeAssistantsIn(town);
-		try {
-			town.setNation(null);
-		} catch (AlreadyRegisteredException ignored) {
-		}
-		
-		/*
-		 * Remove all resident titles/nationRanks before saving the town itself.
-		 */
-		List<Resident> titleRemove = new ArrayList<>(town.getResidents());
-
-		for (Resident res : titleRemove) {
-			if (res.hasTitle() || res.hasSurname()) {
-				res.setTitle("");
-				res.setSurname("");
-			}
-			res.updatePermsForNationRemoval(); // Clears the nationRanks.
-			res.save();
-		}
-		
 		towns.remove(town);
-		
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
 	private void removeAllTowns() {
 
-		for (Town town : new ArrayList<>(towns))
-			remove(town);
+		towns.clear();
 	}
 
 	public void setTaxes(double taxes) {
@@ -743,7 +737,7 @@ public class Nation extends Government {
 	}
 
 	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#pay(double, String)} instead.
+	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#withdraw(double, String)} instead.
 	 *
 	 * @param amount value to deduct from the player's account
 	 * @param reason leger memo stating why amount is deducted

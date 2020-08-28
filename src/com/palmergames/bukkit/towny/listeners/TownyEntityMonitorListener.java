@@ -524,7 +524,7 @@ public class TownyEntityMonitorListener implements Listener {
 					if (!TownyAPI.getInstance().isWarTime()) {
 						if (!townyUniverse.getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 							return;
-						defenderResident.setJailed(defenderResident, 1, attackerTown);
+						defenderResident.setJailed(1, attackerTown);
 						return;
 						
 					} else {
@@ -534,7 +534,7 @@ public class TownyEntityMonitorListener implements Listener {
 							jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
 
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
-								defenderResident.setJailed(defenderResident, index, attackerTown);
+								defenderResident.setJailed(index, attackerTown);
 								try {
 									TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 								} catch (TownyException e) {
@@ -579,14 +579,14 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 			
 			if (!TownyAPI.getInstance().isWarTime()) {
-				defenderResident.setJailed(defenderResident, 1, town);
+				defenderResident.setJailed(1, town);
 			} else {
 				TownBlock jailBlock = null;
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
 					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
 					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
-						defenderResident.setJailed(defenderResident, index, town);
+						defenderResident.setJailed(index, town);
 						try {
 							TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 						} catch (TownyException e) {

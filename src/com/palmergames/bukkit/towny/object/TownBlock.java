@@ -201,7 +201,7 @@ public class TownBlock extends TownyObject {
 		// Custom plot settings here
 		switch (type) {
 		
-		case RESIDENTIAL:
+			case RESIDENTIAL:
 
 			case COMMERCIAL:
 
@@ -220,32 +220,32 @@ public class TownBlock extends TownyObject {
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-			} else {
+				} else {
 				try {
 					setPermissions(getTown().getPermissions().toString());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-			}
+				}
 			
-			break;
+				break;
 
 			case ARENA:
 			
-			setPermissions("pvp");
-			break;
+				setPermissions("pvp");
+				break;
 
 			case SPLEEF:
 
 			case JAIL:
 
 				setPermissions("denyAll");
-			break;
+				break;
 
-		case INN:
+			case INN:
 			
-			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			break;
+				setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+				break;
 		}
 			
 		
@@ -272,34 +272,34 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void setType(TownBlockType type, Resident resident) throws TownyException, EconomyException {
-				double cost;
+		double cost;
 		switch (type) {
-		case COMMERCIAL:
-			cost = TownySettings.getPlotSetCommercialCost();
-			break;
-		case EMBASSY:
-			cost = TownySettings.getPlotSetEmbassyCost();
-			break;
-		case ARENA:
-			cost = TownySettings.getPlotSetArenaCost();
-			break;
-		case WILDS:
-			cost = TownySettings.getPlotSetWildsCost();
-			break;
-		case INN:
-			cost = TownySettings.getPlotSetInnCost();
-			break;
-		case JAIL:
-			cost = TownySettings.getPlotSetJailCost();
-			break;
-		case FARM:
-			cost = TownySettings.getPlotSetFarmCost();
-			break;
-		case BANK:
-			cost = TownySettings.getPlotSetBankCost();
-			break;
-		default: 
-			cost = 0;
+			case COMMERCIAL:
+				cost = TownySettings.getPlotSetCommercialCost();
+				break;
+			case EMBASSY:
+				cost = TownySettings.getPlotSetEmbassyCost();
+				break;
+			case ARENA:
+				cost = TownySettings.getPlotSetArenaCost();
+				break;
+			case WILDS:
+				cost = TownySettings.getPlotSetWildsCost();
+				break;
+			case INN:
+				cost = TownySettings.getPlotSetInnCost();
+				break;
+			case JAIL:
+				cost = TownySettings.getPlotSetJailCost();
+				break;
+			case FARM:
+				cost = TownySettings.getPlotSetFarmCost();
+				break;
+			case BANK:
+				cost = TownySettings.getPlotSetBankCost();
+				break;
+			default: 
+				cost = 0;
 		}
 		
 		// Test if we can pay first to throw an exception.
@@ -324,6 +324,7 @@ public class TownBlock extends TownyObject {
 					}
 				
 				setType(type);
+				TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 			})
 				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 				.sendTo(BukkitTools.getPlayerExact(resident.getName()));
@@ -332,6 +333,7 @@ public class TownBlock extends TownyObject {
 			if (this.isJail())
 				this.getTown().removeJailSpawn(this.getCoord());
 			setType(type);
+			TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 		}
 	}
 

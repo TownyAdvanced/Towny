@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.event.EventWarPreStartEvent;
 import com.palmergames.bukkit.towny.event.EventWarStartEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -614,7 +613,7 @@ public class War {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
 			// Check for money loss in the defending town
-			if (!defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
+			if (TownySettings.isUsingEconomy() && !defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_ran_out_of_money"));
 				TownyMessaging.sendTitleMessageToTown(defenderTown, Translation.of("msg_war_town_removed_from_war_titlemsg"), "");
 				if (defenderTown.isCapital())
@@ -704,25 +703,16 @@ public class War {
 		if (TownySettings.getWarEventWinnerTakesOwnershipOfTown()) {			
 			town.setConquered(true);
 			town.setConqueredDays(TownySettings.getWarEventConquerTime());
-			
-			try {				
-				// if losingNation is not a one-town nation then this.
-				losingNation.removeTown(town);
-				try {
-					attacker.getNation().addTown(town);
-				} catch (AlreadyRegisteredException e) {
-				}
-				townyUniverse.getDatabaseHandler().save(town, attacker.getNation(), losingNation);
-				TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
-			} catch (EmptyNationException e) {
-				// if losingNation was a one-town nation then this.
-				try {
-					attacker.getNation().addTown(town);
-				} catch (AlreadyRegisteredException e1) {
-				}
-				townyUniverse.getDatabaseHandler().save(town, attacker.getNation(), losingNation);
-				TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
+
+			// if losingNation is not a one-town nation then this.
+			town.removeNation();
+			try {
+				town.setNation(attacker.getNation());
+			} catch (AlreadyRegisteredException e) {
 			}
+				townyUniverse.getDatabaseHandler().save(town, attacker.getNation(), losingNation);
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 		}
 		
 		if (towns == 1)

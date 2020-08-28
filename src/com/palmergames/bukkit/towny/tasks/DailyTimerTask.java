@@ -115,7 +115,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								} catch (NotRegisteredException ignored) {
 								}
 								int index = resident.getJailSpawn();
-				            	resident.setJailed(resident , index, jailTown);
+				            	resident.setJailed(index, jailTown);
 				            }
 				            
 				        }.runTaskLater(this.plugin, 20);
@@ -214,14 +214,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
 					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-						try {
-							localRemovedTowns.add(town.getName());							
-							nation.removeTown(town);							
-						} catch (EmptyNationException e) {
-							// Always has 1 town (capital) so ignore
-						} catch (NotRegisteredException ignored) {
-						}
-						townyUniverse.getDatabaseHandler().save(town, nation);
+						localRemovedTowns.add(town.getName());		
+						town.removeNation();
 					}
 				} else
 					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
