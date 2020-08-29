@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SavedEntity(
 	tableName = "NATIONS",
@@ -48,10 +49,10 @@ public class Nation extends Government {
 	private transient final List<Town> towns = new ArrayList<>();
 	@OneToMany(tableName = "allies")
 	@PostLoad
-	private List<Nation> allies = new ArrayList<>();
+	private List<Nation> allies = new CopyOnWriteArrayList<>();
 	@OneToMany(tableName = "enemies")
 	@PostLoad
-	private List<Nation> enemies = new ArrayList<>();
+	private List<Nation> enemies = new CopyOnWriteArrayList<>();
 	private UUID capital;
 	private boolean neutral = false;
 	private String mapColorHexCode = "";

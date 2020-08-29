@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
@@ -45,9 +46,9 @@ public class Town extends Government implements TownBlockOwner {
 	private transient static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private final transient List<Resident> residents = new ArrayList<>();
-	private final Set<UUID> outlaws = new HashSet<>();
-	private List<Location> outpostSpawns = new ArrayList<>();
-	private final List<Location> jailSpawns = new ArrayList<>();
+	private final Set<UUID> outlaws = ConcurrentHashMap.newKeySet();
+	private List<Location> outpostSpawns = new CopyOnWriteArrayList<>();
+	private final List<Location> jailSpawns = new CopyOnWriteArrayList<>();
 	private transient HashMap<String, PlotGroup> plotGroups = null;
 
 	@ForeignKey(reference = Nation.class)

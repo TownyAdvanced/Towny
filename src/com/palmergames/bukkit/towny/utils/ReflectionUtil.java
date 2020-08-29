@@ -281,7 +281,8 @@ public class ReflectionUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Enum<T>> @NotNull T loadEnum(String str, Class<?> type) {
+	@NotNull
+	public static <T extends Enum<T>> T loadEnum(String str, Class<?> type) {
 		return Enum.valueOf((Class<T>)type, str);
 	}
 	

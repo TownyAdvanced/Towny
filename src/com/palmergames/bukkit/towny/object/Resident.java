@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SavedEntity(
 	tableName = "RESIDENTS",
@@ -45,7 +46,7 @@ import java.util.UUID;
 )
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
 	@OneToMany(tableName = "friends")
-	private List<Resident> friends = new ArrayList<>();
+	private List<Resident> friends = new CopyOnWriteArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class)
 	private UUID townID = null;
@@ -61,13 +62,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
-	private final List<String> modes = new ArrayList<>();
+	private final List<String> modes = new CopyOnWriteArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account;
 
-	private final List<String> townRanks = new ArrayList<>();
-	private final List<String> nationRanks = new ArrayList<>();
+	private final List<String> townRanks = new CopyOnWriteArrayList<>();
+	private final List<String> nationRanks = new CopyOnWriteArrayList<>();
 	private transient List<TownBlock> townBlocks = new ArrayList<>();
 	private final TownyPermission permissions = new TownyPermission();
 

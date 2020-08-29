@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.UUID;
 
 public class QueuedObject {
-	private Saveable savableObj;
-	private Map<String, String> insertionMap;
+	private final Saveable savableObj;
+	private final boolean isUpdate;
 	
-	public QueuedObject(@NotNull Saveable obj, @Nullable Map<String, String> insertionMap) {
+	public QueuedObject(@NotNull Saveable obj, boolean isUpdate) {
 		Validate.notNull(obj);
 		this.savableObj = obj;
-		this.insertionMap = insertionMap;
+		this.isUpdate = isUpdate;
 	}
 	
 	public UUID getUUID() {
@@ -27,10 +27,6 @@ public class QueuedObject {
 	}
 	
 	public boolean isUpdate() {
-		return insertionMap != null;
-	}
-	
-	public Map<String, String> getInsertionMap() {
-		return insertionMap;
+		return isUpdate;
 	}
 }

@@ -58,8 +58,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		}
 	}
 	
-	private void queueSave(Saveable obj, Map<String, String> insertionMap) {
-		QueuedObject qObj = new QueuedObject(obj, insertionMap);
+	private void queueSave(Saveable obj, boolean isUpdate) {
+		QueuedObject qObj = new QueuedObject(obj, isUpdate);
 		synchronized (dbQueueMap) {
 			dbQueueMap.put(obj.getUniqueIdentifier(), qObj);
 		}
@@ -70,16 +70,8 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 	public void save(@NotNull Saveable obj) {
 		// Validation/fail-fast safety
 		Validate.notNull(obj);
-		
-		HashMap<String, String> saveMap = new HashMap<>();
-
-		// Get field data.
-		convertMapData(ReflectionUtil.getObjectMap(obj), saveMap);
-		
-		// Add save getter data.
-		convertMapData(getSaveGetterData(obj), saveMap);
 		// Queue save
-		queueSave(obj, saveMap);
+		queueSave(obj, true);
 	}
 
 
@@ -95,15 +87,23 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			}
 		}
 
+		HashMap<String, String> saveMap = new HashMap<>();
+
+		// Get field data.
+		convertMapData(ReflectionUtil.getObjectMap(obj), saveMap);
+
+		// Add save getter data.
+		convertMapData(getSaveGetterData(obj), saveMap);
+
 		// Save
-		FileMgmt.mapToFile(qObj.getInsertionMap(), getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
+		FileMgmt.mapToFile(saveMap, getFlatFile(obj.getClass(), obj.getUniqueIdentifier()));
 	}
 
 	// Can be ran async or sync
 	@Override
 	public boolean delete(@NotNull Saveable obj) {
 		Validate.notNull(obj);
-		queueSave(obj, null);
+		queueSave(obj, false);
 		return true;
 	}
 	
@@ -178,30 +178,42 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 		return obj;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void loadField(Saveable obj, Field field, String fieldValue) {
 		if (fieldValue == null) {
 			return;
 		}
 
-//			// If there is a default value that already exists,
-//			// make sure we are adapting to the same default value type.
-//			try {
-//				Object fieldValue = field.get(obj);
-//
-//				if (fieldValue != null) {
-//					type = fieldValue.getClass();
-//				}
-//			} catch (IllegalAccessException e) {
-//			}
-
-		field.setAccessible(true);
 		Object value = ObjectSerializer.deserializeField(field, fieldValue);
 
 		if (value == null) {
 			// ignore it as another already allocated value may be there.
 			return;
 		}
-
+		
+		field.setAccessible(true);
+		
+		// Handle copying collections over if a default value.
+		// This is useful if the field actually relies on a special type of collection e.g. concurrent structures
+		if (value instanceof Collection) {
+			Object currFieldVal = null;
+			
+			try {
+				currFieldVal = field.get(obj);
+			} catch (IllegalAccessException ignore) {
+			}
+			
+			if (currFieldVal instanceof Collection) {
+				// Copy the collection over
+				Collection currCollection = (Collection) currFieldVal;
+				if (!currCollection.isEmpty())
+					currCollection.clear();
+				Collection newCollection = (Collection) value;
+				currCollection.addAll(newCollection);
+				return;
+			}
+		}
+		
 		try {
 			field.set(obj, value);
 		} catch (IllegalAccessException e) {

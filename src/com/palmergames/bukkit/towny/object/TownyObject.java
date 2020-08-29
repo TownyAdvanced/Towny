@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class TownyObject implements Nameable, Saveable {
 	private String name;
@@ -22,7 +23,7 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@PrimaryKey
 	private UUID uniqueIdentifier;
 	
-	private Map<String, CustomDataField<?>>metadata = null;
+	private Map<String, CustomDataField<?>> metadata = null;
 	
 	public TownyObject(UUID id) {
 		this.uniqueIdentifier = id;
@@ -76,8 +77,11 @@ public abstract class TownyObject implements Nameable, Saveable {
 	}
 
 	public void addMetaData(CustomDataField<?> md) {
-		if (metadata == null)
-			metadata = new HashMap<>();
+		// Lazy load must be thread-safe
+		synchronized(this) {
+			if (metadata == null)
+				metadata = new ConcurrentHashMap<>();
+		}
 		
 		metadata.put(md.getKey(), md);
 	}
@@ -87,34 +91,39 @@ public abstract class TownyObject implements Nameable, Saveable {
 			return;
 		
 		metadata.remove(md.getKey());
-		
-		if (metadata.isEmpty())
-			this.metadata = null;
+
+		synchronized (this) {
+			if (metadata.isEmpty())
+				this.metadata = null;
+		}
 	}
 	
 	public Collection<CustomDataField<?>> getMetadata() {
-		if (metadata == null || metadata.isEmpty())
+		if (!hasMeta() || metadata.isEmpty())
 			return Collections.emptyList();
 		
 		return Collections.unmodifiableCollection(metadata.values());
 	}
 	
 	public CustomDataField<?> getMetadata(String key) {
-		if(metadata != null)
-			return metadata.get(key);
-		
-		return null;
+		if (!hasMeta())
+			return null;
+
+		return metadata.get(key);
 	}
 
 	public boolean hasMeta() {
-		return metadata != null;
+		// Null check must be thread safe
+		synchronized (this) {
+			return metadata != null;
+		}
 	}
 
 	public boolean hasMeta(String key) {
-		if (metadata != null)
-			return metadata.containsKey(key);
-		
-		return false;
+		if (!hasMeta())
+			return false;
+
+		return metadata.containsKey(key);
 	}
 	
 	/**
@@ -123,9 +132,11 @@ public abstract class TownyObject implements Nameable, Saveable {
 	@Deprecated
 	public void setMetadata(String str) {
 		String[] objects = str.split(";");
-
-		if (metadata == null)
-			metadata = new HashMap<>(objects.length);
+		
+		synchronized (this) {
+			if (metadata == null)
+				metadata = new HashMap<>(objects.length);
+		}
 		
 		for (String object : objects) {
 			CustomDataField<?> cdf = CustomDataField.load(object);
