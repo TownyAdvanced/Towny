@@ -36,3 +36,9 @@ events:
 
 github:
     - .github/*
+
+maven:
+    - pom.xml
+
+resources:
+    - resources/*
