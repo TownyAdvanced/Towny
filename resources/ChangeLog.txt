@@ -4894,3 +4894,7 @@ v0.92.0.11:
   - Remove assistants column from nation table on mysql DBs.
   - Improve error messages on loading towns/nations for mysql.
   - Handle nations loading invalid capital. 
+0.96.2.16:
+  - Hotfix: Make deletions and other IO operations go through the async queue, courtesy of Siris with PR #4288.
+  - Fix towns-paying-tax message in the new day not appearing for the town.
+  - Add debug messaging when nations load/set a capital.
