@@ -1173,15 +1173,24 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
-			Town town = universe.getTownsMap().get(rs.getString("capital"));
 			try {
-				nation.forceSetCapital(town);
-			} catch (EmptyNationException e1) {
-				System.out.println(
-						"The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-				removeNation(nation);
-				return true;
+				Town town = universe.getDataSource().getTown(rs.getString("capital"));
+				try {
+					nation.forceSetCapital(town);
+				} catch (EmptyNationException e1) {
+					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					removeNation(nation);
+					return true;
+				}
+			} catch (NotRegisteredException | NullPointerException e) {
+				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
+				if (!nation.findNewCapital()) {
+					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					removeNation(nation);
+					return true;
+				}
 			}
+
 			line = rs.getString("nationBoard");
 			if (line != null)
 				nation.setBoard(rs.getString("nationBoard"));
