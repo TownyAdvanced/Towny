@@ -4899,3 +4899,6 @@ v0.92.0.11:
   - Fix towns-paying-tax message in the new day not appearing for the town.
   - Add debug messaging when nations load/set a capital.
   - Fix nations selecting a new capital on startup.
+0.96.2.17: 
+  - Re-activate the world files unclaimedZoneIgnoredIDs list.
+    - This was only being used for wilds plots, and not having any effect on the wilderness.
