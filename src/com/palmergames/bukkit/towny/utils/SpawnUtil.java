@@ -281,7 +281,9 @@ public class SpawnUtil {
 		double travelCost = 0.0;
 		String spawnPermission = null;
 		Account payee = null;
-		if (TownySettings.isUsingEconomy()) {
+		if (TownySettings.isUsingEconomy() && 
+				(!townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) 
+						&& !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode()))) {
 			// Figure out costs, payee and spawnPermmission slug for money.csv log.
 			switch (spawnType) {
 			case RESIDENT:
@@ -306,9 +308,7 @@ public class SpawnUtil {
 			
 			// Check if need/can pay.
 			try {
-				if ((!townyUniverse.getPermissionSource().has(player,
-						PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()))
-						&& (travelCost > 0 && (resident.getAccount().getHoldingBalance() < travelCost)))
+				if (travelCost > 0 && (resident.getAccount().getHoldingBalance() < travelCost))
 					throw new TownyException(notAffordMSG);
 			} catch (EconomyException ignored) {
 			}
@@ -319,7 +319,7 @@ public class SpawnUtil {
 		}
 		
 		// Cost to spawn, prompt with confirmation unless ignoreWarn is true.
-		if (TownySettings.isUsingEconomy() && travelCost > 0 && !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
+		if (TownySettings.isUsingEconomy() && travelCost > 0) {
 			final double finalCost = travelCost;
 			final Account finalPayee = payee;
 			final String finalSpawnPerm = spawnPermission;
@@ -330,7 +330,7 @@ public class SpawnUtil {
 				try {
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
-						initiateSpawn(player, finalLoc, isTownyAdmin);
+						initiateSpawn(player, finalLoc);
 					}
 				} catch (EconomyException ignored) {
 				}
@@ -343,7 +343,7 @@ public class SpawnUtil {
 					try {
 						if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 							TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
-							initiateSpawn(player, finalLoc, isTownyAdmin);
+							initiateSpawn(player, finalLoc);
 						}
 					} catch (EconomyException ignored) {
 					}
@@ -353,7 +353,7 @@ public class SpawnUtil {
 			}
 		// No Cost so skip confirmation system.
 		} else {
-			initiateSpawn(player, spawnLoc, isTownyAdmin);
+			initiateSpawn(player, spawnLoc);
 		}
 	}
 	
@@ -397,16 +397,9 @@ public class SpawnUtil {
 	 * @param spawnLoc - Location being spawned to.
 	 * @param admin - True if player has admin spawn nodes.
 	 */
-	private static void initiateSpawn(Player player, Location spawnLoc, boolean admin) {
-		// Handle admins without warmup or cooldown.
-		if (admin) {
-			if (player.getVehicle() != null)
-				player.getVehicle().eject();
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			return;
-		}
+	private static void initiateSpawn(Player player, Location spawnLoc) {
 
-		if (TownyTimerHandler.isTeleportWarmupRunning()) {
+		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
@@ -415,7 +408,7 @@ public class SpawnUtil {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			if (TownySettings.getSpawnCooldownTime() > 0)
+			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
 				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
 		}
 

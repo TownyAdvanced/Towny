@@ -73,6 +73,9 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.town.spawn.freecharge: true
+            towny.admin.spawn.nowarmup: true
+            towny.admin.spawn.nocooldown: true
+            towny.admin.spawn.nocharge: true
 
     towny.town.spawn.*:
         description: Grants all Spawn travel nodes
