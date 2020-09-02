@@ -45,6 +45,15 @@ public abstract class DatabaseHandler {
 	private final BukkitTask dbTask;
 	
 	public DatabaseHandler() {
+		// Create flat storage files if they don't exist
+		String rootDirPath = TownyUniverse.getInstance().getRootFolder();
+		if (!FileMgmt.checkOrCreateFolders(rootDirPath, getDataFilePath(),
+			getDataFilePath("plot-block-data"))
+			|| !FileMgmt.checkOrCreateFiles(getDataFilePath("regen.txt"),
+				getDataFilePath("snapshot_queue.txt"))) {
+			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
+		}
+		
 		dbTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Towny.getPlugin(),
 			() -> {
 				processDBQueue();
@@ -103,8 +112,11 @@ public abstract class DatabaseHandler {
 	}
 	
 	private String getDataFilePath(String... path) {
-		Validate.notNull(path);
 		String dataFolder = TownyUniverse.getInstance().getRootFolder() + File.separator + "data";
+		
+		if (path == null)
+			return dataFolder;
+		
 		// Avoid overhead for single path
 		if (path.length == 1)
 			return dataFolder + File.separator + path[0];
