@@ -2506,7 +2506,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		townyUniverse.newTown(name);
 		Town town = townyUniverse.getTown(name);
-		resident.setTown(town);
+		town.addResident(resident);
 		town.setMayor(resident);
 		
 		TownBlock townBlock = new TownBlock(UUID.randomUUID(), key.getX(), key.getZ(), world);
