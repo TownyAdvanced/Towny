@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.Colors;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 public class TownyPermission {
 	public enum ActionType {
@@ -122,14 +124,37 @@ public class TownyPermission {
 		explosion = b;
 		mobs = b;
 	}
-
-	// TODO Restructure how perms are saved
+	
 	public void set(String s, boolean b) {
+		// New way to set perms
+		if (s.contains("-")) {
+			String[] permSplit = s.split("-");
+			
+			PermLevel permLevel;
+			try {
+				permLevel = PermLevel.valueOf(permSplit[0]);
+			} catch (IllegalArgumentException ex) {
+				TownyMessaging.sendErrorMsg("Cannot parse perm level for permission " + s);
+				return;
+			}
+			
+			ActionType actionType;
+			try {
+				actionType = ActionType.valueOf(permSplit[1]);
+			} catch (IllegalArgumentException ex) {
+				TownyMessaging.sendErrorMsg("Cannot parse action type for permission " + s);
+				return;
+			}
+			
+			perms[permLevel.getIndex()][actionType.getIndex()] = b;
+			return;
+		}
 		
 		switch (s.toLowerCase()) {
 			case "denyall":
 				reset();
 				break;
+			// Load old perms
 			case "residentbuild":
 				perms[PermLevel.RESIDENT.getIndex()][ActionType.BUILD.getIndex()] = b;
 				break;
@@ -203,32 +228,24 @@ public class TownyPermission {
 
 	@Override
 	public String toString() {
-		
-		StringBuilder output = new StringBuilder();
+		StringJoiner output = new StringJoiner(",");
 		
 		for (PermLevel permLevel : PermLevel.values) {
-			String permLevelName = permLevel.name().toLowerCase();
-			
 			for (ActionType actionType : ActionType.values) {
 				if (perms[permLevel.getIndex()][actionType.getIndex()]) {
-
-					if (output.length() != 0) {
-						output.append(',');
-					}
-
-					output.append(permLevelName).append(actionType.getCommonName());
+					output.add(permLevel.name() + "-" + actionType.name());
 				}
 			}
 		}
 
 		if (pvp)
-			output.append(output.length() > 0 ? "," : "").append("pvp");
+			output.add("pvp");
 		if (fire)
-			output.append(output.length() > 0 ? "," : "").append("fire");
+			output.add("fire");
 		if (explosion)
-			output.append(output.length() > 0 ? "," : "").append("explosion");
+			output.add("explosion");
 		if (mobs)
-			output.append(output.length() > 0 ? "," : "").append("mobs");
+			output.add("mobs");
 		
 		if (output.length() == 0)
 			return "denyAll";

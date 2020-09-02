@@ -265,13 +265,19 @@ public class ReflectionUtil {
 			if (isArray(type)) {
 				return getTypeOfIterable(type);
 			}
-			else if (type instanceof Class<?>) {
-				Class<?> clazz = (Class<?>) type;
-				ParameterizedType iterableType = ((ParameterizedType) clazz.getGenericSuperclass());
-				return iterableType.getRawType();
-			}
 			else if (type instanceof ParameterizedType) {
 				return ((ParameterizedType) type).getRawType();
+			}
+			else if (type instanceof Class<?>) {
+				Class<?> clazz = (Class<?>) type;
+				// Check if there is any super class.
+				if (clazz.getGenericSuperclass() == Object.class) {
+					return clazz;
+				}
+				else {
+					ParameterizedType iterableType = ((ParameterizedType) clazz.getGenericSuperclass());
+					return iterableType.getRawType();
+				}
 			}
 		} catch (Exception e) {
 			throw new UnsupportedOperationException(e.getMessage());

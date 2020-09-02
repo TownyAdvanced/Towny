@@ -49,7 +49,7 @@ public class OnPlayerLogin implements Runnable {
 		Resident resident = null;
 		TownyMessaging.sendErrorMsg(universe.getResidents().toString());
 		if (!universe.hasResident(player.getName())) {
-			TownyMessaging.sendErrorMsg("UH OH");
+			TownyMessaging.sendErrorMsg("Universe does not have resident!"); // FIXME DEBUG
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
