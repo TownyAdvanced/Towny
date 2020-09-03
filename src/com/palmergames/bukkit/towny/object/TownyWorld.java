@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +69,7 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	public Collection<Town> getTowns() {
-		return towns.values();
+		return Collections.unmodifiableCollection(towns.values());
 	}
 
 	public boolean hasTowns() {
@@ -143,13 +144,7 @@ public class TownyWorld extends TownyObject {
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
-			towns.remove(town.getName());
-			/*
-			 * try {
-			 * town.setWorld(null);
-			 * } catch (AlreadyRegisteredException e) {
-			 * }
-			 */
+			towns.remove(town.getUniqueIdentifier());
 		}
 	}
 

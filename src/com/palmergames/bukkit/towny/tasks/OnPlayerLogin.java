@@ -49,7 +49,7 @@ public class OnPlayerLogin implements Runnable {
 		Resident resident = null;
 		TownyMessaging.sendErrorMsg(universe.getResidents().toString());
 		if (!universe.hasResident(player.getName())) {
-			TownyMessaging.sendErrorMsg("Universe does not have resident!"); // FIXME DEBUG
+			TownyMessaging.sendErrorMsg("Universe does not have resident " + player.getName() + ". UUID: " + player.getUniqueId()); // FIXME DEBUG
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
@@ -64,10 +64,10 @@ public class OnPlayerLogin implements Runnable {
 				resident.setLastOnline(System.currentTimeMillis());
 				resident.setUniqueIdentifier(player.getUniqueId());
 				TownySettings.incrementUUIDCount();
-				if (!TownySettings.getDefaultTownName().equals("")) {
+				if (!TownySettings.getDefaultTownName().isEmpty()) {
 					try {
 						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
-						resident.setTown(town);
+						town.addResident(resident);
 						town.save();
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
@@ -84,7 +84,7 @@ public class OnPlayerLogin implements Runnable {
 			 */
 			try {
 				resident = universe.getResident(player.getUniqueId());
-				TownyMessaging.sendErrorMsg("Resdient = " + resident);
+				TownyMessaging.sendErrorMsg("Logged in known Resident = " + resident); // FIXME DEBUG
 				if (TownySettings.isUsingEssentials()) {
 					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 					/*

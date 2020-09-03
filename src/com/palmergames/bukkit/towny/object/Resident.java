@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.database.handler.annotations.ForeignKey;
 import com.palmergames.bukkit.towny.database.handler.annotations.OneToMany;
+import com.palmergames.bukkit.towny.database.handler.annotations.PostLoad;
 import com.palmergames.bukkit.towny.database.handler.annotations.SavedEntity;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
@@ -46,6 +47,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 )
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
 	@OneToMany(tableName = "friends")
+	@PostLoad
 	private List<Resident> friends = new CopyOnWriteArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	@ForeignKey(reference = Town.class)
@@ -332,16 +334,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public boolean isMayor() {
-
-		Town town;
 		try {
-			town = getTown();
+			return getTown().isMayor(this);
 		} catch (NotRegisteredException e) {
-			e.printStackTrace();
 			return false;
 		}
-
-		return hasTown() && town.isMayor(this);
 	}
 
 	public boolean hasTown() {
@@ -695,15 +692,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return removeAllNationRanks(true);
 	}
 	
-	public boolean removeAllNationRanks(boolean updatePerms) {
-		if (!nationRanks.isEmpty()) {
+	public boolean removeAllNationRanks(boolean refetchPerms) {
+		boolean hasNationRanks = !nationRanks.isEmpty();
+		if (hasNationRanks) {
 			nationRanks.clear();
-			if (updatePerms && BukkitTools.isOnline(this.getName())) {
-				TownyPerms.assignPermissions(this, null);
-			}
-			return true;
 		}
-		return false;
+		if (refetchPerms && BukkitTools.isOnline(this.getName())) {
+			TownyPerms.assignPermissions(this, null);
+		}
+		return hasNationRanks;
 	}
 
 	public boolean isAlliedWith(Resident otherresident) {

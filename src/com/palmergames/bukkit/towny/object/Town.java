@@ -1122,17 +1122,27 @@ public class Town extends Government implements TownBlockOwner {
 		if (hasOutlaw(resident))
 			outlaws.remove(resident.getUniqueIdentifier());			
 	}
-
+	
+	/**
+	 * Use {@link Town#getUniqueIdentifier()}
+	 */
 	@Deprecated
 	public UUID getUuid() {
 		return getUniqueIdentifier();
 	}
-
+	
+	/**
+	 * Use {@link Town#setUniqueIdentifier(UUID)}
+	 */
 	@Deprecated
 	public void setUuid(UUID uuid) {
 		setUniqueIdentifier(uuid);
 	}
 
+	/**
+	 * UUID should never be null
+	 * @return whether the UUID is valid.
+	 */
 	@Deprecated
 	public boolean hasValidUUID() {
 		return getUniqueIdentifier() != null;

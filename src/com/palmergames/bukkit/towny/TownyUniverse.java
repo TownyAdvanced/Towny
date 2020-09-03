@@ -380,8 +380,7 @@ public class TownyUniverse {
 		}
     	return Collections.unmodifiableList(residentList);
 	}
-
-	@Deprecated
+	
 	public final @NotNull Resident newResident(Player player) throws AlreadyRegisteredException, NotRegisteredException {
 		Objects.requireNonNull(player);
 
@@ -722,7 +721,6 @@ public class TownyUniverse {
 		} catch (NotRegisteredException e) {
 			// Must already be removed
 		}
-		townyWorld.save();
 
 		// Delete town from DB
 		databaseHandler.delete(town);

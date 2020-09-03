@@ -2844,9 +2844,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {
 
-		resident.setTown(town);
+		town.addResident(resident);
 		plugin.deleteCache(resident.getName());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		resident.save();
 		town.save();
 	}

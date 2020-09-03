@@ -184,7 +184,17 @@ public class FlatFileDatabaseHandler extends DatabaseHandler {
 			return;
 		}
 
-		Object value = ObjectSerializer.deserializeField(field, fieldValue);
+		Object value;
+		
+		try {
+			value = ObjectSerializer.deserializeField(field, fieldValue);
+		} catch (Exception e) {
+			// Prevent load from crashing
+			value = null;
+			TownyMessaging.sendErrorMsg("Error loading field " + field.getName() + " with value " + fieldValue +
+				" for object " + obj.getClass().getName());
+			e.printStackTrace();
+		}
 
 		if (value == null) {
 			// ignore it as another already allocated value may be there.

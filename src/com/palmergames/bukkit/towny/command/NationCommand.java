@@ -1281,7 +1281,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		townyUniverse.newNation(name);
 		Nation nation = townyUniverse.getNation(name);
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
-		town.setNation(nation);
+		nation.addTown(town);
 		nation.setCapital(town);
 		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {

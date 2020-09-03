@@ -1370,8 +1370,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
-						newMayor.setUniqueIdentifier(UUID.randomUUID());
-
 						newMayor.save();
 
 						// set for no upkeep as an NPC mayor is assigned
@@ -1399,7 +1397,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						// set upkeep again
 						town.setHasUpkeep(true);
 					}
-					townyUniverse.getDatabaseHandler().save(town);					
+					town.save();					
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_new_mayor", newMayor.getName()));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
