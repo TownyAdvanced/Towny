@@ -3,9 +3,9 @@ package com.palmergames.bukkit.towny.database.dbHandlers;
 import com.palmergames.bukkit.towny.database.handler.SerializationHandler;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MetadataHandler implements SerializationHandler<Map<String, CustomDataField<?>>> {
 	
@@ -13,7 +13,7 @@ public class MetadataHandler implements SerializationHandler<Map<String, CustomD
 	public Map<String, CustomDataField<?>> loadString(String str) {
 		String[] objects = str.split(";");
 		
-		Map<String, CustomDataField<?>> metadata = new HashMap<>(objects.length);
+		Map<String, CustomDataField<?>> metadata = new ConcurrentHashMap<>(objects.length);
 
 		for (String object : objects) {
 			CustomDataField<?> cdf = CustomDataField.load(object);
