@@ -376,14 +376,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 			for (Town town : towns) {
-				for (Resident res : town.getResidents()) {
-					if (res.hasTitle() || res.hasSurname()) {
-						res.setTitle("");
-						res.setSurname("");
-					}
-					res.updatePermsForNationRemoval();
-					saveResident(res);
-				}
 				town.removeNation();
 				town.setNation(prevailingNation);
 			}

@@ -399,9 +399,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyPerms.assignPermissions(this, null);
 	}
 	
+	@Deprecated
 	public void updatePermsForNationRemoval() {
-		nationRanks.clear();
-		TownyPerms.assignPermissions(this, null);
+		removeAllNationRanks();
 	}
 
 	public void setRegistered(long registered) {
@@ -689,6 +689,21 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		throw new NotRegisteredException();
 
+	}
+
+	public boolean removeAllNationRanks() {
+		return removeAllNationRanks(true);
+	}
+	
+	public boolean removeAllNationRanks(boolean updatePerms) {
+		if (!nationRanks.isEmpty()) {
+			nationRanks.clear();
+			if (updatePerms && BukkitTools.isOnline(this.getName())) {
+				TownyPerms.assignPermissions(this, null);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isAlliedWith(Resident otherresident) {

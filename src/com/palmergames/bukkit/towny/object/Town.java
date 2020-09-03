@@ -192,18 +192,21 @@ public class Town extends Government implements TownBlockOwner {
 		}
 
 		for (Resident res : getResidents()) {
+			boolean saveRes = false;
 			if (res.hasTitle() || res.hasSurname()) {
+				saveRes = true;
 				res.setTitle("");
 				res.setSurname("");
 			}
-			res.updatePermsForNationRemoval();
-			res.save();
+			saveRes |= res.removeAllNationRanks();
+			if (saveRes)
+				res.save();
 		}
 
 		try {
 			nation.removeTown(this);
 		} catch (EmptyNationException e) {
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			TownyUniverse.getInstance().removeNation(nation);
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation().getName()));
 		}
 

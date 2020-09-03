@@ -59,8 +59,6 @@ public class Nation extends Government {
 	
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
-	@SuppressWarnings("unused")
-	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 
 	public Nation(UUID uniqueIdentifier) {
 		super(uniqueIdentifier);
@@ -416,8 +414,7 @@ public class Nation extends Government {
 	 * @throws EmptyNationException - Thrown when last town is being removed.
 	 */
 	protected void removeTown(Town town) throws EmptyNationException {
-
-		boolean isCapital = town.isCapital();
+		boolean isCapital = isCapital(town);
 		remove(town);
 
 		if (getNumTowns() == 0) {
@@ -434,7 +431,28 @@ public class Nation extends Government {
 	}
 
 	private void removeAllTowns() {
-
+		for (Town town : towns) {
+			if (town.hasNation()) {
+				// Clear resident surname and titles
+				for (Resident res : getResidents()) {
+					boolean saveRes = false;
+					if (res.hasTitle() || res.hasSurname()) {
+						saveRes = true;
+						res.setTitle("");
+						res.setSurname("");
+					}
+					
+					saveRes |= res.removeAllNationRanks();
+					if (saveRes)
+						res.save();
+				}
+				// Set nation to null
+				try {
+					town.setNation(null);
+				} catch (AlreadyRegisteredException ignore) {
+				}
+			}
+		}
 		towns.clear();
 	}
 
