@@ -59,12 +59,14 @@ public class SiegeWarTimerTaskController {
 			case PENDING_DEFENDER_SURRENDER:
 				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
 					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_SURRENDER);
+					SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
 				}
 				break;
 
 			case PENDING_ATTACKER_ABANDON:
 				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
 					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
+					SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
 				}
 				break;
 
