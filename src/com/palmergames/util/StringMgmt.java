@@ -3,7 +3,6 @@ package com.palmergames.util;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import net.md_5.bungee.api.ChatColor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -196,15 +195,5 @@ public class StringMgmt {
 			return str;
 		
 		return  str.substring(0, 1).toUpperCase() + str.substring(1);
-	}
-	
-	@Nullable
-	public static String versionFormat(String str) {
-		Matcher matcher = versionPattern.matcher(str);
-		if (matcher.find()) {
-			return matcher.group(0);
-		} else {
-			return null;
-		}
 	}
 }
