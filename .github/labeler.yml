@@ -18,27 +18,8 @@ economy:
     - src/com/palmergames/bukkit/towny/object/EconomyHandler.java
     - src/com/palmergames/bukkit/towny/TownyEconomyHandler.java
 
-confirmations:
-    - src/com/palmergames/bukkit/towny/confirmations/*
-
-chat:
-    - src/com/palmergames/bukkit/towny/confirmations/chat/*
-
-utils:
-    - src/com/palmergames/bukkit/util/*
-    - src/com/palmergames/util/*
-
-config:
-    - src/com/palmergames/bukkit/config/*
-
 events:
     - src/com/palmergames/bukkit/towny/event/*
 
 github:
     - .github/*
-
-maven:
-    - pom.xml
-
-resources:
-    - resources/*
