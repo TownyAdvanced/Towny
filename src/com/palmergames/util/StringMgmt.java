@@ -24,8 +24,6 @@ public class StringMgmt {
 	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
 	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
 	
-	public static final Pattern versionPattern = Pattern.compile("[0-9]+(\\.[0-9]+)*");
-	
 	public static String translateHexColors(String str) {
 		if (!Towny.is116Plus()) {
 			return str;
