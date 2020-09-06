@@ -4874,3 +4874,37 @@ v0.92.0.11:
 0.96.2.13:
   - Fix NPE caused by trying to delete an economy account before the EconomyHandler is set up.
   - On flatfile databases, move resident file into deleted folder instead of outright deleting them.
+  - Fix Towny deleting residents that do not load proper data.
+    - This was probably overly heavy-handed, usually happening when a resident loaded a town that didn't exist.
+    - Now resident will load with no town, if they have saved an invalid Town.
+    - Removed spammy debug messages from TownySQLSource.
+  - Hotfix/Delay backup until after initialization, courtesy of Siris with PR #4281.
+  - Readd TownyMessaging.sendMsg(Object, String) deprecated.
+  - Fix Towny deleting resident that do not load proper data on sql databases.
+  - Fix Towny still trying to load a nation's town list on SQL servers.
+0.96.2.14:
+  - Fix /t list throwing an error on spigot servers when the economyhandler is not active.
+    - Sometimes caused by having vault without any economy plugin present.
+    - Closes #4284.
+  - Made TownySettings.isUsingEconomy also require that the TownyEconomyHandler.isActive(), to more easily handle when a server has not had their economy properly set up.
+  - Fix for servers that do not use an economy being unable to do many commands/operations and seeing [Towny] null. 
+  - Unmake TownySettings.isUsingEconomy also require that teh TownyEconomyHandler.isActive(), because we use isUsingEconomy to decide if we startup the economy handler (derp).
+  - Fix TownySQLSource#backup() being synchronized.
+0.96.2.15:
+  - Remove assistants column from nation table on mysql DBs.
+  - Improve error messages on loading towns/nations for mysql.
+  - Handle nations loading invalid capital. 
+0.96.2.16:
+  - Hotfix: Make deletions and other IO operations go through the async queue, courtesy of Siris with PR #4288.
+  - Fix towns-paying-tax message in the new day not appearing for the town.
+  - Add debug messaging when nations load/set a capital.
+  - Fix nations selecting a new capital on startup.
+0.96.2.17: 
+  - Re-activate the world files unclaimedZoneIgnoredIDs list.
+    - This was only being used for wilds plots, and not having any effect on the wilderness.
+  - New Permission Nodes:
+    - towny.admin.spawn.nocharge - makes spawning cost 0.
+    - towny.admin.spawn.nocooldown - removes cooldown from spawning.
+    - towny.admin.spawn.nowarmup - removes warmup from spawning.
+    - All three are child nodes of towny.admin.spawn
+    - Closes #4296.

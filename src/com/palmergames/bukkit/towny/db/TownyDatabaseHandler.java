@@ -1019,8 +1019,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
 	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
-	 * @throws NotRegisteredException - Shouldn't happen.
-	 * @throws AlreadyRegisteredException - Shouldn't happen. 
 	 * 
 	 * @author LlmDl
 	 */
@@ -1030,7 +1028,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Iterator<Town> towns = succumbingNation.getTowns().iterator();
 		while (towns.hasNext()) {
 			try {
-				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+				if (TownySettings.isUsingEconomy())
+					succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 				Town town = towns.next();
 				town.removeNation();
 				try {

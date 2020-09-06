@@ -326,6 +326,9 @@ public enum PermissionNodes {
 	TOWNY_TOWN_RESIDENT("towny.town.resident"),
 
 	TOWNY_SPAWN_ADMIN("towny.admin.spawn"),
+	TOWNY_SPAWN_ADMIN_NOWARMUP("towny.admin.spawn.nowarmup"),
+	TOWNY_SPAWN_ADMIN_NOCOOLDOWN("towny.admin.spawn.nocooldown"),
+	TOWNY_SPAWN_ADMIN_NOCHARGE("towny.admin.spawn.nocharge"),
 	
 	TOWNY_SPAWN_ALL("towny.town.spawn.*"),
 

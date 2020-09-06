@@ -212,9 +212,10 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
 						localRemovedTowns.add(town.getName());		
 						town.removeNation();
+					} else {
+						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 					}
-				} else
-					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+				}
 			}
 			if (localRemovedTowns != null) {
 				if (localRemovedTowns.size() == 1) 
