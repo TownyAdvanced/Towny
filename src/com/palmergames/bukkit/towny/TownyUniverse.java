@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.StringMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -141,8 +140,7 @@ public class TownyUniverse {
             return false;
         }
         
-        String verStr = TownySettings.getLastRunVersion(Towny.getPlugin().getVersion().toString());
-        Version lastRunVersion = new Version(StringMgmt.versionFormat(verStr));
+        Version lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
         
         // Only migrate if the user just updated.
         if (!lastRunVersion.equals(towny.getVersion())) {

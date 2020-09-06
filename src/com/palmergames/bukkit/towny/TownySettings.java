@@ -2092,13 +2092,16 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpToDate(Version currentVersion) {
-
-		return currentVersion.equals(new Version(StringMgmt.versionFormat(getLastRunVersion("0.0.0.0"))));
+		return currentVersion.equals(Version.fromString(getLastRunVersion()));
 	}
 
 	public static String getLastRunVersion(String currentVersion) {
 
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
+	}
+	
+	public static String getLastRunVersion() {
+		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0");
 	}
 
 	public static void setLastRunVersion(Version currentVersion) {

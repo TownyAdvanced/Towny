@@ -278,4 +278,8 @@ public class BukkitTools {
 		}
 
 	}
+	
+	public static Version getTownyVersion() {
+		return Version.fromString(plugin.getDescription().getVersion());
+	}
 }
