@@ -2083,16 +2083,13 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 
-	public static boolean isTownyUpdating(Version currentVersion) {
-
-		if (isTownyUpToDate(currentVersion))
-			return false;
-		else
-			return true; // Assume
+	public static boolean isTownyUpdating(String currentVersion) {
+		// Assume
+		return !isTownyUpToDate(currentVersion);
 	}
 
-	public static boolean isTownyUpToDate(Version currentVersion) {
-		return currentVersion.equals(Version.fromString(getLastRunVersion()));
+	public static boolean isTownyUpToDate(String currentVersion) {
+		return currentVersion.equals(currentVersion);
 	}
 
 	public static String getLastRunVersion(String currentVersion) {
@@ -2104,8 +2101,7 @@ public class TownySettings {
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0");
 	}
 
-	public static void setLastRunVersion(Version currentVersion) {
-
+	public static void setLastRunVersion(String currentVersion) {
 		setProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
 		config.save();
 	}

@@ -278,7 +278,14 @@ public class BukkitTools {
 		}
 
 	}
-	
+
+	/**
+	 * Gets the towny version excluding the version of towny this
+	 * code was made for.
+	 * 
+	 * @return A new {@link Version} representing the current towny version
+	 * being run.
+	 */
 	public static Version getTownyVersion() {
 		return Version.fromString(plugin.getDescription().getVersion());
 	}

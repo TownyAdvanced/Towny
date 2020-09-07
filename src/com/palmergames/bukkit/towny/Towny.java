@@ -88,7 +88,7 @@ public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Version NETHER_VER = Version.fromString("1.16.1");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
-	private static Version CUR_PLUGIN_VER;
+	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
@@ -174,9 +174,9 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("=============================================================");
 		if (isError()) {
-			System.out.println("[WARNING] - ***** SAFE MODE ***** " + CUR_PLUGIN_VER);
+			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
-			System.out.println("[Towny] Version: " + CUR_PLUGIN_VER + " - Mod Enabled");
+			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
 		}
 		System.out.println("=============================================================");
 
@@ -239,7 +239,7 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
-		System.out.println("[Towny] Version: " + CUR_PLUGIN_VER + " - Mod Disabled");
+		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 		System.out.println("=============================================================");
 	}
 
@@ -411,7 +411,7 @@ public class Towny extends JavaPlugin {
 			boolean display = false;
 			System.out.println("------------------------------------");
 			System.out.println("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion().toString());
+			String lastVersion = TownySettings.getLastRunVersion(getVersion());
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith(lastVersion)) {
@@ -442,11 +442,8 @@ public class Towny extends JavaPlugin {
 		return townyUniverse;
 	}
 
-	public Version getVersion() {
-		if (CUR_PLUGIN_VER == null) {
-			CUR_PLUGIN_VER = BukkitTools.getTownyVersion();
-		}
-		return CUR_PLUGIN_VER;
+	public String getVersion() {
+		return version;
 	}
 
 	/**
