@@ -68,7 +68,6 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-    private final HashMap<Resident, Location> recentlyLoggedOutResidentLocationMap = new HashMap<>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -568,11 +567,4 @@ public class TownyUniverse {
 		return result;
 	}
 
-	public void addRecentlyLoggedOutResident(Resident resident, Location location) {
-		recentlyLoggedOutResidentLocationMap.put(resident, location);
-	}
-
-	public Map<Resident, Location> getRecentlyLoggedOutResidentLocationMap() {
-		return new HashMap<>(recentlyLoggedOutResidentLocationMap);
-	}
 }

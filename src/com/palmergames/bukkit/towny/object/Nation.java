@@ -18,9 +18,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -100,9 +98,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			throw new NotRegisteredException();
 		else {
 			boolean result = getAllies().remove(nation);
-
-			if(result && TownySettings.getWarSiegeEnabled())
-				SiegeWarMembershipController.evaluateNationRemoveAlly(this, nation);
 
 			return result;
 		}
@@ -375,9 +370,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		else {
 
 			boolean isCapital = town.isCapital();
-
-			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarMembershipController.evaluateNationRemoveTown(town);
 
 			remove(town);
 			TownyUniverse.getInstance().getDataSource().saveNation(this);

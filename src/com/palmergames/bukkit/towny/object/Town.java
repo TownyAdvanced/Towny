@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarMembershipController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -684,9 +683,6 @@ public class Town extends TownyObject implements ResidentList, TownyInviter, Obj
 		if (!hasResident(resident)) {
 			throw new NotRegisteredException();
 		} else {
-
-			if(TownySettings.getWarSiegeEnabled())
-				SiegeWarMembershipController.evaluateTownRemoveResident(this, resident);
 
 			remove(resident);
 

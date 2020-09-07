@@ -1962,14 +1962,6 @@ public enum ConfigNodes {
 			"true",
 			"# If this value is true, then a town under active siege cannot unclaim.",
 			"#  This setting is recommended if invasion/occupation is enabled, to avoid occupation escape exploits."),
-	WAR_SIEGE_PENALTY_POINTS_ENABLED(
-			"war.siege.switches.penalty_points_enabled",
-			"true",
-			"# If this value is true, then multiple siege-death-point avoidance exploits are automatically prevented.",
-			"# The feature works by applying a siege point penalty in any scenario where siege-death points could be avoided.",
-			"# For example, if a soldier in a siege simply left their town just before dying, they would avoid sp loss.",
-			"# As per the wiki, nations & allies are thus recommended to never reduce armed forces if they have active sieges.",
-			"# This setting is recommended to save moderators from extra manual monitoring and enforcement efforts."),
 	WAR_SIEGE_POPULATION_BASED_POINT_BOOSTS_ENABLED(
 			"war.siege.switches.population_based_point_boosts_enabled",
 			"false",
