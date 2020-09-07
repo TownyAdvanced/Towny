@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -2089,7 +2088,7 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
-		return currentVersion.equals(currentVersion);
+		return currentVersion.equals(getLastRunVersion(currentVersion));
 	}
 
 	public static String getLastRunVersion(String currentVersion) {
