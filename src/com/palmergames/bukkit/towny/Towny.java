@@ -411,7 +411,7 @@ public class Towny extends JavaPlugin {
 			boolean display = false;
 			System.out.println("------------------------------------");
 			System.out.println("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion());
+			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith(lastVersion)) {
