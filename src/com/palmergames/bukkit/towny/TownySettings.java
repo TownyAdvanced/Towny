@@ -3149,8 +3149,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PENALTY_POINTS_ENABLED);
 	}
 
-	public static boolean getWarSiegeKeepInventoryOnSiegeDeath() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_KEEP_INVENTORY_ON_SIEGE_DEATH);
+	public static boolean getWarSiegeDeathPenaltyKeepInventoryEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_DEATH_PENALTY_KEEP_INVENTORY_ENABLED);
+	}
+
+	public static boolean getWarSiegeDeathPenaltyDegradeInventoryEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_DEATH_PENALTY_DEGRADE_INVENTORY_ENABLED);
+	}
+
+	public static double getWarSiegeDeathPenaltyDegradeInventoryPercentage() {
+		return getDouble(ConfigNodes.WAR_SIEGE_DEATH_PENALTY_DEGRADE_INVENTORY_PERCENTAGE);
 	}
 
 	public static int getWarSiegeExtraMoneyPercentagePerTownLevel() {

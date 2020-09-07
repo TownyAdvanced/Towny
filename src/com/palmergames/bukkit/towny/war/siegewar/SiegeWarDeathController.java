@@ -11,6 +11,9 @@ import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * This class intercepts 'player death' events coming from the TownyPlayerListener class.
@@ -26,16 +29,15 @@ public class SiegeWarDeathController {
 	 * Evaluates a siege death event.
 	 *
 	 * If the dead player is officially involved in a nearby siege, 
-	 * their side loses siege points AND they keep their inventory.
+	 * - Their side loses siege points 
+	 * - Their inventory items degrade a little (e.g. 10%)
 	 *
-	 * NOTE: 
 	 * This mechanic allows for a wide range of siege-kill-tactics.
 	 * Examples:
+	 * - Players without towns can contribute to siege points
 	 * - Players from non-nation towns can contribute to siege points
 	 * - Players from secretly-allied nations can contribute to siege points
-	 * - Players without official military rank can contribute to siege points
 	 * - Devices (cannons, traps, bombs etc.) can be used to gain siege points
-	 * - Note that players from Neutral towns can use devices, but are technically prevented from non-device kills.
 	 *
 	 * @param deadPlayer The player who died
 	 * @param playerDeathEvent The player death event
@@ -131,6 +133,7 @@ public class SiegeWarDeathController {
 						TownySettings.getLangString("msg_siege_war_attacker_death"));
 				}
 
+				degradeInventory(playerDeathEvent);
 				keepInventory(playerDeathEvent);
 			}
 		} catch (Exception e) {
@@ -143,8 +146,29 @@ public class SiegeWarDeathController {
 		}
 	}
 
+	private static void degradeInventory(PlayerDeathEvent playerDeathEvent) {
+		Damageable damageable;
+		double maxDurability;
+		int currentDurability;
+		int damageToInflict;
+		int newDurability;
+		if(TownySettings.getWarSiegeDeathPenaltyDegradeInventoryEnabled()) {
+			for(ItemStack itemStack: playerDeathEvent.getEntity().getInventory().getContents()) {
+				if (itemStack != null && itemStack.getItemMeta() instanceof Damageable) {
+					damageable = ((Damageable) itemStack.getItemMeta());
+					maxDurability = itemStack.getType().getMaxDurability();
+					currentDurability = damageable.getDamage();
+					damageToInflict = (int)(maxDurability / 100 * TownySettings.getWarSiegeDeathPenaltyDegradeInventoryPercentage());
+					newDurability = currentDurability + damageToInflict;
+					damageable.setDamage(newDurability);
+					itemStack.setItemMeta((ItemMeta)damageable);
+				}
+			}
+		}
+	}
+
 	private static void keepInventory(PlayerDeathEvent playerDeathEvent) {
-		if(TownySettings.getWarSiegeKeepInventoryOnSiegeDeath() && !playerDeathEvent.getKeepInventory()) {
+		if(TownySettings.getWarSiegeDeathPenaltyKeepInventoryEnabled() && !playerDeathEvent.getKeepInventory()) {
 			playerDeathEvent.setKeepInventory(true);
 			playerDeathEvent.getDrops().clear();
 		}
