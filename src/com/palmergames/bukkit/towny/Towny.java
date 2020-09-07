@@ -443,6 +443,7 @@ public class Towny extends JavaPlugin {
 	}
 
 	public String getVersion() {
+
 		return version;
 	}
 

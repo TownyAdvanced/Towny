@@ -2088,6 +2088,7 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
+
 		return currentVersion.equals(getLastRunVersion(currentVersion));
 	}
 
@@ -2101,6 +2102,7 @@ public class TownySettings {
 	}
 
 	public static void setLastRunVersion(String currentVersion) {
+
 		setProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
 		config.save();
 	}
