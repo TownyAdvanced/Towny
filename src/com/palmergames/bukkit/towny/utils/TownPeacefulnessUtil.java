@@ -241,12 +241,13 @@ public class TownPeacefulnessUtil {
 			int guardianTownPlotsRequirement = TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement();
 			int guardianTownMaxDistanceRequirementTownblocks = TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement();
 	
-			//Find valid guardian nations
+			//Find valid guardian towns
 			List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 			for(Town candidateTown: candidateTowns) {
 				if(!candidateTown.isPeaceful()
 					&& !candidateTown.hasSiege()
 					&& candidateTown.hasNation()
+					&& candidateTown.getNation().isOpen()
 					&& candidateTown.getTownBlocks().size() >= guardianTownPlotsRequirement
 					&& SiegeWarDistanceUtil.areTownsClose(peacefulTown, candidateTown, guardianTownMaxDistanceRequirementTownblocks)) {
 					validGuardianTowns.add(candidateTown);
@@ -254,9 +255,9 @@ public class TownPeacefulnessUtil {
 			}
 		} catch (Exception e) {
 			try {
-				System.out.println("Problem getting valid guardian nations for - " + peacefulTown.getName());
+				System.out.println("Problem getting valid guardian towns for - " + peacefulTown.getName());
 			} catch (Exception e2) {
-				System.out.println("Problem getting valid guardian nations (could not read peaceful town name)");
+				System.out.println("Problem getting valid guardian towns (could not read peaceful town name)");
 			}
 			e.printStackTrace();
 		}
