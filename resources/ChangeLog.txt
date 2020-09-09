@@ -4908,3 +4908,5 @@ v0.92.0.11:
     - towny.admin.spawn.nowarmup - removes warmup from spawning.
     - All three are child nodes of towny.admin.spawn
     - Closes #4296.
+  - Fix permissions not being give to members who've just joined a town.
+  - API Change: TownPreClaimEvent has new isOutpost() and isHomeBlock() methods.
