@@ -846,7 +846,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setTownblocks(Collection<TownBlock> townBlocks) {
-		this.townBlocks = new ArrayList<>(townBlocks);
+		townBlocks.clear();
+		this.townBlocks.addAll(townBlocks);
 	}
 
 	@Override
