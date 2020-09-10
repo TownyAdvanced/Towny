@@ -64,7 +64,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
-	private Collection<TownBlock> townBlocks = new HashSet<>();
+	private final Collection<TownBlock> townBlocks = new HashSet<>();
 	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
