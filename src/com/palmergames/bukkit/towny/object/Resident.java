@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +64,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
-	private List<TownBlock> townBlocks = new ArrayList<>();
+	private Collection<TownBlock> townBlocks = new HashSet<>();
 	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {

@@ -763,9 +763,9 @@ public class TownySettings {
 		String townBlockName = "";
 		try {
 			Town fallenTown = fallenTownBlock.getTown();
-			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getCoord().toString() + ")";
+			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getWorldCoord().toString() + ")";
 		} catch (NotRegisteredException e) {
-			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
+			townBlockName = "(" + fallenTownBlock.getWorldCoord().toString() + ")";
 		}
 		return parseString(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName));
 	}

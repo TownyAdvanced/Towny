@@ -96,21 +96,11 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissibl
 	public boolean hasResident() { return resident != null; }
 	
 	public boolean addTownBlock(@NotNull TownBlock townBlock) {
-		if (townBlocks.containsValue(townBlock)) {
-			return false;
-		}
-		
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);
-		return true;
+		return townBlocks.putIfAbsent(townBlock.getWorldCoord(), townBlock) == null;
 	}
 
 	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
-		if (!townBlocks.containsValue(townBlock)) {
-			return false;
-		}
-		
-		townBlocks.remove(townBlock.getWorldCoord());
-		return true;
+		return townBlocks.remove(townBlock.getWorldCoord()) != null;
 	}
 
 	@NotNull

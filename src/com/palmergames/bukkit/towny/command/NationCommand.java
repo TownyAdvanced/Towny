@@ -767,8 +767,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        		throw new Exception(Translation.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = town.getHomeBlock().getCoord();
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getWorldCoord();
+				Coord townCoord = town.getHomeBlock().getWorldCoord();
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 					throw new Exception(Translation.of("msg_err_nation_homeblock_in_another_world"));
 				}
@@ -1510,8 +1510,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		        }
 		        
 				if (TownySettings.getNationRequiresProximity() > 0) {
-					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-					Coord townCoord = town.getHomeBlock().getCoord();
+					Coord capitalCoord = nation.getCapital().getHomeBlock().getWorldCoord();
+					Coord townCoord = town.getHomeBlock().getWorldCoord();
 					if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						remove.add(town);
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_homeblock_in_another_world"));

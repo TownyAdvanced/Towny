@@ -352,7 +352,7 @@ public class TownyFormatter {
 		            (TownySettings.getNationBonusBlocks(town) > 0 ? Translation.of("status_town_size_part_4", TownySettings.getNationBonusBlocks(town)) : "") + 
 		            (town.isPublic() ? Translation.of("status_town_size_part_5") + 
 		            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawn()) : Translation.of("status_no_town"))  + "]" 
-		            				: (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : Translation.of("status_no_town")) + "]") : "")
+		            				: (town.hasHomeBlock() ? town.getHomeBlock().getWorldCoord().toString() : Translation.of("status_no_town")) + "]") : "")
 		           );
 		} catch (TownyException ignored) {}
 

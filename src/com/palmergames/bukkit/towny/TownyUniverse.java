@@ -348,7 +348,7 @@ public class TownyUniverse implements TownBlockOwner {
     public boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
         if (minecraftcoordinates != null && tb != null) {
             for (Location minecraftcoordinate : minecraftcoordinates) {
-                if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
+                if (Coord.parseCoord(minecraftcoordinate).equals(tb.getWorldCoord())) {
                     return true; // Yes the TownBlock is considered an outpost by the Town
                 }
             }
@@ -513,11 +513,7 @@ public class TownyUniverse implements TownBlockOwner {
 	
 	@Override
 	public boolean addTownBlock(@NotNull TownBlock townBlock) {
-		if (hasTownBlock(townBlock.getWorldCoord())) {
-			return false;
-		}
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);
-		return true;
+		return townBlocks.putIfAbsent(townBlock.getWorldCoord(), townBlock) == null;
 	}
 	/**
 	 * Does this WorldCoord have a TownBlock?

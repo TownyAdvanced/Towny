@@ -33,6 +33,14 @@ public class WorldCoord extends Coord {
 		return worldName;
 	}
 
+	/**
+	 * Gets the {@link Coord} form of this object.
+	 * 
+	 * @deprecated As of towny 0.96.2.17, {@link Coord} is a supertype of this object
+	 * so use this object itself instead.
+	 * @return A coordinate of this world coordinate.
+	 */
+	@Deprecated
 	public Coord getCoord() {
 		return new Coord(getX(), getZ());
 	}

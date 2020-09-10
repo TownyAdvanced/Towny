@@ -433,14 +433,14 @@ public class TownyAPI {
 		Town nearestTown = null;
 		int distance;
 		try {
-			nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
+			nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord, nearestTown);
 			if (nearestTown == null) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
 			if (!nearestTown.hasNation()) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
-			distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+			distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord);
 		} catch (NotRegisteredException e1) {
 			// There will almost always be a town in any world where towny is enabled. 
 			// If there isn't then we fall back on normal unclaimed zone status.

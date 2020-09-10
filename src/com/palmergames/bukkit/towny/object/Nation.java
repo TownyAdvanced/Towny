@@ -411,11 +411,11 @@ public class Nation extends Government {
 	public void recheckTownDistance() throws TownyException {
 		if(capital != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				final Coord capitalCoord = capital.getHomeBlock().getWorldCoord();
 				Iterator<Town> it = towns.iterator();
 				while(it.hasNext()) {
 					Town town = it.next();
-					Coord townCoord = town.getHomeBlock().getCoord();
+					Coord townCoord = town.getHomeBlock().getWorldCoord();
 					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						it.remove();
 						continue;
@@ -446,10 +446,10 @@ public class Nation extends Government {
 		List<Town> removedTowns = new ArrayList<>();
 		if(newCapital != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = newCapital.getHomeBlock().getCoord();
+				final Coord capitalCoord = newCapital.getHomeBlock().getWorldCoord();
 				
 				for (Town town : towns) {
-					Coord townCoord = town.getHomeBlock().getCoord();
+					Coord townCoord = town.getHomeBlock().getWorldCoord();
 					if (!newCapital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
 						continue;
 					}

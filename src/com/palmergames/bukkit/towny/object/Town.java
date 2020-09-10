@@ -83,12 +83,12 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 	
 	@Override
 	public boolean addTownBlock(@NotNull TownBlock townBlock) {
-
-		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		if (townBlocks.containsKey(worldCoord)) {
 			return false;
 		}
 
-		townBlocks.put(townBlock.getWorldCoord(), townBlock);
+		townBlocks.put(worldCoord, townBlock);
 		if (townBlocks.size() < 2 && !hasHomeBlock()) {
 			try {
 				setHomeBlock(townBlock);
@@ -516,8 +516,8 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 		if (this.hasNation() && TownySettings.getNationRequiresProximity() > 0)
 			if (!this.getNation().getCapital().equals(this)) {
 				Nation nation = this.getNation();
-				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = this.getHomeBlock().getCoord();
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getWorldCoord();
+				Coord townCoord = this.getHomeBlock().getWorldCoord();
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
 					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					removeNation();
@@ -734,14 +734,14 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 
 	@Override
 	public boolean removeTownBlock(@NotNull TownBlock townBlock) {
-
-		if (townBlocks.containsKey(townBlock.getWorldCoord())) {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		if (townBlocks.containsKey(worldCoord)) {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost()) {
-				removeOutpostSpawn(townBlock.getCoord());
+				removeOutpostSpawn(worldCoord);
 			}
 			if (townBlock.isJail()) {
-				removeJailSpawn(townBlock.getCoord());
+				removeJailSpawn(worldCoord);
 			}
 			
 			// Clear the towns homeblock if this is it.
@@ -751,7 +751,7 @@ public class Town extends Government implements TownBlockOwner, Permissible {
 				}
 			} catch (TownyException ignored) {}
 			
-			townBlocks.remove(townBlock.getWorldCoord());
+			townBlocks.remove(worldCoord);
 			TownyUniverse.getInstance().getDataSource().saveTown(this);
 			
 			return true;

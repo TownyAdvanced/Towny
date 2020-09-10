@@ -604,7 +604,7 @@ public class TownyWorld extends TownyObject {
 		double min = Integer.MAX_VALUE;
 		for (Town town : getTowns().values()) {
 			try {
-				Coord townCoord = town.getHomeBlock().getCoord();
+				Coord townCoord = town.getHomeBlock().getWorldCoord();
 				if (homeTown != null)
 					// If the townblock either: the town is the same as homeTown OR
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
@@ -653,7 +653,7 @@ public class TownyWorld extends TownyObject {
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
 
-					Coord townCoord = b.getCoord();
+					Coord townCoord = b.getWorldCoord();
 					
 					if (key.equals(townCoord)) continue;
 					
@@ -680,7 +680,7 @@ public class TownyWorld extends TownyObject {
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
-				Coord townCoord = b.getCoord();
+				Coord townCoord = b.getWorldCoord();
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min) {
 					min = dist;
@@ -706,7 +706,7 @@ public class TownyWorld extends TownyObject {
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
-				Coord townCoord = b.getCoord();
+				Coord townCoord = b.getWorldCoord();
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min) {
 					min = dist;

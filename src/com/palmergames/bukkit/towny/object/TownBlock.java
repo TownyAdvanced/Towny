@@ -29,6 +29,7 @@ public class TownBlock extends TownyObject {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
+	private final WorldCoord worldCoord;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -39,6 +40,7 @@ public class TownBlock extends TownyObject {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+		this.worldCoord = new WorldCoord(world.getName(), x, z);
 	}
 
 	public void setTown(Town town) {
@@ -303,7 +305,7 @@ public class TownBlock extends TownyObject {
 			
 				if (this.isJail())
 					try {
-						this.getTown().removeJailSpawn(this.getCoord());
+						this.getTown().removeJailSpawn(this.getWorldCoord());
 					} catch (NotRegisteredException ignored) {
 					}
 				
@@ -315,7 +317,7 @@ public class TownBlock extends TownyObject {
 		// No payment required so just change the type.
 		} else {
 			if (this.isJail())
-				this.getTown().removeJailSpawn(this.getCoord());
+				this.getTown().removeJailSpawn(this.getWorldCoord());
 			setType(type);
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 		}
@@ -335,19 +337,9 @@ public class TownBlock extends TownyObject {
 		super.setName(newName.replace("_", " ")); 
 	}
 
-	public void setX(int x) {
-
-		this.x = x;
-	}
-
 	public int getX() {
 
 		return x;
-	}
-
-	public void setZ(int z) {
-
-		this.z = z;
 	}
 
 	public int getZ() {
@@ -355,14 +347,24 @@ public class TownBlock extends TownyObject {
 		return z;
 	}
 
+	/**
+	 * Gets the {@link Coord} associated with this townblock.
+	 * 
+	 * @deprecated As of towny 0.96.2.17, use {@link TownBlock#getWorldCoord()} instead.
+	 * @return A coordinate of the townblock.
+	 */
+	@Deprecated
 	public Coord getCoord() {
-
 		return new Coord(x, z);
 	}
 
+	/**
+	 * Gets the {@link WorldCoord} associated with this townblock.
+	 * 
+	 * @return A world coordinate of this townblock.
+	 */
 	public WorldCoord getWorldCoord() {
-
-		return new WorldCoord(world.getName(), x, z);
+		return worldCoord;
 	}
 
 	/**
@@ -418,12 +420,12 @@ public class TownBlock extends TownyObject {
 	@Override
 	public String toString() {
 
-		return getWorld().getName() + " (" + getCoord() + ")";
+		return getWorld().getName() + " (" + getWorldCoord() + ")";
 	}
 
 	public boolean isWarZone() {
 
-		return getWorld().isWarZone(getCoord());
+		return getWorld().isWarZone(getWorldCoord());
 	}
 
 	public boolean isJail() {

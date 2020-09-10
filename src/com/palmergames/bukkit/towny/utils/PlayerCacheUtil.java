@@ -430,7 +430,7 @@ public class PlayerCacheUtil {
 						
 							Nation playersNation;
 							Town nearestTown = null; 
-							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
+							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos, nearestTown);
 							Nation nearestNation = nearestTown.getNation();
 			
 							try {
