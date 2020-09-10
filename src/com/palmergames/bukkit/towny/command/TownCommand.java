@@ -3145,12 +3145,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	// wrapper function for non friend setting of perms
-	public static void setTownBlockOwnerPermissions(Player player, Permissible townBlockOwner, String[] split) {
-
+	public static <T extends Permissible & TownBlockOwner> void setTownBlockOwnerPermissions(Player player, T townBlockOwner, String[] split) {
 		setTownBlockPermissions(player, townBlockOwner, townBlockOwner.getPermissions(), split, false);
 	}
-
-	public static void setTownBlockPermissions(Player player, Permissible townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
+	
+	public static <T extends Permissible & TownBlockOwner> void setTownBlockPermissions(Player player, T townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
@@ -3183,17 +3182,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (split[0].equalsIgnoreCase("reset")) {
 
 					// reset all townBlock permissions (by town/resident)
-					if (townBlockOwner instanceof TownBlockOwner) {
-						for (TownBlock townBlock : ((TownBlockOwner) townBlockOwner).getTownBlocks()) {
-
-							if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
-
-								// Reset permissions
-								townBlock.setType(townBlock.getType());
-								townyUniverse.getDataSource().saveTownBlock(townBlock);
-							}
+					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
+							// Reset permissions
+							townBlock.setType(townBlock.getType());
+							townyUniverse.getDataSource().saveTownBlock(townBlock);
 						}
 					}
+					
 					if (townBlockOwner instanceof Town)
 						TownyMessaging.sendMsg(player, Translation.of("msg_set_perms_reset", "Town owned"));
 					else
@@ -3287,21 +3283,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 			// Propagate perms to all unchanged townblocks
-			if (townBlockOwner instanceof TownBlockOwner) {
-				for (TownBlock townBlock : ((TownBlockOwner) townBlockOwner).getTownBlocks()) {
-					if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
-						if (!townBlock.isChanged()) {
-							townBlock.setType(townBlock.getType());
-							townyUniverse.getDataSource().saveTownBlock(townBlock);
-						}
-					} else if (townBlockOwner instanceof Resident)
-						if (!townBlock.isChanged()) {
-							townBlock.setType(townBlock.getType());
-							townyUniverse.getDataSource().saveTownBlock(townBlock);
-						}
-				}
+			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
+				} else if (townBlockOwner instanceof Resident)
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
 			}
-
+			
 			TownyMessaging.sendMsg(player, Translation.of("msg_set_perms"));
 			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
