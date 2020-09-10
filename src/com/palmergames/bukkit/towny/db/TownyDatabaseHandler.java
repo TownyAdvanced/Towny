@@ -1019,8 +1019,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
 	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
-	 * @throws NotRegisteredException - Shouldn't happen.
-	 * @throws AlreadyRegisteredException - Shouldn't happen. 
 	 * 
 	 * @author LlmDl
 	 */

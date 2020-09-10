@@ -40,7 +40,7 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+		Version configVersion = Version.fromString(TownySettings.getLastRunVersion());
 		
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
