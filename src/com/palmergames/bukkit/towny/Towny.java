@@ -86,7 +86,9 @@ import java.util.Map;
  */
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
-	private String version = "2.0.0";
+	private static final Version NETHER_VER = Version.fromString("1.16.1");
+	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
+	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
@@ -123,8 +125,6 @@ public class Towny extends JavaPlugin {
 	public void onEnable() {
 
 		System.out.println("====================      Towny      ========================");
-
-		version = this.getDescription().getVersion();
 
 		townyUniverse = TownyUniverse.getInstance();
 		
@@ -411,7 +411,7 @@ public class Towny extends JavaPlugin {
 			boolean display = false;
 			System.out.println("------------------------------------");
 			System.out.println("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
+			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith(lastVersion)) {
@@ -863,12 +863,6 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public static boolean is116Plus() {
-		String verString = Bukkit.getBukkitVersion();
-		verString = verString.replace("-R0.1-SNAPSHOT", "");
-		
-		Version ver = new Version(verString);
-		Version required = new Version("1.16.1");
-		
-		return ver.compareTo(required) >= 0;
+		return CUR_BUKKIT_VER.compareTo(NETHER_VER) >= 0;
 	}
 }
