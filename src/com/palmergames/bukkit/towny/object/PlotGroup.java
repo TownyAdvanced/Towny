@@ -106,7 +106,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Permissibl
 	@NotNull
 	@Override
 	public @UnmodifiableView Collection<TownBlock> getTownBlocks() {
-		return Collections.unmodifiableCollection(townBlocks.values());
+		return townBlocks.values();
 	}
 
 	public void setPrice(double price) {
