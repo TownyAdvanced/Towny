@@ -20,28 +20,6 @@ import java.util.concurrent.ConcurrentMap;
 public class TownBlockMap extends ForwardingConcurrentMap<WorldCoord, TownBlock> {
 	
 	private final ConcurrentMap<WorldCoord, TownBlock> map = new ConcurrentHashMap<>();
-	
-	@NotNull
-	@Override
-	public Collection<TownBlock> values() {
-		return new ValueLookupView(map.values());
-	}
-	
-	// Values wrapper for lookup.
-	private final class ValueLookupView extends AbstractCollection<TownBlock> {
-		private final Collection<TownBlock> view;
-		
-		ValueLookupView(Collection<TownBlock> view) { this.view = view; }
-
-		@Override
-		public Iterator<TownBlock> iterator() { return view.iterator(); }
-
-		@Override
-		public int size() { return view.size(); }
-
-		@Override
-		public boolean contains(Object o) { return TownBlockMap.this.containsValue(o); }
-	}
 
 	@Override
 	public boolean containsValue(Object value) {
