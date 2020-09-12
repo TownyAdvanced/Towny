@@ -250,11 +250,8 @@ public class TownClaim extends Thread {
 			// Prevent removing the homeblock
 			Collection<TownBlock> townBlocks = new ArrayList<>(town.getTownBlocks());
 			for (TownBlock townBlock : townBlocks) {
-				try {
-					if (!town.hasHomeBlock() || !townBlock.equals(town.getHomeBlock())) {
-						TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock);
-					}
-				} catch (TownyException ignore) {
+				if (!town.hasHomeBlock() || !townBlock.equals(town.getHomeBlock())) {
+					TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock);
 				}
 			}
 			

@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -298,7 +299,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeResident(Resident resident);
 
-	abstract public void removeTownBlock(TownBlock townBlock);
+	abstract public void removeTownBlock(@NotNull TownBlock townBlock);
 
 	abstract public void removeTownBlocks(Town town);
 

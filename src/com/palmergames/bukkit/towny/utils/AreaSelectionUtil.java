@@ -238,15 +238,13 @@ public class AreaSelectionUtil {
 	}
 	
 	public static boolean filterHomeBlock(Town town, List<WorldCoord> selection) {
-		WorldCoord homeCoord;
-		
-		try {
-			homeCoord = town.getHomeBlock().getWorldCoord();
-		} catch (TownyException ignore) {
+		TownBlock homeBlock = town.getHomeBlock();
+
+		if (homeBlock == null) {
 			return false;
 		}
-		
-		return selection.removeIf(worldCoord -> worldCoord.equals(homeCoord));
+
+		return selection.removeIf(worldCoord -> worldCoord.equals(homeBlock.getWorldCoord()));
 	}
 
 	/**

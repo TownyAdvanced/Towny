@@ -1794,11 +1794,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + town.getRegistered());
         
         // Home Block
-		if (town.hasHomeBlock())
-			try {
-				list.add("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + town.getHomeBlock().getX() + "," + town.getHomeBlock().getZ());
-			} catch (TownyException ignored) {
-			}
+		if (town.getHomeBlock() != null) {
+			list.add("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + town.getHomeBlock().getX() + "," + town.getHomeBlock().getZ());
+		}
 
 		// Spawn
 		if (town.hasSpawn())

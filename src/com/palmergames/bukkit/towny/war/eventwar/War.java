@@ -343,13 +343,14 @@ public class War {
 		int numTowns = 0;
 		for (Town town : nation.getTowns()) {
 			// A town without a homeblock cannot be won over in war.
-			if (!town.hasHomeBlock())
+			if (town.getHomeBlock() == null) {
 				continue;
-			try {
-				if (town.getTownBlocks().size() > 0 && town.getHomeBlock().getWorld().isWarAllowed())
-					add(town);
-			} catch (TownyException ignored) {
 			}
+
+			if (town.getTownBlocks().size() > 0 && town.getHomeBlock().getWorld().isWarAllowed()) {
+				add(town);
+			}
+			
 			if (warringTowns.contains(town))
 				numTowns++;
 		}

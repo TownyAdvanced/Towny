@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
@@ -339,8 +340,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) {
-
+	public void removeTownBlock(@NotNull TownBlock townBlock) {
+		if (townBlock == null) {
+			return;
+		}
+		
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
 		BukkitTools.getPluginManager().callEvent(event);
 		

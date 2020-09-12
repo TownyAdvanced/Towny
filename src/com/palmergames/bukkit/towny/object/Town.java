@@ -19,6 +19,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -569,12 +570,9 @@ public class Town extends Government implements TownBlockOwner {
 
 	}
 
-	public TownBlock getHomeBlock() throws TownyException {
-
-		if (hasHomeBlock())
-			return homeBlock;
-		else
-			throw new TownyException(this.getName() + " has not set a home block.");
+	@Nullable
+	public TownBlock getHomeBlock() {
+		return homeBlock;
 	}
 
 	/**
