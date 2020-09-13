@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -433,14 +434,20 @@ public class TownyAPI {
 		Town nearestTown = null;
 		int distance;
 		try {
-			nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
-			if (nearestTown == null) {
+			final TownBlock nearestTownblock = worldCoord.getTownyWorld().getClosestTownblockWithNationFromCoord(worldCoord);
+			
+			if (nearestTownblock == null) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
-			if (!nearestTown.hasNation()) {
+			
+			nearestTown = nearestTownblock.getTown();
+			
+			// Safety validation, both these cases should never occur.
+			if (nearestTown == null || !nearestTown.hasNation()) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
-			distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+			
+			distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
 		} catch (NotRegisteredException e1) {
 			// There will almost always be a town in any world where towny is enabled. 
 			// If there isn't then we fall back on normal unclaimed zone status.
@@ -453,13 +460,10 @@ public class TownyAPI {
 		}
 
 		try {
-			int nationZoneRadius;
+			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+			
 			if (nearestTown.isCapital()) {
-				nationZoneRadius =
-					Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
-						+ TownySettings.getNationZonesCapitalBonusSize();
-			} else {
-				nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+				nationZoneRadius += TownySettings.getNationZonesCapitalBonusSize();
 			}
 
 			if (distance <= nationZoneRadius) {
