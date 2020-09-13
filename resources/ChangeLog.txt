@@ -4911,3 +4911,8 @@ v0.92.0.11:
   - Fix permissions not being give to members who've just joined a town.
   - API Change: TownPreClaimEvent has new isOutpost() and isHomeBlock() methods.
   - Fix upgrading from versions with added text in version causing issues with config migration, courtesy of Siris with PR #4282.
+0.96.2.18:
+  - Added NETHER_PORTAL to new_world_settings.plot_management.revert_on_unclaim.block_ignore.
+    - Closes #4305.
+  - Cleaned up config comments, fixed white-spacing. Should be much more readable.
+  - Fix ConfigMigrator not migrating worldActions onto existing world settings.

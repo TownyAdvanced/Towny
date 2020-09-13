@@ -31,5 +31,16 @@
         "worldAction": "UPDATE_WORLD_UNCLAIM_DELETE"
       }
     ]
+  },
+  {
+    "version": "0.96.2.18",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",NETHER_PORTAL",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]

@@ -80,7 +80,8 @@ public class ConfigMigrator {
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
-				change.worldAction.getAction().accept(world, config.getString(change.path) + change.value);
+				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
+				change.worldAction.getAction().accept(world, change.value);
 			}
 		}
 	}

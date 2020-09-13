@@ -16,7 +16,8 @@ class Change {
 		return "Change{" +
 			"type=" + type +
 			", key=" + path +
-			", value='" + value + '\'' +
+			", value='" + value + 
+			", worldAction='" + worldAction + '\'' +
 			'}';
 	}
 }
