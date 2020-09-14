@@ -4916,3 +4916,4 @@ v0.92.0.11:
     - Closes #4305.
   - Cleaned up config comments, fixed white-spacing. Should be much more readable.
   - Fix ConfigMigrator not migrating worldActions onto existing world settings.
+  - Add Hyperverse to plugin.yml's soft-depend.
