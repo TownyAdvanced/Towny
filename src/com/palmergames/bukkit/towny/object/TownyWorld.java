@@ -7,8 +7,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.util.MathUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -715,6 +717,43 @@ public class TownyWorld extends TownyObject {
 			}		
 		}		
 		return (nearestTown);		
+	}
+
+	/**
+	 * Get the town block that belongs to the closest town with a nation
+	 * from the specified coord.
+	 * 
+	 * @param key - Coordinate to compare distance to
+	 * @return The nearest townblock that belongs to a town or
+	 * null if there are no towns in the world.
+	 */
+	@Nullable
+	public TownBlock getClosestTownblockWithNationFromCoord(Coord key) {
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		double minSqr = -1;
+		TownBlock tb = null;
+		
+		for (Town town : getTowns().values()) {
+			if (!town.hasNation())
+				continue;
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this))
+					continue;
+
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+				if (minSqr == -1 || distSqr < minSqr) {
+					minSqr = distSqr;
+					tb = b;
+				}
+			}
+		}
+		
+		return tb;
 	}
 
 	public void addWarZone(Coord coord) {
