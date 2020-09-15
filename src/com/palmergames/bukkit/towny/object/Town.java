@@ -437,10 +437,11 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getMaxClaimPrice() != -1;
 		double maxprice = TownySettings.getMaxClaimPrice();
 		while (i < inputN){
+			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());
+			
 			if(hasmaxprice && nextprice > maxprice)
 				nextprice=maxprice;
-			else
-				nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());
+			
 			cost += nextprice;
 			i++;
 		}
