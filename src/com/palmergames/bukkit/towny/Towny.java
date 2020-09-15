@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -85,10 +84,11 @@ import java.util.Map;
  * 
  * @author Shade, ElgarL, LlmDl
  */
-
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
-	private String version = "2.0.0";
+	private static final Version NETHER_VER = Version.fromString("1.16.1");
+	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
+	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
@@ -126,8 +126,6 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("====================      Towny      ========================");
 
-		version = this.getDescription().getVersion();
-
 		townyUniverse = TownyUniverse.getInstance();
 		
 		isSpigot = BukkitTools.isSpigot();
@@ -141,7 +139,6 @@ public class Towny extends JavaPlugin {
 		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		ConfirmationHandler.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -233,7 +230,9 @@ public class Towny extends JavaPlugin {
 		
 		try {
 			// Shut down our saving task.
+			System.out.println("[Towny] Finishing File IO Tasks...");
 			townyUniverse.getDataSource().finishTasks();
+			townyUniverse.finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
 		}
@@ -278,7 +277,7 @@ public class Towny extends JavaPlugin {
 				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
 		} else 
-			System.out.println("[Towny] All residents store UUIDs, upgrade preparation complete.");
+			System.out.println("[Towny] All residents store UUIDs, upgrade prep complete.");
 		
 		resetCache();
 
@@ -412,7 +411,7 @@ public class Towny extends JavaPlugin {
 			boolean display = false;
 			System.out.println("------------------------------------");
 			System.out.println("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
+			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith(lastVersion)) {
@@ -864,12 +863,6 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public static boolean is116Plus() {
-		String verString = Bukkit.getBukkitVersion();
-		verString = verString.replace("-R0.1-SNAPSHOT", "");
-		
-		Version ver = new Version(verString);
-		Version required = new Version("1.16.1");
-		
-		return ver.compareTo(required) >= 0;
+		return CUR_BUKKIT_VER.compareTo(NETHER_VER) >= 0;
 	}
 }

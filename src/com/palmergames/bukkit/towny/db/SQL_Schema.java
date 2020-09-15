@@ -87,9 +87,7 @@ public class SQL_Schema {
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
-    	columns.add("`towns` mediumtext NOT NULL");
 		columns.add("`capital` mediumtext NOT NULL");
-		columns.add("`assistants` mediumtext NOT NULL");
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
@@ -117,9 +115,8 @@ public class SQL_Schema {
 
     private static List<String> getTownColumns() {
     	List<String> columns = new ArrayList<>();
-//    	columns.add("`residents` mediumtext");
 		columns.add("`mayor` mediumtext");
-		columns.add("`nation` mediumtext NOT NULL");
+		columns.add("`nation` mediumtext");
 		columns.add("`assistants` text DEFAULT NULL");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
 		columns.add("`tag` mediumtext DEFAULT NULL");
@@ -482,6 +479,39 @@ public class SQL_Schema {
     	} catch (SQLException ee) {
     		if (ee.getErrorCode() != 1060)
     			TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
+    	
+    	}
+
+    	/*
+    	 * Update NATIONS
+    	 */
+    	String nation_update;
+    	
+    	try {
+    		nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "DROP COLUMN `towns`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(nation_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
+    	
+    	}
+    	
+    	try {
+    		nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "DROP COLUMN `assistants`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(nation_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
     	
     	}    	
     	

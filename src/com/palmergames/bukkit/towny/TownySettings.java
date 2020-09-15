@@ -1100,7 +1100,7 @@ public class TownySettings {
 
 	public static boolean isFakeResident(String name) {
 
-		return getString(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS).toLowerCase().contains(name.toLowerCase());
+		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
 	public static boolean isUsingEssentials() {
@@ -2083,11 +2083,8 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
-
-		if (isTownyUpToDate(currentVersion))
-			return false;
-		else
-			return true; // Assume
+		// Assume
+		return !isTownyUpToDate(currentVersion);
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
@@ -2098,6 +2095,10 @@ public class TownySettings {
 	public static String getLastRunVersion(String currentVersion) {
 
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
+	}
+	
+	public static String getLastRunVersion() {
+		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0");
 	}
 
 	public static void setLastRunVersion(String currentVersion) {

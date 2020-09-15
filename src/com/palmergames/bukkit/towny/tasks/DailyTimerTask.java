@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -21,11 +20,9 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -115,7 +112,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								} catch (NotRegisteredException ignored) {
 								}
 								int index = resident.getJailSpawn();
-				            	resident.setJailed(resident , index, jailTown);
+				            	resident.setJailed(index, jailTown);
 				            }
 				            
 				        }.runTaskLater(this.plugin, 20);
@@ -140,16 +137,12 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-
-		townyUniverse.getDataSource().cleanupBackups();
-		if (TownySettings.isBackingUpDaily())
-			try {
-				TownyMessaging.sendDebugMsg("Making backup.");
-				townyUniverse.getDataSource().backup();
-			} catch (IOException e) {
-				TownyMessaging.sendErrorMsg("Could not create backup.");
-				e.printStackTrace();
-			}
+		
+		// Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
+		if (TownySettings.isBackingUpDaily()) {
+			TownyMessaging.sendDebugMsg("Making backup.");
+			townyUniverse.performBackup();
+		}
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
@@ -216,7 +209,6 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (universe.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
-
 					if (TownySettings.isTownBankruptcyEnabled()) {
 						//Bankruptcy enabled - Bankrupt town if it cannot pay
 						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
@@ -254,22 +246,15 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					} else {
 						//Bankruptcy disabled - Remove town from nation if it cannot pay
-						if(!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-							//Remove town from nation
-							try {
-								localNewlyBankruptTowns.add(town.getName());
-								nation.removeTown(town);
-							} catch (EmptyNationException e) {
-								// Always has 1 town (capital) so ignore
-							} catch (NotRegisteredException ignored) {
-							}
-							universe.getDataSource().saveTown(town);
-							universe.getDataSource().saveNation(nation);
+						if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
+							localNewlyBankruptTowns.add(town.getName());		
+							town.removeNation();
+						} else {
+							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 						}
 					}
-				} else {
-					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 				}
+
 			}
 
 			if(TownySettings.isTownBankruptcyEnabled()) {

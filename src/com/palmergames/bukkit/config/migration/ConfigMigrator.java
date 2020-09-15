@@ -40,7 +40,7 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
+		Version configVersion = Version.fromString(TownySettings.getLastRunVersion());
 		
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
@@ -80,7 +80,8 @@ public class ConfigMigrator {
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
-				change.worldAction.getAction().accept(world, config.getString(change.path) + change.value);
+				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
+				change.worldAction.getAction().accept(world, change.value);
 			}
 		}
 	}

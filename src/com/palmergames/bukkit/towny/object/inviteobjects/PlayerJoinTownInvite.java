@@ -3,38 +3,17 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.command.CommandSender;
 
-public class PlayerJoinTownInvite implements Invite {
+public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
 
-	private final String directSender;
-	private final Resident receiver;
-	private final Town sender;
-
-	public PlayerJoinTownInvite(String directSender, Town sender, Resident receiver) {
-		this.directSender = directSender;
-		this.sender = sender;
-		this.receiver = receiver;
+	public PlayerJoinTownInvite(CommandSender directSender, Resident receiver, Town sender) {
+		super(directSender, receiver, sender);
 	}
 
-	@Override
-	public String getDirectSender() {
-		return directSender;
-	}
-
-	@Override
-	public Resident getReceiver() {
-		return receiver;
-	}
-
-	@Override
-	public Town getSender() {
-		return sender;
-	}
-	
 	@Override
 	public void accept() throws TownyException {
 		Resident resident = getReceiver();

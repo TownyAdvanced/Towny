@@ -62,6 +62,7 @@ public class TownyUniverse {
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private CompletableFuture<Void> backupFuture;
     
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -125,12 +126,7 @@ public class TownyUniverse {
                 }
             }
             FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-            
-            // Run both the backup cleanup and backup async.
-            CompletableFuture
-                .runAsync(new CleanupBackupTask())
-                .thenRunAsync(new BackupTask());
-
+           
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
                 dataSource.saveAllWorlds();
@@ -144,11 +140,10 @@ public class TownyUniverse {
             return false;
         }
         
-        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
-        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        Version lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
         
         // Only migrate if the user just updated.
-        if (!lastRunVersion.equals(curVersion)) {
+        if (!lastRunVersion.equals(towny.getVersion())) {
 			System.out.println("[Towny] Performing Config Migrations...");
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
@@ -161,9 +156,18 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
+
+		// Run both the backup cleanup and backup async.
+		performBackup();
         
         return true;
     }
+    
+    public void performBackup() {
+		backupFuture = CompletableFuture
+			.runAsync(new CleanupBackupTask())
+			.thenRunAsync(new BackupTask());
+	}
     
     private boolean loadDatabase(String loadDbType) {
         
@@ -198,6 +202,13 @@ public class TownyUniverse {
             warEvent.toggleEnd();
         }
     }
+    
+    public void finishTasks() {
+    	if (backupFuture != null) {
+			// Join into main thread for proper termination.
+			backupFuture.join();
+		}
+	}
     
     public void addWarZone(WorldCoord worldCoord) {
         try {
