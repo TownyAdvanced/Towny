@@ -4917,3 +4917,6 @@ v0.92.0.11:
   - Cleaned up config comments, fixed white-spacing. Should be much more readable.
   - Fix ConfigMigrator not migrating worldActions onto existing world settings.
   - Add Hyperverse to plugin.yml's soft-depend.
+  - Further improve config comments.
+  - Add fire and air to the list of blocks Towny will not try an explosion regen task on.
+    - Improves but doesn't completely solve #4306.
