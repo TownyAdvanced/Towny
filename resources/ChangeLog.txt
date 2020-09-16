@@ -4920,3 +4920,10 @@ v0.92.0.11:
   - Further improve config comments.
   - Add fire and air to the list of blocks Towny will not try an explosion regen task on.
     - Improves but doesn't completely solve #4306.
+  - Optimize `hasNationZone()` method, courtesy of silverwolfg11 with PR #4312.
+    - Also adds MathUtil.
+  - Fix nation-alliance invite showing the wrong nation in the confirmation.
+  - Fix nation deletion not removing the nation from the towns.
+    - Closes #4320.
+  - Fix incorrect information being seen on /n ally received output.
+    - Closes #4319.

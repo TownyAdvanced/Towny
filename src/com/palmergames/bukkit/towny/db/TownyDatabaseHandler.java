@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
@@ -565,20 +566,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Town town : toSave) {
 
-			/*
-			 * Remove all resident titles before saving the town itself.
-			 */
-			List<Resident> titleRemove = new ArrayList<>(town.getResidents());
-
-			for (Resident res : titleRemove) {
+			for (Resident res : getResidents()) {
 				if (res.hasTitle() || res.hasSurname()) {
 					res.setTitle("");
 					res.setSurname("");
-					saveResident(res);
 				}
+				res.updatePermsForNationRemoval();
+				TownyUniverse.getInstance().getDataSource().saveResident(res);
 			}
-
-			saveTown(town);
+			try {
+				town.setNation(null);
+			} catch (AlreadyRegisteredException ignored) {
+				// Cannot reach AlreadyRegisteredException
+			}
+			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, nation));			
 		}
 
 		plugin.resetCache();
