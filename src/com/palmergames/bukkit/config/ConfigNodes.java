@@ -1635,6 +1635,16 @@ public enum ConfigNodes {
 			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
 			"# The debt can be repaid using /t deposit x.", 
 			"# Once all debt is repaid, the town immediately returns to a normal state."),
+	ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX(
+			"economy.bankruptcy.do_bankrupt_towns_pay_nation_tax",
+			"false",
+			"",
+			"# Will bankrupt towns pay their nation tax?",
+			"# If false towns that are bankrupt will not pay any nation tax and will leave their nation.",
+			"# If true the town will go into debt up until their debt cap is reached.",
+			"# True is recommended when using a Siege War style war/conquering system,",
+			"# otherwise conquered towns will be able to leave the nation simply by not paying the nation tax.",
+			"# False is recommended otherwise so that nations are not using abandoned towns to gather taxes."),
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",

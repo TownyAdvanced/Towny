@@ -2968,6 +2968,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
 	
+	public static boolean doBankruptTownsPayNationTax() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
+	}
+	
 	public static void incrementUUIDCount() {
 		uuidCount++;
 	}
