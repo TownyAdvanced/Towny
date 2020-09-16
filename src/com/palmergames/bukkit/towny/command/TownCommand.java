@@ -3644,12 +3644,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					town.getAccount().setBalance(0, "Debt repayment");
 				}
 			}
-<<<<<<< Upstream, based on origin/master
-
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, TownySettings.getLangString("town_sing")));
-=======
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
->>>>>>> 1270e48 Make requested changes.
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
