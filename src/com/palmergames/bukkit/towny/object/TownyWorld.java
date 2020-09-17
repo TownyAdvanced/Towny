@@ -602,8 +602,10 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
-
-		double min = Integer.MAX_VALUE;
+		double minSqr = -1;
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
 		for (Town town : getTowns().values()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
@@ -615,13 +617,13 @@ public class TownyWorld extends TownyObject {
 				
 				if (!town.getHomeblockWorld().equals(this)) continue;
 				
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min)
-					min = dist;
+				final double distSqr = MathUtil.distanceSquared(townCoord.getX() - keyX, townCoord.getZ() - keyZ);
+				if (minSqr == -1 || distSqr < minSqr)
+					minSqr = distSqr;
 			} catch (TownyException e) {
 			}
 		}
-		return (int) Math.ceil(min);
+		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 
 	/**
@@ -643,8 +645,10 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another towns nearest plot.
 	 */
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
-
-		double min = Integer.MAX_VALUE;
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		double minSqr = -1;
 		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
@@ -655,42 +659,20 @@ public class TownyWorld extends TownyObject {
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
 
-					Coord townCoord = b.getCoord();
+					final int tbX = b.getX();
+					final int tbZ = b.getZ();
 					
-					if (key.equals(townCoord)) continue;
+					if (keyX == tbX && keyZ == tbZ)
+						continue;
 					
-					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-					if (dist < min)
-						min = dist;
+					final double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+					if (minSqr == -1 || distSqr < minSqr)
+						minSqr = distSqr;
 				}
 			} catch (TownyException e) {
 			}
 		}
-		return (int) Math.ceil(min);
-	}
-	
-	/**
-	 * Returns the closest town from a given coord (key).
-	 * @param key - Coord
-	 * @param nearestTown - Closest town to the given coord.
-	 * @return the nearestTown
-	 */
-	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
-		
-		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns().values()) {
-			for (TownBlock b : town.getTownBlocks()) {
-				if (!b.getWorld().equals(this)) continue;
-				
-				Coord townCoord = b.getCoord();
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min) {
-					min = dist;
-					nearestTown = town;
-				}						
-			}		
-		}		
-		return (nearestTown);		
+		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 	
 	/**
@@ -701,17 +683,21 @@ public class TownyWorld extends TownyObject {
 	 * @return the nearest town belonging to a nation.   
 	 */
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
 		
-		double min = Integer.MAX_VALUE;
+		double minSqr = -1;
 		for (Town town : getTowns().values()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
-				Coord townCoord = b.getCoord();
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min) {
-					min = dist;
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+				if (minSqr == -1 || distSqr < minSqr) {
+					minSqr = distSqr;
 					nearestTown = town;
 				}						
 			}		
