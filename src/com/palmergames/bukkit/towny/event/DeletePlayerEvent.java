@@ -29,7 +29,7 @@ public class DeletePlayerEvent extends TownyObjDeleteEvent {
     }
 
 	/**
-	 * @return deleted player's uuid
+	 * @return deleted player's uuid. Can be null. 
 	 */
 	public UUID getPlayerUUID() {
     	return uuid;
