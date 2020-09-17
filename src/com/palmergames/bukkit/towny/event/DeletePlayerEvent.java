@@ -1,13 +1,12 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
+import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.event.HandlerList;
 
-public class DeletePlayerEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+import java.util.UUID;
 
-    private final String playerName;
+public class DeletePlayerEvent extends TownyObjDeleteEvent {
+    private static final HandlerList handlers = new HandlerList();
 
     @Override
     public HandlerList getHandlers() {
@@ -18,15 +17,28 @@ public class DeletePlayerEvent extends Event {
         return handlers;
     }
 
-    public DeletePlayerEvent(String player) {
-        super(!Bukkit.getServer().isPrimaryThread());
-        this.playerName = player;
+    public DeletePlayerEvent(Resident resident) {
+        super(resident.getName(), resident.getUUID(), resident.getRegistered());
     }
 
     /**
      * @return the deleted player's name.
      */
     public String getPlayerName() {
-        return playerName;
+        return name;
     }
+
+	/**
+	 * @return deleted player's uuid
+	 */
+	public UUID getPlayerUUID() {
+    	return uuid;
+	}
+
+	/**
+	 * @return when the deleted player first was registered by Towny (in ms).
+	 */
+	public long getRegistered() {
+    	return registered;
+	}
 }
