@@ -1,15 +1,14 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.HandlerList;
 
+import java.util.UUID;
 
-public class DeleteTownEvent extends Event  {
+
+public class DeleteTownEvent extends TownyObjDeleteEvent  {
 
     private static final HandlerList handlers = new HandlerList();
-    
-    private final String townName;
 
     @Override
     public HandlerList getHandlers() {
@@ -22,9 +21,8 @@ public class DeleteTownEvent extends Event  {
 		return handlers;
 	}
 
-    public DeleteTownEvent(String town) {
-        super(!Bukkit.getServer().isPrimaryThread());
-        this.townName = town;
+    public DeleteTownEvent(Town town) {
+    	super(town.getName(), town.getUuid(), town.getRegistered());
     }
 
     /**
@@ -32,7 +30,23 @@ public class DeleteTownEvent extends Event  {
      * @return the deleted town name.
      */
     public String getTownName() {
-        return townName;
+        return name;
     }
+
+	/**
+	 * 
+	 * @return the deleted town uuid.
+	 */
+	public UUID getTownUUID() {
+    	return uuid;
+	}
+
+	/**
+	 * 
+	 * @return the deleted town's time of creation (in ms).
+	 */
+	public long getTownCreated() {
+    	return registered;
+	}
     
 }

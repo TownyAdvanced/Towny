@@ -336,7 +336,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.deleteCache(resident.getName());
 		
-		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
+		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident));
 	}
 
 	@Override
@@ -517,13 +517,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		deleteTown(town);
 		
-		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town));
 	}
 
 	@Override
 	public void removeNation(Nation nation) {
 
-		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation.getName());
+		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation);
 		BukkitTools.getPluginManager().callEvent(preEvent);
 		
 		if (preEvent.isCancelled())
@@ -585,7 +585,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 
-		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation));
 	}
 
 	@Override
