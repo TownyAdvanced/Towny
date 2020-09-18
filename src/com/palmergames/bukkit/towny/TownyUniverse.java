@@ -104,9 +104,11 @@ public class TownyUniverse {
             System.out.println("[Towny] Error: Failed to load!");
             return false;
         }
-        long time = System.currentTimeMillis() - startTime;
-        System.out.println("[Towny] Database loaded in " + time + "ms.");
         
+        long time = System.currentTimeMillis() - startTime;
+        System.out.println("[Towny] Database: Loaded in " + time + "ms.");
+        System.out.println("[Towny] Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs.");
+
         try {
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
@@ -144,7 +146,6 @@ public class TownyUniverse {
         
         // Only migrate if the user just updated.
         if (!lastRunVersion.equals(towny.getVersion())) {
-			System.out.println("[Towny] Performing Config Migrations...");
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}

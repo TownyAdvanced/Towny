@@ -53,6 +53,7 @@ import com.palmergames.util.StringMgmt;
 
 import net.milkbowl.vault.permission.Permission;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -176,7 +177,7 @@ public class Towny extends JavaPlugin {
 		if (isError()) {
 			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
-			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
+			System.out.println("[Towny] Version: " + version + " - Plugin Enabled");
 		}
 		System.out.println("=============================================================");
 
@@ -239,7 +240,7 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
-		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
+		System.out.println("[Towny] Version: " + version + " - Plugin Disabled");
 		System.out.println("=============================================================");
 	}
 
@@ -272,12 +273,8 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
-		if (!TownySettings.getUUIDPercent().equals("100%")) {
-			if (TownySettings.isGatheringResidentUUIDS())
-				TownyTimerHandler.toggleGatherResidentUUIDTask(true);
-			System.out.println("[Towny] " + TownySettings.getUUIDCount() + "/" + TownyUniverse.getInstance().getDataSource().getResidents().size() + " residents have stored UUIDs.");
-		} else 
-			System.out.println("[Towny] All residents store UUIDs, upgrade prep complete.");
+		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
+			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 		
 		resetCache();
 
@@ -295,14 +292,20 @@ public class Towny extends JavaPlugin {
 	
 	private void checkPlugins() {
 
-		List<String> using = new ArrayList<>();
+		System.out.println("[Towny] Searching for third-party plugins...");
+		String output = "";
+		String ecowarn = "";
+		List<String> addons = new ArrayList<>();
 		Plugin test;
 
+		/*
+		 * Check for permission source.
+		 */
+		output += System.lineSeparator() + "  Permissions: ";
 		test = getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null) {
-			// groupManager = (GroupManager)test;
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
-			using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
+			output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
 		} else {
 			// Try Vault
 			test = getServer().getPluginManager().getPlugin("Vault");
@@ -316,63 +319,86 @@ public class Towny extends JavaPlugin {
 					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
 					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 					if (vaultPermProvider != null) {
-						using.add(vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault " + test.getDescription().getVersion());
+						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault " + test.getDescription().getVersion();
 					} else {
-						using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
 					}
 				}
 			}
 
 			if (test == null) {
 				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
-				using.add("BukkitPermissions");
+				output += "BukkitPermissions";
 			}
 		}
 
-		if (TownySettings.isUsingEconomy()) {
-
+		/*
+		 * Check for economy source.
+		 */
+		if (TownySettings.isUsingEconomy()) {			
 			if (TownyEconomyHandler.setupEconomy()) {
-				using.add(TownyEconomyHandler.getVersion());
+				output += System.lineSeparator() + "  Economy: " + TownyEconomyHandler.getVersion();				
 				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy")) {
-					System.out.println("[Towny] Warning: Essentials Economy has been known to reset town and nation bank accounts to their default amount. The authors of Essentials recommend using another economy plugin until they have fixed this bug.");
+					ecowarn = "Warning: Essentials Economy has been known to reset town and nation bank accounts to their default amount. The authors of Essentials recommend using another economy plugin until they have fixed this bug.";
 				}
 					
 			} else {
-				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. Install Vault.jar with any of the supported eco systems.");
-				TownyMessaging.sendErrorMsg("If you do not want an economy to be used, set using_economy: false in your Towny config.yml.");
+				ecowarn = "Warning: No compatible Economy plugins found. Install Vault.jar or Reserve.jar with any of the supported eco systems. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
 			}
 		}
+		
+		/*
+		 * Check add-ons and third-party plugins we use.
+		 */
+		test = getServer().getPluginManager().getPlugin("TownyChat");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyChat", test.getDescription().getVersion()));			
+		}
 
+		test = getServer().getPluginManager().getPlugin("TownyFlight");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyFlight", test.getDescription().getVersion()));			
+		}
+		
 		test = getServer().getPluginManager().getPlugin("Essentials");
 		if (test == null) {
 			TownySettings.setUsingEssentials(false);
 		} else if (TownySettings.isUsingEssentials()) {
 			this.essentials = (Essentials) test;
-			using.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("Questioner");
-		if (test != null) {
-			TownyMessaging.sendErrorMsg("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations.");
-			TownyMessaging.sendErrorMsg("You may safely remove Questioner.jar from your plugins folder.");
+			addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
 		}
 
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
-		if(test != null){
+		if (test != null) {
             new TownyPlaceholderExpansion(this).register();
-            using.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
+            addons.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
 		}
-
-		if (using.size() > 0) {
-			System.out.println("[Towny] Using: " + StringMgmt.join(using, ", "));
-		}
-
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
-	
+
+		/*
+		 * Output discovered plugins and warnings.
+		 */
+		System.out.println("[Towny] Plugins found: " + output);
+		if (!addons.isEmpty())
+			System.out.println("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "           ", true));
+		if (!ecowarn.isEmpty())
+			System.out.println("[Towny] " + WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "        ", true));
+
+		//Add our chat handler to TheNewChat via the API.
+		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
+			TNCRegister.initialize();
+		}
+
+		//Legacy check to see if questioner.jar is still present.
+		test = getServer().getPluginManager().getPlugin("Questioner");
+		if (test != null) {
+			String questioner= "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
+			System.out.println("[Towny] " + WordUtils.wrap(questioner, 55, System.lineSeparator() + "        ", true));
+		}
 	}
 
 	private void registerEvents() {
