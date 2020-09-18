@@ -1535,6 +1535,11 @@ public enum ConfigNodes {
 			"1.0",
 			"",
 			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+	ECO_MAX_PRICE_CLAIM_TOWNBLOCK(
+			"economy.new_expand.max_price_claim_townblock",
+			"-1.0", 
+			"",
+			"# The maximum price for an additional townblock. No matter how many blocks a town has the price will not be above this. Set to -1 to deactivate this."),
 	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
 			"economy.new_expand.price_claim_townblock_refund",
 			"0.0",
