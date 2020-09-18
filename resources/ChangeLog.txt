@@ -4936,3 +4936,6 @@ v0.92.0.11:
     - Also returns the Nation object for the PreDeleteNationEvent rather than just the name, spotted by NNYaKNpGms0eUVpiSdHx on the Discord.
   - Optimize town distance checks, courtesy of silverwolfg11 with PR #4323.
   - Clean up and beautify the Towny startup logging.
+  - Add Wither and WitherSkull to explosion revert settings.
+    - These will be automatically added to the config and world settings.
+    - Closes #4307.

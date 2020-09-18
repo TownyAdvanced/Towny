@@ -40,6 +40,12 @@
         "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
         "value": ",NETHER_PORTAL",
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      },
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "value": ",Wither,WitherSkull",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
   }
