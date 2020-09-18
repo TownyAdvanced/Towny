@@ -301,7 +301,7 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Check for permission source.
 		 */
-		output += System.lineSeparator() + "  Permissions: ";
+		output += System.lineSeparator() + "  Permissions: TownyPerms, ";
 		test = getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
@@ -319,7 +319,7 @@ public class Towny extends JavaPlugin {
 					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
 					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 					if (vaultPermProvider != null) {
-						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault " + test.getDescription().getVersion();
+						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
 					} else {
 						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
 					}
