@@ -2167,11 +2167,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							throw new TownyException(Translation.of("msg_war_cannot_do"));
 
 						world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
+						final int minDistanceFromHomeblock = world.getMinDistanceFromOtherTowns(coord, resident.getTown());
+						if (minDistanceFromHomeblock < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
 						if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+							if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(Translation.of("msg_too_far"));
 
 						// Test whether towns will be removed from the nation
@@ -2447,11 +2448,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
 				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
 
-			if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
+			final int minDistFromOtherTowns = world.getMinDistanceFromOtherTowns(key);
+			if (minDistFromOtherTowns < TownySettings.getMinDistanceFromTownHomeblocks())
 				throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+				if ((minDistFromOtherTowns > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(Translation.of("msg_too_far"));
 
 			// If the town isn't free to make, send a confirmation.
