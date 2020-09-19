@@ -2300,7 +2300,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					try {
-						nation.getTaxCollector().setTaxes(amount);
+						nation.getCollector().setTaxes(amount);
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_town_set_nation_tax", player.getName(), split[1]));
 					} catch (NumberFormatException e) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));

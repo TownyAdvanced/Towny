@@ -1305,7 +1305,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-	public TownTaxCollector getTaxCollector() {
+	public TownTaxCollector getCollector() {
 		return taxCollector;
 	}
 }

@@ -269,5 +269,5 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * 
 	 * @return The tax collector for this government.
 	 */
-	public abstract TaxCollector getTaxCollector();
+	public abstract TaxCollector getCollector();
 }

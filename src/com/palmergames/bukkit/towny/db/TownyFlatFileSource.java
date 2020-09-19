@@ -764,7 +764,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				TownTaxCollector collector = town.getTaxCollector();
+				TownTaxCollector collector = town.getCollector();
 				
 				line = keys.get("taxpercent");
 				if (line != null)
@@ -1087,7 +1087,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				TaxCollector collector = nation.getTaxCollector();
+				TaxCollector collector = nation.getCollector();
 				
 				line = keys.get("taxes");
 				if (line != null)
@@ -1763,21 +1763,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Purchased Blocks
 		list.add("purchasedBlocks=" + town.getPurchasedBlocks());
 		// Taxpercent
-		list.add("taxpercent=" + town.getTaxCollector().isTaxPercentage());
+		list.add("taxpercent=" + town.getCollector().isTaxPercentage());
 		// Taxes
-		list.add("taxes=" + town.getTaxCollector().getTaxes());
+		list.add("taxes=" + town.getCollector().getTaxes());
 		// Plot Price
 		list.add("plotPrice=" + town.getPlotPrice());
 		// Plot Tax
-		list.add("plotTax=" + town.getTaxCollector().getPlotTax());
+		list.add("plotTax=" + town.getCollector().getPlotTax());
 		// Commercial Plot Price
 		list.add("commercialPlotPrice=" + town.getCommercialPlotPrice());
 		// Commercial Tax
-		list.add("commercialPlotTax=" + town.getTaxCollector().getCommercialPlotTax());
+		list.add("commercialPlotTax=" + town.getCollector().getCommercialPlotTax());
 		// Embassy Plot Price
 		list.add("embassyPlotPrice=" + town.getEmbassyPlotPrice());
 		// Embassy Tax
-		list.add("embassyPlotTax=" + town.getTaxCollector().getEmbassyPlotTax());
+		list.add("embassyPlotTax=" + town.getCollector().getEmbassyPlotTax());
 		// Town Spawn Cost
 		list.add("spawnCost=" + town.getSpawnCost());
 		// Upkeep
@@ -1887,7 +1887,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
 		// Taxes
-		list.add("taxes=" + nation.getTaxCollector().getTaxes());
+		list.add("taxes=" + nation.getCollector().getTaxes());
 		// Nation Spawn Cost
 		list.add("spawnCost=" + nation.getSpawnCost());
 		// Peaceful

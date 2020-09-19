@@ -16,7 +16,7 @@ public enum TownBlockType {
 		@Override
 		public double getTax(Town town) {
 
-			return town.getTaxCollector().getCommercialPlotTax() + town.getTaxCollector().getPlotTax();
+			return town.getCollector().getCommercialPlotTax() + town.getCollector().getPlotTax();
 		}
 	},
 
@@ -28,7 +28,7 @@ public enum TownBlockType {
 		@Override
 		public double getTax(Town town) {
 
-			return town.getTaxCollector().getEmbassyPlotTax() + town.getTaxCollector().getPlotTax();
+			return town.getCollector().getEmbassyPlotTax() + town.getCollector().getPlotTax();
 		}
 	},
 	WILDS(4, "Wilds", "W") {	//Follows wilderness protection settings, but town owned.
@@ -84,7 +84,7 @@ public enum TownBlockType {
 
 	public double getTax(Town town) {
 
-		return town.getTaxCollector().getPlotTax();
+		return town.getCollector().getPlotTax();
 	}
 
 	public int getId() {

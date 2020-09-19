@@ -634,7 +634,7 @@ public class Nation extends Government {
 	}
 
 	@Override
-	public TaxCollector getTaxCollector() {
+	public TaxCollector getCollector() {
 		return taxCollector;
 	}
 

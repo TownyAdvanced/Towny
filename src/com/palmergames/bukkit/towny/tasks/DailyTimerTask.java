@@ -191,7 +191,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException - EconomyException
 	 */
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
-		TaxCollector collector = nation.getTaxCollector();
+		TaxCollector collector = nation.getCollector();
 		if (collector.getTaxes() > 0) {
 
 			List<String> localRemovedTowns = new ArrayList<>();
@@ -261,7 +261,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	protected void collectTownTaxes(Town town) throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownTaxCollector collector = town.getTaxCollector();
+		TownTaxCollector collector = town.getCollector();
 		// Resident Tax
 		if (collector.getTaxes() > 0) {
 
@@ -292,7 +292,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						// Make sure that the town percent tax doesn't remove above the
 						// allotted amount of cash.
-						cost = Math.min(cost, town.getTaxCollector().getMaxPercentTaxAmount());
+						cost = Math.min(cost, town.getCollector().getMaxPercentTaxAmount());
 						
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(collector.getTaxes(), town, "Town Tax")) {

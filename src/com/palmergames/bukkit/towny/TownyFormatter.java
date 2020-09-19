@@ -395,7 +395,7 @@ public class TownyFormatter {
 					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
 					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += Translation.of("status_bank_town3", town.getTaxCollector().getTaxes()) + (town.getTaxCollector().isTaxPercentage() ? "%" : "");
+				bankString += Translation.of("status_bank_town3", town.getCollector().getTaxes()) + (town.getCollector().isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
 		}
@@ -484,7 +484,7 @@ public class TownyFormatter {
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
 			out.add(Translation.of("status_nation_king", nation.getCapital().getMayor().getFormattedName()) + 
-					Translation.of("status_nation_tax", nation.getTaxCollector().getTaxes())
+					Translation.of("status_nation_tax", nation.getCollector().getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<>();
@@ -619,7 +619,7 @@ public class TownyFormatter {
 				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
 					out.add(Translation.of("status_res_taxexempt"));
 				} else {
-					TownTaxCollector collector = town.getTaxCollector();
+					TownTaxCollector collector = town.getCollector();
 					if (collector.isTaxPercentage()) {
 						out.add(Translation.of("status_res_tax", resident.getAccount().getHoldingBalance() * collector.getTaxes() / 100));
 					} else {
