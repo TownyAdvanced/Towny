@@ -11,8 +11,10 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TaxCollector;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownTaxCollector;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -762,27 +764,29 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				TownTaxCollector collector = town.getTaxCollector();
+				
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
-						town.setTaxPercentage(Boolean.parseBoolean(line));
+						collector.setTaxPercentage(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
 				
 				line = keys.get("taxes");
 				if (line != null)
 					try {
-						town.setTaxes(Double.parseDouble(line));
+						collector.setTaxes(Double.parseDouble(line));
 					} catch (Exception e) {
-						town.setTaxes(0);
+						collector.setTaxes(0);
 					}
 				
 				line = keys.get("plotTax");
 				if (line != null)
 					try {
-						town.setPlotTax(Double.parseDouble(line));
+						collector.setPlotTax(Double.parseDouble(line));
 					} catch (Exception e) {
-						town.setPlotTax(0);
+						collector.setPlotTax(0);
 					}
 				
 				line = keys.get("commercialPlotPrice");
@@ -796,9 +800,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("commercialPlotTax");
 				if (line != null)
 					try {
-						town.setCommercialPlotTax(Double.parseDouble(line));
+						collector.setCommercialPlotTax(Double.parseDouble(line));
 					} catch (Exception e) {
-						town.setCommercialPlotTax(0);
+						collector.setCommercialPlotTax(0);
 					}
 				
 				line = keys.get("embassyPlotPrice");
@@ -812,9 +816,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("embassyPlotTax");
 				if (line != null)
 					try {
-						town.setEmbassyPlotTax(Double.parseDouble(line));
+						collector.setEmbassyPlotTax(Double.parseDouble(line));
 					} catch (Exception e) {
-						town.setEmbassyPlotTax(0);
+						collector.setEmbassyPlotTax(0);
 					}
 				
 				line = keys.get("spawnCost");
@@ -1083,12 +1087,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
+				TaxCollector collector = nation.getTaxCollector();
+				
 				line = keys.get("taxes");
 				if (line != null)
 					try {
-						nation.setTaxes(Double.parseDouble(line));
+						collector.setTaxes(Double.parseDouble(line));
 					} catch (Exception e) {
-						nation.setTaxes(0.0);
+						collector.setTaxes(0.0);
 					}
 				
 				line = keys.get("spawnCost");
@@ -1757,21 +1763,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Purchased Blocks
 		list.add("purchasedBlocks=" + town.getPurchasedBlocks());
 		// Taxpercent
-		list.add("taxpercent=" + town.isTaxPercentage());
+		list.add("taxpercent=" + town.getTaxCollector().isTaxPercentage());
 		// Taxes
-		list.add("taxes=" + town.getTaxes());
+		list.add("taxes=" + town.getTaxCollector().getTaxes());
 		// Plot Price
 		list.add("plotPrice=" + town.getPlotPrice());
 		// Plot Tax
-		list.add("plotTax=" + town.getPlotTax());
+		list.add("plotTax=" + town.getTaxCollector().getPlotTax());
 		// Commercial Plot Price
 		list.add("commercialPlotPrice=" + town.getCommercialPlotPrice());
 		// Commercial Tax
-		list.add("commercialPlotTax=" + town.getCommercialPlotTax());
+		list.add("commercialPlotTax=" + town.getTaxCollector().getCommercialPlotTax());
 		// Embassy Plot Price
 		list.add("embassyPlotPrice=" + town.getEmbassyPlotPrice());
 		// Embassy Tax
-		list.add("embassyPlotTax=" + town.getEmbassyPlotTax());
+		list.add("embassyPlotTax=" + town.getTaxCollector().getEmbassyPlotTax());
 		// Town Spawn Cost
 		list.add("spawnCost=" + town.getSpawnCost());
 		// Upkeep
@@ -1881,7 +1887,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
 		// Taxes
-		list.add("taxes=" + nation.getTaxes());
+		list.add("taxes=" + nation.getTaxCollector().getTaxes());
 		// Nation Spawn Cost
 		list.add("spawnCost=" + nation.getSpawnCost());
 		// Peaceful

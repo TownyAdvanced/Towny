@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownTaxCollector;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -394,7 +395,7 @@ public class TownyFormatter {
 					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
 					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+				bankString += Translation.of("status_bank_town3", town.getTaxCollector().getTaxes()) + (town.getTaxCollector().isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
 		}
@@ -483,7 +484,7 @@ public class TownyFormatter {
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
 			out.add(Translation.of("status_nation_king", nation.getCapital().getMayor().getFormattedName()) + 
-					Translation.of("status_nation_tax", nation.getTaxes())
+					Translation.of("status_nation_tax", nation.getTaxCollector().getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<>();
@@ -618,10 +619,11 @@ public class TownyFormatter {
 				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
 					out.add(Translation.of("status_res_taxexempt"));
 				} else {
-					if (town.isTaxPercentage()) {
-						out.add(Translation.of("status_res_tax", resident.getAccount().getHoldingBalance() * town.getTaxes() / 100));
+					TownTaxCollector collector = town.getTaxCollector();
+					if (collector.isTaxPercentage()) {
+						out.add(Translation.of("status_res_tax", resident.getAccount().getHoldingBalance() * collector.getTaxes() / 100));
 					} else {
-						out.add(Translation.of("status_res_tax", town.getTaxes()));
+						out.add(Translation.of("status_res_tax", collector.getTaxes()));
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
@@ -631,7 +633,7 @@ public class TownyFormatter {
 
 							out.add(Translation.of("status_res_plottax") + plotTax);
 						}
-						out.add(Translation.of("status_res_totaltax") + (town.getTaxes() + plotTax));
+						out.add(Translation.of("status_res_totaltax") + (collector.getTaxes() + plotTax));
 					}
 				}
 

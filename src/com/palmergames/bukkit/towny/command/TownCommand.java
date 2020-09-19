@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.TownTaxCollector;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -1144,9 +1145,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		out.add(Colors.Green + "Jails    : " + Colors.LightGreen + jail);
 		out.add(Colors.Green + "Inns    : " + Colors.LightGreen + inn);
 		out.add(Colors.Green + "Type: " + Colors.LightGreen + "Player-Owned / ForSale / Total / Daily Revenue");
-		out.add(Colors.Green + "Residential: " + Colors.LightGreen + residentOwned + " / " + residentOwnedFS + " / " + resident + " / " + (residentOwned * town.getPlotTax()));
-		out.add(Colors.Green + "Embassies : " + Colors.LightGreen + embassyRO + " / " + embassyFS + " / " + embassy + " / " + (embassyRO * town.getEmbassyPlotTax()));
-		out.add(Colors.Green + "Shops      : " + Colors.LightGreen + shopRO + " / " + shopFS + " / " + shop + " / " + (shop * town.getCommercialPlotTax()));
+		out.add(Colors.Green + "Residential: " + Colors.LightGreen + residentOwned + " / " + residentOwnedFS + " / " + resident + " / " + (residentOwned * town.getTaxCollector().getPlotTax()));
+		out.add(Colors.Green + "Embassies : " + Colors.LightGreen + embassyRO + " / " + embassyFS + " / " + embassy + " / " + (embassyRO * town.getTaxCollector().getEmbassyPlotTax()));
+		out.add(Colors.Green + "Shops      : " + Colors.LightGreen + shopRO + " / " + shopFS + " / " + shop + " / " + (shop * town.getTaxCollector().getCommercialPlotTax()));
 		out.add(Translation.of("msg_town_plots_revenue_disclaimer"));
 		TownyMessaging.sendMessage(player, out);
 
@@ -1477,10 +1478,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
 
 			} else if (split[0].equalsIgnoreCase("taxpercent")) {
-				town.setTaxPercentage(!town.isTaxPercentage());
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
+				TownTaxCollector collector = town.getTaxCollector();
+				town.getTaxCollector().setTaxPercentage(!collector.isTaxPercentage());
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_taxpercent", collector.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
-					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
+					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", collector.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
 
 				town.setOpen(!town.isOpen());
@@ -1817,7 +1819,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
-				if (!town.isTaxPercentage()) {
+				if (!town.getTaxCollector().isTaxPercentage()) {
 					// msg_max_tax_amount_only_for_percent
 					throw new TownyException(Translation.of("msg_max_tax_amount_only_for_percent"));
 				}
@@ -1828,9 +1830,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				
 				double amount = Double.parseDouble(split[1]);
-				town.setMaxPercentTaxAmount(amount);
+				town.getTaxCollector().setMaxPercentTaxAmount(amount);
 
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_tax_max_percent_amount", player.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_tax_max_percent_amount", player.getName(), TownyEconomyHandler.getFormattedBalance(town.getTaxCollector().getMaxPercentTaxAmount())));
 				
 			} else if (split[0].equalsIgnoreCase("surname")) {
 
@@ -1914,7 +1916,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
 								return;
 							}
-							if (town.isTaxPercentage() && amount > 100) {
+							if (town.getTaxCollector().isTaxPercentage() && amount > 100) {
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_percentage"));
 								return;
 							}
@@ -1922,10 +1924,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_tax_minimum_not_met", TownySettings.getTownDefaultTaxMinimumTax()));
 								return;
 							}
-							town.setTaxes(amount);
+							town.getTaxCollector().setTaxes(amount);
 							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_tax", player.getName(), town.getTaxes()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_tax", player.getName(), town.getTaxes()));
+								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_tax", player.getName(), town.getTaxCollector().getTaxes()));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_tax", player.getName(), town.getTaxCollector().getTaxes()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
 							return;
@@ -1944,10 +1946,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
 								return;
 							}
-							town.setPlotTax(amount);
+							town.getTaxCollector().setPlotTax(amount);
 							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_plottax", player.getName(), town.getPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_plottax", player.getName(), town.getPlotTax()));
+								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_plottax", player.getName(), town.getTaxCollector().getPlotTax()));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_plottax", player.getName(), town.getTaxCollector().getPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
 							return;
@@ -1965,10 +1967,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
 								return;
 							}
-							town.setCommercialPlotTax(amount);
+							town.getTaxCollector().setCommercialPlotTax(amount);
 							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_alttax", player.getName(), "shop", town.getCommercialPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_alttax", player.getName(), "shop", town.getCommercialPlotTax()));
+								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_alttax", player.getName(), "shop", town.getTaxCollector().getCommercialPlotTax()));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_alttax", player.getName(), "shop", town.getTaxCollector().getCommercialPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
 							return;
@@ -1987,10 +1989,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
 								return;
 							}
-							town.setEmbassyPlotTax(amount);
+							town.getTaxCollector().setEmbassyPlotTax(amount);
 							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_alttax", player.getName(), "embassy", town.getEmbassyPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_alttax", player.getName(), "embassy", town.getEmbassyPlotTax()));
+								TownyMessaging.sendMessage(player, Translation.of("msg_town_set_alttax", player.getName(), "embassy", town.getTaxCollector().getEmbassyPlotTax()));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_set_alttax", player.getName(), "embassy", town.getTaxCollector().getEmbassyPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
 							return;

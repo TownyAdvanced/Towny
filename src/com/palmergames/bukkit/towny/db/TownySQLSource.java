@@ -944,15 +944,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 			town.setBonusBlocks(rs.getInt("bonus"));
-			town.setTaxPercentage(rs.getBoolean("taxpercent"));
-			town.setTaxes(rs.getFloat("taxes"));
+			town.getTaxCollector().setTaxPercentage(rs.getBoolean("taxpercent"));
+			town.getTaxCollector().setTaxes(rs.getFloat("taxes"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
-			town.setPlotTax(rs.getFloat("plotTax"));
+			town.getTaxCollector().setPlotTax(rs.getFloat("plotTax"));
 			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
-			town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
+			town.getTaxCollector().setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
 			town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
-			town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
+			town.getTaxCollector().setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
 			town.setSpawnCost(rs.getFloat("spawnCost"));
 			town.setOpen(rs.getBoolean("open"));
 			town.setPublic(rs.getBoolean("public"));
@@ -1230,7 +1230,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 			}
-			nation.setTaxes(rs.getDouble("taxes"));
+			nation.getTaxCollector().setTaxes(rs.getDouble("taxes"));
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
 			try {
@@ -1785,15 +1785,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("bonus", town.getBonusBlocks());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
 			twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
-			twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
+			twn_hm.put("commercialPlotTax", town.getTaxCollector().getCommercialPlotTax());
 			twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());
-			twn_hm.put("embassyPlotTax", town.getEmbassyPlotTax());
+			twn_hm.put("embassyPlotTax", town.getTaxCollector().getEmbassyPlotTax());
 			twn_hm.put("spawnCost", town.getSpawnCost());
 			twn_hm.put("plotPrice", town.getPlotPrice());
-			twn_hm.put("plotTax", town.getPlotTax());
-			twn_hm.put("taxes", town.getTaxes());
+			twn_hm.put("plotTax", town.getTaxCollector().getPlotTax());
+			twn_hm.put("taxes", town.getTaxCollector().getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
-			twn_hm.put("taxpercent", town.isTaxPercentage());
+			twn_hm.put("taxpercent", town.getTaxCollector().isTaxPercentage());
 			twn_hm.put("open", town.isOpen());
 			twn_hm.put("public", town.isPublic());
 			twn_hm.put("conquered", town.isConquered());
@@ -1882,7 +1882,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
 			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-			nat_hm.put("taxes", nation.getTaxes());
+			nat_hm.put("taxes", nation.getTaxCollector().getTaxes());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
 			nat_hm.put("nationSpawn",

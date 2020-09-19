@@ -36,6 +36,7 @@ public class Nation extends Government {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	private final List<Town> towns = new ArrayList<>();
+	private final TaxCollector taxCollector = new NationTaxCollector();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
@@ -387,10 +388,6 @@ public class Nation extends Government {
 		towns.clear();
 	}
 
-	public void setTaxes(double taxes) {
-		this.taxes = Math.min(taxes, TownySettings.getMaxNationTax());
-	}
-
 	public void clear() {
 
 		//TODO: Check cleanup
@@ -634,6 +631,11 @@ public class Nation extends Government {
 		} else {
 			return BukkitTools.getWorlds().get(0);
 		}
+	}
+
+	@Override
+	public TaxCollector getTaxCollector() {
+		return taxCollector;
 	}
 
 	@Override

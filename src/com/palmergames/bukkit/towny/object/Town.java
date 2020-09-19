@@ -40,19 +40,15 @@ public class Town extends Government implements TownBlockOwner {
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private final List<Location> jailSpawns = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
+	private final TownTaxCollector taxCollector = new TownTaxCollector();
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
-	private double plotTax= TownySettings.getTownDefaultPlotTax();
-	private double commercialPlotTax = TownySettings.getTownDefaultShopTax();
 	private double plotPrice = 0.0;
-	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
-	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
 	private boolean hasUpkeep = true;
-	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
@@ -68,7 +64,6 @@ public class Town extends Government implements TownBlockOwner {
 		permissions.loadDefault(this);
 		
 		// Set defaults.
-		setTaxes(TownySettings.getTownDefaultTax());
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
 	}
@@ -116,14 +111,6 @@ public class Town extends Government implements TownBlockOwner {
 	public Resident getMayor() {
 
 		return mayor;
-	}
-
-	public void setTaxes(double taxes) {
-		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxTownTaxPercent() : TownySettings.getMaxTownTax());
-		
-		// Fix invalid taxes
-		if (this.taxes < 0)
-			this.taxes = TownySettings.getTownDefaultTax();
 	}
 
 	/**
@@ -373,19 +360,6 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean isBANG() {
 
 		return this.permissions.explosion;
-	}
-
-	public void setTaxPercentage(boolean isPercentage) {
-
-		this.isTaxPercentage = isPercentage;
-		if (this.getTaxes() > 100) {
-			this.setTaxes(0);
-		}
-	}
-
-	public boolean isTaxPercentage() {
-
-		return isTaxPercentage;
 	}
 
 	public void setFire(boolean isFire) {
@@ -912,30 +886,6 @@ public class Town extends Government implements TownBlockOwner {
 		return hasHomeBlock() && townBlock == homeBlock;
 	}
 
-	public void setPlotTax(double plotTax) {
-		this.plotTax = Math.min(plotTax, TownySettings.getMaxPlotTax());
-	}
-
-	public double getPlotTax() {
-		return plotTax;
-	}
-
-	public void setCommercialPlotTax(double commercialTax) {
-		this.commercialPlotTax = Math.min(commercialTax, TownySettings.getMaxPlotTax());
-	}
-
-	public double getCommercialPlotTax() {
-		return commercialPlotTax;
-	}
-
-	public void setEmbassyPlotTax(double embassyPlotTax) {
-		this.embassyPlotTax = Math.min(embassyPlotTax, TownySettings.getMaxPlotTax());
-	}
-
-	public double getEmbassyPlotTax() {
-		return embassyPlotTax;
-	}
-
 	public void collect(double amount) throws EconomyException {
 		
 		if (TownySettings.isUsingEconomy()) {
@@ -1273,15 +1223,6 @@ public class Town extends Government implements TownBlockOwner {
 		
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
 	}
-
-	public double getMaxPercentTaxAmount() {
-		return maxPercentTaxAmount;
-	}
-
-	public void setMaxPercentTaxAmount(double maxPercentTaxAmount) {
-		// Max tax amount cannot go over amount defined in config.
-		this.maxPercentTaxAmount = Math.min(maxPercentTaxAmount, TownySettings.getMaxTownTaxPercentAmount());
-	}
 	
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
@@ -1361,5 +1302,10 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
+	}
+
+	@Override
+	public TownTaxCollector getTaxCollector() {
+		return taxCollector;
 	}
 }

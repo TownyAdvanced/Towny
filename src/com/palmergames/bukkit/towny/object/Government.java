@@ -38,7 +38,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private boolean isOpen = false;
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
-	protected double taxes;
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
 	protected Government(String name) {
@@ -259,26 +258,16 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Sets the tax amount of this object.
-	 * 
-	 * @param taxes The taxes as a percentage or flat number.
-	 */
-	public abstract void setTaxes(double taxes);
-
-	/**
-	 * Gets the taxes as a percentage or as a flat number.
-	 * 
-	 * @return The tax number.
-	 */
-	public double getTaxes() {
-		setTaxes(taxes); //make sure the tax level is right.
-		return taxes;
-	}
-
-	/**
 	 * Gets the world in which this object resides.
 	 * 
 	 * @return The {@link World} this object is in.
 	 */
 	public abstract World getWorld();
+
+	/**
+	 * Gets the object in charge of tax collection.
+	 * 
+	 * @return The tax collector for this government.
+	 */
+	public abstract TaxCollector getTaxCollector();
 }

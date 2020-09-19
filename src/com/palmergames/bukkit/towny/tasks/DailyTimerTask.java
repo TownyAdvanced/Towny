@@ -12,8 +12,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TaxCollector;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownTaxCollector;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -189,8 +191,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException - EconomyException
 	 */
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
-		
-		if (nation.getTaxes() > 0) {
+		TaxCollector collector = nation.getTaxCollector();
+		if (collector.getTaxes() > 0) {
 
 			List<String> localRemovedTowns = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
@@ -209,11 +211,11 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
-					if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
+					if (!town.getAccount().payTo(collector.getTaxes(), nation, "Nation Tax")) {
 						localRemovedTowns.add(town.getName());		
 						town.removeNation();
 					} else {
-						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + collector.getTaxes());
 					}
 				}
 			}
@@ -259,8 +261,9 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	protected void collectTownTaxes(Town town) throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownTaxCollector collector = town.getTaxCollector();
 		// Resident Tax
-		if (town.getTaxes() > 0) {
+		if (collector.getTaxes() > 0) {
 
 			List<Resident> residents = new ArrayList<>(town.getResidents());
 			ListIterator<Resident> residentItr = residents.listIterator();
@@ -284,15 +287,15 @@ public class DailyTimerTask extends TownyTimerTask {
 							// Player is not online
 						}
 						continue;
-					} else if (town.isTaxPercentage()) {
-						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+					} else if (collector.isTaxPercentage()) {
+						double cost = resident.getAccount().getHoldingBalance() * collector.getTaxes() / 100;
 						
 						// Make sure that the town percent tax doesn't remove above the
 						// allotted amount of cash.
-						cost = Math.min(cost, town.getMaxPercentTaxAmount());
+						cost = Math.min(cost, town.getTaxCollector().getMaxPercentTaxAmount());
 						
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
-					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
+					} else if (!resident.getAccount().payTo(collector.getTaxes(), town, "Town Tax")) {
 						removedResidents.add(resident.getName());
 						
 						// remove this resident from the town.
@@ -309,7 +312,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		// Plot Tax
-		if (town.getPlotTax() > 0 || town.getCommercialPlotTax() > 0 || town.getEmbassyPlotTax() > 0) {
+		if (collector.getPlotTax() > 0 || collector.getCommercialPlotTax() > 0 || collector.getEmbassyPlotTax() > 0) {
 
 			List<TownBlock> townBlocks = new ArrayList<>(town.getTownBlocks());
 			List<String> lostPlots = new ArrayList<>();
