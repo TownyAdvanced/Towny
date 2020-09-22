@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
@@ -141,30 +140,27 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 
+		
 		if (load()) {
 			// Setup bukkit command interfaces
 			registerSpecialCommands();
-			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-			getCommand("resident").setExecutor(new ResidentCommand(this));
-			getCommand("towny").setExecutor(new TownyCommand(this));
+			registerCommands();
 
-			CommandExecutor townCommandExecutor = new TownCommand(this);
-			getCommand("town").setExecutor(townCommandExecutor);
-			
-			// This is needed because the vanilla "/t" tab completer needs to be overridden.
-			getCommand("t").setTabCompleter((TabCompleter)townCommandExecutor);
-			
-			getCommand("nation").setExecutor(new NationCommand(this));
-			getCommand("plot").setExecutor(new PlotCommand(this));
-			getCommand("invite").setExecutor(new InviteCommand(this));
-
+			// Add custom metrics charts.
 			addMetricsCharts();
 
+			// Begin FlagWar.
 			FlagWar.onEnable();
 
 			if (TownySettings.isTownyUpdating(getVersion())) {
-				update();
+				
+				printChangelogToConsole();
+				// Update config with new version.
+				TownySettings.setLastRunVersion(getVersion());
+				// Save database.
+				townyUniverse.getDataSource().saveAll();
+				// cleanup() updates SQL schema for any changes.
+				townyUniverse.getDataSource().cleanup();
 			}
 
 			// Register all child permissions for ranks
@@ -217,13 +213,8 @@ public class Towny extends JavaPlugin {
 			TownyUniverse.getInstance().getWarEvent().toggleEnd();
 		}
 
-		TownyTimerHandler.toggleTownyRepeatingTimer(false);
-		TownyTimerHandler.toggleDailyTimer(false);
-		TownyTimerHandler.toggleMobRemoval(false);
-		TownyTimerHandler.toggleHealthRegen(false);
-		TownyTimerHandler.toggleTeleportWarmup(false);
-		TownyTimerHandler.toggleDrawSmokeTask(false);
-		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
+		// Turn off timers.		
+		toggleTimersOff();
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
@@ -244,38 +235,31 @@ public class Towny extends JavaPlugin {
 		System.out.println("=============================================================");
 	}
 
+	/**
+	 * Attempts to load language, config and database files.
+	 * Checks for plugins, ends and begins timers, resets player cache. 
+	 * 
+	 * @return true if things have loaded without error.
+	 */
 	public boolean load() {
 
+		// Things which have to be done first.
 		checkCitizens();
 		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 		
+		// Load Config, Language Files, Database.
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
 			return false;
 		}
 
+		// Check for plugins that we use, we develop.
 		checkPlugins();
 
-		// make sure the timers are stopped for a reset
-		TownyTimerHandler.toggleTownyRepeatingTimer(false);
-		TownyTimerHandler.toggleDailyTimer(false);
-		TownyTimerHandler.toggleMobRemoval(false);
-		TownyTimerHandler.toggleHealthRegen(false);
-		TownyTimerHandler.toggleTeleportWarmup(false);
-		TownyTimerHandler.toggleCooldownTimer(false);
-		TownyTimerHandler.toggleDrawSmokeTask(false);
-
-		// Start timers
-		TownyTimerHandler.toggleTownyRepeatingTimer(true);
-		TownyTimerHandler.toggleDailyTimer(true);
-		TownyTimerHandler.toggleMobRemoval(true);
-		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
-		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
-		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
-		TownyTimerHandler.toggleDrawSmokeTask(true);
-		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
-			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+		// Make sure the timers are stopped for a reset, then started.
+		cycleTimers();
 		
+		// Reset player cache.
 		resetCache();
 
 		return true;
@@ -293,44 +277,12 @@ public class Towny extends JavaPlugin {
 	private void checkPlugins() {
 
 		System.out.println("[Towny] Searching for third-party plugins...");
-		String output = "";
 		String ecowarn = "";
 		List<String> addons = new ArrayList<>();
 		Plugin test;
 
-		/*
-		 * Check for permission source.
-		 */
-		output += System.lineSeparator() + "  Permissions: TownyPerms, ";
-		test = getServer().getPluginManager().getPlugin("GroupManager");
-		if (test != null) {
-			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
-			output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
-		} else {
-			// Try Vault
-			test = getServer().getPluginManager().getPlugin("Vault");
-			if (test != null) {
-				net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
-				if (chat == null) {
-					// No Chat implementation
-					test = null;
-					// Fall back to BukkitPermissions below
-				} else {
-					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
-					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-					if (vaultPermProvider != null) {
-						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
-					} else {
-						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
-					}
-				}
-			}
-
-			if (test == null) {
-				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
-				output += "BukkitPermissions";
-			}
-		}
+	 	//Check for permission source.
+		String output = returnPermissionsProviders();
 
 		/*
 		 * Check for economy source.
@@ -400,6 +352,69 @@ public class Towny extends JavaPlugin {
 			System.out.println("[Towny] " + WordUtils.wrap(questioner, 55, System.lineSeparator() + "        ", true));
 		}
 	}
+	
+	private String returnPermissionsProviders() {
+		// TownyPerms is always present.
+		String output = System.lineSeparator() + "  Permissions: TownyPerms, ";
+		
+		// Test for GroupManager being present.
+		Plugin test = getServer().getPluginManager().getPlugin("GroupManager");
+		if (test != null) {
+			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
+			output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
+		// Else test for vault being present.
+		} else {
+			// Try Vault
+			test = getServer().getPluginManager().getPlugin("Vault");
+			if (test != null) {
+				net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
+				if (chat == null) {
+					// No Chat implementation
+					test = null;
+					// Fall back to BukkitPermissions below
+				} else {
+					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
+					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+					if (vaultPermProvider != null) {
+						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
+					} else {
+						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
+					}
+				}
+			}
+
+			if (test == null) {
+				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
+				output += "BukkitPermissions";
+			}
+		}
+		return output;		
+	}
+	
+	private void cycleTimers() {
+
+		toggleTimersOff();
+		TownyTimerHandler.toggleTownyRepeatingTimer(true);
+		TownyTimerHandler.toggleDailyTimer(true);
+		TownyTimerHandler.toggleMobRemoval(true);
+		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
+		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
+		TownyTimerHandler.toggleDrawSmokeTask(true);
+		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
+			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
+	}
+	
+	private void toggleTimersOff() {
+
+		TownyTimerHandler.toggleTownyRepeatingTimer(false);
+		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleMobRemoval(false);
+		TownyTimerHandler.toggleHealthRegen(false);
+		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleCooldownTimer(false);
+		TownyTimerHandler.toggleDrawSmokeTask(false);
+	}
 
 	private void registerEvents() {
 
@@ -430,7 +445,7 @@ public class Towny extends JavaPlugin {
 
 	}
 
-	private void update() {
+	private void printChangelogToConsole() {
 
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
@@ -451,10 +466,6 @@ public class Towny extends JavaPlugin {
 		} catch (IOException e) {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}
-		TownySettings.setLastRunVersion(getVersion());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveAll();
-		townyUniverse.getDataSource().cleanup();
 	}
 
 	/**
@@ -578,9 +589,7 @@ public class Towny extends JavaPlugin {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
-				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically
-																														// resets
-																														// permissions.
+				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically resets permissions.
 	}
 
 	/**
@@ -593,9 +602,7 @@ public class Towny extends JavaPlugin {
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				if (Coord.parseCoord(player).equals(worldCoord))
-					getCache(player).resetAndUpdate(worldCoord); // Automatically
-																	// resets
-																	// permissions.
+					getCache(player).resetAndUpdate(worldCoord); // Automatically resets permissions.
 	}
 
 	/**
@@ -733,17 +740,6 @@ public class Towny extends JavaPlugin {
 			LOGGER.info(ChatColor.stripColor(msg));
 		}
 	}
-	
-
-	public boolean parseOnOff(String s) throws Exception {
-
-		if (s.equalsIgnoreCase("on"))
-			return true;
-		else if (s.equalsIgnoreCase("off"))
-			return false;
-		else
-			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
-	}
 
 	/**
 	 * @return the Towny instance
@@ -857,6 +853,23 @@ public class Towny extends JavaPlugin {
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void registerCommands() {
+		getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
+		getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
+		getCommand("resident").setExecutor(new ResidentCommand(this));
+		getCommand("towny").setExecutor(new TownyCommand(this));
+
+		CommandExecutor townCommandExecutor = new TownCommand(this);
+		getCommand("town").setExecutor(townCommandExecutor);
+		
+		// This is needed because the vanilla "/t" tab completer needs to be overridden.
+		getCommand("t").setTabCompleter((TabCompleter)townCommandExecutor);
+		
+		getCommand("nation").setExecutor(new NationCommand(this));
+		getCommand("plot").setExecutor(new PlotCommand(this));
+		getCommand("invite").setExecutor(new InviteCommand(this));
 	}
 
 	private void addMetricsCharts() {

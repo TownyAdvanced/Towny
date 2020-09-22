@@ -3207,7 +3207,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// '/town set perm off'
 
 					try {
-						boolean b = plugin.parseOnOff(split[0]);
+						boolean b = StringMgmt.parseOnOff(split[0]);
 						
 						perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
 					} catch (Exception e) {
@@ -3220,7 +3220,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				boolean b;
 
 				try {
-					b = plugin.parseOnOff(split[1]);
+					b = StringMgmt.parseOnOff(split[1]);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_set_perm_syntax_error"));
 					return;
@@ -3275,7 +3275,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				
 				try {
-					boolean b = plugin.parseOnOff(split[2]);
+					boolean b = StringMgmt.parseOnOff(split[2]);
 
 					perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 

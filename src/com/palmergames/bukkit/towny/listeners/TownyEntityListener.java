@@ -38,6 +38,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -56,6 +57,7 @@ import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
@@ -928,11 +930,20 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
-		// Can't do this cause it makes hanging objects stay in the air after their block is destroyed.
-//		if (event.getCause().equals(RemoveCause.PHYSICS)) {
-//			event.setCancelled(true);
-//			return;
-//		}
+		// This workaround prevent boats from destroying item_frames.
+		if (event.getCause().equals(RemoveCause.PHYSICS) && hanging.getType().equals(EntityType.ITEM_FRAME)) {
+			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
+			Block block = loc.getBlock();
+			if (block.isLiquid() || block.isEmpty())
+				return;
+			
+			for (Entity entity : hanging.getNearbyEntities(0.5, 0.5, 0.5)) {
+				if (entity instanceof Vehicle) {
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
 
 		
 		if (event instanceof HangingBreakByEntityEvent) {

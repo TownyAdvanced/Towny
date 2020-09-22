@@ -2,6 +2,8 @@ package com.palmergames.util;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.object.Translation;
+
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.Collection;
@@ -195,4 +197,13 @@ public class StringMgmt {
 		return  str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	
+	public static boolean parseOnOff(String s) throws Exception {
+
+		if (s.equalsIgnoreCase("on"))
+			return true;
+		else if (s.equalsIgnoreCase("off"))
+			return false;
+		else
+			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
+	}
 }
