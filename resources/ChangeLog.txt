@@ -4941,3 +4941,5 @@ v0.92.0.11:
     - Closes #4307.
   - Fix item_frames being broken by boats.
     - Closes #4093.
+  - When /tw toggle revertunclaim is used, any active reverts will be stopped.
+    - Removes necessity to stop the server and manually delete the towny\data\regen.txt. 
