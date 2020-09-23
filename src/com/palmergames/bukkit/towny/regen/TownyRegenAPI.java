@@ -525,8 +525,9 @@ public class TownyRegenAPI {
 		}
 	}
 	
+	//TODO: Make this a configurable list.
 	private static boolean isBlacklistedBlock(Material type) {		
-		return (type == Material.TNT || type == Material.AIR || type == Material.FIRE);
+		return (type == Material.TNT || type == Material.AIR || type == Material.FIRE || type == Material.NETHER_PORTAL);
 	}
 
 	/**

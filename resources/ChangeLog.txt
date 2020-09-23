@@ -4943,3 +4943,6 @@ v0.92.0.11:
     - Closes #4093.
   - When /tw toggle revertunclaim is used, any active reverts will be stopped.
     - Removes necessity to stop the server and manually delete the towny\data\regen.txt. 
+0.96.2.19:
+  - Actually fix NETHER_PORTALs regenerating in explosions.
+    - Closes #4305.
