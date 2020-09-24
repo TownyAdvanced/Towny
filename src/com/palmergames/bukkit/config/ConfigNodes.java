@@ -372,7 +372,7 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",			
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull"),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
@@ -1535,6 +1535,11 @@ public enum ConfigNodes {
 			"1.0",
 			"",
 			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+	ECO_MAX_PRICE_CLAIM_TOWNBLOCK(
+			"economy.new_expand.max_price_claim_townblock",
+			"-1.0", 
+			"",
+			"# The maximum price for an additional townblock. No matter how many blocks a town has the price will not be above this. Set to -1 to deactivate this."),
 	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
 			"economy.new_expand.price_claim_townblock_refund",
 			"0.0",

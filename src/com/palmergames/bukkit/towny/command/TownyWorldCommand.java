@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -437,6 +438,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("revertunclaim")) {
 
 				Globalworld.setUsingPlotManagementRevert(!Globalworld.isUsingPlotManagementRevert());
+
+				if (!Globalworld.isUsingPlotManagementRevert()) {
+					TownyRegenAPI.removeWorldCoords(Globalworld); // Stop any active snapshots being made.
+					TownyRegenAPI.removePlotChunksForWorld(Globalworld, true); // Stop any active reverts being done.
+				}
+				
 				msg = Translation.of("msg_changed_world_setting", "Unclaim Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementRevert() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);

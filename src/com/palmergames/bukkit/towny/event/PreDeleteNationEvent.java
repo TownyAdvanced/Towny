@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -10,11 +11,13 @@ public class PreDeleteNationEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	
 	private final String nationName;
+	private final Nation nation;
 	private boolean isCancelled = false;
 	
-	public PreDeleteNationEvent(String nation) {
+	public PreDeleteNationEvent(Nation nation) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.nationName = nation;
+		this.nation = nation;
+		this.nationName = nation.getName();
 	}
 	
 	@Override
@@ -43,5 +46,12 @@ public class PreDeleteNationEvent extends Event implements Cancellable {
 	 */
 	public String getNationName() {
 		return nationName;
+	}
+
+	/**
+	 * @return the deleted nation object.
+	 */
+	public Nation getNation() {
+		return nation;
 	}
 }

@@ -16,6 +16,9 @@ public enum WorldMigrationAction {
 	})),
 	UPDATE_WORLD_UNCLAIM_DELETE(((townyWorld, s) -> {
 		townyWorld.setPlotManagementDeleteIds(splitMats(StringMgmt.join(townyWorld.getPlotManagementDeleteIds(), ",") + s));
+	})),
+	UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES(((townyWorld, s) -> {
+		townyWorld.setPlotManagementWildRevertEntities(splitMats(StringMgmt.join(townyWorld.getPlotManagementWildRevertEntities(), ",") + s));
 	}));
 	
 	BiConsumer<TownyWorld, String> action;

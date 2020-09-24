@@ -25,6 +25,6 @@ public class BackupTask implements Runnable {
 			return;
 		}
 
-		Towny.getPlugin().getLogger().info("Towny Database Successfully backed up.");
+		Towny.getPlugin().getLogger().info("Towny flatfiles and settings successfully backed up.");
 	}
 }

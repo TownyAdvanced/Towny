@@ -2170,11 +2170,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							throw new TownyException(Translation.of("msg_war_cannot_do"));
 
 						world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
+						final int minDistanceFromHomeblock = world.getMinDistanceFromOtherTowns(coord, resident.getTown());
+						if (minDistanceFromHomeblock < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
 						if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+							if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(Translation.of("msg_too_far"));
 
 						// Test whether towns will be removed from the nation
@@ -2450,11 +2451,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
 				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
 
-			if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
+			final int minDistFromOtherTowns = world.getMinDistanceFromOtherTowns(key);
+			if (minDistFromOtherTowns < TownySettings.getMinDistanceFromTownHomeblocks())
 				throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+				if ((minDistFromOtherTowns > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(Translation.of("msg_too_far"));
 
 			// If the town isn't free to make, send a confirmation.
@@ -3212,7 +3214,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// '/town set perm off'
 
 					try {
-						boolean b = plugin.parseOnOff(split[0]);
+						boolean b = StringMgmt.parseOnOff(split[0]);
 						
 						perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
 					} catch (Exception e) {
@@ -3225,7 +3227,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				boolean b;
 
 				try {
-					b = plugin.parseOnOff(split[1]);
+					b = StringMgmt.parseOnOff(split[1]);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_set_perm_syntax_error"));
 					return;
@@ -3280,7 +3282,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				
 				try {
-					boolean b = plugin.parseOnOff(split[2]);
+					boolean b = StringMgmt.parseOnOff(split[2]);
 
 					perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 
