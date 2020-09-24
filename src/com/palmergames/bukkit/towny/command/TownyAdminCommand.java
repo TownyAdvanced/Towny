@@ -263,8 +263,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			case "toggle":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
-				} else if (args.length == 3 && args[1].equalsIgnoreCase("npc")) {
-					return getTownyStartingWith(args[2], "r");
+				} else if (args.length >= 3 && args[1].equalsIgnoreCase("npc")) {
+					if (args.length == 3) {
+						return getTownyStartingWith(args[2], "r");
+					} else if (args.length == 4) {
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[3]);
+					}
+				} else if (args.length == 3) {
+					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				}
 				break;
 			case "tpplot":
@@ -330,6 +336,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "outlaw":
 							switch (args.length) {
 							case 4:
@@ -366,6 +374,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4) 
 								return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
+							else if (args.length == 5)
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "set":
 							try {
 								return NationCommand.nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getNation(args[1]), StringMgmt.remArgs(args, 2));
@@ -958,12 +968,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
+				Boolean choice = null;
+				if (split.length == 4) {
+					choice = BaseCommand.parseToggleChoice(split[3]);
+				}
+				
 				if (split[2].equalsIgnoreCase("forcepvp")) {
 					
-					if (town.isAdminEnabledPVP())
-						town.setAdminEnabledPVP(false);
-					else 
-						town.setAdminEnabledPVP(true);
+					if (choice == null) choice = !town.isAdminEnabledPVP();
+					town.setAdminEnabledPVP(choice);
 					
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMessage(sender, Translation.of("msg_town_forcepvp_setting_set_to", town.getName(), town.isAdminEnabledPVP()));
@@ -1720,7 +1733,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseToggleCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		boolean choice;
+		Boolean choice = null;
+		if (split.length == 2) {
+			choice = BaseCommand.parseToggleChoice(split[1]);
+		} else if (split.length == 3 && split[1].equalsIgnoreCase("npc")) {
+			choice = BaseCommand.parseToggleChoice(split[2]);
+		}
 
 		if (split.length == 0) {
 			// command was '/townyadmin toggle'
@@ -1739,7 +1757,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		if (split[0].equalsIgnoreCase("war")) {
-			choice = TownyAPI.getInstance().isWarTime();
+			if (choice == null) choice = TownyAPI.getInstance().isWarTime();
 
 			if (!choice) {
 				townyUniverse.startWarEvent();
@@ -1751,7 +1769,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
 			try {
-				choice = !TownySettings.isDeclaringNeutral();
+				if (choice == null) choice = !TownySettings.isDeclaringNeutral();
 				TownySettings.setDeclaringNeutral(choice);
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_nation_allow_peaceful", choice ? Translation.of("enabled") : Translation.of("disabled")));
 
@@ -1761,7 +1779,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
-				choice = !TownySettings.isDevMode();
+				if (choice == null) choice = !TownySettings.isDevMode();
 				TownySettings.setDevMode(choice);
 				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
@@ -1769,7 +1787,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("debug")) {
 			try {
-				choice = !TownySettings.getDebug();
+				if (choice == null) choice = !TownySettings.getDebug();
 				TownySettings.setDebug(choice);
 				TownyLogger.getInstance().refreshDebugLogger();
 				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
@@ -1778,7 +1796,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("townwithdraw")) {
 			try {
-				choice = !TownySettings.getTownBankAllowWithdrawls();
+				if (choice == null) choice = !TownySettings.getTownBankAllowWithdrawls();
 				TownySettings.SetTownBankAllowWithdrawls(choice);
 				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
@@ -1786,7 +1804,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
-				choice = !TownySettings.geNationBankAllowWithdrawls();
+				if (choice == null) choice = !TownySettings.geNationBankAllowWithdrawls();
 				TownySettings.SetNationBankAllowWithdrawls(choice);
 				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {

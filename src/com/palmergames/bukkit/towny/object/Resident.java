@@ -541,6 +541,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		 */
 		for (String mode : newModes) {
 			mode = mode.toLowerCase();
+			if (mode.equals("on") || mode.equals("off")) continue;
 			if (this.modes.contains(mode))
 				this.modes.remove(mode);
 			else

@@ -154,6 +154,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					if (args.length == 2)
 						return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+					else if (args.length == 3)
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
 				case "king":
 					if (args.length == 2)
@@ -2532,6 +2534,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
+			
+			Boolean choice = null;
+			if (split.length == 2) {
+				choice = BaseCommand.parseToggleChoice(split[1]);
+			}
 
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
@@ -2539,8 +2546,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				try {
-					boolean choice = !nation.isNeutral();
+					if (choice == null) choice = !nation.isNeutral();
 					double cost = TownySettings.getNationNeutralityCost();
+					
+					if (nation.isNeutral() && choice) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
+					else if (!nation.isNeutral() && !choice) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
 					if (choice && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
@@ -2566,14 +2576,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
                     throw new TownyException(Translation.of("msg_err_command_disable"));
 
-                nation.setPublic(!nation.isPublic());
+                if (choice == null) choice = !nation.isPublic();
+                nation.setPublic(choice);
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
 
             } else if(split[0].equalsIgnoreCase("open")){
                 if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
                     throw new TownyException(Translation.of("msg_err_command_disable"));
 
-                nation.setOpen(!nation.isOpen());
+				if (choice == null) choice = !nation.isOpen();
+                nation.setOpen(choice);
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 
             } else {

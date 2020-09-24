@@ -92,6 +92,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"perm",
 		"mode"
 	);
+	
+	private static final List<String> residentToggleChoices = Arrays.asList(
+		"pvp",
+		"fire",
+		"mobs",
+		"explosion"
+	);
 
 	public ResidentCommand(Towny instance) {
 
@@ -132,6 +139,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					}
 					break;
 				case "set":
@@ -377,6 +386,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		TownyPermission perm = resident.getPermissions();
+		
+		Boolean choice = null;
+		
+		if (newSplit.length == 2 && residentToggleChoices.contains(newSplit[0].toLowerCase())) {
+			choice = BaseCommand.parseToggleChoice(newSplit[1]);
+		}
 
 		// Special case chat spy
 		if (newSplit[0].equalsIgnoreCase("spy")) {
@@ -397,16 +412,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
 			}			
-			perm.pvp = !perm.pvp;
+			if (choice == null) choice = !perm.pvp;
+			perm.pvp = choice;
 			// Add a task for the resident.
 			if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
-			perm.fire = !perm.fire;
+			if (choice == null) choice = !perm.fire;
+			perm.fire = choice;
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {
-			perm.explosion = !perm.explosion;
+			if (choice == null) choice = !perm.explosion;
+			perm.explosion = choice;
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
-			perm.mobs = !perm.mobs;
+			if (choice == null) choice = !perm.mobs;
+			perm.mobs = choice;
 		} else {
 
 			resident.toggleMode(newSplit, true);

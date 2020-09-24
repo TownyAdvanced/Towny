@@ -325,6 +325,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					switch (args.length) {
 						case 2:
 							return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+						case 3:
+							if (!args[1].equalsIgnoreCase("jail")) {
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+							}
+							break;
 						case 4:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
 					}
@@ -1406,10 +1411,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (!admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			Boolean choice = null;
+			if (split.length == 2 && !split[0].equalsIgnoreCase("jail")) { // Exclude jail command from on/off
+				choice = BaseCommand.parseToggleChoice(split[1]);
+			}
 
 			if (split[0].equalsIgnoreCase("public")) {
 
-				town.setPublic(!town.isPublic());
+				if (choice == null) choice = !town.isPublic();
+				town.setPublic(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_public", town.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_public", town.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1439,7 +1450,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 				if (!outsiderintown) {
-					town.setPVP(!town.isPVP());
+					if (choice == null) choice = !town.isPVP();
+					town.setPVP(choice);
 					// Add a cooldown to PVP toggling.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
 						CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
@@ -1453,7 +1465,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
-				town.setBANG(!town.isBANG());
+				if (choice == null) choice = !town.isBANG();
+				town.setBANG(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_expl", town.getName(), town.isBANG() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_expl", town.getName(), town.isBANG() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1462,7 +1475,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
-				town.setFire(!town.isFire());
+				if (choice == null) choice = !town.isFire();
+				town.setFire(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_fire", town.getName(), town.isFire() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_fire", town.getName(), town.isFire() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1471,19 +1485,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
-				town.setHasMobs(!town.hasMobs());
+				if (choice == null) choice = !town.hasMobs();
+				town.setHasMobs(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
 
 			} else if (split[0].equalsIgnoreCase("taxpercent")) {
-				town.setTaxPercentage(!town.isTaxPercentage());
+				if (choice == null) choice = !town.isTaxPercentage();
+				town.setTaxPercentage(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
 
-				town.setOpen(!town.isOpen());
+				if (choice == null) choice = !town.isOpen();
+				town.setOpen(choice);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));

@@ -47,7 +47,7 @@ public class BaseCommand implements TabCompleter{
 		"itemuse"
 	);
 
-	private static final List<String> setOnOffCompletes = Arrays.asList(
+	static final List<String> setOnOffCompletes = Arrays.asList(
 		"on",
 		"off"
 	);
@@ -173,5 +173,16 @@ public class BaseCommand implements TabCompleter{
 		} catch (NotRegisteredException e) {
 			return Collections.emptyList();
 		}
+	}
+
+	/**
+	 * Parses the given string into a boolean choice.
+	 * @param str The string to parse
+	 * @return true for "ON", false for "OFF", or null if no match.
+	 */
+	public static Boolean parseToggleChoice(String str) {
+		if (str.equalsIgnoreCase("on")) return true;
+		else if (str.equalsIgnoreCase("off")) return false;
+		else return null;
 	}
 }
