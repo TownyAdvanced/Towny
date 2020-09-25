@@ -180,9 +180,9 @@ public class BaseCommand implements TabCompleter{
 	 * @param str The string to parse
 	 * @return true for "ON", false for "OFF", or null if no match.
 	 */
-	public static Boolean parseToggleChoice(String str) {
-		if (str.equalsIgnoreCase("on")) return true;
-		else if (str.equalsIgnoreCase("off")) return false;
+	protected static Boolean parseToggleChoice(String str) {
+		if (str.equalsIgnoreCase("on")) return Boolean.TRUE;
+		else if (str.equalsIgnoreCase("off")) return Boolean.FALSE;
 		else return null;
 	}
 }
