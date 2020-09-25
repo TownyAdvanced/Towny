@@ -1484,7 +1484,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("open")) {
 
 				if(town.isBankrupt())
-					throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_toggle_open"));
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -3097,7 +3097,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 		if (town.isBankrupt())
-			throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_invite"));
+			throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_invite"));
 
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 

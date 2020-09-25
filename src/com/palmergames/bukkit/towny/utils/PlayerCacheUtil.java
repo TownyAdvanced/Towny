@@ -394,10 +394,7 @@ public class PlayerCacheUtil {
 					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
 					return false;
 				}
-			} catch (NotRegisteredException e) {
-				//ignored
-			} catch (EconomyException ee) {
-				//also ignored
+			} catch (NotRegisteredException | EconomyException ignored) {
 			}
 		}
 

@@ -1154,6 +1154,5 @@ msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not affo
 msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
-msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
-msg_err_siege_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
-msg_err_siege_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
+msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'

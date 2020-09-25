@@ -213,37 +213,21 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax()) {
 						//Bankruptcy enabled && Towns will go into debt to pay nation tax. 
 						//Bankrupt town if it cannot pay.
+						boolean townWasBankrupt = town.isBankrupt();
+						double actualTaxPayment = town.getAccount().getHoldingBalance() + town.getAccount().getDebtCap();
 						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-						if (town.getAccount().isBankrupt()) {
-							//town already bankrupt
-							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
-								//Town paid for tax using debt. Pay nation fully
-								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
-							} else {
-								//Town did not pay, as this would put it over the debt ceiling.
-								//Pay up to the ceiling now
-								double actualTaxPayment = town.getAccount().getDebtCap() + town.getAccount().getHoldingBalance();
-								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
-								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
-							}
-						} else {
-							//town not bankrupt
-							if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
-								//Town paid for tax using balance or debt. Pay nation fully
-								nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
-							} else {
-								//Town did not pay, as this would put it over the debt ceiling.
-								//Pay up to the ceiling now
-								double actualTaxPayment = town.getAccount().getHoldingBalance() + town.getAccount().getDebtCap();
-								town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
-								nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
-							}
 
-							if (town.getAccount().isBankrupt()) {
-								town.setOpen(false);
-								universe.getDataSource().saveTown(town);
-								localNewlyDelinquentTowns.add(town.getName());
-							}
+						if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
+							nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
+						} else {
+							town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
+							nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
+						}
+
+						if (!townWasBankrupt && town.isBankrupt()) {
+							town.setOpen(false);
+							universe.getDataSource().saveTown(town);
+							localNewlyDelinquentTowns.add(town.getName());
 						}
 
 					} else {
@@ -440,22 +424,17 @@ public class DailyTimerTask extends TownyTimerTask {
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
-
 						if (TownySettings.isTownBankruptcyEnabled()) {
+							boolean townWasBankrupt = town.isBankrupt();
 							//Bankruptcy enabled - Bankrupt town if it cannot pay
 							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-							if(town.getAccount().isBankrupt()) {
-								//Town already bankrupt
-								town.getAccount().withdraw(upkeep, "Town Upkeep"); 
-							} else {
-								//Town not bankrupt at this point
-								town.getAccount().withdraw(upkeep, "Town Upkeep");
-								if(town.getAccount().isBankrupt()) {
-									town.setOpen(false);
-									universe.getDataSource().saveTown(town);
-									delinquentTowns.add(town.getName());
-								}
+							town.getAccount().withdraw(upkeep, "Town Upkeep");
+							if(!townWasBankrupt && town.isBankrupt()) {
+								town.setOpen(false);
+								universe.getDataSource().saveTown(town);
+								delinquentTowns.add(town.getName());
 							}
+						
 						} else {
 							//Bankruptcy disabled - Remove town if it cannot pay
 							if(!town.getAccount().withdraw(upkeep, "Town Upkeep")) {
@@ -463,6 +442,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								delinquentTowns.add(town.getName());
 							}
 						}
+						
 					} else if (upkeep < 0) {						
 						// Negative upkeep
 						if (TownySettings.isUpkeepPayingPlots()) {
