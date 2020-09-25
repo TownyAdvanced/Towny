@@ -203,16 +203,6 @@ public enum ConfigNodes {
 			"",
 			"# Default nation board"),
 	
-	TOWN_BANKRUPTCY_ENABLED(
-			"town.bankruptcy_enabled",
-			"false",
-			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
-			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
-			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
-			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
-			"# The debt can be repaid using /t deposit x.", 
-			"# Once all debt is repaid, the town immediately returns to a normal state."),
-
 	NWS(
 			"new_world_settings",
 			"",

@@ -88,42 +88,6 @@ public class BankAccount extends Account {
 		this.debtCap = debtCap;
 	}
 
-	/**
-	 * Sets the max amount of money allowed in this account.
-	 * 
-	 * @param balanceCap The max amount allowed in this account.
-	 */
-	public void setBalanceCap(double balanceCap) {
-		this.balanceCap = balanceCap;
-	}
-
-	/**
-	 * Sets the maximum amount of money this account can have.
-	 *
-	 * @return the max amount allowed in this account.
-	 */
-	public double getBalanceCap() {
-		return balanceCap;
-	}
-
-	/**
-	 * The maximum amount of debt this account can have.
-	 * 
-	 * @return The max amount of debt for this account.
-	 */
-	public double getDebtCap() {
-		return debtCap;
-	}
-
-	/**
-	 * Sets the maximum amount of debt this account can have.
-	 * 
-	 * @param debtCap The new cap for debt on this account.
-	 */
-	public void setDebtCap(double debtCap) {
-		this.debtCap = debtCap;
-	}
-
 	@Override
 	protected boolean subtractMoney(double amount) {
 		try {
@@ -139,9 +103,6 @@ public class BankAccount extends Account {
 
 				// Calculate debt.
 				double amountInDebt = amount - getHoldingBalance();
-
-				if(amountInDebt <= getDebtCap()) {
-					TownyMessaging.sendErrorMsg("amount = " + amountInDebt);
 
 				if(amountInDebt <= getDebtCap()) {
 					// Empty out account.
@@ -239,38 +200,6 @@ public class BankAccount extends Account {
 		// Make sure to remove debt account
 		if (debtAccount != null)
 			TownyEconomyHandler.removeAccount(debtAccount.getName());
-		TownyEconomyHandler.removeAccount(getName());
-	}
-
-	@Override
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			if (isBankrupt()) {
-				return TownyEconomyHandler.getBalance(debtAccount.getName(), getBukkitWorld()) * -1;
-			}
-			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getName());
-		}
-	}
-
-	@Override
-	public String getHoldingFormattedBalance() {
-		try {
-			if (isBankrupt()) {
-				return "-" + debtAccount.getHoldingFormattedBalance();
-			}
-			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
-		} catch (EconomyException e) {
-			return "Error";
-		}
-	}
-
-	@Override
-	public void removeAccount() {
-		// Make sure to remove debt account
-		TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
 	}
 }

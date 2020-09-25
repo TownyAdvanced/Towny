@@ -3,8 +3,6 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.invites.InviteReceiver;
-import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -17,27 +15,6 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 	
 	public TownJoinNationInvite(CommandSender directSender, Town receiver, Nation sender) {
 		super(directSender, receiver, sender);
-		this.sender = sender;
-		this.receiver = receiver;
-	}
-
-	private String directsender;
-	private InviteReceiver receiver;
-	private InviteSender sender;
-
-	@Override
-	public String getDirectSender() {
-		return directsender;
-	}
-
-	@Override
-	public InviteReceiver getReceiver() {
-		return receiver;
-	}
-
-	@Override
-	public InviteSender getSender() {
-		return sender;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
+import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.economy.Economy;
 import net.tnemc.core.Reserve;
 
@@ -31,6 +32,7 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EcoType Type = EcoType.NONE;
 	private static String version = "";
+	
 	public enum EcoType {
 		NONE, VAULT, RESERVE
 	}
@@ -323,7 +325,6 @@ public class TownyEconomyHandler {
 		}
 	}
 	
-
 	public static void newAccount(String accountName) {
 		economy.newAccount(accountName);
 	}

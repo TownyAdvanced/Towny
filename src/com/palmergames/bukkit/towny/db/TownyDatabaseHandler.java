@@ -165,11 +165,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
 		} catch (InvalidNameException e) {
-<<<<<<< Upstream, based on origin/master
 			throw new NotRegisteredException(String.format("The town with name '%s' is not valid.", name));
-=======
-			e.printStackTrace();
->>>>>>> cb1ac98 Fix tag issues
 		}
 
 		if (!hasTown(name))

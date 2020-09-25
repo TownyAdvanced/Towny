@@ -335,8 +335,6 @@ public class TownyEntityMonitorListener implements Listener {
 					} else {
 						defenderResident.getAccount().withdraw(price, "Death Payment (War)");
 						TownyMessaging.sendMsg(defenderPlayer, Translation.of("msg_you_lost_money", TownyEconomyHandler.getFormattedBalance(price)));
-						defenderResident.getAccount().withdraw(price, "Death Payment (War)");
-						TownyMessaging.sendMsg(defenderPlayer, String.format(TownySettings.getLangString("msg_you_lost_money"), TownyEconomyHandler.getFormattedBalance(price)));
 					}
 				}
 

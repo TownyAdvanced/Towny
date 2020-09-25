@@ -702,7 +702,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				if (!loadResident(resident, rs)) {
 					System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 					return false;
-
 				}
 				
 				if (resident.hasUUID())

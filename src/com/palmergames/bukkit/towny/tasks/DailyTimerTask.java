@@ -197,6 +197,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			ListIterator<Town> townItr = towns.listIterator();
 			Town town;
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 			while (townItr.hasNext()) {
 				town = townItr.next();
@@ -206,7 +207,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * exists.
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
-				if (universe.getDataSource().hasTown(town.getName())) {
+				if (townyUniverse.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
 					if (TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax()) {
@@ -251,16 +252,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							localNewlyDelinquentTowns.add(town.getName());		
 							town.removeNation();
 						} else {
-							//Remove town from nation
-							try {
-								localNewlyBankruptTowns.add(town.getName());
-								nation.removeTown(town);
-							} catch (EmptyNationException e) {
-								// Always has 1 town (capital) so ignore
-							} catch (NotRegisteredException ignored) {
-							}
-							universe.getDataSource().saveTown(town);
-							universe.getDataSource().saveNation(nation);
+							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 						}
 					}
 				}
@@ -425,7 +417,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws TownyException if there is a error with Towny
 	 */
 	public void collectTownCosts() throws EconomyException, TownyException {
-		List<Town> towns = new ArrayList<>(universe.getDataSource().getTowns());
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -436,7 +429,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.getDataSource().hasTown(town.getName())) {
+			if (townyUniverse.getDataSource().hasTown(town.getName())) {
 
 				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
@@ -470,7 +463,6 @@ public class DailyTimerTask extends TownyTimerTask {
 								delinquentTowns.add(town.getName());
 							}
 						}
-
 					} else if (upkeep < 0) {						
 						// Negative upkeep
 						if (TownySettings.isUpkeepPayingPlots()) {

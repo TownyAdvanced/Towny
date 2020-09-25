@@ -715,13 +715,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-<<<<<<< Upstream, based on origin/master
-=======
-				
-				line = keys.get("mayor");
-				if (line != null)
-					town.setMayor(getResident(line));
->>>>>>> 75334a7 Cleanup/Territory renameRemove unused imports
 
 				line = "townBoard";
 				town.setBoard(keys.get("townBoard"));

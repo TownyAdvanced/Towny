@@ -3627,23 +3627,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				return;
 			}
 			
-			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
-				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
-
-			//If town is bankrupt, clear some debt
-			if(town.isBankrupt()) {
-				if(amount >= town.getDebtAccount().getHoldingBalance()) {
-					//Full debt repayment
-					town.getAccount().setBalance(amount - town.getDebtAccount().getHoldingBalance(), "Debt repayment");
-					town.getDebtAccount().setBalance(0, "Debt Repayment");
-					plugin.resetCache(); //Allow perms change to take effect immediately
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_debts_cleared"), town.getFormattedName()));
-				} else {
-					//Partial debt repayment
-					town.getDebtAccount().pay(amount, "Debt repayment");
-					town.getAccount().setBalance(0, "Debt repayment");
-				}
-			}
+			// Deposit into town.
+			town.depositToBank(resident, amount);
+			
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {

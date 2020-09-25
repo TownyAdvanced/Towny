@@ -3,9 +3,6 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
-import com.palmergames.bukkit.towny.object.economy.AbstractAccount;
-import com.palmergames.bukkit.towny.object.economy.Account;
-import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import org.bukkit.World;
 
 /**
@@ -41,4 +38,5 @@ public class EconomyAccount extends Account {
 	public World getWorld() {
 		return world;
 	}
+
 }

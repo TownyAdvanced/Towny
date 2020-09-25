@@ -479,6 +479,7 @@ public class PlayerCacheUtil {
 				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 				return false;
 			}
+
 		}
 
 		// Plot Permissions

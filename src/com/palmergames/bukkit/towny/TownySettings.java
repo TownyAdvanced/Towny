@@ -2967,6 +2967,7 @@ public class TownySettings {
 	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
+		
 	}
 
 	public static boolean isTownBankruptcyEnabled() {

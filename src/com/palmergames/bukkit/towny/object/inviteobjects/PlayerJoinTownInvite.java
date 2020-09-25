@@ -3,63 +3,17 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-<<<<<<< Upstream, based on origin/master
-=======
-import com.palmergames.bukkit.towny.invites.Invite;
-<<<<<<< Upstream, based on origin/master
-import com.palmergames.bukkit.towny.invites.InviteReceiver;
-import com.palmergames.bukkit.towny.invites.InviteSender;
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
-=======
->>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.command.CommandSender;
 
-<<<<<<< Upstream, based on origin/master
 public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
-=======
-public class PlayerJoinTownInvite implements Invite {
 
-	private final String directSender;
-	private final Resident receiver;
-	private final Town sender;
->>>>>>> 3e8e9e5 town bankruptcy - fixing merge issues
-
-<<<<<<< Upstream, based on origin/master
 	public PlayerJoinTownInvite(CommandSender directSender, Resident receiver, Town sender) {
 		super(directSender, receiver, sender);
-=======
-	public PlayerJoinTownInvite(String directSender, InviteSender sender, InviteReceiver receiver) {
-		this.directSender = directSender;
-		this.sender = sender;
-		this.receiver = receiver;
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 	}
 
-<<<<<<< Upstream, based on origin/master
-=======
-	private String directSender;
-	private InviteReceiver receiver;
-	private InviteSender sender;
-
-	@Override
-	public String getDirectSender() {
-		return directSender;
-	}
-
-	@Override
-	public InviteReceiver getReceiver() {
-		return receiver;
-	}
-
-	@Override
-	public InviteSender getSender() {
-		return sender;
-	}
-	
->>>>>>> bc10475 Refactor things that are useless and/or serve no purpose, and adjust naming.
 	@Override
 	public void accept() throws TownyException {
 		Resident resident = getReceiver();

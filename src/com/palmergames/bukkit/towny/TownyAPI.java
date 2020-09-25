@@ -4,10 +4,9 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Residence;
+import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -115,7 +114,7 @@ public class TownyAPI {
     }
     
     /**
-     * Gets all online {@link Player}s for a specific {@link Residence}.
+     * Gets all online {@link Player}s for a specific {@link ResidentList}.
      *
      * @param owner {@link ResidentList} of which you want all the online {@link Player}s.
      * @return {@link List} of all online {@link Player}s in the specified {@link ResidentList}.
