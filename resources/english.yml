@@ -1159,3 +1159,6 @@ msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrup
 msg_payed_nation_tax: '&bPayed nation tax of %s'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
 msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
+msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
+msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
+msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'

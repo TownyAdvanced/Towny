@@ -1715,13 +1715,14 @@ public enum ConfigNodes {
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
 	
-	ECO_BANKRUPTCY("economy.bankruptcy", "", 
+	ECO_BANKRUPTCY("economy.bankruptcy", "", "", 
 			"# The Bankruptcy system in Towny will make it so that when a town cannot pay their upkeep costs,",
 			"# rather than being deleted the towns will go into debt. Debt is capped based on the Town's costs",
 			"# or overriden with the below settings."),
 	ECO_BANKRUPTCY_ENABLED(
 			"economy.bankruptcy.enabled",
 			"false",
+			"",
 			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
 			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
 			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
@@ -1752,14 +1753,14 @@ public enum ConfigNodes {
 	ECO_BANKRUPTCY_UPKEEP(
 			"economy.bankruptcy.upkeep",
 			"",
-			"",
-			"# When bankruptcy is enabled towns that cannot pay will go into debt to pay the upkeep."),
+			""),
 	ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP(
 			"economy.bankruptcy.upkeep.delete_towns_that_reach_debt_cap",
 			"false",
 			"",
 			"# If a town has reached their debt cap and is unable to pay the upkeep with debt,",
 			"# will Towny delete them?"),
+	ECO_BANKRUPTCY_NATION("economy.bankruptcy.nation_tax", "", ""),
 	ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX(
 			"economy.bankruptcy.nation_tax.do_bankrupt_towns_pay_nation_tax",
 			"false",
