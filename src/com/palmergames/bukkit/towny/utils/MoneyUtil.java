@@ -15,7 +15,7 @@ public class MoneyUtil {
 	 */
 	public static double getEstimatedValueOfTown(Town town) {
 		return TownySettings.getNewTownPrice() // New Town cost. 
-				+ (town.getTownBlocks().size() * TownySettings.getClaimPrice()) // Claimed land costs. 
+				+ ((town.getTownBlocks().size() - 1) * TownySettings.getClaimPrice()) // Claimed land costs. (-1 because the homeblock comes with the NewTownPrice.) 
 				+ (town.getAllOutpostSpawns().size() * (TownySettings.getOutpostCost() - TownySettings.getClaimPrice())); // Outposts costs. 
 	}
 }

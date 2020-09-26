@@ -193,6 +193,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		
 		if (nation.getTaxes() > 0) {
 
+			double taxAmount = nation.getTaxes();
 			List<String> localNewlyDelinquentTowns = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			ListIterator<Town> townItr = towns.listIterator();
@@ -210,51 +211,55 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep())
 						continue;
-					if (TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax()) {
-						//Bankruptcy enabled && Towns will go into debt to pay nation tax. 
-						//Bankrupt town if it cannot pay.
-						boolean townWasBankrupt = town.isBankrupt();
-						double actualTaxPayment = town.getAccount().getHoldingBalance() + town.getAccount().getDebtCap();
-						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-
-						if (town.getAccount().withdraw(nation.getTaxes(), "Nation Tax to " + nation.getName())) {
-							nation.getAccount().deposit(nation.getTaxes(), "Nation Tax from " + town.getName());
-						} else {
-							town.getAccount().withdraw(actualTaxPayment, "Nation Tax to " + nation.getName());
-							nation.getAccount().deposit(actualTaxPayment, "Nation Tax from " + town.getName());
-						}
-
-						if (!townWasBankrupt && town.isBankrupt()) {
-							town.setOpen(false);
-							universe.getDataSource().saveTown(town);
-							localNewlyDelinquentTowns.add(town.getName());
-						}
-
+					if (town.getAccount().canPayFromHoldings(taxAmount)) {
+					// Town is able to pay the nation's tax.
+						town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 					} else {
-						// Bankruptcy disabled || Bankruptcy enabled but towns are not allowed to go into debt to pay nationtax.
-						if (!town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
+					// Town is unable to pay the nation's tax.
+						if (!TownySettings.isTownBankruptcyEnabled() || (TownySettings.isTownBankruptcyEnabled() && !TownySettings.doBankruptTownsPayNationTax())) {
+						// Bankruptcy disabled, remove town for not paying nation tax.
 							localNewlyDelinquentTowns.add(town.getName());		
 							town.removeNation();
+							TownyMessaging.sendTownMessagePrefixed(town, Translation.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 						} else {
-							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+						// Bankruptcy enabled, 
+							boolean townWasBankrupt = town.isBankrupt();
+							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+							
+							if (TownySettings.doBankruptTownsPayNationTax()) {
+							// Nations can take money from towns and put them further into debt.
+								if (Math.abs(town.getAccount().getHoldingBalance()) + taxAmount > town.getAccount().getDebtCap()) {									
+									taxAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());									
+								}
+
+								town.getAccount().withdraw(taxAmount, "Nation Tax to " + nation.getName());
+								nation.getAccount().deposit(taxAmount, "Nation Tax from " + town.getName());
+								TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+
+								// Check if the town was newly bankrupted.
+								if (!townWasBankrupt && town.isBankrupt()) {
+									town.setOpen(false);
+									universe.getDataSource().saveTown(town);
+									localNewlyDelinquentTowns.add(town.getName());
+								}
+							}
 						}
 					}
 				}
 			}
 
-			if(TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax()) {
-				//Towns go into the bankrupt state
-				if (localNewlyDelinquentTowns.size() == 1)
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_bankrupt_by_nation_tax", ChatTools.list(localNewlyDelinquentTowns)));
-				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyDelinquentTowns, Translation.of("msg_town_bankrupt_by_nation_tax_multiple")));
-			} else {
-				//Towns get removed from nation
-				if (localNewlyDelinquentTowns.size() == 1)
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_couldnt_pay_tax", ChatTools.list(localNewlyDelinquentTowns), "nation"));
-				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyDelinquentTowns, Translation.of("msg_couldnt_pay_nation_tax_multiple")));
+			String msg1 = "msg_couldnt_pay_tax";
+			String msg2 = "msg_couldnt_pay_nation_tax_multiple";
+			if (TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax()) { 
+				msg1 = "msg_town_bankrupt_by_nation_tax";
+				msg2 = "msg_town_bankrupt_by_nation_tax_multiple";
 			}
+			
+			if (localNewlyDelinquentTowns.size() == 1)
+				TownyMessaging.sendNationMessagePrefixed(nation, Translation.of(msg1, ChatTools.list(localNewlyDelinquentTowns), Translation.of("nation_sing")));
+			else
+				TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localNewlyDelinquentTowns, msg2));
 		}
 
 	}
@@ -425,8 +430,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (upkeep > 0) {
 						// Town is paying upkeep
 						if (TownySettings.isTownBankruptcyEnabled()) {
-							boolean townWasBankrupt = town.isBankrupt();
 							//Bankruptcy enabled - Bankrupt town if it cannot pay
+							boolean townWasBankrupt = town.isBankrupt();
 							town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
 							town.getAccount().withdraw(upkeep, "Town Upkeep");
 							if(!townWasBankrupt && town.isBankrupt()) {

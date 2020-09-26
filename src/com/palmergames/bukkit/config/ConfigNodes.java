@@ -1631,6 +1631,8 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
+	
+	ECO_BANKRUPTCY("economy.bankruptcy", "", ""),
 	ECO_BANKRUPTCY_ENABLED(
 			"economy.bankruptcy.enabled",
 			"false",
