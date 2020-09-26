@@ -187,6 +187,12 @@ public class War {
 	 */
 	public void start() {
 		
+		warZone.clear();
+		warringNations.clear();
+		warringTowns.clear();
+		townScores.clear();
+		warTaskIds.clear();
+		
 		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
 		Bukkit.getServer().getPluginManager().callEvent(preEvent);
 		if (preEvent.getWarSpoils() != 0.0)

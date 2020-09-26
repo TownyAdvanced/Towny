@@ -749,7 +749,7 @@ public class TownySettings {
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
-		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, fallenNation.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), String.valueOf(n), fallenNation.getName()));
 	}
 	
 	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
