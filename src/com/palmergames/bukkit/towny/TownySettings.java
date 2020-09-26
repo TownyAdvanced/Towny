@@ -2967,19 +2967,34 @@ public class TownySettings {
 	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
-		
 	}
 
+	public static void incrementUUIDCount() {
+		uuidCount++;
+	}
+	
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
-	
-	public static boolean doBankruptTownsPayNationTax() {
-		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
+
+	public static double getDebtCapMaximum() {
+		return getDouble(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_MAXIMUM);
 	}
 	
-	public static void incrementUUIDCount() {
-		uuidCount++;
+	public static double getDebtCapOverride() {
+		return getDouble(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE);
+	}
+	
+	public static boolean isUpkeepDeletingTownsThatReachDebtCap() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP);
+	}
+	
+	public static boolean isNationTaxKickingTownsThatReachDebtCap() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP);
+	}
+
+	public static boolean doBankruptTownsPayNationTax() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
 	}
 }
 

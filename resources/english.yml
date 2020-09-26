@@ -1158,3 +1158,4 @@ msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankr
 msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
 msg_payed_nation_tax: '&bPayed nation tax of %s'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
+msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
