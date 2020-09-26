@@ -210,7 +210,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 					} else {
 					// Town is unable to pay the nation's tax.
-						if (!TownySettings.isTownBankruptcyEnabled() || (TownySettings.isTownBankruptcyEnabled() && !TownySettings.doBankruptTownsPayNationTax())) {
+						if (!TownySettings.isTownBankruptcyEnabled() || !TownySettings.doBankruptTownsPayNationTax()) {
 						// Bankruptcy disabled, remove town for not paying nation tax, 
 						// OR Bankruptcy enabled but towns aren't allowed to use debt to pay nation tax. 
 							localNewlyDelinquentTowns.add(town.getName());		
@@ -226,7 +226,6 @@ public class DailyTimerTask extends TownyTimerTask {
 						if (town.getAccount().getHoldingBalance() - taxAmount < town.getAccount().getDebtCap() * -1) {
 						// Towns that would go over their debtcap to pay nation tax, need the amount they pay reduced to what their debt cap can cover.
 						// This will result in towns that become fully indebted paying 0 nation tax eventually.
-							taxAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
 
 							if (TownySettings.isNationTaxKickingTownsThatReachDebtCap()) {
 							// Alternatively, when configured, a nation will kick a town that  
@@ -236,6 +235,8 @@ public class DailyTimerTask extends TownyTimerTask {
 								TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(nation.getTaxes())));
 								continue;
 							}
+							
+							taxAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
 						}
 
 						// Pay the nation tax with at least some amount of debt.
@@ -450,16 +451,16 @@ public class DailyTimerTask extends TownyTimerTask {
 							if (town.getAccount().getHoldingBalance() - upkeep < town.getAccount().getDebtCap() * -1) {
 							// The town will exceed their debt cap to pay the upkeep.
 							// Eventually when the cap is reached they will pay 0 upkeep.
-								double trueUpkeep = upkeep;
-								upkeep = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());							
+													
 								if (TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
 								// Alternatively, if configured, towns will not be allowed to exceed
 								// their debt and be deleted from the server for non-payment finally.
-									TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(trueUpkeep)));
+									TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 									universe.getDataSource().removeTown(town);
 									delinquentTowns.add(town.getName());
 									continue;
-								}								
+								}
+								upkeep = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
 							}
 							
 							// Finally pay the upkeep or the modified upkeep up to the debtcap. 
