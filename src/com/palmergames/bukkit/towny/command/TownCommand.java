@@ -649,6 +649,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								
+								if (Towny.isSpigot) {
+									TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
+									return;
+								}
+								
 								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {

@@ -4961,3 +4961,5 @@ v0.92.0.11:
     - If People should keep their inventories on death in an allied town.
     - Is not guaranteed to work with other keep inventory plugins!
     - Closes #3859.
+  - /t outpost list now generates a clickable/hoverable list for easy interaction.
+    - Closes #3826.

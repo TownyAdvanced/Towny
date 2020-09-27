@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -14,7 +15,9 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -276,5 +279,67 @@ public class TownySpigotMessaging {
 		// Page navigation
 		TextComponent pageFooter = getPageNavigationFooter("nation", page, total);
 		sender.spigot().sendMessage(pageFooter);
+	}
+	
+	public static void sendSpigotOutpostList(Player player, Town town, int page, int total) {
+		int outpostsCount = town.getAllOutpostSpawns().size();
+		int iMax = Math.min(page * 10, outpostsCount);
+		List<Location> outposts = town.getAllOutpostSpawns();
+		
+		BaseComponent[] outpostsFormatted;
+		
+		if ((page * 10) > outpostsCount) {
+			outpostsFormatted = new BaseComponent[outpostsCount % 10];
+		} else {
+			outpostsFormatted = new BaseComponent[10];
+		}
+		
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Location outpost = outposts.get(i);
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
+			if (tb == null)
+				continue;
+			TextComponent line = new TextComponent(Integer.toString(i + 1));
+			line.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+			TextComponent dash = new TextComponent(" - ");
+			dash.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
+			TextComponent outpostName = new TextComponent(tb.getName());
+			outpostName.setColor(net.md_5.bungee.api.ChatColor.GREEN);
+			TextComponent worldName = new TextComponent(outpost.getWorld().getName());
+			worldName.setColor(net.md_5.bungee.api.ChatColor.BLUE);
+			TextComponent coords = new TextComponent("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")");
+			coords.setColor(net.md_5.bungee.api.ChatColor.BLUE);
+
+			line.addExtra(dash);
+			if (!tb.getName().equalsIgnoreCase("")) {
+				line.addExtra(outpostName);
+				line.addExtra(dash);
+			}
+			line.addExtra(worldName);
+			line.addExtra(dash);
+			line.addExtra(coords);
+			
+			String spawnCost = "0.00";
+
+			if (TownySettings.isUsingEconomy())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+			String hoverText = Translation.of("msg_click_spawn", tb.getName().equalsIgnoreCase("") ? "outpost" : tb.getName()) + "\n" + spawnCost;
+			TextComponent hoverComponent = new TextComponent(hoverText);
+			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+			
+			adaptForHover(line).setHoverText(hoverText);
+			line.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:town outpost " + (i + 1)));
+			outpostsFormatted[i % 10] = line;
+		}
+		
+		player.sendMessage(ChatTools.formatTitle(Translation.of("outpost_plu")));
+		for (BaseComponent baseComponent : outpostsFormatted) {
+			player.spigot().sendMessage(baseComponent);
+		}
+		
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("outpost", page, total);
+		player.spigot().sendMessage(pageFooter);
 	}
 }
