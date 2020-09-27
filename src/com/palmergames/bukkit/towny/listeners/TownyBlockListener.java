@@ -370,7 +370,7 @@ public class TownyBlockListener implements Listener {
 			}
 			
 			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && townyWorld.isUsingPlotManagementWildRevert()) {
-				TownyRegenAPI.beginProtectionRegenTask(block, count);
+				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 			}
 		}
 		
