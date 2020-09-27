@@ -458,15 +458,16 @@ public class SQL_Schema {
     	try {
     		DatabaseMetaData md = cntx.getMetaData();
         	ResultSet rs = md.getColumns(null, null, table, column);
+        	if (!rs.next())
+        		return;
         	
-        	if (rs.next()) {    		
-	    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
-	    		
-	    		Statement s = cntx.createStatement();
-	    		s.executeUpdate(update);
-	    		
-	    		TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
-        	}
+    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(update);
+    		
+    		TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
+        	
     	} catch (SQLException ee) {
     		if (ee.getErrorCode() != 1060)
     			TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
