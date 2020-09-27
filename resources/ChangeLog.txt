@@ -5009,3 +5009,4 @@ v0.92.0.11:
     - default: false
     - If a town can no longer pay their nation tax with debt because they have reach their debtcap, are they kicked from the nation?
   - Language files bumped to 0.86.
+  - Small refactor of the cleanup() used in the sql_schema, fixes a bit of spam saying Towny couldn't drop a column that doesn't exist.
