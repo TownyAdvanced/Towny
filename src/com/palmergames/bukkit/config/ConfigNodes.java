@@ -608,21 +608,35 @@ public enum ConfigNodes {
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
 			"",
-			"# If People should keep their inventories on death in a town",
+			"# If People should keep their inventories on death in a town.",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_OWN_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_own_town",
+			"false",
+			"",
+			"# If People should keep their inventories on death in their own town.",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ALLIED_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_allied_town",
+			"false",
+			"",
+			"# If People should keep their inventories on death in an allied town.",
 			"# Is not guaranteed to work with other keep inventory plugins!"
 	),
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA(
 		"global_town_settings.keep_inventory_on_death_in_arena",
 		"false",
 		"",
-		"# If People should keep their inventories on death in an arena townblock",
+		"# If People should keep their inventories on death in an arena townblock.",
 		"# Is not guaranteed to work with other keep inventory plugins!"
 	),
 	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_experience_on_death_in_town",
 			"false",
 			"",
-			"# If People should keep their experience on death in a town",
+			"# If People should keep their experience on death in a town.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
 	GTOWN_MAX_PLOT_PRICE_COST(

@@ -187,6 +187,12 @@ public class War {
 	 */
 	public void start() {
 		
+		warZone.clear();
+		warringNations.clear();
+		warringTowns.clear();
+		townScores.clear();
+		warTaskIds.clear();
+		
 		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
 		Bukkit.getServer().getPluginManager().callEvent(preEvent);
 		if (preEvent.getWarSpoils() != 0.0)
@@ -389,13 +395,17 @@ public class War {
 	 */
 	public void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
 
-		String[] pointMessage = {"error"};
+		String pointMessage = "";
 		if (fallenObject instanceof Nation)
-			pointMessage = TownySettings.getWarTimeScoreNationEliminatedMsg(town, n, (Nation)fallenObject);
+			pointMessage = Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, ((Nation)fallenObject).getName());
 		else if (fallenObject instanceof Town)
-			pointMessage = TownySettings.getWarTimeScoreTownEliminatedMsg(town, n, (Town)fallenObject, townBlocksFallen);
-		else if (fallenObject instanceof TownBlock){	
-			pointMessage = TownySettings.getWarTimeScoreTownBlockEliminatedMsg(town, n, (TownBlock)fallenObject);
+			pointMessage = Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, ((Town)fallenObject).getName(), townBlocksFallen);
+		else if (fallenObject instanceof TownBlock){
+			String townBlockName = "";
+			try {
+				townBlockName = "[" + ((TownBlock)fallenObject).getTown().getName() + "](" + ((TownBlock)fallenObject).getCoord().toString() + ")";
+			} catch (NotRegisteredException ignored) {}
+				pointMessage = Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
 		}
 
 		townScores.put(town, townScores.get(town) + n);

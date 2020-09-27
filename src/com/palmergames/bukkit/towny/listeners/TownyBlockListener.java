@@ -202,14 +202,15 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		List<Block> blocks = event.getBlocks();
-		if (testBlockMove(event.getBlock(), event.getDirection(), true))
+		if (testBlockMove(event.getBlock(), event.getDirection()))
 			event.setCancelled(true);
 
+		List<Block> blocks = event.getBlocks();
+		
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection(), false))
+				if (testBlockMove(block, event.getDirection()))
 					event.setCancelled(true);
 			}
 		}
@@ -223,7 +224,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (testBlockMove(event.getBlock(), event.getDirection(), false))
+		if (testBlockMove(event.getBlock(), event.getDirection()))
 			event.setCancelled(true);
 		
 		List<Block> blocks = event.getBlocks();
@@ -231,27 +232,23 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection(), false))
+				if (testBlockMove(block, event.getDirection()))
 					event.setCancelled(true);
 			}
 		}
 	}
 
 	/**
-	 * testBlockMove
+	 * Decides whether blocks moved by pistons follow the rules.
 	 * 
-	 * @param block - block that is being moved, or if pistonBlock is true the piston itself
-	 * @param direction - direction the blocks are going
-	 * @param pistonBlock - test is slightly different when the piston block itself is being checked.	 * 
+	 * @param block - block that is being moved.
+	 * @param direction - direction the piston is facing.
+	 * 
+	 * @return true if block is able to be moved. 
 	 */
-	private boolean testBlockMove(Block block, BlockFace direction, boolean pistonBlock) {
+	private boolean testBlockMove(Block block, BlockFace direction) {
 
-		Block blockTo = null;
-		if (!pistonBlock)
-			blockTo = block.getRelative(direction);
-		else {
-			blockTo = block.getRelative(direction.getOppositeFace());
-		}
+		Block blockTo = block.getRelative(direction);
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
@@ -373,7 +370,7 @@ public class TownyBlockListener implements Listener {
 			}
 			
 			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && townyWorld.isUsingPlotManagementWildRevert()) {
-				TownyRegenAPI.beginProtectionRegenTask(block, count);
+				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 			}
 		}
 		

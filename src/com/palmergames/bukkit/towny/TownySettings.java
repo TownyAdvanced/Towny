@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
@@ -747,28 +746,6 @@ public class TownySettings {
 	}
 
 	//Need other languages Methods
-	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
-
-		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, fallenNation.getName()));
-	}
-	
-	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
-
-		return parseString(Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, fallenTown.getName(), fallenTownBlocks));
-	}
-	
-	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
-
-		String townBlockName = "";
-		try {
-			Town fallenTown = fallenTownBlock.getTown();
-			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getCoord().toString() + ")";
-		} catch (NotRegisteredException e) {
-			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
-		}
-		return parseString(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName));
-	}
-	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
 
 		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), dead.getName(), n, attackingTown.getName()));
@@ -2692,6 +2669,14 @@ public class TownySettings {
 
 	public static boolean getKeepInventoryInTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN);
+	}
+	
+	public static boolean getKeepInventoryInOwnTown() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_OWN_TOWN);
+	}
+	
+	public static boolean getKeepInventoryInAlliedTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ALLIED_TOWN);
 	}
 	
 	public static boolean getKeepInventoryInArenas() {

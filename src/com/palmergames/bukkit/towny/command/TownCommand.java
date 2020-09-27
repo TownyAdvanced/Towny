@@ -649,6 +649,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								
+								if (Towny.isSpigot) {
+									TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
+									return;
+								}
+								
 								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
@@ -3538,7 +3544,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
 			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
 			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 1)
+			if (available - selection.size() < 0)
 				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 		}
 
