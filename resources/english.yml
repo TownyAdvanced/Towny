@@ -1,5 +1,5 @@
 name: Towny
-version: 0.85
+version: 0.86
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1143,3 +1143,22 @@ msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group 
 
 # Added in 0.85
 msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
+
+#Added in 0.86
+status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
+msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
+msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
+msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
+msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
+msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
+msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
+msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
+msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
+msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
+msg_payed_nation_tax: '&bPayed nation tax of %s'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
+msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
+msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
+msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
+msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'

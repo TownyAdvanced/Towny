@@ -73,9 +73,18 @@ public class BankAccount extends Account {
 	/**
 	 * The maximum amount of debt this account can have.
 	 * 
+	 * Can be overriden by the config debt_cap override.
+	 * Can be overriden by the config debt_cap maximum. 
+	 * 
 	 * @return The max amount of debt for this account.
 	 */
 	public double getDebtCap() {
+		if (TownySettings.getDebtCapOverride() != 0.0)
+			return TownySettings.getDebtCapOverride();
+		
+		if (TownySettings.getDebtCapMaximum() != 0.0)
+			return Math.min(debtCap, TownySettings.getDebtCapMaximum());
+		
 		return debtCap;
 	}
 

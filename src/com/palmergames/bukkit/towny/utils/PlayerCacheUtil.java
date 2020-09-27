@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -377,6 +378,25 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
+		// Allow admins to have ALL permissions
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
+			return true;
+
+		//If town is bankrupt, nobody can build
+		TownBlock townBlock = null;
+		Town targetTown = null;
+		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
+			try {
+				townBlock = pos.getTownBlock();
+				targetTown = townBlock.getTown();
+				if(targetTown.getAccount().isBankrupt())  {
+					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
+					return false;
+				}
+			} catch (NotRegisteredException | EconomyException ignored) {
+			}
+		}
 
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
@@ -394,19 +414,17 @@ public class PlayerCacheUtil {
 			return false;
 		}
 
-		TownBlock townBlock = null;
 		Town playersTown = null;
-		Town targetTown = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		try {
 			playersTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 		} catch (NotRegisteredException e) {
 		}
 
 		try {
-			townBlock = pos.getTownBlock();
-			targetTown = townBlock.getTown();
+			if(townBlock == null)
+				townBlock = pos.getTownBlock();
+			if(targetTown == null)
+				targetTown = townBlock.getTown();
 		} catch (NotRegisteredException e) {
 
 			try {
@@ -460,11 +478,6 @@ public class PlayerCacheUtil {
 			}
 
 		}
-
-		// Allow admins to have ALL permissions over towns.
-		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
-			return true;
-
 
 		// Plot Permissions
 

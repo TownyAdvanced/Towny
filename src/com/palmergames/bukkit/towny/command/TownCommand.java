@@ -1489,6 +1489,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
 
+				if(town.isBankrupt())
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
+
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
@@ -3098,6 +3101,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+
+		if (town.isBankrupt())
+			throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_invite"));
+
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
 			if (!town.hasSpawn())
@@ -3334,6 +3341,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
+
+				if (town.isBankrupt())
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
+
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				if (!world.isUsingTowny()) {

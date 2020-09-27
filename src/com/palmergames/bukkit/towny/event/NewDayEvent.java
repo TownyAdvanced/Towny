@@ -14,9 +14,9 @@ public class NewDayEvent extends Event{
 	private final double nationUpkeepCollected;
 	private final long time;
 
-	public NewDayEvent(final List<String> fallenTowns, final List<String> fallenNations, final double townUpkeepCollected, final double nationUpkeepCollected, final long time) {
+	public NewDayEvent(final List<String> delinquentTowns, final List<String> fallenNations, final double townUpkeepCollected, final double nationUpkeepCollected, final long time) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.fallenTowns = fallenTowns;
+		this.fallenTowns = delinquentTowns;
 		this.fallenNations = fallenNations;
 		this.townUpkeepCollected = townUpkeepCollected;
 		this.nationUpkeepCollected = nationUpkeepCollected;
