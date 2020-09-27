@@ -449,7 +449,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	
     	for (ColumnUpdate update : cleanups)
-    		dropTable(cntx, db_name, update.getTable(), update.getColumn());
+    		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
     }
     
     /**
@@ -460,7 +460,7 @@ public class SQL_Schema {
      * @param table table name.
      * @param column column to drop from the given table.
      */
-    private static void dropTable(Connection cntx, String db_name, String table, String column) {
+    private static void dropColumn(Connection cntx, String db_name, String table, String column) {
     	String update;
     	
     	try {
