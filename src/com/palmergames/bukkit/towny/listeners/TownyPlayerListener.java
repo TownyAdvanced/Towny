@@ -956,37 +956,46 @@ public class TownyPlayerListener implements Listener {
 		boolean keepInventory = event.getKeepInventory();
 		boolean keepLevel = event.getKeepLevel();
 		Player player = event.getEntity();
+		Resident resident = null;
+		try {
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException ignored) {}
 		Location deathloc = player.getLocation();
-		if (TownySettings.getKeepInventoryInTowns()) {
-			if (!keepInventory) { // If you don't keep your inventory via any other plugin or the server
-				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has a town, and we keep inventory in towns, deathloc in a town. Do it!
-						event.setKeepInventory(true);
-						event.getDrops().clear();
-					}
-				}
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
+		if (tb != null && tb.hasTown()) {
+			if (TownySettings.getKeepExperienceInTowns() && !keepLevel) {
+				event.setKeepLevel(true);
+				event.setDroppedExp(0);
 			}
-		}
-		if (TownySettings.getKeepExperienceInTowns()) {
-			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
-				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
-						event.setKeepLevel(true);
-						event.setDroppedExp(0);
-					}
-				}
 
+			if (TownySettings.getKeepInventoryInTowns() && !keepInventory) {
+				event.setKeepInventory(true);
+				event.getDrops().clear();
+				keepInventory = true;
 			}
-		}
-		if (TownySettings.getKeepInventoryInArenas()) {
-			if (!keepInventory) {
-				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
-				if (tb != null && tb.getType() == TownBlockType.ARENA) {
+
+			if (resident != null && resident.hasTown() && !keepInventory) {
+				Town town = null;
+				Town tbTown = null;
+				try {
+					town = resident.getTown();
+					tbTown = tb.getTown();
+				} catch (NotRegisteredException ignored) {}
+				if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town)) {
 					event.setKeepInventory(true);
 					event.getDrops().clear();
+					keepInventory = true;
 				}
+				if (TownySettings.getKeepInventoryInAlliedTowns() && !keepInventory && tbTown.isAlliedWith(town)) {
+					event.setKeepInventory(true);
+					event.getDrops().clear();
+					keepInventory = true;
+				}
+			}
+
+			if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA) {
+				event.setKeepInventory(true);
+				event.getDrops().clear();
 			}
 		}
 	}
