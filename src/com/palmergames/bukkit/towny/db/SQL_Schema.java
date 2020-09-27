@@ -4,7 +4,9 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -431,7 +433,7 @@ public class SQL_Schema {
 			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
 		}
     }
-
+    
     /**
      * Call after loading to remove any old database elements we no longer need.
      *
@@ -440,98 +442,65 @@ public class SQL_Schema {
      */
     public static void cleanup(Connection cntx, String db_name) {
     	
-		/*
-		 * Update RESIDENTS.
-		 */
-//        String resident_update;
-//
-//        try {
-//
-//            resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
-//                    + "DROP COLUMN `townBlocks`";
-//
-//            Statement s = cntx.createStatement();
-//            s.executeUpdate(resident_update);
-//
-//            TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-//
-//        } catch (SQLException ee) {
-//
-//            if (ee.getErrorCode() != 1060)
-//                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-//
-//        }
-
+    	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
+    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+    	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	
-    	/*
-    	 * Update TOWNS
-    	 */
-    	String town_update;
+    	for (ColumnUpdate update : cleanups)
+    		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
+    }
+    
+    /**
+     * Drops the given column from the given table, if the column is present.
+     * 
+     * @param cntx database connection.
+     * @param db_name database name.
+     * @param table table name.
+     * @param column column to drop from the given table.
+     */
+    private static void dropColumn(Connection cntx, String db_name, String table, String column) {
+    	String update;
     	
     	try {
-    		town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` " + "DROP COLUMN `residents`";
+    		DatabaseMetaData md = cntx.getMetaData();
+        	ResultSet rs = md.getColumns(null, null, table, column);
+        	if (!rs.next())
+        		return;
+        	
+    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
     		
     		Statement s = cntx.createStatement();
-    		s.executeUpdate(town_update);
+    		s.executeUpdate(update);
     		
-    		TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
-    		
+    		TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
+        	
     	} catch (SQLException ee) {
     		if (ee.getErrorCode() != 1060)
-    			TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-    	
+    			TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
     	}
-
-    	/*
-    	 * Update NATIONS
-    	 */
-    	String nation_update;
+    }
+    
+    private static class ColumnUpdate {
+    	private String table;
+    	private String column;
     	
-    	try {
-    		nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "DROP COLUMN `towns`";
-    		
-    		Statement s = cntx.createStatement();
-    		s.executeUpdate(nation_update);
-    		
-    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
-    		
-    	} catch (SQLException ee) {
-    		if (ee.getErrorCode() != 1060)
-    			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
-    	
+    	private ColumnUpdate(String table, String column) {
+    		this.table = table;
+    		this.column = column;
+    	}
+    	    	
+    	private String getTable() {
+    		return this.table;
     	}
     	
-    	try {
-    		nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "DROP COLUMN `assistants`";
-    		
-    		Statement s = cntx.createStatement();
-    		s.executeUpdate(nation_update);
-    		
-    		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
-    		
-    	} catch (SQLException ee) {
-    		if (ee.getErrorCode() != 1060)
-    			TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
+    	private String getColumn() {
+    		return this.column;
+    	}
     	
-    	}    	
-    	
-    	/*
-    	 * Update WORLDS 
-    	 */
-    	String world_update;
-    	
-    	try {
-    		world_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "WORLDS` " + "DROP COLUMN `towns`";
-    		
-    		Statement s = cntx.createStatement();
-    		s.executeUpdate(world_update);
-    		
-    		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
-    		
-    	} catch (SQLException ee) {
-    		if (ee.getErrorCode() != 1060)
-    			TownyMessaging.sendErrorMsg("Error updating table WORLDS :" + ee.getMessage());
-    	
-    	}    	
-	}
-}
+    	private static ColumnUpdate of(String table, String column) {
+    		return new ColumnUpdate(table, column);
+    	}
+    }
+ }
