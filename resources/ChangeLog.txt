@@ -4948,4 +4948,6 @@ v0.92.0.11:
     - Closes #4305.
   - Clear EventWar hashtable/lists & fix message.
     - Closes #3816.
-    
+  - Fix AreaSelectionTools picking up already claimed TownBlocks in the initial sweeps.
+  - Fix not being able to claim the last townblock in some situations.
+    - Closes #4342.
