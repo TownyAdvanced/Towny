@@ -4963,3 +4963,5 @@ v0.92.0.11:
     - Closes #3859.
   - /t outpost list now generates a clickable/hoverable list for easy interaction.
     - Closes #3826.
+  - Fix pistonretractevent being off by one block and testing the block behind it.
+    - Closes #4084.
