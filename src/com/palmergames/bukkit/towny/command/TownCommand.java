@@ -654,6 +654,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								
+								if (Towny.isSpigot) {
+									TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
+									return;
+								}
+								
 								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
@@ -1498,6 +1504,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
+
+				if(town.isBankrupt())
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
 				if (choice == null) choice = !town.isOpen();
 				town.setOpen(choice);
@@ -3109,6 +3118,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+
+		if (town.isBankrupt())
+			throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_invite"));
+
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
 			if (!town.hasSpawn())
@@ -3345,6 +3358,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
+
+				if (town.isBankrupt())
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
+
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				if (!world.isUsingTowny()) {
@@ -3544,7 +3561,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
 			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
 			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 1)
+			if (available - selection.size() < 0)
 				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 		}
 

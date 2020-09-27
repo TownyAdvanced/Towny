@@ -108,8 +108,11 @@ public class AreaSelectionUtil {
 					r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
-						if (out.size() < available)
-							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
+						if (out.size() < available) {
+							WorldCoord wc = new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z);
+							if (!wc.hasTownBlock())
+								out.add(wc);
+						}
 			} else {
 				throw new TownyException(Translation.of("msg_err_invalid_radius"));
 			}
@@ -154,8 +157,12 @@ public class AreaSelectionUtil {
 					r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
-						if ((x * x + z * z <= r * r) && (out.size() < available))
-							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
+						if ((x * x + z * z <= r * r) && (out.size() < available)) {
+							WorldCoord wc = new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z);
+							if (!wc.hasTownBlock())
+								out.add(wc);
+						}
+							
 			} else {
 				throw new TownyException(Translation.of("msg_err_invalid_radius"));
 			}

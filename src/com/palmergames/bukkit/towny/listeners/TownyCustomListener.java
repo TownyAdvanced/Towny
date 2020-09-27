@@ -95,7 +95,7 @@ public class TownyCustomListener implements Listener {
 								player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
 								remainingSeconds.getAndDecrement();
 								
-								if (remainingSeconds.get() == 0) {
+								if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) {
 									Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
 									playerActionTasks.remove(player);
 								}

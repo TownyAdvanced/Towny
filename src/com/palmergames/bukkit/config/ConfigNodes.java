@@ -608,21 +608,35 @@ public enum ConfigNodes {
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
 			"",
-			"# If People should keep their inventories on death in a town",
+			"# If People should keep their inventories on death in a town.",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_OWN_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_own_town",
+			"false",
+			"",
+			"# If People should keep their inventories on death in their own town.",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ALLIED_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_allied_town",
+			"false",
+			"",
+			"# If People should keep their inventories on death in an allied town.",
 			"# Is not guaranteed to work with other keep inventory plugins!"
 	),
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA(
 		"global_town_settings.keep_inventory_on_death_in_arena",
 		"false",
 		"",
-		"# If People should keep their inventories on death in an arena townblock",
+		"# If People should keep their inventories on death in an arena townblock.",
 		"# Is not guaranteed to work with other keep inventory plugins!"
 	),
 	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_experience_on_death_in_town",
 			"false",
 			"",
-			"# If People should keep their experience on death in a town",
+			"# If People should keep their experience on death in a town.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
 	GTOWN_MAX_PLOT_PRICE_COST(
@@ -1714,6 +1728,70 @@ public enum ConfigNodes {
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
+	
+	ECO_BANKRUPTCY("economy.bankruptcy", "", "", 
+			"# The Bankruptcy system in Towny will make it so that when a town cannot pay their upkeep costs,",
+			"# rather than being deleted the towns will go into debt. Debt is capped based on the Town's costs",
+			"# or overriden with the below settings."),
+	ECO_BANKRUPTCY_ENABLED(
+			"economy.bankruptcy.enabled",
+			"false",
+			"",
+			"# If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.),",
+			"# it does not get deleted, but instead goes into a 'bankrupt state'.",
+			"# While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).",
+			"# The debt has a ceiling equal to the estimated value of the town (from new town and claims costs)",
+			"# The debt can be repaid using /t deposit x.", 
+			"# Once all debt is repaid, the town immediately returns to a normal state."),
+	ECO_BANKRUPTCY_DEBT_CAP(
+			"economy.bankruptcy.debt_cap",
+			"",
+			"",
+			"# When using bankruptcy is enabled a Town a debtcap.",
+			"# The debt cap is calculated by adding the following:",
+			"# The cost of the town,",
+			"# The cost of the town's purchased townblocks,",
+			"# The cost of the town's purchased outposts."),
+	ECO_BANKRUPTCY_DEBT_CAP_MAXIMUM(
+			"economy.bankruptcy.debt_cap.maximum",
+			"0.0",
+			"",
+			"# When set to greater than 0.0, this will be used to determine every town''s maximum debt,",
+			"# overriding the above calculation if the calculation would be larger than the set maximum."),
+	ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE(
+			"economy.bankruptcy.debt_cap.override",
+			"0.0",
+			"",
+			"# When set to greater than 0.0, this setting will override all other debt calculations and maximums,",
+			"# making all towns have the same debt cap."),
+	ECO_BANKRUPTCY_UPKEEP(
+			"economy.bankruptcy.upkeep",
+			"",
+			""),
+	ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP(
+			"economy.bankruptcy.upkeep.delete_towns_that_reach_debt_cap",
+			"false",
+			"",
+			"# If a town has reached their debt cap and is unable to pay the upkeep with debt,",
+			"# will Towny delete them?"),
+	ECO_BANKRUPTCY_NATION("economy.bankruptcy.nation_tax", "", ""),
+	ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX(
+			"economy.bankruptcy.nation_tax.do_bankrupt_towns_pay_nation_tax",
+			"false",
+			"",
+			"# Will bankrupt towns pay their nation tax?",
+			"# If false towns that are bankrupt will not pay any nation tax and will leave their nation.",
+			"# If true the town will go into debt up until their debt cap is reached.",
+			"# True is recommended when using a Siege War style war/conquering system,",
+			"# otherwise conquered towns will be able to leave the nation simply by not paying the nation tax.",
+			"# False is recommended otherwise so that nations are not using abandoned towns to gather taxes."),
+	ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP(
+			"economy.bankruptcy.nation_tax.kick_towns_that_reach_debt_cap",
+			"false",
+			"",
+			"# If a town can no longer pay their nation tax with debt because they have",
+			"# reach their debtcap, are they kicked from the nation?"),
+	
 	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
 	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
 			"0.0",
