@@ -442,17 +442,25 @@ public class SQL_Schema {
      */
     public static void cleanup(Connection cntx, String db_name) {
     	
-    	List<TableUpdate> cleanups = new ArrayList<TableUpdate>();
-    	cleanups.add(TableUpdate.of("TOWNS", "residents"));
-    	cleanups.add(TableUpdate.of("TOWNS", "residents"));
-    	cleanups.add(TableUpdate.of("NATIONS", "assistants"));
-    	cleanups.add(TableUpdate.of("WORLDS", "towns"));
+    	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
+    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+    	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	
-    	for (TableUpdate update : cleanups)
-    		cleanupTable(cntx, db_name, update.getTable(), update.getColumn());
+    	for (ColumnUpdate update : cleanups)
+    		dropTable(cntx, db_name, update.getTable(), update.getColumn());
     }
     
-    private static void cleanupTable(Connection cntx, String db_name, String table, String column) {
+    /**
+     * Drops the given column from the given table, if the column is present.
+     * 
+     * @param cntx database connection.
+     * @param db_name database name.
+     * @param table table name.
+     * @param column column to drop from the given table.
+     */
+    private static void dropTable(Connection cntx, String db_name, String table, String column) {
     	String update;
     	
     	try {
@@ -474,11 +482,11 @@ public class SQL_Schema {
     	}
     }
     
-    private static class TableUpdate<Table, Column> {
+    private static class ColumnUpdate {
     	private String table;
     	private String column;
     	
-    	private TableUpdate(String table, String column) {
+    	private ColumnUpdate(String table, String column) {
     		this.table = table;
     		this.column = column;
     	}
@@ -491,8 +499,8 @@ public class SQL_Schema {
     		return this.column;
     	}
     	
-    	private static <Table,Column> TableUpdate<Table,Column> of(String table, String column) {
-    		return new TableUpdate<>(table, column);
+    	private static ColumnUpdate of(String table, String column) {
+    		return new ColumnUpdate(table, column);
     	}
     }
  }
