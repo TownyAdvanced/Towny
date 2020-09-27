@@ -4968,3 +4968,44 @@ v0.92.0.11:
   - Potential fix for #4078 (ActionBar spazzing out plot notifications.)
   - Fix explosion reverts being able to happen on top of explosion reverts causing the wrong blocks to restore.
     - Closes #4306.
+  - Big New Feature: Town Bankruptcy.
+    - When enabled in the config:
+    - Towns which cannot pay their upkeep costs will go into a bankrupt state.
+    - While bankrupt their bank will continue to pay upkeep (optional) and continue to pay nation tax (optional.)
+    - Their bank balance will go into the negatives until they hit their DebtCap.
+    - Debtcap is calculated by the cost of the town, townblock costs and outpost costs.
+    - Debtcap can optionally be capped to another number in case a town has an very high natural debtcap.
+    - Debtcap can optionally be overridden to a set number applied to all towns.
+    - While bankrupt:
+      - Towns cannot invite members.
+      - Towns cannot set their town to open status.
+      - Towns cannot claim more land.
+      - Towns cannot have anything built in their land.
+    - Towns can erase their debt by using the /t deposit command.
+  - New Config Option: economy.bankruptcy.enabled
+    - default: false
+    - If this setting is true, then if a town runs out of money (due to upkeep, nation tax etc.), it does not get deleted, but instead goes into a 'bankrupt state'.
+    - While bankrupt, the town bank account is in debt, and the town cannot expand (e.g claim, recruit, or build).
+    - The debt has a ceiling equal to the estimated value of the town (from new town and claims costs.)
+    - The debt can be repaid using /t deposit x.
+    - Once all debt is repaid, the town immediately returns to a normal state.
+  - New Config Option: economy.bankruptcy.debt_cap.maximum
+    - default: 0.0
+    - When set to greater than 0.0, this will be used to determine every town's maximum debt overriding the above calculation if the calculation would be larger than the set maximum.
+  - New Config Option: economy.bankruptcy.debt_cap.override
+    - default: 0.0
+    - When set to greater than 0.0, this setting will override all other debt calculations and maximums, making all towns have the same debt cap.
+  - New Config Option: economy.bankruptcy.upkeep.delete_towns_that_reach_debt_cap
+    - default: false
+    - If a town has reached their debt cap and is unable to pay the upkeep with debt, will Towny delete them?
+  - New Config Option: economy.bankruptcy.nation_tax.do_bankrupt_towns_pay_nation_tax
+    - default: false
+    - Will bankrupt towns pay their nation tax?
+    - If false towns that are bankrupt will not pay any nation tax and will leave their nation.
+    - If true the town will go into debt up until their debt cap is reached.
+    - True is recommended when using a Siege War style war/conquering system, otherwise conquered towns will be able to leave the nation simply by not paying the nation tax.
+    - False is recommended otherwise so that nations are not using abandoned towns to gather taxes.
+  - New Config Option: economy.bankruptcy.nation_tax.kick_towns_that_reach_debt_cap
+    - default: false
+    - If a town can no longer pay their nation tax with debt because they have reach their debtcap, are they kicked from the nation?
+  - Language files bumped to 0.86.
