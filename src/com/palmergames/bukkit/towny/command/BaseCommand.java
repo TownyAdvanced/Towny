@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -180,9 +181,9 @@ public class BaseCommand implements TabCompleter{
 	 * @param str The string to parse
 	 * @return true for "ON", false for "OFF", or null if no match.
 	 */
-	protected static Boolean parseToggleChoice(String str) {
-		if (str.equalsIgnoreCase("on")) return Boolean.TRUE;
-		else if (str.equalsIgnoreCase("off")) return Boolean.FALSE;
-		else return null;
+	protected static Optional<Boolean> parseToggleChoice(String str) {
+		if (str.equalsIgnoreCase("on")) return Optional.of(true);
+		else if (str.equalsIgnoreCase("off")) return Optional.of(false);
+		else return Optional.empty();
 	}
 }

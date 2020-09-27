@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Send a list of all towny resident help commands to player Command: /resident
@@ -387,8 +388,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		TownyPermission perm = resident.getPermissions();
 		
-		Boolean choice = null;
-		
+		Optional<Boolean> choice = Optional.empty();
 		if (newSplit.length == 2 && residentToggleChoices.contains(newSplit[0].toLowerCase())) {
 			choice = BaseCommand.parseToggleChoice(newSplit[1]);
 		}
@@ -411,21 +411,17 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
 					throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
-			}			
-			if (choice == null) choice = !perm.pvp;
-			perm.pvp = choice;
+			}
+			perm.pvp = choice.orElse(!perm.pvp);
 			// Add a task for the resident.
 			if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
-			if (choice == null) choice = !perm.fire;
-			perm.fire = choice;
+			perm.fire = choice.orElse(!perm.fire);
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {
-			if (choice == null) choice = !perm.explosion;
-			perm.explosion = choice;
+			perm.explosion = choice.orElse(!perm.explosion);
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
-			if (choice == null) choice = !perm.mobs;
-			perm.mobs = choice;
+			perm.mobs = choice.orElse(!perm.mobs);
 		} else {
 
 			resident.toggleMode(newSplit, true);
