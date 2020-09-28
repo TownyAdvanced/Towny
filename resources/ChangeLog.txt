@@ -5015,3 +5015,5 @@ v0.92.0.11:
     - Closes #4127.
   - Alter farm and wilds plots to have resident/friend build & destroy on automatically when the plot type is set.
     - As opposed to having those plot types mimic the town/resident perm line. 
+  - Fix missing switch test, solving problem with unresearched slimefun items allowing bypass of switch protections.
+    - Closes #4065.
