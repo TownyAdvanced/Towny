@@ -43,6 +43,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
@@ -60,6 +61,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -369,12 +371,42 @@ public class TownyEntityListener implements Listener {
 		}
 		// As of July 25, 2019 there is no way to get shooter of firework via crossbow.
 		// TODO: Check back here https://hub.spigotmc.org/jira/browse/SPIGOT-5201
-		if (damager.equals("FIREWORK"))
-			if (!locationCanExplode(townyWorld, entity.getLocation()) || CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(entity.getLocation())))
-				event.setCancelled(true);
+		if (damager.equals("FIREWORK") && (!locationCanExplode(townyWorld, entity.getLocation()) || CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(entity.getLocation()))))
+			event.setCancelled(true);
 			
 	}
+	
+	/**
+	 * Handles dragon fireball's cloud damage to players.
+	 * 
+	 * @param event AreaEffectCloudApplyEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
+		if (!event.getEntity().getBasePotionData().getType().equals(PotionType.UNCRAFTABLE))
+			return;
 
+		List<LivingEntity> entities = event.getAffectedEntities();
+
+		TownyWorld townyWorld = null;
+		try {
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
+		} catch (NotRegisteredException e) {
+			// Failed to fetch a world
+			return;
+		}
+		
+		for (LivingEntity entity : entities) {
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(entity.getLocation());
+			if (CombatUtil.preventPvP(townyWorld, townBlock)) {
+				event.setCancelled(true);
+			}	
+		}
+	}
+	
 	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
