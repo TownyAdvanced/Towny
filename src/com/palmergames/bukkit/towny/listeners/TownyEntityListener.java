@@ -291,7 +291,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Handles dragon fireball's cloud damage to players.
+	 * Removes dragon fireball AreaEffectClouds when they would spawn somewhere with PVP disabled.
 	 * 
 	 * @param event AreaEffectCloudApplyEvent
 	 */
@@ -306,8 +306,6 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
 			return;
 
-		List<LivingEntity> entities = event.getAffectedEntities();
-
 		TownyWorld townyWorld = null;
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
@@ -315,13 +313,12 @@ public class TownyEntityListener implements Listener {
 			// Failed to fetch a world
 			return;
 		}
-		
-		for (LivingEntity entity : entities) {
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(entity.getLocation());
-			if (CombatUtil.preventPvP(townyWorld, townBlock)) {
-				event.setCancelled(true);
-			}	
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
+		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
+			event.setCancelled(true);
+			event.getEntity().remove();
 		}
+
 	}
 	
 	/**
