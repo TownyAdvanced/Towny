@@ -2,12 +2,15 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TownyWorld extends TownyObject {
 
@@ -50,6 +54,7 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
+	public Map<Location, BedExplodeEvent> bedMap = new HashMap<Location, BedExplodeEvent>();
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
@@ -751,4 +756,23 @@ public class TownyWorld extends TownyObject {
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
+	
+	public boolean hasBedExplosionAtBlock(Location loc) {
+		return bedMap.containsKey(loc);
+	}
+	
+	public void addBedExplosionAtBlock(Location loc, BedExplodeEvent event) {
+		bedMap.put(loc, event);
+
+		System.out.println("bed added");
+		System.out.println("Event Block Location " + loc);
+	}
+	
+	public void removeBedExplosionAtBlock(Location loc) {
+		if (hasBedExplosionAtBlock(loc)) {
+			bedMap.remove(loc);
+			System.out.println("bedremoved");
+		}
+	}
+	
 }

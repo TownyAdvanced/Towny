@@ -361,6 +361,14 @@ public class TownyBlockListener implements Listener {
 			e.printStackTrace();
 			return;
 		}
+		System.out.println("Exploded Block location " + event.getBlock().getLocation());
+		
+		if (townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation())) {
+			event.setCancelled(true); // Doesn't actually cancel the event.
+			System.out.println("stopped exploding bed"); // This is a lie. Exploding bed isn't actually stopped.
+			townyWorld.removeBedExplosionAtBlock(event.getBlock().getLocation());
+			return; // We would have to return here in order to stop any sort of reverting.
+		}
 		for (Block block : blocks) {
 			count++;
 			

@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
@@ -46,8 +47,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
@@ -332,6 +336,35 @@ public class TownyPlayerListener implements Listener {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 					onPlayerSwitchEvent(event, null);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Handles clicking on beds in the nether, sending blocks to a map so we can track when explosions occur from beds.
+	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds exploding, which is why this is necessary.
+	 * @param event PlayerInteractEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerInteractWithBed(PlayerInteractEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		World world = event.getPlayer().getWorld();
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+
+		if (event.hasBlock()) {
+			if (Tag.BEDS.isTagged(block.getType()) && world.getEnvironment().equals(Environment.NETHER)) {
+				System.out.println("bed clicked in nether.");
+				BlockData data = block.getBlockData();
+				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) data);
+				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, event.getClickedBlock().getLocation(), block.getRelative(bed.getFacing()).getLocation()));
 			}
 		}
 	}

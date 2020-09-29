@@ -10,12 +10,14 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
+import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
@@ -133,5 +135,24 @@ public class TownyCustomListener implements Listener {
 		// which could contain the above advice about depositing money, or containing
 		// links to the commands page on the wiki.
 		
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL) 
+	public void onBedExplodeEvent(BedExplodeEvent event) {
+		System.out.println("BEDEXPLODEEVENT");
+		TownyWorld world = null;
+		try {
+			world = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
+		} catch (NotRegisteredException ignored) {}
+		
+		world.addBedExplosionAtBlock(event.getLocation(), event);
+		world.addBedExplosionAtBlock(event.getLocation2(), event);
+//		final TownyWorld finalWorld = world;
+//		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin ,new Runnable() {
+//            @Override
+//            public void run() {
+//                finalWorld.removeBedExplosionAtBlock(event.getLocation());
+//            }
+//        }, 20L);
 	}
 }
