@@ -613,7 +613,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String[] tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							Resident friend = getResident(token);
+							Resident friend;
+							try {
+								friend = getResident(token);
+							} catch (NotRegisteredException e) {
+								continue;
+							}
 							if (friend != null)
 								resident.addFriend(friend);
 						}

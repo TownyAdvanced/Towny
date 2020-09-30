@@ -5017,3 +5017,4 @@ v0.92.0.11:
     - As opposed to having those plot types mimic the town/resident perm line. 
   - Fix missing switch test, solving problem with unresearched slimefun items allowing bypass of switch protections.
     - Closes #4065.
+  - Fix trying to load non-existant residents in the friendslist.
