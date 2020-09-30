@@ -349,14 +349,16 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
 		TownyWorld townyWorld;
 		List<Block> blocks = event.blockList();
 		int count = 0;
 
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
-			if (!townyWorld.isUsingTowny())
-				return; 
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			return;
