@@ -29,7 +29,7 @@ description: >
 # Amarelo = &e           Branco = &f
 
 
-default_towny_prefix: '&6[Towny] &b &7'
+default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 
