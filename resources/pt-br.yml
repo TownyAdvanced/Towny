@@ -29,9 +29,9 @@ description: >
 # Amarelo = &e           Branco = &f
 
 
-default_towny_prefix: '&9Towny> &7'
-default_town_prefix: '&6Cidade> &b[%s] &7'
-default_nation_prefix: '&2Nação> &b[%s] &7'
+default_towny_prefix: '&6[Towny] &b &7'
+default_town_prefix: '&6[%s] &b'
+default_nation_prefix: '&6[%s] &6'
 
 unclaimed_plot_name: 'Sem dono'
 unclaimed_zone_name: 'Zona Selvagem'
