@@ -33,12 +33,11 @@ public class TownyWorld extends TownyObject {
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private List<String> plotManagementIgnoreIds = null;
 
-	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();	
+	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
-	private long plotManagementWildBlockRevertDelay = TownySettings.getPlotManagementWildBlockRegenDelay();
 	private List<String> blockExplosionProtection = null;
 	
 	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
@@ -414,7 +413,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * @return the isUsingPlotManagementWildRevert
 	 */
-	public boolean isUsingPlotManagementWildBlockRevert() {
+	public boolean isUsingPlotManagementWildRevertBlocks() {
 
 		return isUsingPlotManagementWildBlockRevert;
 	}
@@ -480,23 +479,6 @@ public class TownyWorld extends TownyObject {
 
 		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
 
-	}
-	
-	/**
-	 * @return the plotManagementWildRevertDelay
-	 */
-	public long getPlotManagementWildBlockRevertDelay() {
-
-		return plotManagementWildBlockRevertDelay;
-	}
-
-	/**
-	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to
-	 *            set
-	 */
-	public void setPlotManagementWildBlockRevertDelay(long plotManagementWildBlockRevertDelay) {
-
-		this.plotManagementWildBlockRevertDelay = plotManagementWildBlockRevertDelay;
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
@@ -827,26 +809,34 @@ public class TownyWorld extends TownyObject {
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 	
-	public boolean hasBedExplosionAtBlock(Location loc) {
-		return bedMap.containsKey(loc);
+	/**
+	 * Does this world have an exploded bet at the location?
+	 * @param location Location to test.
+	 * @return true when the bed map contains the location.
+	 */
+	public boolean hasBedExplosionAtBlock(Location location) {
+		return bedMap.containsKey(location);
 	}
-	
-	public void addBedExplosionAtBlock(Location loc, Material mat) {
-		bedMap.put(loc, mat);
-	}
-	
+
+	/**
+	 * Gets the exploded bed material.
+	 * @param location Location to get the material.
+	 * @return material of the bed or null if the bedMap doesn't contain the location.
+	 */
 	@Nullable
-	public Material getBedExplosionMaterial(Location loc) {
-		if (hasBedExplosionAtBlock(loc))
-			return bedMap.get(loc);
+	public Material getBedExplosionMaterial(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			return bedMap.get(location);
 		return null;
 	}
 	
-	public void removeBedExplosionAtBlock(Location loc) {
-		if (hasBedExplosionAtBlock(loc)) {
-			bedMap.remove(loc);
-			System.out.println("bedremoved");
-		}
+	public void addBedExplosionAtBlock(Location location, Material material) {
+		bedMap.put(location, material);
+	}
+
+	public void removeBedExplosionAtBlock(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			bedMap.remove(location);
 	}
 	
 }

@@ -391,9 +391,6 @@ public enum ConfigNodes {
 			"new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
 			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED",
 			"# The list of blocks whose explosions should be reverted."),
-	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_TIME(
-			"new_world_settings.plot_management.wild_revert_on_block_explosion.delay",
-			"20s"),
 		
 
 	GTOWN_SETTINGS(

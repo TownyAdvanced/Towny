@@ -1384,7 +1384,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				line = keys.get("usingPlotManagementWildBlockRegen");
+				line = keys.get("usingPlotManagementWildRegenBlocks");
 				if (line != null)
 					try {
 						world.setUsingPlotManagementWildBlockRevert(Boolean.parseBoolean(line));
@@ -1404,14 +1404,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setPlotManagementWildRevertMaterials(mats);
 					} catch (Exception ignored) {
 					}
-				
-				line = keys.get("usingPlotManagementWildBlockRegenDelay");
-				if (line != null)
-					try {
-						world.setPlotManagementWildBlockRevertDelay(Long.parseLong(line));
-					} catch (Exception ignored) {
-					}
-				
+
 				line = keys.get("usingTowny");
 				if (line != null)
 					try {
@@ -2032,14 +2025,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
 		
 		// Using PlotManagement Wild Block Regen
-		list.add("usingPlotManagementWildBlockRegen=" + world.isUsingPlotManagementWildBlockRevert());
+		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildRevertBlocks());
 
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
 			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
-
-		// Using PlotManagement Wild Regen Block Delay
-		list.add("usingPlotManagementWildBlockRegenDelay=" + world.getPlotManagementWildBlockRevertDelay());
 
 		// Using Towny
 		list.add("");

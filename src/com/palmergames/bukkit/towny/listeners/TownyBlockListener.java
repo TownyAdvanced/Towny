@@ -375,7 +375,7 @@ public class TownyBlockListener implements Listener {
 		/*
 		 * Don't regenerate block explosions unless they are on the list of blocks whose explosions regenerate.
 		 */
-		if (townyWorld.isUsingPlotManagementWildRevert() && townyWorld.getPlotManagementWildRevertBlocks().contains(material.toString().toLowerCase()) )
+		if (townyWorld.isUsingPlotManagementWildRevert() && townyWorld.isProtectingExplosionBlock(material))
 			revertingThisMaterial = true;
 		
 		for (Block block : blocks) {
