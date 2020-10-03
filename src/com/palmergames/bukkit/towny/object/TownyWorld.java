@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,23 +23,33 @@ import java.util.Map;
 public class TownyWorld extends TownyObject {
 
 	private HashMap<String, Town> towns = new HashMap<>();
-	private boolean isClaimable = true;
+
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();
-	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
+	
+	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
 	private List<String> plotManagementMayorDelete = null;
+	
+	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private List<String> plotManagementIgnoreIds = null;
-	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
-			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
-	private String unclaimedZoneName = null;
-	private List<Coord> warZones = new ArrayList<>();
+
+	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();	
+	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
 	
+	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
+	private long plotManagementWildBlockRevertDelay = TownySettings.getPlotManagementWildBlockRegenDelay();
+	private List<String> blockExplosionProtection = null;
+	
+	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
+	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
+			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
+
+	private String unclaimedZoneName = null;
+	private List<Coord> warZones = new ArrayList<>();
+	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isClaimable = true;
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
@@ -54,7 +63,7 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-	public Map<Location, BedExplodeEvent> bedMap = new HashMap<Location, BedExplodeEvent>();
+	public Map<Location, Material> bedMap = new HashMap<Location, Material>();
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
@@ -401,6 +410,14 @@ public class TownyWorld extends TownyObject {
 
 		return isUsingPlotManagementWildRevert;
 	}
+	
+	/**
+	 * @return the isUsingPlotManagementWildRevert
+	 */
+	public boolean isUsingPlotManagementWildBlockRevert() {
+
+		return isUsingPlotManagementWildBlockRevert;
+	}
 
 	/**
 	 * @param isUsingPlotManagementWildRevert the
@@ -409,6 +426,15 @@ public class TownyWorld extends TownyObject {
 	public void setUsingPlotManagementWildRevert(boolean isUsingPlotManagementWildRevert) {
 
 		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
+	}
+	
+	/**
+	 * @param isUsingPlotManagementWildBlockRevert the
+	 *            isUsingPlotManagementWildBlockRevert to set
+	 */
+	public void setUsingPlotManagementWildBlockRevert(boolean isUsingPlotManagementWildBlockRevert) {
+
+		this.isUsingPlotManagementWildBlockRevert = isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
@@ -453,6 +479,50 @@ public class TownyWorld extends TownyObject {
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
 		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
+
+	}
+	
+	/**
+	 * @return the plotManagementWildRevertDelay
+	 */
+	public long getPlotManagementWildBlockRevertDelay() {
+
+		return plotManagementWildBlockRevertDelay;
+	}
+
+	/**
+	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to
+	 *            set
+	 */
+	public void setPlotManagementWildBlockRevertDelay(long plotManagementWildBlockRevertDelay) {
+
+		this.plotManagementWildBlockRevertDelay = plotManagementWildBlockRevertDelay;
+	}
+
+	public void setPlotManagementWildRevertMaterials(List<String> mats) {
+
+		blockExplosionProtection = new ArrayList<>();
+
+		for (String mat : mats)
+			if (!mat.equals(""))
+				blockExplosionProtection.add(mat);
+
+	}
+
+	public List<String> getPlotManagementWildRevertBlocks() {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return entityExplosionProtection;
+	}
+
+	public boolean isProtectingExplosionBlock(Material material) {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return (blockExplosionProtection.contains(material.toString()));
 
 	}
 
@@ -761,11 +831,15 @@ public class TownyWorld extends TownyObject {
 		return bedMap.containsKey(loc);
 	}
 	
-	public void addBedExplosionAtBlock(Location loc, BedExplodeEvent event) {
-		bedMap.put(loc, event);
-
-		System.out.println("bed added");
-		System.out.println("Event Block Location " + loc);
+	public void addBedExplosionAtBlock(Location loc, Material mat) {
+		bedMap.put(loc, mat);
+	}
+	
+	@Nullable
+	public Material getBedExplosionMaterial(Location loc) {
+		if (hasBedExplosionAtBlock(loc))
+			return bedMap.get(loc);
+		return null;
 	}
 	
 	public void removeBedExplosionAtBlock(Location loc) {

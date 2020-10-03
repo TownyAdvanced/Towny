@@ -145,14 +145,14 @@ public class TownyCustomListener implements Listener {
 			world = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
 		} catch (NotRegisteredException ignored) {}
 		
-		world.addBedExplosionAtBlock(event.getLocation(), event);
-		world.addBedExplosionAtBlock(event.getLocation2(), event);
-//		final TownyWorld finalWorld = world;
-//		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin ,new Runnable() {
-//            @Override
-//            public void run() {
-//                finalWorld.removeBedExplosionAtBlock(event.getLocation());
-//            }
-//        }, 20L);
+		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
+		world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
+		final TownyWorld finalWorld = world;
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin ,new Runnable() {
+            @Override
+            public void run() {
+                finalWorld.removeBedExplosionAtBlock(event.getLocation());
+            }
+        }, 20L);
 	}
 }

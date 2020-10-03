@@ -47,11 +47,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
@@ -353,18 +351,14 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
-		World world = event.getPlayer().getWorld();
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 
+		Block block = event.getClickedBlock();
 		if (event.hasBlock()) {
-			if (Tag.BEDS.isTagged(block.getType()) && world.getEnvironment().equals(Environment.NETHER)) {
-				System.out.println("bed clicked in nether.");
-				BlockData data = block.getBlockData();
-				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) data);
-				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, event.getClickedBlock().getLocation(), block.getRelative(bed.getFacing()).getLocation()));
+			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
+				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
+				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 			}
 		}
 	}
