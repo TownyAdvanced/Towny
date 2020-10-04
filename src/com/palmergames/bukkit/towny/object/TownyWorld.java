@@ -25,7 +25,6 @@ public class TownyWorld extends TownyObject {
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();
-	private long plotManagementRevertSpeed = TownySettings.getPlotManagementSpeed();
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
@@ -405,25 +404,6 @@ public class TownyWorld extends TownyObject {
 	public void setUsingPlotManagementWildRevert(boolean isUsingPlotManagementWildRevert) {
 
 		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
-	}
-
-	/*
-	 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-	 */
-	/**
-	 * @return the plotManagementRevertSpeed
-	 */
-	public long getPlotManagementRevertSpeed() {
-
-		return plotManagementRevertSpeed;
-	}
-
-	/**
-	 * @param plotManagementRevertSpeed the plotManagementRevertSpeed to set
-	 */
-	public void setPlotManagementRevertSpeed(long plotManagementRevertSpeed) {
-
-		this.plotManagementRevertSpeed = plotManagementRevertSpeed;
 	}
 
 	/**

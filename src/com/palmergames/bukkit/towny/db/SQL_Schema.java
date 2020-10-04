@@ -447,6 +447,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
     	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
     	
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());

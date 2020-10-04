@@ -1513,16 +1513,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
-			/*
-			 * No longer used - Never was used. Sadly not configurable per-world based on
-			 * how the timer runs.
-			 */
-			resultLong = rs.getLong("PlotManagementRevertSpeed");
-			try {
-				world.setPlotManagementRevertSpeed(resultLong);
-			} catch (Exception ignored) {
-			}
-
 			line = rs.getString("plotManagementIgnoreIds");
 			if (line != null)
 				try {
@@ -1981,8 +1971,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
-			// Using PlotManagement Revert Speed
-			nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
 
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)
