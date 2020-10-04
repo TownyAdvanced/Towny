@@ -1808,12 +1808,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return;
 				}
 				split = StringMgmt.remArgs(split, 2);
-				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+				
+				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				if (title.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
 				}
 
-				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
 				resident.setTitle(title);
 				townyUniverse.getDataSource().saveResident(resident);
 
@@ -1862,12 +1863,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return;
 				}
 				split = StringMgmt.remArgs(split, 2);
-				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+
+				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
 				}
-
-				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				
 				resident.setSurname(surname);
 				townyUniverse.getDataSource().saveResident(resident);
 

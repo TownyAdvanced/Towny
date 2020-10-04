@@ -5019,3 +5019,7 @@ v0.92.0.11:
     - Closes #4065.
   - Fix trying to load non-existant residents in the friendslist.
   - Remove unused plotManagementRevertSpeed from sql and townyworld.
+  - Fix &k being allowed to be used in various things like titles/surnames/tags.
+    - Closes #4270.
+  - Remove unused & long-deprecated NameValidation settings from TownySettings.
+  - Rearrange title and surname length test to occur after we've filtered out any characters we won't allow.

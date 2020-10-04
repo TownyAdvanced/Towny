@@ -2409,12 +2409,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				split = StringMgmt.remArgs(split, 2);
-				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+
+				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				if (title.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
 				}
-
-				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				
 				resident.setTitle(title);
 				townyUniverse.getDataSource().saveResident(resident);
 
@@ -2432,8 +2433,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (split.length < 2)
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set surname bilbo the dwarf ");
 				else
-
 					resident = townyUniverse.getDataSource().getResident(split[1]);
+
 				if (resident.hasNation()) {
 					if (resident.getTown().getNation() != townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation()) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_nation", resident.getName()));
@@ -2444,12 +2445,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				split = StringMgmt.remArgs(split, 2);
-				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+
+				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
 				}
-
-				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				
 				resident.setSurname(surname);
 				townyUniverse.getDataSource().saveResident(resident);
 

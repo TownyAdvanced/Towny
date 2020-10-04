@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -2614,24 +2613,6 @@ public class TownySettings {
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS.getRoot(), newSetting);
-	}
-
-	@Deprecated
-	public static boolean isValidRegionName(String name) {
-
-		return !NameValidation.isBlacklistName(name);
-	}
-
-	@Deprecated
-	public static boolean isValidName(String name) {
-
-		return NameValidation.isValidName(name);
-	}
-
-	@Deprecated
-	public static String filterName(String input) {
-
-		return NameValidation.filterName(input);
 	}
 
 	public static boolean isDisallowOneWayAlliance() {
