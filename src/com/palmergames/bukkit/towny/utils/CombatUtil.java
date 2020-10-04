@@ -438,7 +438,7 @@ public class CombatUtil {
 	 * 
 	 * @param a - Town A in comparison
 	 * @param b - Town B in comparison
-	 * @return true if they are allies.
+	 * @return true if they are in the same nation.
 	 */
 	public static boolean isSameNation(Town a, Town b) {
 
@@ -467,7 +467,52 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Is resident a in a nation with resident b?
+	 * 
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same nation.
+	 */
+	public static boolean isSameNation(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+				
+		return isSameNation(townA, townB);
+	}
 	
+	
+	/**
+	 * Is resident a in a town with resident b?
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same town.
+	 */
+	public static boolean isSameTown(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		
+		return isSameTown(townA, townB);
+	}
+
 	/**
 	 * Can resident a attack resident b?
 	 * 

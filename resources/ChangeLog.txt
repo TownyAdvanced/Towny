@@ -5023,3 +5023,5 @@ v0.92.0.11:
     - Closes #4270.
   - Remove unused & long-deprecated NameValidation settings from TownySettings.
   - Rearrange title and surname length test to occur after we've filtered out any characters we won't allow.
+  - API: Add CombatUtil.isSameTown(Resident, Resident) and CombatUtil.isNameNation(Resident, Resident).
+  - Clean up title and surname setting for towns and nations.

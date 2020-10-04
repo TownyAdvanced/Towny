@@ -56,6 +56,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -1798,18 +1799,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					resident = townyUniverse.getDataSource().getResident(split[1]);
 				
-				if (resident.hasTown()) {
-					if (resident.getTown() != townyUniverse.getDataSource().getResident(player.getName()).getTown()) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
-						return;
-					}
-				} else {
+				if (!CombatUtil.isSameTown(townyUniverse.getDataSource().getResident(player.getName()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
-				split = StringMgmt.remArgs(split, 2);
 				
-				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				String title = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (title.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
@@ -1851,20 +1846,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (split.length < 2)
 					TownyMessaging.sendErrorMsg(player, "Eg: /town set surname bilbo the dwarf ");
 				else
-
 					resident = townyUniverse.getDataSource().getResident(split[1]);
-				if (resident.hasTown()) {
-					if (resident.getTown() != townyUniverse.getDataSource().getResident(player.getName()).getTown()) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
-						return;
-					}
-				} else {
+
+				if (!CombatUtil.isSameTown(townyUniverse.getDataSource().getResident(player.getName()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
-				split = StringMgmt.remArgs(split, 2);
 
-				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;

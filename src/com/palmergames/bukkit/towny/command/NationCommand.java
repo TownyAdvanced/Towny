@@ -46,6 +46,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -2399,18 +2400,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					resident = townyUniverse.getDataSource().getResident(split[1]);
 				
-				if (resident.hasNation()) {
-					if (resident.getTown().getNation() != townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation()) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_nation", resident.getName()));
-						return;
-					}
-				} else {
+				if (!CombatUtil.isSameNation(townyUniverse.getDataSource().getResident(player.getName()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_nation", resident.getName()));
 					return;
 				}
-				split = StringMgmt.remArgs(split, 2);
 
-				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				String title = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (title.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
@@ -2435,18 +2430,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					resident = townyUniverse.getDataSource().getResident(split[1]);
 
-				if (resident.hasNation()) {
-					if (resident.getTown().getNation() != townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation()) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_nation", resident.getName()));
-						return;
-					}
-				} else {
+				if (!CombatUtil.isSameNation(townyUniverse.getDataSource().getResident(player.getName()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_nation", resident.getName()));
 					return;
 				}
-				split = StringMgmt.remArgs(split, 2);
 
-				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_input_too_long"));
 					return;
