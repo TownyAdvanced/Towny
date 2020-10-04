@@ -5025,3 +5025,7 @@ v0.92.0.11:
   - Rearrange title and surname length test to occur after we've filtered out any characters we won't allow.
   - API: Add CombatUtil.isSameTown(Resident, Resident) and CombatUtil.isNameNation(Resident, Resident).
   - Clean up title and surname setting for towns and nations.
+  - New Config Option: economy.new_expand.price_purchased_bonus_townblock_max_price
+    - Default: -1.0
+    - The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium.
+    - Closes #3788.

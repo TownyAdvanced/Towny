@@ -1571,6 +1571,11 @@ public enum ConfigNodes {
 			"1.0",
 			"",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
+	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM(
+			"economy.new_expand.price_purchased_bonus_townblock_max_price",
+			"-1.0",
+			"",
+			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium."),
 
 	ECO_DEATH("economy.death", "", ""),
 	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", 
