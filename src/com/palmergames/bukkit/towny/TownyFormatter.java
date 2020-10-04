@@ -333,9 +333,11 @@ public class TownyFormatter {
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
-		try {
-			out.add(Translation.of("status_town_board", town.getBoard()));
-		} catch (NullPointerException ignored) {
+		if (!town.getBoard().isEmpty()) {
+			try {
+				out.add(Translation.of("status_town_board", town.getBoard()));
+			} catch (NullPointerException ignored) {
+			}
 		}
 		// Created Date
 		long registered= town.getRegistered();
@@ -445,6 +447,14 @@ public class TownyFormatter {
 		title += (nation.isOpen() ? Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
+		// Board: Get your fried chicken
+		if (!nation.getBoard().isEmpty()) {
+			try {
+				out.add(Translation.of("status_town_board", nation.getBoard()));
+			} catch (NullPointerException ignored) {
+			}
+		}
+		
 		// Created Date
 		long registered = nation.getRegistered();
 		if (registered != 0) {

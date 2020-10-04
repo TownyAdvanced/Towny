@@ -2461,14 +2461,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
-					if (!NameValidation.isValidString(line)) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_string_nationboard_not_set"));
-						return;
-					}
-					// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
-					if (line.length() > 159)
-						line = line.substring(0, 159);
-
+					if (!line.equals("none")) {
+						if (!NameValidation.isValidString(line)) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_string_nationboard_not_set"));
+							return;
+						}
+						// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
+						if (line.length() > 159)
+							line = line.substring(0, 159);
+					} else 
+						line = "";
+					
 					nation.setBoard(line);
 					TownyMessaging.sendNationBoard(player, nation);
 				}
