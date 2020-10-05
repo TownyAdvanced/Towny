@@ -27,7 +27,7 @@ commands:
     resident:
         aliases: [res, p, player]
     town:
-        aliases: [t]
+        aliases: [t, supertest]
     townyadmin:
         aliases: [ta]
     townyworld:
