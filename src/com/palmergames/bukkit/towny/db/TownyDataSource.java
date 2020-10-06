@@ -62,7 +62,7 @@ public abstract class TownyDataSource {
 
 	public boolean saveAll() {
 
-		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -122,8 +122,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveNation(Nation nation);
 
 	abstract public boolean saveWorld(TownyWorld world);
-
-	abstract public boolean saveAllTownBlocks();
 
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 
@@ -252,6 +250,15 @@ public abstract class TownyDataSource {
 			saveWorld(world);
 		return true;
 	}
+	
+	public boolean saveTownBlocks() {
+		TownyMessaging.sendDebugMsg("Saving Townblocks");
+		for (Town town : getTowns()) {
+			for (TownBlock townBlock : town.getTownBlocks())
+				saveTownBlock(townBlock);
+		}
+		return true;
+	}
 
 	// Database functions
 	abstract public List<Resident> getResidents(Player player, String[] names);
@@ -292,7 +299,17 @@ public abstract class TownyDataSource {
 
 	abstract public List<TownyWorld> getWorlds();
 
-	abstract public TownyWorld getTownWorld(String townName);
+	@Deprecated // TODO: Scrap worlds holding Towns. Towns' homeblocks should be reliable enough to return a world when needed (if we need it at all anymore.)
+	public TownyWorld getTownWorld(String townName) {
+
+		for (TownyWorld world : universe.getWorldMap().values()) {
+			if (world.hasTown(townName))
+				return world;
+		}
+
+		// If this has failed the Town has no land claimed at all but should be given a world regardless.
+		return universe.getDataSource().getWorlds().get(0);
+	}
 
 	abstract public void removeResident(Resident resident);
 
@@ -314,10 +331,13 @@ public abstract class TownyDataSource {
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
+	@Deprecated
 	abstract public Set<String> getResidentKeys();
 
+	@Deprecated
 	abstract public Set<String> getTownsKeys();
 
+	@Deprecated
 	abstract public Set<String> getNationsKeys();
 
 	abstract public List<Town> getTownsWithoutNation();
