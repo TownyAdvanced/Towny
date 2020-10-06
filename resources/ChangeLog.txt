@@ -5040,4 +5040,4 @@ v0.92.0.11:
   - Language files bumped to 0.87.
   - Fix /ta town TOWNNAME withdraw displaying the correct message when a town is bankrupt and has hit the debtcap.
   - Add groupmanager and iconomy to the softdepend.
-  
+  - Add debt cap to town status screen when a town is bankrupt.

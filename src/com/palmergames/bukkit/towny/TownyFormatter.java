@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -392,6 +393,11 @@ public class TownyFormatter {
 			String bankString = "";
 
 			bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank" , town.getAccount().getHoldingFormattedBalance());
+			if (town.isBankrupt()) {
+				if (town.getAccount().getDebtCap() == 0)
+					town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+				bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
+			}
 			if (town.hasUpkeep())
 				bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
