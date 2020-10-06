@@ -994,12 +994,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				town.getAccount().deposit(amount, "Admin Deposit");
-				
-				// Send notifications
-				String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
-				TownyMessaging.sendMessage(sender, depositMessage);
-				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
+				if (town.getAccount().deposit(amount, "Admin Deposit")) {
+					// Send notifications
+					String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
+					TownyMessaging.sendMessage(sender, depositMessage);
+					TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_unable_to_deposit_x", amount));
+				}
+
 			} else if (split[1].equalsIgnoreCase("withdraw")) {
 				
 				if (!TownySettings.isUsingEconomy())
@@ -1018,12 +1021,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				town.getAccount().withdraw(amount, "Admin Withdraw");
-				
-				// Send notifications
-				String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
-				TownyMessaging.sendMessage(sender, withdrawMessage);
-				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+				if (town.getAccount().withdraw(amount, "Admin Withdraw")) {				
+					// Send notifications
+					String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
+					TownyMessaging.sendMessage(sender, withdrawMessage);
+					TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_unable_to_withdraw_x", amount));
+				}
 			} else if (split[1].equalsIgnoreCase("outlaw")) {
 				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("leavenation")) {

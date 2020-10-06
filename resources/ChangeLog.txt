@@ -5038,3 +5038,6 @@ v0.92.0.11:
   - Removed no-longer-needed deleteUnusedFiles.
   - NewDayEvent now has removedTowns and bankruptTowns separated.
   - Language files bumped to 0.87.
+  - Fix /ta town TOWNNAME withdraw displaying the correct message when a town is bankrupt and has hit the debtcap.
+  - Add groupmanager and iconomy to the softdepend.
+  

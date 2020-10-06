@@ -1166,3 +1166,5 @@ msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkee
 #Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, reached their debtcap, and has disbanded.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
+msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
+msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
