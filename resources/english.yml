@@ -1,5 +1,5 @@
 name: Towny
-version: 0.86
+version: 0.87
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1162,3 +1162,7 @@ msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
 msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
 msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
 msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'
+
+#Added in 0.87
+msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, reached their debtcap, and has disbanded.'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '

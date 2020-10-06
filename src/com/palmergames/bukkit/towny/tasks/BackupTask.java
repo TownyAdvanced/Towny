@@ -11,13 +11,9 @@ public class BackupTask implements Runnable {
 	public void run() {
 
 		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
-		TownyUniverse universe = TownyUniverse.getInstance();
+		Towny.getPlugin().getLogger().info("Making backup...");
 		try {
 			dataSource.backup();
-
-			if (universe.getLoadDbType().equalsIgnoreCase("flatfile") || universe.getSaveDbType().equalsIgnoreCase("flatfile")) {
-				dataSource.deleteUnusedResidents();
-			}
 
 		} catch (IOException e) {
 			System.out.println("[Towny] Error: Could not create backup.");

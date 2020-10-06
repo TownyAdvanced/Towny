@@ -2293,11 +2293,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + File.separator + "backup"), deleteAfter);
 	}
 
-	@Override
-	public void deleteUnusedResidents() {
-
-	}
-
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg("Loading PlotGroup List");
 		if (!getContext())

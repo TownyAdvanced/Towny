@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -161,28 +160,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         if (deleteAfter >= 0)
             FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + File.separator + "backup"), deleteAfter);
     }
-    
-    @Override
-	public void deleteUnusedResidents() {
-
-		String path;
-		Set<String> names;
-
-		path = dataFolderPath + File.separator + "residents";
-		names = getResidentKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-
-		path = dataFolderPath + File.separator + "towns";
-		names = getTownsKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-
-		path = dataFolderPath + File.separator + "nations";
-		names = getNationsKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-	}
 
 	public String getResidentFilename(Resident resident) {
 

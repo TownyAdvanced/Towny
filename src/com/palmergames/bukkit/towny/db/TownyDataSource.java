@@ -55,8 +55,6 @@ public abstract class TownyDataSource {
 
 	public abstract void cleanupBackups();
 
-	public abstract void deleteUnusedResidents();
-
 	public boolean loadAll() {
 
 		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();

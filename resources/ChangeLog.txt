@@ -5034,3 +5034,7 @@ v0.92.0.11:
     - Sets an empty board message.
     - Empty board messages are not shown on login and do not appear on the /town and /nation status screens.
     - Closes #4322.
+  - Fix newday showing the wrong message when towns are bankrupted under some circumstances.
+  - Removed no-longer-needed deleteUnusedFiles.
+  - NewDayEvent now has removedTowns and bankruptTowns separated.
+  - Language files bumped to 0.87.
