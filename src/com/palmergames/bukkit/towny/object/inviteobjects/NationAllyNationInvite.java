@@ -28,7 +28,7 @@ public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 		
 		TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
 		TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
-			
+		
 		receiverNation.deleteReceivedInvite(this);
 		senderNation.deleteSentAllyInvite(this);
 			

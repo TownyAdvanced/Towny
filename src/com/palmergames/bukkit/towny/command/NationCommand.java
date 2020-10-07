@@ -153,7 +153,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
@@ -1853,7 +1852,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							toAccept.getReceiver().deleteReceivedInvite(toAccept);
 							toAccept.getSender().deleteSentInvite(toAccept);
 							TownyMessaging.sendErrorMsg(player, preAcceptAllyRequestEvent.getCancelMessage());
-							
 							return;
 						}
 						InviteHandler.acceptInvite(toAccept);
@@ -1911,10 +1909,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						
 						InviteHandler.declineInvite(toDecline, false);
 						TownyMessaging.sendMessage(player, Translation.of("successful_deny_request"));
-						
 						NationDenyAllyRequestEvent denyAllyRequestEvent = new NationDenyAllyRequestEvent(nation, sendernation);
 						Bukkit.getPluginManager().callEvent(denyAllyRequestEvent);
-						
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
@@ -1999,9 +1995,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (targetNation.hasAlly(nation))
 						nationlegacyAlly(resident, targetNation, Arrays.asList(nation), false);
 				}
+				
 			} catch (NotRegisteredException e) {
 				remove.add(targetNation);
 			}
+		
 		for (Nation newAlly : remove)
 			allies.remove(newAlly);
 
@@ -2012,6 +2010,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			plugin.resetCache();
 		} else
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
+		
 	}
 
 	public void nationAlly(Resident resident, final Nation nation, List<Nation> allies, boolean add) throws TownyException {
