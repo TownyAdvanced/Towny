@@ -2,14 +2,9 @@ package com.palmergames.bukkit.towny.object.inviteobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.NationPreAcceptAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.NationPreDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {

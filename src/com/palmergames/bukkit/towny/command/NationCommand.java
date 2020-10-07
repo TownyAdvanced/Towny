@@ -20,12 +20,9 @@ import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
-import com.palmergames.bukkit.towny.event.NationPreRemoveAllyEvent;
-import com.palmergames.bukkit.towny.event.NationPreDenyAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.NationPreAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -1846,17 +1843,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (toAccept != null) {
 					try {
-						NationPreAcceptAllyRequestEvent preAcceptAllyRequestEvent = new NationPreAcceptAllyRequestEvent((Nation)toAccept.getSender(), (Nation) toAccept.getReceiver());
-						Bukkit.getPluginManager().callEvent(preAcceptAllyRequestEvent);
-						if (preAcceptAllyRequestEvent.isCancelled()) {
+						NationAcceptAllyRequestEvent acceptAllyRequestEvent = new NationAcceptAllyRequestEvent((Nation)toAccept.getSender(), (Nation) toAccept.getReceiver());
+						Bukkit.getPluginManager().callEvent(acceptAllyRequestEvent);
+						if (acceptAllyRequestEvent.isCancelled()) {
 							toAccept.getReceiver().deleteReceivedInvite(toAccept);
 							toAccept.getSender().deleteSentInvite(toAccept);
-							TownyMessaging.sendErrorMsg(player, preAcceptAllyRequestEvent.getCancelMessage());
+							TownyMessaging.sendErrorMsg(player, acceptAllyRequestEvent.getCancelMessage());
 							return;
 						}
 						InviteHandler.acceptInvite(toAccept);
-						NationAcceptAllyRequestEvent acceptEvent = new NationAcceptAllyRequestEvent((Nation)toAccept.getSender(),(Nation)toAccept.getReceiver());
-						Bukkit.getPluginManager().callEvent(acceptEvent);
 						return;
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
@@ -1898,18 +1893,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (toDecline != null) {
 					try {
-						NationPreDenyAllyRequestEvent preDenyAllyRequestEvent = new NationPreDenyAllyRequestEvent(nation, sendernation);
-						Bukkit.getPluginManager().callEvent(preDenyAllyRequestEvent);
-						if (preDenyAllyRequestEvent.isCancelled()) {
+						NationDenyAllyRequestEvent denyAllyRequestEvent = new NationDenyAllyRequestEvent(nation, sendernation);
+						Bukkit.getPluginManager().callEvent(denyAllyRequestEvent);
+						if (denyAllyRequestEvent.isCancelled()) {
 							sendernation.deleteSentAllyInvite(toDecline);
 							nation.deleteReceivedInvite(toDecline);
-							TownyMessaging.sendErrorMsg(player, preDenyAllyRequestEvent.getCancelMessage());
+							TownyMessaging.sendErrorMsg(player, denyAllyRequestEvent.getCancelMessage());
 							return;
 						}
 						InviteHandler.declineInvite(toDecline, false);
 						TownyMessaging.sendMessage(player, Translation.of("successful_deny_request"));
-						NationDenyAllyRequestEvent denyAllyRequestEvent = new NationDenyAllyRequestEvent(nation, sendernation);
-						Bukkit.getPluginManager().callEvent(denyAllyRequestEvent);
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
@@ -2043,15 +2036,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else { // So we are removing an ally
 				if (nation.getAllies().contains(targetNation)) {
 					try {
-						NationPreRemoveAllyEvent preRemoveAllyEvent = new NationPreRemoveAllyEvent(nation, targetNation);
-						Bukkit.getPluginManager().callEvent(preRemoveAllyEvent);
-						if (preRemoveAllyEvent.isCancelled()) {
-							TownyMessaging.sendErrorMsg(player, preRemoveAllyEvent.getCancelMessage());
+						NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(nation, targetNation);
+						Bukkit.getPluginManager().callEvent(removeAllyEvent);
+						if (removeAllyEvent.isCancelled()) {
+							TownyMessaging.sendErrorMsg(player, removeAllyEvent.getCancelMessage());
 							return;
 						}
 						nation.removeAlly(targetNation);
-						NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(nation, targetNation);
-						Bukkit.getPluginManager().callEvent(removeAllyEvent);
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translation.of("msg_removed_ally", nation.getName()));
 						TownyMessaging.sendMessage(player, Translation.of("msg_ally_removed_successfully"));
 					} catch (NotRegisteredException e) {
