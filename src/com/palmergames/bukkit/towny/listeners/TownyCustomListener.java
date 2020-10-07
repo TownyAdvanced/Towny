@@ -46,7 +46,7 @@ public class TownyCustomListener implements Listener {
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
 
