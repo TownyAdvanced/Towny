@@ -11,6 +11,7 @@ public class NationPreRemoveAllyEvent extends Event implements Cancellable {
 	private final Nation nation;
 	private final Nation removedNation;
 	boolean cancelled;
+	private String cancelMessage = "Sorry this event was cancelled";
 
 	public NationPreRemoveAllyEvent(Nation nation, Nation removedNation) {
 		this.nation = nation;
@@ -26,6 +27,11 @@ public class NationPreRemoveAllyEvent extends Event implements Cancellable {
 		cancelled = cancel;
 	}
 
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
+	}
+	
+	public String getCancelMessage() { return this.cancelMessage; }
 
 	public Nation getRemovedNation() {
 		return removedNation;

@@ -12,6 +12,7 @@ public class NationPreAcceptAllyRequestEvent extends Event implements Cancellabl
 	boolean cancelled;
 	private final Nation senderNation;
 	private final Nation receiverNation;
+	private String cancelMessage = "Sorry this event was cancelled";
 
 	public NationPreAcceptAllyRequestEvent(Nation senderNation, Nation receiverNation) {
 		this.senderNation = senderNation;
@@ -34,6 +35,12 @@ public class NationPreAcceptAllyRequestEvent extends Event implements Cancellabl
 	public Nation getInvitedNation() {
 		return receiverNation;
 	}
+
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
+	}
+	
+	public String getCancelMessage() { return this.cancelMessage; }
 
 	public static HandlerList getHandlerList() {
 		return handlers;

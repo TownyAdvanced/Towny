@@ -9,7 +9,23 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.event.*;
+import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
+import com.palmergames.bukkit.towny.event.NewNationEvent;
+import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.NationPreRemoveAllyEvent;
+import com.palmergames.bukkit.towny.event.NationPreDenyAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationPreAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -137,7 +153,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
@@ -1831,7 +1847,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (toAccept != null) {
 					try {
+						NationPreAcceptAllyRequestEvent preAcceptAllyRequestEvent = new NationPreAcceptAllyRequestEvent((Nation)toAccept.getSender(), (Nation) toAccept.getReceiver());
+						Bukkit.getPluginManager().callEvent(preAcceptAllyRequestEvent);
+						if (preAcceptAllyRequestEvent.isCancelled()) {
+							toAccept.getReceiver().deleteReceivedInvite(toAccept);
+							toAccept.getSender().deleteSentInvite(toAccept);
+							TownyMessaging.sendErrorMsg(player, preAcceptAllyRequestEvent.getCancelMessage());
+							
+							return;
+						}
 						InviteHandler.acceptInvite(toAccept);
+						NationAcceptAllyRequestEvent acceptEvent = new NationAcceptAllyRequestEvent((Nation)toAccept.getSender(),(Nation)toAccept.getReceiver());
+						Bukkit.getPluginManager().callEvent(acceptEvent);
 						return;
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
@@ -1873,10 +1900,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (toDecline != null) {
 					try {
-						
 						NationPreDenyAllyRequestEvent preDenyAllyRequestEvent = new NationPreDenyAllyRequestEvent(nation, sendernation);
 						Bukkit.getPluginManager().callEvent(preDenyAllyRequestEvent);
 						if (preDenyAllyRequestEvent.isCancelled()) {
+							sendernation.deleteSentAllyInvite(toDecline);
+							nation.deleteReceivedInvite(toDecline);
+							TownyMessaging.sendErrorMsg(player, preDenyAllyRequestEvent.getCancelMessage());
 							return;
 						}
 						
@@ -1970,11 +1999,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (targetNation.hasAlly(nation))
 						nationlegacyAlly(resident, targetNation, Arrays.asList(nation), false);
 				}
-
 			} catch (NotRegisteredException e) {
 				remove.add(targetNation);
 			}
-
 		for (Nation newAlly : remove)
 			allies.remove(newAlly);
 
@@ -1985,7 +2012,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			plugin.resetCache();
 		} else
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
-
 	}
 
 	public void nationAlly(Resident resident, final Nation nation, List<Nation> allies, boolean add) throws TownyException {
@@ -2007,15 +2033,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							try {
 								targetNation.addAlly(nation);
 								nation.addAlly(targetNation);
-								
-								
 							} catch (AlreadyRegisteredException e) {
 								e.printStackTrace();
 							}
-							
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_allied_nations", resident.getName(), targetNation.getName()));
 							TownyMessaging.sendPrefixedNationMessage(targetNation, Translation.of("msg_added_ally", nation.getName()));
-							
 						} else
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_unable_ally_npc", nation.getName()));
 					}
@@ -2026,6 +2048,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						NationPreRemoveAllyEvent preRemoveAllyEvent = new NationPreRemoveAllyEvent(nation, targetNation);
 						Bukkit.getPluginManager().callEvent(preRemoveAllyEvent);
 						if (preRemoveAllyEvent.isCancelled()) {
+							TownyMessaging.sendErrorMsg(player, preRemoveAllyEvent.getCancelMessage());
 							return;
 						}
 						nation.removeAlly(targetNation);

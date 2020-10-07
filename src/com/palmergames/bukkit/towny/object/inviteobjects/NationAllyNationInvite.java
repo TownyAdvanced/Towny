@@ -22,18 +22,9 @@ public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 	public void accept() throws TownyException {
 		Nation receiverNation = getReceiver();
 		Nation senderNation = getSender();
-
-		NationPreAcceptAllyRequestEvent preAcceptAllyRequestEvent = new NationPreAcceptAllyRequestEvent(senderNation, receiverNation);
-		Bukkit.getPluginManager().callEvent(preAcceptAllyRequestEvent);
-		if (preAcceptAllyRequestEvent.isCancelled()) {
-			return;
-		}
-			
+		
 		receiverNation.addAlly(senderNation);
 		senderNation.addAlly(receiverNation);
-
-		NationAcceptAllyRequestEvent acceptEvent = new NationAcceptAllyRequestEvent(senderNation, receiverNation);
-		Bukkit.getPluginManager().callEvent(acceptEvent);
 		
 		TownyMessaging.sendPrefixedNationMessage(receiverNation, Translation.of("msg_added_ally", senderNation.getName()));
 		TownyMessaging.sendPrefixedNationMessage(senderNation, Translation.of("msg_accept_ally", receiverNation.getName()));
