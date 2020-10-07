@@ -9,17 +9,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
-import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
-import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
-import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
-import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
-import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
-import com.palmergames.bukkit.towny.event.NewNationEvent;
-import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
-import com.palmergames.bukkit.towny.event.NationTransactionEvent;
-import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
-import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -1883,8 +1873,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (toDecline != null) {
 					try {
+						
+						NationPreDenyAllyRequestEvent preDenyAllyRequestEvent = new NationPreDenyAllyRequestEvent(nation, sendernation);
+						Bukkit.getPluginManager().callEvent(preDenyAllyRequestEvent);
+						if (preDenyAllyRequestEvent.isCancelled()) {
+							return;
+						}
+						
 						InviteHandler.declineInvite(toDecline, false);
 						TownyMessaging.sendMessage(player, Translation.of("successful_deny_request"));
+						
+						NationDenyAllyRequestEvent denyAllyRequestEvent = new NationDenyAllyRequestEvent(nation, sendernation);
+						Bukkit.getPluginManager().callEvent(denyAllyRequestEvent);
+						
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
@@ -2006,11 +2007,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							try {
 								targetNation.addAlly(nation);
 								nation.addAlly(targetNation);
+								
+								
 							} catch (AlreadyRegisteredException e) {
 								e.printStackTrace();
 							}
+							
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_allied_nations", resident.getName(), targetNation.getName()));
 							TownyMessaging.sendPrefixedNationMessage(targetNation, Translation.of("msg_added_ally", nation.getName()));
+							
 						} else
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_unable_ally_npc", nation.getName()));
 					}
@@ -2018,7 +2023,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else { // So we are removing an ally
 				if (nation.getAllies().contains(targetNation)) {
 					try {
+						NationPreRemoveAllyEvent preRemoveAllyEvent = new NationPreRemoveAllyEvent(nation, targetNation);
+						Bukkit.getPluginManager().callEvent(preRemoveAllyEvent);
+						if (preRemoveAllyEvent.isCancelled()) {
+							return;
+						}
 						nation.removeAlly(targetNation);
+						NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(nation, targetNation);
+						Bukkit.getPluginManager().callEvent(removeAllyEvent);
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translation.of("msg_removed_ally", nation.getName()));
 						TownyMessaging.sendMessage(player, Translation.of("msg_ally_removed_successfully"));
 					} catch (NotRegisteredException e) {
