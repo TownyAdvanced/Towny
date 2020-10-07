@@ -1906,7 +1906,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(player, preDenyAllyRequestEvent.getCancelMessage());
 							return;
 						}
-						
 						InviteHandler.declineInvite(toDecline, false);
 						TownyMessaging.sendMessage(player, Translation.of("successful_deny_request"));
 						NationDenyAllyRequestEvent denyAllyRequestEvent = new NationDenyAllyRequestEvent(nation, sendernation);
