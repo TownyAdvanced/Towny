@@ -1949,7 +1949,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("disablecreaturetrample=" + world.isDisableCreatureTrample());
 
 		// Unclaimed
-		list.add(newLine);
+		list.add("");
 		list.add("# Unclaimed Zone settings.");
 
 		// Unclaimed Zone Build
@@ -1976,9 +1976,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ","));
 
 		// PlotManagement Delete
-		list.add(newLine);
+		list.add("");
 		list.add("# The following settings control what blocks are deleted upon a townblock being unclaimed");
-
 		// Using PlotManagement Delete
 		list.add("usingPlotManagementDelete=" + world.isUsingPlotManagementDelete());
 		// Plot Management Delete Ids
@@ -1986,9 +1985,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
 
 		// PlotManagement
-		list.add(newLine);
+		list.add("");
 		list.add("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command");
-
 		// Using PlotManagement Mayor Delete
 		list.add("usingPlotManagementMayorDelete=" + world.isUsingPlotManagementMayorDelete());
 		// Plot Management Mayor Delete
@@ -1996,45 +1994,46 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ","));
 
 		// PlotManagement Revert
-		list.add(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed.");
-		list.add("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot.");
-
+		list.add("");
+		list.add("# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed.");
+		list.add("# When the townblock is unclaimed its blocks will begin to revert to the original snapshot.");
 		// Using PlotManagement Revert
 		list.add("usingPlotManagementRevert=" + world.isUsingPlotManagementRevert());
-		// Using PlotManagement Revert Speed
-		//list.add("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()));
 
 		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air.");
-
 		// Plot Management Ignore Ids
 		if (world.getPlotManagementIgnoreIds() != null)
 			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
 
 		// PlotManagement Wild Regen
 		list.add("");
-		list.add("# If enabled any damage caused by explosions will repair itself.");
-
+		list.add("# The following settings control which entities/blocks' explosions are reverted in the wilderness.");
+		list.add("# If enabled any damage caused by entity explosions will repair itself.");
 		// Using PlotManagement Wild Regen
 		list.add("usingPlotManagementWildRegen=" + world.isUsingPlotManagementWildEntityRevert());
 
+		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
 			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ","));
 
-		// Using PlotManagement Wild Regen Delay
-		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
-		
+		list.add("# If enabled any damage caused by block explosions will repair itself.");
 		// Using PlotManagement Wild Block Regen
 		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildBlockRevert());
 
+		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
 			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
 
+		list.add("# The delay after which the explosion reverts will begin.");
+		// Using PlotManagement Wild Regen Delay
+		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
+
+		
 		// Using Towny
 		list.add("");
 		list.add("# This setting is used to enable or disable Towny in this world.");
-
 		// Using Towny
 		list.add("usingTowny=" + world.isUsingTowny());
 
@@ -2044,6 +2043,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("warAllowed=" + world.isWarAllowed());
 
 		// Metadata
+		list.add("");
 		list.add("metadata=" + serializeMetadata(world));
 		
 		/*
