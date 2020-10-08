@@ -139,7 +139,6 @@ public class TownyCustomListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL) 
 	public void onBedExplodeEvent(BedExplodeEvent event) {
-		System.out.println("BEDEXPLODEEVENT");
 		TownyWorld world = null;
 		try {
 			world = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
@@ -148,10 +147,11 @@ public class TownyCustomListener implements Listener {
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
 		world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
 		final TownyWorld finalWorld = world;
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin ,new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
                 finalWorld.removeBedExplosionAtBlock(event.getLocation());
+                finalWorld.removeBedExplosionAtBlock(event.getLocation2());
             }
         }, 20L);
 	}

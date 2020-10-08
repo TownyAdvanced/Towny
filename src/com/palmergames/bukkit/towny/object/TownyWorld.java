@@ -496,7 +496,7 @@ public class TownyWorld extends TownyObject {
 		if (blockExplosionProtection == null)
 			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
 
-		return entityExplosionProtection;
+		return blockExplosionProtection;
 	}
 
 	public boolean isProtectingExplosionBlock(Material material) {
