@@ -5041,3 +5041,5 @@ v0.92.0.11:
   - Fix /ta town TOWNNAME withdraw displaying the correct message when a town is bankrupt and has hit the debtcap.
   - Add groupmanager and iconomy to the softdepend.
   - Add debt cap to town status screen when a town is bankrupt.
+  - Fix mayors being able to alter the plot permissions of their residents on embassy plots in other towns.
+    - Closes #4360.

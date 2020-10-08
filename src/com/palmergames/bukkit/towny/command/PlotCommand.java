@@ -1306,7 +1306,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					&& (townBlock.getTown() == resident.getTown()))				
 					return owner;
 					
-			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown();
+			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown() && townBlock.getTown() == resident.getTown();  //Last test makes it so mayors cannot alter embassy plots owned by their residents in towns they are not mayor of.
 
 			if ((resident == owner)
 					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
