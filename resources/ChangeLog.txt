@@ -5043,3 +5043,5 @@ v0.92.0.11:
   - Add debt cap to town status screen when a town is bankrupt.
   - Fix mayors being able to alter the plot permissions of their residents on embassy plots in other towns.
     - Closes #4360.
+  - Add support for colour codes in the plot line where players have coloured names.
+    - Closes #4091.

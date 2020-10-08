@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
@@ -79,6 +80,8 @@ public class TownyCustomListener implements Listener {
 					e.printStackTrace();
 				}
 				if (msg != null) {
+					msg = NameUtil.translateColorCodes(msg);
+					
 					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
 						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
 						if (seconds > 3) {
