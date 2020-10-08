@@ -1169,3 +1169,5 @@ msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could
 msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
 msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
 status_debtcap: '&2Debt Cap: &a%s'
+status_world_explrevert_entity: '&2Entity Explosion Revert: '
+status_world_explrevert_block: '&2Block Explosion Revert: '

@@ -59,7 +59,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"townmobs",
 		"worldmobs",
 		"revertunclaim",
-		"revertexpl",
+		"revertentityexpl",
+		"revertblockexpl",
 		"warallowed"
 	);
 	
@@ -315,7 +316,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "explosion/forceexplosion", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "fire/forcefire", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/worldmobs", ""));
-				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim/revertexpl", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertentityexpl/revertblockexpl", ""));
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
@@ -325,7 +327,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "explosion/forceexplosion", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "fire/forcefire", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "townmobs/worldmobs", ""));
-				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim/revertexpl", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertentityexpl/revertblockexpl", ""));
 			}
 		} else {
 
@@ -450,15 +453,24 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendMsg(msg);
 
-			} else if (split[0].equalsIgnoreCase("revertexpl")) {
+			} else if (split[0].equalsIgnoreCase("revertentityexpl")) {
 
-				Globalworld.setUsingPlotManagementWildRevert(!Globalworld.isUsingPlotManagementWildRevert());
-				msg = Translation.of("msg_changed_world_setting", "Wilderness Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildRevert() ? Translation.of("enabled") : Translation.of("disabled"));
+				Globalworld.setUsingPlotManagementWildEntityRevert(!Globalworld.isUsingPlotManagementWildEntityRevert());
+				msg = Translation.of("msg_changed_world_setting", "Wilderness Entity Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildEntityRevert() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
 
+			} else if (split[0].equalsIgnoreCase("revertblockexpl")) {
+
+				Globalworld.setUsingPlotManagementWildBlockRevert(!Globalworld.isUsingPlotManagementWildBlockRevert());
+				msg = Translation.of("msg_changed_world_setting", "Wilderness Block Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildBlockRevert() ? Translation.of("enabled") : Translation.of("disabled"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+				
 			} else {
 				msg = Translation.of("msg_err_invalid_property", "'" + split[0] + "'");
 				if (player != null)

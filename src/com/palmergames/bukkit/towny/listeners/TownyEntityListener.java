@@ -800,7 +800,7 @@ public class TownyEntityListener implements Listener {
 							// Wilderness explosion regeneration
 
 							if (townyWorld.isExpl()) {
-								if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
+								if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
 									TownyRegenAPI.beginProtectionRegenTask(block, count);
 								}
 							} else {
@@ -842,7 +842,7 @@ public class TownyEntityListener implements Listener {
 				} else {
 					// Wilderness explosion regeneration
 					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
+						if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 						}
 					} else {
@@ -1002,7 +1002,7 @@ public class TownyEntityListener implements Listener {
 					if (tb == null) {
 					    // We're in the wilderness because the townblock is null;
 						if (townyWorld.isExpl())
-							if (townyWorld.isUsingPlotManagementWildRevert() && (remover != null))
+							if (townyWorld.isUsingPlotManagementWildEntityRevert() && (remover != null))
 								if (townyWorld.isProtectingExplosionEntity((Entity)remover))
 									event.setCancelled(true);
 					}

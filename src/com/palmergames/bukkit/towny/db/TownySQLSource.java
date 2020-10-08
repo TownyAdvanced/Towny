@@ -1528,7 +1528,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			result = rs.getBoolean("usingPlotManagementWildRegen");
 			try {
-				world.setUsingPlotManagementWildRevert(result);
+				world.setUsingPlotManagementWildEntityRevert(result);
 			} catch (Exception ignored) {
 			}
 
@@ -1998,7 +1998,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
 
 			// Using PlotManagement Wild Regen
-			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildRevert());
+			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildEntityRevert());
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
@@ -2009,7 +2009,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
 			
 			// Using PlotManagement Wild Block Regen
-			nat_hm.put("usingPlotManagementWildRegenBlocks", world.isUsingPlotManagementWildRevertBlocks());
+			nat_hm.put("usingPlotManagementWildRegenBlocks", world.isUsingPlotManagementWildBlockRevert());
 
 			// Wilderness Explosion Protection blocks
 			if (world.getPlotManagementWildRevertBlocks() != null)

@@ -1359,7 +1359,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("usingPlotManagementWildRegen");
 				if (line != null)
 					try {
-						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
+						world.setUsingPlotManagementWildEntityRevert(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
 				
@@ -2015,7 +2015,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# If enabled any damage caused by explosions will repair itself.");
 
 		// Using PlotManagement Wild Regen
-		list.add("usingPlotManagementWildRegen=" + world.isUsingPlotManagementWildRevert());
+		list.add("usingPlotManagementWildRegen=" + world.isUsingPlotManagementWildEntityRevert());
 
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
@@ -2025,7 +2025,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
 		
 		// Using PlotManagement Wild Block Regen
-		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildRevertBlocks());
+		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildBlockRevert());
 
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)

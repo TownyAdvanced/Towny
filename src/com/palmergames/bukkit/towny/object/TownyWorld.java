@@ -33,7 +33,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private List<String> plotManagementIgnoreIds = null;
 
-	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
+	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
 	
@@ -403,28 +403,28 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @return the isUsingPlotManagementWildRevert
+	 * @return the isUsingPlotManagementWildEntityRevert
 	 */
-	public boolean isUsingPlotManagementWildRevert() {
+	public boolean isUsingPlotManagementWildEntityRevert() {
 
-		return isUsingPlotManagementWildRevert;
+		return isUsingPlotManagementWildEntityRevert;
 	}
 	
 	/**
-	 * @return the isUsingPlotManagementWildRevert
+	 * @return the isUsingPlotManagementWildBlockRevert
 	 */
-	public boolean isUsingPlotManagementWildRevertBlocks() {
+	public boolean isUsingPlotManagementWildBlockRevert() {
 
 		return isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
-	 * @param isUsingPlotManagementWildRevert the
+	 * @param isUsingPlotManagementWildEntityRevert the
 	 *            isUsingPlotManagementWildRevert to set
 	 */
-	public void setUsingPlotManagementWildRevert(boolean isUsingPlotManagementWildRevert) {
+	public void setUsingPlotManagementWildEntityRevert(boolean isUsingPlotManagementWildEntityRevert) {
 
-		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
+		this.isUsingPlotManagementWildEntityRevert = isUsingPlotManagementWildEntityRevert;
 	}
 	
 	/**
