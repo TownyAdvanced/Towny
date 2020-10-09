@@ -5045,3 +5045,7 @@ v0.92.0.11:
     - Closes #4360.
   - Add support for colour codes in the plot line where players have coloured names.
     - Closes #4091.
+  - API: Add TownyAPI.getInstance().getOnlinePlayersInTown(Town town).
+  - API: Add TownyAPI.getInstance().getOnlinePlayersInNation(Nation nation).
+  - Move translateColorCodes from NameUtil to Colors.
+    - Original method deprecated.

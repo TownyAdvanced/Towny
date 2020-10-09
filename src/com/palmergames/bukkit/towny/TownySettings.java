@@ -17,10 +17,10 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -344,7 +344,7 @@ public class TownySettings {
 			sendError(root.toLowerCase() + " from " + config.getString("language"));
 			return "";
 		}
-		return StringMgmt.translateHexColors(NameUtil.translateColorCodes(data));
+		return StringMgmt.translateHexColors(Colors.translateColorCodes(data));
 	}
 
 	public static List<Integer> getIntArr(ConfigNodes node) {
