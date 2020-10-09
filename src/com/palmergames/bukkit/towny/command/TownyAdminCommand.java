@@ -906,7 +906,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
 					Confirmation.runOnAccept(() -> {
-						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+						TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
 					})
 						.sendTo(sender);
@@ -1208,7 +1208,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					Confirmation.runOnAccept(() -> {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
-						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+						TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
 					})
 					.sendTo(sender); // It takes the nation, an admin deleting another town has no confirmation.
 				}
@@ -1708,7 +1708,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						Resident resident = townyUniverse.getDataSource().getResident(name);
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							townyUniverse.getDataSource().removeResident(resident);
-							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
+							TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_RESIDENT", resident.getName()));
 						} else
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_online_or_npc", name));
 					} catch (NotRegisteredException x) {

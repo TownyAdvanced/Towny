@@ -1007,9 +1007,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if (forSale != -1) {
-					TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+					TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 					if (townBlock.getTown() != resident.getTown())
-						TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+						TownyMessaging.sendMessage(resident, Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 				} else {
 					Player p = TownyAPI.getInstance().getPlayer(resident);
 					if (p == null) {

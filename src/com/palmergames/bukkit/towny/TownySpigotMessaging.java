@@ -185,7 +185,7 @@ public class TownySpigotMessaging {
 		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
 		adaptForHover(forwardButton).setHoverText(Translation.of("msg_hover_next_page"));
 		
-		TextComponent pageText = new TextComponent("   " + TownySettings.getListPageMsg(page, total) + "   ");
+		TextComponent pageText = new TextComponent("   " + Translation.of("LIST_PAGE", page, total) + "   ");
 
 		TextComponent pageFooter = new TextComponent();
 		if (page < total && page > 1) {

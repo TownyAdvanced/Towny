@@ -460,7 +460,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		        }
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode()))
-					throw new TownyException(TownySettings.getNotPermToNewNationLine());
+					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				if (split.length == 1)
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_nation_name"));
@@ -1164,7 +1164,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 	    if (page > total) {
-	        TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
+	        TownyMessaging.sendErrorMsg(sender, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 	        return;
 	    }
 
@@ -1202,7 +1202,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						Translation.of("nation_plu"),
 						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_towns"),
 						nationsordered,
-						TownySettings.getListPageMsg(page, total)
+						Translation.of("LIST_PAGE", page, total)
 				));		
 	}
 
@@ -1379,7 +1379,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Nation nation = resident.getTown().getNation();
 				Confirmation.runOnAccept(() -> {
 					TownyUniverse.getInstance().getDataSource().removeNation(nation);
-					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
 				})
 				.sendTo(player);
 			} catch (TownyException x) {
@@ -1392,7 +1392,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				Nation nation = townyUniverse.getDataSource().getNation(split[0]);
 				townyUniverse.getDataSource().removeNation(nation);
-				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+				TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}

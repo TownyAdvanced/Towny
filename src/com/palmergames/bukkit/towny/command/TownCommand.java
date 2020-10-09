@@ -643,7 +643,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 									}
 								}
 								if (page > total) {
-									TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+									TownyMessaging.sendErrorMsg(player, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 									return;
 								}
 								int iMax = page * 10;
@@ -676,7 +676,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 												Translation.of("outpost_plu"),
 												Colors.Gold + "#" + Colors.Gray + " - " + Colors.LightGreen + "(Plot Name)" + Colors.Gray + " - " + Colors.LightBlue + "(Outpost World)"+ Colors.Gray + " - " + Colors.LightBlue + "(Outpost Location)",
 												outputs,
-												TownySettings.getListPageMsg(page, total)
+												Translation.of("LIST_PAGE", page, total)
 										));
 
 							} else {
@@ -1291,7 +1291,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 		if (page > total) {
-			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
+			TownyMessaging.sendErrorMsg(sender, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 			return;
 		}
 		
@@ -1336,7 +1336,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		String[] messages = ChatTools.formatList(Translation.of("town_plu"),
 			Colors.Blue + Translation.of("town_name") +
 				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents")),
-			townsformatted, TownySettings.getListPageMsg(page, total)
+			townsformatted, Translation.of("LIST_PAGE", page, total)
 		);
 		
 		sender.sendMessage(messages);
@@ -2606,7 +2606,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 		if (resident.isMayor()) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getMayorAbondonMsg());
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_mayor_abandon"));
 			return;
 		}
 
@@ -2710,7 +2710,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
 				})
 					.sendTo(player);
@@ -2729,7 +2729,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+			TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 			townyUniverse.getDataSource().removeTown(town);
 		}
 
@@ -2968,7 +2968,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					return;
 				}
 			TownyMessaging.sendPrefixedNationMessage(town.getNation(), Translation.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
+			TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", town.getNation()));
 			townyUniverse.getDataSource().removeNation(town.getNation());
 
 			if (TownySettings.isUsingEconomy() && TownySettings.isRefundNationDisbandLowResidents()) {

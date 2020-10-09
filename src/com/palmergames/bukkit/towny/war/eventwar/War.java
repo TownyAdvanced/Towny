@@ -318,7 +318,7 @@ public class War {
 				nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
+					TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), TownyEconomyHandler.getFormattedBalance(nationWinnings)));
 				}
 			} catch (ArithmeticException e) {
 				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
@@ -328,7 +328,7 @@ public class War {
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
+				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
 				
 				EventWarEndEvent event = new EventWarEndEvent(warringTowns, winningTownScore.key, halfWinnings, warringNations, nationWinnings);
 				Bukkit.getServer().getPluginManager().callEvent(event);
@@ -424,16 +424,16 @@ public class War {
 	 * @param n - the score to be added ({@link Integer})
 	 */
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n) {
-		String[] pointMessage;
+		String pointMessage;
 		TownBlock deathLoc = TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation());
 		if (deathLoc == null)
-			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
+			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attackerPlayer.getName(), defenderPlayer.getName(), n, attackerTown.getName());
 		else if (warZone.containsKey(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
-			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, attackerPlayer, n, attackerTown);
+			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attackerPlayer.getName(), defenderPlayer.getName(), attackerPlayer.getName(), n, attackerTown.getName());
 		else if (warZone.containsKey(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
-			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, defenderPlayer, n, attackerTown);
+			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attackerPlayer.getName(), defenderPlayer.getName(), defenderPlayer.getName(), n, attackerTown.getName());
 		else
-			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
+			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attackerPlayer.getName(), defenderPlayer.getName(), n, attackerTown.getName());
 
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);

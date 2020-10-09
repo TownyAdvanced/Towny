@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -50,21 +51,21 @@ public class ChunkNotification {
 	 */
 	public static void loadFormatStrings() {
 
-		notificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_FORMAT);
-		notificationSpliter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_SPLITTER);
-		areaWildernessNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS);
-		areaWildernessPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP);
-		areaTownNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN);
-		areaTownPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP);
-		ownerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_OWNER);
-		noOwnerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_NO_OWNER);
-		plotNotficationSplitter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_SPLITTER);
-		plotNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORMAT);
-		homeBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK);
-		outpostBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK);
-		forSaleNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
-		plotTypeNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_TYPE);
-		groupNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_GROUP);
+		notificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_FORMAT));
+		notificationSpliter = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER));
+		areaWildernessNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS));
+		areaWildernessPvPNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP));
+		areaTownNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN));
+		areaTownPvPNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP));
+		ownerNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_OWNER));
+		noOwnerNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_NO_OWNER));
+		plotNotficationSplitter = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER));
+		plotNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT));
+		homeBlockNotification = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK));
+		outpostBlockNotification = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK));
+		forSaleNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALE));
+		plotTypeNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE));
+		groupNotificationFormat = NameUtil.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP));
 	}
 
 	WorldCoord from, to;

@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.chat.Chat;
 
@@ -70,7 +70,7 @@ public class VaultPermSource extends TownyPermissionSource {
 			if (!playerPrefixSuffix.equals(groupPrefixSuffix))
 				prefixSuffix = groupPrefixSuffix + playerPrefixSuffix;
 
-			return TownySettings.parseSingleLineString(prefixSuffix);
+			return NameUtil.translateColorCodes(prefixSuffix);
 		}
 		return "";
 	}

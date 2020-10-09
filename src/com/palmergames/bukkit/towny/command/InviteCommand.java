@@ -296,7 +296,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 		player.sendMessage(ChatTools.formatList(Translation.of("invite_plu"),
 				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by"),
-				invitesFormatted, TownySettings.getListPageMsg(page, total)
+				invitesFormatted, Translation.of("LIST_PAGE", page, total)
 		));
 	}
 }

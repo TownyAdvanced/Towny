@@ -329,7 +329,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
-							TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
+							TownyMessaging.sendResidentMessage(resident, Translation.of("MSG_TAX_EXEMPT"));
 						} catch (TownyException e) {
 							// Player is not online
 						}
