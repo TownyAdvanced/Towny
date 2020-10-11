@@ -343,10 +343,16 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
-						removedResidents.add(resident.getName());
-						
-						// remove this resident from the town.
-						resident.removeTown();
+						// Handle town bank caps not allowing a player to deposit the money, but not because the player could not pay.
+						if (town.getAccount().getHoldingBalance() + town.getTaxes() > town.getAccount().getBalanceCap()) {
+							double tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+							resident.getAccount().payTo(tax, town, "Town tax hitting bank cap.");
+						} else { 
+							removedResidents.add(resident.getName());
+							
+							// remove this resident from the town.
+							resident.removeTown();
+						}
 					}
 				}
 			}
@@ -386,17 +392,23 @@ public class DailyTimerTask extends TownyTimerTask {
 									continue;
 							
 						if (!resident.getAccount().payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
-							if (!lostPlots.contains(resident.getName()))
-									lostPlots.add(resident.getName());
-
-							townBlock.setResident(null);
-							townBlock.setPlotPrice(-1);
-
-							// Set the plot permissions to mirror the towns.
-							townBlock.setType(townBlock.getType());
 							
-							universe.getDataSource().saveResident(resident);
-							universe.getDataSource().saveTownBlock(townBlock);
+							if (town.getAccount().getHoldingBalance() + townBlock.getType().getTax(town) > town.getAccount().getBalanceCap()) {
+								double tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+								resident.getAccount().payTo(tax, town, "Town plottax hitting bank cap.");
+							} else {
+								if (!lostPlots.contains(resident.getName()))
+									lostPlots.add(resident.getName());
+	
+								townBlock.setResident(null);
+								townBlock.setPlotPrice(-1);
+	
+								// Set the plot permissions to mirror the towns.
+								townBlock.setType(townBlock.getType());
+								
+								universe.getDataSource().saveResident(resident);
+								universe.getDataSource().saveTownBlock(townBlock);
+							}
 						}
 					}
 				} catch (NotRegisteredException ignored) {
