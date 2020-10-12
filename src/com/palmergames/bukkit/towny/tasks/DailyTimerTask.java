@@ -320,6 +320,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			while (residentItr.hasNext()) {
 				resident = residentItr.next();
 
+				boolean paid = true;
+				double tax = 0;
 				/*
 				 * Only collect resident tax from this resident if it really
 				 * still exists. We are running in an Async thread so MUST
@@ -335,25 +337,31 @@ public class DailyTimerTask extends TownyTimerTask {
 						}
 						continue;
 					} else if (town.isTaxPercentage()) {
-						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						tax = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
 						
 						// Make sure that the town percent tax doesn't remove above the
 						// allotted amount of cash.
-						cost = Math.min(cost, town.getMaxPercentTaxAmount());
+						tax = Math.min(tax, town.getMaxPercentTaxAmount());
 						
-						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
+						resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
 					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
 						// Handle town bank caps not allowing a player to deposit the money, but not because the player could not pay.
 						if (town.getAccount().getHoldingBalance() + town.getTaxes() > town.getAccount().getBalanceCap()) {
-							double tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
-							resident.getAccount().payTo(tax, town, "Town tax hitting bank cap.");
+							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+							if (resident.getAccount().canPayFromHoldings(tax))
+								resident.getAccount().payTo(tax, town, "Town tax hitting bank cap.");
+							else 
+								paid = false;
 						} else { 
-							removedResidents.add(resident.getName());
-							
-							// remove this resident from the town.
-							resident.removeTown();
+							paid = false;
 						}
 					}
+				}
+				
+				if (!paid) {
+					removedResidents.add(resident.getName());					
+					// remove this resident from the town.
+					resident.removeTown();
 				}
 			}
 			if (removedResidents != null) {
@@ -373,6 +381,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownBlock townBlock;
 
 			while (townBlockItr.hasNext()) {
+				boolean paid = true;
 				townBlock = townBlockItr.next();
 
 				if (!townBlock.hasResident())
@@ -386,34 +395,38 @@ public class DailyTimerTask extends TownyTimerTask {
 					 * verify all objects.
 					 */
 					if (universe.getDataSource().hasResident(resident.getName())) {
-						if (resident.hasTown())
-							if (resident.getTown() == townBlock.getTown())
-								if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
-									continue;
+						if (resident.hasTown() && resident.getTown() == townBlock.getTown())
+							if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
+								continue;
+						
+						double tax = townBlock.getType().getTax(town);
 							
-						if (!resident.getAccount().payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+						if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 							
-							if (town.getAccount().getHoldingBalance() + townBlock.getType().getTax(town) > town.getAccount().getBalanceCap()) {
-								double tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
-								resident.getAccount().payTo(tax, town, "Town plottax hitting bank cap.");
+							if (town.getAccount().getHoldingBalance() + tax > town.getAccount().getBalanceCap()) {
+								tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+								if (resident.getAccount().canPayFromHoldings(tax))
+									resident.getAccount().payTo(tax, town, "Town plottax hitting bank cap.");
+								else
+									paid = false;
 							} else {
-								if (!lostPlots.contains(resident.getName()))
-									lostPlots.add(resident.getName());
-	
-								townBlock.setResident(null);
-								townBlock.setPlotPrice(-1);
-	
-								// Set the plot permissions to mirror the towns.
-								townBlock.setType(townBlock.getType());
-								
-								universe.getDataSource().saveResident(resident);
-								universe.getDataSource().saveTownBlock(townBlock);
+								paid = false;
 							}
 						}
 					}
+					
+					if (!paid) {
+						if (!lostPlots.contains(resident.getName()))
+							lostPlots.add(resident.getName());
+
+						townBlock.setResident(null);
+						townBlock.setPlotPrice(-1);
+						// Set the plot permissions to mirror the towns.
+						townBlock.setType(townBlock.getType());
+						universe.getDataSource().saveTownBlock(townBlock);
+					}
 				} catch (NotRegisteredException ignored) {
 				}
-				
 			}
 			if (lostPlots != null) {
 				if (lostPlots.size() == 1) 
