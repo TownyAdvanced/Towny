@@ -1,7 +1,7 @@
 name: Towny
 version: 0.86
 language: português (Brasil)
-author: BannerGames
+author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
 description: >
     Arquivo de língua para todas as mensagens do jogo. Não altere este arquivo.
@@ -1146,23 +1146,23 @@ msg_town_set_tax_max_percent_amount: "%s mudou o valor da taxa máxima para %s."
 msg_err_plot_belongs_to_group_toggle: 'O terreno pertence a um grupo, use /plot group toggle'
 
 # Added in 0.85
-msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
+msg_set_perms_reset_single: '&bPermissões restauradas com succeso para esse terreno.'
 
 #Added in 0.86
-status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
-msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
-msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
-msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
-msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
-msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
-msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
-msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
-msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
-msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
-msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
-msg_payed_nation_tax: '&bPayed nation tax of %s'
-msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
-msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
-msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
-msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
-msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'
+status_bank_bankrupt: '&2Banco: &a%s &c(FALÊNCIA)'
+msg_warning_bankrupt: '&4*** ALERTA, %s IRÁ FALIR ATÉ O PRÓXIMO DIA DEVIDO A QUEDA DE FUNDOS ***'
+msg_town_bankrupt_by_upkeep: '&b%s não podia pagar sua manutenção e faliu.'
+msg_town_bankrupt_by_upkeep_multiple: '&bAs seguintes cidades não conseguiram pagar sua manutenção e faliram: '
+msg_town_bankrupt_by_nation_tax: '&b%s não conseguiu pagar o imposto de %s e irá falir.'
+msg_town_bankrupt_by_nation_tax_multiple:  '&bAs seguintes cidades não podiam pagar o imposto nacional e faliram: '
+msg_town_debts_cleared: '%s limpou todas as suas dívidas e não irá mais falir.'
+msg_err_bankrupt_town_cannot_claim: 'Não é permitido reivindicar lotes para uma cidade em falência.'
+msg_err_bankrupt_town_cannot_build: 'Não é permitido construir em uma cidade em falência.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Não tem permissão para abrir uma cidade em falência.'
+msg_err_bankrupt_town_cannot_invite: 'Não é permitido convidar jogadores para uma cidade em falência.'
+msg_payed_nation_tax: '&bPago os impostos da nação %s'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bSua cidade não podia pagar o imposto nacional de %s e foi expulsa do país.'
+msg_your_town_payed_upkeep: '&bSua cidade pagou a manutenção diária de %s.'
+msg_your_nation_payed_upkeep: '&bSua nação pagou a manutenção diária de %s.'
+msg_your_town_couldnt_pay_upkeep: '&bSua cidade não podia pagar a manutenção diária de %s e foi dissolvida.'
+msg_your_nation_couldnt_pay_upkeep: '&bSua nação não podia pagar a manutenção diária de %s e foi dissolvida.'
