@@ -5051,3 +5051,26 @@ v0.92.0.11:
     - Original method deprecated.
   - Fix towns that cannot afford to purchase townblocks not seeing any message when they cannot pay.
     - Closes #4365.
+  - Added: per-world block explosion revert list.
+    - Decides which blocks' explosions will be reverted on a per-world basis.
+    - Closes #4300.    
+  - New Config Option: new_world_settings.plot_management.wild_revert_on_block_explosion.enabled
+    - default: true
+    - Enabling this will slowly regenerate holes created in the wilderness by exploding blocks like beds.
+    - Is a default setting for new worlds only.
+  - New Config Option: new_world_settings.plot_management.wild_revert_on_block_explosion.blocks
+    - default: WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED
+    - The list of blocks whose explosions should be reverted.
+    - Is a default settings applied to new worlds only.
+  - Removed Command: /tw toggle revertexpl
+  - New Command: /tw toggle revertentityexpl
+    - Toggles explosions caused by entities reverting on and off.
+  - New Command: /tw toggle revertblockexpl
+    - Toggles explosions caused by blocks reverting on and off..
+  - API: Ally Events, courtesy of ceeedric with PR #4356. (First-Time Contributor!)
+    - Adds the following cancellable events:
+      - NationAcceptAllyRequestEvent
+      - NationDenyAllyRequestEvent
+      - NationRemoveAllyEvent
+  - pt-br.yml updated to 0.86 by Plugner with PR #4348. (First-Time Contributor!)
+  - New farmable nether blocks added to config by Momshroom with PR #4353. (First-Time Contributor!)
