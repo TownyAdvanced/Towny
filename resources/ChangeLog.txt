@@ -5049,3 +5049,5 @@ v0.92.0.11:
   - API: Add TownyAPI.getInstance().getOnlinePlayersInNation(Nation nation).
   - Move translateColorCodes from NameUtil to Colors.
     - Original method deprecated.
+  - Fix towns that cannot afford to purchase townblocks not seeing any message when they cannot pay.
+    - Closes #4365.

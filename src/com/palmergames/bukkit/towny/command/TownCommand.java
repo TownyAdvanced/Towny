@@ -2314,10 +2314,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel()) {
-			TownyMessaging.sendErrorMsg(player, "Config.yml max_purchased_blocks: '0' ");
+			TownyMessaging.sendErrorMsg(player, "Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
 			return;
 		} else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0) {
-			TownyMessaging.sendErrorMsg(player, "Config.yml town_level townBlockBonusBuyAmount: 0");
+			TownyMessaging.sendErrorMsg(player, "Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
 			return;
 		}
 			
@@ -2335,7 +2335,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (split.length == 2) {
 						try {
 							townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
-						} catch (EconomyException ignored) {							
+						} catch (EconomyException e) {
+							player.sendMessage(e.getMessage());
 						}
 					} else {
 						throw new TownyException(Translation.of("msg_must_specify_amnt", "/town buy bonus"));
