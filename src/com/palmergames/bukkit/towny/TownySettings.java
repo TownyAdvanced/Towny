@@ -1174,6 +1174,13 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Wilderness explosion protection entities. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST);
 	}
+	
+	public static List<String> getWildExplosionProtectionBlocks() {
+
+		if (getDebug())
+			System.out.println("[Towny] Debug: Wilderness explosion protection blocks. ");
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST);
+	}
 
 	public static long getMobRemovalSpeed() {
 
@@ -1925,7 +1932,7 @@ public class TownySettings {
 		return getSeconds(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_TIME);
 	}
 
-	public static boolean isUsingPlotManagementWildRegen() {
+	public static boolean isUsingPlotManagementWildEntityRegen() {
 
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_ENABLE);
 	}
@@ -1933,6 +1940,11 @@ public class TownySettings {
 	public static long getPlotManagementWildRegenDelay() {
 
 		return getSeconds(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME);
+	}
+	
+	public static boolean isUsingPlotManagementWildBlockRegen() {
+
+		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_ENABLE);
 	}
 
 	public static List<String> getPlotManagementIgnoreIds() {

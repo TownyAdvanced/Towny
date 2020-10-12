@@ -595,8 +595,9 @@ public class TownyFormatter {
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
 			// + "No"));
 
-			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " + 
-			        Translation.of("status_world_explrevert") + (world.isUsingPlotManagementWildRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
+			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad"))); 
+			out.add(Translation.of("status_world_explrevert_entity") + (world.isUsingPlotManagementWildEntityRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " +
+			        Translation.of("status_world_explrevert_block") + (world.isUsingPlotManagementWildBlockRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
 			// Wilderness:
 			// Build, Destroy, Switch
 			// Ignored Blocks: 34, 45, 64

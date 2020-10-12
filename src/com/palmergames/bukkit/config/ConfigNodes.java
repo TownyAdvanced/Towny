@@ -372,10 +372,26 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",			
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull",
+			"# The list of entities whose explosions should be reverted."),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_HEADER(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion",
+			"",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected."),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_ENABLE(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion.enabled",
+			"true",
+			"# Enabling this will slowly regenerate holes created in the",
+			"# wilderness by exploding blocks like beds."),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
+			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED",
+			"# The list of blocks whose explosions should be reverted."),
+		
 
 	GTOWN_SETTINGS(
 			"global_town_settings",

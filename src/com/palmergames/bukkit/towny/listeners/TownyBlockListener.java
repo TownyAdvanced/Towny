@@ -348,6 +348,9 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
 		
 		TownyWorld townyWorld;
 		List<Block> blocks = event.blockList();
@@ -355,12 +358,26 @@ public class TownyBlockListener implements Listener {
 
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
-			if (!townyWorld.isUsingTowny())
-				return; 
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			return;
 		}
+
+		Material material = event.getBlock().getType();
+		boolean revertingThisMaterial = false;
+		
+		/*
+		 * event.getBlock() doesn't return the bed when the bed is the cause of the explosion, so we use this workaround.
+		 */
+		if (townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
+			material = townyWorld.getBedExplosionMaterial(event.getBlock().getLocation());
+		
+		/*
+		 * Don't regenerate block explosions unless they are on the list of blocks whose explosions regenerate.
+		 */
+		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material))
+			revertingThisMaterial = true;
+		
 		for (Block block : blocks) {
 			count++;
 			
@@ -369,7 +386,7 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 			
-			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && townyWorld.isUsingPlotManagementWildRevert()) {
+			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisMaterial) {
 				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 			}
 		}
