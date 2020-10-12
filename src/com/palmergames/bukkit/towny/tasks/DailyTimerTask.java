@@ -321,7 +321,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				resident = residentItr.next();
 
 				boolean paid = true;
-				double tax = 0;
+				double tax = town.getTaxes();
 				/*
 				 * Only collect resident tax from this resident if it really
 				 * still exists. We are running in an Async thread so MUST
@@ -337,16 +337,16 @@ public class DailyTimerTask extends TownyTimerTask {
 						}
 						continue;
 					} else if (town.isTaxPercentage()) {
-						tax = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						tax = resident.getAccount().getHoldingBalance() * tax / 100;
 						
 						// Make sure that the town percent tax doesn't remove above the
 						// allotted amount of cash.
 						tax = Math.min(tax, town.getMaxPercentTaxAmount());
 						
 						resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
-					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
+					} else if (!resident.getAccount().payTo(tax, town, "Town Tax")) {
 						// Handle town bank caps not allowing a player to deposit the money, but not because the player could not pay.
-						if (town.getAccount().getHoldingBalance() + town.getTaxes() > town.getAccount().getBalanceCap()) {
+						if (town.getAccount().getHoldingBalance() + tax > town.getAccount().getBalanceCap()) {
 							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
 							if (resident.getAccount().canPayFromHoldings(tax))
 								resident.getAccount().payTo(tax, town, "Town tax hitting bank cap.");
