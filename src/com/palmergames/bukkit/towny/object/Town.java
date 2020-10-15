@@ -1300,7 +1300,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public boolean isBankrupt() { 
 		try {
-			return getAccount().isBankrupt();
+			return TownySettings.isUsingEconomy() && getAccount().isBankrupt();
 		} catch (EconomyException ignored) {}
 
 		return false;

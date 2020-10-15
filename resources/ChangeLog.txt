@@ -5074,3 +5074,4 @@ v0.92.0.11:
       - NationRemoveAllyEvent
   - pt-br.yml updated to 0.86 by Plugner with PR #4348. (First-Time Contributor!)
   - New farmable nether blocks added to config by Momshroom with PR #4353. (First-Time Contributor!)
+  - Fix bankruptcy test stopping players from using /t claim.
