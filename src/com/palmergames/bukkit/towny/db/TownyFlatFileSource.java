@@ -1193,6 +1193,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("friendlyFire");
+				if (line != null)
+					try {
+						world.setFriendlyFire(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("forcetownmobs");
 				if (line != null)
 					try {
@@ -1928,6 +1935,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("pvp=" + world.isPVP());
 		// Force PvP
 		list.add("forcepvp=" + world.isForcePVP());
+		// FriendlyFire 
+		list.add("friendlyFire=" + world.isFriendlyFireEnabled());		
 		// Claimable
 		list.add("# Can players found towns and claim plots in this world?");
 		list.add("claimable=" + world.isClaimable());

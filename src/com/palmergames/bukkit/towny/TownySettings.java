@@ -955,11 +955,11 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_TOWN_BLOCK_SIZE);
 	}
 
-	public static boolean getFriendlyFire() {
+	public static boolean isFriendlyFireEnabled() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_FRIENDLY_FIRE);
+		return getBoolean(ConfigNodes.NWS_FRIENDLY_FIRE_ENABLED);
 	}
-
+	
 	public static boolean isUsingEconomy() {
 
 		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);

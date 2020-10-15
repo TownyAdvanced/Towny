@@ -237,6 +237,13 @@ public enum ConfigNodes {
 			"",
 			"# Do new worlds have pvp forced on by default?",
 			"# This setting overrides a towns' setting."),
+	NWS_FRIENDLY_FIRE_ENABLED(
+			"new_world_settings.pvp.friendly_fire_enabled",
+			"false",
+			"",
+			"# Do new world have friendly fire enabled by default?",
+			"# Does not affect Arena Plots which have FF enabled all the time.",
+			"# When true players on the same town or nation will harm each other."),	
 	NWS_WAR_ALLOWED(
 			"new_world_settings.pvp.war_allowed",
 			"true",
@@ -404,11 +411,6 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			""),
-	GTOWN_SETTINGS_FRIENDLY_FIRE(
-			"global_town_settings.friendly_fire",
-			"true",
-			"",
-			"# can residents/Allies harm other residents when in an area with pvp enabled? Other than an Arena plot."),
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
 			"",

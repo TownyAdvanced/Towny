@@ -52,6 +52,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
+	private boolean isFriendlyFire = TownySettings.isFriendlyFireEnabled();
 	private boolean isFire = TownySettings.isFire();
 	private boolean isForceFire = TownySettings.isForcingFire();
 	private boolean hasWorldMobs = TownySettings.isWorldMonstersOn();
@@ -837,6 +838,15 @@ public class TownyWorld extends TownyObject {
 	public void removeBedExplosionAtBlock(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			bedMap.remove(location);
+	}
+
+	public void setFriendlyFire(boolean parseBoolean) {
+		isFriendlyFire = parseBoolean;
+		
+	}
+	
+	public boolean isFriendlyFireEnabled( ) {
+		return isFriendlyFire;
 	}
 	
 }
