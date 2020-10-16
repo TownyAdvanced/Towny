@@ -2009,7 +2009,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Using PlotManagement Revert
 		list.add("usingPlotManagementRevert=" + world.isUsingPlotManagementRevert());
 
-		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air.");
+		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air. This list also world on the WildRegen settings below.");
 		// Plot Management Ignore Ids
 		if (world.getPlotManagementIgnoreIds() != null)
 			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));

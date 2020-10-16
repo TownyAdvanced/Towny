@@ -58,5 +58,16 @@
         "value": ",CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS"
       }
     ]
+  },
+  {
+    "version": "0.96.2.21",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": "FURNACE,BLAST_FURNACE,SMOKER,BREWING_STAND,TNT,AIR,FIRE",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]

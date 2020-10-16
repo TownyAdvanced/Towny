@@ -784,7 +784,7 @@ public class TownyEntityListener implements Listener {
 								continue;
 							}
 							if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
-								TownyRegenAPI.beginProtectionRegenTask(block, count);
+								TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld);
 							}
 							// Break the block
 						} else {
@@ -803,7 +803,7 @@ public class TownyEntityListener implements Listener {
 
 							if (townyWorld.isExpl()) {
 								if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
-									TownyRegenAPI.beginProtectionRegenTask(block, count);
+									event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
 								}
 							} else {
 								event.setCancelled(true);
@@ -845,7 +845,7 @@ public class TownyEntityListener implements Listener {
 					// Wilderness explosion regeneration
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
-							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
+							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
 						}
 					} else {
 						event.setCancelled(true);
