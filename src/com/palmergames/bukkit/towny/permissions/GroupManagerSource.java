@@ -1,11 +1,12 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.events.GMGroupEvent;
@@ -81,7 +82,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		if (!group.equals(user))
 			user = group + user;
-		user = TownySettings.parseSingleLineString(user);
+		user = Colors.translateColorCodes(user);
 
 		return user;
 

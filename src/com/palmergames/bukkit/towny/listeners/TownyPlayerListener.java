@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
@@ -46,6 +47,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
@@ -248,7 +250,6 @@ public class TownyPlayerListener implements Listener {
 	/*
 	* PlayerInteractEvent 
 	* 
-	*  Used to stop trampling of crops,
 	*  admin infotool,
 	*  item use check,
 	*  switch use check
@@ -269,64 +270,97 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 
 			/*
-			 * Info Tool
+			 * Info Tool.
 			 */
-			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
-
-				if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
-					if (event.getClickedBlock() != null) {
-
-						block = event.getClickedBlock();
-						
-						if (Tag.SIGNS.isTagged(block.getType())) {
-							BlockFace facing = null;
-							if (block.getBlockData() instanceof Sign) {
-								org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
-								facing = sign.getRotation();
-							}
-							if (block.getBlockData() instanceof WallSign)  { 
-								org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
-								facing = sign.getFacing();	
-							}
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Sign Info"),
-									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "Facing", "", facing.toString())
-									));
-						} else if (Tag.DOORS.isTagged(block.getType())) {
-							org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Door Info"),
-									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
-									ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
-									ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
-									));
-						} else {
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Block Info"),
-									ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
-									ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
-									));
-						}
-						event.setUseInteractedBlock(Event.Result.DENY);
-						event.setCancelled(true);
+			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool()) 
+					&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)
+					&& event.getClickedBlock() != null) {
+				block = event.getClickedBlock();
+				
+				if (Tag.SIGNS.isTagged(block.getType())) {
+					BlockFace facing = null;
+					if (block.getBlockData() instanceof Sign) {
+						org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
+						facing = sign.getRotation();
 					}
+					if (block.getBlockData() instanceof WallSign)  { 
+						org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+						facing = sign.getFacing();	
+					}
+					TownyMessaging.sendMessage(player, Arrays.asList(
+							ChatTools.formatTitle("Sign Info"),
+							ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
+							ChatTools.formatCommand("", "Facing", "", facing.toString())
+							));
+				} else if (Tag.DOORS.isTagged(block.getType())) {
+					org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
+					TownyMessaging.sendMessage(player, Arrays.asList(
+							ChatTools.formatTitle("Door Info"),
+							ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
+							ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
+							ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
+							ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
+							));
+				} else {
+					TownyMessaging.sendMessage(player, Arrays.asList(
+							ChatTools.formatTitle("Block Info"),
+							ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
+							ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
+							));
 				}
+				event.setUseInteractedBlock(Event.Result.DENY);
+				event.setCancelled(true);
 
 			}
+			
+			/*
+			 * Test item_use.
+			 */
 			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
 				TownyMessaging.sendDebugMsg("ItemUse Material found: " + event.getItem().getType().name());
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
-		}
-		if (!event.useItemInHand().equals(Event.Result.DENY))
+			/*
+			 * Test switch use.
+			 */
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 					onPlayerSwitchEvent(event, null);
 				}
 			}
+		}
+		if (!event.useItemInHand().equals(Event.Result.DENY)) {
+			if (event.getClickedBlock() != null) {
+				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
+					onPlayerSwitchEvent(event, null);
+				}
+			}
+		}
+	}
 
+	/**
+	 * Handles clicking on beds in the nether, sending blocks to a map so we can track when explosions occur from beds.
+	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds exploding, which is why this is necessary.
+	 * @param event PlayerInteractEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerInteractWithBed(PlayerInteractEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+
+		Block block = event.getClickedBlock();
+		if (event.hasBlock()) {
+			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
+				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
+				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+			}
+		}
 	}
 
 	

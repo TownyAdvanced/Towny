@@ -27,4 +27,8 @@ public class Colors {
 			line.replaceAll(cc.toString(), "");
 		return line;
 	}
+
+	public static String translateColorCodes(String str) {
+		return ChatColor.translateAlternateColorCodes('&', str);
+	}
 }

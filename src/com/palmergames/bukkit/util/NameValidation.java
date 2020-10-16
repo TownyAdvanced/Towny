@@ -148,6 +148,6 @@ public class NameValidation {
 
 	public static String filterName(String input) {
 
-		return input.replaceAll(TownySettings.getNameFilterRegex(), "_").replaceAll(TownySettings.getNameRemoveRegex(), "");
+		return input.replaceAll(TownySettings.getNameFilterRegex(), "_").replaceAll(TownySettings.getNameRemoveRegex(), "").replace("&k", "");
 	}
 }

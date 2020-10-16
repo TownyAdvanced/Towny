@@ -111,11 +111,11 @@ public class OnPlayerLogin implements Runnable {
 			
 			
 			try {
-				if (TownySettings.getShowTownBoardOnLogin()) {
+				if (TownySettings.getShowTownBoardOnLogin() && !resident.getTown().getBoard().isEmpty()) {
 					TownyMessaging.sendTownBoard(player, resident.getTown());
 				}
 				if (TownySettings.getShowNationBoardOnLogin()) {
-					if (resident.getTown().hasNation()) {
+					if (resident.getTown().hasNation() && !resident.getTown().getNation().getBoard().isEmpty()) {
 						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
 					}
 				}

@@ -33,6 +33,7 @@ public class SQL_Schema {
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcetownmobs` bool NOT NULL DEFAULT '0'");
+		columns.add("`friendlyFire` bool NOT NULL DEFAULT '0'");
 		columns.add("`worldmobs` bool NOT NULL DEFAULT '0'");
 		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");
@@ -57,6 +58,8 @@ public class SQL_Schema {
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
+		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
+		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
@@ -447,6 +450,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
     	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
     	
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());

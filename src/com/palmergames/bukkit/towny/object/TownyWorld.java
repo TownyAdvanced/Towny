@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -16,31 +18,41 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TownyWorld extends TownyObject {
 
 	private HashMap<String, Town> towns = new HashMap<>();
-	private boolean isClaimable = true;
+
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();
-	private long plotManagementRevertSpeed = TownySettings.getPlotManagementSpeed();
-	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
+	
+	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
 	private List<String> plotManagementMayorDelete = null;
+	
+	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private List<String> plotManagementIgnoreIds = null;
-	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
-			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
-	private String unclaimedZoneName = null;
-	private List<Coord> warZones = new ArrayList<>();
+
+	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
+	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
 	
+	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
+	private List<String> blockExplosionProtection = null;
+	
+	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
+	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
+			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
+
+	private String unclaimedZoneName = null;
+	private List<Coord> warZones = new ArrayList<>();
+	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isClaimable = true;
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
+	private boolean isFriendlyFire = TownySettings.isFriendlyFireEnabled();
 	private boolean isFire = TownySettings.isFire();
 	private boolean isForceFire = TownySettings.isForcingFire();
 	private boolean hasWorldMobs = TownySettings.isWorldMonstersOn();
@@ -51,6 +63,7 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
+	public Map<Location, Material> bedMap = new HashMap<Location, Material>();
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
@@ -391,39 +404,37 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @return the isUsingPlotManagementWildRevert
+	 * @return the isUsingPlotManagementWildEntityRevert
 	 */
-	public boolean isUsingPlotManagementWildRevert() {
+	public boolean isUsingPlotManagementWildEntityRevert() {
 
-		return isUsingPlotManagementWildRevert;
+		return isUsingPlotManagementWildEntityRevert;
+	}
+	
+	/**
+	 * @return the isUsingPlotManagementWildBlockRevert
+	 */
+	public boolean isUsingPlotManagementWildBlockRevert() {
+
+		return isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
-	 * @param isUsingPlotManagementWildRevert the
+	 * @param isUsingPlotManagementWildEntityRevert the
 	 *            isUsingPlotManagementWildRevert to set
 	 */
-	public void setUsingPlotManagementWildRevert(boolean isUsingPlotManagementWildRevert) {
+	public void setUsingPlotManagementWildEntityRevert(boolean isUsingPlotManagementWildEntityRevert) {
 
-		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
+		this.isUsingPlotManagementWildEntityRevert = isUsingPlotManagementWildEntityRevert;
 	}
-
-	/*
-	 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-	 */
+	
 	/**
-	 * @return the plotManagementRevertSpeed
+	 * @param isUsingPlotManagementWildBlockRevert the
+	 *            isUsingPlotManagementWildBlockRevert to set
 	 */
-	public long getPlotManagementRevertSpeed() {
+	public void setUsingPlotManagementWildBlockRevert(boolean isUsingPlotManagementWildBlockRevert) {
 
-		return plotManagementRevertSpeed;
-	}
-
-	/**
-	 * @param plotManagementRevertSpeed the plotManagementRevertSpeed to set
-	 */
-	public void setPlotManagementRevertSpeed(long plotManagementRevertSpeed) {
-
-		this.plotManagementRevertSpeed = plotManagementRevertSpeed;
+		this.isUsingPlotManagementWildBlockRevert = isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
@@ -468,6 +479,33 @@ public class TownyWorld extends TownyObject {
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
 		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
+
+	}
+
+	public void setPlotManagementWildRevertMaterials(List<String> mats) {
+
+		blockExplosionProtection = new ArrayList<>();
+
+		for (String mat : mats)
+			if (!mat.equals(""))
+				blockExplosionProtection.add(mat);
+
+	}
+
+	public List<String> getPlotManagementWildRevertBlocks() {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return blockExplosionProtection;
+	}
+
+	public boolean isProtectingExplosionBlock(Material material) {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return (blockExplosionProtection.contains(material.toString()));
 
 	}
 
@@ -771,4 +809,44 @@ public class TownyWorld extends TownyObject {
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
+	
+	/**
+	 * Does this world have an exploded bet at the location?
+	 * @param location Location to test.
+	 * @return true when the bed map contains the location.
+	 */
+	public boolean hasBedExplosionAtBlock(Location location) {
+		return bedMap.containsKey(location);
+	}
+
+	/**
+	 * Gets the exploded bed material.
+	 * @param location Location to get the material.
+	 * @return material of the bed or null if the bedMap doesn't contain the location.
+	 */
+	@Nullable
+	public Material getBedExplosionMaterial(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			return bedMap.get(location);
+		return null;
+	}
+	
+	public void addBedExplosionAtBlock(Location location, Material material) {
+		bedMap.put(location, material);
+	}
+
+	public void removeBedExplosionAtBlock(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			bedMap.remove(location);
+	}
+
+	public void setFriendlyFire(boolean parseBoolean) {
+		isFriendlyFire = parseBoolean;
+		
+	}
+	
+	public boolean isFriendlyFireEnabled( ) {
+		return isFriendlyFire;
+	}
+	
 }

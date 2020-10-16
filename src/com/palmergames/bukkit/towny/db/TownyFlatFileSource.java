@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -161,28 +160,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         if (deleteAfter >= 0)
             FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + File.separator + "backup"), deleteAfter);
     }
-    
-    @Override
-	public void deleteUnusedResidents() {
-
-		String path;
-		Set<String> names;
-
-		path = dataFolderPath + File.separator + "residents";
-		names = getResidentKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-
-		path = dataFolderPath + File.separator + "towns";
-		names = getTownsKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-
-		path = dataFolderPath + File.separator + "nations";
-		names = getNationsKeys();
-
-		FileMgmt.deleteUnusedFiles(new File(path), names);
-	}
 
 	public String getResidentFilename(Resident resident) {
 
@@ -613,7 +590,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String[] tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							Resident friend = getResident(token);
+							Resident friend;
+							try {
+								friend = getResident(token);
+							} catch (NotRegisteredException e) {
+								continue;
+							}
 							if (friend != null)
 								resident.addFriend(friend);
 						}
@@ -1211,6 +1193,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("friendlyFire");
+				if (line != null)
+					try {
+						world.setFriendlyFire(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("forcetownmobs");
 				if (line != null)
 					try {
@@ -1377,7 +1366,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("usingPlotManagementWildRegen");
 				if (line != null)
 					try {
-						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
+						world.setUsingPlotManagementWildEntityRevert(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
 				
@@ -1402,6 +1391,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("usingPlotManagementWildRegenBlocks");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementWildBlockRevert(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
+				line = keys.get("PlotManagementWildRegenBlocks");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								try {
+									mats.add(s.trim());
+								} catch (NumberFormatException ignored) {
+								}
+						world.setPlotManagementWildRevertMaterials(mats);
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("usingTowny");
 				if (line != null)
 					try {
@@ -1925,6 +1935,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("pvp=" + world.isPVP());
 		// Force PvP
 		list.add("forcepvp=" + world.isForcePVP());
+		// FriendlyFire 
+		list.add("friendlyFire=" + world.isFriendlyFireEnabled());		
 		// Claimable
 		list.add("# Can players found towns and claim plots in this world?");
 		list.add("claimable=" + world.isClaimable());
@@ -1946,7 +1958,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("disablecreaturetrample=" + world.isDisableCreatureTrample());
 
 		// Unclaimed
-		list.add(newLine);
+		list.add("");
 		list.add("# Unclaimed Zone settings.");
 
 		// Unclaimed Zone Build
@@ -1973,9 +1985,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ","));
 
 		// PlotManagement Delete
-		list.add(newLine);
+		list.add("");
 		list.add("# The following settings control what blocks are deleted upon a townblock being unclaimed");
-
 		// Using PlotManagement Delete
 		list.add("usingPlotManagementDelete=" + world.isUsingPlotManagementDelete());
 		// Plot Management Delete Ids
@@ -1983,9 +1994,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
 
 		// PlotManagement
-		list.add(newLine);
+		list.add("");
 		list.add("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command");
-
 		// Using PlotManagement Mayor Delete
 		list.add("usingPlotManagementMayorDelete=" + world.isUsingPlotManagementMayorDelete());
 		// Plot Management Mayor Delete
@@ -1993,38 +2003,46 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ","));
 
 		// PlotManagement Revert
-		list.add(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed.");
-		list.add("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot.");
-
+		list.add("");
+		list.add("# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed.");
+		list.add("# When the townblock is unclaimed its blocks will begin to revert to the original snapshot.");
 		// Using PlotManagement Revert
 		list.add("usingPlotManagementRevert=" + world.isUsingPlotManagementRevert());
-		// Using PlotManagement Revert Speed
-		//list.add("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()));
 
-		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air.");
-
+		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air. This list also world on the WildRegen settings below.");
 		// Plot Management Ignore Ids
 		if (world.getPlotManagementIgnoreIds() != null)
 			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
 
 		// PlotManagement Wild Regen
 		list.add("");
-		list.add("# If enabled any damage caused by explosions will repair itself.");
-
+		list.add("# The following settings control which entities/blocks' explosions are reverted in the wilderness.");
+		list.add("# If enabled any damage caused by entity explosions will repair itself.");
 		// Using PlotManagement Wild Regen
-		list.add("usingPlotManagementWildRegen=" + world.isUsingPlotManagementWildRevert());
+		list.add("usingPlotManagementWildRegen=" + world.isUsingPlotManagementWildEntityRevert());
 
+		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
 			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ","));
 
+		list.add("# If enabled any damage caused by block explosions will repair itself.");
+		// Using PlotManagement Wild Block Regen
+		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildBlockRevert());
+
+		list.add("# The list of entities whose explosions would be reverted.");
+		// Wilderness Explosion Protection blocks
+		if (world.getPlotManagementWildRevertBlocks() != null)
+			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
+
+		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay
 		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
 
+		
 		// Using Towny
 		list.add("");
 		list.add("# This setting is used to enable or disable Towny in this world.");
-
 		// Using Towny
 		list.add("usingTowny=" + world.isUsingTowny());
 
@@ -2034,6 +2052,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("warAllowed=" + world.isWarAllowed());
 
 		// Metadata
+		list.add("");
 		list.add("metadata=" + serializeMetadata(world));
 		
 		/*

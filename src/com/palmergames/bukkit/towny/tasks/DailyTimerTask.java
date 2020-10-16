@@ -28,7 +28,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
-	private final List<String> delinquentTowns = new ArrayList<>();
+	private final List<String> bankruptedTowns = new ArrayList<>();
+	private final List<String> removedTowns = new ArrayList<>();
 	private final List<String> removedNations = new ArrayList<>();
 
 	public DailyTimerTask(Towny plugin) {
@@ -42,14 +43,17 @@ public class DailyTimerTask extends TownyTimerTask {
 		long start = System.currentTimeMillis();
 		totalTownUpkeep = 0.0;
 		totalNationUpkeep = 0.0;
-		delinquentTowns.clear();
+		bankruptedTowns.clear();
+		removedTowns.clear();
 		removedNations.clear();
 
 		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
 		
 		TownyMessaging.sendDebugMsg("New Day");
 
-		// Collect taxes
+		/*
+		 * If enabled, collect taxes and then server upkeep costs.
+		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day_tax"));
 			try {
@@ -62,7 +66,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
 				collectNationCosts();
 				
-				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(delinquentTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 				
 			} catch (EconomyException ex) {
 				TownyMessaging.sendErrorMsg("Economy Exception");
@@ -74,12 +78,17 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day"));
 
-		// Automatically delete old residents
+		/*
+		 * If enabled, remove old residents who haven't logged in for the configured number of days.
+		 */	
 		if (TownySettings.isDeletingOldResidents()) {
 			// Run a purge in it's own thread
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly()).start();
 		}
 
+		/*
+		 * If enabled, remove all 0-plot towns.
+		 */
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
 			for (Town town : universe.getTownsMap().values()) {
@@ -92,7 +101,9 @@ public class DailyTimerTask extends TownyTimerTask {
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_the_following_towns_were_deleted_for_having_0_claims", String.join(", ", deletedTowns)));
 		}
 		
-		// Reduce jailed residents jail time
+		/*
+		 * Reduce the number of days jailed residents are jailed for.
+		 */
 		if (!universe.getJailedResidentMap().isEmpty()) {
 			for (Resident resident : universe.getJailedResidentMap()) {
 				if (resident.hasJailDays()) {
@@ -120,7 +131,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			}			
 		}
 		
-		// Reduce conquered towns' conqueredDays
+		/*
+		 * Reduce the number of days conquered towns are conquered for.
+		 */
 		for (Town towns : universe.getDataSource().getTowns()) {
 			if (towns.isConquered()) {
 				if (towns.getConqueredDays() == 1) {
@@ -131,12 +144,10 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 		}
 
-		// Backups
-		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-		
-		// Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
-		if (TownySettings.isBackingUpDaily()) {
-			TownyMessaging.sendDebugMsg("Making backup.");
+		/*
+		 * Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
+		 */
+		if (TownySettings.isBackingUpDaily()) {			
 			universe.performBackup();
 		}
 
@@ -153,7 +164,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (total)", Runtime.getRuntime().totalMemory() / 1024 / 1024));
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (free)", Runtime.getRuntime().freeMemory() / 1024 / 1024));
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (used=total-free)", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024));
-		System.out.println("Towny DailyTimerTask took " + (System.currentTimeMillis() - start) + "ms to process.");
+		Towny.getPlugin().getLogger().info("Towny DailyTimerTask took " + (System.currentTimeMillis() - start) + "ms to process.");
 	}
 
 	/**
@@ -318,7 +329,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
-							TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
+							TownyMessaging.sendResidentMessage(resident, Translation.of("MSG_TAX_EXEMPT"));
 						} catch (TownyException e) {
 							// Player is not online
 						}
@@ -440,7 +451,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							// Bankruptcy is disabled, remove the town for not paying upkeep.
 								TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 								universe.getDataSource().removeTown(town);
-								delinquentTowns.add(town.getName());
+								removedTowns.add(town.getName());
 								continue;
 							}
 							
@@ -457,7 +468,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								// their debt and be deleted from the server for non-payment finally.
 									TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 									universe.getDataSource().removeTown(town);
-									delinquentTowns.add(town.getName());
+									removedTowns.add(town.getName());
 									continue;
 								}
 								upkeep = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
@@ -471,7 +482,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							if(!townWasBankrupt && town.isBankrupt()) {
 								town.setOpen(false);
 								universe.getDataSource().saveTown(town);
-								delinquentTowns.add(town.getName());
+								bankruptedTowns.add(town.getName());
 							}
 						}
 
@@ -502,18 +513,22 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		String msg1 = Translation.of("msg_bankrupt_town2");
 		String msg2 = Translation.of("msg_bankrupt_town_multiple");
-
-		if(TownySettings.isTownBankruptcyEnabled() && !TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
-			plugin.resetCache(); //Allow perms change to take effect immediately
-			msg1 = Translation.of("msg_town_bankrupt_by_upkeep");
-			msg2 = Translation.of("msg_town_bankrupt_by_upkeep_multiple");
+		if(TownySettings.isTownBankruptcyEnabled() && TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
+				plugin.resetCache(); //Allow perms change to take effect immediately
+				msg1 = Translation.of("msg_town_reached_debtcap_and_is_disbanded");
+				msg2 = Translation.of("msg_town_reached_debtcap_and_is_disbanded_multiple");
 		}
-
-		if (delinquentTowns != null)
-			if (delinquentTowns.size() == 1)
-				TownyMessaging.sendGlobalMessage(String.format(msg1, delinquentTowns.get(0)));
+		
+		if (bankruptedTowns != null)
+			if (bankruptedTowns.size() == 1)
+				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_town_bankrupt_by_upkeep"), bankruptedTowns.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(delinquentTowns, msg2));
+				TownyMessaging.sendGlobalMessage(ChatTools.list(bankruptedTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
+		if (removedTowns != null)
+			if (removedTowns.size() == 1)
+				TownyMessaging.sendGlobalMessage(String.format(msg1, removedTowns.get(0)));
+			else
+				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, msg2));
 	}
 
 	/**

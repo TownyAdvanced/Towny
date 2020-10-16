@@ -414,7 +414,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public double getBonusBlockCost() {
-		return (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
+		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
+		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
+		return (maxprice == -1 ? price : Math.min(price, maxprice));
 	}
 	
 	public double getTownBlockCost() {
@@ -470,8 +472,16 @@ public class Town extends Government implements TownBlockOwner {
 		double nextprice = getBonusBlockCost();
 		int i = 1;
 		double cost = nextprice;
+		boolean hasmaxprice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
+		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
 		while (i < n){
 			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+i) * TownySettings.getPurchasedBonusBlocksCost());			
+			
+			if (hasmaxprice && nextprice > maxprice) {
+				cost += maxprice * (inputN - i);
+				break;
+			}
+
 			cost += nextprice;
 			i++;
 		}
@@ -1290,7 +1300,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public boolean isBankrupt() { 
 		try {
-			return getAccount().isBankrupt();
+			return TownySettings.isUsingEconomy() && getAccount().isBankrupt();
 		} catch (EconomyException ignored) {}
 
 		return false;

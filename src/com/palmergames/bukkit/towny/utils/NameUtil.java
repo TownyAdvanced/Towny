@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.Nameable;
-import org.bukkit.ChatColor;
+import com.palmergames.bukkit.util.Colors;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,10 @@ public class NameUtil {
 		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
 	}
 
+	/**
+	 * @deprecated as of 0.96.2.20. Use {@link Colors#translateColorCodes(String)} instead
+	 */
 	public static String translateColorCodes(String str) {
-		return ChatColor.translateAlternateColorCodes('&', str);
+		return Colors.translateColorCodes(str);
 	}
 }
