@@ -48,10 +48,10 @@ public class BaseCommand implements TabCompleter{
 		"itemuse"
 	);
 
-	static final List<String> setOnOffCompletes = Arrays.asList(
+	public static final List<String> setOnOffCompletes = Collections.unmodifiableList(Arrays.asList(
 		"on",
 		"off"
-	);
+	));
 
 	private static final List<String> toggleTypeOnOffCompletes = Arrays.asList(
 		"build",

@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Send a list of all towny resident help commands to player Command: /resident
@@ -63,6 +65,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"pvp",
 		"fire",
 		"mobs",
+		"explosion",
 		"plotborder",
 		"constantplotborder",
 		"ignoreplots",
@@ -100,6 +103,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"mobs",
 		"explosion"
 	);
+	
+	private static final List<String> residentToggleModes = new ArrayList<>(residentToggleTabCompletes).stream()
+		.filter(str -> !residentToggleChoices.contains(str))
+		.collect(Collectors.toList());
+
+	private static final List<String> residentToggleModesUnionToggles = Stream.concat(
+		new ArrayList<>(residentToggleModes).stream(),
+		BaseCommand.setOnOffCompletes.stream()
+	).collect(Collectors.toList());
 
 	public ResidentCommand(Towny instance) {
 
@@ -142,6 +154,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+					} else if (args.length >= 3) {
+						String prevArg = args[args.length - 2].toLowerCase();
+						if (residentToggleModes.contains(prevArg)) {
+							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
+						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
+							return NameUtil.filterByStart(residentToggleModes, args[args.length - 1]);
+						}
 					}
 					break;
 				case "set":
@@ -371,6 +390,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "pvp", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "mobs", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "explosion", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "plotborder", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "constantplotborder", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "ignoreplots", ""));
