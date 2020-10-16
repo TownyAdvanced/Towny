@@ -5075,3 +5075,15 @@ v0.92.0.11:
   - pt-br.yml updated to 0.86 by Plugner with PR #4348. (First-Time Contributor!)
   - New farmable nether blocks added to config by Momshroom with PR #4353. (First-Time Contributor!)
   - Fix bankruptcy test stopping players from using /t claim.
+0.96.2.21:
+  - New Config Option: new_world_settings.pvp.friendly_fire_enabled
+    - Default: false.
+    - Do new world have friendly fire enabled by default?
+    - Does not affect Arena Plots which have FF enabled all the time.
+    - When true players on the same town or nation will harm each other.
+  - Removed Config Option: global_town_settings.friendly_fire
+  - API: Added CombatUtil.preventFriendlyFire(attacker, defender, world).
+  - API: Deprecated CombatUtil.preventFriendlyFire(attacker, defender).
+  - Added friendlyFire setting to database as a world setting.
+    - Closes #1242.
+  
