@@ -33,6 +33,7 @@ public class SQL_Schema {
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcetownmobs` bool NOT NULL DEFAULT '0'");
+		columns.add("`friendlyFire` bool NOT NULL DEFAULT '0'");
 		columns.add("`worldmobs` bool NOT NULL DEFAULT '0'");
 		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");

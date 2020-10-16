@@ -1369,6 +1369,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				world.setForcePVP(result);
 			} catch (Exception ignored) {
 			}
+			
+			result = rs.getBoolean("friendlyFire");
+			try {
+				world.setFriendlyFire(result);
+			} catch (Exception ignored) {
+			}
 
 			result = rs.getBoolean("forcetownmobs");
 			try {
@@ -1943,6 +1949,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("pvp", world.isPVP());
 			// Force PvP
 			nat_hm.put("forcepvp", world.isForcePVP());
+			// Friendly Fire
+			nat_hm.put("friendlyFire", world.isFriendlyFireEnabled());
 			// Claimable
 			nat_hm.put("claimable", world.isClaimable());
 			// has monster spawns
