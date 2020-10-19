@@ -624,10 +624,10 @@ public class TownyMessaging {
 	 * @param subtitle subtitle message to send
 	 * @throws TownyException if the player is null
 	 */
-	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) throws TownyException {
+	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
 		Player player = TownyAPI.getInstance().getPlayer(resident);
 		if (player == null) {
-			throw new TownyException("Player could not be found!");
+			return;
 		}
 		player.sendTitle(title, subtitle, 10, 70, 10);
 	}

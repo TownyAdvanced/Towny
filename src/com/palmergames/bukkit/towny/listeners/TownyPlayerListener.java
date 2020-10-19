@@ -1041,22 +1041,30 @@ public class TownyPlayerListener implements Listener {
 	 *   - showing NotificationsUsingTitles upon entering a town.
 	 *   
 	 * @param event - PlayerEnterTownEvent
-	 * @throws TownyException - Generic TownyException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerEnterTown(PlayerEnterTownEvent event) throws TownyException {
+	public void onPlayerEnterTown(PlayerEnterTownEvent event) {
 		
-		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
+		Resident resident = null;
+		Town town = null;
+		try {
+			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
+			town = to.getTownBlock().getTown();
+		} catch (NotRegisteredException e) {
+			// Likely a Citizens NPC
+			return;
+		}
+		
+		if (TownySettings.isNotificationUsingTitles() && resident != null && town != null) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
 			HashMap<String, Object> placeholders = new HashMap<>();
-			placeholders.put("{townname}", StringMgmt.remUnderscore(to.getTownBlock().getTown().getName()));
-			placeholders.put("{town_motd}", to.getTownBlock().getTown().getBoard());
-			placeholders.put("{town_residents}", to.getTownBlock().getTown().getNumResidents());
-			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(to.getTownBlock().getTown()).size());
+			placeholders.put("{townname}", StringMgmt.remUnderscore(town.getName()));
+			placeholders.put("{town_motd}", town.getBoard());
+			placeholders.put("{town_residents}", town.getNumResidents());
+			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
@@ -1073,13 +1081,20 @@ public class TownyPlayerListener implements Listener {
 	 *   - unjailing residents
 	 *   
 	 * @param event - PlayerLeaveTownEvent
-	 * @throws TownyException - Generic TownyException   
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) throws TownyException {
+	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		Resident resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
+		Resident resident;
+		String worldName;
+		try {
+			resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
+			worldName = townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName();
+		} catch (NotRegisteredException e1) {
+			// Likely a Citizens NPC.
+			return;
+		}
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
 			try {
@@ -1089,17 +1104,16 @@ public class TownyPlayerListener implements Listener {
 				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 				if (title.contains("{wilderness}")) {
-					title = title.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
+					title = title.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
 				}
 				if (subtitle.contains("{wilderness}")) {
-					subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
+					subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
 				}
 				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 			}			
 		}
 
-		Player player = event.getPlayer();
-		if (townyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
+		if (resident.isJailed()) {
 			resident.freeFromJail(resident.getJailSpawn(), true);
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
