@@ -447,6 +447,25 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				}
 			}
 			return String.valueOf(cost);
+		case "daily_town_tax": // %townyadvanced_daily_town_tax%
+			boolean percentage = false;
+			if (resident.hasTown()) {				
+				try {
+					cost = resident.getTown().getTaxes();
+					percentage = resident.getTown().isTaxPercentage();
+				} catch (NotRegisteredException ignored) {
+				}			
+			}
+			return String.valueOf(cost) + (percentage ? "%" : "");
+		case "daily_nation_tax": // %townyadvanced_daily_nation_tax%
+			if (resident.hasTown()) {
+				try {
+					if (resident.getTown().hasNation())
+						cost = resident.getTown().getNation().getTaxes();
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return String.valueOf(cost);
 		case "has_town": // %townyadvanced_has_town%
 			return String.valueOf(resident.hasTown());
 		case "has_nation": // %townyadvanced_has_nation%
@@ -455,6 +474,20 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			try {
 				if (resident.hasTown()) {
 					town = resident.getTown().getFormattedName();
+					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag())
+						nation = resident.getTown().getNation().getTag();
+				}
+				if (!nation.isEmpty())
+					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+				else if (!town.isEmpty())
+					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			} catch (NotRegisteredException ignored) {
+			}
+			return tag;
+		case "nation_tag_town_name": // %townyadvanced_nation_tag_town_name%
+			try {
+				if (resident.hasTown()) {
+					town = resident.getTown().getName();
 					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag())
 						nation = resident.getTown().getNation().getTag();
 				}

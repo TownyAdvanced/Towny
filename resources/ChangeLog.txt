@@ -5091,3 +5091,10 @@ v0.92.0.11:
   - Alter War to not use TownyMessaging.sendMessageToMode() methods, send prefixed messages instead.
   - Fix Citizens NPCs that use actual Resident names from throwing TownyExceptions when they enter/exit towns.
     - Closes #4375.
+  - Add placeholder: %townyadvanced_nation_tag_town_name%
+    - Displays nation tag (if set, otherwise blank,) followed by the Town name (if the player is part of a town.)
+    - Closes #4377.
+  - Add placeholders: %townyadvanced_daily_town_tax% & %townyadvanced_daily_nation_tax%
+    - Displays the daily tax charged by the town or the nation.
+    - Closes #4145.
+    
