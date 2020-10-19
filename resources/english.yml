@@ -1,5 +1,5 @@
 name: Towny
-version: 0.87
+version: 0.88
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -153,8 +153,6 @@ msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
 msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
 msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation.'
-msg_nation_already_peaceful: '&cNation is already peaceful.'
-msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 msg_peaceful_disabled: '&bNation peace is disabled globally.'
 msg_you_paid: '&bYou paid %s to set peaceful status.'
 msg_nation_set_peace: '&bSuccessfully changed nation''s state.'
@@ -1173,3 +1171,7 @@ msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
 status_debtcap: '&2Debt Cap: &a%s'
 status_world_explrevert_entity: '&2Entity Explosion Revert: '
 status_world_explrevert_block: '&2Block Explosion Revert: '
+
+#Added in 0.88
+msg_nation_already_peaceful: '&cNation is already peaceful.'
+msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
