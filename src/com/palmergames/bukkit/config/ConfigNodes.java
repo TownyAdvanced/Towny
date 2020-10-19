@@ -180,7 +180,7 @@ public enum ConfigNodes {
 			"# The size of the square grid cell. Changing this value is suggested only when you first install Towny.",
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
-			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
+			"# Each cell is (town_block_size * town_block_size * 256) in size, with 256 being from bedrock to clouds."),
 	
 	NATION("nation", "", "", "",
 			"############################################################",
