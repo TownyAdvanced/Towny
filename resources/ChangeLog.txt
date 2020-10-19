@@ -5088,3 +5088,4 @@ v0.92.0.11:
     - Closes #1242.
   - Made the plotManagementIgnoreIds also affect the wilderness explosion revert feature.
   - Added FURNACE,BLAST_FURNACE,SMOKER,BREWING_STAND,TNT,AIR,FIRE,NETHER_QUARTZ_ORE to the plotManagementIgnoreIds and default config's new_world_settings.plot_management.revert_on_unclaim.block_ignore.
+  - Alter War to not use TownyMessaging.sendMessageToMode() methods, send prefixed messages instead.
