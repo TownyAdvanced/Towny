@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -153,7 +154,7 @@ public class TownyUniverse {
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
             for (Town town : dataSource.getTowns()) {
-                TownySQLSource.validateTownOutposts(town);
+                TownyDatabaseHandler.validateTownOutposts(town);
             }
             towny.saveResource("outpostschecked.txt", false);
         }

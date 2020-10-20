@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
@@ -27,22 +29,40 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.FileMgmt;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import javax.naming.InvalidNameException;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -55,6 +75,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String logFolderPath;
 	final String backupFolderPath;
 	
+	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
+	private final BukkitTask task;
+	
 	public TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
 		this.rootFolderPath = universe.getRootFolder();
@@ -62,7 +85,148 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		this.settingsFolderPath = rootFolderPath + File.separator + "settings";
 		this.logFolderPath = rootFolderPath + File.separator + "logs";
 		this.backupFolderPath = rootFolderPath + File.separator + "backup";
+		
+		/*
+		 * Start our Async queue for pushing data to the flatfile database.
+		 */
+		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+			while (!this.queryQueue.isEmpty()) {
+				Runnable operation = this.queryQueue.poll();
+				operation.run();
+			}
+		}, 5L, 5L);
 	}
+	
+	@Override
+	public void finishTasks() {
+		
+		// Cancel the repeating task as its not needed anymore.
+		task.cancel();
+		
+		// Make sure that *all* tasks are saved before shutting down.
+		while (!queryQueue.isEmpty()) {
+			Runnable operation = this.queryQueue.poll();
+			operation.run();
+		}
+	}
+	
+	@Override
+	public boolean backup() throws IOException {
+
+		if (!TownySettings.getSaveDatabase().equalsIgnoreCase("flatfile")) {
+			System.out.println("***** Warning *****");
+			System.out.println("***** Only Snapshots & Regen files in towny\\data\\ will be backed up!");
+			System.out.println("***** This does not include your residents/towns/nations.");
+			System.out.println("***** Make sure you have scheduled a backup in MySQL too!!!");
+		}
+		String backupType = TownySettings.getFlatFileBackupType();
+		long t = System.currentTimeMillis();
+		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
+		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
+		switch (backupType.toLowerCase()) {
+		case "folder": {
+			FileMgmt.checkOrCreateFolder(newBackupFolder);
+			FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
+			FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
+			FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
+			return true;
+		}
+		case "zip": {
+			FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
+					new File(logFolderPath), new File(settingsFolderPath));
+			return true;
+		}
+		case "tar.gz":
+		case "tar": {
+			FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+				new File(dataFolderPath),
+				new File(logFolderPath),
+				new File(settingsFolderPath));
+			return true;
+		}
+		default:
+		case "none": {
+			return false;
+		}
+		}
+	}
+	
+	@Override
+	public void cleanupBackups() {
+        long deleteAfter = TownySettings.getBackupLifeLength();
+        if (deleteAfter >= 0)
+            FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + File.separator + "backup"), deleteAfter);
+	}
+	
+	/*
+	 * Add new objects to the TownyUniverse maps.
+	 */
+	
+	@Override
+	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterPlayerName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+
+		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
+
+		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
+		universe.getResidentsTrie().addKey(filteredName);
+	}
+
+	@Override
+	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+
+		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+
+		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
+		universe.getTownsTrie().addKey(filteredName);
+	}
+
+	@Override
+	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+
+		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+
+		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
+		universe.getNationsTrie().addKey(filteredName);
+	}
+
+	@Override
+	public void newWorld(String name) throws AlreadyRegisteredException {
+		
+		if (universe.getWorldMap().containsKey(name.toLowerCase()))
+			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
+
+		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
+	}
+
+	public void newPlotGroup(PlotGroup group) {
+		universe.getGroups().add(group);
+	}
+
+	/*
+	 * Are these objects in the TownyUniverse maps?
+	 */
 	
 	@Override
 	public boolean hasResident(String name) {
@@ -84,6 +248,33 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getNationsMap().containsKey(name.toLowerCase());
 	}
 
+	/*
+	 * get keys 
+	 * No longer used by Towny.
+	 */
+	
+	@Override
+	public Set<String> getResidentKeys() {
+
+		return universe.getResidentMap().keySet();
+	}
+
+	@Override
+	public Set<String> getTownsKeys() {
+
+		return universe.getTownsMap().keySet();
+	}
+
+	@Override
+	public Set<String> getNationsKeys() {
+
+		return universe.getNationsMap().keySet();
+	}
+	
+	/*
+	 * getResident methods.
+	 */
+	
 	@Override
 	public List<Resident> getResidents(Player player, String[] names) {
 
@@ -142,6 +333,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	public List<Resident> getResidentsWithoutTown() {
+
+		List<Resident> residentFilter = new ArrayList<>();
+		for (Resident resident : universe.getResidentMap().values())
+			if (!resident.hasTown())
+				residentFilter.add(resident);
+		return residentFilter;
+	}
+	
+	/*
+	 * getTowns methods.
+	 */	
+	
+	@Override
 	public List<Town> getTowns(String[] names) {
 
 		List<Town> matches = new ArrayList<>();
@@ -194,11 +399,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return universe.getTownsMap().get(name);
 	}
-	
-	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
-		return universe.getGroup(townName, groupID);
-	}
 
+	@Override
+	public List<Town> getTownsWithoutNation() {
+
+		List<Town> townFilter = new ArrayList<>();
+		for (Town town : getTowns())
+			if (!town.hasNation())
+				townFilter.add(town);
+		return townFilter;
+	}
+	
+	/*
+	 * getNations methods.
+	 */
+	
 	@Override
 	public List<Nation> getNations(String[] names) {
 
@@ -252,6 +467,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getNationsMap().get(name);
 	}
 
+	/*
+	 * getWorlds methods.
+	 */
+
 	@Override
 	public TownyWorld getWorld(String name) throws NotRegisteredException {
 
@@ -268,25 +487,32 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return new ArrayList<>(universe.getWorldMap().values());
 	}
-
-	/**
-	 * Returns the world a town belongs to
-	 * 
-	 * @param townName Town to check world of
-	 * @return TownyWorld for this town.
+	
+	/*
+	 * getTownblocks methods.
 	 */
+
 	@Override
-	public TownyWorld getTownWorld(String townName) {
+	public Collection<TownBlock> getAllTownBlocks() {
+		return TownyUniverse.getInstance().getTownBlocks().values();
+	}
+	
+	/*
+	 * getPlotGroups methods.
+	 */
 
-		for (TownyWorld world : universe.getWorldMap().values()) {
-			if (world.hasTown(townName))
-				return world;
-		}
-
-		// If this has failed the Town has no land claimed at all but should be given a world regardless.
-		return universe.getDataSource().getWorlds().get(0);
+	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
+		return universe.getGroup(townName, groupID);
 	}
 
+	public List<PlotGroup> getAllPlotGroups() {
+		return new ArrayList<>(universe.getGroups());
+	}
+
+	/*
+	 * Remove Object Methods
+	 */
+	
 	@Override
 	public void removeResident(Resident resident) {
 
@@ -387,84 +613,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
-	}
-
-	@Override
-	public Collection<TownBlock> getAllTownBlocks() {
-		return TownyUniverse.getInstance().getTownBlocks().values();
-	}
-	
-	public List<PlotGroup> getAllPlotGroups() {
-		return new ArrayList<>(universe.getGroups());
-	}
-	
-	public void newPlotGroup(PlotGroup group) {
-		universe.getGroups().add(group);
-	}
-
-	@Override
-	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
-
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterPlayerName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
-
-		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
-		universe.getResidentsTrie().addKey(filteredName);
-	}
-
-	@Override
-	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
-		universe.getTownsTrie().addKey(filteredName);
-	}
-
-	@Override
-	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
-		universe.getNationsTrie().addKey(filteredName);
-	}
-
-	@Override
-	public void newWorld(String name) throws AlreadyRegisteredException {
-		
-		/*
-		 * try {
-		 * filteredName = checkAndFilterName(name);
-		 * } catch (InvalidNameException e) {
-		 * throw new NotRegisteredException(e.getMessage());
-		 * }
-		 */
-		if (universe.getWorldMap().containsKey(name.toLowerCase()))
-			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
-
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
 	}
 
 	@Override
@@ -595,43 +743,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public Set<String> getResidentKeys() {
-
-		return universe.getResidentMap().keySet();
-	}
-
-	@Override
-	public Set<String> getTownsKeys() {
-
-		return universe.getTownsMap().keySet();
-	}
-
-	@Override
-	public Set<String> getNationsKeys() {
-
-		return universe.getNationsMap().keySet();
-	}
-
-	@Override
-	public List<Town> getTownsWithoutNation() {
-
-		List<Town> townFilter = new ArrayList<>();
-		for (Town town : getTowns())
-			if (!town.hasNation())
-				townFilter.add(town);
-		return townFilter;
-	}
-
-	@Override
-	public List<Resident> getResidentsWithoutTown() {
-
-		List<Resident> residentFilter = new ArrayList<>();
-		for (Resident resident : universe.getResidentMap().values())
-			if (!resident.hasTown())
-				residentFilter.add(resident);
-		return residentFilter;
-	}
+	/*
+	 * Rename Object Methods
+	 */
 
 	@Override
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
@@ -758,7 +872,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
 	}
 		
-
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
@@ -1016,6 +1129,285 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
 	}
 	
+	/*
+	 * PlotBlockData methods
+	 */
+	
+	/**
+	 * Save PlotBlockData
+	 *
+	 * @param plotChunk - Plot for data to be saved for.
+	 * @return true if saved
+	 */
+	@Override
+	public boolean savePlotData(PlotBlockData plotChunk) {
+        String path = getPlotFilename(plotChunk);
+        
+        queryQueue.add(() -> {
+			File file = new File(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+			FileMgmt.savePlotData(plotChunk, file, path);
+		});
+		
+		return true;
+	}
+
+	/**
+	 * Load PlotBlockData
+	 *
+	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param x - Coordinate for X.
+	 * @param z - Coordinate for Z.
+	 * @return PlotBlockData or null
+	 */
+	@Override
+	public PlotBlockData loadPlotData(String worldName, int x, int z) {
+
+		try {
+			TownyWorld world = getWorld(worldName);
+			TownBlock townBlock = new TownBlock(x, z, world);
+
+			return loadPlotData(townBlock);
+		} catch (NotRegisteredException e) {
+			// Failed to get world
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Load PlotBlockData for regen at unclaim
+	 *
+	 * @param townBlock - townBlock being reverted
+	 * @return PlotBlockData or null
+	 */
+    @Override
+    public PlotBlockData loadPlotData(TownBlock townBlock) {
+        
+        String fileName = getPlotFilename(townBlock);
+        
+        String value;
+        
+        if (isFile(fileName)) {
+            PlotBlockData plotBlockData = null;
+			try {
+				plotBlockData = new PlotBlockData(townBlock);
+			} catch (NullPointerException e1) {
+				TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+				return null;
+			}
+            List<String> blockArr = new ArrayList<>();
+            int version = 0;
+            
+            try (DataInputStream fin = new DataInputStream(new FileInputStream(fileName))) {
+                
+                //read the first 3 characters to test for version info
+                fin.mark(3);
+                byte[] key = new byte[3];
+                fin.read(key, 0, 3);
+                String test = new String(key);
+                
+                if (elements.fromString(test) == elements.VER) {// Read the file version
+                    version = fin.read();
+                    plotBlockData.setVersion(version);
+                    
+                    // next entry is the plot height
+                    plotBlockData.setHeight(fin.readInt());
+                } else {
+                    /*
+                     * no version field so set height
+                     * and push rest to queue
+                     */
+                    plotBlockData.setVersion(version);
+                    // First entry is the plot height
+                    fin.reset();
+                    plotBlockData.setHeight(fin.readInt());
+                    blockArr.add(fin.readUTF());
+                    blockArr.add(fin.readUTF());
+                }
+                
+                /*
+                 * Load plot block data based upon the stored version number.
+                 */
+                switch (version) {
+                    
+                    default:
+                    case 4:
+                    case 3:
+                    case 1:
+                        
+                        // load remainder of file
+                        while ((value = fin.readUTF()) != null) {
+                            blockArr.add(value);
+                        }
+                        
+                        break;
+                    
+                    case 2: {
+                        
+                        // load remainder of file
+                        int temp = 0;
+                        while ((temp = fin.readInt()) >= 0) {
+                            blockArr.add(temp + "");
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                
+            } catch (EOFException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            plotBlockData.setBlockList(blockArr);
+            plotBlockData.resetBlockListRestored();
+            return plotBlockData;
+        }
+        return null;
+    }
+    
+    @Override
+	public void deletePlotData(PlotBlockData plotChunk) {
+		File file = new File(getPlotFilename(plotChunk));
+		queryQueue.add(new DeleteFileTask(file, true));
+	}
+
+	private String getPlotFilename(PlotBlockData plotChunk) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".data";
+	}
+
+	private String getPlotFilename(TownBlock townBlock) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
+	}
+	
+	private boolean isFile(String fileName) {
+		File file = new File(fileName);
+		return file.exists() && file.isFile();
+	}
+	
+	/*
+	 * RegenList and SnapshotList methods
+	 */
+	
+	@Override
+	public boolean loadRegenList() {
+		
+		TownyMessaging.sendDebugMsg("Loading Regen List");
+		
+		String line = null;
+		
+		String[] split;
+		PlotBlockData plotData;
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "regen.txt"), StandardCharsets.UTF_8))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					plotData = loadPlotData(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					if (plotData != null) {
+						TownyRegenAPI.addPlotChunk(plotData, false);
+					}
+				}
+			
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
+	}
+	
+	@Override
+	public boolean loadSnapshotList() {
+		
+		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
+		
+		String line = null;
+		
+		String[] split;
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "snapshot_queue.txt"), StandardCharsets.UTF_8))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					TownyRegenAPI.addWorldCoord(worldCoord);
+				}
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
+	}
+	
+	@Override
+	public boolean saveRegenList() {
+        queryQueue.add(() -> {
+        	File file = new File(dataFolderPath + File.separator + "regen.txt");
+        	
+			Collection<String> lines = TownyRegenAPI.getPlotChunks().values().stream()
+				.map(data -> data.getWorldName() + "," + data.getX() + "," + data.getZ())
+				.collect(Collectors.toList());
+			
+			FileMgmt.listToFile(lines, file.getPath());
+		});
+
+		return true;
+	}
+
+	@Override
+	public boolean saveSnapshotList() {
+       queryQueue.add(() -> {
+       		List<String> coords = new ArrayList<>();
+       		while (TownyRegenAPI.hasWorldCoords()) {
+			   	WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+			   	coords.add(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ());
+		    }
+       		
+       		FileMgmt.listToFile(coords, dataFolderPath + File.separator + "snapshot_queue.txt");
+	   });
+       
+       return true;
+	}
+
+	/*
+	 * Misc methods follow below
+	 */
+	
+	@Override
+	public void deleteFile(String fileName) {
+		File file = new File(fileName);
+		queryQueue.add(new DeleteFileTask(file, true));
+	}
+
+	/**
+	 * @param town - Town to validate outpost spawns of
+	 * @author - Articdive | Author note is only for people to know who wrote it and
+	 *         who to ask, not to creditize
+	 */
+	public static void validateTownOutposts(Town town) {
+		List<Location> validoutpostspawns = new ArrayList<>();
+		if (town != null && town.hasOutpostSpawn()) {
+			for (Location outpostSpawn : town.getAllOutpostSpawns()) {
+				TownBlock outpostSpawnTB = TownyAPI.getInstance().getTownBlock(outpostSpawn);
+				if (outpostSpawnTB != null) {
+					validoutpostspawns.add(outpostSpawn);
+				}
+			}
+			town.setOutpostSpawns(validoutpostspawns);
+		}
+	}
+
 	/** 
 	 * Merges the succumbingNation into the prevailingNation.
 	 * 
