@@ -634,6 +634,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * 
 	 * @return world
 	 */
+	@SuppressWarnings("deprecation")
 	public TownyWorld getHomeblockWorld() {
 
 		if (world != null)

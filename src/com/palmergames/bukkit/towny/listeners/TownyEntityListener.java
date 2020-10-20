@@ -150,7 +150,7 @@ public class TownyEntityListener implements Listener {
 					return;
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
-				TownyWorld world = universe.getDataSource().getTownWorld(attacker.getLocation().getWorld().toString());
+				TownyWorld world = universe.getDataSource().getWorld(attacker.getLocation().getWorld().toString());
 				//Cancel because one of two players has no town and should not be interfering during war.
 				if (!universe.getDataSource().getResident(attacker.getName()).hasTown() || !universe.getDataSource().getResident(defender.getName()).hasTown()){
 					TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_no_town"));

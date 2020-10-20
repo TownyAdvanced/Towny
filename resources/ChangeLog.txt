@@ -5097,4 +5097,6 @@ v0.92.0.11:
   - Add placeholders: %townyadvanced_daily_town_tax% & %townyadvanced_daily_nation_tax%
     - Displays the daily tax charged by the town or the nation.
     - Closes #4145.
-    
+  - Datasource Cleanup
+    - PR #4367
+    - Greatly reduces redundancies in database code.
