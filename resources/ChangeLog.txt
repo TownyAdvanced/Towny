@@ -5100,3 +5100,5 @@ v0.92.0.11:
   - Datasource Cleanup
     - PR #4367
     - Greatly reduces redundancies in database code.
+  - New Command: /tw toggle friendlyfire
+    - Toggles friendlyfire on and off.

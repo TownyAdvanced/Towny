@@ -55,6 +55,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"forcepvp",
 		"explosion",
 		"forceexplosion",
+		"friendlyfire",
 		"fire",
 		"townmobs",
 		"worldmobs",
@@ -324,6 +325,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "usingtowny", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "warallowed", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "pvp/forcepvp", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "friendlyfire", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "explosion/forceexplosion", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "fire/forcefire", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "townmobs/worldmobs", ""));
@@ -379,6 +381,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				Globalworld.setForcePVP(!Globalworld.isForcePVP());
 				msg = Translation.of("msg_changed_world_setting", "Force town PVP", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("forced") : Translation.of("adjustable"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+
+			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
+
+				Globalworld.setFriendlyFire(!Globalworld.isFriendlyFireEnabled());
+				msg = Translation.of("msg_changed_world_setting", "Friendly Fire", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
