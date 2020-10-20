@@ -22,7 +22,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
-import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
+import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
@@ -167,7 +167,7 @@ public class TownyUniverse {
     
     public void performBackup() {
 		backupFuture = CompletableFuture
-			.runAsync(new CleanupBackupTask())
+			.runAsync(new CleanupTask())
 			.thenRunAsync(new BackupTask());
 	}
     

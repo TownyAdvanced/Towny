@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -403,6 +404,34 @@ public final class FileMgmt {
 		}
 	}
 
+
+	/**
+	 * Zip a given file into the given path.
+	 * 
+	 * @param file - File to zip.
+	 * @param path - Path to put file.
+	 */
+	public static void zipFile(File file, String path) {
+		
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
+			writeLock.lock();
+			byte[] buffer = new byte[2056];
+			zos.putNextEntry(new ZipEntry(file.getName()));			
+			try (FileInputStream in = new FileInputStream(file)) {
+                int len;
+                while ((len = in.read(buffer)) > 0) {
+                    zos.write(buffer, 0, len);
+                }
+            }			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 		try {
 			readLock.lock();
@@ -564,7 +593,7 @@ public final class FileMgmt {
 			writeLock.unlock();
 		}
 	}
-	
+
 	@Deprecated
 	public static String fileSeparator() {
 
