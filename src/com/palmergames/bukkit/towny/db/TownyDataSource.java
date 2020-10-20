@@ -53,8 +53,6 @@ public abstract class TownyDataSource {
 
 	public abstract boolean backup() throws IOException;
 
-	public abstract void cleanupBackups();
-
 	public boolean loadAll() {
 
 		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
@@ -353,6 +351,4 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
-
-	abstract public void cleanupPlotBlockData();
 }

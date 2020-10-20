@@ -153,36 +153,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		}
 	}
-	
-	@Override
-	public void cleanupBackups() {
-        long deleteAfter = TownySettings.getBackupLifeLength();
-        if (deleteAfter >= 0)
-            FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + File.separator + "backup"), deleteAfter);
-	}
-	
-	@Override
-	public void cleanupPlotBlockData() {
-		File plotBlockDataFolder = new File(dataFolderPath + File.separator + "plot-block-data");
-		File[] worldFolders = plotBlockDataFolder.listFiles(File::isDirectory);
-		for (File worldfolder : worldFolders) {
-			File worldFolder = new File(dataFolderPath + File.separator + "plot-block-data" + File.separator + worldfolder.getName());
-			File[] plotBlockDataFiles = worldFolder.listFiles((file)->file.getName().endsWith(".data"));
-			int count = 0;
-			for (File plotBlockDataFile : plotBlockDataFiles) {
-				FileMgmt.zipFile(plotBlockDataFile, plotBlockDataFile.getParent() + File.separator + plotBlockDataFile.getName().replace("data", "zip"));
-				FileMgmt.deleteFile(plotBlockDataFile);
-				count++;
-				if (count % 50 == 0)
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-			}
-		}		
-	}
-	
+
 	/*
 	 * Add new objects to the TownyUniverse maps.
 	 */
@@ -1201,6 +1172,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	/**
 	 * Load PlotBlockData for regen at unclaim
+	 * 
+	 * First attempts to load a .zip file containing the data file.
+	 * Fallback attempts to load old .data files instead.
+	 * 
+	 * Once it finds a zip or data file it will send it to be unpacked 
+	 * by {@link #loadDataStream(PlotBlockData, InputStream)}
+	 * which will return the populated PlotBlockData object. 
 	 *
 	 * @param townBlock - townBlock being reverted
 	 * @return PlotBlockData or null
@@ -1246,7 +1224,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
     }
 
     /**
-     * Loads PlotBlockData from an InputStream.
+     * Loads PlotBlockData from an InputStream provided by 
+     * {@link #loadPlotData(TownBlock)}
      * 
      * @param plotBlockData - plotBlockData object to populate with block array.
      * @param stream - InputStream used to populate the plotBlockData.

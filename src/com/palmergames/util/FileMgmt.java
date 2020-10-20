@@ -415,11 +415,11 @@ public final class FileMgmt {
 		
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
 			writeLock.lock();
-			byte[] buffer = new byte[2056];
-			zos.putNextEntry(new ZipEntry(file.getName()));			
-			try (FileInputStream in = new FileInputStream(file)) {
+			byte[] buffer = new byte[2056];  // Buffer with which to write the bytes of the zip file.
+			zos.putNextEntry(new ZipEntry(file.getName())); // Place file into zip.
+			try (FileInputStream in = new FileInputStream(file)) { 
                 int len;
-                while ((len = in.read(buffer)) > 0) {
+                while ((len = in.read(buffer)) > 0) { // While there is data to write, write up to the buffer.
                     zos.write(buffer, 0, len);
                 }
             }			
@@ -573,17 +573,25 @@ public final class FileMgmt {
 		}
 	}
 	
+	/**
+	 * Method to save a PlotBlockData object to disk.
+	 * 
+	 * @param data PlotBlockData object containing a plot snapshot used for the unclaim-on-revert feature.
+	 * @param file Directory to save the PlotBlockData to.
+	 * @param path Zip file location to save to.
+	 */
 	public static void savePlotData(PlotBlockData data, File file, String path) {
-		checkOrCreateFolder(file.getPath());
+		checkOrCreateFolder(file.getPath()); // Make the folder if it doesn't exist.
 		try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
 			writeLock.lock();
-			output.putNextEntry(new ZipEntry(data.getX() + "_" + data.getZ() + "_" + data.getSize() + ".data"));
+			output.putNextEntry(new ZipEntry(data.getX() + "_" + data.getZ() + "_" + data.getSize() + ".data")); // Create x_z_size.data file inside of .zip
 			try (DataOutputStream fout = new DataOutputStream(output)) {
 				// Data version goes first.
 				fout.write("VER".getBytes(StandardCharsets.UTF_8));
 				fout.write(data.getVersion());
-				// Push the plot height, then the plot block data types.
+				// Write the plot height (who knows Mojang might change it a second time.
 				fout.writeInt(data.getHeight());
+				// Write the actual blocks with their BlockData included.
 				for (String block : new ArrayList<>(data.getBlockList()))
 					fout.writeUTF(block);
 			}
@@ -593,7 +601,7 @@ public final class FileMgmt {
 			writeLock.unlock();
 		}
 	}
-
+	
 	@Deprecated
 	public static String fileSeparator() {
 
