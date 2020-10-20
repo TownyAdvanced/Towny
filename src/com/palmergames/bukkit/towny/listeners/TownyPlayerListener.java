@@ -395,7 +395,6 @@ public class TownyPlayerListener implements Listener {
 
 			case ARMOR_STAND:
 				
-				TownyMessaging.sendDebugMsg("ArmorStand Right Clicked");
 				block = Material.ARMOR_STAND;
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
@@ -403,7 +402,6 @@ public class TownyPlayerListener implements Listener {
 
 			case ITEM_FRAME:
 				
-				TownyMessaging.sendDebugMsg("Item_Frame Right Clicked");
 				block = Material.ITEM_FRAME;
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
@@ -411,7 +409,6 @@ public class TownyPlayerListener implements Listener {
 				
 			case LEASH_HITCH:
 
-				TownyMessaging.sendDebugMsg("Leash Hitch Right Clicked");
 				block = Material.LEAD;
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);

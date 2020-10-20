@@ -139,13 +139,8 @@ public class PlotBlockData {
 				case 1:
 				case 2:				
 				case 3:
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getKey() " + storedData.getKey());
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getData() " + storedData.getData());
 					if(storedData.usesID()) {
 						if (storedData.getData() == 0) {
-							TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
 							mat = BukkitTools.getMaterial(storedData.getTypeId());
 						} else {
 							try {
@@ -167,7 +162,6 @@ public class PlotBlockData {
 					if (mat == null) {
 						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
 					} else if (blockMat != mat) {
-						TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
 						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
 			
 							try {
@@ -185,7 +179,6 @@ public class PlotBlockData {
 			
 						return true;
 					}
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
 					break;
 				
 				case 4:
@@ -195,7 +188,6 @@ public class PlotBlockData {
 					if (mat == null) {
 						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
 					} else if (blockMat != mat) {
-						TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
 						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
 							try {								
 								block.setType(mat, false);

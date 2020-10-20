@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -472,8 +471,6 @@ public class TownyRegenAPI {
 
 		//Block block = null;
 		int plotSize = TownySettings.getTownBlockSize();
-
-		TownyMessaging.sendDebugMsg("Processing deleteTownBlockMaterial");
 
 		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
 

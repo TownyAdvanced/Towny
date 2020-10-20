@@ -63,9 +63,8 @@ public class WarTimerTask extends TownyTimerTask {
 						if (!warEvent.isWarringNation(nation))
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   warringNation");
-						//TODO: Cache player coord & townblock
 
-						WorldCoord worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
+						WorldCoord worldCoord = plugin.getCache(player).getLastTownBlock();
 						if (!warEvent.isWarZone(worldCoord))
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   warZone");

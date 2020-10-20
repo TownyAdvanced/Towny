@@ -1504,8 +1504,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				
 				new TownClaim(plugin, player, town, selection, false, true, false).start();
-//				TownyMessaging.sendErrorMsg(getSender(), Translation.of("not_standing_in_plot"));
-//				return;
+
 			}
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_property", "administrative"));

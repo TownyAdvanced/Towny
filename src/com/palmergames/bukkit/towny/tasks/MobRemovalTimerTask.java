@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
@@ -128,7 +127,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			mobRemovalEvent = new MobRemovalEvent(livingEntity);
 			plugin.getServer().getPluginManager().callEvent(mobRemovalEvent);
 			if (!mobRemovalEvent.isCancelled()) {
-				TownyMessaging.sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
 				livingEntity.remove();
 			}
 		}
