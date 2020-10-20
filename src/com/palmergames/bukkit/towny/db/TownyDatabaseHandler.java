@@ -49,7 +49,9 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -63,6 +65,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
+import java.util.zip.ZipFile;
 
 /**
  * @author ElgarL
@@ -1182,89 +1185,120 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
     @Override
     public PlotBlockData loadPlotData(TownBlock townBlock) {
+
+    	PlotBlockData plotBlockData = null;
+		try {
+			plotBlockData = new PlotBlockData(townBlock);
+		} catch (NullPointerException e1) {
+			TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+			return null;
+		}
         
         String fileName = getPlotFilename(townBlock);
-        
-        String value;
-        
         if (isFile(fileName)) {
-            PlotBlockData plotBlockData = null;
-			try {
-				plotBlockData = new PlotBlockData(townBlock);
-			} catch (NullPointerException e1) {
-				TownyMessaging.sendErrorMsg("Unable to load plotblockdata for townblock: " + townBlock.getWorldCoord().toString() + ". Skipping regeneration for this townBlock.");
+        	/*
+        	 * Attempt to load .zip file's inner .data file.
+        	 */
+        	try (ZipFile zipFile = new ZipFile(fileName)) {
+				InputStream stream = zipFile.getInputStream(zipFile.entries().nextElement());
+				return loadDataStream(plotBlockData, stream);
+			} catch (IOException e) {
+				e.printStackTrace();
 				return null;
 			}
-            List<String> blockArr = new ArrayList<>();
-            int version = 0;
+			
+
+        } else if (isFile(getLegacyPlotFilename(townBlock))) {
+        	/*
+        	 * Attempt to load legacy .data files.
+        	 */
+        	try {
+    			return loadDataStream(plotBlockData, new FileInputStream(getLegacyPlotFilename(townBlock)));
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    			return null;
+    		}
+        }
+        
+        return null;
+    }
+
+    /**
+     * Loads PlotBlockData from an InputStream.
+     * 
+     * @param plotBlockData - plotBlockData object to populate with block array.
+     * @param stream - InputStream used to populate the plotBlockData.
+     * @return PlotBlockData object populated with blocks.
+     */
+    private PlotBlockData loadDataStream(PlotBlockData plotBlockData, InputStream stream) {
+    	int version = 0;
+    	List<String> blockArr = new ArrayList<>();
+    	String value;
+        try (DataInputStream fin = new DataInputStream(stream)) {
             
-            try (DataInputStream fin = new DataInputStream(new FileInputStream(fileName))) {
+            //read the first 3 characters to test for version info
+            fin.mark(3);
+            byte[] key = new byte[3];
+            fin.read(key, 0, 3);
+            String test = new String(key);
+            
+            if (elements.fromString(test) == elements.VER) {// Read the file version
+                version = fin.read();
+                plotBlockData.setVersion(version);
                 
-                //read the first 3 characters to test for version info
-                fin.mark(3);
-                byte[] key = new byte[3];
-                fin.read(key, 0, 3);
-                String test = new String(key);
-                
-                if (elements.fromString(test) == elements.VER) {// Read the file version
-                    version = fin.read();
-                    plotBlockData.setVersion(version);
-                    
-                    // next entry is the plot height
-                    plotBlockData.setHeight(fin.readInt());
-                } else {
-                    /*
-                     * no version field so set height
-                     * and push rest to queue
-                     */
-                    plotBlockData.setVersion(version);
-                    // First entry is the plot height
-                    fin.reset();
-                    plotBlockData.setHeight(fin.readInt());
-                    blockArr.add(fin.readUTF());
-                    blockArr.add(fin.readUTF());
-                }
-                
+                // next entry is the plot height
+                plotBlockData.setHeight(fin.readInt());
+            } else {
                 /*
-                 * Load plot block data based upon the stored version number.
+                 * no version field so set height
+                 * and push rest to queue
                  */
-                switch (version) {
-                    
-                    default:
-                    case 4:
-                    case 3:
-                    case 1:
-                        
-                        // load remainder of file
-                        while ((value = fin.readUTF()) != null) {
-                            blockArr.add(value);
-                        }
-                        
-                        break;
-                    
-                    case 2: {
-                        
-                        // load remainder of file
-                        int temp = 0;
-                        while ((temp = fin.readInt()) >= 0) {
-                            blockArr.add(temp + "");
-                        }
-                        
-                        break;
-                    }
-                }
-                
-                
-            } catch (EOFException ignored) {
-            } catch (IOException e) {
-                e.printStackTrace();
+                plotBlockData.setVersion(version);
+                // First entry is the plot height
+                fin.reset();
+                plotBlockData.setHeight(fin.readInt());
+                blockArr.add(fin.readUTF());
+                blockArr.add(fin.readUTF());
             }
             
-            plotBlockData.setBlockList(blockArr);
-            plotBlockData.resetBlockListRestored();
-            return plotBlockData;
+            /*
+             * Load plot block data based upon the stored version number.
+             */
+            switch (version) {
+                
+                default:
+                case 4:
+                case 3:
+                case 1:
+                    
+                    // load remainder of file
+                    while ((value = fin.readUTF()) != null) {
+                        blockArr.add(value);
+                    }
+                    
+                    break;
+                
+                case 2: {
+                    
+                    // load remainder of file
+                    int temp = 0;
+                    while ((temp = fin.readInt()) >= 0) {
+                        blockArr.add(temp + "");
+                    }
+                    
+                    break;
+                }
+            }
+            
+            
+        } catch (EOFException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        
+        plotBlockData.setBlockList(blockArr);
+        plotBlockData.resetBlockListRestored();
+        return plotBlockData;
     }
     
     @Override
@@ -1275,10 +1309,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	private String getPlotFilename(PlotBlockData plotChunk) {
 
-		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".data";
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".zip";
 	}
 
 	private String getPlotFilename(TownBlock townBlock) {
+
+		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".zip";
+	}
+
+	public String getLegacyPlotFilename(TownBlock townBlock) {
 
 		return dataFolderPath + File.separator + "plot-block-data" + File.separator + townBlock.getWorld().getName() + File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize() + ".data";
 	}

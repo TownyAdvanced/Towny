@@ -1,6 +1,5 @@
 package com.palmergames.util;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -546,37 +545,21 @@ public final class FileMgmt {
 	}
 	
 	public static void savePlotData(PlotBlockData data, File file, String path) {
-		FileMgmt.checkOrCreateFolder(file.getPath());
-		try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
+		checkOrCreateFolder(file.getPath());
+		try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
 			writeLock.lock();
-			switch (data.getVersion()) {
-
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-					/*
-					 * New system requires pushing
-					 * version data first
-					 */
-					fout.write("VER".getBytes(StandardCharsets.UTF_8));
-					fout.write(data.getVersion());
-
-					break;
-
-				default:
-
+			output.putNextEntry(new ZipEntry(data.getX() + "_" + data.getZ() + "_" + data.getSize() + ".data"));
+			try (DataOutputStream fout = new DataOutputStream(output)) {
+				// Data version goes first.
+				fout.write("VER".getBytes(StandardCharsets.UTF_8));
+				fout.write(data.getVersion());
+				// Push the plot height, then the plot block data types.
+				fout.writeInt(data.getHeight());
+				for (String block : new ArrayList<>(data.getBlockList()))
+					fout.writeUTF(block);
 			}
-
-			// Push the plot height, then the plot block data types.
-			fout.writeInt(data.getHeight());
-			for (String block : new ArrayList<>(data.getBlockList())) {
-				fout.writeUTF(block);
-			}
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + file + ")");
-			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		} finally {
 			writeLock.unlock();
 		}
