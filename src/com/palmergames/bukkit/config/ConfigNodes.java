@@ -1788,6 +1788,13 @@ public enum ConfigNodes {
 			"",
 			"# When set to greater than 0.0, this setting will override all other debt calculations and maximums,",
 			"# making all towns have the same debt cap."),
+	ECO_BANKRUPTCY_DEBT_CAP_USES_TOWN_LEVELS(
+			"economy.bankruptcy.debt_cap.debt_cap_uses_town_levels",
+			"false",
+			"",
+			"# When true the debt_cap.override price will be multiplied by the debtCapModifier in the town_level",
+			"# section of the config. (Ex: debtCapModifier of 3.0 and debt_cap.override of 1000.0 would set ",
+			"# a debtcap of 3.0 x 1000 = 3000."),
 	ECO_BANKRUPTCY_UPKEEP(
 			"economy.bankruptcy.upkeep",
 			"",

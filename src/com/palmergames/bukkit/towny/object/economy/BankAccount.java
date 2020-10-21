@@ -2,8 +2,12 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
+import com.palmergames.bukkit.towny.object.Town;
+
 import org.bukkit.World;
 
 /**
@@ -28,7 +32,7 @@ public class BankAccount extends Account {
 
 		public DebtAccount(Account account) {
 			// TNE doesn't play nice with "town-" on debt accounts.
-			super(DEBT_PREFIX + account.getName().replace("town-",""), account.getBukkitWorld());
+			super(DEBT_PREFIX + account.getName().replace(TownySettings.getTownAccountPrefix(),""), account.getBukkitWorld());
 			
 			// Check if the account already exists, if not make sure the balance is set to 0
 			// as some eco configurations put a default amount in every new account.
@@ -79,6 +83,16 @@ public class BankAccount extends Account {
 	 * @return The max amount of debt for this account.
 	 */
 	public double getDebtCap() {
+		if (TownySettings.isDebtCapDeterminedByTownLevel()) { // town_level debtCapModifier * debt_cap.override.
+			Town town = null;
+			try {
+				town = TownyUniverse.getInstance().getDataSource().getTown(this.getName().replace(TownySettings.getTownAccountPrefix(), ""));
+			} catch (NotRegisteredException e) {
+				e.printStackTrace();
+			}
+			return Double.parseDouble(TownySettings.getTownLevel(town).get(TownySettings.TownLevel.DEBT_CAP_MODIFIER).toString()) * TownySettings.getDebtCapOverride();
+		}
+		
 		if (TownySettings.getDebtCapOverride() != 0.0)
 			return TownySettings.getDebtCapOverride();
 		

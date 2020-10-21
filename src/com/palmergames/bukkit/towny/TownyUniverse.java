@@ -151,6 +151,13 @@ public class TownyUniverse {
 			migrator.migrate();
 		}
         
+        try {
+			TownySettings.loadCachedObjects();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+        
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
             for (Town town : dataSource.getTowns()) {
