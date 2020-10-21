@@ -66,10 +66,10 @@ public class ConfigMigrator {
 				config.set(change.path, base + change.value);
 				break;
 			case TOWN_LEVEL_ADD:
-				addTownLevelProperty(change.path, change.value);
+				addTownLevelProperty(change.key, change.value);
 				break;
 			case NATION_LEVEL_ADD:
-				addNationLevelProperty(change.path, change.value);
+				addNationLevelProperty(change.key, change.value);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);

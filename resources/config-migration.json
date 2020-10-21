@@ -70,7 +70,7 @@
       },
       {
         "type": "TOWN_LEVEL_ADD",
-        "path": "debtCapModifier",
+        "key": "debtCapModifier",
         "value": "1.0"
       }
     ]

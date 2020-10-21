@@ -46,7 +46,7 @@ public class ChunkNotification {
 
 	/**
 	 * Called on Config load.
-	 * Specifically: TownySettings.loadCachedLangStrings()
+	 * Specifically: TownySettings.loadConfig()
 	 */
 	public static void loadFormatStrings() {
 

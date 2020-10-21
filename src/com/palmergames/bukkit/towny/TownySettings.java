@@ -233,6 +233,9 @@ public class TownySettings {
 			setDefaults(version, file);
 
 			config.save();
+			
+			loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
+			ChunkNotification.loadFormatStrings();
 		}
 	}
 	
@@ -243,27 +246,24 @@ public class TownySettings {
 			playermap = new CommentedConfiguration(file);
 			if (!playermap.load()) {
 				System.out.println("Failed to load playermap!");
-				
-				
 			}
 		}
 	}
-
-	public static void loadCachedObjects() throws IOException {
-
+	
+	private static void loadWarMaterialsLists() {
 		// Cell War material types.
 		FlagWarConfig.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
 		FlagWarConfig.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
 		FlagWarConfig.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
 
+		// Load allowed blocks in warzone.
+		WarZoneConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
+	}
+
+	public static void loadTownAndNationLevels() throws IOException {
 		// Load Nation & Town level data into maps.
 		loadTownLevelConfig();
 		loadNationLevelConfig();
-
-		// Load allowed blocks in warzone.
-		WarZoneConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
-
-		ChunkNotification.loadFormatStrings();
 	}
 
 	public static void sendError(String msg) {

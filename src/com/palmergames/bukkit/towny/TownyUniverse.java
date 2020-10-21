@@ -151,8 +151,9 @@ public class TownyUniverse {
 			migrator.migrate();
 		}
         
+        // Loads Town and Nation Levels.
         try {
-			TownySettings.loadCachedObjects();
+			TownySettings.loadTownAndNationLevels();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
