@@ -5102,3 +5102,8 @@ v0.92.0.11:
     - Greatly reduces redundancies in database code.
   - New Command: /tw toggle friendlyfire
     - Toggles friendlyfire on and off.
+  - Archive plot-block-data to save HDD space.
+    - Towny will convert all existing plot-block-data .data files into .zip files.
+    - Drastically reduces size on disk.
+    - New plot-block-data are made zipped.
+    - Closes #4327.
