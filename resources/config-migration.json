@@ -69,5 +69,15 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
+  },
+  {
+    "version": "0.96.2.22",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "debtCapModifier",
+        "value": "1.0"
+      }
+    ]
   }
 ]

@@ -151,6 +151,14 @@ public class TownyUniverse {
 			migrator.migrate();
 		}
         
+        // Loads Town and Nation Levels.
+        try {
+			TownySettings.loadTownAndNationLevels();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+        
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
             for (Town town : dataSource.getTowns()) {
