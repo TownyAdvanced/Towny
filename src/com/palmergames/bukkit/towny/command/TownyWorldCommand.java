@@ -397,7 +397,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
 
-				Globalworld.setFriendlyFire(!Globalworld.isFriendlyFireEnabled());
+				Globalworld.setFriendlyFire(choice.orElse(!Globalworld.isFriendlyFireEnabled()));
 				msg = Translation.of("msg_changed_world_setting", "Friendly Fire", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.87
+version: 0.88
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1171,3 +1171,7 @@ msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
 status_debtcap: '&2Debt Cap: &a%s'
 status_world_explrevert_entity: '&2Entity Explosion Revert: '
 status_world_explrevert_block: '&2Block Explosion Revert: '
+
+#Added in 0.88
+msg_nation_already_peaceful: '&cNation is already peaceful.'
+msg_nation_already_not_peaceful: '&cNation is already not peaceful.'

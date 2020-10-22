@@ -5107,3 +5107,12 @@ v0.92.0.11:
     - Drastically reduces size on disk.
     - New plot-block-data are made zipped.
     - Closes #4327.
+0.96.2.22:
+  - Fix Config Migrator & Add debtCapModifier #4383 
+  - New Config Option: economy.bankruptcy.debt_cap.debt_cap_uses_town_levels
+    - default: false
+    - When true the debt_cap.override price will be multiplied by the debtCapModifier in the town_level section of the config. (Ex: debtCapModifier of 3.0 and debt_cap.override of 1000.0 would set a debtcap of 3.0 x 1000 = 3000.)
+    - Closes #4374    
+  - Add discrete toggling to toggle commands, courtesy of FrankHeijden with PR #4336 (First-Time Contributor!)
+    - Adds the ability to specify on or off on nearly every toggle command.
+  - Bump language files to 0.88
