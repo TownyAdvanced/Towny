@@ -23,6 +23,7 @@ public class GatherResidentUUIDTask implements Runnable {
 
 	private Towny plugin;
 	private final static Queue<Resident> queue = new ConcurrentLinkedQueue<>();
+	private static boolean offlineModeDetected = false;
 
 	/**
 	 * @param plugin reference to Towny
@@ -40,15 +41,22 @@ public class GatherResidentUUIDTask implements Runnable {
 			return;
 		}
 		Resident resident = queue.poll();
-		if (resident.hasUUID())
+		if (resident.hasUUID()) {
+			if (resident.getUUID().version() == 3) // True offline servers return a v3 UUID instead of v4.
+				offlineModeDetected = true;
+			
 			return;
+		}
 		if (resident.isNPC())
 			resident.setUUID(UUID.randomUUID());
 		UUID uuid = BukkitTools.getUUIDSafely(resident.getName());
 
-		if (uuid != null)
+		if (uuid != null) {
+			if (uuid.version() == 3) // True offline servers return a v3 UUID instead of v4.
+				offlineModeDetected = true;
+			
 			applyUUID(resident, uuid, "cache");
-		else {
+		} else if (!offlineModeDetected) { // If the server is in true offline mode the following test would result always return 204, wiping the database.
 			try {
 				uuid = BukkitTools.getUUIDFromResident(resident);
 			} catch (IOException e) {
@@ -79,4 +87,9 @@ public class GatherResidentUUIDTask implements Runnable {
 		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
 	}
+	
+	public static void setOfflineModeTrue() {
+		offlineModeDetected = true;
+	}
+	
 }

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -47,6 +48,10 @@ public class OnPlayerLogin implements Runnable {
 	public void run() {
 		
 		Resident resident = null;
+
+		// A player returning a v3 UUID means the server is in true offline mode and not behind a bungee proxy. 
+		if (TownyTimerHandler.isGatherResidentUUIDTaskRunning() && player.getUniqueId().version() == 3)
+			GatherResidentUUIDTask.setOfflineModeTrue();
 
 		if (!universe.getDataSource().hasResident(player.getName())) {
 			/*
