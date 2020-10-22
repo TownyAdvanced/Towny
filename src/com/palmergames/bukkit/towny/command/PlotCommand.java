@@ -53,6 +53,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -173,6 +174,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					if (args.length == 2)
 						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+					else if (args.length == 3)
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
 				case "claim":
 				case "unclaim":
@@ -1084,6 +1087,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				Optional<Boolean> choice = Optional.empty();
+				if (split.length == 2) {
+					choice = BaseCommand.parseToggleChoice(split[1]);
+				}
 
 				if (split[0].equalsIgnoreCase("pvp")) {
 					// Make sure we are allowed to set these permissions.
@@ -1107,7 +1115,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
 
-					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
+					townBlock.getPermissions().pvp = choice.orElse(!townBlock.getPermissions().pvp);
 					// Add a cooldown timer for this plot.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 						CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.PVP);
@@ -1116,19 +1124,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
-					townBlock.getPermissions().explosion = !townBlock.getPermissions().explosion;
+					townBlock.getPermissions().explosion = choice.orElse(!townBlock.getPermissions().explosion);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
-					townBlock.getPermissions().fire = !townBlock.getPermissions().fire;
+					townBlock.getPermissions().fire = choice.orElse(!townBlock.getPermissions().fire);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
-					townBlock.getPermissions().mobs = !townBlock.getPermissions().mobs;
+					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
 
@@ -1175,6 +1183,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// to prevent chat log spam.
 				String endingMessage = "";
 				
+				Optional<Boolean> choice = Optional.empty();
+				if (split.length == 2) {
+					choice = BaseCommand.parseToggleChoice(split[1]);
+				}
+				
 				for (TownBlock groupBlock : plotGroup.getTownBlocks()) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -1193,7 +1206,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
 						}
 
-						groupBlock.getPermissions().pvp = !groupBlock.getPermissions().pvp;
+						groupBlock.getPermissions().pvp = choice.orElse(!groupBlock.getPermissions().pvp);
 						// Add a cooldown timer for this plot.
 						if (TownySettings.getPVPCoolDownTime() > 0)
 							CooldownTimerTask.addCooldownTimer(groupBlock.getWorldCoord().toString(), CooldownType.PVP);
@@ -1202,19 +1215,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
-						groupBlock.getPermissions().explosion = !groupBlock.getPermissions().explosion;
+						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
 						endingMessage = Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
-						groupBlock.getPermissions().fire = !groupBlock.getPermissions().fire;
+						groupBlock.getPermissions().fire = choice.orElse(!groupBlock.getPermissions().fire);
 						endingMessage =  Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
-						groupBlock.getPermissions().mobs = !groupBlock.getPermissions().mobs;
+						groupBlock.getPermissions().mobs = choice.orElse(!groupBlock.getPermissions().mobs);
 						endingMessage =  Translation.of("msg_changed_mobs", "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else {

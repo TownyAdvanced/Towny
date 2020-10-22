@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -263,8 +264,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			case "toggle":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
-				} else if (args.length == 3 && args[1].equalsIgnoreCase("npc")) {
-					return getTownyStartingWith(args[2], "r");
+				} else if (args.length >= 3 && args[1].equalsIgnoreCase("npc")) {
+					if (args.length == 3) {
+						return getTownyStartingWith(args[2], "r");
+					} else if (args.length == 4) {
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[3]);
+					}
+				} else if (args.length == 3) {
+					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				}
 				break;
 			case "tpplot":
@@ -330,6 +337,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "outlaw":
 							switch (args.length) {
 							case 4:
@@ -366,6 +375,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "toggle":
 							if (args.length == 4) 
 								return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
+							else if (args.length == 5)
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "set":
 							try {
 								return NationCommand.nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getNation(args[1]), StringMgmt.remArgs(args, 2));
@@ -958,12 +969,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
+				Optional<Boolean> choice = Optional.empty();
+				if (split.length == 4) {
+					choice = BaseCommand.parseToggleChoice(split[3]);
+				}
+				
 				if (split[2].equalsIgnoreCase("forcepvp")) {
 					
-					if (town.isAdminEnabledPVP())
-						town.setAdminEnabledPVP(false);
-					else 
-						town.setAdminEnabledPVP(true);
+					town.setAdminEnabledPVP(choice.orElse(!town.isAdminEnabledPVP()));
 					
 					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMessage(sender, Translation.of("msg_town_forcepvp_setting_set_to", town.getName(), town.isAdminEnabledPVP()));
@@ -1724,7 +1737,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseToggleCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		boolean choice;
+		Optional<Boolean> choice = Optional.empty();
+		if (split.length == 2) {
+			choice = BaseCommand.parseToggleChoice(split[1]);
+		} else if (split.length == 3 && split[1].equalsIgnoreCase("npc")) {
+			choice = BaseCommand.parseToggleChoice(split[2]);
+		}
 
 		if (split.length == 0) {
 			// command was '/townyadmin toggle'
@@ -1743,9 +1761,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		if (split[0].equalsIgnoreCase("war")) {
-			choice = TownyAPI.getInstance().isWarTime();
-
-			if (!choice) {
+			if (!choice.orElse(!TownyAPI.getInstance().isWarTime())) {
 				townyUniverse.startWarEvent();
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_war_started"));
 			} else {
@@ -1755,9 +1771,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
 			try {
-				choice = !TownySettings.isDeclaringNeutral();
-				TownySettings.setDeclaringNeutral(choice);
-				TownyMessaging.sendMsg(getSender(), Translation.of("msg_nation_allow_peaceful", choice ? Translation.of("enabled") : Translation.of("disabled")));
+				TownySettings.setDeclaringNeutral(choice.orElse(!TownySettings.isDeclaringNeutral()));
+				TownyMessaging.sendMsg(getSender(), Translation.of("msg_nation_allow_peaceful", TownySettings.isDeclaringNeutral() ? Translation.of("enabled") : Translation.of("disabled")));
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
@@ -1765,34 +1780,30 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
-				choice = !TownySettings.isDevMode();
-				TownySettings.setDevMode(choice);
-				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
+				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (TownySettings.isDevMode() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("debug")) {
 			try {
-				choice = !TownySettings.getDebug();
-				TownySettings.setDebug(choice);
+				TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
 				TownyLogger.getInstance().refreshDebugLogger();
-				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (TownySettings.getDebug() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("townwithdraw")) {
 			try {
-				choice = !TownySettings.getTownBankAllowWithdrawls();
-				TownySettings.SetTownBankAllowWithdrawls(choice);
-				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
+				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
-				choice = !TownySettings.geNationBankAllowWithdrawls();
-				TownySettings.SetNationBankAllowWithdrawls(choice);
-				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (choice ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.geNationBankAllowWithdrawls()));
+				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.geNationBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}
