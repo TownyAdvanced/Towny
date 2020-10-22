@@ -110,6 +110,12 @@ public class TownySettings {
 		for (Map<?, ?> level : levels) {
 
 			try {
+				/*
+				 * We parse everything as if it were a string because of the config-migrator, 
+				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
+				 * Until the migrator is revamped to handle different types of primitives, or,
+				 * the nation/town levels are changed this might be least painful alternative.
+				 */
 				newTownLevel(
 						Integer.parseInt(level.get("numResidents").toString()),
 						String.valueOf(level.get("namePrefix")),
@@ -147,8 +153,14 @@ public class TownySettings {
 		for (Map<?, ?> level : levels) {
 
 			try {
-				newNationLevel(
-						Integer.parseInt(level.get("numResidents").toString()),
+				/*
+				 * We parse everything as if it were a string because of the config-migrator, 
+				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
+				 * Until the migrator is revamped to handle different types of primitives, or,
+				 * the nation/town levels are changed this might be least painful alternative.
+				 */
+				newNationLevel( 
+						Integer.parseInt(level.get("numResidents").toString()), 
 						String.valueOf(level.get("namePrefix")),
 						String.valueOf(level.get("namePostfix")),
 						String.valueOf(level.get("capitalPrefix")),
