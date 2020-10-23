@@ -2,12 +2,12 @@ package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 
-public abstract class CustomDataField<T> {
+public abstract class CustomDataField<T> implements Cloneable {
     private final CustomDataFieldType type;
     private T value;
     private final String key;
     
-    private String label;
+    protected String label;
     
     public CustomDataField(String key, CustomDataFieldType type, T value, String label)
     {
@@ -46,6 +46,8 @@ public abstract class CustomDataField<T> {
         
         this.value = value;
     }
+    
+    public abstract void setValueFromString(String strValue);
 
     public String getKey() {
         return key;
@@ -91,25 +93,30 @@ public abstract class CustomDataField<T> {
 	 */
     public static CustomDataField load(String str) {
         String[] tokens = str.split(",");
-        CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
+        CustomDataFieldType type = CustomDataFieldType.fromValue(Integer.parseInt(tokens[0]));
         String key = tokens[1];
         CustomDataField field = null;
         
         switch (type) {
             case IntegerField:
-                Integer intValue = Integer.parseInt(tokens[2]);
-                field = new IntegerDataField(key, intValue);
+                field = new IntegerDataField(key);
                 break;
             case StringField:
-                field = new StringDataField(key, tokens[2]);
+                field = new StringDataField(key);
                 break;
             case BooleanField:
-                field = new BooleanDataField(key, Boolean.parseBoolean(tokens[2]));
+                field = new BooleanDataField(key);
                 break;
             case DecimalField:
-                field = new DecimalDataField(key, Double.parseDouble(tokens[2]));
+                field = new DecimalDataField(key);
                 break;
+			case LongField:
+				field = new LongDataField(key);
+				break;
         }
+        
+        if (field.canParseFromString(tokens[2]))
+        	field.setValueFromString(tokens[2]);
         
 		String label;
 		if (tokens[3] == null || tokens[3].equalsIgnoreCase("nil"))
@@ -121,30 +128,22 @@ public abstract class CustomDataField<T> {
 		
         return field;
     }
-    
-    public void isValidType(String str) throws InvalidMetadataTypeException {
-        switch (type) {
-            case IntegerField:
-                try {
-                    Integer.parseInt(str);
-                } catch (NumberFormatException e) {
-                    throw new InvalidMetadataTypeException(type);
-                }
-                break;
-            case BooleanField:
-                // Apparently any string that isn't "true" is just evaluated to false.
-                break;
-            case DecimalField:
-                try {
-                    Double.parseDouble(str);
-                } catch (NumberFormatException e) {
-                    throw new InvalidMetadataTypeException(type);
-                }
-                break;
-            default:
-            	break;
-        }
-    }
+
+    // Overridable validation function
+	protected boolean canParseFromString(String strValue) {
+    	return true;
+	}
+	
+	public final void isValidType(String str) throws InvalidMetadataTypeException {
+    	if (!canParseFromString(str))
+    		throw new InvalidMetadataTypeException(this.type);
+	}
+
+	/**
+	 * Formats and colors the value of the custom data field object.
+	 * @return the formatted value of this data field.
+	 */
+	public abstract String displayFormattedValue();
     
     @Override
     public boolean equals(Object rhs) {
@@ -160,19 +159,15 @@ public abstract class CustomDataField<T> {
         return getKey().hashCode();
     }
     
+    public abstract CustomDataField clone();
+    
+	/**
+	 * Returns a duplicate instance of the object.
+	 * @deprecated Use {@link #clone()} instead.
+	 */
+	@Deprecated
     public CustomDataField newCopy() {
-        switch (type) {
-            case BooleanField:
-                return new BooleanDataField(getKey(), (Boolean)getValue());
-            case IntegerField:
-                return new IntegerDataField(getKey(), (Integer)getValue());
-            case DecimalField:
-                return new DecimalDataField(getKey(), (Double)getValue());
-            case StringField:
-                return new StringDataField(getKey(), (String)getValue());
-        }
-        
-        return null;
+    	return clone();
     }
     
 }

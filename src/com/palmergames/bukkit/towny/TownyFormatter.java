@@ -743,23 +743,7 @@ public class TownyFormatter {
 			else
 				field += Colors.Green + cdf.getLabel() + ": ";
 			
-			switch (cdf.getType()) {
-				case IntegerField:
-					int ival = (int) cdf.getValue();
-					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
-					break;
-				case StringField:
-					field += Colors.White + cdf.getValue();
-					break;
-				case BooleanField:
-					boolean bval = (boolean) cdf.getValue();
-					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
-					break;
-				case DecimalField:
-					double dval = (double) cdf.getValue();
-					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
-					break;
-			}
+			field += cdf.displayFormattedValue();
 			
 			field += "  ";
 			
@@ -767,7 +751,8 @@ public class TownyFormatter {
 				extraFields.add(field);
 		}
 		
-		extraFields.add(field);
+		if (!field.isEmpty())
+			extraFields.add(field);
 		
 		return extraFields;
 	}
