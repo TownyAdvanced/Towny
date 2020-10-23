@@ -5121,3 +5121,4 @@ v0.92.0.11:
   - Make loadSettings() cleaner, fix up flatfile creation missing in TownyDataBaseHandler.
   - Offline mode UUID task mercy branch #4384
     - Prevent the GatherUUIDTask from wiping the database on true offline mode servers.
+  - Fix towns being able to get around the maxNumberResidentsWithoutNation setting.
