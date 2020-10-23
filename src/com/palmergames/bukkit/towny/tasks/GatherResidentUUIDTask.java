@@ -93,7 +93,7 @@ public class GatherResidentUUIDTask implements Runnable {
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
 	}
 	
-	public static void setOfflineModeTrue() {
+	public static void markOfflineMode() {
 		offlineModeDetected = true;
 	}
 	

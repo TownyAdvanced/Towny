@@ -51,7 +51,7 @@ public class OnPlayerLogin implements Runnable {
 
 		// A player returning a v3 UUID means the server is in true offline mode and not behind a bungee proxy. 
 		if (TownyTimerHandler.isGatherResidentUUIDTaskRunning() && player.getUniqueId().version() == 3)
-			GatherResidentUUIDTask.setOfflineModeTrue();
+			GatherResidentUUIDTask.markOfflineMode();
 
 		if (!universe.getDataSource().hasResident(player.getName())) {
 			/*
