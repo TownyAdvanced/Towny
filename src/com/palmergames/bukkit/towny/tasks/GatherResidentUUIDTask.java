@@ -23,6 +23,7 @@ public class GatherResidentUUIDTask implements Runnable {
 
 	private Towny plugin;
 	private final static Queue<Resident> queue = new ConcurrentLinkedQueue<>();
+	private static boolean offlineModeDetected = false;
 
 	/**
 	 * @param plugin reference to Towny
@@ -40,18 +41,29 @@ public class GatherResidentUUIDTask implements Runnable {
 			return;
 		}
 		Resident resident = queue.poll();
-		if (resident.hasUUID())
+		if (resident.hasUUID()) {
+			// We already have the UUID but we can still test if server is in offline mode. 
+			if (!offlineModeDetected && resident.getUUID().version() == 3) // True offline servers return a v3 UUID instead of v4.
+				offlineModeDetected = true;
+			
 			return;
-		if (resident.isNPC())
-			resident.setUUID(UUID.randomUUID());
-		UUID uuid = BukkitTools.getUUIDSafely(resident.getName());
+		}
+		if (resident.isNPC()) // This is one of our own NPC residents, lets give them a UUID if they don't already have one.
+			applyUUID(resident, UUID.randomUUID(), "Towny");
+		
+		UUID uuid = BukkitTools.getUUIDSafely(resident.getName()); // Get a UUID from the server's playercache without calling to Mojang. 
 
-		if (uuid != null)
-			applyUUID(resident, uuid, "cache");
-		else {
+		if (uuid != null) { // The player has been online recently enough to be in the cache.
+			if (!offlineModeDetected && uuid.version() == 3) // True offline servers return a v3 UUID instead of v4.
+				offlineModeDetected = true;
+			
+			applyUUID(resident, uuid, "cache"); 
+
+		} else if (!offlineModeDetected) { // If the server is in true offline mode the following test would result always return 204, wiping the database.
 			try {
-				uuid = BukkitTools.getUUIDFromResident(resident);
+				uuid = BukkitTools.getUUIDFromResident(resident); // This will call mojang for the player's UUID.
 			} catch (IOException e) {
+				// 204 is thrown when the player account no longer exists, they will not be logging in again so they can be deleted.
 				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " no longer has an account. Removing this resident from the database.");
 				Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin,
 					() -> TownyUniverse.getInstance().getDataSource().removeResident(resident),
@@ -61,6 +73,7 @@ public class GatherResidentUUIDTask implements Runnable {
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");
 			else {
+				// The mojang API could not be reached so lets just shut down the task for a minute.
 				TownyMessaging.sendDebugMsg("Could not resolve UUID for resident: " + resident.getName() + ", sorry! Gather task will try again in a minute.");
 				queue.add(resident);
 				TownyTimerHandler.toggleGatherResidentUUIDTask(false);
@@ -79,4 +92,9 @@ public class GatherResidentUUIDTask implements Runnable {
 		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
 	}
+	
+	public static void markOfflineMode() {
+		offlineModeDetected = true;
+	}
+	
 }
