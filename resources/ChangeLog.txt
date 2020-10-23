@@ -5116,3 +5116,5 @@ v0.92.0.11:
   - Add discrete toggling to toggle commands, courtesy of FrankHeijden with PR #4336 (First-Time Contributor!)
     - Adds the ability to specify on or off on nearly every toggle command.
   - Bump language files to 0.88
+  - Hotfix/bankcaps affect taxes #4366
+    - Closes #4364.
