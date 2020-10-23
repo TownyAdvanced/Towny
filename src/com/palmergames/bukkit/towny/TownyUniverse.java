@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -27,7 +26,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.File;
@@ -75,6 +73,13 @@ public class TownyUniverse {
         rootFolder = towny.getDataFolder().getPath();
     }
     
+    public static TownyUniverse getInstance() {
+        if (instance == null) {
+            instance = new TownyUniverse();
+        }
+        return instance;
+    }
+
     /**
      * Loads Towny's files/database en masse. Will end up in safemode if things do not go well. 
      * 
@@ -111,13 +116,9 @@ public class TownyUniverse {
 			migrator.migrate();
 		}
         
-        // Loads Town and Nation Levels.
-        try {
-			TownySettings.loadTownAndNationLevels();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+        // Loads Town and Nation Levels after migration has occured.
+        if (!loadTownAndNationLevels())
+        	return false;
 
         File f = new File(rootFolder, "outpostschecked.txt");                                        // Old towny didn't keep as good track of outpost spawn points,
         if (!f.exists()) {                                                                           // some of them ending up outside of claimed plots. If the file 
@@ -131,7 +132,14 @@ public class TownyUniverse {
 		// Things would appear to have gone well.
         return true;
     }
-    
+ 
+    /*
+     * loadSettings() functions.
+     */
+
+    /**
+    * Performs CleanupTask and BackupTask in async,
+     */
     public void performCleanupAndBackup() {
 		backupFuture = CompletableFuture
 			.runAsync(new CleanupTask())
@@ -153,6 +161,17 @@ public class TownyUniverse {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Clears the object maps.
+     */
+    public void clearAllObjects() {
+    	worlds.clear();
+        nations.clear();
+        towns.clear();
+        residents.clear();
+        townBlocks.clear();
     }
     
     /**
@@ -247,43 +266,39 @@ public class TownyUniverse {
             return false;
         }
     }
-    
-    public void startWarEvent() {
-        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
+
+    /**
+     * Loads the Town and Nation Levels from the config.yml
+     * 
+     * @return true if they have the required elements.
+     */
+    private boolean loadTownAndNationLevels() {
+		// Load Nation & Town level data into maps.
+		try {
+			TownySettings.loadTownLevelConfig();
+			TownySettings.loadNationLevelConfig();
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
     }
-    
-    //TODO: This actually breaks the design pattern, so I might just redo warEvent to never be null.
-    //TODO for: Articdive
-    public void endWarEvent() {
-        if (warEvent != null && warEvent.isWarTime()) {
-            warEvent.toggleEnd();
-        }
-    }
-    
+
+    /**
+     * Run during onDisable() to finish cleanup and backup.
+     */
     public void finishTasks() {
     	if (backupFuture != null) {
 			// Join into main thread for proper termination.
 			backupFuture.join();
 		}
 	}
-    
-    public void addWarZone(WorldCoord worldCoord) {
-        try {
-        	if (worldCoord.getTownyWorld().isWarAllowed())
-            	worldCoord.getTownyWorld().addWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
-            // Not a registered world
-        }
-        towny.updateCache(worldCoord);
-    }
-    
-    public void removeWarZone(WorldCoord worldCoord) {
-        try {
-            worldCoord.getTownyWorld().removeWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
-            // Not a registered world
-        }
-        towny.updateCache(worldCoord);
+
+    /*
+     * DataSource, PermissionSource and RootFolder.
+     */
+
+    public TownyDataSource getDataSource() {
+        return dataSource;
     }
     
     public TownyPermissionSource getPermissionSource() {
@@ -294,18 +309,14 @@ public class TownyUniverse {
         this.permissionSource = permissionSource;
     }
     
-    public War getWarEvent() {
-        return warEvent;
-    }
-    
-    public void setWarEvent(War warEvent) {
-        this.warEvent = warEvent;
-    }
-    
     public String getRootFolder() {
         return rootFolder;
     }
     
+    /*
+     * Maps and Tries
+     */
+
     public Map<String, Nation> getNationsMap() {
         return nations;
     }
@@ -338,10 +349,10 @@ public class TownyUniverse {
         return worlds;
     }
     
-    public TownyDataSource getDataSource() {
-        return dataSource;
-    }
-    
+    /*
+     * Towny Tree command output.
+     */
+
     public List<String> getTreeString(int depth) {
         
         List<String> out = new ArrayList<>();
@@ -389,53 +400,38 @@ public class TownyUniverse {
         }
         return new String(fill);
     }
-    
-    /**
-     * Pretty much this method checks if a townblock is contained within a list of locations.
-     *
-     * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
-     * @param tb                   - TownBlock to check if its contained..
-     * @return true if the TownBlock is considered an outpost by it's Town.
-     * @author Lukas Mansour (Articdive)
-     */
-    public boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
-        if (minecraftcoordinates != null && tb != null) {
-            for (Location minecraftcoordinate : minecraftcoordinates) {
-                if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
-                    return true; // Yes the TownBlock is considered an outpost by the Town
-                }
-            }
-        }
-        return false;
-    }
-    
-    public void addCustomCustomDataField(CustomDataField cdf) throws KeyAlreadyRegisteredException {
-    	
-    	if (this.getRegisteredMetadataMap().containsKey(cdf.getKey()))
-    		throw new KeyAlreadyRegisteredException();
-    	
-    	this.getRegisteredMetadataMap().put(cdf.getKey(), cdf);
-	}
-    
-    public static TownyUniverse getInstance() {
-        if (instance == null) {
-            instance = new TownyUniverse();
-        }
-        return instance;
-    }
-    
-    /**
-     * Clears the object maps.
-     */
-    public void clearAllObjects() {
-    	worlds.clear();
-        nations.clear();
-        towns.clear();
-        residents.clear();
-        townBlocks.clear();
-    }
 
-	public boolean hasGroup(String townName, UUID groupID) {
+    /*
+     * PlotGroup Stuff.
+     */
+
+	public PlotGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
+    	
+    	// Create new plot group.
+		PlotGroup newGroup = new PlotGroup(id, name, town);
+		
+		// Check if there is a duplicate
+		if (town.hasPlotGroupName(newGroup.getName())) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
+			throw new AlreadyRegisteredException();
+		}
+		
+		// Create key and store group globally.
+		town.addPlotGroup(newGroup);
+		
+		return newGroup;
+	}
+
+	public UUID generatePlotGroupID() {
+		return UUID.randomUUID();
+	}
+
+	public void removeGroup(PlotGroup group) {
+		group.getTown().removePlotGroup(group);
+		
+	}
+
+    public boolean hasGroup(String townName, UUID groupID) {
 		Town t = towns.get(townName);
 		
 		if (t != null) {
@@ -472,7 +468,6 @@ public class TownyUniverse {
 		
 		return groups;
 	}
-
 
 	/**
 	 * Gets the plot group from the town name and the plot group UUID 
@@ -512,40 +507,29 @@ public class TownyUniverse {
 		return null;
 	}
 
+	/*
+	 * Metadata Stuff
+	 */
+
+	public void addCustomCustomDataField(CustomDataField cdf) throws KeyAlreadyRegisteredException {
+    	
+    	if (this.getRegisteredMetadataMap().containsKey(cdf.getKey()))
+    		throw new KeyAlreadyRegisteredException();
+    	
+    	this.getRegisteredMetadataMap().put(cdf.getKey(), cdf);
+	}
+
 	public Map<String, CustomDataField> getRegisteredMetadataMap() {
 		return getRegisteredMetadata();
-	}
-
-	public PlotGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
-    	
-    	// Create new plot group.
-		PlotGroup newGroup = new PlotGroup(id, name, town);
-		
-		// Check if there is a duplicate
-		if (town.hasPlotGroupName(newGroup.getName())) {
-			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
-			throw new AlreadyRegisteredException();
-		}
-		
-		// Create key and store group globally.
-		town.addPlotGroup(newGroup);
-		
-		return newGroup;
-	}
-
-	public UUID generatePlotGroupID() {
-		return UUID.randomUUID();
-	}
-
-
-	public void removeGroup(PlotGroup group) {
-		group.getTown().removePlotGroup(group);
-		
 	}
 	
 	public Map<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
+
+	/*
+	 * Townblock Stuff
+	 */
 
 	/**
 	 * How to get a TownBlock for now.
@@ -577,6 +561,7 @@ public class TownyUniverse {
 			return;
 		townBlocks.put(townBlock.getWorldCoord(), townBlock);
 	}
+
 	/**
 	 * Does this WorldCoord have a TownBlock?
 	 * @param worldCoord - the coord for which we want to know if there is a townblock.
@@ -626,7 +611,48 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-	@Deprecated
+	/*
+	 * War Stuff
+	 */
+
+    public void startWarEvent() {
+        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
+    }
+    
+    public void endWarEvent() {
+        if (warEvent != null && warEvent.isWarTime()) {
+            warEvent.toggleEnd();
+        }
+    }	
+
+    public void addWarZone(WorldCoord worldCoord) {
+        try {
+        	if (worldCoord.getTownyWorld().isWarAllowed())
+            	worldCoord.getTownyWorld().addWarZone(worldCoord);
+        } catch (NotRegisteredException e) {
+            // Not a registered world
+        }
+        towny.updateCache(worldCoord);
+    }
+    
+    public void removeWarZone(WorldCoord worldCoord) {
+        try {
+            worldCoord.getTownyWorld().removeWarZone(worldCoord);
+        } catch (NotRegisteredException e) {
+            // Not a registered world
+        }
+        towny.updateCache(worldCoord);
+    }
+
+    public War getWarEvent() {
+        return warEvent;
+    }
+    
+    public void setWarEvent(War warEvent) {
+        this.warEvent = warEvent;
+    }
+    
+    @Deprecated
 	public String getSaveDbType() {
 		return TownySettings.getSaveDatabase();
 	}

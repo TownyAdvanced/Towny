@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -18,6 +17,8 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import org.bukkit.Location;
 
 public class AreaSelectionUtil {
 
@@ -46,7 +47,7 @@ public class AreaSelectionUtil {
 				TownBlock tb = pos.getTownBlock();
 				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
 					Town town = tb.getTown();
-					if (TownyUniverse.getInstance().isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
+					if (isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
 						tb.setOutpost(true);
 						out.add(pos);
 					} else {
@@ -358,5 +359,24 @@ public class AreaSelectionUtil {
 			}
 		return false;
 	}
+	
+    /**
+     * Pretty much this method checks if a townblock is contained within a list of locations.
+     *
+     * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
+     * @param tb                   - TownBlock to check if its contained..
+     * @return true if the TownBlock is considered an outpost by it's Town.
+     * @author Lukas Mansour (Articdive)
+     */
+    public static boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
+        if (minecraftcoordinates != null && tb != null) {
+            for (Location minecraftcoordinate : minecraftcoordinates) {
+                if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
+                    return true; // Yes the TownBlock is considered an outpost by the Town
+                }
+            }
+        }
+        return false;
+    }
 
 }

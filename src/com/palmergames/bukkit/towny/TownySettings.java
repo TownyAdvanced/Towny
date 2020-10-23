@@ -272,12 +272,6 @@ public class TownySettings {
 		WarZoneConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
 	}
 
-	public static void loadTownAndNationLevels() throws IOException {
-		// Load Nation & Town level data into maps.
-		loadTownLevelConfig();
-		loadNationLevelConfig();
-	}
-
 	public static void sendError(String msg) {
 
 		System.out.println("[Towny] Error could not read " + msg);
