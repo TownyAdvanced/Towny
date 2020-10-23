@@ -5118,3 +5118,4 @@ v0.92.0.11:
   - Bump language files to 0.88
   - Hotfix/bankcaps affect taxes #4366
     - Closes #4364.
+  - Make loadSettings() cleaner, fix up flatfile creation missing in TownyDataBaseHandler.

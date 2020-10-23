@@ -574,7 +574,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(getSender(), Translation.of("msg_save_success"));
 	
 		} else if (split[0].equalsIgnoreCase("load")) {
-			TownyUniverse.getInstance().clearAll();			
+			TownyUniverse.getInstance().clearAllObjects();			
 			TownyUniverse.getInstance().getDataSource().loadAll();
 			TownyMessaging.sendMsg(getSender(), Translation.of("msg_load_success"));			
 		}

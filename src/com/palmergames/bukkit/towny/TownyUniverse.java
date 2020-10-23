@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
-import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -70,83 +69,44 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
-    private String saveDbType;
-    private String loadDbType;
-    
+
     private TownyUniverse() {
         towny = Towny.getPlugin();
         rootFolder = towny.getDataFolder().getPath();
     }
     
-    // TODO: Put loadSettings into the constructor, since it is 1-time-run code.
+    /**
+     * Loads Towny's files/database en masse. Will end up in safemode if things do not go well. 
+     * 
+     * Loads config/language/townyperms files.
+     * Initiates the logger.
+     * Flushes object maps.
+     * Saves and loads the database.
+     * Will migrate the config if needed.
+     * Loads the town and nation levels.
+     * Legacy outpost test.
+     * Schedule cleanup and backup.
+     * 
+     * @return true if things go well.
+     */
     boolean loadSettings() {
         
-        try {
-            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
-            TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
-            
-        } catch (IOException | TownyException e) {
-            e.printStackTrace();
-            return false;
-        }
-		// Init logger
+    	// Load config, language and townyperms files.
+    	if (!loadFiles())
+    		return false;
+
+    	// Init logger
 		TownyLogger.getInstance();
 
-        saveDbType = TownySettings.getSaveDatabase();
-        loadDbType = TownySettings.getLoadDatabase();
-        
-        System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-        
-        clearAll();
+        // Clears the object maps from memory.
+        clearAllObjects();
                 
-        long startTime = System.currentTimeMillis();
-        if (!loadDatabase(loadDbType)) {
-            System.out.println("[Towny] Error: Failed to load!");
-            return false;
-        }
-        
-        long time = System.currentTimeMillis() - startTime;
-        System.out.println("[Towny] Database: Loaded in " + time + "ms.");
-        System.out.println("[Towny] Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs.");
+        // Try to load and save the database.
+        if (!loadAndSaveDatabase(TownySettings.getSaveDatabase(), TownySettings.getLoadDatabase()))
+        	return false;
 
-        try {
-            // Set the new class for saving.
-            switch (saveDbType.toLowerCase()) {
-                case "ff":
-                case "flatfile": {
-                    this.dataSource = new TownyFlatFileSource(towny, this);
-                    break;
-                }
-                case "h2":
-                case "sqlite":
-                case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
-                    break;
-                }
-                default: {
-                
-                }
-            }
-            FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
-           
-            if (loadDbType.equalsIgnoreCase(saveDbType)) {
-                // Update all Worlds data files
-                dataSource.saveAllWorlds();
-            } else {
-                //Formats are different so save ALL data.
-                dataSource.saveAll();
-            }
-            
-        } catch (UnsupportedOperationException e) {
-            System.out.println("[Towny] Error: Unsupported save format!");
-            return false;
-        }
-        
-        Version lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
-        
-        // Only migrate if the user just updated.
-        if (!lastRunVersion.equals(towny.getVersion())) {
+        // Try migrating the config and world files if the version has changed.
+        if (!Version.fromString(TownySettings.getLastRunVersion()).equals(towny.getVersion())) {
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}
@@ -158,27 +118,77 @@ public class TownyUniverse {
 			e.printStackTrace();
 			return false;
 		}
-        
-        File f = new File(rootFolder, "outpostschecked.txt");
-        if (!(f.exists())) {
-            for (Town town : dataSource.getTowns()) {
-                TownyDatabaseHandler.validateTownOutposts(town);
-            }
-            towny.saveResource("outpostschecked.txt", false);
-        }
 
-		// Run both the backup cleanup and backup async.
-		performBackup();
-        
+        File f = new File(rootFolder, "outpostschecked.txt");                                        // Old towny didn't keep as good track of outpost spawn points,
+        if (!f.exists()) {                                                                           // some of them ending up outside of claimed plots. If the file 
+            for (Town town : dataSource.getTowns()) TownyDatabaseHandler.validateTownOutposts(town); // does not exist we will test all outpostspawns and create the
+            towny.saveResource("outpostschecked.txt", false);                                        // file. Sometimes still useful on servers who've manually
+        }                                                                                            // altered data manually and want to re-check.
+
+		// Run both the cleanup and backup async.
+		performCleanupAndBackup();
+
+		// Things would appear to have gone well.
         return true;
     }
     
-    public void performBackup() {
+    public void performCleanupAndBackup() {
 		backupFuture = CompletableFuture
 			.runAsync(new CleanupTask())
 			.thenRunAsync(new BackupTask());
 	}
     
+    /**
+     * Load config, language and townyperms files.
+     * 
+     * @return true if no exceptions are found.
+     */
+    private boolean loadFiles() {
+        try {
+            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
+            Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+            TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
+        } catch (IOException | TownyException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Test loading and saving the database.
+     * 
+     * @param loadDbType - load setting from the config.
+     * @param saveDbType - save setting from the config.
+     * @return true when the databse will load and save.
+     */
+    private boolean loadAndSaveDatabase(String loadDbType, String saveDbType) {
+    	System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
+        // Try loading the database.
+        long startTime = System.currentTimeMillis();
+        if (!loadDatabase(loadDbType)) {
+            System.out.println("[Towny] Error: Failed to load!");
+            return false;
+        }
+        
+        long time = System.currentTimeMillis() - startTime;
+        System.out.println("[Towny] Database: Loaded in " + time + "ms.");
+        System.out.println("[Towny] Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
+
+        // Try saving the database.
+        if (!saveDatabase(saveDbType)) {
+        	System.out.println("[Towny] Error: Unsupported save format!");
+        	return false;
+        }
+		return true;
+    }
+    
+    /**
+     * Loads the database into memory.
+     *  
+     * @param loadDbType - load setting from the config.
+     * @return true when the database will load.
+     */
     private boolean loadDatabase(String loadDbType) {
         
         switch (loadDbType.toLowerCase()) {
@@ -199,6 +209,43 @@ public class TownyUniverse {
         }
         
         return dataSource.loadAll();
+    }
+    
+    /**
+     * Saves the database into memory.
+     * 
+     * @param saveDbType - save setting from the config.
+     * @return true when the database will save.
+     */
+    private boolean saveDatabase(String saveDbType) {
+        try {
+            // Set the new class for saving.
+            switch (saveDbType.toLowerCase()) {
+                case "ff":
+                case "flatfile": {
+                    this.dataSource = new TownyFlatFileSource(towny, this);
+                    break;
+                }
+                case "h2":
+                case "sqlite":
+                case "mysql": {
+                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
+                    break;
+                }
+                default: {}
+            }
+
+            if (TownySettings.getLoadDatabase().equalsIgnoreCase(saveDbType)) {
+                // Update all Worlds data files
+                dataSource.saveAllWorlds();                
+            } else {
+                //Formats are different so save ALL data.
+                dataSource.saveAll();
+            }
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
     }
     
     public void startWarEvent() {
@@ -377,7 +424,10 @@ public class TownyUniverse {
         return instance;
     }
     
-    public void clearAll() {
+    /**
+     * Clears the object maps.
+     */
+    public void clearAllObjects() {
     	worlds.clear();
         nations.clear();
         towns.clear();
@@ -576,12 +626,13 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-
+	@Deprecated
 	public String getSaveDbType() {
-		return saveDbType;
+		return TownySettings.getSaveDatabase();
 	}
-
+	
+	@Deprecated
 	public String getLoadDbType() {
-		return loadDbType;
+		return TownySettings.getLoadDatabase();
 	}
 }

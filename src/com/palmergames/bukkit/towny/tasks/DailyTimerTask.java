@@ -148,7 +148,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
 		 */
 		if (TownySettings.isBackingUpDaily()) {			
-			universe.performBackup();
+			universe.performCleanupAndBackup();
 		}
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
