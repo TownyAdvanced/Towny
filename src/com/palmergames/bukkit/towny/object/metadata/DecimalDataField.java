@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
+import com.palmergames.bukkit.util.Colors;
+
 public class DecimalDataField extends CustomDataField<Double> {
     public DecimalDataField(String key, Double value) {
         super(key, CustomDataFieldType.DecimalField, value);
@@ -12,4 +14,30 @@ public class DecimalDataField extends CustomDataField<Double> {
     public DecimalDataField(String key) {
         super(key, CustomDataFieldType.DecimalField, 0.0);
     }
+
+	@Override
+	public void setValueFromString(String strValue) {
+    	setValue(Double.parseDouble(strValue));
+	}
+
+	@Override
+	public boolean canParseFromString(String str) {
+		try {
+			Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String displayFormattedValue() {
+		double val = getValue();
+		return (val <= 0 ? Colors.Red : Colors.LightGreen) + val;
+	}
+
+	@Override
+	public CustomDataField clone() {
+		return new DecimalDataField(getKey(), getValue(), getLabel());
+	}
 }

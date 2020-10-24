@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
+import com.palmergames.bukkit.util.Colors;
+
 public class StringDataField extends CustomDataField<String> {
 
     public StringDataField(String key) {
@@ -13,4 +15,19 @@ public class StringDataField extends CustomDataField<String> {
     public StringDataField(String key, String value) {
         super(key, CustomDataFieldType.StringField, value, null);
     }
+
+	@Override
+	public void setValueFromString(String strValue) {
+		setValue(strValue);
+	}
+
+	@Override
+	public String displayFormattedValue() {
+		return Colors.White + getValue();
+	}
+
+	@Override
+	public CustomDataField clone() {
+		return new StringDataField(getKey(), getValue(), this.label);
+	}
 }
