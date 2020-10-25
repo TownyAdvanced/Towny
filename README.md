@@ -8,7 +8,7 @@ With help coming from other developers from time to time including dumptruckman,
 
 Towny is one of the oldest still-in-development plugins for Minecraft. It was created by Shadeness for the now-defunct server platform called hMod.
 
-It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months. Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.
+It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months, Towny is now over 10 years old! Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.
 </p>
 
 ___
@@ -19,9 +19,9 @@ ___
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
-| MC 1.16.* | Use [0.96.2.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0) or the above Latest Pre-Release. |
-| MC 1.15.* | Use [0.96.2.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0) or the above Latest Pre-Release. |
-| MC 1.14.* | Use [0.96.2.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0) or the above Latest Pre-Release. |
+| MC 1.16.* | Use [0.96.3.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.3.0) or the above Latest Pre-Release. |
+| MC 1.15.* | Use [0.96.3.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.3.0) or the above Latest Pre-Release. |
+| MC 1.14.* | Use [0.96.3.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.3.0) or the above Latest Pre-Release. |
 | MC 1.13.2 | [0.96.2.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2) |
 | MC 1.12.2 | [0.96.2.0 for 1.12.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.12.2) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |

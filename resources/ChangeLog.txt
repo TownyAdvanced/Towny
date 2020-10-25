@@ -5129,3 +5129,5 @@ v0.92.0.11:
     - Adds a new metadata field to store longs by introducing the LongDataField.
     - Makes the CustomDataField class truly abstract relying less on switch statements and makes it much easier to add new metadata types in the future, potentially paving the way for even allowing developers to add their own metadata types in the future.
   - Fix flipped save/load types.
+0.96.3.0:
+  - Bump version for Release.
