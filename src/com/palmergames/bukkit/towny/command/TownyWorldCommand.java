@@ -58,6 +58,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"forceexplosion",
 		"friendlyfire",
 		"fire",
+		"forcefire",
 		"townmobs",
 		"worldmobs",
 		"revertunclaim",

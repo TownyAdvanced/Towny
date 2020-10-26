@@ -5131,3 +5131,5 @@ v0.92.0.11:
   - Fix flipped save/load types.
 0.96.3.0:
   - Bump version for Release.
+0.96.3.1:
+  - Fix forcefire missing from /tw toggle tab-completion.
