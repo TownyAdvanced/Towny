@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalItemusePermissionEvent;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermissionEvent;
@@ -19,12 +20,10 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -77,7 +76,6 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -221,15 +219,12 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		// Test against the item in hand as we need to test the bucket contents
-		// we are trying to empty.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event.getPlayer().getInventory().getItemInMainHand()));
-
-		// Test on the resulting empty bucket to see if we have permission to
-		// empty a bucket.
-		if (!event.isCancelled())
-			event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
-
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		
+		// Test whether we can fill the bucket by testing if they would be able to build the liquid it is picking up.
+		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()).getLocation(), event.getBucket());
+		event.setCancelled(internalEvent.isCancelled());
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -239,9 +234,13 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		// test against the bucket we will finish up with to see if we are
-		// allowed to fill this item.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		
+		// Test whether we can fill the bucket by testing if they would be able to destroy the liquid it is picking up.
+		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), event.getBlockClicked().getLocation(), event.getBlockClicked().getType());
+		event.setCancelled(internalEvent.isCancelled());
 
 	}
 
@@ -261,10 +260,11 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
+		
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
 
 		if (event.hasItem()) {
 
@@ -274,7 +274,6 @@ public class TownyPlayerListener implements Listener {
 			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool()) 
 					&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)
 					&& event.getClickedBlock() != null) {
-				block = event.getClickedBlock();
 				
 				if (Tag.SIGNS.isTagged(block.getType())) {
 					BlockFace facing = null;
@@ -317,13 +316,16 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
 				TownyMessaging.sendDebugMsg("ItemUse Material found: " + event.getItem().getType().name());
-				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(player, block.getLocation(), block.getType());
+				event.setCancelled(internalEvent.isCancelled());
 			}
 			/*
 			 * Test switch use.
 			 */
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, block.getLocation(), block.getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
@@ -332,6 +334,7 @@ public class TownyPlayerListener implements Listener {
 		if (!event.useItemInHand().equals(Event.Result.DENY)) {
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, block.getLocation(), block.getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
@@ -380,10 +383,10 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		
 		if (event.getRightClicked() != null) {
-
-			if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
-				return;
 
 			Player player = event.getPlayer();
 			Material block = null;
@@ -414,23 +417,9 @@ public class TownyPlayerListener implements Listener {
 			}
 
 			if (block != null) {
-
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
-				// Allow the removal if we are permitted
-				if (!internalEvent.isCancelled())
-					return;
-
-				event.setCancelled(true);
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				if (cache.hasBlockErrMsg())
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-				return;
+				event.setCancelled(internalEvent.isCancelled());
 			}
 
 			/*
@@ -439,7 +428,9 @@ public class TownyPlayerListener implements Listener {
 			if (event.getPlayer().getInventory().getItemInMainHand() != null) {
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
+					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
 		}
@@ -458,21 +449,11 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
 
 		if (event.getRightClicked() != null) {
-
-			TownyWorld World = null;
-
-			try {
-				World = TownyUniverse.getInstance().getDataSource().getWorld(event.getPlayer().getWorld().getName());
-				if (!World.isUsingTowny())
-					return;
-
-			} catch (NotRegisteredException e) {
-				// World not registered with Towny.
-				e.printStackTrace();
-				return;
-			}
 
 			Player player = event.getPlayer();
 			Material block = null;
@@ -524,23 +505,15 @@ public class TownyPlayerListener implements Listener {
 				// Check if the player has valid permission for interacting with the entity based on the action type.
 				boolean cancelled = false;
 				if (actionType == ActionType.DESTROY) {
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
 					cancelled = internalEvent.isCancelled();
 				} else { //actionType is still switch.
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, event.getRightClicked().getLocation(), block);
 					cancelled = internalEvent.isCancelled();
 				}
-				if (cancelled) {
-					event.setCancelled(true); // Cancel the event
-					/*
-					 * Fetch the players cache
-					 */
-					PlayerCache cache = plugin.getCache(player);
-
-					if (cache.hasBlockErrMsg())
-						TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-				}
-				
+				event.setCancelled(cancelled);				
 				return;
 			}
 
@@ -567,7 +540,9 @@ public class TownyPlayerListener implements Listener {
 				}
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
+					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
 		}
@@ -668,24 +643,26 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if CHORUS_FRUIT is in the item_use list.
 		 */
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT)
-			if (TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name()))
-				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.CHORUS_FRUIT))) {
-					event.setCancelled(true);					
-					return;
-				}	
+		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name())) {
+			//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT);
+			if (internalEvent.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
+		}	
 			
 		/*
 		 * Test to see if Ender pearls are disabled.
 		 */		
-		if (event.getCause() == TeleportCause.ENDER_PEARL)
-			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name()))
-				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_ender_pearls_disabled"));
-					return;
-				}
-		
+		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {
+			//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getTo(), Material.ENDER_PEARL);
+			if (internalEvent.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
 		onPlayerMove(event);
 	}
 
@@ -746,73 +723,6 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	/*
-	*  ItemUse protection handling
-	*/
-	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
-
-		boolean cancelState = false;
-		WorldCoord worldCoord;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		try {
-			String worldName = player.getWorld().getName();
-
-			if (block != null)
-				worldCoord = new WorldCoord(worldName, Coord.parseCoord(block));
-			else
-				worldCoord = new WorldCoord(worldName, Coord.parseCoord(player));
-
-			// Get itemUse permissions (updates if none exist)
-			Location loc;
-			if (block != null)
-				loc = block.getLocation();
-			else
-				loc = player.getLocation();
-			
-			TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(player, loc, item.getType());
-
-			boolean wildOverride = townyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, item.getType(), TownyPermission.ActionType.ITEM_USE);
-
-			PlayerCache cache = plugin.getCache(player);
-			// cache.updateCoord(worldCoord);
-			try {
-
-				TownBlockStatus status = plugin.getCache(player).getStatus();
-				if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
-					return cancelState;
-
-				// Allow item_use if we have an override
-				if (((status == TownBlockStatus.TOWN_RESIDENT) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, item.getType(), TownyPermission.ActionType.ITEM_USE)))
-						|| (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) 
-						&& (townyUniverse.getPermissionSource().hasAllTownOverride(player, item.getType(), TownyPermission.ActionType.ITEM_USE))))
-					return cancelState;
-
-				// Non-Override Wilderness & Non-Override Claimed Land Handled here.
-				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) // Wilderness 
-						|| ((internalEvent.isCancelled()) && (status != TownBlockStatus.UNCLAIMED_ZONE))) { // Claimed Land
-					cancelState = true;
-				}
-
-				if ((cache.hasBlockErrMsg())) 
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-			} catch (NullPointerException e) {
-				System.out.print("NPE generated!");
-				System.out.print("Player: " + player.getName());
-				System.out.print("Item: " + item.getType().name());
-			}
-
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_configured"));
-			cancelState = true;
-			return cancelState;
-		}
-
-		return cancelState;
-
-	}
-
-	/*
 	 * PlayerFishEvent
 	 * 
 	 * Prevents players from fishing for entities in protected regions.
@@ -839,6 +749,7 @@ public class TownyPlayerListener implements Listener {
 				test = !CombatUtil.preventPvP(world, tb);
 			// Non-player catches are tested for destroy permissions.
 			} else {
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, caught.getLocation(), Material.GRASS);
 				test = internalEvent.isCancelled();
 			}
@@ -1075,11 +986,8 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getLectern().getWorld()))
 			return;
 		
-		Player player = event.getPlayer();
-		org.bukkit.block.Lectern lectern = event.getLectern();
-		Location location = lectern.getLocation();
-
-		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, location, Material.LECTERN);
+		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), event.getLectern().getLocation(), Material.LECTERN);
 		event.setCancelled(internalEvent.isCancelled());
 	}
 

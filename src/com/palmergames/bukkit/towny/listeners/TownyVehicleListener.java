@@ -8,10 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 
 /**
  * Handle events for all Vehicle related events
@@ -82,23 +80,9 @@ public class TownyVehicleListener implements Listener {
 				return;
 
 			if (vehicle != null) {
-				// Get permissions (updates if none exist)
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getVehicle().getLocation(), vehicle);
-
-				// Allow the removal if we are permitted
-				if (!internalEvent.isCancelled())
-					return;
-
-				event.setCancelled(true);
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				if (cache.hasBlockErrMsg()) {
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-				}
+				event.setCancelled(internalEvent.isCancelled());
 			}
 		}
 	}

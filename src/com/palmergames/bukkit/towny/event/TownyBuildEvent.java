@@ -14,6 +14,7 @@ public class TownyBuildEvent extends Event implements Cancellable {
 	private Location loc;
 	private Material mat;
 	private boolean cancelled;
+	private String message;
 	private static final HandlerList handlers = new HandlerList();
 	
 	public TownyBuildEvent(Player player, Location loc, Material mat, boolean cancelled) {
@@ -49,6 +50,14 @@ public class TownyBuildEvent extends Event implements Cancellable {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
@@ -11,7 +10,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -167,6 +165,7 @@ public class CombatUtil {
 				 */
 				if (defenderTB != null) {
 					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
+						//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 						TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
 						if (!internalEvent.isCancelled())
 							return false;
@@ -231,22 +230,11 @@ public class CombatUtil {
 				}
 
 				if (block != null) {
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, defendingEntity.getLocation(), block);
-					if (internalEvent.isCancelled()) {
-
-						/*
-						 * Fetch the players cache
-						 */
-						PlayerCache cache = plugin.getCache(attackingPlayer);
-
-						if (cache.hasBlockErrMsg())
-							TownyMessaging.sendErrorMsg(attackingPlayer, cache.getBlockErrMsg());
-
+					if (internalEvent.isCancelled())
 						return true;
-					}
-
 				}
-
 			}
 		}
 		

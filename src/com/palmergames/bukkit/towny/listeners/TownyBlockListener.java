@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionE
 import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -19,7 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,28 +48,13 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
-		Block block = event.getBlock();
-
-		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, block.getLocation(), block.getType());
-
-		// Allow the removal if we are permitted
-		if (!internalEvent.isCancelled())
+		Block block = event.getBlock();		
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
-		event.setCancelled(true);
-
-		/*
-		 * Fetch the players cache
-		 */
-		PlayerCache cache = plugin.getCache(player);
-
-		/* 
-		 * display any error recorded for this plot
-		 */
-		if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
-			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
+		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), block.getLocation(), block.getType());
+		event.setCancelled(internalEvent.isCancelled());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -82,30 +65,14 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		
-		//Get build permissions (updates if none exist)
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(player, block.getLocation(), block.getType());
-
-		// Allow build if we are permitted
-		if (!internalEvent.isCancelled())
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
-		event.setBuild(false);
-		event.setCancelled(true);
-		
-		/*
-		 * Fetch the players cache
-		 */
-		PlayerCache cache = plugin.getCache(player);
-
-		/* 
-		 * display any error recorded for this plot
-		 */
-		if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
-			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
+		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event. 
+		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), block.getLocation(), block.getType());
+		event.setBuild(!internalEvent.isCancelled());
+		event.setCancelled(internalEvent.isCancelled());
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

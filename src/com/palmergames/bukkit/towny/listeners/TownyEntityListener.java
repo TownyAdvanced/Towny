@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermission
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -252,8 +251,8 @@ public class TownyEntityListener implements Listener {
 				if (!TownyAPI.getInstance().getTownBlock(loc).hasResident())
 					return;	
 
-				Player target = (Player)event.getTarget();
-				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(target, loc, Material.DIRT);
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent((Player) event.getTarget(), loc, Material.DIRT);
 				event.setCancelled(internalEvent.isCancelled());
 			}
 		}
@@ -273,6 +272,9 @@ public class TownyEntityListener implements Listener {
 		if (plugin.isError()) {
 				return;
 		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld = null;
@@ -342,12 +344,10 @@ public class TownyEntityListener implements Listener {
 					if (TownyAPI.getInstance().isWilderness(entity.getLocation()))
 						return;
 			
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.ARMOR_STAND);
-					// Allow the removal if we are permitted
-					if (!internalEvent.isCancelled())
-						return;
-
-					event.setCancelled(true);
+					// Not able to destroy an ArmorStand so cancel the event.
+					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
 			
@@ -357,11 +357,8 @@ public class TownyEntityListener implements Listener {
 				if (entity instanceof EnderCrystal) {
 					// Test if a player can break a grass block here.
 					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.GRASS);
-					// Allow the removal if we are permitted
-					if (!internalEvent.isCancelled())
-						return;
 					// Not able to destroy grass so we cancel event.
-					event.setCancelled(true);
+					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
 		}
@@ -563,6 +560,7 @@ public class TownyEntityListener implements Listener {
 
 	/**
 	 * Handles pressure plates (switch use) not triggered by players.
+	 * example: animals or a boat with a player in it.
 	 * 
 	 * @param event - EntityInteractEvent
 	 */
@@ -573,12 +571,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
 		List<Entity> passengers = entity.getPassengers();
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
-			return;
 
 		/*
 		 * Allow players in vehicles to activate pressure plates if they
@@ -590,12 +588,12 @@ public class TownyEntityListener implements Listener {
 				if (!passenger.getType().equals(EntityType.PLAYER)) 
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
+					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent((Player) passenger, block.getLocation(), block.getType());
-					if (!internalEvent.isCancelled())
-						return;
+					event.setCancelled(internalEvent.isCancelled());
+					return;
 				}
 			}
-
 		}
 
 		// Prevent creatures triggering stone pressure plates
@@ -972,21 +970,10 @@ public class TownyEntityListener implements Listener {
 				default:
 					mat = Material.GRASS_BLOCK;
 				}
-					
+
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, hanging.getLocation(), mat);
-				// Allow the removal if we are permitted
-				if (!internalEvent.isCancelled())
-					return;
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				event.setCancelled(true);
-
-				if (cache.hasBlockErrMsg())
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+				event.setCancelled(internalEvent.isCancelled());
 
 			} else {
 				// Explosions are blocked in this plot
@@ -1036,17 +1023,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		Entity hanging = event.getEntity();
-
-		if (!TownyAPI.getInstance().isTownyWorld(hanging.getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		Player player = event.getPlayer();
-		
-		// Get build permissions (updates if none exist)
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(player, hanging.getLocation(), Material.PAINTING);
+		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING);
 
-		// Cancel based on above Cache query.
 		event.setCancelled(internalEvent.isCancelled());
 	}
 
