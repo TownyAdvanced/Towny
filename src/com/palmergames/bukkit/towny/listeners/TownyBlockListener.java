@@ -5,24 +5,16 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -67,21 +59,12 @@ public class TownyBlockListener implements Listener {
 		if (!internalEvent.isCancelled())
 			return;
 
+		event.setCancelled(true);
+
 		/*
 		 * Fetch the players cache
 		 */
 		PlayerCache cache = plugin.getCache(player);
-
-		if ((cache.getStatus() == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
-				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
-				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "destroy", block.getType().toString().toLowerCase()));
-			}
-			return;
-		}
-
-		event.setCancelled(true);
 
 		/* 
 		 * display any error recorded for this plot
@@ -101,65 +84,27 @@ public class TownyBlockListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		WorldCoord worldCoord;
 		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			TownyWorld world = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
+		//Get build permissions (updates if none exist)
+		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(player, block.getLocation(), block.getType());
 
-			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.BUILD);
+		// Allow build if we are permitted
+		if (!internalEvent.isCancelled())
+			return;
 
-			// Allow build if we are permitted
-			if (bBuild)
-				return;
-			
-			/*
-			 * Fetch the players cache
-			 */
-			PlayerCache cache = plugin.getCache(player);
-			TownBlockStatus status = cache.getStatus();
+		event.setBuild(false);
+		event.setCancelled(true);
+		
+		/*
+		 * Fetch the players cache
+		 */
+		PlayerCache cache = plugin.getCache(player);
 
-			/*
-			 * Flag war
-			 */
-			if (((status == TownBlockStatus.ENEMY) && FlagWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == FlagWarConfig.getFlagBaseMaterial())) {
-
-				try {
-					if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
-						return;
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-				}
-
-				event.setBuild(false);
-				event.setCancelled(true);
-
-			// Event War piggy backing on flag war's EditableMaterialInWarZone 
-			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
-					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
-					event.setBuild(false);
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "build", block.getType().toString().toLowerCase()));
-				}
-				return;
-			} else {
-				event.setBuild(false);
-				event.setCancelled(true);
-			}
-
-			/* 
-			 * display any error recorded for this plot
-			 */
-			if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
-				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_configured"));
-			event.setCancelled(true);
-		}
+		/* 
+		 * display any error recorded for this plot
+		 */
+		if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
+			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 	}
 

@@ -5,7 +5,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
 import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -13,13 +15,11 @@ import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.ArraySort;
@@ -590,7 +590,8 @@ public class TownyEntityListener implements Listener {
 				if (!passenger.getType().equals(EntityType.PLAYER)) 
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
-					if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null))
+					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent((Player) passenger, block.getLocation(), block.getType());
+					if (!internalEvent.isCancelled())
 						return;
 				}
 			}
@@ -1043,10 +1044,10 @@ public class TownyEntityListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Get build permissions (updates if none exist)
-		boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.BUILD);
+		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(player, hanging.getLocation(), Material.PAINTING);
 
 		// Cancel based on above Cache query.
-		event.setCancelled(!bBuild);
+		event.setCancelled(internalEvent.isCancelled());
 	}
 
 	/**
