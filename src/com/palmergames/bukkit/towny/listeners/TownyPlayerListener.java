@@ -728,7 +728,7 @@ public class TownyPlayerListener implements Listener {
 	 * Prevents players from fishing for entities in protected regions.
 	 * - Armorstands, animals, players, any entity affected by rods.
 	 */
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled= true)
 	public void onPlayerFishEvent(PlayerFishEvent event) {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;

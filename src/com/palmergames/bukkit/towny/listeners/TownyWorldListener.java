@@ -182,7 +182,7 @@ public class TownyWorldListener implements Listener {
 			event.getBlocks().removeAll(removed);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPortalCreate(PortalCreateEvent event) {
 		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
 			return;
