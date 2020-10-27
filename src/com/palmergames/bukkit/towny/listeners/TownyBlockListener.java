@@ -28,6 +28,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 import java.util.List;
 
@@ -102,6 +103,13 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
+		if (event.getCause().equals(IgniteCause.FLINT_AND_STEEL)) {
+			TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE);
+			if (internalEvent.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
 		if (isBurnCancelled(event.getBlock()))
 			event.setCancelled(true);
 	}
