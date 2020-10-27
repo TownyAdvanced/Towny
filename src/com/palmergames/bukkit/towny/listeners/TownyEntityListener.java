@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -252,9 +253,8 @@ public class TownyEntityListener implements Listener {
 					return;	
 
 				Player target = (Player)event.getTarget();
-				if (!PlayerCacheUtil.getCachePermission(target, loc, Material.DIRT, TownyPermission.ActionType.DESTROY)) {
-					event.setCancelled(true);
-				}
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(target, loc, Material.DIRT);
+				event.setCancelled(internalEvent.isCancelled());
 			}
 		}
 	}
@@ -342,12 +342,9 @@ public class TownyEntityListener implements Listener {
 					if (TownyAPI.getInstance().isWilderness(entity.getLocation()))
 						return;
 			
-					// Get destroy permissions (updates if none exist)
-					//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.ARMOR_STAND, TownyPermission.ActionType.DESTROY);
-
+					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.ARMOR_STAND);
 					// Allow the removal if we are permitted
-					if (bDestroy)
+					if (!internalEvent.isCancelled())
 						return;
 
 					event.setCancelled(true);
@@ -357,12 +354,11 @@ public class TownyEntityListener implements Listener {
 			// Handle player causes against entities that should be protected.
 			if (event.getDamager() instanceof Player) {
 				Player player = (Player) event.getDamager();
-				boolean bDestroy = false;
 				if (entity instanceof EnderCrystal) {
 					// Test if a player can break a grass block here.
-					bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
-					// If destroying is allowed then return before we cancel.
-					if (bDestroy)
+					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.GRASS);
+					// Allow the removal if we are permitted
+					if (!internalEvent.isCancelled())
 						return;
 					// Not able to destroy grass so we cancel event.
 					event.setCancelled(true);
@@ -976,12 +972,9 @@ public class TownyEntityListener implements Listener {
 					mat = Material.GRASS_BLOCK;
 				}
 					
-
-				// Get destroy permissions (updates if none exist)
-				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), mat, TownyPermission.ActionType.DESTROY);
-
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, hanging.getLocation(), mat);
 				// Allow the removal if we are permitted
-				if (bDestroy)
+				if (!internalEvent.isCancelled())
 					return;
 
 				/*

@@ -10,9 +10,8 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 
 /**
  * Handle events for all Vehicle related events
@@ -42,7 +41,6 @@ public class TownyVehicleListener implements Listener {
 		if (event.getAttacker() instanceof Player) {
 			
 			Player player = (Player) event.getAttacker();
-			boolean bBreak = true;
 			Material vehicle = null;
 
 			switch (event.getVehicle().getType()) {
@@ -83,13 +81,12 @@ public class TownyVehicleListener implements Listener {
 			if ((vehicle != null) && (!TownySettings.isItemUseMaterial(vehicle.toString())))
 				return;
 
-			// Get permissions (updates if none exist)
-			bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), vehicle, TownyPermission.ActionType.ITEM_USE);
-
 			if (vehicle != null) {
+				// Get permissions (updates if none exist)
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getVehicle().getLocation(), vehicle);
 
 				// Allow the removal if we are permitted
-				if (bBreak)
+				if (!internalEvent.isCancelled())
 					return;
 
 				event.setCancelled(true);

@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -385,7 +387,6 @@ public class TownyPlayerListener implements Listener {
 				return;
 
 			Player player = event.getPlayer();
-			boolean bBuild = true;
 			Material block = null;
 
 			/*
@@ -396,23 +397,17 @@ public class TownyPlayerListener implements Listener {
 			case ARMOR_STAND:
 				
 				block = Material.ARMOR_STAND;
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
 				break;
 
 			case ITEM_FRAME:
 				
 				block = Material.ITEM_FRAME;
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 				break;
 				
 			case LEASH_HITCH:
 
 				block = Material.LEAD;
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
-				break;				
+				break;
 			
 			default:
 				break;
@@ -421,8 +416,9 @@ public class TownyPlayerListener implements Listener {
 
 			if (block != null) {
 
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
 				// Allow the removal if we are permitted
-				if (bBuild)
+				if (!internalEvent.isCancelled())
 					return;
 
 				event.setCancelled(true);
@@ -527,7 +523,15 @@ public class TownyPlayerListener implements Listener {
 			
 			if (block != null && TownySettings.isSwitchMaterial(block.name())) {
 				// Check if the player has valid permission for interacting with the entity based on the action type.
-				if (!PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, actionType)) {
+				boolean cancelled = false;
+				if (actionType == ActionType.DESTROY) {
+					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
+					cancelled = internalEvent.isCancelled();
+				} else { //actionType is still switch.
+					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, event.getRightClicked().getLocation(), block);
+					cancelled = internalEvent.isCancelled();
+				}
+				if (cancelled) {
 					event.setCancelled(true); // Cancel the event
 					/*
 					 * Fetch the players cache
@@ -836,10 +840,10 @@ public class TownyPlayerListener implements Listener {
 			return false;
 
 		// Get switch permissions (updates if none exist)
-		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH);
-
+		
+		TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, block.getLocation(), block.getType());
 		// Allow switch if we are permitted
-		if (bSwitch)
+		if (!internalEvent.isCancelled())
 			return false;
 
 		/*
@@ -896,7 +900,8 @@ public class TownyPlayerListener implements Listener {
 				test = !CombatUtil.preventPvP(world, tb);
 			// Non-player catches are tested for destroy permissions.
 			} else {
-				test = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
+				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, caught.getLocation(), Material.GRASS);
+				test = internalEvent.isCancelled();
 			}
 			if (!test) {
 				event.setCancelled(true);
@@ -1134,9 +1139,9 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 		org.bukkit.block.Lectern lectern = event.getLectern();
 		Location location = lectern.getLocation();
-		
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
-		event.setCancelled(!bDestroy);
+
+		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, location, Material.LECTERN);
+		event.setCancelled(internalEvent.isCancelled());
 	}
 
 	/**

@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -60,11 +61,10 @@ public class TownyBlockListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
-		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY);
-		
-		// Allow destroy if we are permitted
-		if (bDestroy)
+		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, block.getLocation(), block.getType());
+
+		// Allow the removal if we are permitted
+		if (!internalEvent.isCancelled())
 			return;
 
 		/*

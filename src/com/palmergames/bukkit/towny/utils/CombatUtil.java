@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
+import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -15,8 +16,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -168,7 +167,8 @@ public class CombatUtil {
 				 */
 				if (defenderTB != null) {
 					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
-						if (PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT, ActionType.DESTROY))
+						TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
+						if (!internalEvent.isCancelled())
 							return false;
 					}
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
@@ -180,8 +180,10 @@ public class CombatUtil {
 						 * and have destroy permissions (dirt) in the defending
 						 * TownBlock
 						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT, ActionType.DESTROY))
+						TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT);
+						if (internalEvent.isCancelled())
 							return true;
+
 					}
 				}
 
@@ -229,10 +231,8 @@ public class CombatUtil {
 				}
 
 				if (block != null) {
-					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
-
-					if (!bDestroy) {
+					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, defendingEntity.getLocation(), block);
+					if (internalEvent.isCancelled()) {
 
 						/*
 						 * Fetch the players cache
