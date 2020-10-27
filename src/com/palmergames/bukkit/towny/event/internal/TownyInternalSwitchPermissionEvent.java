@@ -14,7 +14,7 @@ public class TownyInternalSwitchPermissionEvent {
 	private boolean cancelled;
 
 	public TownyInternalSwitchPermissionEvent(Player player, Location loc, Material mat) {
-		setCancelled(!PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.SWITCH));
+		cancelled = !PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.SWITCH);
 		TownyMessaging.sendDebugMsg("TownyInternalSwitchPermissionEvent - PRE - " + player.getName() +
 				" - loc:" + loc + 
 				" - mat:" + mat.name() + 
@@ -22,7 +22,7 @@ public class TownyInternalSwitchPermissionEvent {
 
 		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, isCancelled());
 		BukkitTools.getPluginManager().callEvent(event);
-		setCancelled(event.isCancelled());
+		cancelled = event.isCancelled();
 
 		TownyMessaging.sendDebugMsg("TownyInternalSwitchPermissionEvent - POST - " + player.getName() +
 				" - loc:" + loc + 
@@ -33,9 +33,4 @@ public class TownyInternalSwitchPermissionEvent {
 	public boolean isCancelled() {
 		return cancelled;
 	}
-
-	public void setCancelled(boolean cancel) {
-		this.cancelled = cancel;
-	}
-	
 }

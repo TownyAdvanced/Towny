@@ -244,6 +244,7 @@ public class TownyPlayerListener implements Listener {
 		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
 
 	}
+
 	
 	/*
 	* PlayerInteractEvent 
@@ -363,6 +364,7 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
+	
 	/*
 	* PlayerInteractAtEntity event
 	* 
@@ -915,6 +917,7 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendMsg(player, Translation.of("msg_you_are_an_outlaw_in_this_town", to.getTownBlock().getTown()));
 	}
 
+
 	/**
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
@@ -971,6 +974,7 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 	}
+
 
 	/**
 	 * PlayerEnterTownEvent

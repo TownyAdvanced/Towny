@@ -34,7 +34,6 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onDestroy(TownyDestroyEvent event) {
-		
 		Player player = event.getPlayer();
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
@@ -52,7 +51,6 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onBuild(TownyBuildEvent event) {
-		
 		Player player = event.getPlayer();
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
@@ -85,7 +83,7 @@ public class WarZoneListener implements Listener {
 		}
 	}
 	
-	@EventHandler (ignoreCancelled= true)
+	@EventHandler
 	public void onSwitchUse(TownySwitchEvent event) {
 		Player player = event.getPlayer();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
@@ -108,7 +106,7 @@ public class WarZoneListener implements Listener {
 		Block block = player.getWorld().getBlockAt(event.getLocation());
 		WorldCoord worldCoord = new WorldCoord(block.getWorld().getName(), Coord.parseCoord(block));
 		
-		if (((plugin.getCache(player).getStatus() == TownBlockStatus.ENEMY) && FlagWarConfig.isAllowingAttacks()) && (mat == FlagWarConfig.getFlagBaseMaterial())) 
+		if (FlagWarConfig.isAllowingAttacks() && plugin.getCache(player).getStatus() == TownBlockStatus.ENEMY && mat == FlagWarConfig.getFlagBaseMaterial()) 
 			try {
 				if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
 					event.setCancelled(false);

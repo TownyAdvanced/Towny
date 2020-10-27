@@ -14,7 +14,7 @@ public class TownyInternalBuildPermissionEvent {
 	private boolean cancelled;
 
 	public TownyInternalBuildPermissionEvent(Player player, Location loc, Material mat) {
-		setCancelled(!PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.BUILD));
+		cancelled = !PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.BUILD);
 		TownyMessaging.sendDebugMsg("TownyInternalBuildPermissionEvent - PRE - " + player.getName() +
 				" - loc:" + loc + 
 				" - mat:" + mat.name() + 
@@ -22,7 +22,7 @@ public class TownyInternalBuildPermissionEvent {
 
 		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, isCancelled());
 		BukkitTools.getPluginManager().callEvent(event);
-		setCancelled(event.isCancelled());
+		cancelled = event.isCancelled();
 
 		TownyMessaging.sendDebugMsg("TownyInternalBuildPermissionEvent - POST - " + player.getName() +
 				" - loc:" + loc + 
@@ -33,9 +33,4 @@ public class TownyInternalBuildPermissionEvent {
 	public boolean isCancelled() {
 		return cancelled;
 	}
-
-	public void setCancelled(boolean cancel) {
-		this.cancelled = cancel;
-	}
-	
 }
