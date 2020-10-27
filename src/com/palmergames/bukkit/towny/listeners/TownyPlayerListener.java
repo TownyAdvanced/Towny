@@ -11,10 +11,10 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalItemusePermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyItemuseEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownySwitchEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -223,7 +223,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		// Test whether we can fill the bucket by testing if they would be able to build the liquid it is picking up.
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()).getLocation(), event.getBucket());
+		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()).getLocation(), event.getBucket());
 		event.setCancelled(internalEvent.isCancelled());
 	}
 
@@ -239,7 +239,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		// Test whether we can fill the bucket by testing if they would be able to destroy the liquid it is picking up.
-		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), event.getBlockClicked().getLocation(), event.getBlockClicked().getType());
+		TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(event.getPlayer(), event.getBlockClicked().getLocation(), event.getBlockClicked().getType());
 		event.setCancelled(internalEvent.isCancelled());
 
 	}
@@ -317,7 +317,7 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
 				TownyMessaging.sendDebugMsg("ItemUse Material found: " + event.getItem().getType().name());
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(player, block.getLocation(), block.getType());
+				TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(player, block.getLocation(), block.getType());
 				event.setCancelled(internalEvent.isCancelled());
 			}
 			/*
@@ -326,7 +326,7 @@ public class TownyPlayerListener implements Listener {
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, block.getLocation(), block.getType());
+					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, block.getLocation(), block.getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
@@ -335,7 +335,7 @@ public class TownyPlayerListener implements Listener {
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, block.getLocation(), block.getType());
+					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, block.getLocation(), block.getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
@@ -418,7 +418,7 @@ public class TownyPlayerListener implements Listener {
 
 			if (block != null) {
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
+				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getRightClicked().getLocation(), block);
 				event.setCancelled(internalEvent.isCancelled());
 			}
 
@@ -429,7 +429,7 @@ public class TownyPlayerListener implements Listener {
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
+					TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
@@ -506,11 +506,11 @@ public class TownyPlayerListener implements Listener {
 				boolean cancelled = false;
 				if (actionType == ActionType.DESTROY) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, event.getRightClicked().getLocation(), block);
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getRightClicked().getLocation(), block);
 					cancelled = internalEvent.isCancelled();
 				} else { //actionType is still switch.
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent(player, event.getRightClicked().getLocation(), block);
+					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, event.getRightClicked().getLocation(), block);
 					cancelled = internalEvent.isCancelled();
 				}
 				event.setCancelled(cancelled);				
@@ -541,7 +541,7 @@ public class TownyPlayerListener implements Listener {
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
+					TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(event.getPlayer(), event.getRightClicked().getLocation(), event.getPlayer().getInventory().getItemInMainHand().getType());
 					event.setCancelled(internalEvent.isCancelled());
 				}
 			}
@@ -645,7 +645,7 @@ public class TownyPlayerListener implements Listener {
 		 */
 		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name())) {
 			//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT);
+			TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT);
 			if (internalEvent.isCancelled()) {
 				event.setCancelled(true);
 				return;
@@ -657,7 +657,7 @@ public class TownyPlayerListener implements Listener {
 		 */		
 		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {
 			//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			TownyInternalItemusePermissionEvent internalEvent = new TownyInternalItemusePermissionEvent(event.getPlayer(), event.getTo(), Material.ENDER_PEARL);
+			TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(event.getPlayer(), event.getTo(), Material.ENDER_PEARL);
 			if (internalEvent.isCancelled()) {
 				event.setCancelled(true);
 				return;
@@ -750,7 +750,7 @@ public class TownyPlayerListener implements Listener {
 			// Non-player catches are tested for destroy permissions.
 			} else {
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, caught.getLocation(), Material.GRASS);
+				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, caught.getLocation(), Material.GRASS);
 				test = internalEvent.isCancelled();
 			}
 			if (!test) {
@@ -987,7 +987,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), event.getLectern().getLocation(), Material.LECTERN);
+		TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(event.getPlayer(), event.getLectern().getLocation(), Material.LECTERN);
 		event.setCancelled(internalEvent.isCancelled());
 	}
 

@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -54,7 +54,7 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(event.getPlayer(), block.getLocation(), block.getType());
+		TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(event.getPlayer(), block.getLocation(), block.getType());
 		event.setCancelled(internalEvent.isCancelled());
 	}
 
@@ -71,7 +71,7 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event. 
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), block.getLocation(), block.getType());
+		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), block.getLocation(), block.getType());
 		event.setBuild(!internalEvent.isCancelled());
 		event.setCancelled(internalEvent.isCancelled());
 	}
@@ -104,7 +104,7 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		if (event.getCause().equals(IgniteCause.FLINT_AND_STEEL)) {
-			TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE);
+			TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE);
 			if (internalEvent.isCancelled()) {
 				event.setCancelled(true);
 				return;

@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -54,7 +54,7 @@ public class ShopPlotUtil {
 	 * @return true if the player can build and the plot is a shop
 	 */
 	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(player, location, Material.DIRT);
+		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(player, location, Material.DIRT);
 		if (!internalEvent.isCancelled() && isShopPlot(location))
 			return true;
 		else return false;

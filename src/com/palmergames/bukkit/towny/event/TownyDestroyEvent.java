@@ -8,6 +8,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * 
+ * @author LlmDl
+ */
 public class TownyDestroyEvent extends Event implements Cancellable {
 
 	private Player player;

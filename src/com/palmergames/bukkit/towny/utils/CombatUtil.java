@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -166,7 +166,7 @@ public class CombatUtil {
 				if (defenderTB != null) {
 					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
 						//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-						TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
+						TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
 						if (!internalEvent.isCancelled())
 							return false;
 					}
@@ -179,7 +179,7 @@ public class CombatUtil {
 						 * and have destroy permissions (dirt) in the defending
 						 * TownBlock
 						 */
-						TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT);
+						TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT);
 						if (internalEvent.isCancelled())
 							return true;
 
@@ -231,7 +231,7 @@ public class CombatUtil {
 
 				if (block != null) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(attackingPlayer, defendingEntity.getLocation(), block);
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, defendingEntity.getLocation(), block);
 					if (internalEvent.isCancelled())
 						return true;
 				}

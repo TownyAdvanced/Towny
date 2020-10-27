@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -197,7 +197,7 @@ public class TownyWorldListener implements Listener {
 		
 		for (BlockState block : event.getBlocks()) {
 			//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL);
+			TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL);
 			
 			// Cancel PortalCreateEvent based on internalEvent results.
 			if (internalEvent.isCancelled()) {

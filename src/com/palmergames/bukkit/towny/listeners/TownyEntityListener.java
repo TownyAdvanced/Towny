@@ -5,9 +5,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalBuildPermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalDestroyPermissionEvent;
-import com.palmergames.bukkit.towny.event.internal.TownyInternalSwitchPermissionEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownySwitchEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -252,7 +252,7 @@ public class TownyEntityListener implements Listener {
 					return;	
 
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent((Player) event.getTarget(), loc, Material.DIRT);
+				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor((Player) event.getTarget(), loc, Material.DIRT);
 				event.setCancelled(internalEvent.isCancelled());
 			}
 		}
@@ -345,7 +345,7 @@ public class TownyEntityListener implements Listener {
 						return;
 			
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.ARMOR_STAND);
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, entity.getLocation(), Material.ARMOR_STAND);
 					// Not able to destroy an ArmorStand so cancel the event.
 					event.setCancelled(internalEvent.isCancelled());
 				}
@@ -356,7 +356,7 @@ public class TownyEntityListener implements Listener {
 				Player player = (Player) event.getDamager();
 				if (entity instanceof EnderCrystal) {
 					// Test if a player can break a grass block here.
-					TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, entity.getLocation(), Material.GRASS);
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, entity.getLocation(), Material.GRASS);
 					// Not able to destroy grass so we cancel event.
 					event.setCancelled(internalEvent.isCancelled());
 				}
@@ -589,7 +589,7 @@ public class TownyEntityListener implements Listener {
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyInternalSwitchPermissionEvent internalEvent = new TownyInternalSwitchPermissionEvent((Player) passenger, block.getLocation(), block.getType());
+					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor((Player) passenger, block.getLocation(), block.getType());
 					event.setCancelled(internalEvent.isCancelled());
 					return;
 				}
@@ -972,7 +972,7 @@ public class TownyEntityListener implements Listener {
 				}
 
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyInternalDestroyPermissionEvent internalEvent = new TownyInternalDestroyPermissionEvent(player, hanging.getLocation(), mat);
+				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, hanging.getLocation(), mat);
 				event.setCancelled(internalEvent.isCancelled());
 
 			} else {
@@ -1027,7 +1027,7 @@ public class TownyEntityListener implements Listener {
 			return;
 
 		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		TownyInternalBuildPermissionEvent internalEvent = new TownyInternalBuildPermissionEvent(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING);
+		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING);
 
 		event.setCancelled(internalEvent.isCancelled());
 	}
