@@ -69,6 +69,7 @@ public class EntityTypeUtil {
 		case ITEM_FRAME:
 			material = Material.ITEM_FRAME;
 			break;
+
 		case PAINTING:
 			material = Material.PAINTING;
 			break;
@@ -77,11 +78,16 @@ public class EntityTypeUtil {
 			material = Material.ARMOR_STAND;
 			break;
 			
+		case LEASH_HITCH:
+			material = Material.LEAD;
+			break;
+
 		case ENDER_CRYSTAL:
 			material = Material.END_CRYSTAL;
 			break;
 
 		case MINECART:
+		case MINECART_MOB_SPAWNER:
 			material = Material.MINECART;
 			break;
 			
@@ -99,6 +105,10 @@ public class EntityTypeUtil {
 
 		case MINECART_HOPPER:
 			material = Material.HOPPER_MINECART;
+			break;
+			
+		case MINECART_TNT:
+			material = Material.TNT_MINECART;
 			break;
 		}
 					

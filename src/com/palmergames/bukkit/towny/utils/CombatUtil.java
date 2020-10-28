@@ -201,53 +201,33 @@ public class CombatUtil {
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material block = null;
+				Material material = null;
 
 				switch (defendingEntity.getType()) {
-	
+					/*
+					 * Below are the entities we specifically want to protect with this test.
+					 * Any other entity will mean that block is still null and will not be
+					 * tested with a destroy test.
+					 */
 					case ITEM_FRAME:
-						block = Material.ITEM_FRAME;
-						break;
-	
 					case PAINTING:
-						block = Material.PAINTING;
-						break;
-						
 					case ARMOR_STAND:
-						block = Material.ARMOR_STAND;
-						break;
-						
 					case ENDER_CRYSTAL:
-						block = Material.GRASS_BLOCK; // Because we don't want players not able to destroy those crystals in the end...
-						break;
-	
 					case MINECART:
-						block = Material.MINECART;
-						break;
-						
 					case MINECART_CHEST:
-						block = Material.CHEST_MINECART;
-						break;
-					
 					case MINECART_FURNACE:
-						block = Material.FURNACE_MINECART;
-						break;
-	
 					case MINECART_COMMAND:
-						block = Material.COMMAND_BLOCK_MINECART;
-						break;
-	
 					case MINECART_HOPPER:
-						block = Material.HOPPER_MINECART;
+						material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 						break;
 					
 					default:
 						break;
 				}
 
-				if (block != null) {
+				if (material != null) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, defendingEntity.getLocation(), block);
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, defendingEntity.getLocation(), material);
 					if (internalEvent.isCancelled())
 						return true;
 				}

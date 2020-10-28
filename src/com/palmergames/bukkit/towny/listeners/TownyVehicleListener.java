@@ -10,6 +10,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 
 /**
  * Handle events for all Vehicle related events
@@ -41,39 +42,22 @@ public class TownyVehicleListener implements Listener {
 			Player player = (Player) event.getAttacker();
 			Material vehicle = null;
 
+			/*
+			 * Substitute a Material for the Entity so we can run a destroy test against it.
+			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
+			 */
 			switch (event.getVehicle().getType()) {
-
-			case MINECART:
-				vehicle = Material.MINECART;
-				break;
-			
-			case MINECART_FURNACE:
-				vehicle = Material.FURNACE_MINECART;
-				break;
-			
-			case MINECART_HOPPER:
-				vehicle = Material.HOPPER_MINECART;
-				break;
-				
-			case MINECART_CHEST:
-				vehicle = Material.CHEST_MINECART;
-				break;
-				
-			case MINECART_MOB_SPAWNER:
-				vehicle = Material.MINECART;
-				break;
-			
-			case MINECART_COMMAND:
-				vehicle = Material.COMMAND_BLOCK_MINECART;
-				break;
-			
-			case MINECART_TNT:
-				vehicle = Material.TNT_MINECART;
-				break;
-				
-			default:
-				break;
-
+				case MINECART:
+				case MINECART_FURNACE:
+				case MINECART_HOPPER:
+				case MINECART_CHEST:
+				case MINECART_MOB_SPAWNER:
+				case MINECART_COMMAND:
+				case MINECART_TNT:
+					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
+					break;
+				default:
+					break;
 			}
 			
 			if ((vehicle != null) && (!TownySettings.isItemUseMaterial(vehicle.toString())))

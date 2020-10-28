@@ -33,6 +33,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -378,18 +379,9 @@ public class TownyPlayerListener implements Listener {
 			switch (event.getRightClicked().getType()) {
 
 			case ARMOR_STAND:
-				
-				block = Material.ARMOR_STAND;
-				break;
-
 			case ITEM_FRAME:
-				
-				block = Material.ITEM_FRAME;
-				break;
-				
 			case LEASH_HITCH:
-
-				block = Material.LEAD;
+				block = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 				break;
 			
 			default:
@@ -458,45 +450,32 @@ public class TownyPlayerListener implements Listener {
 			Material block = null;
 			ActionType actionType = ActionType.SWITCH;
 			
+			/*
+			 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
+			 * Anything not in the switch will leave the block null.
+			 */
 			switch (event.getRightClicked().getType()) {
+				/*
+				 * First three are tested with a Destroy perm check.
+				 */
 				case ITEM_FRAME:
-					block = Material.ITEM_FRAME;
-					actionType = ActionType.DESTROY;
-					break;
-					
 				case PAINTING:
-					block = Material.PAINTING;
-					actionType = ActionType.DESTROY;
-					break;
-					
 				case LEASH_HITCH:
-					block = Material.LEAD;
+					block = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					actionType = ActionType.DESTROY;
 					break;
 					
+				/*
+				 * Afterwards they will remain as Switch perm checks.
+				 */
 				case MINECART:
 				case MINECART_MOB_SPAWNER:
-					block = Material.MINECART;
-					break;
-					
 				case MINECART_CHEST:
-					block = Material.CHEST_MINECART;
-					break;
-					
 				case MINECART_FURNACE:
-					block = Material.FURNACE_MINECART;
-					break;
-				
 				case MINECART_COMMAND:
-					block = Material.COMMAND_BLOCK_MINECART;
-					break;
-					
 				case MINECART_HOPPER:
-					block = Material.HOPPER_MINECART;
-					break;
-					
 				case MINECART_TNT:
-					block = Material.TNT_MINECART;
+					block = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					break;
 			}
 

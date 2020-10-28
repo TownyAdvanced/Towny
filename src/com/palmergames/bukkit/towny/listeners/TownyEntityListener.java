@@ -935,17 +935,13 @@ public class TownyEntityListener implements Listener {
 				Player player = (Player) remover;
 				Material mat = null;
 				switch (event.getEntity().getType()) {
-				case PAINTING:
-					mat = Material.PAINTING;
-					break;
-				case LEASH_HITCH:
-					mat = Material.LEAD;
-					break;
-				case ITEM_FRAME:
-					mat = Material.ITEM_FRAME;
-					break;
-				default:
-					mat = Material.GRASS_BLOCK;
+					case PAINTING:
+					case LEASH_HITCH:
+					case ITEM_FRAME:
+						mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
+						break;
+					default:
+						mat = Material.GRASS_BLOCK;
 				}
 
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
