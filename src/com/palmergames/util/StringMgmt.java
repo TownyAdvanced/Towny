@@ -180,14 +180,6 @@ public class StringMgmt {
 		return false;
 	}
 	
-	public static boolean containsIgnoreCase(String[] arr, String str) {
-
-		for (String s : arr)
-			if (s.equalsIgnoreCase(str))
-				return true;
-		return false;
-	}
-	
 	/**
 	 * Replaces underscores with spaces.
 	 * 

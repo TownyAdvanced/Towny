@@ -17,8 +17,11 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
@@ -105,6 +108,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
 
 		// World using Towny
@@ -154,22 +158,28 @@ public class CombatUtil {
 					return !event.isCancelled();
 				}
 
+			/*
+			 * Defender is not a player.
+			 */
 			} else {
 				/*
-				 * Remove animal killing prevention start
-				 */
-				
-				
-				/*
-				 * Defender is not a player so check for PvM
+				 * First test protections for Non-Player defenders who are being protected
+				 * because they are specifically in Town-Claimed land.
 				 */
 				if (defenderTB != null) {
+					
+					/*
+					 * Farm Animals
+					 */
 					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
 						//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 						TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
 						if (!internalEvent.isCancelled())
 							return false;
 					}
+					/*
+					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
+					 */
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
 					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) {
 						
@@ -186,12 +196,10 @@ public class CombatUtil {
 					}
 				}
 
-				/*
-				 * Remove prevention end
-				 */
 
 				/*
 				 * Protect specific entity interactions (faked with Materials).
+				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
 				Material block = null;
 
@@ -203,6 +211,14 @@ public class CombatUtil {
 	
 					case PAINTING:
 						block = Material.PAINTING;
+						break;
+						
+					case ARMOR_STAND:
+						block = Material.ARMOR_STAND;
+						break;
+						
+					case ENDER_CRYSTAL:
+						block = Material.GRASS_BLOCK; // Because we don't want players not able to destroy those crystals in the end...
 						break;
 	
 					case MINECART:
@@ -236,21 +252,43 @@ public class CombatUtil {
 						return true;
 				}
 			}
-		}
-		
-		/*
-		 * If attackingEntity is a tamed Wolf and...
-		 * Defender is a player and...
-		 * Either player or wolf is in a non-PVP area
-		 * 
-		 * Prevent pvp and remove Wolf targeting.
-		 */
-		if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && defendingPlayer != null && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
-			((Wolf) attackingEntity).setTarget(null);
-			return true;
-		}
-		
 
+		/*
+		 * This is not an attack by a player....
+		 */
+		} else {
+
+			/*
+			 * If Defender is a player, Attacker is not.
+			 */
+			if (defendingPlayer != null) {
+
+				/*
+				 * If attackingEntity is a tamed Wolf and...
+				 * Defender is a player and...
+				 * Either player or wolf is in a non-PVP area
+				 * 
+				 * Prevent pvp and remove Wolf targeting.
+				 */
+				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
+					((Wolf) attackingEntity).setTarget(null);
+					return true;
+				}
+				
+				/*
+				 * Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.
+				 */
+				if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && attackingEntity.getType() == EntityType.PRIMED_TNT)
+					return true;
+				
+			/*
+			 * DefendingEntity is not a player.
+			 * This is now non-player vs non-player damage.
+			 * This should be unreachable as we are already parsing out
+			 * non-player involved combat at TownyEntityListener#nonPlayerEntityDamageByEntity.
+			 */
+			}
+		}
 		return false;
 	}
 
