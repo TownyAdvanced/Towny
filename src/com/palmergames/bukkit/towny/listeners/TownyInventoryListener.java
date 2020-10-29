@@ -6,8 +6,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.Colors;
 
@@ -23,18 +21,9 @@ public class TownyInventoryListener implements Listener {
 			return;
 
 		Player player = (Player) event.getWhoClicked();
-		Resident resident = null;
 		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e1) {
-			e1.printStackTrace();
-			event.setCancelled(true);
-			return;
-		}
-
-		TownyInventory inv = resident.getGUIInventory();
-
-		try {
+			TownyInventory inv = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getGUIInventory();
+		
 			// If the pressed item was a nextpage button
 			if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
 				event.setCancelled(true);
@@ -60,7 +49,5 @@ public class TownyInventoryListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		event.setCancelled(true);
 	}
-	
 }
