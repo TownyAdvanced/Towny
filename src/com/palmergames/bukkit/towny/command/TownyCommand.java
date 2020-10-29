@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -229,9 +228,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				for (String line : getTownyPrices(town))
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
-				new TownyInventory(player, TownySettings.getSwitchMaterials(), "Towny Switch List");
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				resident.openGUIInventory(TownySettings.getSwitchMaterials(), "Towny Switch List");
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
-				new TownyInventory(player, TownySettings.getItemUseMaterials(), "Towny ItemUse List");
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				resident.openGUIInventory(TownySettings.getItemUseMaterials(), "Towny ItemUse List");
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

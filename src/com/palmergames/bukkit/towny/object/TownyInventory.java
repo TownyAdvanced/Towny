@@ -1,11 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,17 +19,9 @@ public class TownyInventory {
 
 	public ArrayList<Inventory> pages = new ArrayList<Inventory>();
 	public int currentPage = 0;
-	public static HashMap<Player, TownyInventory> players = new HashMap<Player, TownyInventory>();
 
-	public TownyInventory(Player player, List<String> list, String name) {
+	public TownyInventory(Resident resident, ArrayList<ItemStack> items, String name) {
 
-		ArrayList<ItemStack> items = new ArrayList<>();
-		for (String item : list) {
-			Material mat = Material.getMaterial(item);
-			if (mat != null) {
-				items.add(new ItemStack(mat));
-			}
-		}
 		Inventory page = getBlankPage(name);
 		
 		for (int i = 0; i < items.size(); i++) {
@@ -46,8 +35,8 @@ public class TownyInventory {
 			}
 		}
 		pages.add(page);
-		player.openInventory(pages.get(currentPage));
-		players.put(player, this);
+		resident.getPlayer().openInventory(pages.get(currentPage));
+		resident.setGUIInventory(this);
 	}
 
 	// This creates a blank page with the next and prev buttons

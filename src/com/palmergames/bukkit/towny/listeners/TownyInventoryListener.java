@@ -4,6 +4,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.Colors;
 
@@ -19,13 +23,16 @@ public class TownyInventoryListener implements Listener {
 			return;
 
 		Player player = (Player) event.getWhoClicked();
-
-		// Get the current TownyInventory the player is looking at, if the player is
-		// looking at one.
-		if (!TownyInventory.players.containsKey(player)) {
+		Resident resident = null;
+		try {
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException e1) {
+			e1.printStackTrace();
+			event.setCancelled(true);
 			return;
 		}
-		TownyInventory inv = TownyInventory.players.get(player);
+
+		TownyInventory inv = resident.getGUIInventory();
 
 		try {
 			// If the pressed item was a nextpage button
