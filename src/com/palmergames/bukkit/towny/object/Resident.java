@@ -27,11 +27,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -929,25 +926,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setGUIInventory(TownyInventory inventory) {
 		this.guiInventory = inventory;
 	}
-	
-	/**
-	 * Opens a basic inventory GUI with pagination.
-	 * GUI displays either switch or itemuse materials via an
-	 * ArrayList of strings which is converted to valid Materials
-	 * and sent to be shown to the player.
-	 *  
-	 * @param list ArrayList of strings that will be converted to valid Materials.
-	 * @param name Name of the inventory window.
-	 */
-	public void openGUIInventory(List<String> list, String name) {
-		ArrayList<ItemStack> items = new ArrayList<>();
-		for (String item : list) {
-			Material mat = Material.getMaterial(item);
-			if (mat != null) {
-				items.add(new ItemStack(mat));
-			}
-		}
-		new TownyInventory(this, items, name);
-	}
+
 }
 
