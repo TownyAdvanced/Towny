@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 
@@ -59,9 +58,6 @@ public class TownyVehicleListener implements Listener {
 				default:
 					break;
 			}
-			
-			if ((vehicle != null) && (!TownySettings.isItemUseMaterial(vehicle.toString())))
-				return;
 
 			if (vehicle != null) {
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
