@@ -262,11 +262,7 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
-		String hand = "NoHand";
-		if (event.getHand() != null) 
-			hand = event.getHand().name();
-		System.out.println("PlayerInteractEvent:" + hand);
-		System.out.println("Action:" + event.getAction().name());
+
 		/*
 		 * Item Use or and Item's that call destroy tests.
 		 */
@@ -277,11 +273,9 @@ public class TownyPlayerListener implements Listener {
 			 * Test item_use.
 			 */
 			if (TownySettings.isItemUseMaterial(item.name())) {
-				System.out.println("PlayerInteractEvent:"+hand+":hasItem()&isItemUse:ITEMUSE:item="+item.name());
 				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(player, clickedBlock.getLocation(), item);
 				event.setCancelled(internalEvent.isCancelled());
-				System.out.println("eventCancelled " + internalEvent.isCancelled());
 			}
 			
 			/*
@@ -293,38 +287,23 @@ public class TownyPlayerListener implements Listener {
 			 * 
 			 */
 			if (clickedBlock != null) {
+				Material clickedMat = clickedBlock.getType();
 				/*
-				 * Test stripping logs. Treat interaction as a Destroy test.
+				 * Test stripping logs, dye-able signs, glass bottles and shears on beehomes.
+				 * 
+				 * Treat interaction as a Destroy test.
 				 */
-				if (ItemLists.AXES.contains(item.name()) && Tag.LOGS.isTagged(clickedBlock.getType())) { // This will also catched already stripped logs but it is cleaner than anything else.
-					System.out.println("PlayerInteractEvent:"+hand+":hasItem()&LogStripping:DESTROY:block="+clickedBlock.getType().name());
+				if ((ItemLists.AXES.contains(item.name()) && Tag.LOGS.isTagged(clickedMat)) || // This will also catched already stripped logs but it is cleaner than anything else.
+					(ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedMat)) || 
+					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE)) ) { 
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
-					event.setCancelled(internalEvent.isCancelled());
-				}
-				/*
-				 * Test dye-able signs. Treat interaction as a Destroy test.
-				 */
-				if (ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedBlock.getType())) {
-					System.out.println("PlayerInteractEvent:"+hand+":hasItem()&DyeOnColorable:DESTROY:block="+clickedBlock.getType().name());
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
-					event.setCancelled(internalEvent.isCancelled());
-				}
-				/*
-				 * Test glass bottles and shears on beehomes. Treat interaction as a Destroy test.
-				 */
-				if ((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedBlock.getType() == Material.BEE_NEST || clickedBlock.getType() == Material.BEEHIVE)) {
-					System.out.println("PlayerInteractEvent:"+hand+":hasItem()&Beehome:DESTROY:block="+clickedBlock.getType().name());
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedMat);
 					event.setCancelled(internalEvent.isCancelled());
 				}
 				/*
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
 				if (item == Material.BONE_MEAL) {
-					System.out.println("PlayerInteractEvent:"+hand+":hasItem(BoneMeal):BUILD:block="+clickedBlock.getType().name());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(player, clickedBlock.getLocation(), item);
 					event.setCancelled(internalEvent.isCancelled());
@@ -337,46 +316,34 @@ public class TownyPlayerListener implements Listener {
 		 */
 		if (!event.useItemInHand().equals(Event.Result.DENY)) {
 			if (clickedBlock != null) {
+				Material clickedMat = clickedBlock.getType(); 
 				/*
 				 * Test switch use.
 				 */
-				if (TownySettings.isSwitchMaterial(clickedBlock.getType().name()) || event.getAction() == Action.PHYSICAL) {
-					System.out.println("PlayerInteractEvent:"+hand+":NoItem&ClickingBlock:SWITCH:block="+clickedBlock.getType().name());
+				if (TownySettings.isSwitchMaterial(clickedMat.name()) || event.getAction() == Action.PHYSICAL) {
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
+					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, clickedBlock.getLocation(), clickedMat);
 					event.setCancelled(internalEvent.isCancelled());
+					return;
 				}
 				/*
-				 * Test potted plants. Treat interaction as a Destroy test.
+				 * Test potted plants, redstone interactables, other blocks which 
+				 * cause an interaction that could be considered destructive, or 
+				 * something which wouldn't be given out like a normal 
+				 * door/inventory permission. 
+				 * 
+				 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
 				 */
-				if (ItemLists.POTTED_PLANTS.contains(clickedBlock.getType().name())){
-					System.out.println("PlayerInteractEvent:"+hand+":NoItem&PottedPlant:DESTROY:block="+clickedBlock.getType().name());
+				if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
+					ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
+					clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
+					clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
+					
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
+					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedMat);
 					event.setCancelled(internalEvent.isCancelled());
+					return;
 				}
-				/*
-				 * Test redstone interactables. Treat interaction as a Destroy test.
-				 * Contains: "COMPARATOR","REPEATER","DAYLIGHT_DETECTOR","NOTE_BLOCK"
-				 */
-				if (ItemLists.REDSTONE_INTERACTABLES.contains(clickedBlock.getType().name())){
-					System.out.println("PlayerInteractEvent:"+hand+":NoItem&RedstoneInteractables:DESTROY:block="+clickedBlock.getType().name());
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
-					event.setCancelled(internalEvent.isCancelled());
-				}
-				/*
-				 * Test other blocks which cause an interaction that could be considered
-				 * destructive, or something which wouldn't be given out like a normal
-				 * door/inventory permission. Test interaction as a Destroy test.
-				 */
-				if (clickedBlock.getType() == Material.BEACON || clickedBlock.getType() == Material.DRAGON_EGG || clickedBlock.getType() == Material.COMMAND_BLOCK) {
-					System.out.println("PlayerInteractEvent:"+hand+":NoItem&SpecialCaseBlocks:DESTROY:block="+clickedBlock.getType().name());
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, clickedBlock.getLocation(), clickedBlock.getType());
-					event.setCancelled(internalEvent.isCancelled());
-				}
-				
 			}
 		}
 	}
@@ -443,9 +410,6 @@ public class TownyPlayerListener implements Listener {
 		
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-
-		String hand = event.getHand().name();
-		System.out.println("PlayerInteractEntityEvent:Hand:" + hand);
 		
 		if (event.getRightClicked() != null) {
 			Player player = event.getPlayer();
@@ -500,7 +464,6 @@ public class TownyPlayerListener implements Listener {
 			if (block != null) {
 				// Material has been supplied in place of an entity, run Destroy Tests.
 				if (actionType == ActionType.DESTROY) {
-					System.out.println("PlayerInteractEntityEvent:"+hand+":DESTROY:block="+block.name());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getRightClicked().getLocation(), block);
 					event.setCancelled(internalEvent.isCancelled());
@@ -508,7 +471,6 @@ public class TownyPlayerListener implements Listener {
 				}
 				// Material has been supplied in place of an entity, run Switch Tests.
 				if (TownySettings.isSwitchMaterial(block.name()) && actionType == ActionType.SWITCH) {
-					System.out.println("PlayerInteractEntityEvent:"+hand+":SWITCH:block="+block.name());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor(player, event.getRightClicked().getLocation(), block);
 					event.setCancelled(internalEvent.isCancelled());				
@@ -526,7 +488,6 @@ public class TownyPlayerListener implements Listener {
 				 * Sheep can be sheared.
 				 */
 				if (event.getRightClicked().getType().equals(EntityType.SHEEP) && item == Material.SHEARS) {
-					System.out.println("PlayerInteractEntityEvent:"+hand+":SheepShearing:DESTROY:dye="+item.name());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getRightClicked().getLocation(), item);
 					event.setCancelled(internalEvent.isCancelled());
@@ -537,7 +498,6 @@ public class TownyPlayerListener implements Listener {
 				 * Nametags can be used on things.
 				 */
 				if (item == Material.NAME_TAG) {
-					System.out.println("PlayerInteractEntityEvent:"+hand+":NameTagging:DESTROY:item="+item.name());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getRightClicked().getLocation(), item);
 					event.setCancelled(internalEvent.isCancelled());
@@ -548,10 +508,6 @@ public class TownyPlayerListener implements Listener {
 				 * Item_use protection.
 				 */
 				if (TownySettings.isItemUseMaterial(item.name())) {
-					if (block != null)
-						System.out.println("PlayerInteractEntityEvent:"+hand+":ITEMUSE:block="+block.name());
-					else 
-						System.out.println("PlayerInteractEntityEvent:"+hand+":ITEMUSE:entity="+event.getRightClicked().getName());
 					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(event.getPlayer(), event.getRightClicked().getLocation(), item);
 					event.setCancelled(internalEvent.isCancelled());
