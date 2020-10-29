@@ -23,7 +23,6 @@ public class TownyInventoryListener implements Listener {
 			return;
 
 		Player player = (Player) event.getWhoClicked();
-		try {
 		Resident resident = null;
 		try {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
@@ -34,7 +33,7 @@ public class TownyInventoryListener implements Listener {
 
 		TownyInventory inv = resident.getGUIInventory();
 
-		
+		try {
 			// If the pressed item was a nextpage button
 			if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
 				event.setCancelled(true);
@@ -56,11 +55,10 @@ public class TownyInventoryListener implements Listener {
 					player.openInventory(inv.pages.get(inv.currentPage));
 				}
 			}
+			event.setCancelled(true);
 		} catch (Exception e) {
 			event.setCancelled(true);
 			return;
-		}
-		event.setCancelled(true);
+		}	
 	}
-	
 }
