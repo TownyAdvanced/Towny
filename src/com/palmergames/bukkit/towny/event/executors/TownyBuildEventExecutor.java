@@ -36,7 +36,6 @@ public class TownyBuildEventExecutor {
 	 */
 	public TownyBuildEventExecutor(Player player, Location loc, Material mat) {
 		cancelled = !PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.BUILD);
-		TownyMessaging.sendDebugMsg("TownyInternalBuildPermissionEvent - PRE - " + player.getName() + " - loc:" + loc + " - mat:" + mat.name() + " - cancelled:" + cancelled);
 
 		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, cancelled);
 		if (cancelled) {
@@ -49,7 +48,6 @@ public class TownyBuildEventExecutor {
 		if (cancelled && event.getMessage() != null)
 			TownyMessaging.sendErrorMsg(player, event.getMessage());
 
-		TownyMessaging.sendDebugMsg("TownyInternalBuildPermissionEvent - POST - " + player.getName() + " - loc:" + loc + " - mat:" + mat.name() + " - cancelled:" + cancelled);
 	}
 	
 	public boolean isCancelled() {

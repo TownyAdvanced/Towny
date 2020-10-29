@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event.executors;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -35,7 +36,6 @@ public class TownySwitchEventExecutor {
 	 */	
 	public TownySwitchEventExecutor(Player player, Location loc, Material mat) {
 		cancelled = !PlayerCacheUtil.getCachePermission(player, loc, mat, ActionType.SWITCH);
-		TownyMessaging.sendDebugMsg("TownyInternalSwitchPermissionEvent - PRE - " + player.getName() + " - loc:" + loc + " - mat:" + mat.name() + " - cancelled:" + cancelled);
 
 		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, cancelled);
 		if (cancelled) {
@@ -48,7 +48,6 @@ public class TownySwitchEventExecutor {
 		if (cancelled && event.getMessage() != null)
 			TownyMessaging.sendErrorMsg(player, event.getMessage());
 
-		TownyMessaging.sendDebugMsg("TownyInternalSwitchPermissionEvent - POST - " + player.getName() + " - loc:" + loc + " - mat:" + mat.name() + " - cancelled:" + cancelled);
 	}
 	
 	public boolean isCancelled() {
