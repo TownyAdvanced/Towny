@@ -277,6 +277,14 @@ public class TownyPlayerListener implements Listener {
 				TownyItemuseEventExecutor internalEvent = new TownyItemuseEventExecutor(player, clickedBlock.getLocation(), item);
 				event.setCancelled(internalEvent.isCancelled());
 			}
+			/*
+			 * Test if we're about to spawn either entity. Uses build test.
+			 */
+			if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) {
+				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(player, event.getPlayer().getLocation(), item);
+				event.setCancelled(internalEvent.isCancelled());
+			}
 			
 			/*
 			 * Test other Items using non-ItemUse test.

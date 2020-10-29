@@ -993,7 +993,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT,ARMOR_STAND,END_CRYSTAL,",
+			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT",
 			"",
 			"# Items that can be blocked within towns via town/plot flags.",
 			"# These items will be the ones restricted by a town/resident/plot's item_use setting.",
@@ -1002,7 +1002,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BELL,BARREL,BREWING_STAND,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,CARROT_STICK",
+			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BELL,BARREL,BREWING_STAND,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
