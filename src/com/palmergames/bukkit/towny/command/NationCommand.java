@@ -1227,7 +1227,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
-			
+
 			Town town = universe.getDataSource().getTown(capitalName);
 			if (town.hasNation())
 				throw new TownyException(Translation.of("msg_err_already_nation"));
