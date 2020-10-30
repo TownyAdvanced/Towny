@@ -1211,8 +1211,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
-			Town town = universe.getDataSource().getTown(capitalName);
 			
+			Town town = universe.getDataSource().getTown(capitalName);
 			if (town.hasNation())
 				throw new TownyException(Translation.of("msg_err_already_nation"));
 
@@ -1250,7 +1250,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 					} catch (EconomyException ignored) {
 					}
-					
 					try {
 						// Actually make nation.
 						newNation(name, town);
@@ -1329,7 +1328,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			Confirmation.runOnAccept(() -> {
-				
 				NationPreMergeEvent preEvent = new NationPreMergeEvent(nation, remainingNation);
 				Bukkit.getPluginManager().callEvent(preEvent);
 
