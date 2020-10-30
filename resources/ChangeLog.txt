@@ -5144,4 +5144,5 @@ v0.92.0.11:
     - NationPreMergeEvent - Cancellable event thrown before a nation merge occurs.
     - NationMergeEvent - Thrown when nations merge.
     - PreNewNationEvent - Cancellable event thrown before a nation is created.
-  
+0.96.3.2:
+  - Fix /ta toggle war having backwards logic.
