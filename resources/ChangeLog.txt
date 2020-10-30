@@ -5133,3 +5133,9 @@ v0.92.0.11:
   - Bump version for Release.
 0.96.3.1:
   - Fix forcefire missing from /tw toggle tab-completion.
+  - Add GUIs to display the switch and itemuse lists of materials.
+    - https://user-images.githubusercontent.com/879756/97643654-5570f180-1a16-11eb-87e3-9c1b9dfb1823.PNG
+  - New Command: /towny switches
+    - Opens GUI showing all of the switch materials.
+  - New Command: /towny itemuse
+    - Opens GUI showing all of the itemuse materials.
