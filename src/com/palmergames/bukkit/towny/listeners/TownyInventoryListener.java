@@ -19,7 +19,10 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!event.getView().getTitle().equalsIgnoreCase("Towny Switch List") && !event.getView().getTitle().equalsIgnoreCase("Towny ItemUse List"))
+		if (!event.getView().getTitle().equalsIgnoreCase("Towny Switch List") && 
+				!event.getView().getTitle().equalsIgnoreCase("Towny ItemUse List") &&
+				!event.getView().getTitle().equalsIgnoreCase("Towny WildsBlocks List") &&
+				!event.getView().getTitle().equalsIgnoreCase("Towny FarmBlocks List"))
 			return;
 
 		Player player = (Player) event.getWhoClicked();

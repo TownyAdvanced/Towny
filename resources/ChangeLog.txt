@@ -5146,3 +5146,7 @@ v0.92.0.11:
     - PreNewNationEvent - Cancellable event thrown before a nation is created.
 0.96.3.2:
   - Fix /ta toggle war having backwards logic.
+  - New Command: /towny farmblocks
+    - Opens GUI showing all of the farmplot materials.
+  - New Command: /towny wildsblocks
+    - Opens GUI showing all of the wilds plot materials/materials allowed to be used in the wilderness.  
