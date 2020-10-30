@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
@@ -87,7 +86,6 @@ public class TownyUniverse {
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
-    private War warEvent;
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -1079,27 +1077,9 @@ public class TownyUniverse {
 	}
 
 	/*
-	 * War Stuff
+	 * SpawnPoint Stuff
 	 */
 
-    public void startWarEvent() {
-        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
-    }
-    
-    public void endWarEvent() {
-        if (warEvent != null && warEvent.isWarTime()) {
-            warEvent.toggleEnd();
-        }
-    }	
-
-    public War getWarEvent() {
-        return warEvent;
-    }
-    
-    public void setWarEvent(War warEvent) {
-        this.warEvent = warEvent;
-    }
-    
 	public Map<Block, SpawnPoint> getSpawnPoints() {
 		return spawnPoints;
 	}

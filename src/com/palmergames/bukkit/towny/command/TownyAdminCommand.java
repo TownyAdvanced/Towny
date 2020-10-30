@@ -154,7 +154,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
 		"wildernessuse",
 		"regenerations",
-		"war",
 		"neutral",
 		"npc",
 		"debug",
@@ -1036,9 +1035,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			try {
-				if (TownyAPI.getInstance().isWarTime())
-					throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 				List<WorldCoord> selection;
 				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
 				selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
@@ -2127,24 +2123,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("regenerations")) {
 			toggleRegenerations(choice.orElse(false));
 			TownyMessaging.sendMsg(getSender(), Translatable.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
-		} else if (split[0].equalsIgnoreCase("war")) {
-			if (!choice.orElse(TownyAPI.getInstance().isWarTime())) {
-				townyUniverse.startWarEvent();
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_war_started"));
-			} else {
-				townyUniverse.endWarEvent();
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_war_ended"));
-			}
-		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
-
-			try {
-				TownySettings.setDeclaringNeutral(choice.orElse(!TownySettings.isDeclaringNeutral()));
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_nation_allow_peaceful", TownySettings.isDeclaringNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
-			}
-
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
 				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));

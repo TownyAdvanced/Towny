@@ -28,9 +28,6 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		if (TownyAPI.getInstance().isWarTime())
-			return;
-
 		for (Player player : server.getOnlinePlayers()) {
 			if (player.getHealth() <= 0)
 				continue;
@@ -43,7 +40,8 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 			if (resident != null 
-				&& resident.hasTown() 
+				&& resident.hasTown()
+				&& !resident.getTownOrNull().hasActiveWar()
 				&& CombatUtil.isAlly(townBlock.getTownOrNull(), TownyAPI.getInstance().getResidentTownOrNull(resident))
 				&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 				incHealth(player);

@@ -263,7 +263,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
 		ThrownPotion potion = event.getEntity();
@@ -322,7 +322,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
@@ -637,8 +637,8 @@ public class TownyEntityListener implements Listener {
 				attacker = (LivingEntity) source;
 			}
 
-			// There is an attacker and Not war time.
-			if ((attacker != null) && (!TownyAPI.getInstance().isWarTime())) {
+			// There is an attacker.
+			if (attacker != null) {
 
 				if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.PROJECTILE)) {
 					// Remove the projectile here so no
