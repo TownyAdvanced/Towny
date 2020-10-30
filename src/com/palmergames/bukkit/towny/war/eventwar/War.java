@@ -48,6 +48,7 @@ public class War {
 	
 	// War Data
 	private Hashtable<WorldCoord, Integer> warZone = new Hashtable<>();
+	private Hashtable<Resident, Integer> playerLives = new Hashtable<>();
 	private Hashtable<Town, Integer> townScores = new Hashtable<>();
 	private List<Town> warringTowns = new ArrayList<>();
 	private List<Nation> warringNations = new ArrayList<>();
@@ -425,7 +426,7 @@ public class War {
 		case RIOT:
 			warParticipants.add(Colors.translateColorCodes("&6[War] &eResident Name &f(&bLives&f) "));
 			for (Resident resident : warringResidents) {
-				warParticipants.add(Translation.of("msg_war_participants", resident.getName(), "5"));
+				warParticipants.add(Translation.of("msg_war_participants", resident.getName(), playerLives.get(resident)));
 			}
 			break;
 		}
@@ -581,6 +582,8 @@ public class War {
 		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_war_join", town.getName()));
 		TownyMessaging.sendPrefixedTownMessage(town, "You have joined a war of type: " + warType.getName());
 		warringResidents.addAll(town.getResidents());
+		for (Resident resident : town.getResidents()) 
+			playerLives.put(resident, warType.lives);
 		return true;
 	}
 
@@ -969,6 +972,10 @@ public class War {
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
+		for (Resident resident : town.getResidents()) {
+			if (warringResidents.contains(resident))
+				remove(resident);
+		}
 		town.setActiveWar(false);
 		sendEliminateMessage(town.getFormattedName() + " (" + fallenTownBlocks + Translation.of("msg_war_append_townblocks_fallen"));
 	}
@@ -979,6 +986,18 @@ public class War {
 	 */
 	private void remove(WorldCoord worldCoord) {	
 		warZone.remove(worldCoord);
+	}
+	
+	public void takeLife(Resident resident) {
+		playerLives.put(resident, playerLives.get(resident) - 1);
+		if (playerLives.get(resident) <= 0) {
+			remove(resident);
+			checkEnd();
+		}
+	}
+	
+	public void remove(Resident resident) {
+		warringResidents.remove(resident);
 	}
 	
 	private void sendEliminateMessage(String name) {
