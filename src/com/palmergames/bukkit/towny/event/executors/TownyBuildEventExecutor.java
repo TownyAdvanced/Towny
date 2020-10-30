@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.BukkitTools;
  *
  * @author LlmDl
  */
+@Deprecated
 public class TownyBuildEventExecutor {
 	
 	private boolean cancelled;

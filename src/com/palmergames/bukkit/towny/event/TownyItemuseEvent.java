@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import org.bukkit.event.HandlerList;
  * 
  * @author LlmDl
  */
-public class TownyItemuseEvent extends Event implements Cancellable {
+public class TownyItemuseEvent extends Event implements Cancellable, TownyActionEvent {
 
 	private Player player;
 	private Location loc;
@@ -41,7 +40,6 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
 	public TownyItemuseEvent(Player player, Location loc, Material mat, boolean cancelled) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.loc = loc;
 		this.mat = mat;
@@ -64,13 +62,7 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 		cancelled = cancel;
 	}
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
 	/**
-	 * 
 	 * @return Material of the item being used in the item_use event.
 	 */
 	public Material getMaterial() {
@@ -78,7 +70,6 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return Location of the block where the item in the item_use event is used.
 	 */
 	public Location getLocation() {
@@ -86,7 +77,6 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return player involved in the item_use event.
 	 */
 	public Player getPlayer() {
@@ -94,7 +84,6 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return cancellation message shown to players when their item_use attempt is cancelled or null.
 	 */
 	public String getMessage() {
@@ -102,11 +91,18 @@ public class TownyItemuseEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @param message Message shown to players when their item_use attempts is cancelled.
 	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
 }

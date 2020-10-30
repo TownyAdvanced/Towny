@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import org.bukkit.event.HandlerList;
  * 
  * @author LlmDl
  */
-public class TownySwitchEvent extends Event implements Cancellable {
+public class TownySwitchEvent extends Event implements Cancellable, TownyActionEvent {
 
 	private Player player;
 	private Location loc;
@@ -40,7 +39,6 @@ public class TownySwitchEvent extends Event implements Cancellable {
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
 	public TownySwitchEvent(Player player, Location loc, Material mat, boolean cancelled) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.loc = loc;
 		this.mat = mat;
@@ -63,13 +61,7 @@ public class TownySwitchEvent extends Event implements Cancellable {
 		cancelled = cancel;
 	}
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
 	/**
-	 * 
 	 * @return Material of the block being switched/toggled.
 	 */
 	public Material getMaterial() {
@@ -77,7 +69,6 @@ public class TownySwitchEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return Location of the block being switched/toggled.
 	 */
 	public Location getLocation() {
@@ -85,7 +76,6 @@ public class TownySwitchEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return player involved in the  switch event.
 	 */
 	public Player getPlayer() {
@@ -93,7 +83,6 @@ public class TownySwitchEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @return cancellation message shown to players when their switch attempt is cancelled or null.
 	 */
 	public String getMessage() {
@@ -101,11 +90,18 @@ public class TownySwitchEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * 
 	 * @param message Message shown to players when their switch attempts is cancelled.
 	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
 }

@@ -5,8 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
-import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -53,9 +52,8 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
-		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(event.getPlayer(), block.getLocation(), block.getType());
-		event.setCancelled(internalEvent.isCancelled());
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		event.setCancelled(TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -70,10 +68,10 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
-		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event. 
-		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), block.getLocation(), block.getType());
-		event.setBuild(!internalEvent.isCancelled());
-		event.setCancelled(internalEvent.isCancelled());
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		boolean cancelled = TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType());
+		event.setBuild(cancelled);
+		event.setCancelled(cancelled);
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
@@ -104,8 +102,8 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		if (event.getCause().equals(IgniteCause.FLINT_AND_STEEL)) {
-			TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE);
-			if (internalEvent.isCancelled()) {
+			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+			if (!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE)) {
 				event.setCancelled(true);
 				return;
 			}
