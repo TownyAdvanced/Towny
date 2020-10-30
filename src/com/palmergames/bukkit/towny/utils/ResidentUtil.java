@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -11,6 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class ResidentUtil {
@@ -83,5 +86,25 @@ public class ResidentUtil {
 			}
 		}
 		return residents;
+	}
+	
+	/**
+	 * Opens a basic inventory GUI with pagination.
+	 * GUI displays either switch or itemuse materials via an
+	 * ArrayList of strings is converted to valid Materials
+	 * and sent to be shown to the player.
+	 *  
+	 * @param list ArrayList of strings that will be converted to valid Materials.
+	 * @param name Name of the inventory window.
+	 */
+	public static void openGUIInventory(Resident resident, List<String> list, String name) {
+		ArrayList<ItemStack> items = new ArrayList<>();
+		for (String item : list) {
+			Material mat = Material.getMaterial(item);
+			if (mat != null) {
+				items.add(new ItemStack(mat));
+			}
+		}
+		new TownyInventory(resident, items, name);
 	}
 }
