@@ -16,7 +16,10 @@ import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
+import com.palmergames.bukkit.towny.event.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationPreMergeEvent;
+import com.palmergames.bukkit.towny.event.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -1240,6 +1243,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(Translation.of("msg_err_invalid_name", name));
 
+			PreNewNationEvent preEvent = new PreNewNationEvent(town, name);
+			Bukkit.getPluginManager().callEvent(preEvent);
+
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(town, preEvent.getCancelMessage());
+				return;
+			}
+
 			// If it isn't free to make a nation, send a confirmation.
 			if (!noCharge && TownySettings.isUsingEconomy()) {
 				// Test if they can pay.
@@ -1333,7 +1344,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			Confirmation.runOnAccept(() -> {
+				NationPreMergeEvent preEvent = new NationPreMergeEvent(nation, remainingNation);
+				Bukkit.getPluginManager().callEvent(preEvent);
+
+				if (preEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(nation, preEvent.getCancelMessage());
+					return;
+				}
+				
 				try {
+					BukkitTools.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
 					TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 					TownyMessaging.sendGlobalMessage(Translation.of("nation1_has_merged_with_nation2", nation, remainingNation));
 				} catch (TownyException e) {
