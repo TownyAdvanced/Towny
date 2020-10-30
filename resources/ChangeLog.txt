@@ -5139,3 +5139,9 @@ v0.92.0.11:
     - Opens GUI showing all of the switch materials.
   - New Command: /towny itemuse
     - Opens GUI showing all of the itemuse materials.
+  - NationPreMergeEvent, NationMergeEvent, PreNewNationEvent, courtesy of Jena-Bot with PR #4402 (First-Time Contributor!)
+  - API: New Events:
+    - NationPreMergeEvent - Cancellable event thrown before a nation merge occurs.
+    - NationMergeEvent - Thrown when nations merge.
+    - PreNewNationEvent - Cancellable event thrown before a nation is created.
+  
