@@ -10,6 +10,22 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.*;
+import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
+import com.palmergames.bukkit.towny.event.NewNationEvent;
+import com.palmergames.bukkit.towny.event.PreNewNationEvent;
+import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationPreMergeEvent;
+import com.palmergames.bukkit.towny.event.NationMergeEvent;
+import com.palmergames.bukkit.towny.event.NationTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
+import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -1211,7 +1227,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
-			
 			Town town = universe.getDataSource().getTown(capitalName);
 			if (town.hasNation())
 				throw new TownyException(Translation.of("msg_err_already_nation"));
