@@ -615,9 +615,9 @@ public class TownyUniverse {
 	 * War Stuff
 	 */
 
-    public void startWarEvent() {
-        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
-    }
+//    public void startWarEvent() {
+//        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
+//    }
     
     public void endWarEvent() {
         if (warEvent != null && warEvent.isWarTime()) {

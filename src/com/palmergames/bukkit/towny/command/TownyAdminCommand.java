@@ -40,6 +40,8 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1767,7 +1769,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("war")) {
 			if (!choice.orElse(!TownyAPI.getInstance().isWarTime())) {
-				townyUniverse.startWarEvent();
+				List<Nation> nations = new ArrayList<>();
+				for (Nation nation : TownyUniverse.getInstance().getNationsMap().values())
+					nations.add(nation);
+				new War(plugin,TownySettings.getWarTimeWarningDelay(), nations, null, null, WarType.WORLDWAR);
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_war_started"));
 			} else {
 				townyUniverse.endWarEvent();
