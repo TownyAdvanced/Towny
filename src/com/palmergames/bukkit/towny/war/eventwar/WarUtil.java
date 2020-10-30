@@ -22,7 +22,7 @@ public class WarUtil {
 				if (resident.isJailed())
 					return true;
 				if (resident.hasTown())
-					if (!War.isWarringTown(resident.getTown()))
+					if (!TownyUniverse.getInstance().hasWarEvent(resident.getTown()))
 						return true;
 			} catch (NotRegisteredException e) {
 			}			

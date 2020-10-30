@@ -44,15 +44,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-//TODO: Extend a new class called TownyEvent
 public class War {
 	
 	// War Data
-	private static Hashtable<WorldCoord, Integer> warZone = new Hashtable<>();
+	private Hashtable<WorldCoord, Integer> warZone = new Hashtable<>();
 	private Hashtable<Town, Integer> townScores = new Hashtable<>();
-	public static List<Town> warringTowns = new ArrayList<>();
-	public static List<Nation> warringNations = new ArrayList<>();
-	public static List<Resident> warringResidents = new ArrayList<>();
+	private List<Town> warringTowns = new ArrayList<>();
+	private List<Nation> warringNations = new ArrayList<>();
+	private List<Resident> warringResidents = new ArrayList<>();
 	private WarSpoils warSpoils = new WarSpoils();
 	private WarType warType;
 	
@@ -68,20 +67,11 @@ public class War {
 	public War(Towny plugin, int startDelay, List<Nation> nations, List<Town> towns, List<Resident> residents, WarType warType) {
 
 		this.plugin = plugin;
-		TownyUniverse.getInstance();
-		
-		warZone.clear();
-		warringNations.clear();
-		warringTowns.clear();
-		warringResidents.clear();
-		townScores.clear();
-		warTaskIds.clear();
 		
 		if (!TownySettings.isUsingEconomy()) {
 			TownyMessaging.sendGlobalMessage("War Event cannot function while using_economy: false in the config.yml. Economy Required.");
         	return;
 		}
-		
 		
 		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
 		Bukkit.getServer().getPluginManager().callEvent(preEvent);
@@ -113,23 +103,18 @@ public class War {
 			break;
 		case TOWNWAR:
 		case RIOT:
-			warringTowns.addAll(towns);
+			for (Town town : towns) {
+				// TODO: town neutrality tests here
+				if (add(town))
+					warringTowns.add(town);
+			}
 			break;
 		}
 
-		if (warringNations == null && warringTowns != null) {
-			for (Town town : warringTowns) {
-				// TODO: town neutrality tests here
-				add(town);
-			}
-		} else if (warringNations != null) {
-		} else {
-			TownyMessaging.sendGlobalMessage("All towns/nations submitted were null! No war for you!");
-			return;
-		}
 		
 		if (!verifyTwoEnemies()) {
 			TownyMessaging.sendGlobalMessage("Failed to get the correct number of teams for war to happen! Good-bye!");
+			toggleEnd();
 			return;
 		}
 			
@@ -198,7 +183,7 @@ public class War {
 		return warringResidents;
 	}
 	
-	public static boolean isWarZone(WorldCoord worldCoord) {
+	public boolean isWarZone(WorldCoord worldCoord) {
 
 		return warZone.containsKey(worldCoord);
 	}
@@ -208,18 +193,36 @@ public class War {
 		return warringNations.contains(nation);
 	}
 
-	public static boolean isWarringTown(Town town) {
+	public boolean isWarringTown(Town town) {
 
 		return warringTowns.contains(town);
 	}
 	
-	public static boolean isWarringResident(Resident resident) {
+	public boolean isWarringResident(Resident resident) {
 
 		return warringResidents.contains(resident);
 	}
 	
 	public void toggleEnd() {
+		warZone.clear();
+		townScores.clear();
+		
+		if (warringTowns != null) {
+			for (Town town : warringTowns) {
+				if (town.hasActiveWar())
+					town.setActiveWar(false);
+			}
+		}
+		warringTowns.clear();
+		warringNations.clear();
+		warringResidents.clear();
+//		warSpoils.setBalance(0.0, "war over");
+		warType = null;
+		plugin = null;
+		warTaskIds.clear();
+
 		warTime = false;
+		TownyUniverse.getInstance().removeWar(this);
 	}
 
 	//// END GETTERS/SETTERS ////
@@ -266,58 +269,6 @@ public class War {
 	 */
 	public void start() {
 		
-//		warZone.clear();
-//		warringNations.clear();
-//		warringTowns.clear();
-//		warringResidents.clear();
-//		townScores.clear();
-//		warTaskIds.clear();
-//		
-//		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
-//		Bukkit.getServer().getPluginManager().callEvent(preEvent);
-//		if (preEvent.getWarSpoils() != 0.0)
-//			try {
-//				warSpoils.deposit(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
-//			} catch (EconomyException ignored) {
-//			}
-//
-//		//Gather all nations at war
-//		for (Nation nation : TownyUniverse.getInstance().getDataSource().getNations()) {
-//			if (!nation.isNeutral()) {
-//				add(nation);
-//				if (warringNations.contains(nation))
-//					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_nation", nation.getName()));
-//			} else if (!TownySettings.isDeclaringNeutral()) {
-//				nation.setNeutral(false);
-//				add(nation);
-//				if (warringNations.contains(nation))
-//					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_war_join_forced", nation.getName()));
-//			}
-//		}
-//
-//		// Cannot have a war with less than 2 nations.
-//		if (warringNations.size() < 2) {
-//			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_not_enough_nations"));
-//			warringNations.clear();
-//			warringTowns.clear();
-//			return;
-//		}
-//		
-//		// Lets make sure that at least 2 nations consider each other enemies.
-//		boolean enemy = false; 
-//		for (Nation nation : warringNations) {
-//			for (Nation nation2 : warringNations) {
-//				if (nation.hasEnemy(nation2) && nation2.hasEnemy(nation)) {
-//					enemy = true;
-//					break;
-//				}
-//			}			
-//		}
-//		if (!enemy) {
-//			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_no_enemies_for_war"));
-//			return;
-//		}
-		
 		outputParticipants();
 
 		warTime = true;
@@ -336,13 +287,16 @@ public class War {
 		}
 		
 		// Start the WarTimerTask
-		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
-		if (id == -1) {
-			TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
-			end();
-		} else
-			addTaskId(id);
+		if (warType.hasTownBlockHP) {
+			int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
+			if (id == -1) {
+				TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
+				end();
+			} else
+				addTaskId(id);
+		}
 		checkEnd();
+		TownyUniverse.getInstance().addWar(this);
 	}
 
 	private boolean verifyTwoEnemies() {
@@ -384,12 +338,17 @@ public class War {
 				return false;
 			}
 			//TODO: add town enemy checking.
+			break;
 		case RIOT:
 			if (warringTowns.size() > 1 ) {
 				TownyMessaging.sendGlobalMessage("Too many towns gathered for a riot war!");
 			}
+			break;
 		}
 		
+		for (Town town : warringTowns) {
+			town.setActiveWar(true);
+		}
 		return true;
 	}
 	public boolean startClassicEventWar() {
@@ -440,8 +399,36 @@ public class War {
 		
 		return true;
 	}
-	private void outputParticipants() {
+	public void outputParticipants() {
+		String type = warType.getName();
 		List<String> warParticipants = new ArrayList<>();
+		
+		switch (warType) {
+		case WORLDWAR:
+		case NATIONWAR:
+		case CIVILWAR:
+			Translation.of("msg_war_participants_header");
+			for (Nation nation : warringNations) {
+				int towns = 0;
+				for (Town town : nation.getTowns())
+					if (warringTowns.contains(town))
+						towns++;
+				warParticipants.add(Translation.of("msg_war_participants", nation.getName(), towns));			
+			}
+			break;
+		case TOWNWAR:
+			warParticipants.add(Colors.translateColorCodes("&6[War] &eTown Name &f(&bResidents&f)"));
+			for (Town town : warringTowns) {
+				warParticipants.add(Translation.of("msg_war_participants", town.getName(), town.getResidents().size()));
+			}
+			break;
+		case RIOT:
+			warParticipants.add(Colors.translateColorCodes("&6[War] &eResident Name &f(&bLives&f) "));
+			for (Resident resident : warringResidents) {
+				warParticipants.add(Translation.of("msg_war_participants", resident.getName(), "5"));
+			}
+			break;
+		}
 		for (Nation nation : warringNations) {
 			int towns = 0;
 			for (Town town : nation.getTowns())
@@ -449,8 +436,8 @@ public class War {
 					towns++;
 			warParticipants.add(Translation.of("msg_war_participants", nation.getName(), towns));			
 		}
-		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle("War Participants"));
-		TownyMessaging.sendPlainGlobalMessage(Translation.of("msg_war_participants_header"));
+		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle(type + " Participants"));
+
 		for (String string : warParticipants)
 			TownyMessaging.sendPlainGlobalMessage(string);
 		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle("----------------"));
@@ -544,9 +531,15 @@ public class War {
 		if (numTowns > 0 && warringTowns.contains(nation.getCapital())) {
 			TownyMessaging.sendPrefixedNationMessage(nation, "You have joined a war of type: " + warType.getName());
 			return true;
+		} else {
+			for (Town town : nation.getTowns()) 
+				if (warringTowns.contains(town)) {
+					warringTowns.remove(town);
+					townScores.remove(town);
+				}
+					
+			return false;
 		}
-		
-		return false;
 	}
 
 	/**
@@ -588,7 +581,6 @@ public class War {
 		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_war_join", town.getName()));
 		TownyMessaging.sendPrefixedTownMessage(town, "You have joined a war of type: " + warType.getName());
 		warringResidents.addAll(town.getResidents());
-		town.setActiveWar(true);
 		return true;
 	}
 
@@ -977,6 +969,7 @@ public class War {
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
+		town.setActiveWar(false);
 		sendEliminateMessage(town.getFormattedName() + " (" + fallenTownBlocks + Translation.of("msg_war_append_townblocks_fallen"));
 	}
 
@@ -1013,10 +1006,28 @@ public class War {
 
 	public void checkEnd() {
 
-		if (warringNations.size() <= 1)
-			toggleEnd();
-		else if (CombatUtil.areAllAllies(warringNations))
-			toggleEnd();
+		switch(warType) {
+		case WORLDWAR:
+		case NATIONWAR:
+			if (warringNations.size() <= 1)
+				toggleEnd();
+			else if (CombatUtil.areAllAllies(warringNations))
+				toggleEnd();
+			break;
+		case CIVILWAR:
+			if (warringTowns.size() <= 1)
+				toggleEnd();
+			break;
+		case TOWNWAR:
+			if (warringTowns.size() <= 1)
+				toggleEnd();
+			// TODO: Handle town neutrality.
+			break;
+		case RIOT:
+			if (warringResidents.size() <= 0)
+				toggleEnd();
+			break;
+		}
 	}
 
 	public int countActiveWarBlocks(Town town) {

@@ -99,7 +99,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"mysqldump",
 		"tpplot",
 		"database",
-		"depositall"
+		"depositall",
+		"war"
 	);
 
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
@@ -558,7 +559,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
 				
-			}  else {
+			} else if (split[0].equalsIgnoreCase("war")) {
+				if (!TownySettings.isUsingEconomy())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
+				parseAdminWarCommand(StringMgmt.remFirstArg(split));
+				
+			} else {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_sub"));
 				return false;
 			}
@@ -2077,6 +2084,88 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void showDepositAllHelp() {
 		sender.sendMessage(ChatTools.formatTitle("/townyadmin depositall"));
 		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin depositall", "[amount]", ""));		
+	}
+
+	private void parseAdminWarCommand(String[] split) {
+		List<Nation> nations = new ArrayList<>();
+		List<Town> towns = new ArrayList<>();
+		
+		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
+			showWarHelp();
+		else if (split.length > 3)
+			showWarHelp();
+		else if (split.length == 1) {
+			if (split[0].equalsIgnoreCase("worldwar")) {
+				for (Nation nation : TownyUniverse.getInstance().getNationsMap().values())
+					nations.add(nation);
+				new War(plugin,TownySettings.getWarTimeWarningDelay(), nations, null, null, WarType.WORLDWAR);
+				return;
+			} else {
+				showWarHelp();
+			}
+		} else if (split.length == 2) {
+			if (split[0].equalsIgnoreCase("riot")) {
+				Town town = null;
+				try {
+					town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+					towns.add(town);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
+				}
+				new War(plugin, 20, null, towns, null, WarType.RIOT);
+				
+			} else if (split[0].equalsIgnoreCase("civilwar")) {
+				Nation nation = null;
+				try {
+					nation = TownyUniverse.getInstance().getDataSource().getNation(split[1]);
+					nations.add(nation);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
+				}
+				new War(plugin, 20, nations, null, null, WarType.CIVILWAR);
+			} else {
+				showWarHelp();
+				return;
+			}
+		} else if (split.length == 3) {
+			if (split[0].equalsIgnoreCase("townwar")) {
+				Town town = null;
+				try {
+					town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+					towns.add(town);
+					town = TownyUniverse.getInstance().getDataSource().getTown(split[2]);
+					towns.add(town);
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
+				}
+				new War(plugin, 20, null, towns, null, WarType.TOWNWAR);
+			} else if (split[0].equalsIgnoreCase("nationwar")) {
+				Nation nation = null;
+
+				try {
+					nation = TownyUniverse.getInstance().getDataSource().getNation(split[1]);
+					nations.add(nation);
+					nation = TownyUniverse.getInstance().getDataSource().getNation(split[2]);
+					nations.add(nation);
+
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
+				}
+				new War(plugin, 20, nations, null, null, WarType.NATIONWAR);
+			} else {
+				showWarHelp();
+				return;
+			}
+		}
+	}
+
+	private void showWarHelp() {
+		sender.sendMessage(ChatTools.formatTitle("/townyadmin war"));
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "RIOT [town]", ""));		
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "TOWNWAR [town] [town]", ""));		
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "CIVILWAR [nation]", ""));
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "NATIONWAR [nation] [nation]", ""));
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "WORLDWAR", ""));
 	}
 
 }

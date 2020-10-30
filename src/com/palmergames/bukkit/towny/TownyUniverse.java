@@ -27,6 +27,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class TownyUniverse {
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
+    private List<War> wars = new ArrayList<>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -648,8 +650,59 @@ public class TownyUniverse {
         return warEvent;
     }
     
+    public War getWarEvent(Player player) {
+    	Resident resident = null;
+		try {
+			resident = getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException ignored) {}
+		if (resident == null)
+			return null;
+        for (War war : getWars()) {
+        	if (war.isWarringResident(resident))
+        		return war;
+        }
+        return null;
+    }
+    
+    public War getWarEvent(TownBlock townBlock) {
+    	for (War war : getWars()) {
+    		if (war.isWarZone(townBlock.getWorldCoord()))
+    			return war;
+    	}
+    	return null;
+    }
+
+    public boolean hasWarEvent(TownBlock townBlock) {
+    	for (War war : getWars()) {
+    		if (war.isWarZone(townBlock.getWorldCoord()))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    public boolean hasWarEvent(Town town) {
+    	for (War war : getWars()) {
+    		if (war.isWarringTown(town))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    
     public void setWarEvent(War warEvent) {
         this.warEvent = warEvent;
+    }
+    
+    public List<War> getWars() {
+    	return wars;
+    }
+    
+    public void addWar(War war) {
+    	wars.add(war);
+    }
+    
+    public void removeWar(War war) {
+    	wars.remove(war);
     }
     
     @Deprecated

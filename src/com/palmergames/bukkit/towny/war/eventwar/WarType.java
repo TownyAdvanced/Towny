@@ -2,9 +2,9 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 public enum WarType {
 	RIOT("Riot", false, 1, 100.0),
-	TOWNWAR("Town vs Town", false, 5, 100.0),
+	TOWNWAR("Town vs Town War", false, 5, 100.0),
 	CIVILWAR("National Civil War", false, 5, 100.0),
-	NATIONWAR("Nation vs Nation", false, 10, 1000.0),
+	NATIONWAR("Nation vs Nation War", false, 10, 1000.0),
 	WORLDWAR("World War", true, -1, 10000.0);
 	
 	String name;

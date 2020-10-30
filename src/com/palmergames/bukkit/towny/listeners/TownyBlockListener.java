@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -308,7 +307,7 @@ public class TownyBlockListener implements Listener {
 			 */
 			boolean inWarringTown = false;
 			if (TownyAPI.getInstance().isWarTime()) {
-				if (War.isWarringTown(TownyAPI.getInstance().getTown(loc)))
+				if (TownyUniverse.getInstance().hasWarEvent(townBlock))
 					inWarringTown = true;
 			}
 			/*
@@ -411,7 +410,7 @@ public class TownyBlockListener implements Listener {
 		boolean isNeutral = false;
 		townBlock = TownyAPI.getInstance().getTownBlock(target);
 		if (townBlock != null && townBlock.hasTown())
-			if (!War.isWarZone(townBlock.getWorldCoord()))
+			if (!TownyUniverse.getInstance().hasWarEvent(townBlock))
 				isNeutral = true;
 
 		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {

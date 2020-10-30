@@ -391,12 +391,12 @@ public class TownyAPI {
     public War getWarEvent() {
         return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
     }
-    
-    public void clearWarEvent() {
-        TownyUniverse townyUniverse = TownyUniverse.getInstance();
-        townyUniverse.getWarEvent().cancelTasks(BukkitTools.getScheduler());
-        townyUniverse.setWarEvent(null);
-    }
+//    
+//    public void clearWarEvent() {
+//        TownyUniverse townyUniverse = TownyUniverse.getInstance();
+//        townyUniverse.getWarEvent().cancelTasks(BukkitTools.getScheduler());
+//        townyUniverse.setWarEvent(null);
+//    }
     public void requestTeleport(Player player, Location spawnLoc) {
         
         try {

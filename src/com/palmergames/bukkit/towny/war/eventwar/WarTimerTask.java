@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -31,14 +30,14 @@ public class WarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		//TODO: check if war has ended and end gracefully
-		if (!warEvent.isWarTime()) {
-			warEvent.end();
-			TownyAPI.getInstance().clearWarEvent();
-			plugin.resetCache();
-			TownyMessaging.sendDebugMsg("War ended.");
-			return;
-		}
+//		//TODO: check if war has ended and end gracefully
+//		if (!warEvent.isWarTime()) {
+//			warEvent.end();
+//			TownyAPI.getInstance().clearWarEvent();
+//			plugin.resetCache();
+//			TownyMessaging.sendDebugMsg("War ended.");
+//			return;
+//		}
 
 		int numPlayers = 0;
 		Hashtable<TownBlock, WarZoneData> plotList = new Hashtable<>();

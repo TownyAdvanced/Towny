@@ -178,7 +178,7 @@ public class TownyEntityMonitorListener implements Listener {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
 
-				if (attackerResident.hasTown() && War.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && War.isWarringTown(defenderResident.getTown())){
+				if (attackerResident.hasTown() && TownyUniverse.getInstance().hasWarEvent(attackerResident.getTown()) && defenderResident.hasTown() && TownyUniverse.getInstance().hasWarEvent(defenderResident.getTown())){
 					if (TownySettings.isRemovingOnMonarchDeath())
 						monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
@@ -532,7 +532,7 @@ public class TownyEntityMonitorListener implements Listener {
 						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
 							jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
 
-							if (War.isWarZone(jailBlock.getWorldCoord())) {
+							if (TownyUniverse.getInstance().hasWarEvent(jailBlock)) {
 								defenderResident.setJailed(index, attackerTown);
 								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 								return;
@@ -581,7 +581,7 @@ public class TownyEntityMonitorListener implements Listener {
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
 					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
-					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
+					if (jailBlock != null && TownyUniverse.getInstance().hasWarEvent(jailBlock)) {
 						defenderResident.setJailed(index, town);
 						TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 						return;
