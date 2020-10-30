@@ -2590,9 +2590,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
 			}
 			
-			if (TownyAPI.getInstance().isWarTime())
-				throw new TownyException(Translatable.of("msg_war_cannot_do"));
-			
 			if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
 				throw new TownyException(Translatable.of("msg_err_homeblock_already_set_here"));
 
@@ -2793,11 +2790,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try {
-			if (TownyAPI.getInstance().isWarTime())
-				throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
-			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
-				throw new TownyException(Translatable.of("msg_err_universe_limit"));
+			if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getDataSource().getTowns().size() >= TownySettings.getTownLimit())
+				throw new TownyException(Translation.of("msg_err_universe_limit"));
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
 				name = StringMgmt.capitalizeStrings(name);
@@ -2971,10 +2965,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public void townLeave(Player player) {
 
 		try {
-			// TODO: Allow leaving town during war.
-			if (TownyAPI.getInstance().isWarTime())
-				throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 			Resident resident = getResidentOrThrow(player.getUniqueId());
 			
 			if (!resident.hasTown())
@@ -3732,9 +3722,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!world.isClaimable())
 					throw new TownyException(Translatable.of("msg_not_claimable"));
 
-				if (TownyAPI.getInstance().isWarTime())
-					throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 				List<WorldCoord> selection;
 				boolean outpost = false;
 				boolean isAdmin = permSource.isTownyAdmin(player);
@@ -3878,9 +3865,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyAPI.getInstance().isWarTime())
-					throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 				resident = getResidentOrThrow(player.getUniqueId());
 				town = resident.getTown();
 				world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());

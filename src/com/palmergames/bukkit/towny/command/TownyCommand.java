@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -47,6 +48,7 @@ import org.bukkit.plugin.Plugin;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -309,7 +311,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
 					for (String line : towny_war)
-						TownyMessaging.sendMessage(player, Colors.strip(line));
+						TownyMessaging.sendMessage(player, line);
 				else
 					TownyMessaging.sendErrorMsg(player, "The world isn't currently at war.");
 
@@ -333,12 +335,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	private boolean TownyWar(String[] args, Player p) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (TownyAPI.getInstance().isWarTime() && args.length > 0) {
+//		if (TownyAPI.getInstance().isWarTime() && args.length > 0) {
+		if (args.length > 0) {
 			towny_war.clear();
 			if (args[0].equalsIgnoreCase("stats"))
-				towny_war.addAll(townyUniverse.getWarEvent().getStats());
+				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getStats());
 			else if (args[0].equalsIgnoreCase("scores"))
-				towny_war.addAll(townyUniverse.getWarEvent().getScores(-1));
+				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getScores(-1));
 			else if (args[0].equalsIgnoreCase("participants")) {
 				parseWarParticipants(p, args);
 				return true;
@@ -351,75 +354,133 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					TownyMessaging.sendErrorMsg(p, Translatable.of("msg_err_command_disable"));
 				}
+			} else if (args[0].equalsIgnoreCase("types")) {
+				towny_war.addAll(getWarTypes());
+				return true;
 			}
 		}
 
 		return TownyAPI.getInstance().isWarTime();
 	}
 
-	private void parseWarParticipants(Player player, String[] split) {
-		Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
-		if (resident == null)
-			return;
-		List<Town> townsToSort = War.warringTowns;
-		List<Nation> nationsToSort = War.warringNations;
-		int page = 1;
-		List<String> output = new ArrayList<>();
-		String nationLine;
-		String townLine;
-		for (Nation nations : nationsToSort) {
-			nationLine = Colors.Gold + "-" + nations.getName();
-			if (resident.hasNation())
-				if (resident.getTownOrNull().getNationOrNull().hasEnemy(nations))
-					nationLine += Colors.Red + " (Enemy)";
-				else if (resident.getTownOrNull().getNationOrNull().hasAlly(nations))
-					nationLine += Colors.Green + " (Ally)";
-			output.add(nationLine);
-			for (Town towns : townsToSort) {
-				if (towns.hasNation() && towns.getNationOrNull().equals(nations)) {
-					townLine = Colors.Blue + "  -" + towns.getName();
-					if (towns.isCapital())
-						townLine += Colors.LightBlue + " (Capital)";
-					output.add(townLine);
-				}
-			}
-		}
-		int total = (int) Math.ceil((output.size()) / (double) 10);
-		if (split.length > 1) {
-			try {
-				page = Integer.parseInt(split[1]);
-				if (page < 0) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_negative"));
-					return;
-				} else if (page == 0) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
-			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-				return;
-			}
-		}
-		if (page > total) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
-			return;
-		}
+	private Collection<? extends String> getWarTypes() {
+		List<String> lines = new ArrayList<>();
+		lines.add(ChatTools.formatTitle("War Types"));
+		WarType type = WarType.RIOT;
+		lines.add(type.getName());
+		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
+		lines.add("   residentLives: " + type.residentLives);
+		lines.add("      mayorLives: " + type.mayorLives);
+		lines.add("   pointsPerKill: " + type.pointsPerKill);
+		lines.add("      baseSpoils: " + type.baseSpoils);
+		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
+		lines.add("   takesoverTown: " + type.hasTownConquering);
+		type = WarType.TOWNWAR;
+		lines.add(type.getName());
+		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
+		lines.add("   residentLives: " + type.residentLives);
+		lines.add("      mayorLives: " + type.mayorLives);
+		lines.add("   pointsPerKill: " + type.pointsPerKill);
+		lines.add("      baseSpoils: " + type.baseSpoils);
+		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
+		lines.add("   takesoverTown: " + type.hasTownConquering);
+		type = WarType.CIVILWAR;
+		lines.add(type.getName());
+		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
+		lines.add("   residentLives: " + type.residentLives);
+		lines.add("      mayorLives: " + type.mayorLives);
+		lines.add("   pointsPerKill: " + type.pointsPerKill);
+		lines.add("      baseSpoils: " + type.baseSpoils);
+		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
+		lines.add("   takesoverTown: " + type.hasTownConquering);
+		type = WarType.NATIONWAR;
+		lines.add(type.getName());
+		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
+		lines.add("   residentLives: " + type.residentLives);
+		lines.add("      mayorLives: " + type.mayorLives);
+		lines.add("   pointsPerKill: " + type.pointsPerKill);
+		lines.add("      baseSpoils: " + type.baseSpoils);
+		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
+		lines.add("   takesoverTown: " + type.hasTownConquering);
+		type = WarType.WORLDWAR;
+		lines.add(type.getName());
+		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
+		lines.add("   residentLives: " + type.residentLives);
+		lines.add("      mayorLives: " + type.mayorLives);
+		lines.add("   pointsPerKill: " + type.pointsPerKill);
+		lines.add("      baseSpoils: " + type.baseSpoils);
+		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
+		lines.add("   takesoverTown: " + type.hasTownConquering);
+		
+		return lines;
+	}
 
-		int iMax = page * 10;
-		if ((page * 10) > output.size()) {
-			iMax = output.size();
+	private void parseWarParticipants(Player player, String[] split) {
+
+//		Resident resident = getResidentOrThrow(player.getUniqueId());
+//		List<Town> townsToSort = War.warringTowns;
+//		List<Nation> nationsToSort = War.warringNations;
+//		int page = 1;
+//		List<String> output = new ArrayList<>();
+//		String nationLine;
+//		String townLine;
+//		for (Nation nations : nationsToSort) {
+//			nationLine = Colors.Gold + "-" + nations.getName();
+//			if (resident.hasNation())
+//				if (resident.getTown().getNation().hasEnemy(nations))
+//					nationLine += Colors.Red + " (Enemy)";
+//				else if (resident.getTown().getNation().hasAlly(nations))
+//					nationLine += Colors.Green + " (Ally)";
+//			output.add(nationLine);
+//			for (Town towns : townsToSort) {
+//				if (towns.getNation().equals(nations)) {
+//					townLine = Colors.Blue + "  -" + towns.getName();
+//					if (towns.isCapital())
+//						townLine += Colors.LightBlue + " (Capital)";
+//					output.add(townLine);
+//				}
+//			}
+//		}
+//		int total = (int) Math.ceil((output.size()) / (double) 10);
+//		if (split.length > 1) {
+//			try {
+//				page = Integer.parseInt(split[1]);
+//				if (page < 0) {
+//					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative"));
+//					return;
+//				} else if (page == 0) {
+//					TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+//					return;
+//				}
+//			} catch (NumberFormatException e) {
+//				TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+//				return;
+//			}
+//		}
+//		if (page > total) {
+//			TownyMessaging.sendErrorMsg(player, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+//			return;
+//		}
+//
+//		int iMax = page * 10;
+//		if ((page * 10) > output.size()) {
+//			iMax = output.size();
+//		}
+//		List<String> warparticipantsformatted = new ArrayList<>();
+//		for (int i = (page - 1) * 10; i < iMax; i++) {
+//			String line = output.get(i);
+//			warparticipantsformatted.add(line);
+//		}
+//		player.sendMessage(ChatTools.formatList("War Participants",
+//				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
+//				warparticipantsformatted, Translation.of("LIST_PAGE", page, total)
+//				)
+//		);
+//		output.clear();
+		
+		for (War war : TownyUniverse.getInstance().getWars()) {
+			war.getWarParticipants().outputParticipants(war.getWarType(), war.getWarName());
 		}
-		List<String> warparticipantsformatted = new ArrayList<>();
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			String line = output.get(i);
-			warparticipantsformatted.add(line);
-		}
-		TownyMessaging.sendMessage(player, ChatTools.formatList("War Participants",
-				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
-				warparticipantsformatted, Translatable.of("LIST_PAGE", page, total).forLocale(player)
-				)
-		);
-		output.clear();
 	}	
 	
 	private void TopCommand(Player player, String[] args) {

@@ -27,9 +27,9 @@ import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEven
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 
 public class WarZoneListener implements Listener {
@@ -142,7 +142,7 @@ public class WarZoneListener implements Listener {
 				continue;
 			
 			// Non-warzone, skip it.
-			if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(block.getLocation()).getWorldCoord()))
+			if (!TownyUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(block.getLocation())))
 				continue;
 			
 			// A war that doesn't allow any kind of explosions.
@@ -191,7 +191,7 @@ public class WarZoneListener implements Listener {
 		 */
 		
 		// Not in a war zone, do not modify the outcome of the event.
-		if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(event.getLocation()).getWorldCoord()))
+		if (!TownyUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(event.getLocation())))
 			return;
 			
 		/*
@@ -227,7 +227,7 @@ public class WarZoneListener implements Listener {
 		/*
 		 * Is this in a Town with an Event War?
 		 */
-		if (TownyAPI.getInstance().isWarTime() && War.isWarringTown(TownyAPI.getInstance().getTown(event.getLocation()))) {
+		if (TownyAPI.getInstance().isWarTime() && TownyUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
 			if (TownySettings.isAllowWarBlockGriefing() || WarZoneConfig.isAllowingFireInWarZone()) {
 				event.setCancelled(false);
 			} else {
@@ -275,7 +275,7 @@ public class WarZoneListener implements Listener {
 		}
 		
 		//Cancel because one of the two players are no longer involved in the war.
-		if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
+		if (!TownyUniverse.getInstance().hasWarEvent(defenderTown) || !TownyUniverse.getInstance().hasWarEvent(attackerTown)) {
 			event.setMessage(Translatable.of("msg_war_a_player_has_been_removed_from_war").forLocale(event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
@@ -294,7 +294,7 @@ public class WarZoneListener implements Listener {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 		
-		if (War.isWarZone(event.getTownBlock().getWorldCoord()))
+		if (TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			event.setPvp(true);
 	}
 	

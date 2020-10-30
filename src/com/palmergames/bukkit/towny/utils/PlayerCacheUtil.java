@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -364,7 +363,7 @@ public class PlayerCacheUtil {
 			
 			// Enemy or WarZone.
 			if (CombatUtil.isEnemy(resident.getTown(), town)) {
-				if (TownyAPI.getInstance().isWarTime() && War.isWarZone(townBlock.getWorldCoord()))
+				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone())
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.ENEMY;

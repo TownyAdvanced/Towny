@@ -35,6 +35,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,7 @@ public class TownyUniverse {
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
-    private War warEvent;
+    private List<War> wars = new ArrayList<>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -1082,24 +1083,85 @@ public class TownyUniverse {
 	 * War Stuff
 	 */
 
-    public void startWarEvent() {
-        warEvent = new War(towny, TownySettings.getWarTimeWarningDelay());
+	@Nullable
+    public War getWarEvent(Player player) {
+    	Resident resident = getResident(player.getUniqueId());
+		if (resident != null)
+	        for (War war : getWars()) {
+	        	if (war.getWarParticipants().has(resident))
+	        		return war;
+	        }
+        return null;
     }
     
-    public void endWarEvent() {
-        if (warEvent != null && warEvent.isWarTime()) {
-            warEvent.toggleEnd();
-        }
-    }	
+	@Nullable
+    public War getWarEvent(TownBlock townBlock) {
+    	for (War war : getWars()) {
+    		if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
+    			return war;
+    	}
+    	return null;
+    }
+    
+	@Nullable
+    public War getWarEvent(String warName) {
+    	for (War war : getWars()) {
+    		if (war.getWarName().equalsIgnoreCase(warName))
+    			return war;
+    	}
+    	return null;
+    }
 
-    public War getWarEvent() {
-        return warEvent;
+    public boolean hasWarEvent(TownBlock townBlock) {
+    	for (War war : getWars()) {
+    		if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
+    			return true;
+    	}
+    	return false;
     }
     
-    public void setWarEvent(War warEvent) {
-        this.warEvent = warEvent;
+    public boolean hasWarEvent(Town town) {
+    	for (War war : getWars()) {
+    		if (war.getWarParticipants().has(town))
+    			return true;
+    	}
+    	return false;
     }
     
+    public boolean hasWarEvent(Resident resident) {
+     	for (War war : getWars()) {
+     		if (war.getWarParticipants().has(resident))
+				return true;
+     	}
+     	return false;
+    }
+
+	public boolean isWarTime() {	
+
+		return !wars.isEmpty();
+	}
+    
+    public List<War> getWars() {
+    	return wars;
+    }
+    
+    public List<String> getWarNames() {
+    	List<String> names = new ArrayList<String>(wars.size());
+    	for (War war : getWars())
+    		names.add(war.getWarName());
+    	
+    	return names;
+    }
+    
+    public void addWar(War war) {
+    	wars.add(war);
+    }
+    
+    public void removeWar(War war) {
+    	war = null;
+    	wars.remove(war);
+    }
+
 	public Map<Block, SpawnPoint> getSpawnPoints() {
 		return spawnPoints;
 	}

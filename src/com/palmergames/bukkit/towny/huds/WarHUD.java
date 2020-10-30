@@ -60,8 +60,8 @@ public class WarHUD {
 		String health;
 		boolean isTown = false;
 		try { 
-			if (War.isWarZone(at.getTownBlock().getWorldCoord())) {
-				health = war.getWarZone().get(at) + "" + ChatColor.AQUA + "/" + (at.getTownBlock().isHomeBlock() ? home_health : town_health);
+			if (war.getWarZoneManager().isWarZone(at.getTownBlock().getWorldCoord())) {
+				health = war.getWarZoneManager().getWarZone().get(at) + "" + ChatColor.AQUA + "/" + (at.getTownBlock().isHomeBlock() ? home_health : town_health);
 			} else {
 				isTown = true;
 				if (at.getTownBlock().getTown().getNation().isNeutral())
@@ -108,7 +108,7 @@ public class WarHUD {
 	public static void updateScore(Player p, War war) {
 		String score = "";
 		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
-		Hashtable<Town, Integer> scores = war.getTownScores();
+		Hashtable<Town, Integer> scores = war.getScoreManager().getTownScores();
 		try {
 			if (res != null && res.hasTown() && scores.containsKey(res.getTown())) {
 				score = String.valueOf(scores.get(res.getTown()));
@@ -220,7 +220,7 @@ public class WarHUD {
 		updateHealth(p, at, war);
 		updateHomeTown(p);
 		updateScore(p, war);
-		updateTopScores(p, war.getTopThree());
+		updateTopScores(p, war.getScoreManager().getTopThree());
 	}
 
 	public static boolean isOnEdgeOfTown(WorldCoord worldCoord, War war) {
@@ -230,7 +230,7 @@ public class WarHUD {
 		//Checks to make sure the worldCoord is actually in war
 		try {
 			currentTown = worldCoord.getTownBlock().getTown();
-			if (!War.isWarZone(worldCoord))
+			if (!war.getWarZoneManager().isWarZone(worldCoord))
 				return false;
 		} catch (NotRegisteredException e) {
 			return false;
@@ -241,7 +241,7 @@ public class WarHUD {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				boolean sameTown = edgeTownBlock.getTown() == currentTown;
-				if (!sameTown || (sameTown && !War.isWarZone(edgeTownBlock.getWorldCoord()))) {
+				if (!sameTown || (sameTown && !war.getWarZoneManager().isWarZone(edgeTownBlock.getWorldCoord()))) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {

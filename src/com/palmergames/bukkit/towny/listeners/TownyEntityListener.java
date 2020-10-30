@@ -637,8 +637,8 @@ public class TownyEntityListener implements Listener {
 				attacker = (LivingEntity) source;
 			}
 
-			// There is an attacker and Not war time.
-			if ((attacker != null) && (!TownyAPI.getInstance().isWarTime())) {
+			// There is an attacker.
+			if (attacker != null) {
 
 				if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.PROJECTILE)) {
 					// Remove the projectile here so no

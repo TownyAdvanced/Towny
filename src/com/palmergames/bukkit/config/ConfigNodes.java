@@ -2499,6 +2499,12 @@ public enum ConfigNodes {
 			"",
 			"# If set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.",
 			"# The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed."),
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNS_EXCLUDES_CAPITALS(
+			"war.event.winner_takes_ownership_of_town_excludes_nation_capitals",
+			"true",
+			"",
+			"# If set to true, and winner_takes_ownership_of_town is also true, nation capitals will not switch nations.",
+			"# If false, and winner_takes_ownership_of_town is also true, the losing nation will be deleted and the capital will change nations."),
 	WAR_EVENT_CONQUER_TIME(
 			"war.event.conquer_time",
 			"7",
@@ -2514,6 +2520,245 @@ public enum ConfigNodes {
 			"60",
 			"",
 			"# The minimum height at which a player must stand to count as an attacker."),
+
+	WAR_WAR_TYPES(
+			"war.war_types",
+			"",
+			"",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                War Types Configuration               | #",
+			"# |                                                      | #",
+			"# |                  Used in Event Wars                  | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	WAR_WAR_TYPES_RIOT(
+			"war.war_types.riot",
+			"",
+			"",
+			"# Riot wars involve a single town. Details to be developed."),
+	WAR_WAR_TYPES_RIOT_ENABLE(
+			"war.war_types.riot.enabled",
+			"false",
+			"",
+			"# Does the server allow riots?"
+			),
+	WAR_WAR_TYPES_RIOT_RESIDENT_LIVES(
+			"war.war_types.riot.resident_lives",
+			"5",
+			"",
+			"# How many lives do normal residents get, before they are removed from the war."),
+	WAR_WAR_TYPES_RIOT_MAYOR_LIVES(
+			"war.war_types.riot.mayor_lives",
+			"5",
+			"",
+			"# How many lives do mayors get, before they are removed from the war."),
+	WAR_WAR_TYPES_RIOT_MAYOR_DEATH(
+			"war.war_types.riot.mayor_death",
+			"false",
+			"",
+			"# Does a riot war end if the mayor is killed to the point they have no lives left?"
+			),
+	WAR_WAR_TYPES_RIOT_BASE_SPOILS(
+			"war.war_types.riot.base_spoils",
+			"10.0",
+			"",
+			"# How much money is automatically put into the war spoils at the beginning of a riot."),
+	WAR_WAR_TYPES_RIOT_POINTS_PER_KILL(
+			"war.war_types.riot.points_per_kill",
+			"10",
+			"",
+			"# How many points are awarded for killing an enemy."),
+
+	WAR_WAR_TYPES_TOWN_WAR(
+			"war.war_types.town_war",
+			"",
+			"",
+			"# Town War involves one town versus another single town."),
+	WAR_WAR_TYPES_TOWN_WAR_ENABLE(
+			"war.war_types.town_war.enabled",
+			"false",
+			"",
+			"# Does the server allow town wars?"),
+	WAR_WAR_TYPES_TOWN_WAR_TOWNBLOCK_HP(
+			"war.war_types.town_war.townblock_hp",
+			"false",
+			"",
+			"# In town war, do the townblocks have HP which can be fought over?"),
+	WAR_WAR_TYPES_TOWN_WAR_RESIDENT_LIVES(
+			"war.war_types.town_war.resident_lives",
+			"5",
+			"",
+			"# How many lives do normal residents get, before they are removed from the war."),
+	WAR_WAR_TYPES_TOWN_WAR_MAYOR_LIVES(
+			"war.war_types.town_war.mayor_lives",
+			"5",
+			"",
+			"# How many lives do mayors get, before they are removed from the war."),
+	WAR_WAR_TYPES_TOWN_WAR_MAYOR_DEATH(
+			"war.war_types.town_war.mayor_death",
+			"false",
+			"",
+			"# Does a town war end if one of the mayors is killed to the point they have no lives left?"),
+	WAR_WAR_TYPES_TOWN_WAR_WINNER_TAKES_OVER_TOWN(
+			"war.war_types.town_war.winner_takes_over_town",
+			"false",
+			"",
+			"# Does the losing town disolve and become merged with the winning town?"),
+	WAR_WAR_TYPES_TOWN_WAR_BASE_SPOILS(
+			"war.war_types.town_war.base_spoils",
+			"100.0",
+			"",
+			"# How much money is automatically put into the war spoils at the beginning of a town war."),
+	WAR_WAR_TYPES_TOWN_WAR_POINTS_PER_KILL(
+			"war.war_types.town_war.points_per_kill",
+			"10",
+			"",
+			"# How many points are awarded for killing an enemy."),
+	
+
+	WAR_WAR_TYPES_CIVIL_WAR(
+			"war.war_types.civil_war",
+			"",
+			"",
+			"# Civil War involves all of the towns in a nation."),
+	WAR_WAR_TYPES_CIVIL_WAR_ENABLE(
+			"war.war_types.civil_war.enabled",
+			"false",
+			"",
+			"# Does the server allow civil wars?"),	
+	WAR_WAR_TYPES_CIVIL_WAR_TOWNBLOCK_HP(
+			"war.war_types.civil_war.townblock_hp",
+			"true",
+			"",
+			"# In town war, do the townblocks have HP which can be fought over?"),
+	WAR_WAR_TYPES_CIVIL_WAR_RESIDENT_LIVES(
+			"war.war_types.civil_war.resident_lives",
+			"5",
+			"",
+			"# How many lives do normal residents get, before they are removed from the war."),
+	WAR_WAR_TYPES_CIVIL_WAR_MAYOR_LIVES(
+			"war.war_types.civil_war.mayor_lives",
+			"5",
+			"",
+			"# How many lives do mayors get, before they are removed from the war."),
+	WAR_WAR_TYPES_CIVIL_WAR_MAYOR_DEATH(
+			"war.war_types.civil_war.mayor_death",
+			"false",
+			"",
+			"# Does a town get removed from the civil war if their mayor is killed to the point they have no lives left?"),
+	WAR_WAR_TYPES_CIVIL_WAR_WINNER_TAKES_OVER_NATION(
+			"war.war_types.civil_war.winner_takes_over_nation",
+			"true",
+			"",
+			"# Does the winning town take over as capital of the nation?"),
+	WAR_WAR_TYPES_CIVIL_WAR_BASE_SPOILS(
+			"war.war_types.civil_war.base_spoils",
+			"500.0",
+			"",
+			"# How much money is automatically put into the war spoils at the beginning of a civil war."),
+	WAR_WAR_TYPES_CIVIL_WAR_POINTS_PER_KILL(
+			"war.war_types.civil_war.points_per_kill",
+			"10",
+			"",
+			"# How many points are awarded for killing an enemy."),
+	
+	WAR_WAR_TYPES_NATION_WAR(
+			"war.war_types.nation_war",
+			"",
+			"",
+			"# Nation War involves one nation versus another single nation."),
+	WAR_WAR_TYPES_NATION_WAR_ENABLE(
+			"war.war_types.nation_war.enabled",
+			"false",
+			"",
+			"# Does the server allow nation wars?"),
+	WAR_WAR_TYPES_NATION_WAR_TOWNBLOCK_HP(
+			"war.war_types.nation_war.townblock_hp",
+			"true",
+			"",
+			"# In nation war, do the townblocks have HP which can be fought over?"),
+	WAR_WAR_TYPES_NATION_WAR_RESIDENT_LIVES(
+			"war.war_types.nation_war.resident_lives",
+			"5",
+			"",
+			"# How many lives do normal residents get, before they are removed from the war."),
+	WAR_WAR_TYPES_NATION_WAR_MAYOR_LIVES(
+			"war.war_types.nation_war.mayor_lives",
+			"5",
+			"",
+			"# How many lives do mayors get, before they are removed from the war."),
+	WAR_WAR_TYPES_NATION_WAR_MAYOR_DEATH(
+			"war.war_types.nation_war.mayor_death",
+			"true",
+			"",
+			"# Does a town get removed from the nation war if their mayor is killed to the point they have no lives left?",
+			"# Does a nation get removed from the nation war if their king is killed to the point they have no lives left?"),
+	WAR_WAR_TYPES_NATION_WAR_WINNER_CONQUERS_TOWNS(
+			"war.war_types.nation_war.winner_conquers_towns",
+			"true",
+			"",
+			"# Does the winning nation conquer towns which are knocked out of the war?"),
+	WAR_WAR_TYPES_NATION_WAR_BASE_SPOILS(
+			"war.war_types.nation_war.base_spoils",
+			"1000.0",
+			"",
+			"# How much money is automatically put into the war spoils at the beginning of a nation war."),
+	WAR_WAR_TYPES_NATION_WAR_POINTS_PER_KILL(
+			"war.war_types.nation_war.points_per_kill",
+			"10",
+			"",
+			"# How many points are awarded for killing an enemy."),
+
+	WAR_WAR_TYPES_WORLD_WAR(
+			"war.war_types.world_war",
+			"",
+			"",
+			"# World War potentially involves every town and nation on the server."),
+	WAR_WAR_TYPES_WORLD_WAR_ENABLE(
+			"war.war_types.world_war.enabled",
+			"false",
+			"",
+			"# Does the server allow world wars?"),
+	WAR_WAR_TYPES_WORLD_WAR_TOWNBLOCK_HP(
+			"war.war_types.world_war.townblock_hp",
+			"true",
+			"",
+			"# In world war, do the townblocks have HP which can be fought over?"),
+	WAR_WAR_TYPES_WORLD_WAR_RESIDENT_LIVES(
+			"war.war_types.world_war.resident_lives",
+			"5",
+			"",
+			"# How many lives do normal residents get, before they are removed from the war."),
+	WAR_WAR_TYPES_WORLD_WAR_MAYOR_LIVES(
+			"war.war_types.world_war.mayor_lives",
+			"5",
+			"",
+			"# How many lives do mayors get, before they are removed from the war."),
+	WAR_WAR_TYPES_WORLD_WAR_MAYOR_DEATH(
+			"war.war_types.world_war.mayor_death",
+			"true",
+			"",
+			"# Does a town get removed from the world war if their mayor is killed to the point they have no lives left?",
+			"# Does a nation get removed from the world war if their king is killed to the point they have no lives left?"),
+	WAR_WAR_TYPES_WORLD_WAR_WINNER_CONQUERS_TOWNS(
+			"war.war_types.world_war.winner_conquers_towns",
+			"true",
+			"",
+			"# Does the winning nation conquer towns which are knocked out of the war?"),
+	WAR_WAR_TYPES_WORLD_WAR_BASE_SPOILS(
+			"war.war_types.world_war.base_spoils",
+			"10000",
+			"",
+			"# How much money is automatically put into the war spoils at the beginning of a world war."),
+	WAR_WAR_TYPES_WORLD_WAR_POINTS_PER_KILL(
+			"war.war_types.world_war.points_per_kill",
+			"10",
+			"",
+			"# How many points are awarded for killing an enemy."),
+
 	WAR_WARZONE(
 			"war.warzone",
 			"",

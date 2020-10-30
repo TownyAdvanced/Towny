@@ -90,6 +90,7 @@ public class Town extends Government implements TownBlockOwner {
 	private long joinedNationAt;
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
+	private boolean hasActiveWar = false;
 
 	public Town(String name) {
 		super(name);
@@ -1339,6 +1340,14 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void setDebtBalance(double balance) {
 		this.debtBalance = balance;
+	}
+	
+	public boolean hasActiveWar() {
+		return hasActiveWar;
+	}
+	
+	public void setActiveWar(boolean active) {
+		this.hasActiveWar = active;
 	}
 
 	public boolean isRuined() {

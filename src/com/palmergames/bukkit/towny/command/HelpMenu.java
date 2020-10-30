@@ -62,7 +62,8 @@ public enum HelpMenu {
 				.add("mysqldump", "")
 				.add("database [save/load]", "")
 				.add("newday", Translation.of("admin_panel_3"))
-				.add("purge [number of days]", "");
+				.add("purge [number of days]", "")
+				.add("war", "");
 		}
 	},
 	
