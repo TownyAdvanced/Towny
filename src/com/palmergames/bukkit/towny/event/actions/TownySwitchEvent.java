@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.actions;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

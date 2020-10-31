@@ -9,10 +9,10 @@ import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.event.TownyBuildEvent;
-import com.palmergames.bukkit.towny.event.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.TownyItemuseEvent;
-import com.palmergames.bukkit.towny.event.TownySwitchEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
+import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;

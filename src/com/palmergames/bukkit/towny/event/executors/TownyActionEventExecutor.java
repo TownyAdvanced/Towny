@@ -6,11 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.event.TownyActionEvent;
-import com.palmergames.bukkit.towny.event.TownyBuildEvent;
-import com.palmergames.bukkit.towny.event.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.TownyItemuseEvent;
-import com.palmergames.bukkit.towny.event.TownySwitchEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
+import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
