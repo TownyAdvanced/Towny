@@ -38,7 +38,7 @@ public class TownyActionEventExecutor {
 	 * @param Material   - Material being involved in the event.
 	 * @param ActionType - The ActionType of the event. ex: BUILD
 	 * @param TownyActionEvent - One of the four ActionType-based events.
-	 * @return true if allowed by the cache and the event.
+	 * @return true if not cancelled by the cache or the event results.
 	 */
 	private static boolean isAllowedAction(Player player, Location loc, Material mat, ActionType action, TownyActionEvent event) {
 
@@ -64,7 +64,7 @@ public class TownyActionEventExecutor {
 		if (event.isCancelled() && event.getMessage() != null)
 			TownyMessaging.sendErrorMsg(player, event.getMessage());
 
-		return event.isCancelled();
+		return !event.isCancelled();
 	}
 
 	/**

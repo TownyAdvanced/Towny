@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 
 /**
@@ -60,9 +60,8 @@ public class TownyVehicleListener implements Listener {
 			}
 
 			if (vehicle != null) {
-				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, event.getVehicle().getLocation(), vehicle);
-				event.setCancelled(internalEvent.isCancelled());
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
 		}
 	}

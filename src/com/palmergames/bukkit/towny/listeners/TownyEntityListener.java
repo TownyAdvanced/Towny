@@ -5,9 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.executors.TownyBuildEventExecutor;
-import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
-import com.palmergames.bukkit.towny.event.executors.TownySwitchEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -258,9 +256,8 @@ public class TownyEntityListener implements Listener {
 				if (!TownyAPI.getInstance().getTownBlock(loc).hasResident())
 					return;	
 
-				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor((Player) event.getTarget(), loc, Material.DIRT);
-				event.setCancelled(internalEvent.isCancelled());
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) event.getTarget(), loc, Material.DIRT));
 			}
 		}
 	}
@@ -565,9 +562,8 @@ public class TownyEntityListener implements Listener {
 				if (!passenger.getType().equals(EntityType.PLAYER)) 
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownySwitchEventExecutor internalEvent = new TownySwitchEventExecutor((Player) passenger, block.getLocation(), block.getType());
-					event.setCancelled(internalEvent.isCancelled());
+					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType()));
 					return;
 				}
 			}
@@ -944,9 +940,8 @@ public class TownyEntityListener implements Listener {
 						mat = Material.GRASS_BLOCK;
 				}
 
-				//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(player, hanging.getLocation(), mat);
-				event.setCancelled(internalEvent.isCancelled());
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
 
 			} else {
 				// Explosions are blocked in this plot
@@ -999,10 +994,8 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		TownyBuildEventExecutor internalEvent = new TownyBuildEventExecutor(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING);
-
-		event.setCancelled(internalEvent.isCancelled());
+		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING));
 	}
 
 	/**

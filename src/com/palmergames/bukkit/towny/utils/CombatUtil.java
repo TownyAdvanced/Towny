@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
-import com.palmergames.bukkit.towny.event.executors.TownyDestroyEventExecutor;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -169,34 +169,20 @@ public class CombatUtil {
 				if (defenderTB != null) {
 					
 					/*
-					 * Farm Animals
+					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
 					 */
-					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
-						//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-						TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT);
-						if (!internalEvent.isCancelled())
-							return false;
-					}
+					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
+						return (!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT));
+
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
-					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) {
-						
-						/*
-						 * Only allow the player to kill protected entities etc,
-						 * if they are from the same town
-						 * and have destroy permissions (dirt) in the defending
-						 * TownBlock
-						 */
-						TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT);
-						if (internalEvent.isCancelled())
-							return true;
+					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) 						
+						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
 
-					}
 				}
-
-
+				
 				/*
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
@@ -226,10 +212,8 @@ public class CombatUtil {
 				}
 
 				if (material != null) {
-					//Begin decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					TownyDestroyEventExecutor internalEvent = new TownyDestroyEventExecutor(attackingPlayer, defendingEntity.getLocation(), material);
-					if (internalEvent.isCancelled())
-						return true;
+					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
 				}
 			}
 
