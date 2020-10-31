@@ -4659,3 +4659,51 @@ v0.92.0.11:
   - Fix for towns not having their homeblocks set sometimes on creation.
   - Fix for /t list by resident not working.
   - Move comparators to own file and clean up listing code, courtesy of Siris with PR #4122.
+0.96.2.2:
+  - Fix the towny.nation.spawn.public node not being used for checks if a player can n spawn to a public nation. 
+  - Fix allow_nation_spawn config nodes not overriding player permissions.
+    - Closes #4066. 
+  - Fix /towny prices showing costs when using_economy: false.
+  - Fix death costs appearing messages showing when using_economy: false.
+  - Fix revert-on-unclaim feature failing to read 1.15 and lower BlockStates of walls in 1.16.
+    - Closes #4121.
+  - Add Respawn Anchor Integration, courtesy of Siris with PR #4134.
+    - Closes #4132.
+  - New Config option: global_town_settings.respawn_anchor_higher_precendence
+    - Default: true
+    - When this is true, players will respawn to respawn anchors on death rather than their own town. Affect 1.16+ servers only. 
+  - Fix new Towns not adopting the economy.spawn_travel.price_town_public_spawn_travel cost for using /t spawn [townname].
+    - Closes #4082.
+  - Bump language files to 0.84.
+  - Fix /plot toggle being able to be used on grouped plots.
+  - Update log4j to 2.13.2.
+  - Add color code translation to resident formatted names, courtesy of Siris with PR #4059.
+  - Add configurable default Town&Nation board #4125, courtesy of ronthecookie with PR #4125.
+  - New Config Option: nation.default_board 
+    - default: /nation set board [msg]
+    - Default nation board.
+  - New Config Option: town.default_board 
+    - default: /town set board [msg]
+    - Default town board.
+  - MOVED CONFIG OPTIONS:
+    - global_nation_settings.default.public
+    - global_nation_settings.default.open
+    - These config options are now found in the brand new "New Nation Defaults" section immediately below the "Town Claim/new defaults" section.
+    - nation.default_public, default: false.
+    - nation.default_open, default: false.
+    - You will have to reconfigure these new settings if you had either of the old setting set to true.
+  - REQUIRED CONFIG CHANGE: Block/Switch/Item_Use Additions for MC 1.16.*
+    - protection.switch_ids
+      - Add ",CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE,CRIMSON_BUTTON,WARPED_BUTTON,POLISHED_BLACKSTONE_BUTTON,CRIMSON_DOOR,WARPED_DOOR,CRIMSON_FENCE_GATE,WARPED_FENCE_GATE,CRIMSON_TRAPDOOR,WARPED_TRAPDOOR,LODESTONE,RESPAWN_ANCHOR,TARGET"
+    - protection.item_use_ids
+      - Add ",NETHERITE_AXE"
+    - new_world_settings.plot_management.revert_on_unclaim.block_ignore
+      - Add ",NETHER_GOLD_ORE,ANCIENT_DEBRIS,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_SIGN,CRIMSON_WALL_SIGN,WARPED_SIGN,WARPED_WALL_SIGN,LODESTONE,RESPAWN_ANCHOR"
+      - This will also have to be added to any towny\data\worlds\WORLDNAME.txt file in the plotManagementIgnoreIds list.
+    - new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete
+      - Add ",CRIMSON_WALL_SIGN,CRIMSON_SIGN,WARPED_WALL_SIGN,WARPED_SIGN"
+      - This will also have to be added to any towny\data\worlds\WORLDNAME.txt file in the plotManagementMayorDelete list.
+    - new_world_settings.plot_management.block_delete.unclaim_delete
+      - Add ",CRIMSON_SIGN,WARPED_SIGN,CRIMSON_WALL_SIGN,WARPED_WALL_SIGN,CRIMSON_DOOR,WARPED_DOOR,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE"
+      - This will also have to be added to any towny\data\worlds\WORLDNAME.txt file in the plotManagementDeleteIds list.
+  - Fix NoSuchMethodError on startup from the new log4j methods.

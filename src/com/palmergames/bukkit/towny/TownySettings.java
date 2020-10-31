@@ -1382,10 +1382,15 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
-	
+
+	public static String getTownDefaultBoard() {
+
+		return getString(ConfigNodes.TOWN_DEF_BOARD);
+	}
+
 	public static boolean getNationDefaultOpen() {
 
-		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
+		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
 
 	public static double getTownDefaultTax() {
@@ -1994,7 +1999,12 @@ public class TownySettings {
 
 	public static boolean getNationDefaultPublic(){
 
-		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+		return getBoolean(ConfigNodes.NATION_DEF_PUBLIC);
+	}
+
+	public static String getNationDefaultBoard(){
+
+		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
 	public static String getFlatFileBackupType() {
@@ -2119,6 +2129,10 @@ public class TownySettings {
 	public static boolean isTownRespawningInOtherWorlds() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
+	}
+	
+	public static boolean isRespawnAnchorHigherPrecedence() {
+		return getBoolean(ConfigNodes.GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
 	public static int getMaxResidentsPerTown() {
