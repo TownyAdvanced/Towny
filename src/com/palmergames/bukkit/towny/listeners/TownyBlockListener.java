@@ -27,7 +27,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 import java.util.List;
 
@@ -68,6 +67,12 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
+		/*
+		 * Allow portals to be made.
+		 */
+		if (block.getType() == Material.FIRE && block.getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+			return;
+
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {
 			event.setBuild(true);
@@ -102,13 +107,6 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		if (event.getCause().equals(IgniteCause.FLINT_AND_STEEL)) {
-			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlock().getLocation(), Material.FIRE)) {
-				event.setCancelled(true);
-				return;
-			}
-		}
 		if (isBurnCancelled(event.getBlock()))
 			event.setCancelled(true);
 	}
