@@ -5150,3 +5150,5 @@ v0.92.0.11:
     - Opens GUI showing all of the farmplot materials.
   - New Command: /towny wildsblocks
     - Opens GUI showing all of the wilds plot materials/materials allowed to be used in the wilderness.  
+  - API: Added PlayerKilledPlayerEvent.
+    - Returns killed and victim Player and Resident objects as well as the location
