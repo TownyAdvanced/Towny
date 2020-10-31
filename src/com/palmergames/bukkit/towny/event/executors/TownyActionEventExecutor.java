@@ -41,23 +41,35 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed by the cache and the event.
 	 */
 	private static boolean isAllowedAction(Player player, Location loc, Material mat, ActionType action, TownyActionEvent event) {
-		boolean cancelled = !PlayerCacheUtil.getCachePermission(player, loc, mat, action);
-		if (cancelled) {
+
+		/*
+		 * Use the PlayerCache to decide what Towny will do,
+		 * then set the error message if there is one.
+		 */
+		if (!PlayerCacheUtil.getCachePermission(player, loc, mat, action)) {
 			event.setCancelled(true);
 			PlayerCache cache = PlayerCacheUtil.getCache(player);
 			if (cache.hasBlockErrMsg())
 				event.setMessage(cache.getBlockErrMsg());
 		}
+
+		/*
+		 * Fire the event to let other plugins/Towny's internal war make changes.
+		 */
 		BukkitTools.getPluginManager().callEvent((Event) event);
-		cancelled = event.isCancelled();
-		if (cancelled && event.getMessage() != null)
+
+		/*
+		 * Send any feedback when the action is denied.
+		 */
+		if (event.isCancelled() && event.getMessage() != null)
 			TownyMessaging.sendErrorMsg(player, event.getMessage());
 
-		return cancelled;
+		return event.isCancelled();
 	}
 
 	/**
 	 * Can the player build this material at this location?
+	 * 
 	 * @param Player     - Player involved in the event.
 	 * @param Location   - Location of the event.
 	 * @param Material   - Material being involved in the event.
@@ -70,6 +82,7 @@ public class TownyActionEventExecutor {
 
 	/**
 	 * Can the player destroy this material at this location?
+	 * 
 	 * @param Player     - Player involved in the event.
 	 * @param Location   - Location of the event.
 	 * @param Material   - Material being involved in the event.
@@ -82,6 +95,7 @@ public class TownyActionEventExecutor {
 
 	/**
 	 * Can the player use switches of this material at this location?
+	 * 
 	 * @param Player     - Player involved in the event.
 	 * @param Location   - Location of the event.
 	 * @param Material   - Material being involved in the event.
@@ -94,6 +108,7 @@ public class TownyActionEventExecutor {
 
 	/**
 	 * Can the player use items of this material at this location?
+	 * 
 	 * @param Player     - Player involved in the event.
 	 * @param Location   - Location of the event.
 	 * @param Material   - Material being involved in the event.
