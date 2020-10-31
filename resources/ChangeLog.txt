@@ -4707,3 +4707,20 @@ v0.92.0.11:
       - Add ",CRIMSON_SIGN,WARPED_SIGN,CRIMSON_WALL_SIGN,WARPED_WALL_SIGN,CRIMSON_DOOR,WARPED_DOOR,SOUL_TORCH,SOUL_WALL_TORCH,CRIMSON_PRESSURE_PLATE,WARPED_PRESSURE_PLATE,POLISHED_BLACKSTONE_PRESSURE_PLATE"
       - This will also have to be added to any towny\data\worlds\WORLDNAME.txt file in the plotManagementDeleteIds list.
   - Fix NoSuchMethodError on startup from the new log4j methods.
+0.96.2.3:
+  - pt-br.yml updated to 0.84, courtesy of vsdepontes with PR #4139.
+  - Add option for keep inventory for arena plots, courtesy of Siris with #4138.
+    - Closes #4137.
+  - New Config Option: global_town_settings.keep_inventory_on_death_in_arena
+    - default: false.
+    - If People should keep their inventories on death in an arena townblock.
+    - Is not guaranteed to work with other keep inventory plugins!
+  - Fix for CMIFakeOperator triggering a NotRegisteredException on the PlayerCommandPreprocessEvent.
+    - Closes #4144.
+  - Add Asynchronous Backup To Speed up Load Times, courtesy of Siris with PR #4136.
+  - Fix jail days being able to crash mysql databases, jail days now max out at 10000.
+  - Added 3 placeholders for entering-towns title/subtitle messages, courtesy of Yldales with PR #4153.
+    - Along with the original {townname} option you may now also use the following on the notification.titles.town_title and notification.titles.town_subtitle lines:
+    - {town_motd} : show the town's townboard.
+    - {town_residents} : show the number of residents of the town.
+    - {town_residents_online} : show the number of online residents (including npcs) of the town.
