@@ -141,7 +141,7 @@ public class SQL_Schema {
 
     private static List<String> getTownColumns() {
     	List<String> columns = new ArrayList<>();
-    	columns.add("`residents` mediumtext");
+//    	columns.add("`residents` mediumtext");
 		columns.add("`mayor` mediumtext");
 		columns.add("`nation` mediumtext NOT NULL");
 		columns.add("`assistants` text DEFAULT NULL");
@@ -537,6 +537,26 @@ public class SQL_Schema {
 //
 //        }
 
+    	
+    	/*
+    	 * Update TOWNS
+    	 */
+    	String town_update;
+    	
+    	try {
+    		town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` " + "DROP COLUMN `residents`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(town_update);
+    		
+    		TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
+    		
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
+    	
+    	}    	
+    	
     	/*
     	 * Update WORLDS 
     	 */

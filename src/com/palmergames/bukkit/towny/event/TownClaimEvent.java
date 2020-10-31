@@ -1,7 +1,11 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -12,23 +16,27 @@ public class TownClaimEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private TownBlock townBlock;
+    private final TownBlock townBlock;
+    private Resident resident;
 
     @Override
     public HandlerList getHandlers() {
-    	
         return handlers;
     }
     
     public static HandlerList getHandlerList() {
-
 		return handlers;
 	}
 
-    public TownClaimEvent(TownBlock townBlock) {
+    public TownClaimEvent(TownBlock townBlock, Player player) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = townBlock;
-    }
+		try {
+			this.resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+	}
 
     /**
      *
@@ -37,5 +45,13 @@ public class TownClaimEvent extends Event  {
     public TownBlock getTownBlock() {
         return townBlock;
     }
-    
+
+	/**
+	 * Gets the resident claiming the townblock.
+	 * 
+	 * @return The resident claiming.
+	 */
+	public Resident getResident() {
+		return resident;
+	}
 }

@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -297,7 +296,7 @@ public class TownBlock extends TownyObject {
 
 		// Handle payment via a confirmation to avoid suprise costs.
 		if (cost > 0 && TownySettings.isUsingEconomy()) {
-			Confirmation confirmation = new Confirmation(() -> {
+			Confirmation.runOnAccept(() -> {
 		
 				try {
 					resident.getAccount().pay(cost, String.format("Plot set to %s", type));
@@ -313,9 +312,9 @@ public class TownBlock extends TownyObject {
 					}
 				
 				setType(type);
-			});
-			confirmation.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)));
-			ConfirmationHandler.sendConfirmation(BukkitTools.getPlayerExact(resident.getName()), confirmation);
+			})
+				.setTitle(String.format(TownySettings.getLangString("msg_confirm_purchase"), TownyEconomyHandler.getFormattedBalance(cost)))
+				.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 		// No payment required so just change the type.
 		} else {
 			if (this.isJail())

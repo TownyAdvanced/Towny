@@ -1115,7 +1115,6 @@ public class TownyPlayerListener implements Listener {
 	/**
 	 * Blocks jailed players using blacklisted commands.
 	 * @param event - PlayerCommandPreprocessEvent
-	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) {

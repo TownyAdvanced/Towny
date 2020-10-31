@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.towny.war.siegewar.objects.HeldItemsCombination;
@@ -62,7 +63,7 @@ public class TownySettings {
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
-	private static int uuidCount;
+	public static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -338,13 +339,11 @@ public class TownySettings {
 	}
 
 	private static String[] parseString(String str) {
-
 		return parseSingleLineString(str).split("@");
 	}
 
 	public static String parseSingleLineString(String str) {
-
-		return str.replaceAll("&", "\u00A7");
+		return NameUtil.translateColorCodes(str);
 	}
 	
 	public static SpawnLevel getSpawnLevel(ConfigNodes node)
@@ -413,7 +412,7 @@ public class TownySettings {
 			sendError(root.toLowerCase() + " from " + config.getString("language"));
 			return "";
 		}
-		return parseSingleLineString(data);
+		return StringMgmt.translateHexColors(parseSingleLineString(data));
 	}
 
 	public static String getConfigLang(ConfigNodes node) {
@@ -1038,6 +1037,11 @@ public class TownySettings {
 	public static String getSaveDatabase() {
 
 		return getString(ConfigNodes.PLUGIN_DATABASE_SAVE);
+	}
+
+	public static boolean isGatheringResidentUUIDS() {
+		
+		return getBoolean(ConfigNodes.PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS);
 	}
 
 	// SQL

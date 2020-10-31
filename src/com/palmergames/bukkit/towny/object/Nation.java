@@ -372,7 +372,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			boolean isCapital = town.isCapital();
 
 			remove(town);
-			TownyUniverse.getInstance().getDataSource().saveNation(this);
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -385,12 +384,10 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 						numResidents = newCapital.getNumResidents();
 					}
 
-				if (tempCapital != null) {
+				if (tempCapital != null)
 					setCapital(tempCapital);
-					TownyUniverse.getInstance().getDataSource().saveNation(this);
-				}
-
 			}
+			TownyUniverse.getInstance().getDataSource().saveNation(this);
 		}
 	}
 

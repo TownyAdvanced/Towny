@@ -27,14 +27,14 @@ public class TownySpigotMessaging {
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
 				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
-				String secondline = "/t invite accept " + invite.getSender().getName();
-				String thirdline = "/t invite deny " + invite.getSender().getName();
+				String secondline = "/towny:t invite accept " + invite.getSender().getName();
+				String thirdline = "/towny:t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
 				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
-				String secondline = "/n ally accept " + invite.getSender().getName();
-				String thirdline = "/n ally deny " + invite.getSender().getName();
+				String secondline = "/towny:n ally accept " + invite.getSender().getName();
+				String thirdline = "/towny:n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 		}
@@ -68,12 +68,12 @@ public class TownySpigotMessaging {
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = new TextComponent(ChatColor.GREEN + confirmline.replace('/', '[').concat("]"));
 		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_accept")).create()));
-		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, confirmline));
+		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + confirmline.replace("/","")));
 
 		// Create cancel button based on given params.
 		TextComponent cancelComponent = new TextComponent(ChatColor.GREEN + cancelline.replace('/', '[').concat("]"));
 		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel")).create()));
-		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cancelline));
+		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + cancelline.replace("/","")));
 		
 		// Use spigot to send the message.
 		player.spigot().sendMessage(new ComponentBuilder(firstline + "\n")
@@ -126,7 +126,7 @@ public class TownySpigotMessaging {
 			
 			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/town spawn " + town + " -ignore"));
+			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:town spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
 		}
@@ -234,7 +234,7 @@ public class TownySpigotMessaging {
 
 			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(hoverText).create()));
-			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nation spawn " + nation + " -ignore"));
+			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:nation spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
 		}

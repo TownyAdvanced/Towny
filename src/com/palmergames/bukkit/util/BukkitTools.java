@@ -3,6 +3,8 @@ package com.palmergames.bukkit.util;
 import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Resident;
+
 import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
@@ -14,7 +16,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,6 +74,35 @@ public class BukkitTools {
 		}
 		
 		return matchedPlayers;
+	}
+	
+	/**
+	 * Given a name this method should only return a UUID that is stored in the server cache,
+	 * without pinging Mojang servers.
+	 * 
+	 * @param name - Resident/Player name to get a UUID for.
+	 * @return UUID of player or null if the player is not in the cache.
+	 */
+	public static UUID getUUIDSafely(String name) {
+		if (hasPlayedBefore(name))
+			return getOfflinePlayer(name).getUniqueId();
+		else
+			return null;
+	}
+	
+	/**
+	 * Given a resident, return the UUID using their name as of last login.
+	 * Uses mojang API call. Do not abuse.
+	 * 
+	 * @param resident - who to return a UUID for. 
+	 * @return uuid - UUID of resident using the name at last login or null.
+	 * @throws IOException when Mojang returns HTTP Code 204.
+	 */
+	public static UUID getUUIDFromResident(Resident resident) throws IOException {
+
+		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
+		
+		return (object != null && object.containsKey("id")) ? UUID.fromString(MojangAPI.dashUUID(object.get("id").toString())) : null;
 	}
 	
 	public static Player getPlayerExact(String name) {
@@ -205,9 +238,22 @@ public class BukkitTools {
 		return (value * TownySettings.getTownBlockSize()) / 16;
 	}
 
+
+	@SuppressWarnings("deprecation")
+	public static boolean hasPlayedBefore(String name) {
+		return getServer().getOfflinePlayer(name).hasPlayedBefore();
+	}
+	
+	/**
+	 * Do not use without first using {@link #hasPlayedBefore(String)}
+	 * 
+	 * @param name - name of resident
+	 * @return OfflinePlayer
+	 */
+	@SuppressWarnings("deprecation")
 	public static OfflinePlayer getOfflinePlayer(String name) {
 
-		return Bukkit.getOfflinePlayer(getPlayerExact(name).getUniqueId());
+		return Bukkit.getOfflinePlayer(name);
 	}
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {

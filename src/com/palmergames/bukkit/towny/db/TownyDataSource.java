@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
+
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -60,11 +62,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadSiegeList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSieges() && loadResidents() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadSiegeList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadNations() && loadTowns() && loadSieges() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
-		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveSiegeList() && saveResidentList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveSieges() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+
+		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveSiegeList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveSieges() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -110,8 +113,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadPlotGroupList();
 
 	abstract public boolean loadPlotGroups();
-
-	abstract public boolean saveResidentList();
 
 	abstract public boolean saveTownList();
 
@@ -178,26 +179,26 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<>();
-		int hasUUID = 0;
-
+		TownySettings.setUUIDCount(0);
+		
 		for (Resident resident : new ArrayList<>(getResidents()))
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				toRemove.add(resident);
 				//return false;
 			} else {
-				if (resident.hasUUID() || resident.isNPC()) // TODO: Add UUIDs to NPC residents.
-					hasUUID++;					
+				if (resident.hasUUID())
+					TownySettings.uuidCount++;
+				else
+					GatherResidentUUIDTask.addResident(resident);
 			}
 
 		// Remove any resident which failed to load.
 		for (Resident resident : toRemove) {
 			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
-			removeResidentList(resident);
+			removeResident(resident);
 		}
 
-		System.out.println("[Towny] " + hasUUID + "/" + getResidents().size() + " residents have stored UUIDs.");
-		TownySettings.setUUIDCount(hasUUID);
 		return true;
 	}
 
@@ -307,8 +308,6 @@ public abstract class TownyDataSource {
 	abstract public List<Resident> getResidents(String[] names);
 
 	abstract public Resident getResident(String name) throws NotRegisteredException;
-
-	abstract public void removeResidentList(Resident resident);
 
 	abstract public void removeNation(Nation nation);
 
