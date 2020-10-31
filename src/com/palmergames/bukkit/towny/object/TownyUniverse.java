@@ -4,8 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
-import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -105,34 +103,6 @@ public class TownyUniverse {
 
 	public Hashtable<String, TownyWorld> getWorldMap() {
 		return new Hashtable<>(com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWorldMap());
-	}
-
-	public static boolean isWarTime() {
-
-		return TownyAPI.getInstance().isWarTime();
-	}
-
-//	public void startWarEvent() {
-//		com.palmergames.bukkit.towny.TownyUniverse.getInstance().startWarEvent();
-//	}
-
-	public void endWarEvent() {
-		com.palmergames.bukkit.towny.TownyUniverse.getInstance().endWarEvent();
-	}
-
-	public void clearWarEvent() {
-
-		getWarEvent().cancelTasks(BukkitTools.getScheduler());
-		setWarEvent(null);
-	}
-
-	//TODO: throw error if null
-	public War getWarEvent() {
-		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
-	}
-
-	public void setWarEvent(War event) {
-		com.palmergames.bukkit.towny.TownyUniverse.getInstance().setWarEvent(event);
 	}
 
 	public List<String> getTreeString(int depth) {

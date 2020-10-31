@@ -103,6 +103,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"war"
 	);
 
+	private static final List<String> adminWarTabCompletes = Arrays.asList(
+			"riot",
+			"townwar",
+			"civilwar",
+			"nationwar",
+			"worldwar"
+	);
+	
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
 		"new",
 		"add",
@@ -277,6 +285,30 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				}
 				break;
+			case "war":
+				if (args.length == 2) {
+					return NameUtil.filterByStart(adminWarTabCompletes, args[1]);
+				} else if (args.length >= 3) {
+					if (args.length == 3) {
+						switch (args[1].toLowerCase()) {
+							case "civilwar":
+								return getTownyStartingWith(args[2], "n");
+							case "riot":
+								return getTownyStartingWith(args[2], "t");
+							case "townwar":
+								return getTownyStartingWith(args[2], "t");
+							case "nationwar":
+								return getTownyStartingWith(args[2], "n");
+						}
+					} else if (args.length == 4) {
+						switch (args[1].toLowerCase()) {
+							case "townwar":
+								return getTownyStartingWith(args[3], "t");
+							case "nationwar":
+								return getTownyStartingWith(args[3], "n");
+						}
+					}
+				}
 			case "tpplot":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getWorlds()
@@ -2147,7 +2179,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					nations.add(nation);
 					nation = TownyUniverse.getInstance().getDataSource().getNation(split[2]);
 					nations.add(nation);
-
 				} catch (NotRegisteredException e) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
 				}
