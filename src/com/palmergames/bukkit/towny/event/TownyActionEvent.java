@@ -1,48 +1,19 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 /**
  * 
  * @author LlmDl
  */
-public interface TownyActionEvent {
+public abstract class TownyActionEvent extends Event{
 
-	/**
-	 * @return Whether the event has been cancelled.
-	 */
-	public boolean isCancelled();
+	public abstract void setCancelled(boolean b);
 
-	/**
-	 * @param boolean Set the event to cancelled.
-	 */
-	public void setCancelled(boolean cancelled);
+	public abstract void setMessage(String blockErrMsg);
 
-	/**
-	 * @return null or the message shown to players when their action is cancelled.
-	 */
-	public String getMessage();
+	public abstract boolean isCancelled();
 
-	/**
-	 * @param message Message shown to players when their action is cancelled.
-	 */
-	public void setMessage(String message);
-
-	/**
-	 * @return Material of the block being used in the event.
-	 */
-	public Material getMaterial();
-	
-	/**
-	 * @return Location of the event.
-	 */
-	public Location getLocation();
-
-	/**
-	 * @return player involved in the event.
-	 */
-	public Player getPlayer();
+	public abstract String getMessage();
 	
 }

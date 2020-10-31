@@ -4,14 +4,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
  * 
  * @author LlmDl
  */
-public class TownyDestroyEvent extends Event implements Cancellable, TownyActionEvent {
+public class TownyDestroyEvent extends TownyActionEvent implements Cancellable {
 
 	private Player player;
 	private Location loc;
