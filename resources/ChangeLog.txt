@@ -5173,3 +5173,4 @@ v0.92.0.11:
       - BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS 
     - Overall, the benefits are quite large. It is now much, much safer to give someone switch and item_use perms without having to worry about them breaking redstone builds, stripping logs and dyeing your signs.
   - Add BookFactory.
+  - Fix /tw toggle friendlyfire showing feedback for the wrong world setting.
