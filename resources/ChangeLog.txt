@@ -5174,3 +5174,5 @@ v0.92.0.11:
     - Overall, the benefits are quite large. It is now much, much safer to give someone switch and item_use perms without having to worry about them breaking redstone builds, stripping logs and dyeing your signs.
   - Add BookFactory.
   - Fix /tw toggle friendlyfire showing feedback for the wrong world setting.
+  - Fix sync loading chunk on teleport warmup, courtesy of silverwolfg11 with PR #4408.
+    - Closes #4391.
