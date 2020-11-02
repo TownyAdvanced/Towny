@@ -45,18 +45,15 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				break;
 			if (currentTime > resident.getTeleportRequestTime() + (TownySettings.getTeleportWarmupTime() * 1000)) {
 				resident.clearTeleportRequest();
-				// Make sure the chunk we teleport to is loaded.
-				Chunk chunk = resident.getTeleportDestination().getWorld().getChunkAt(resident.getTeleportDestination().getBlock());
-				if (!chunk.isLoaded()) {
-					chunk.load();
-				}
+				
 				Player p = TownyAPI.getInstance().getPlayer(resident);
-				if (p == null) {
-					return;
+				// Only teleport & add cooldown if player is valid
+				if (p != null) {
+					PaperLib.teleportAsync(p, resident.getTeleportDestination(), TeleportCause.COMMAND);
+					if (TownySettings.getSpawnCooldownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 				}
-				PaperLib.teleportAsync(p, resident.getTeleportDestination(), TeleportCause.COMMAND);
-				if (TownySettings.getSpawnCooldownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
+				
 				teleportQueue.poll();
 			} else {
 				break;
