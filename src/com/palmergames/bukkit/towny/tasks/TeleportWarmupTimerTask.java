@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
 import io.papermc.lib.PaperLib;
 
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;

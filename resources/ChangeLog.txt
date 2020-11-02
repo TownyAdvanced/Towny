@@ -5176,3 +5176,4 @@ v0.92.0.11:
   - Fix /tw toggle friendlyfire showing feedback for the wrong world setting.
   - Fix sync loading chunk on teleport warmup, courtesy of silverwolfg11 with PR #4408.
     - Closes #4391.
+  - Move PlayerKilledPlayerEvent to event/player/ package.
