@@ -5,10 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
 /**
  * A util for Shop Plugin Developers to use,
@@ -54,8 +54,7 @@ public class ShopPlotUtil {
 	 * @return true if the player can build and the plot is a shop
 	 */
 	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
-		boolean build = PlayerCacheUtil.getCachePermission(player, location, Material.DIRT, ActionType.BUILD);
-		if (build && isShopPlot(location))
+		if (TownyActionEventExecutor.canBuild(player, location, Material.DIRT) && isShopPlot(location))
 			return true;
 		else return false;
 	}

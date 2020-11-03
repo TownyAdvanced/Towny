@@ -8,11 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 
 /**
  * Handle events for all Vehicle related events
@@ -42,66 +39,29 @@ public class TownyVehicleListener implements Listener {
 		if (event.getAttacker() instanceof Player) {
 			
 			Player player = (Player) event.getAttacker();
-			boolean bBreak = true;
 			Material vehicle = null;
 
+			/*
+			 * Substitute a Material for the Entity so we can run a destroy test against it.
+			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
+			 */
 			switch (event.getVehicle().getType()) {
-
-			case MINECART:
-				vehicle = Material.MINECART;
-				break;
-			
-			case MINECART_FURNACE:
-				vehicle = Material.FURNACE_MINECART;
-				break;
-			
-			case MINECART_HOPPER:
-				vehicle = Material.HOPPER_MINECART;
-				break;
-				
-			case MINECART_CHEST:
-				vehicle = Material.CHEST_MINECART;
-				break;
-				
-			case MINECART_MOB_SPAWNER:
-				vehicle = Material.MINECART;
-				break;
-			
-			case MINECART_COMMAND:
-				vehicle = Material.COMMAND_BLOCK_MINECART;
-				break;
-			
-			case MINECART_TNT:
-				vehicle = Material.TNT_MINECART;
-				break;
-				
-			default:
-				break;
-
+				case MINECART:
+				case MINECART_FURNACE:
+				case MINECART_HOPPER:
+				case MINECART_CHEST:
+				case MINECART_MOB_SPAWNER:
+				case MINECART_COMMAND:
+				case MINECART_TNT:
+					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
+					break;
+				default:
+					break;
 			}
-			
-			if ((vehicle != null) && (!TownySettings.isItemUseMaterial(vehicle.toString())))
-				return;
-
-			// Get permissions (updates if none exist)
-			bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), vehicle, TownyPermission.ActionType.ITEM_USE);
 
 			if (vehicle != null) {
-
-				// Allow the removal if we are permitted
-				if (bBreak)
-					return;
-
-				event.setCancelled(true);
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				if (cache.hasBlockErrMsg()) {
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-				}
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
 		}
 	}

@@ -5,20 +5,19 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.ArraySort;
@@ -84,6 +83,9 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
+	 * EntityDamageByEntity events involving 0 player interaction has
+	 * already been handled in the {@link #nonPlayerEntityDamageByEntity(EntityDamageByEntityEvent)} method.
+	 * 
 	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -93,6 +95,9 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
 		
@@ -251,133 +256,90 @@ public class TownyEntityListener implements Listener {
 				if (!TownyAPI.getInstance().getTownBlock(loc).hasResident())
 					return;	
 
-				Player target = (Player)event.getTarget();
-				if (!PlayerCacheUtil.getCachePermission(target, loc, Material.DIRT, TownyPermission.ActionType.DESTROY)) {
-					event.setCancelled(true);
-				}
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) event.getTarget(), loc, Material.DIRT));
 			}
 		}
 	}
 	
 	/**
+	 * Non-player involved cases of entity damage.
+	 * 
 	 * Prevent explosions from hurting non-living entities in towns.
 	 * Includes: Armorstands, itemframes, animals, endercrystals, minecarts
-	 * 
-	 * Prevent explosions from hurting players if Event War is active and
-	 * WarzoneBlockPermissions' explosions tag is set to true.
 	 * 
 	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+	public void nonPlayerEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (plugin.isError()) {
 				return;
 		}
 		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+
+		/*
+		 * Bail out if a player is involved in the damage.
+		 */
+		if ((event.getDamager() instanceof Player) ||
+			(event.getEntity() instanceof Player) ||
+			((event.getDamager() instanceof Projectile) && ((Projectile)event.getDamager()) instanceof Player)
+			) return;
+		System.out.println("nonplayerdamage");
+			
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld = null;
 		
-		Entity entity = event.getEntity();		
-		String damager = event.getDamager().getType().name();
+		Entity entity = event.getEntity();
+		Entity damager= event.getDamager();
 		
 		try {
 			townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
-		
-		// Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.  
-		if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
-			event.setCancelled(true);			
-		
-		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
-		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
-		
-		// Entities requiring special protection.
+
+		/*
+		 * Entities requiring special protection.
+		 * 
+		 * Whether because they are fragile or because they are specifically in protected lists.
+		 */
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof EnderCrystal 
 				|| (TownySettings.getEntityTypes().contains("Animals") && entity instanceof Animals) // Only protect these entities if servers specifically add them to the protections.
 				|| (TownySettings.getEntityTypes().contains("Villager") && entity instanceof Villager) // Only protect these entities if servers specifically add them to the protections.
 				){
 			
 			// Handle exploding causes of damage.
-		    if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
-                damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
-								
-				if (!locationCanExplode(townyWorld, entity.getLocation())) {
-					event.setCancelled(true);
-					return;
-				} else {
-					return;
-				}
+		    if (EntityTypeUtil.isExplosive(damager.getType()) && !locationCanExplode(townyWorld, entity.getLocation())) {
+				event.setCancelled(true);
+				return;
 			}
 		    
-		    if (damager.equals("LIGHTNING")) {
+		    if (damager.getType() == EntityType.LIGHTNING) {
 		    	// Other than natural causes, as of the introduction of Tridents with the Channeling enchantment,
 		    	// lightning can be summoned by anyone at anything. Until we can discern the cause of the lightning
 		    	// we will block all damage to the above entities requiring special protection.
-		    	// Note 1: Some day we might be able to get the cause of the lightning.
+		    	// TODO: use the LightningStrikeEvent for this very thing.
 				if (!locationCanExplode(townyWorld, entity.getLocation())) {
 					event.setDamage(0);
 					event.setCancelled(true);
-					return;
-				} else {
-					return;
 				}
+				return;
 		    }
 
-		    // Handle arrows and projectiles that do not explode.
+		    /*
+		     * Prevents projectiles fired by non-players harming the above entities.
+		     * Could be a monster or it could be a dispenser.
+		     */
 			if (event.getDamager() instanceof Projectile) {
-				
-				try {
-					townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-				Object remover = event.getDamager();
-				remover = ((Projectile) remover).getShooter();
-				if (remover instanceof Monster) {
-					event.setCancelled(true);	
-				} else if (remover instanceof Player) {
-					Player player = (Player) remover;
-					if (TownyAPI.getInstance().isWilderness(entity.getLocation()))
-						return;
-			
-					// Get destroy permissions (updates if none exist)
-					//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.ARMOR_STAND, TownyPermission.ActionType.DESTROY);
-
-					// Allow the removal if we are permitted
-					if (bDestroy)
-						return;
-
-					event.setCancelled(true);
-				}
+				event.setCancelled(true);	
 			}
-			
-			// Handle player causes against entities that should be protected.
-			if (event.getDamager() instanceof Player) {
-				Player player = (Player) event.getDamager();
-				boolean bDestroy = false;
-				if (entity instanceof EnderCrystal) {
-					// Test if a player can break a grass block here.
-					bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
-					// If destroying is allowed then return before we cancel.
-					if (bDestroy)
-						return;
-					// Not able to destroy grass so we cancel event.
-					event.setCancelled(true);
-				}
-			}
+
 		}
-		// As of July 25, 2019 there is no way to get shooter of firework via crossbow.
-		// TODO: Check back here https://hub.spigotmc.org/jira/browse/SPIGOT-5201
-		if (damager.equals("FIREWORK"))
-			if (!locationCanExplode(townyWorld, entity.getLocation()) || CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(entity.getLocation())))
-				event.setCancelled(true);
 			
 	}
 
-	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
@@ -567,6 +529,7 @@ public class TownyEntityListener implements Listener {
 
 	/**
 	 * Handles pressure plates (switch use) not triggered by players.
+	 * example: animals or a boat with a player in it.
 	 * 
 	 * @param event - EntityInteractEvent
 	 */
@@ -577,12 +540,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
 		List<Entity> passengers = entity.getPassengers();
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
-			return;
 
 		/*
 		 * Allow players in vehicles to activate pressure plates if they
@@ -594,11 +557,11 @@ public class TownyEntityListener implements Listener {
 				if (!passenger.getType().equals(EntityType.PLAYER)) 
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
-					if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null))
-						return;
+					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType()));
+					return;
 				}
 			}
-
 		}
 
 		// Prevent creatures triggering stone pressure plates
@@ -963,36 +926,17 @@ public class TownyEntityListener implements Listener {
 				Player player = (Player) remover;
 				Material mat = null;
 				switch (event.getEntity().getType()) {
-				case PAINTING:
-					mat = Material.PAINTING;
-					break;
-				case LEASH_HITCH:
-					mat = Material.LEAD;
-					break;
-				case ITEM_FRAME:
-					mat = Material.ITEM_FRAME;
-					break;
-				default:
-					mat = Material.GRASS_BLOCK;
+					case PAINTING:
+					case LEASH_HITCH:
+					case ITEM_FRAME:
+						mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
+						break;
+					default:
+						mat = Material.GRASS_BLOCK;
 				}
-					
 
-				// Get destroy permissions (updates if none exist)
-				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), mat, TownyPermission.ActionType.DESTROY);
-
-				// Allow the removal if we are permitted
-				if (bDestroy)
-					return;
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				event.setCancelled(true);
-
-				if (cache.hasBlockErrMsg())
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
 
 			} else {
 				// Explosions are blocked in this plot
@@ -1042,18 +986,11 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		Entity hanging = event.getEntity();
-
-		if (!TownyAPI.getInstance().isTownyWorld(hanging.getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		Player player = event.getPlayer();
-		
-		// Get build permissions (updates if none exist)
-		boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.BUILD);
-
-		// Cancel based on above Cache query.
-		event.setCancelled(!bBuild);
+		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING));
 	}
 
 	/**

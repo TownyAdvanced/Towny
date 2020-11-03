@@ -5152,3 +5152,29 @@ v0.92.0.11:
     - Opens GUI showing all of the wilds plot materials/materials allowed to be used in the wilderness.  
   - API: Added PlayerKilledPlayerEvent.
     - Returns killed and victim Player and Resident objects as well as the location
+  - API: New Action Events.
+    - Add TownyBuildEvent
+    - Add TownyItemuseEvent
+    - Add TownyDestroyEvent
+    - Add TownySwitchEvent
+    - Events will tell another plugin (or internally for war purposes) what Towny has already decided it will do in regards to cancelling an action, then let the listener change the outcome and send a feedback message if it is a cancellation.
+  - Create Cancellable events when Towny makes decisions about PlotPermissions / Overhaul Item/Switch use.
+    - On top of the above events, Towny now has a whole new system of determining switches/item_use materials.
+    - Many things that used to be items are now build/destroy tests instead.
+      - Using a flint and steel is now considered a build fire action.
+      - Emptying a bucket is a build action.
+      - Filling a bucket is a destroy action.
+      - Altering redstone repeaters is a destroy action.
+      - And many others....
+    - It is highly recommended you delete the switch_ids and item_use_ids lines in the config and let towny re-make them with the new defaults.
+      - New itemuse list is 5 long, instead of 48.
+      - New switch list is 30 long, instead of 128.
+    - There are now groups of items that can be used in the itemuse/switch lists, which currently are:    
+      - BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS 
+    - Overall, the benefits are quite large. It is now much, much safer to give someone switch and item_use perms without having to worry about them breaking redstone builds, stripping logs and dyeing your signs.
+  - Add BookFactory.
+  - Fix /tw toggle friendlyfire showing feedback for the wrong world setting.
+  - Fix sync loading chunk on teleport warmup, courtesy of silverwolfg11 with PR #4408.
+    - Closes #4391.
+  - Move PlayerKilledPlayerEvent to event/player/ package.
+  - Fix Javadoc Errors (Again...) courtesy of TheFlagCourier with PR #4411.

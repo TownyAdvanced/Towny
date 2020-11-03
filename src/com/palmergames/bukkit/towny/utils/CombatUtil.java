@@ -2,26 +2,26 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
@@ -108,6 +108,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
 
 		// World using Towny
@@ -157,112 +158,101 @@ public class CombatUtil {
 					return !event.isCancelled();
 				}
 
+			/*
+			 * Defender is not a player.
+			 */
 			} else {
 				/*
-				 * Remove animal killing prevention start
-				 */
-				
-				
-				/*
-				 * Defender is not a player so check for PvM
+				 * First test protections for Non-Player defenders who are being protected
+				 * because they are specifically in Town-Claimed land.
 				 */
 				if (defenderTB != null) {
-					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
-						if (PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT, ActionType.DESTROY))
-							return false;
-					}
+					
+					/*
+					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
+					 */
+					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
+						return (!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT));
+
+					/*
+					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
+					 */
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
-					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) {
-						
-						/*
-						 * Only allow the player to kill protected entities etc,
-						 * if they are from the same town
-						 * and have destroy permissions (dirt) in the defending
-						 * TownBlock
-						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT, ActionType.DESTROY))
-							return true;
-					}
+					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) 						
+						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
+
 				}
-
-				/*
-				 * Remove prevention end
-				 */
-
+				
 				/*
 				 * Protect specific entity interactions (faked with Materials).
+				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material block = null;
+				Material material = null;
 
 				switch (defendingEntity.getType()) {
-	
+					/*
+					 * Below are the entities we specifically want to protect with this test.
+					 * Any other entity will mean that block is still null and will not be
+					 * tested with a destroy test.
+					 */
 					case ITEM_FRAME:
-						block = Material.ITEM_FRAME;
-						break;
-	
 					case PAINTING:
-						block = Material.PAINTING;
-						break;
-	
+					case ARMOR_STAND:
+					case ENDER_CRYSTAL:
 					case MINECART:
-						block = Material.MINECART;
-						break;
-						
 					case MINECART_CHEST:
-						block = Material.CHEST_MINECART;
-						break;
-					
 					case MINECART_FURNACE:
-						block = Material.FURNACE_MINECART;
-						break;
-	
 					case MINECART_COMMAND:
-						block = Material.COMMAND_BLOCK_MINECART;
-						break;
-	
 					case MINECART_HOPPER:
-						block = Material.HOPPER_MINECART;
+						material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 						break;
 					
 					default:
 						break;
 				}
 
-				if (block != null) {
-					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
-
-					if (!bDestroy) {
-
-						/*
-						 * Fetch the players cache
-						 */
-						PlayerCache cache = plugin.getCache(attackingPlayer);
-
-						if (cache.hasBlockErrMsg())
-							TownyMessaging.sendErrorMsg(attackingPlayer, cache.getBlockErrMsg());
-
-						return true;
-					}
-
+				if (material != null) {
+					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
 				}
+			}
 
+		/*
+		 * This is not an attack by a player....
+		 */
+		} else {
+
+			/*
+			 * If Defender is a player, Attacker is not.
+			 */
+			if (defendingPlayer != null) {
+
+				/*
+				 * If attackingEntity is a tamed Wolf and...
+				 * Defender is a player and...
+				 * Either player or wolf is in a non-PVP area
+				 * 
+				 * Prevent pvp and remove Wolf targeting.
+				 */
+				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
+					((Wolf) attackingEntity).setTarget(null);
+					return true;
+				}
+				
+				/*
+				 * Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.
+				 */
+				if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && attackingEntity.getType() == EntityType.PRIMED_TNT)
+					return true;
+				
+			/*
+			 * DefendingEntity is not a player.
+			 * This is now non-player vs non-player damage.
+			 * This should be unreachable as we are already parsing out
+			 * non-player involved combat at TownyEntityListener#nonPlayerEntityDamageByEntity.
+			 */
 			}
 		}
-		
-		/*
-		 * If attackingEntity is a tamed Wolf and...
-		 * Defender is a player and...
-		 * Either player or wolf is in a non-PVP area
-		 * 
-		 * Prevent pvp and remove Wolf targeting.
-		 */
-		if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && defendingPlayer != null && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
-			((Wolf) attackingEntity).setTarget(null);
-			return true;
-		}
-		
-
 		return false;
 	}
 

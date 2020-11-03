@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,6 +17,17 @@ public class PlayerKilledPlayerEvent extends Event {
 	private Resident victimRes;
 	private Location location;
 	
+	/**
+	 * An event fired from a EventPriority.MONITOR listener. 
+	 * Do not use to un-kill someone or you're likely to cause 
+	 * issues with other plugins.
+	 * 
+	 * @param killer - Player that killed the victim.
+	 * @param victim - Player that died.
+	 * @param killerRes - Resident that killed the victim.
+	 * @param victimRes - Resident that died.
+	 * @param location - Location of the player that died.
+	 */
 	public PlayerKilledPlayerEvent(Player killer, Player victim, Resident killerRes, Resident victimRes, Location location) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.killer = killer;

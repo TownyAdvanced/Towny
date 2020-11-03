@@ -44,7 +44,16 @@ public class PlayerCacheUtil {
 		PlayerCacheUtil.plugin = plugin;
 	}
 
-	
+	/**
+	 * Returns the PlayerCache of a Player.
+	 * @param player The {@link Player} for which to fetch the {@link PlayerCache}.
+	 * @return PlayerCache
+	 */
+	public static PlayerCache getCache(Player player) {
+		
+		return plugin.getCache(player);
+	}
+
 	/**
 	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
 	 * at this location for the specified item id.

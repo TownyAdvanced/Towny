@@ -317,12 +317,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "claimable", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "usingtowny", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "warallowed", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "pvp/forcepvp", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "friendlyfire", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "explosion/forceexplosion", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "fire/forcefire", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/worldmobs", ""));
-				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim", ""));
-				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertentityexpl/revertblockexpl", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertentityexpl/revertblockexpl", ""));
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
@@ -399,7 +401,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
 
 				Globalworld.setFriendlyFire(choice.orElse(!Globalworld.isFriendlyFireEnabled()));
-				msg = Translation.of("msg_changed_world_setting", "Friendly Fire", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("enabled") : Translation.of("disabled"));
+				msg = Translation.of("msg_changed_world_setting", "Friendly Fire", Globalworld.getName(), Globalworld.isFriendlyFireEnabled() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
