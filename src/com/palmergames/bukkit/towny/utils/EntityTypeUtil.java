@@ -22,7 +22,8 @@ public class EntityTypeUtil {
 			EntityType.MINECART_TNT, 
 			EntityType.PRIMED_TNT, 
 			EntityType.WITHER, 
-			EntityType.WITHER_SKULL));
+			EntityType.WITHER_SKULL,
+			EntityType.ENDER_CRYSTAL));
 
 	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
 

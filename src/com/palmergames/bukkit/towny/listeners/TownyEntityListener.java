@@ -26,13 +26,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -47,6 +43,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -82,9 +80,6 @@ public class TownyEntityListener implements Listener {
 
 	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
-	 * 
-	 * EntityDamageByEntity events involving 0 player interaction has
-	 * already been handled in the {@link #nonPlayerEntityDamageByEntity(EntityDamageByEntityEvent)} method.
 	 * 
 	 * @param event - EntityDamageByEntityEvent
 	 */
@@ -263,15 +258,12 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Non-player involved cases of entity damage.
-	 * 
-	 * Prevent explosions from hurting non-living entities in towns.
-	 * Includes: Armorstands, itemframes, animals, endercrystals, minecarts
-	 * 
-	 * @param event - EntityDamageByEntityEvent
+	 * Prevent explosions from hurting non-player entities.
+	 *  
+	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void nonPlayerEntityDamageByEntity(EntityDamageByEntityEvent event) {
+	public void onNonPlayerEntityTakesExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 				return;
 		}
@@ -279,65 +271,19 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		/*
-		 * Bail out if a player is involved in the damage.
-		 */
-		if ((event.getDamager() instanceof Player) ||
-			(event.getEntity() instanceof Player) ||
-			((event.getDamager() instanceof Projectile) && ((Projectile)event.getDamager()) instanceof Player)
-			) return;
-		System.out.println("nonplayerdamage");
-			
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (event.getEntity() instanceof Player)
+			return;
+
 		TownyWorld townyWorld = null;
-		
-		Entity entity = event.getEntity();
-		Entity damager= event.getDamager();
-		
 		try {
-			townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
 
-		/*
-		 * Entities requiring special protection.
-		 * 
-		 * Whether because they are fragile or because they are specifically in protected lists.
-		 */
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof EnderCrystal 
-				|| (TownySettings.getEntityTypes().contains("Animals") && entity instanceof Animals) // Only protect these entities if servers specifically add them to the protections.
-				|| (TownySettings.getEntityTypes().contains("Villager") && entity instanceof Villager) // Only protect these entities if servers specifically add them to the protections.
-				){
-			
-			// Handle exploding causes of damage.
-		    if (EntityTypeUtil.isExplosive(damager.getType()) && !locationCanExplode(townyWorld, entity.getLocation())) {
-				event.setCancelled(true);
-				return;
-			}
-		    
-		    if (damager.getType() == EntityType.LIGHTNING) {
-		    	// Other than natural causes, as of the introduction of Tridents with the Channeling enchantment,
-		    	// lightning can be summoned by anyone at anything. Until we can discern the cause of the lightning
-		    	// we will block all damage to the above entities requiring special protection.
-		    	// TODO: use the LightningStrikeEvent for this very thing.
-				if (!locationCanExplode(townyWorld, entity.getLocation())) {
-					event.setDamage(0);
-					event.setCancelled(true);
-				}
-				return;
-		    }
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !locationCanExplode(townyWorld, event.getEntity().getLocation()))
+			event.setCancelled(true);
 
-		    /*
-		     * Prevents projectiles fired by non-players harming the above entities.
-		     * Could be a monster or it could be a dispenser.
-		     */
-			if (event.getDamager() instanceof Projectile) {
-				event.setCancelled(true);	
-			}
-
-		}
-			
 	}
 
 	/**
@@ -917,7 +863,10 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		
+
+		/*
+		 * It's a player or an entity (probably an explosion)
+		 */
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 			Object remover = evt.getRemover();
@@ -944,24 +893,31 @@ public class TownyEntityListener implements Listener {
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
-
-			} else {
+			} else if (remover instanceof Monster) {
+				/*
+				 * Probably a skeleton, cancel the break if it is in a town.
+				 */
+				if (!TownyAPI.getInstance().isWilderness(hanging.getLocation()))
+					event.setCancelled(true);
+			}
+		
+			if (event.getCause() == RemoveCause.EXPLOSION) {
 				// Explosions are blocked in this plot
 				if (!locationCanExplode(townyWorld, hanging.getLocation())) {
 					event.setCancelled(true);
 				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
 				} else {
 					TownBlock tb = TownyAPI.getInstance().getTownBlock(hanging.getLocation());
-					if (tb == null) {
-					    // We're in the wilderness because the townblock is null;
-						if (townyWorld.isExpl())
-							if (townyWorld.isUsingPlotManagementWildEntityRevert() && (remover != null))
-								if (townyWorld.isProtectingExplosionEntity((Entity)remover))
-									event.setCancelled(true);
-					}
+					// We're in the wilderness because the townblock is null and we have a remover.
+					if (tb == null && remover != null)
+					    if (townyWorld.isExpl() && townyWorld.isUsingPlotManagementWildEntityRevert() && townyWorld.isProtectingExplosionEntity((Entity)remover))
+							event.setCancelled(true);
 				}
-		}
+			}
 
+		/*
+		 * Probably a case of a block explosion/created explosion with no Entity.
+		 */
 		} else {
 
 			switch (event.getCause()) {
