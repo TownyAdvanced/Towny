@@ -780,7 +780,7 @@ msg_no_one_to_evict: 'No hay nadie a quien desalojar en este terreno.'
 
 # Añadido en la versión 0.46
 nation_help_10: 'Teletransportarse al spawn de la nación.'
-msg_nation_spawn_warmup: '&bIniciando teletransportacion...
+msg_nation_spawn_warmup: '&bIniciando teletransportacion...'
 msg_set_nation_spawn: '&bSe cambió el spawn de la nación de forma exitosa.'
 msg_err_cant_afford_tp_nation: '&cNo puedes pagar el teletransporte a %s.'
 msg_err_nationspawn_has_not_been_set: '&cLa nación no ha establecido un spawn.'
