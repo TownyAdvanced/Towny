@@ -259,22 +259,19 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Prevent explosions from hurting non-player entities.
+	 * Prevent explosions from hurting entities.
 	 * 
 	 * Doesn't stop damage to vehicles or hanging entities.
 	 *  
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onNonPlayerEntityTakesExplosionDamage(EntityDamageEvent event) {
+	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 				return;
 		}
 		
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
-			return;
-
-		if (event.getEntity() instanceof Player)
 			return;
 
 		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !ExplosionUtil.locationCanExplode(event.getEntity().getLocation())) {
@@ -700,40 +697,25 @@ public class TownyEntityListener implements Listener {
 		 */
 		} else {
 						
+			boolean revertingThisEntity = townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity);
 			int count = 0;
-
+			List<Block> toKeep = new ArrayList<Block>();
+			
 			for (Block block : blocks) {
-				Coord coord = Coord.parseCoord(block.getLocation());
 				count++;
+
+				if (!ExplosionUtil.locationCanExplode(block.getLocation()))
+					continue;
+				else 
+					toKeep.add(block);
 				
-				TownBlock townBlock = null;
-
-				// Has to be in a town.
-				if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
-					townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());
-
-					// If explosions are off, or it's wartime and explosions are off
-					// and the towns has no nation
-					if (!townyWorld.isForceExpl() && !townBlock.getPermissions().explosion) {
-						if (event.getEntity() != null){
-							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
-							event.setCancelled(true); 
-							return;
-						}
-					}
-				} else {
-					// Wilderness explosion regeneration
-					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
-							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
-						}
-					} else {
-						event.setCancelled(true);
-						return;
-					}
+				if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisEntity) {
+					event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
 				}
 			}
-			
+
+			event.blockList().clear();
+			event.blockList().addAll(toKeep);
 		}
 
 		
