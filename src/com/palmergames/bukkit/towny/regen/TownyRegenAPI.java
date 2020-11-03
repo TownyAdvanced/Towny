@@ -503,8 +503,9 @@ public class TownyRegenAPI {
 	/**
 	 * Called from various explosion listeners.
 	 * 
-	 * @param block - Block which is being exploded.
+	 * @param block - {@link Block} which is being exploded.
 	 * @param count - int for setting the delay to do one block at a time.
+	 * @param world - {@link TownyWorld} for where the regen is being triggered.
 	 * 
 	 * @return true if the protectiontask was begun successfully. 
 	 */

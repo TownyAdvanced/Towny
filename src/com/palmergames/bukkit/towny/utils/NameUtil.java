@@ -52,6 +52,9 @@ public class NameUtil {
 	}
 
 	/**
+	 * Legacy call for translating color codes.
+	 * @param str String to parse.
+	 * @return Passes the string to the new method in deprecation note.   
 	 * @deprecated as of 0.96.2.20. Use {@link Colors#translateColorCodes(String)} instead
 	 */
 	public static String translateColorCodes(String str) {
