@@ -42,10 +42,6 @@ public class BookFactory {
 	 * Heavily inspired by
 	 * https://www.spigotmc.org/threads/book-multipage-wrapping-text.383001/#post-3474541
 	 * 
-	 * Quirk: Minecraft spaces are actually 3 pixels wide but Bukkit thinks they're
-	 * 2 pixles. So that's why we have to track spaces. TODO:
-	 * https://hub.spigotmc.org/jira/browse/SPIGOT-6213
-	 * 
 	 * @param rawText
 	 * @return lines as a List of Strings.
 	 */
@@ -80,13 +76,16 @@ public class BookFactory {
 						}
 
 						/*
-						 * Required because Bukkit believes a space is only 2 pixels wide while it is in
-						 * fact 3 pixels wide.
+						 * Required because Bukkit builds older than Nov 3 2020 (MC 1.16.3)
+						 * believe a space is only 2 pixels wide while it is in fact 3 pixels wide.
 						 */
-						int spaces = 1;
-						for (int i = 0; i < line.length(); ++i)
-							if (line.charAt(i) == ' ')
-								spaces++;
+						int spaces = 0; // Number of pixels to add to the line length test later on.
+						if (font.getWidth(" ") == 2) {
+							spaces = 1; // Because one space will be added in the test.
+							for (int i = 0; i < line.length(); ++i)
+								if (line.charAt(i) == ' ')
+									spaces++;
+						}
 
 						// Current line + word is too long to be one line
 						if (font.getWidth(line + " " + word) + spaces > maxLineWidth) {
