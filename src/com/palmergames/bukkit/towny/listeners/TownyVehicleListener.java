@@ -8,8 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 
 /**
  * Handle events for all Vehicle related events
@@ -25,8 +27,6 @@ public class TownyVehicleListener implements Listener {
 
 		plugin = instance;
 	}
-
-	
 	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
@@ -36,6 +36,17 @@ public class TownyVehicleListener implements Listener {
 			return;
 		}
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
+			return;
+
+		if (event.getAttacker() == null) {  // Probably a respawn anchor or a TNT minecart.
+			event.setCancelled(!ExplosionUtil.locationCanExplode(event.getVehicle().getLocation()));
+			return;
+		}
+		
+		/*
+		 * Note: TNT and Fireballs are considered Players by the API in this instance.
+		 */
 		if (event.getAttacker() instanceof Player) {
 			
 			Player player = (Player) event.getAttacker();
@@ -53,6 +64,7 @@ public class TownyVehicleListener implements Listener {
 				case MINECART_MOB_SPAWNER:
 				case MINECART_COMMAND:
 				case MINECART_TNT:
+				case BOAT:
 					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 					break;
 				default:
@@ -63,6 +75,10 @@ public class TownyVehicleListener implements Listener {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
+		} else {
+			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !ExplosionUtil.locationCanExplode(event.getVehicle().getLocation()))
+				event.setCancelled(true);
 		}
+			
 	}
 }

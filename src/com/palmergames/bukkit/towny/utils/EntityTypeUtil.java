@@ -111,6 +111,10 @@ public class EntityTypeUtil {
 		case MINECART_TNT:
 			material = Material.TNT_MINECART;
 			break;
+		
+		case BOAT:
+			material = Material.OAK_BOAT;
+			break;
 		}
 					
 		return material;

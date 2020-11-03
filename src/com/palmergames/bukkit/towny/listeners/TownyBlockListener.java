@@ -8,9 +8,11 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Location;
@@ -298,7 +300,7 @@ public class TownyBlockListener implements Listener {
 		for (Block block : blocks) {
 			count++;
 			
-			if (!locationCanExplode(townyWorld, block.getLocation())) {
+			if (!ExplosionUtil.locationCanExplode(block.getLocation())) {
 				event.setCancelled(true);
 				return;
 			}
@@ -319,37 +321,38 @@ public class TownyBlockListener implements Listener {
 	 */
 	public boolean locationCanExplode(TownyWorld world, Location target) {
 
+		/*
+		 * Handle occasions in the wilderness first.
+		 */
+		if (TownyAPI.getInstance().isWilderness(target)) {
+			if (world.isForceExpl() || world.isExpl())
+				return true;
+			if (!world.isExpl())
+				return false;				
+		}
+
+		/*
+		 * Must be inside of a town.
+		 */
 		Coord coord = Coord.parseCoord(target);
 
+		/*
+		 * Stops any type of exploding damage and block damage if wars are not allowing explosions.
+		 */
 		if (world.isWarZone(coord) && !WarZoneConfig.isAllowingExplosionsInWarZone()) {
 			return false;
 		}
-		TownBlock townBlock = null;
-		boolean isNeutral = false;
-		townBlock = TownyAPI.getInstance().getTownBlock(target);
-		if (townBlock != null && townBlock.hasTown())
-			if (!War.isWarZone(townBlock.getWorldCoord()))
-				isNeutral = true;
 
-		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
-			isNeutral = !world.isExpl();
-			if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return false;				
-			if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return true;	
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(target);
+		Town town = TownyAPI.getInstance().getTown(target);
+
+		if (TownyAPI.getInstance().isWarTime() && WarZoneConfig.explosionsBreakBlocksInWarZone() && War.isWarZone(townBlock.getWorldCoord())){
+			return true;				
 		}
+		if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && WarZoneConfig.isAllowingExplosionsInWarZone() && !town.hasNation() && !town.isBANG()))
+			return false;
+
 		
-		try {			
-			if (world.isUsingTowny() && !world.isForceExpl()) {
-				if (TownyAPI.getInstance().isWarTime() && WarZoneConfig.explosionsBreakBlocksInWarZone() && !isNeutral){
-					return true;				
-				}
-				if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && WarZoneConfig.isAllowingExplosionsInWarZone() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG()))
-					return false;
-			}
-		} catch (NotRegisteredException e) {
-			return world.isExpl();
-		}
 		return true;
 	}
 
