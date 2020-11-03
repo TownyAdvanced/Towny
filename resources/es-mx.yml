@@ -715,7 +715,7 @@ explosions: '  &2Explosiones: '              # Usado en /plot perm, /res
 explosions2: '&2Explosiones: '               # Usado en /town and /tw
 firespread: '  &2Incendios: '
 mobspawns: '  &2Aparición de mobs: '
-owner_of_x_plots: '&2Dueño/a de &a%s %2propiedades'
+owner_of_x_plots: '&2Dueño/a de &a%s &2propiedades'
 status_bank: '&2Banco: &a%s'
 status_town: '&2Ciudad: &a'
 status_no_town: 'Ninguna'
