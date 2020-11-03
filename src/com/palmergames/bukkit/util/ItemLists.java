@@ -84,7 +84,7 @@ public interface ItemLists {
 	 * Returns a pre-configured list from the GROUPS.
 	 * 
 	 * @param groupName - String value of one of the {@link ItemLists#GROUPS}
-	 * @return - List<String> grouping of materials.
+	 * @return - List&lt;String&gt; grouping of materials.
 	 */
 	@Nullable
 	public static List<String> getGrouping(String groupName) {

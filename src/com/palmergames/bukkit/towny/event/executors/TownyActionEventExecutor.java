@@ -33,11 +33,11 @@ public class TownyActionEventExecutor {
 	 * 
 	 * Displays feedback to the player when an action is cancelled.
 	 * 
-	 * @param Player     - Player involved in the event.
-	 * @param Location   - Location of the event.
-	 * @param Material   - Material being involved in the event.
-	 * @param ActionType - The ActionType of the event. ex: BUILD
-	 * @param TownyActionEvent - One of the four ActionType-based events.
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
+	 * @param action - The ActionType of the event. ex: BUILD
+	 * @param event - One of the four ActionType-based events.
 	 * @return true if not cancelled by the cache or the event results.
 	 */
 	private static boolean isAllowedAction(Player player, Location loc, Material mat, ActionType action, TownyActionEvent event) {
@@ -70,9 +70,9 @@ public class TownyActionEventExecutor {
 	/**
 	 * Can the player build this material at this location?
 	 * 
-	 * @param Player     - Player involved in the event.
-	 * @param Location   - Location of the event.
-	 * @param Material   - Material being involved in the event.
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canBuild(Player player, Location loc, Material mat) {
@@ -83,9 +83,9 @@ public class TownyActionEventExecutor {
 	/**
 	 * Can the player destroy this material at this location?
 	 * 
-	 * @param Player     - Player involved in the event.
-	 * @param Location   - Location of the event.
-	 * @param Material   - Material being involved in the event.
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canDestroy(Player player, Location loc, Material mat) {
@@ -96,9 +96,9 @@ public class TownyActionEventExecutor {
 	/**
 	 * Can the player use switches of this material at this location?
 	 * 
-	 * @param Player     - Player involved in the event.
-	 * @param Location   - Location of the event.
-	 * @param Material   - Material being involved in the event.
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat) {
@@ -109,9 +109,9 @@ public class TownyActionEventExecutor {
 	/**
 	 * Can the player use items of this material at this location?
 	 * 
-	 * @param Player     - Player involved in the event.
-	 * @param Location   - Location of the event.
-	 * @param Material   - Material being involved in the event.
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canItemuse(Player player, Location loc, Material mat) {

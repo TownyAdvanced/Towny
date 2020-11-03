@@ -46,7 +46,7 @@ public class PlayerCacheUtil {
 
 	/**
 	 * Returns the PlayerCache of a Player.
-	 * @param player
+	 * @param player The {@link Player} for which to fetch the {@link PlayerCache}.
 	 * @return PlayerCache
 	 */
 	public static PlayerCache getCache(Player player) {
