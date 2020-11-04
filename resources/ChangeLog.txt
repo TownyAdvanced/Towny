@@ -5178,3 +5178,4 @@ v0.92.0.11:
     - Closes #4391.
   - Move PlayerKilledPlayerEvent to event/player/ package.
   - Fix Javadoc Errors (Again...) courtesy of TheFlagCourier with PR #4411.
+  - Optimize API, courtesy of silverwolfg11 with PR #4412.
