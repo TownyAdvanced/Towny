@@ -1161,7 +1161,7 @@ msg_payed_nation_tax: '&bTaxe de nation de %s payée'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&bVotre ville n''a pas pu payer la taxe de nation d''un montant de %s et a donc été exclue de la nation.'
 msg_your_town_payed_upkeep: '&bVotre ville a payé la taxe journallière de %s.'
 msg_your_nation_payed_upkeep: '&bVotre nation a payé la taxe journallière de %s.'
-msg_your_town_couldnt_pay_upkeep: '&bVotre ville n'a pas pu payer la taxe journallière et a donc été démantelée.'
+msg_your_town_couldnt_pay_upkeep: '&bVotre ville n''a pas pu payer la taxe journallière et a donc été démantelée.'
 msg_your_nation_couldnt_pay_upkeep: '&bbVotre nation n'a pas pu payer la taxe journallière et a donc été démantelée.'
 
 #Added in 0.87
