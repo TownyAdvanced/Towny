@@ -266,8 +266,11 @@ public class TownyAPI {
     public Town getTown(Location location) {
         try {
             WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            if (!worldCoord.hasTownBlock())
-            	return worldCoord.getTownBlock().getTown();
+            if (worldCoord.hasTownBlock()) {
+            	TownBlock tb = worldCoord.getTownBlock();
+            	if (tb.hasTown())
+            		return tb.getTown();
+			}
         } catch (NotRegisteredException ignore) {
         }
 
