@@ -242,9 +242,6 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
-		
-		//if (isTownyAdmin(player))
-		//        return TownBlockStatus.ADMIN;
 
 		try {
 			if (!worldCoord.getTownyWorld().isUsingTowny())
@@ -254,24 +251,8 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.NOT_REGISTERED;
 		}
 
-		//TownyUniverse universe = plugin.getTownyUniverse();
-		TownBlock townBlock;
-		Town town;
-		try {
-			townBlock = worldCoord.getTownBlock();
-			town = townBlock.getTown();
-
-			if (townBlock.isLocked()) {
-				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-				if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
-					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-					return TownBlockStatus.LOCKED;
-				}
-				townBlock.setLocked(false);
-			}
-
-		} catch (NotRegisteredException e) {
-			// Has to be wilderness because townblock = null;
+		if (!worldCoord.hasTownBlock()) {
+			// Has to be wilderness.
 
 			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
 			if (TownySettings.getNationZonesEnabled()) {
@@ -285,6 +266,23 @@ public class PlayerCacheUtil {
 			// Otherwise treat as normal wilderness. 
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
+
+		TownBlock townBlock = null;
+		Town town = null;
+		try {
+			townBlock = worldCoord.getTownBlock();
+			town = townBlock.getTown();
+
+			if (townBlock.isLocked()) {
+				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
+				if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+					return TownBlockStatus.LOCKED;
+				}
+				townBlock.setLocked(false);
+			}
+
+		} catch (NotRegisteredException ignored) {}
 
 		/*
 		 * Find the resident data for this player.

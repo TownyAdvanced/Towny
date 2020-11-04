@@ -5181,3 +5181,4 @@ v0.92.0.11:
   - Optimize API, courtesy of silverwolfg11 with PR #4412.
   - New Language: es-419.yml couresty of EuGNosii with PR #4405 (First-Time Contributor!)
     - replaces the out-dated and broken es-mx.yml.
+  - Prevent PlayerCacheUtil from catching a NotRegisteredException when it really doesn't have to.
