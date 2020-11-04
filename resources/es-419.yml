@@ -258,7 +258,10 @@ msg_changed_taxpercent: '&cEl porcentaje base de impuestos es ahora %s.'
 msg_changed_open: '&cLa residencia no invitada ahora está %s.'
 msg_toggle_open_on_warning: 'Advertencia: Los permisos de la ciudad deberían cambiarse si la ciudad permite la residencia no invitada. Escribe ''/town set perm off'' seguido por ''/town set perm reset''.'
 
-msg_changed_world_setting: '&c%s en %s está %s.'
+# Esta cadena utiliza el Formatter de Java. (https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html). En caso de que cause problemas, borrala y quita el
+# símbolo "#" de la cadena comentada.
+msg_changed_world_setting: '&cSe ha establecido como &c%3$2s &cla configuración &e%1$2s &cen el mundo &c%2$2s'
+#msg_changed_world_setting: '&c%s en %s está %s.'
 
 msg_world_pvp: '&cEn este mundo el combate está habilitado globalmente.'
 msg_world_mobs: '&cEn este mundo la aparición de mobs está habilitada globalmente.'
@@ -827,7 +830,7 @@ towny_map_ally: 'Aliado'
 towny_map_enemy: 'Enemigo'
 enabled: 'Activado'
 disabled: 'Desactivado'
-forced: 'Forzado'
+forced: 'Forzada'
 adjustable: 'Ajustable'
 
 # Añadido en la versión 0.48
@@ -1139,7 +1142,7 @@ msg_set_perms_reset_single: '&bSe han reestablecido los permisos del terreno.'
 # Añadido en la versión 0.86
 status_bank_bankrupt: '&2Banco: &a%s &c(QUEBRADO)'
 msg_warning_bankrupt: '&4*** ¡ADVERTENCIA! %s quebrará debido a que no hay fondos suficientes en el banco. ***'
-msg_town_bankrupt_by_upkeep: '&b%s no pudó mantenerse y cayó en la bancarrota'
+msg_town_bankrupt_by_upkeep: '&b%s no pudó mantenerse y cayó en la bancarrota.'
 msg_town_bankrupt_by_upkeep_multiple: '&bLas siguientes ciudades no pudieron mantenerse y han caído en la bancarrota: '
 msg_town_bankrupt_by_nation_tax: '&b%s no pudo pagar los impuestos de %s y cayó en la bancarrota.'
 msg_town_bankrupt_by_nation_tax_multiple:  '&bLas siguientes ciudades no pudieron pagar los impuestos nacionales y han caído en la bancarrota: '
