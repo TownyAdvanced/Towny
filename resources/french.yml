@@ -1,7 +1,7 @@
 name: Towny
 version: 0.88
 language: french
-author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK
+author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious
 website: 'http://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
@@ -41,7 +41,7 @@ unclaimed_zone_name: 'Région sauvage'
 ############################################################
 
 
-help_0: 'Aide générales de Towny'
+help_0: "Aide générales de Towny"
 help_1: 'Essayez les commandes suivantes pour en savoir plus sur towny.'
 help_2: 'Tchat de ville'
 help_3: 'Tchat de nation'
@@ -823,12 +823,12 @@ status_plot_type: '&2Type de parcelle : &a'
 msg_no_self_jailing: 'Vous ne pouvez pas vous emprisonnez vous-même.'
 online2: ' &a(En-ligne)'
 build: 'Construire'
-destroy: 'Destruire'
-switch: 'Ouvrir/fermer'
+destroy: 'Détruire'
+switch: 'Ouvrir/Fermer'
 item_use: 'Utilisation Item'
 towny_map_header: 'Carte Towny '
 towny_map_unclaimed: 'Libre'
-towny_map_claimed: 'Annexé'
+towny_map_claimed: 'Annexée'
 towny_map_forsale: 'A vendre'
 towny_map_yourtown: 'Votre ville'
 towny_map_yourplot: 'Votre parcelle'
@@ -1136,43 +1136,43 @@ msg_hover_next_page: 'Page Suivante'
 msg_hover_previous_page: 'Page Précédente'
 
 # Added in 0.83
-msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
-msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
+msg_max_tax_amount_only_for_percent: 'Les montants maximum de taxe ne peuvent être définis que pour les villes utilisant le mode "pourcentages de taxe".'
+msg_town_set_tax_max_percent_amount: '%s a défini le montant maximum des taxes a %s.'
 
 # Added in 0.84
-msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
+msg_err_plot_belongs_to_group_toggle: 'La parcelle appartient à un groupe, utilisez /plot group toggle'
 
 # Added in 0.85
-msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
+msg_set_perms_reset_single: '&bPermissions de la parcelle réinitialisée avec succès.'
 
 #Added in 0.86
-status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
-msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
-msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
-msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
-msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
-msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
-msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
-msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
-msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
-msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
-msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
-msg_payed_nation_tax: '&bPayed nation tax of %s'
-msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
-msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
-msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
-msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
-msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'
+status_bank_bankrupt: '&2Banque: &a%s &c(BANQUEROUTE)'
+msg_warning_bankrupt: '&4*** ATTENTION, %s VA ÊTRE EN BANQUEROUTE AU PROCHAIN PRÉLÈVEMENT DES TAXE À CAUSE D''UN MANQUE D''ARGENT ***'
+msg_town_bankrupt_by_upkeep: '&b%s n''a pas pu payer sa taxe journallière et est tombée en banqueroute.'
+msg_town_bankrupt_by_upkeep_multiple: '&bLes villes suivantes n''ont pas pu payer leur taxe journallière et sont tombées en banqueroute: '
+msg_town_bankrupt_by_nation_tax: '&b%s n''a pas pu payer les %s de taxe et tombe donc en banqueroute.'
+msg_town_bankrupt_by_nation_tax_multiple:  '&bLes villes suivantes n''ont pas pu payer les taxes de leur nation et tombent donc en banqueroute: '
+msg_town_debts_cleared: '%s a payé toutes ses dettes et n''est plus en banqueroute.'
+msg_err_bankrupt_town_cannot_claim: 'Interdiction d''annexer de nouvelles terres pour une ville en banqueroute.'
+msg_err_bankrupt_town_cannot_build: 'Interdiction de construire dans une ville en banqueroute.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Interdiction d''ouvrir une ville en banqueroute au public.'
+msg_err_bankrupt_town_cannot_invite: 'Interdiction d''inviter des personnes dans une ville en banqueroute.'
+msg_payed_nation_tax: '&bTaxe de nation de %s payée'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bVotre ville n''a pas pu payer la taxe de nation d''un montant de %s et a donc été exclue de la nation.'
+msg_your_town_payed_upkeep: '&bVotre ville a payé la taxe journallière de %s.'
+msg_your_nation_payed_upkeep: '&bVotre nation a payé la taxe journallière de %s.'
+msg_your_town_couldnt_pay_upkeep: '&bVotre ville n'a pas pu payer la taxe journallière et a donc été démantelée.'
+msg_your_nation_couldnt_pay_upkeep: '&bbVotre nation n'a pas pu payer la taxe journallière et a donc été démantelée.'
 
 #Added in 0.87
-msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, reached their debtcap, and has disbanded.'
-msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
-msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
-msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
-status_debtcap: '&2Debt Cap: &a%s'
+msg_town_reached_debtcap_and_is_disbanded: '&b%s n''a pas pu payer leurs taxe journallière, a atteint leurs endettement maximum et a donc été démantelée.'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&bLes villes suivantes n''ont pas pu payer leur taxe journallière, ont atteint leurs endettement maximum et ont donc été démantelée: '
+msg_unable_to_deposit_x: 'Impossible de déposer %s dans la banque de cette ville.'
+msg_unable_to_withdraw_x: 'Impossible de récuperer %s de la banque de cette ville.'
+status_debtcap: '&2Endettement maximum: &a%s'
 status_world_explrevert_entity: '&2Entity Explosion Revert: '
 status_world_explrevert_block: '&2Block Explosion Revert: '
 
 #Added in 0.88
-msg_nation_already_peaceful: '&cNation is already peaceful.'
-msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
+msg_nation_already_peaceful: '&cLa nation est déjà en paie.'
+msg_nation_already_not_peaceful: '&cLa nation est déjà engagée dans les guerres.'
