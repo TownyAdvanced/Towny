@@ -41,7 +41,7 @@ unclaimed_zone_name: 'Région sauvage'
 ############################################################
 
 
-help_0: "Aide générales de Towny"
+help_0: 'Aide générales de Towny'
 help_1: 'Essayez les commandes suivantes pour en savoir plus sur towny.'
 help_2: 'Tchat de ville'
 help_3: 'Tchat de nation'
@@ -828,7 +828,7 @@ switch: 'Ouvrir/Fermer'
 item_use: 'Utilisation Item'
 towny_map_header: 'Carte Towny '
 towny_map_unclaimed: 'Libre'
-towny_map_claimed: 'Annexée'
+towny_map_claimed: 'Annexé'
 towny_map_forsale: 'A vendre'
 towny_map_yourtown: 'Votre ville'
 towny_map_yourplot: 'Votre parcelle'
@@ -1162,7 +1162,7 @@ msg_your_town_couldnt_pay_the_nation_tax_of: '&bVotre ville n''a pas pu payer la
 msg_your_town_payed_upkeep: '&bVotre ville a payé la taxe journallière de %s.'
 msg_your_nation_payed_upkeep: '&bVotre nation a payé la taxe journallière de %s.'
 msg_your_town_couldnt_pay_upkeep: '&bVotre ville n''a pas pu payer la taxe journallière et a donc été démantelée.'
-msg_your_nation_couldnt_pay_upkeep: '&bbVotre nation n'a pas pu payer la taxe journallière et a donc été démantelée.'
+msg_your_nation_couldnt_pay_upkeep: '&bbVotre nation n''a pas pu payer la taxe journallière et a donc été démantelée.'
 
 #Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '&b%s n''a pas pu payer leurs taxe journallière, a atteint leurs endettement maximum et a donc été démantelée.'
