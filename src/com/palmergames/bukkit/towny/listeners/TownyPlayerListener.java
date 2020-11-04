@@ -486,6 +486,7 @@ public class TownyPlayerListener implements Listener {
 				case LEASH_HITCH:
 				case MINECART_COMMAND:
 				case MINECART_TNT:
+				case MINECART_MOB_SPAWNER:
 					mat = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					break;
 				/*
@@ -503,12 +504,9 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Afterwards they will remain as Switch perm checks.
 				 */
-				case MINECART:
-				case MINECART_MOB_SPAWNER:
 				case MINECART_CHEST:
 				case MINECART_FURNACE:				
 				case MINECART_HOPPER:
-				case BOAT:
 					mat = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					actionType = ActionType.SWITCH;
 					break;
