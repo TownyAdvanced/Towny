@@ -5186,3 +5186,4 @@ v0.92.0.11:
     - Closes #4417.
   - Add rename to the list of /plot group tab-completes.
   - French translation updated to 0.88 courtesy of Dzious with PR #4415 (First-Time Contributor!)
+  - Add protection to Campfires from Splash Water Bottles.

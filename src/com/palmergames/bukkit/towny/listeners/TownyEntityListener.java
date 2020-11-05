@@ -635,7 +635,14 @@ public class TownyEntityListener implements Listener {
 			if (townyWorld.isDisableCreatureTrample())
 				event.setCancelled(true);
 			break;
-
+	
+		/*
+		 * Protect campfires from SplashWaterBottles. Uses a destroy test.
+		 */
+		case SPLASH_POTION:			if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
+				return;
+			event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
+			break;
 		default:
 
 		}
