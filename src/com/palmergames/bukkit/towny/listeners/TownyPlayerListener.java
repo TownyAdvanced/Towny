@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -59,7 +58,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -347,6 +345,10 @@ public class TownyPlayerListener implements Listener {
 	/**
 	 * Handles clicking on beds in the nether, sending blocks to a map so we can track when explosions occur from beds.
 	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds exploding, which is why this is necessary.
+	 * 
+	 * Also denies the use of beds in plots the player doesn't own and plots which are not inn plots.
+	 *   - Also denies enemies and outlaws using inn plots.
+	 *   
 	 * @param event PlayerInteractEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -365,8 +367,46 @@ public class TownyPlayerListener implements Listener {
 			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
 				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
 				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+				return;
+			}
+			
+			if (Tag.BEDS.isTagged(block.getType())) {
+				if (!TownySettings.getBedUse())
+					return;
+
+				boolean isOwner = false;
+				boolean isInnPlot = false;
+
+				if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
+					
+					TownBlock townblock = TownyAPI.getInstance().getTownBlock(block.getLocation());
+					Resident resident = null;
+					Town town = null;
+					try {
+						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
+						town = townblock.getTown();
+					} catch (NotRegisteredException ignored) {}
+					assert resident != null;
+					assert town != null;
+					
+					isOwner = townblock.isOwner(resident);
+					isInnPlot = townblock.getType() == TownBlockType.INN;
+					
+					if (CombatUtil.isEnemyTownBlock(event.getPlayer(), townblock.getWorldCoord()) || town.hasOutlaw(resident)) {
+						event.setCancelled(true);
+						TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_no_sleep_in_enemy_inn"));
+						return;
+					}
+				}
+				if (!isOwner && !isInnPlot) {
+
+					event.setCancelled(true);
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_cant_use_bed"));
+
+				}
 			}
 		}
+		
 	}
 
 	
@@ -627,56 +667,6 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerChangeWorld(PlayerChangedWorldEvent event) { // has changed worlds
 		if (event.getPlayer().isOnline())
 			TownyPerms.assignPermissions(null, event.getPlayer());
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBed().getWorld()))
-			return;
-		
-		if (!TownySettings.getBedUse())
-			return;
-
-		boolean isOwner = false;
-		boolean isInnPlot = false;
-
-		try {
-			
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
-			
-			WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
-
-			TownBlock townblock = worldCoord.getTownBlock();
-			
-			isOwner = townblock.isOwner(resident);
-
-			isInnPlot = townblock.getType() == TownBlockType.INN;			
-			
-			if (resident.hasNation() && townblock.getTown().hasNation()) {
-				
-				Nation residentNation = resident.getTown().getNation();
-				
-				Nation townblockNation = townblock.getTown().getNation();			
-				
-				if (townblockNation.hasEnemy(residentNation)) {
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_no_sleep_in_enemy_inn"));
-					return;
-				}
-			}
-			
-		} catch (NotRegisteredException e) {
-			// Wilderness as it error'd getting a townblock.
-		}
-		
-		if (!isOwner && !isInnPlot) {
-
-			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_cant_use_bed"));
-
-		}
-		
 	}
 
 	/*

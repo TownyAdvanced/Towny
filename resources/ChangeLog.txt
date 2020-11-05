@@ -5190,3 +5190,5 @@ v0.92.0.11:
   - Fix the escape-from-jail into the wilderness message less spammy.
     - Only shown to the jailtown they escaped from, and if the escapee has a town, also the escapee's town.
   - API: Add ResidentSpawnEvent, fires when someone uses /res spawn.
+  - Fix deny_bed_use not doing very much in the daytime.
+  - Fix a bunch of cases where we were pointlessly using NREs in the CombatUtil.
