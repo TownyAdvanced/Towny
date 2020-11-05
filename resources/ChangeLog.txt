@@ -5187,3 +5187,5 @@ v0.92.0.11:
   - Add rename to the list of /plot group tab-completes.
   - French translation updated to 0.88 courtesy of Dzious with PR #4415 (First-Time Contributor!)
   - Add protection to Campfires from Splash Water Bottles.
+  - Fix the escape-from-jail into the wilderness message less spammy.
+    - Only shown to the jailtown they escaped from, and if the escapee has a town, also the escapee's town.
