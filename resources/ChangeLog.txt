@@ -5189,3 +5189,4 @@ v0.92.0.11:
   - Add protection to Campfires from Splash Water Bottles.
   - Fix the escape-from-jail into the wilderness message less spammy.
     - Only shown to the jailtown they escaped from, and if the escapee has a town, also the escapee's town.
+  - API: Add ResidentSpawnEvent, fires when someone uses /res spawn.
