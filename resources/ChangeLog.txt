@@ -5182,3 +5182,6 @@ v0.92.0.11:
   - New Language: es-419.yml couresty of EuGNosii with PR #4405 (First-Time Contributor!)
     - replaces the out-dated and broken es-mx.yml.
   - Prevent PlayerCacheUtil from catching a NotRegisteredException when it really doesn't have to.
+  - Fix being able to run /plot group rename without a name.
+    - Closes #4417.
+  - Add rename to the list of /plot group tab-completes.
