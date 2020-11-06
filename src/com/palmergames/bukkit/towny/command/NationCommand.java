@@ -615,7 +615,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
-					Town town = TownyAPI.getInstance().getDataSource().getTown(split[2]);
+					Town town = TownyUniverse.getInstance().getTown(split[2]);
 					Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if (town != null) {
 						if (!town.hasNation())

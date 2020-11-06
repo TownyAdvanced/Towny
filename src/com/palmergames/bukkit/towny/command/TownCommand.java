@@ -399,12 +399,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			listTowns(sender, split);
 
 		} else {
-			try {
-				final Town town = TownyUniverse.getInstance().getDataSource().getTown(split[0]);
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
-			} catch (NotRegisteredException x) {
+			final Town town = TownyUniverse.getInstance().getTown(split[0]);
+			
+			if (town == null)
 				throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
-			}
+
+			Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
 		}
 
 	}
@@ -556,17 +556,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				Town town = null;
 				try {
-
-
 					if (split.length == 1) {
 						town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 					} else {
-						town = townyUniverse.getDataSource().getTown(split[1]);
+						town = townyUniverse.getTown(split[1]);
 					}
 				} catch (Exception e) {
+				}
+				
+				if (town == null) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
 					return;
 				}
+				
 
 				townPlots(player, town);
 
@@ -718,12 +720,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						if (split.length == 1) {
 							town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 						} else {
-							town = townyUniverse.getDataSource().getTown(split[1]);
+							town = townyUniverse.getTown(split[1]);
 						}
-					} catch (Exception e) {
+					} catch (TownyException e) {
+					}
+					
+					if (town == null) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
 						return;
 					}
+					
 					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedResidents(town));
 
 				} else if (split[0].equalsIgnoreCase("ranklist")) {
@@ -2528,7 +2534,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
-		town.setUuid(UUID.randomUUID());
+		town.setUUID(UUID.randomUUID());
 		town.setRegistered(System.currentTimeMillis());
 
 		if (world.isUsingPlotManagementRevert()) {
@@ -2680,35 +2686,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			ignoreWarning = true;
 		}
 		
-		try {
 
-			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-			Town town;
-			String notAffordMSG;
+		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+		Town town;
+		String notAffordMSG;
 
-			// Set target town and affiliated messages.
-			if (split.length == 0 || outpost || split[0].equals("-ignore")) {
+		// Set target town and affiliated messages.
+		if (split.length == 0 || outpost || split[0].equals("-ignore")) {
 
-				if (!resident.hasTown()) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_dont_belong_town"));
-					return;
-				}
-
-				town = resident.getTown();
-				notAffordMSG = Translation.of("msg_err_cant_afford_tp");
-
-			} else {
-				// split.length > 1
-				town = townyUniverse.getDataSource().getTown(split[0]);
-				notAffordMSG = Translation.of("msg_err_cant_afford_tp_town", town.getName());
+			if (!resident.hasTown()) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_dont_belong_town"));
+				return;
 			}
+
+			town = resident.getTown();
+			notAffordMSG = Translation.of("msg_err_cant_afford_tp");
+
+		} else {
+			// split.length > 1
+			town = townyUniverse.getTown(split[0]);
 			
-			SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, ignoreWarning, SpawnType.TOWN);
-		} catch (NotRegisteredException e) {
-
-			throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
-
+			if (town == null)
+				throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
+			
+			notAffordMSG = Translation.of("msg_err_cant_afford_tp_town", town.getName());
 		}
+			
+		SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, ignoreWarning, SpawnType.TOWN);
 
 	}
 

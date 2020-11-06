@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
@@ -24,15 +25,21 @@ import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
+import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +60,14 @@ public class TownyUniverse {
     
     private final Map<String, Resident> residents = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
-    private final Map<String, Town> towns = new ConcurrentHashMap<>();
+    
+    private final Map<String, Town> townNameMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Town> townUUIDMap = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
+    
     private final Map<String, Nation> nations = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
+    
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -169,7 +180,7 @@ public class TownyUniverse {
     public void clearAllObjects() {
     	worlds.clear();
         nations.clear();
-        towns.clear();
+        townNameMap.clear();
         residents.clear();
         townBlocks.clear();
     }
@@ -336,9 +347,58 @@ public class TownyUniverse {
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
     }
-    
-    public Map<String, Town> getTownsMap() {
-        return towns;
+
+	// =========== Town Methods ===========
+	
+	public boolean hasTown(@NotNull String townName) {
+		Validate.notNull(townName);
+		
+    	String formattedName;
+		try {
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+		} catch (InvalidNameException e) {
+			return false;
+		}
+		
+		return townNameMap.containsKey(formattedName);
+	}
+	
+	public boolean hasTown(@NotNull UUID townUUID) {
+		Validate.notNull(townUUID, "Town UUID cannot be null!");
+    	
+    	return townUUIDMap.containsKey(townUUID);
+	}
+	
+	@Nullable
+	public Town getTown(@NotNull String townName) {
+    	Validate.notNull(townName, "Town Name cannot be null!");
+    	
+    	// Fast-fail empty names
+    	if (townName.isEmpty())
+    		return null;
+    	
+		String formattedName;
+		try {
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+		} catch (InvalidNameException e) {
+			return null;
+		}
+		
+		return townNameMap.get(formattedName);
+	}
+	
+	@Nullable
+	public Town getTown(UUID townUUID) {
+    	return townUUIDMap.get(townUUID);
+	}
+	
+	@Unmodifiable
+	public Collection<Town> getTowns() {
+    	return Collections.unmodifiableCollection(townUUIDMap.values());
+	}
+
+	public Map<String, Town> getTownsMap() {
+        return townNameMap;
     }
     
     public Trie getTownsTrie() {
@@ -432,7 +492,7 @@ public class TownyUniverse {
 	}
 
     public boolean hasGroup(String townName, UUID groupID) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 		
 		if (t != null) {
 			return t.getObjectGroupFromID(groupID) != null;
@@ -442,7 +502,7 @@ public class TownyUniverse {
 	}
 
 	public boolean hasGroup(String townName, String groupName) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 
 		if (t != null) {
 			return t.hasPlotGroupName(groupName);
@@ -460,7 +520,7 @@ public class TownyUniverse {
 	public Collection<PlotGroup> getGroups() {
     	List<PlotGroup> groups = new ArrayList<>();
     	
-		for (Town town : towns.values()) {
+		for (Town town : townNameMap.values()) {
 			if (town.hasPlotGroups()) {
 				groups.addAll(town.getPlotObjectGroups());
 			}
@@ -498,7 +558,7 @@ public class TownyUniverse {
 	 * @return the plot group if found, otherwise null
 	 */
 	public PlotGroup getGroup(String townName, String groupName) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 
 		if (t != null) {
 			return t.getPlotObjectGroupFromName(groupName);
