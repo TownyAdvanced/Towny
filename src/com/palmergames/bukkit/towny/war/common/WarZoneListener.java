@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.war.common;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -131,10 +133,26 @@ public class WarZoneListener implements Listener {
 		}
 
 		/*
-		 * TODO: Separate event into EntityDamage and BlockDamage, so explosions can still harm entities but not cause block damage. 
+		 * Explosions must be allowed, so un-cancel the event and set the explosion to hurt entities.
 		 */
-		if (WarZoneConfig.explosionsBreakBlocksInWarZone())
-			event.setCancelled(false);				
+		event.setCancelled(false);
+		event.setAllowEntityDamage(true);
+
+		if (event.getBlock() != null) {
+			/*
+			 * Allow for block damage to occur.
+			 */
+			if (WarZoneConfig.explosionsBreakBlocksInWarZone()) {			
+				if (WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getRelative(BlockFace.UP).getType().toString())){
+					event.setAllowBlockDamage(false);
+					return;
+				}
+				event.setAllowBlockDamage(true);
+				if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
+					TownyRegenAPI.beginProtectionRegenTask(event.getBlock(), event.getDelay(), TownyAPI.getInstance().getTownyWorld(event.getLocation().getWorld().getName()));
+				}
+			}
+		}
 	}
 
 	@EventHandler (priority=EventPriority.HIGH)

@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.util.ArraySort;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -272,6 +274,10 @@ public class TownyBlockListener implements Listener {
 		
 		TownyWorld townyWorld;
 		List<Block> blocks = event.blockList();
+
+		// Sort blocks by height (lowest to highest).
+		blocks.sort(ArraySort.getInstance());
+
 		int count = 0;
 
 		try {
@@ -302,7 +308,7 @@ public class TownyBlockListener implements Listener {
 		for (Block block : blocks) {
 			count++;
 			
-			if (!TownyActionEventExecutor.locationCanExplode(block.getLocation())) {
+			if (!TownyActionEventExecutor.canExplosionDamageBlocks(block.getLocation(), block, count)) {
 				continue;
 			} else {
 				toKeep.add(block);

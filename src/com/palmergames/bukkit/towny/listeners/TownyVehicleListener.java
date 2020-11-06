@@ -46,7 +46,7 @@ public class TownyVehicleListener implements Listener {
 			return;
 
 		if (event.getAttacker() == null) {  // Probably a respawn anchor or a TNT minecart or TNT lit by redstone.
-			event.setCancelled(!TownyActionEventExecutor.locationCanExplode(event.getVehicle().getLocation()));
+			event.setCancelled(!TownyActionEventExecutor.canExplosionDamageBlocks(event.getVehicle().getLocation(), null, 0));
 			return;
 		}
 		
@@ -82,7 +82,7 @@ public class TownyVehicleListener implements Listener {
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
 		} else {
-			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.locationCanExplode(event.getVehicle().getLocation()))
+			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.canExplosionDamageBlocks(event.getVehicle().getLocation(), null, 0))
 				event.setCancelled(true);
 		}
 	}

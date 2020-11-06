@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event.executors;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -69,6 +70,32 @@ public class TownyActionEventExecutor {
 
 		return !event.isCancelled();
 	}
+	
+	private static boolean isAllowedExplosion(Location loc) {
+		boolean canExplode = false;
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+		if (world == null)
+			canExplode = false;
+		else {
+		
+			if (TownyAPI.getInstance().isWilderness(loc)) {
+				/*
+				 * Handle occasions in the wilderness first.
+				 */
+				if (world.isForceExpl() || world.isExpl())
+					canExplode = true;
+				if (!world.isExpl())
+					canExplode = false;			
+			} else {
+				/*
+				 * Must be inside of a town.
+				 */
+				canExplode = TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+			}
+		}
+
+		return canExplode;
+	}
 
 	/**
 	 * Can the player build this material at this location?
@@ -123,7 +150,30 @@ public class TownyActionEventExecutor {
 	}
 	
 	/**
-	 * Test if this location has explosions enabled.
+	 * Test if explosions can hurt blocks here.
+	 * 
+	 * First uses Towny's internal plot permissions and
+	 * then fires a TownyExplosionEvent to let Towny's war
+	 * systems and other plugins decide how to proceed.
+	 * 
+	 * @param loc - Location to check
+	 * @param delay - int value used in setting up the explosion block regeneration.
+	 * @return true if allowed.
+	 */
+	public static boolean canExplosionDamageBlocks(Location loc, Block block, int delay) {
+		boolean canExplode = isAllowedExplosion(loc);
+
+		TownyExplodeEvent event = new TownyExplodeEvent(loc, block, delay, canExplode);
+		BukkitTools.getPluginManager().callEvent(event);
+		
+		/*
+		 * Finally return the results after Towny lets its own war systems and other plugins have a say.
+		 */
+		return event.isAllowBlockDamage() && !event.isCancelled();
+	}
+	
+	/**
+	 * Test if explosions can hurt entities here.
 	 * 
 	 * First uses Towny's internal plot permissions and
 	 * then fires a TownyExplosionEvent to let Towny's war
@@ -132,35 +182,15 @@ public class TownyActionEventExecutor {
 	 * @param loc - Location to check
 	 * @return true if allowed.
 	 */
-	public static boolean locationCanExplode(Location loc) {
-		boolean canExplode = false;
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
-		if (world == null)
-			canExplode = false;
-		else {
-		
-			if (TownyAPI.getInstance().isWilderness(loc)) {
-				/*
-				 * Handle occasions in the wilderness first.
-				 */
-				if (world.isForceExpl() || world.isExpl())
-					canExplode = true;
-				if (!world.isExpl())
-					canExplode = false;			
-			} else {
-				/*
-				 * Must be inside of a town.
-				 */
-				canExplode = TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
-			}
-		}
+	public static boolean canExplosionDamageEntities(Location loc) {
+		boolean canExplode = isAllowedExplosion(loc);
 
-		TownyExplodeEvent event = new TownyExplodeEvent(loc, canExplode);
+		TownyExplodeEvent event = new TownyExplodeEvent(loc, null, 0, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
 		 * Finally return the results after Towny lets its own war systems and other plugins have a say.
 		 */
-		return event.isCancelled();
-	}
+		return event.isAllowEntityDamage() && !event.isCancelled();
+	}	
 }

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event.actions;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -17,12 +18,16 @@ public class TownyExplodeEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Location location;
+	private final Block block;
+	private final int delay;
 	private boolean canExplode;
 	private boolean allowBlockDamage;
 	private boolean allowEntityDamage;
 
-	public TownyExplodeEvent(Location location, boolean canExplode) {
+	public TownyExplodeEvent(Location location, Block block, int delay, boolean canExplode) {
 		this.location = location;
+		this.block = block;
+		this.delay = delay;
 		this.canExplode = canExplode;
 		this.allowBlockDamage = canExplode;
 		this.allowEntityDamage = canExplode;
@@ -49,6 +54,14 @@ public class TownyExplodeEvent extends Event implements Cancellable {
 	public Location getLocation() {
 		return location;
 	}
+	
+	public Block getBlock() {
+		return block;
+	}
+
+	public int getDelay() {
+		return delay;
+	}
 
 	public boolean isAllowEntityDamage() {
 		return allowEntityDamage;
@@ -65,5 +78,4 @@ public class TownyExplodeEvent extends Event implements Cancellable {
 	public void setAllowBlockDamage(boolean allowBlockDamage) {
 		this.allowBlockDamage = allowBlockDamage;
 	}
-
 }
