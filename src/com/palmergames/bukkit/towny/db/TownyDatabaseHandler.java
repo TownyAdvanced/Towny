@@ -372,40 +372,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return new ArrayList<>(universe.getTownsMap().values());
 	}
 
+	@Deprecated
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(String.format("The town with name '%s' is not valid.", name));
-		}
-
-		if (!hasTown(name))
-			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
-
-		return universe.getTownsMap().get(name);
+		Town town = universe.getTown(name);
+		
+		if (town == null)
+			throw new NotRegisteredException(String.format("The town with name '%s' is not valid!", name));
+		
+		return town;
 	}
 
+	@Deprecated
 	@Override
 	public Town getTown(UUID uuid) throws NotRegisteredException {
-		String name = null;
-		for (Town town : this.getTowns()) {
-			if (uuid.equals(town.getUuid())) {
-				name = town.getName();
-			}
-		}
-
-		if (name == null) {
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		}
+		Town town = universe.getTown(uuid);	
 		
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		return universe.getTownsMap().get(name);
+		if (town == null)
+			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
+		
+		return town;
 	}
 
 	@Override
@@ -827,7 +813,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (isCapital) {
 				nation.setCapital(town);
 			}
-			town.setUuid(oldUUID);
+			town.setUUID(oldUUID);
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {

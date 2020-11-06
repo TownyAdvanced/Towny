@@ -148,6 +148,11 @@
             <artifactId>commons-compress</artifactId>
             <version>1.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

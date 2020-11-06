@@ -772,11 +772,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("uuid");
 				if (line != null) {
+					UUID townUUID = null;
 					try {
-						town.setUuid(UUID.fromString(line));
+						townUUID = UUID.fromString(line);
 					} catch (IllegalArgumentException ee) {
-						town.setUuid(UUID.randomUUID());
+						townUUID = UUID.randomUUID();
 					}
+					
+					town.setUUID(townUUID);
 				}
 				line = keys.get("registered");
 				if (line != null) {

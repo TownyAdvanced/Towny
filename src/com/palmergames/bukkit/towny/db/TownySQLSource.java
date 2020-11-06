@@ -1039,9 +1039,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 
 			try {
-				town.setUuid(UUID.fromString(rs.getString("uuid")));
+				town.setUUID(UUID.fromString(rs.getString("uuid")));
 			} catch (IllegalArgumentException | NullPointerException ee) {
-				town.setUuid(UUID.randomUUID());
+				town.setUUID(UUID.randomUUID());
 			}
 
 			int conqueredDays = rs.getInt("conqueredDays");

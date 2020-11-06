@@ -57,7 +57,6 @@ public class Town extends Government implements TownBlockOwner {
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
-	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -71,6 +70,11 @@ public class Town extends Government implements TownBlockOwner {
 		setTaxes(TownySettings.getTownDefaultTax());
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
+	}
+	
+	public Town(String name, UUID uuid) {
+		this(name);
+		setUUID(uuid);
 	}
 
 	@Override
@@ -1105,12 +1109,13 @@ public class Town extends Government implements TownBlockOwner {
 			outlaws.remove(resident);			
 	}
 
+	/**
+	 * @return The UUID for this town.
+	 * @deprecated Use {@link #getUUID()} instead.
+	 */
+	@Deprecated
 	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
+		return getUUID();
 	}
 
 	public boolean hasValidUUID() {
