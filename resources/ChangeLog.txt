@@ -5207,5 +5207,4 @@ v0.92.0.11:
   - Add boat to possible switch use.
   - Move switch tests for vehicle entering to the Vehicle listener.
     - Add the option to use SADDLE to protect the saddle-wearing vehicles in the switch list (not recommended, see switch_ids section of the config.)
-    
-    
+0.96.3.3:
