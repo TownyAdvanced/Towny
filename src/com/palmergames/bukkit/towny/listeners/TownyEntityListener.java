@@ -568,7 +568,7 @@ public class TownyEntityListener implements Listener {
 
 		case WITHER:
 
-			if (!TownyActionEventExecutor.canExplosionDamageBlocks(event.getBlock().getLocation(), null, 0)) {
+			if (!TownyActionEventExecutor.canExplosionDamageBlocks(event.getBlock().getLocation(), event.getBlock(), 0)) {
 				event.setCancelled(true);
 				return;
 			}
@@ -772,7 +772,7 @@ public class TownyEntityListener implements Listener {
 		
 			if (event.getCause() == RemoveCause.EXPLOSION) {
 				// Explosions are blocked in this plot
-				if (!TownyActionEventExecutor.canExplosionDamageBlocks(hanging.getLocation(), null, 0)) {
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation())) {
 					event.setCancelled(true);
 				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
 				} else {
@@ -793,7 +793,7 @@ public class TownyEntityListener implements Listener {
 
 			case EXPLOSION:
 
-				if (!TownyActionEventExecutor.canExplosionDamageBlocks(event.getEntity().getLocation(), null, 0))
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation()))
 					event.setCancelled(true);
 				break;
 

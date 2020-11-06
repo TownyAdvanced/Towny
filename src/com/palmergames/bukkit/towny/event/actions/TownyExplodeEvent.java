@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Part of the API which lets Towny's war and other plugins modify Towny's
@@ -55,6 +56,7 @@ public class TownyExplodeEvent extends Event implements Cancellable {
 		return location;
 	}
 	
+	@Nullable
 	public Block getBlock() {
 		return block;
 	}

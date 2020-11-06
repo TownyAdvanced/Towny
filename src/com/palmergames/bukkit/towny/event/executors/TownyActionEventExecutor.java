@@ -156,18 +156,28 @@ public class TownyActionEventExecutor {
 	 * then fires a TownyExplosionEvent to let Towny's war
 	 * systems and other plugins decide how to proceed.
 	 * 
-	 * @param loc - Location to check
+	 * @param loc - Location to check.
+	 * @param block - Block which might be exploded.
 	 * @param delay - int value used in setting up the explosion block regeneration.
 	 * @return true if allowed.
 	 */
 	public static boolean canExplosionDamageBlocks(Location loc, Block block, int delay) {
+		/*
+		 *  canExplode will get Towny's normal response as to 
+		 *  whether an explosion is allowed in the given location.
+		 */		
 		boolean canExplode = isAllowedExplosion(loc);
 
+		/*
+		 * Fire a TownyExplodeEvent to let Towny's war systems 
+		 * and other plugins have a say in the results.
+		 */
 		TownyExplodeEvent event = new TownyExplodeEvent(loc, block, delay, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
-		 * Finally return the results after Towny lets its own war systems and other plugins have a say.
+		 * Finally return the results after Towny lets its own 
+		 * war systems and other plugins have a say.
 		 */
 		return event.isAllowBlockDamage() && !event.isCancelled();
 	}
@@ -183,13 +193,22 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canExplosionDamageEntities(Location loc) {
+		/*
+		 *  canExplode will get Towny's normal response as to 
+		 *  whether an explosion is allowed in the given location.
+		 */		
 		boolean canExplode = isAllowedExplosion(loc);
 
+		/*
+		 * Fire a TownyExplodeEvent to let Towny's war systems 
+		 * and other plugins have a say in the results.
+		 */
 		TownyExplodeEvent event = new TownyExplodeEvent(loc, null, 0, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
-		 * Finally return the results after Towny lets its own war systems and other plugins have a say.
+		 * Finally return the results after Towny lets its own 
+		 * war systems and other plugins have a say.
 		 */
 		return event.isAllowEntityDamage() && !event.isCancelled();
 	}	

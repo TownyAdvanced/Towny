@@ -142,12 +142,22 @@ public class WarZoneListener implements Listener {
 			/*
 			 * Allow for block damage to occur.
 			 */
-			if (WarZoneConfig.explosionsBreakBlocksInWarZone()) {			
+			if (WarZoneConfig.explosionsBreakBlocksInWarZone()) {
+				/*
+				 * Parse out disallowed blocks 
+				 * TODO: See if this is even needed post-BlockData. Most things should regenerate properly now.
+				 */
 				if (WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getRelative(BlockFace.UP).getType().toString())){
 					event.setAllowBlockDamage(false);
 					return;
 				}
+				/*
+				 * Blow the block up.
+				 */
 				event.setAllowBlockDamage(true);
+				/*
+				 * If regeneration is enabled set up a regentask for the single block, using the given delay.
+				 */
 				if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
 					TownyRegenAPI.beginProtectionRegenTask(event.getBlock(), event.getDelay(), TownyAPI.getInstance().getTownyWorld(event.getLocation().getWorld().getName()));
 				}
