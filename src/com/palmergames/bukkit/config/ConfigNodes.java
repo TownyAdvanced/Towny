@@ -1008,7 +1008,10 @@ public enum ConfigNodes {
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
 			"# Switches are blocks, that are in the world, which get right-clicked.",
 			"# Towny will tell you the proper name to use in this list if you hit the block while holding a clay brick item in your hand.",
-			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS",
+			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS.",
+			"# Note: Vehicles like MINECARTS and BOATS can be added here. If you want to treat other rideable mobs like switches add SADDLE",
+			"#       to protect HORSES, DONKEYS, MULES, PIGS, STRIDERS (This is not recommended, unless you want players to not be able to",
+			"#       re-mount their animals in towns they cannot switch in.)",
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_FIRE_SPREAD_BYPASS(
 			"protection.fire_spread_bypass_materials",

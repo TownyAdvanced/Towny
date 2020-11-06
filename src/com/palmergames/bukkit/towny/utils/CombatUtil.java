@@ -248,9 +248,15 @@ public class CombatUtil {
 			/*
 			 * DefendingEntity is not a player.
 			 * This is now non-player vs non-player damage.
-			 * This should be unreachable as we are already parsing out
-			 * non-player involved combat at TownyEntityListener#nonPlayerEntityDamageByEntity.
 			 */
+			} else {
+			    /*
+			     * Prevents projectiles fired by non-players harming non-player entities.
+			     * Could be a monster or it could be a dispenser.
+			     */
+				if (attackingEntity instanceof Projectile) {
+					return true;	
+				}
 			}
 		}
 		return false;

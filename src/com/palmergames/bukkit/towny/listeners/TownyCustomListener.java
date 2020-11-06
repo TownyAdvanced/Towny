@@ -140,6 +140,11 @@ public class TownyCustomListener implements Listener {
 		
 	}
 	
+	/**
+	 * Runs when a bed or respawn anchor explodes that we can track them in the BlockExplodeEvent,
+	 * which always returns AIR for that event's getBlock().
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.NORMAL) 
 	public void onBedExplodeEvent(BedExplodeEvent event) {
 		TownyWorld world = null;
@@ -148,7 +153,8 @@ public class TownyCustomListener implements Listener {
 		} catch (NotRegisteredException ignored) {}
 		
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
-		world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
+		if (event.getLocation2() != null);
+			world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
 		final TownyWorld finalWorld = world;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
