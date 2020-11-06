@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 
 /**
  * Handle events for all Vehicle related events
@@ -47,7 +46,7 @@ public class TownyVehicleListener implements Listener {
 			return;
 
 		if (event.getAttacker() == null) {  // Probably a respawn anchor or a TNT minecart or TNT lit by redstone.
-			event.setCancelled(!ExplosionUtil.locationCanExplode(event.getVehicle().getLocation()));
+			event.setCancelled(!TownyActionEventExecutor.locationCanExplode(event.getVehicle().getLocation()));
 			return;
 		}
 		
@@ -83,7 +82,7 @@ public class TownyVehicleListener implements Listener {
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
 		} else {
-			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !ExplosionUtil.locationCanExplode(event.getVehicle().getLocation()))
+			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.locationCanExplode(event.getVehicle().getLocation()))
 				event.setCancelled(true);
 		}
 	}

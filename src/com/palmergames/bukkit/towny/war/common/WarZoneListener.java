@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodeEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -18,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -100,6 +102,40 @@ public class WarZoneListener implements Listener {
 			event.setCancelled(false);
 		}
 	}
+	
+	@EventHandler
+	public void onExplosion(TownyExplodeEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		/*
+		 * Handle occasions in the wilderness first.
+		 */
+		if (TownyAPI.getInstance().isWilderness(event.getLocation()))
+			return;
+
+		/*
+		 * Must be inside of a town.
+		 */
+		
+		// Not in a war zone, do not modify the outcome of the event.
+		if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(event.getLocation()).getWorldCoord()))
+			return;
+			
+		/*
+		 * Stops any type of exploding damage and block damage if wars are not allowing explosions.
+		 */
+		if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		/*
+		 * TODO: Separate event into EntityDamage and BlockDamage, so explosions can still harm entities but not cause block damage. 
+		 */
+		if (WarZoneConfig.explosionsBreakBlocksInWarZone())
+			event.setCancelled(false);				
+	}
 
 	@EventHandler (priority=EventPriority.HIGH)
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {
@@ -117,4 +153,6 @@ public class WarZoneListener implements Listener {
 				event.setMessage(e.getMessage());
 			}
 	}
+	
+	
 }

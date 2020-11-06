@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Location;
@@ -303,7 +302,7 @@ public class TownyBlockListener implements Listener {
 		for (Block block : blocks) {
 			count++;
 			
-			if (!ExplosionUtil.locationCanExplode(block.getLocation())) {
+			if (!TownyActionEventExecutor.locationCanExplode(block.getLocation())) {
 				continue;
 			} else {
 				toKeep.add(block);

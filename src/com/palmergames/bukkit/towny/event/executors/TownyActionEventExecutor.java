@@ -5,13 +5,16 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodeEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -117,5 +120,47 @@ public class TownyActionEventExecutor {
 	public static boolean canItemuse(Player player, Location loc, Material mat) {
 		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, false);
 		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event);
+	}
+	
+	/**
+	 * Test if this location has explosions enabled.
+	 * 
+	 * First uses Towny's internal plot permissions and
+	 * then fires a TownyExplosionEvent to let Towny's war
+	 * systems and other plugins decide how to proceed.
+	 * 
+	 * @param loc - Location to check
+	 * @return true if allowed.
+	 */
+	public static boolean locationCanExplode(Location loc) {
+		boolean canExplode = false;
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+		if (world == null)
+			canExplode = false;
+		else {
+		
+			if (TownyAPI.getInstance().isWilderness(loc)) {
+				/*
+				 * Handle occasions in the wilderness first.
+				 */
+				if (world.isForceExpl() || world.isExpl())
+					canExplode = true;
+				if (!world.isExpl())
+					canExplode = false;			
+			} else {
+				/*
+				 * Must be inside of a town.
+				 */
+				canExplode = TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+			}
+		}
+
+		TownyExplodeEvent event = new TownyExplodeEvent(loc, canExplode);
+		BukkitTools.getPluginManager().callEvent(event);
+		
+		/*
+		 * Finally return the results after Towny lets its own war systems and other plugins have a say.
+		 */
+		return event.isCancelled();
 	}
 }
