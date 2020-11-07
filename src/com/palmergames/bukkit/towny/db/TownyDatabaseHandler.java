@@ -378,7 +378,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Town town = universe.getTown(name);
 		
 		if (town == null)
-			throw new NotRegisteredException(String.format("The town with name '%s' is not valid!", name));
+			throw new NotRegisteredException(String.format("The town with name '%s' is not registered!", name));
 		
 		return town;
 	}

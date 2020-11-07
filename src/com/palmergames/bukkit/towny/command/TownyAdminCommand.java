@@ -1192,8 +1192,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_NEW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				final Town capitalTown = townyUniverse.getTown(split[2]);
+				
+				if (capitalTown == null)
+					throw new TownyException(Translation.of("msg_err_invalid_name", split[2]));
 
-				NationCommand.newNation(player, split[1], split[2], true);
+				NationCommand.newNation(player, split[1], capitalTown, true);
 				return;
 			}
 			

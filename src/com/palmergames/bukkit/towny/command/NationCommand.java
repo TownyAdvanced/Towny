@@ -482,7 +482,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String nationName = String.join("_", newSplit);
-					newNation(player, nationName, resident.getTown().getName(), noCharge);
+					newNation(player, nationName, resident.getTown(), noCharge);
 
 				}
 			} else if (split[0].equalsIgnoreCase("join")) {
@@ -1220,16 +1220,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 * @param player - Player creating the new nation.
 	 * @param name - Nation name.
-	 * @param capitalName - Capital city name.
+	 * @param capitalTown - Capital city town.
 	 * @param noCharge - charging for creation - /ta nation new NAME CAPITAL has no charge.
 	 */
-	public static void newNation(Player player, String name, String capitalName, boolean noCharge) {
+	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
 
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
-
-			Town town = universe.getDataSource().getTown(capitalName);
-			if (town.hasNation())
+			if (capitalTown.hasNation())
 				throw new TownyException(Translation.of("msg_err_already_nation"));
 
 			// Check the name is valid and doesn't already exist.
@@ -1243,24 +1241,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(Translation.of("msg_err_invalid_name", name));
 
-			PreNewNationEvent preEvent = new PreNewNationEvent(town, name);
+			PreNewNationEvent preEvent = new PreNewNationEvent(capitalTown, name);
 			Bukkit.getPluginManager().callEvent(preEvent);
 
 			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(town, preEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(capitalTown, preEvent.getCancelMessage());
 				return;
 			}
 
 			// If it isn't free to make a nation, send a confirmation.
 			if (!noCharge && TownySettings.isUsingEconomy()) {
 				// Test if they can pay.
-				if (!town.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
+				if (!capitalTown.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 
 				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
-						if (!town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
+						if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 							return;
 						}
@@ -1268,7 +1266,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					try {
 						// Actually make nation.
-						newNation(name, town);
+						newNation(name, capitalTown);
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
@@ -1280,7 +1278,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 			// Or, it is free, so just make the nation.
 			} else {
-				newNation(name, town);
+				newNation(name, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException | EconomyException x) {
