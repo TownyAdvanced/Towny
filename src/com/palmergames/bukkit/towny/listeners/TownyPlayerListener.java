@@ -343,17 +343,8 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	/**
-<<<<<<< Upstream, based on origin/master
-	 * Handles clicking on beds in the nether, sending blocks to a map so we can track when explosions occur from beds.
-	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds exploding, which is why this is necessary.
-	 * 
-	 * Also denies the use of beds in plots the player doesn't own and plots which are not inn plots.
-	 *   - Also denies enemies and outlaws using inn plots.
-	 *   
-=======
 	 * Handles clicking on beds in the nether/respawn anchors in the overworld sending blocks to a map so we can track when explosions occur from beds.
 	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds/anchors exploding, which is why this is necessary.
->>>>>>> edeaa1f More explosions protections.
 	 * @param event PlayerInteractEvent
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
