@@ -143,7 +143,7 @@ public class TownyCustomListener implements Listener {
 	/**
 	 * Runs when a bed or respawn anchor explodes that we can track them in the BlockExplodeEvent,
 	 * which always returns AIR for that event's getBlock().
-	 * @param event
+	 * @param event {@link BedExplodeEvent}
 	 */
 	@EventHandler(priority = EventPriority.NORMAL) 
 	public void onBedExplodeEvent(BedExplodeEvent event) {
