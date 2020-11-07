@@ -23,6 +23,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.entity.Player;
+import org.bukkit.util.ChatPaginator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -278,29 +279,14 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param out - List&lt;String&gt;
-	 * @return a string list with all lines split at a middle-ish " " and shortened so that they fit equally into 80 characters chat line.
-	 * Please do not pass this anything longer than 159 characters. 
+	 * @return a string list with all lines formatted to fit within the MC chat box. 
 	 */
 	public static List<String> formatStatusScreens(List<String> out) {
-		
+
 		List<String> formattedOut = new ArrayList<>();
 		for (String line: out) {
-			if (line.length() > 80) {
-				int middle = (line.length()/2);
-				int before = line.lastIndexOf(' ', middle);
-				int after = line.lastIndexOf(' ', middle + 1);
-				if (middle - before < after - middle) 
-					middle = before;
-				else
-					middle = after;
-				
-				String first = line.substring(0, middle);
-				String second = line.substring(middle + 1);
-				formattedOut.add(first);
-				formattedOut.add(second);					
-			} else {
-				formattedOut.add(line);
-			}
+			for (String string : ChatPaginator.wordWrap(line, ChatPaginator.UNBOUNDED_PAGE_WIDTH))
+				formattedOut.add(string);
 		}
 		return formattedOut;
 	}	

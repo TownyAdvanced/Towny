@@ -5218,3 +5218,6 @@ v0.92.0.11:
     - default: Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse
     - Remove living entities in the wilderness in all worlds that have the wildernessmobs turned off in.
   - Update polish.yml courtesy of Martinez.
+  - Fix wonky resident lists by adopting ChatPaginator in formatting the status screens.
+    - Closes #4388.
+    - Also fixes colour encoding lost in /tw status screen.
