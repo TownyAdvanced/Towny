@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -273,7 +272,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation())) {
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
@@ -568,7 +567,7 @@ public class TownyEntityListener implements Listener {
 
 		case WITHER:
 
-			if (!TownyActionEventExecutor.canExplosionDamageBlocks(event.getBlock().getLocation(), event.getBlock(), 0)) {
+			if (!TownyActionEventExecutor.isAllowedExplosion(event.getBlock().getLocation())) {
 				event.setCancelled(true);
 				return;
 			}
@@ -600,14 +599,18 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Handles explosion regeneration in War (inside towns,)
-	 * and from regular non-war causes (outside towns.)  
+	 * Decides how explosions made by entities will be handled ie: TNT, Creepers, etc.
+	 * 
+	 * Handles wilderness entity explosion regeneration.
+	 * 
+	 * Explosion blockList is filtered via the TownyActionEventExecutor,
+	 * allowing Towny's war and other plugins to modify which blocks will
+	 * be exploding.  
 	 * 
 	 * @param event - EntityExplodeEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -615,44 +618,31 @@ public class TownyEntityListener implements Listener {
 
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
-		
-		TownyWorld townyWorld = null;
 
-		/*
-		  Perform this test outside the block loop so we only get the world
-		  once per explosion.
-		 */
+		TownyWorld townyWorld = null;
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
 		} catch (NotRegisteredException ignored) {}
 
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList());
+		event.blockList().clear();
+		event.blockList().addAll(blocks);
+
+		if (event.blockList().isEmpty())
+			return;
 		
-		List<Block> blocks = event.blockList();
 		Entity entity = event.getEntity();
-		
-		// Sort blocks by height (lowest to highest).
-		blocks.sort(ArraySort.getInstance());
-
-			
-		boolean revertingThisEntity = townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity);
-		int count = 0;
-		List<Block> toKeep = new ArrayList<Block>();
-		
-		for (Block block : blocks) {
-			count++;
-
-			if (!TownyActionEventExecutor.canExplosionDamageBlocks(block.getLocation(), block, count))
-				continue;
-			else 
-				toKeep.add(block);
-			
-			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisEntity) {
+		if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
+			int count = 0;
+			for (Block block : blocks) {
+				// Only regenerate in the wilderness.
+				if (!TownyAPI.getInstance().isWilderness(block))
+					return;
+				count++;
+				// Cancel the event outright if this will cause a revert to start on an already operating revert.
 				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
 			}
 		}
-
-		event.blockList().clear();
-		event.blockList().addAll(toKeep);
 	}
 
 	/**
@@ -772,7 +762,7 @@ public class TownyEntityListener implements Listener {
 		
 			if (event.getCause() == RemoveCause.EXPLOSION) {
 				// Explosions are blocked in this plot
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation())) {
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation(), event.getEntity())) {
 					event.setCancelled(true);
 				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
 				} else {
@@ -793,7 +783,7 @@ public class TownyEntityListener implements Listener {
 
 			case EXPLOSION:
 
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation()))
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity()))
 					event.setCancelled(true);
 				break;
 
@@ -840,7 +830,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation()))
+		if (!!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity()))
 			event.setCancelled(true);
 	}
 	

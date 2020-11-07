@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.war.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -12,7 +15,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplodeEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlockEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -106,7 +110,55 @@ public class WarZoneListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onExplosion(TownyExplodeEvent event) {
+	public void onExplosionDamagingBlocks(TownyExplodingBlockEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+
+		List<Block> alreadyAllowed = event.getTownyFilteredBlockList();
+		List<Block> toAllow = new ArrayList<Block>();
+		
+		int count = 0;
+		for (Block block : event.getVanillaBlockList()) {
+			// Wilderness, skip it.
+			if (TownyAPI.getInstance().isWilderness(block))
+				continue;
+			
+			// Non-warzone, skip it.
+			if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(block.getLocation()).getWorldCoord()))
+				continue;
+			
+			// A war that doesn't allow any kind of explosions.
+			if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+				// Remove from the alreadyAllowed list if it exists there.
+				if (alreadyAllowed.contains(block))
+					alreadyAllowed.remove(block);
+				continue;
+			}
+
+			// A war that does allow explosions and explosions regenerate.
+			if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
+				// Skip this block if it is in the ignore list. TODO: with the blockdata nowadays this might not even be necessary.
+				if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())) {
+					// Remove from the alreadyAllowed list if it exists there.
+					if (alreadyAllowed.contains(block))
+						alreadyAllowed.remove(block);
+					continue;
+				}
+				count++;
+				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()));
+			}
+			// This is an allowed explosion, so add it to our War-allowed list.
+			toAllow.add(block);
+		}
+		// Add all TownyFilteredBlocks to our list, since our list will be used.
+		toAllow.addAll(alreadyAllowed);
+		
+		// Return the list of allowed blocks for this block explosion event.
+		event.setBlockList(toAllow);
+	}
+
+	@EventHandler
+	public void onExplosionDamagingEntity(TownyExplosionDamagesEntityEvent event) {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 		
@@ -125,7 +177,7 @@ public class WarZoneListener implements Listener {
 			return;
 			
 		/*
-		 * Stops any type of exploding damage and block damage if wars are not allowing explosions.
+		 * Stops any type of exploding damage if wars are not allowing explosions.
 		 */
 		if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
 			event.setCancelled(true);
@@ -133,37 +185,11 @@ public class WarZoneListener implements Listener {
 		}
 
 		/*
-		 * Explosions must be allowed, so un-cancel the event and set the explosion to hurt entities.
+		 * Explosions must be allowed, so un-cancel the event.
 		 */
 		event.setCancelled(false);
-		event.setAllowEntityDamage(true);
-
-		if (event.getBlock() != null) {
-			/*
-			 * Allow for block damage to occur.
-			 */
-			if (WarZoneConfig.explosionsBreakBlocksInWarZone()) {
-				/*
-				 * Parse out disallowed blocks 
-				 * TODO: See if this is even needed post-BlockData. Most things should regenerate properly now.
-				 */
-				if (WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(event.getBlock().getRelative(BlockFace.UP).getType().toString())){
-					event.setAllowBlockDamage(false);
-					return;
-				}
-				/*
-				 * Blow the block up.
-				 */
-				event.setAllowBlockDamage(true);
-				/*
-				 * If regeneration is enabled set up a regentask for the single block, using the given delay.
-				 */
-				if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
-					TownyRegenAPI.beginProtectionRegenTask(event.getBlock(), event.getDelay(), TownyAPI.getInstance().getTownyWorld(event.getLocation().getWorld().getName()));
-				}
-			}
-		}
 	}
+
 
 	@EventHandler (priority=EventPriority.HIGH)
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {

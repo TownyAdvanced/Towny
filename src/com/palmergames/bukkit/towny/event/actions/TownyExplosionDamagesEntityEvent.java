@@ -1,11 +1,10 @@
 package com.palmergames.bukkit.towny.event.actions;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Part of the API which lets Towny's war and other plugins modify Towny's
@@ -15,24 +14,17 @@ import org.jetbrains.annotations.Nullable;
  * 
  * @author LlmDl
  */
-@Deprecated
-public class TownyExplodeEvent extends Event implements Cancellable {
+public class TownyExplosionDamagesEntityEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Location location;
-	private final Block block;
-	private final int delay;
+	private final Entity entity;
 	private boolean canExplode;
-	private boolean allowBlockDamage;
-	private boolean allowEntityDamage;
 
-	public TownyExplodeEvent(Location location, Block block, int delay, boolean canExplode) {
+	public TownyExplosionDamagesEntityEvent(Location location, Entity entity, boolean canExplode) {
 		this.location = location;
-		this.block = block;
-		this.delay = delay;
+		this.entity = entity;
 		this.canExplode = canExplode;
-		this.allowBlockDamage = canExplode;
-		this.allowEntityDamage = canExplode;
 	}
 	
 	public static HandlerList getHandlerList() {
@@ -57,28 +49,7 @@ public class TownyExplodeEvent extends Event implements Cancellable {
 		return location;
 	}
 	
-	@Nullable
-	public Block getBlock() {
-		return block;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public boolean isAllowEntityDamage() {
-		return allowEntityDamage;
-	}
-
-	public void setAllowEntityDamage(boolean allowEntityDamage) {
-		this.allowEntityDamage = allowEntityDamage;
-	}
-
-	public boolean isAllowBlockDamage() {
-		return allowBlockDamage;
-	}
-
-	public void setAllowBlockDamage(boolean allowBlockDamage) {
-		this.allowBlockDamage = allowBlockDamage;
+	public Entity getEntity() {
+		return entity;
 	}
 }

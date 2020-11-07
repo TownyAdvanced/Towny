@@ -1,8 +1,12 @@
 package com.palmergames.bukkit.towny.event.executors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -11,13 +15,15 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplodeEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlockEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
 
 /**
@@ -71,7 +77,7 @@ public class TownyActionEventExecutor {
 		return !event.isCancelled();
 	}
 	
-	private static boolean isAllowedExplosion(Location loc) {
+	public static boolean isAllowedExplosion(Location loc) {
 		boolean canExplode = false;
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 		if (world == null)
@@ -95,6 +101,17 @@ public class TownyActionEventExecutor {
 		}
 
 		return canExplode;
+	}
+	
+	private static List<Block> filterExplodingBlockList(List<Block> blocks) {
+
+		List<Block> approvedBlocks = new ArrayList<Block>();
+		
+		for (Block block : blocks) {
+			if (isAllowedExplosion(block.getLocation()))
+				approvedBlocks.add(block);
+		}
+		return approvedBlocks;
 	}
 
 	/**
@@ -150,36 +167,45 @@ public class TownyActionEventExecutor {
 	}
 	
 	/**
-	 * Test if explosions can hurt blocks here.
+	 * Test if explosions can destroy blocks here.
 	 * 
 	 * First uses Towny's internal plot permissions and
 	 * then fires a TownyExplosionEvent to let Towny's war
 	 * systems and other plugins decide how to proceed.
 	 * 
-	 * @param loc - Location to check.
-	 * @param block - Block which might be exploded.
-	 * @param delay - int value used in setting up the explosion block regeneration.
-	 * @return true if allowed.
+	 * @param blockList - List of Blocks which might be exploded.
+	 * @return filteredBlocks - List of Blocks which are going to be allowed to explode.
 	 */
-	public static boolean canExplosionDamageBlocks(Location loc, Block block, int delay) {
+	public static List<Block> filterExplodableBlocks(List<Block> blockList) {
+		
+		/* 
+		 * Sort blocks into lowest Y to highest Y in order to preserve
+		 * blocks affected by gravity or tile entities requiring a base. 
+		 */
+		blockList.sort(ArraySort.getInstance());
+		
 		/*
-		 *  canExplode will get Towny's normal response as to 
-		 *  whether an explosion is allowed in the given location.
+		 * Filter out any blocks which are not allowed to explode based 
+		 * on Towny's plot permissions settings.
 		 */		
-		boolean canExplode = isAllowedExplosion(loc);
+		List<Block> filteredBlocks = filterExplodingBlockList(blockList);
 
 		/*
-		 * Fire a TownyExplodeEvent to let Towny's war systems 
+		 * Fire a TownyExplodingBlockEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplodeEvent event = new TownyExplodeEvent(loc, block, delay, canExplode);
+		TownyExplodingBlockEvent event = new TownyExplodingBlockEvent(blockList, filteredBlocks);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
-		 * Finally return the results after Towny lets its own 
-		 * war systems and other plugins have a say.
+		 * Finally, return the results of the TownyExplodingBlockEvent
+		 * if the event modified the original blockList. Otherwise, return
+		 * the filteredBlocks block list.
 		 */
-		return event.isAllowBlockDamage() && !event.isCancelled();
+		if (event.isChanged())
+			filteredBlocks = event.getBlockList();
+
+		return filteredBlocks;
 	}
 	
 	/**
@@ -192,7 +218,7 @@ public class TownyActionEventExecutor {
 	 * @param loc - Location to check
 	 * @return true if allowed.
 	 */
-	public static boolean canExplosionDamageEntities(Location loc) {
+	public static boolean canExplosionDamageEntities(Location loc, Entity entity) {
 		/*
 		 *  canExplode will get Towny's normal response as to 
 		 *  whether an explosion is allowed in the given location.
@@ -203,13 +229,13 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplodeEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplodeEvent event = new TownyExplodeEvent(loc, null, 0, canExplode);
+		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, entity, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
 		 * Finally return the results after Towny lets its own 
 		 * war systems and other plugins have a say.
 		 */
-		return event.isAllowEntityDamage() && !event.isCancelled();
+		return !event.isCancelled();
 	}	
 }
