@@ -211,6 +211,10 @@
                             <pattern>org.apache.commons.compress</pattern>
                             <shadedPattern>com.palmergames.compress</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains.annotations</pattern>
+                            <shadedPattern>com.palmergames.annotations</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
