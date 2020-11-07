@@ -102,7 +102,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					if (!isRemovingWildernessEntity(livingEntity))
 						continue;
 					
-					System.out.println(livingEntity.toString());
 					livingEntitiesToRemove.add(livingEntity);
 					continue;
 				}
