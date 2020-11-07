@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
@@ -366,27 +368,27 @@ public class SpawnUtil {
 	 * @return true if uncancelled.
 	 */
 	public static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
+		SpawnEvent spawnEvent = null;
 		switch (type) {
+			case RESIDENT:
+				spawnEvent = new ResidentSpawnEvent(player, player.getLocation(), spawnLoc);
+				break;
+		
 			case TOWN:
-				TownSpawnEvent townSpawnEvent = new TownSpawnEvent(player, player.getLocation(), spawnLoc);
-				Bukkit.getPluginManager().callEvent(townSpawnEvent);
-
-				if (townSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, townSpawnEvent.getCancelMessage());
-					return false;
-				}
+				spawnEvent = new TownSpawnEvent(player, player.getLocation(), spawnLoc);
 				break;
 			case NATION:
-				NationSpawnEvent nationSpawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
-				Bukkit.getPluginManager().callEvent(nationSpawnEvent);
-
-				if (nationSpawnEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, nationSpawnEvent.getCancelMessage());
-					return false;
-				}
+				spawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
 				break;
 		}
+	
+		Bukkit.getPluginManager().callEvent(spawnEvent);
 		
+		if (spawnEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, spawnEvent.getCancelMessage());
+			return false;
+		}
+
 		return true;
 	}
 	

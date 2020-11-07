@@ -255,6 +255,11 @@ public enum ConfigNodes {
 			"new_world_settings.mobs.world_monsters_on",
 			"true",
 			"# Do new worlds have world_monsters_on enabled by default?"),
+	NWS_WILDERNESS_MONSTERS_ON(
+			"new_world_settings.mobs.wilderness_monsters_on",
+			"true",
+			"",
+			"# Do new worlds have wilderness_monsters_on enabled by default?"),
 	NWS_FORCE_TOWN_MONSTERS_ON(
 			"new_world_settings.mobs.force_town_monsters_on",
 			"false",
@@ -1008,7 +1013,10 @@ public enum ConfigNodes {
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
 			"# Switches are blocks, that are in the world, which get right-clicked.",
 			"# Towny will tell you the proper name to use in this list if you hit the block while holding a clay brick item in your hand.",
-			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS",
+			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS.",
+			"# Note: Vehicles like MINECARTS and BOATS can be added here. If you want to treat other rideable mobs like switches add SADDLE",
+			"#       to protect HORSES, DONKEYS, MULES, PIGS, STRIDERS (This is not recommended, unless you want players to not be able to",
+			"#       re-mount their animals in towns they cannot switch in.)",
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_FIRE_SPREAD_BYPASS(
 			"protection.fire_spread_bypass_materials",
@@ -1043,11 +1051,17 @@ public enum ConfigNodes {
 			"",
 			"# Disable creatures triggering stone pressure plates"),
 
+	PROT_MOB_REMOVE_WILDERNESS(
+			"protection.wilderness_mob_removal_entities",
+			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
+			"",
+			"# Remove living entities in the wilderness in all worlds that have wildernessmobs turned off."),
+
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# Globally remove living entities in all worlds that have their flag set."),
+			"# Globally remove living entities in all worlds that have worldmmobs turned off"),
 
 	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
 			"protection.world_prevent_villager_breeding",
