@@ -22,8 +22,7 @@ public class EntityTypeUtil {
 			EntityType.MINECART_TNT, 
 			EntityType.PRIMED_TNT, 
 			EntityType.WITHER, 
-			EntityType.WITHER_SKULL,
-			EntityType.ENDER_CRYSTAL));
+			EntityType.WITHER_SKULL));
 
 	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
 
@@ -110,10 +109,6 @@ public class EntityTypeUtil {
 			
 		case MINECART_TNT:
 			material = Material.TNT_MINECART;
-			break;
-		
-		case BOAT:
-			material = Material.OAK_BOAT;
 			break;
 		}
 					

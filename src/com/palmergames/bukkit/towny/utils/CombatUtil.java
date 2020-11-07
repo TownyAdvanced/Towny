@@ -248,15 +248,9 @@ public class CombatUtil {
 			/*
 			 * DefendingEntity is not a player.
 			 * This is now non-player vs non-player damage.
+			 * This should be unreachable as we are already parsing out
+			 * non-player involved combat at TownyEntityListener#nonPlayerEntityDamageByEntity.
 			 */
-			} else {
-			    /*
-			     * Prevents projectiles fired by non-players harming non-player entities.
-			     * Could be a monster or it could be a dispenser.
-			     */
-				if (attackingEntity instanceof Projectile) {
-					return true;	
-				}
 			}
 		}
 		return false;
@@ -394,7 +388,9 @@ public class CombatUtil {
 				if (defenderTB.getType().equals(TownBlockType.ARENA) && attackerTB.getType().equals(TownBlockType.ARENA))
 					return true;
 
-			} catch (NotRegisteredException ignored) {}
+			} catch (NotRegisteredException e) {
+				// Not a Town owned Plot
+			}
 		}
 		return false;
 	}
@@ -418,7 +414,9 @@ public class CombatUtil {
 				return true;
 			if (residentA.getTown().getNation().hasAlly(residentB.getTown().getNation()))
 				return true;
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 		return false;
 	}
 
@@ -438,7 +436,9 @@ public class CombatUtil {
 				return true;
 			if (a.getNation().hasAlly(b.getNation()))
 				return true;
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 		return false;
 	}
 
@@ -545,7 +545,9 @@ public class CombatUtil {
 				return false;
 			if (nationA.hasEnemy(nationB))
 				return true;
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 		return false;
 	}
 
@@ -586,7 +588,9 @@ public class CombatUtil {
 				return false;
 			if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
 				return true;
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 		return false;
 	}
 
@@ -606,7 +610,9 @@ public class CombatUtil {
 				return false;
 			if (a.getNation().hasEnemy(b.getNation()))
 				return true;
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 		return false;
 	}
 
@@ -617,11 +623,12 @@ public class CombatUtil {
 	 * @param worldCoord - Location
 	 * @return true if it is an enemy plot.
 	 */
-	public static boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
+	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 
 		try {
 			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
-		} catch (NotRegisteredException ignored) {}
-		return false;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
 	}
 }

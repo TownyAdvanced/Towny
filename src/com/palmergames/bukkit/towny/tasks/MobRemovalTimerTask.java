@@ -25,7 +25,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 	private final Server server;
 	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
-	public static List<Class<?>> classesOfWildernessMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
 	private final boolean isRemovingKillerBunny;
 
@@ -35,17 +34,12 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		this.server = server;
 
 		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
-		classesOfWildernessMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: ");
 		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
 		isRemovingKillerBunny = TownySettings.isRemovingKillerBunny();
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
 		return EntityTypeUtil.isInstanceOfAny(classesOfWorldMobsToRemove, livingEntity);
-	}
-	
-	public static boolean isRemovingWildernessEntity(LivingEntity livingEntity) {
-		return  EntityTypeUtil.isInstanceOfAny(classesOfWildernessMobsToRemove, livingEntity);
 	}
 
 	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
@@ -89,19 +83,17 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 						continue;
 				}
 				
-				// Handles entities Globally.
-				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity)) {
-					livingEntitiesToRemove.add(livingEntity);
-					continue;
-				}
-				
 				// Handles entities in the wilderness.
 				if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
-					if (townyWorld.hasWildernessMobs())
+					// Check if we're allowing mobs in unregistered plots in this world.
+					if (townyWorld.hasWorldMobs())
 						continue;
-					if (!isRemovingWildernessEntity(livingEntity))
+
+					// Check that Towny is removing this type of entity in unregistered plots.
+					if (!isRemovingWorldEntity(livingEntity))
 						continue;
 					
+					// Remove world mob.
 					livingEntitiesToRemove.add(livingEntity);
 					continue;
 				}

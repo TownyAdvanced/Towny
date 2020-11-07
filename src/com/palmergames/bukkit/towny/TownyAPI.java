@@ -54,14 +54,11 @@ public class TownyAPI {
     public Location getTownSpawnLocation(Player player) {
         try {
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-            if (resident.hasTown()) {
-				Town town = resident.getTown();
-				return town.getSpawn();
-			}
-        } catch (TownyException ignore) {
+            Town town = resident.getTown();
+            return town.getSpawn();
+        } catch (TownyException x) {
+            return null;
         }
-
-		return null;
     }
     
     /**
@@ -73,17 +70,11 @@ public class TownyAPI {
     public Location getNationSpawnLocation(Player player) {
         try {
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-            if (resident.hasTown()) {
-            	Town t = resident.getTown();
-            	if (t.hasNation()) {
-					Nation nation = t.getNation();
-					return nation.getSpawn();
-				}
-			}
-        } catch (TownyException ignore) {
+            Nation nation = resident.getTown().getNation();
+            return nation.getSpawn();
+        } catch (TownyException x) {
+            return null;
         }
-
-		return null;
     }
     
     
@@ -94,20 +85,14 @@ public class TownyAPI {
      * @return an online {@link Player} or if it's not obtainable.
      */
     public Player getPlayer(Resident resident) {
-    	// NPCs are not players
-    	if (resident.isNPC())
-    		return null;
-    	
-    	Player player = null;
-    	
-    	if (resident.hasUUID())
-    		player = BukkitTools.getPlayer(resident.getUUID());
-    	
-    	// Some servers use cross-platform proxies / offline mode where UUIDs may not be accurate. 
-    	if (player == null)
-    		player = BukkitTools.getPlayerExact(resident.getName());
-    	
-        return player;
+        for (Player player : BukkitTools.getOnlinePlayers()) {
+            if (player != null) {
+                if (player.getName().equals(resident.getName())) {
+                    return player;
+                }
+            }
+        }
+        return null;
     }
     
     /**
@@ -117,19 +102,14 @@ public class TownyAPI {
      * @return an online {@link Player}'s {@link UUID} or null if it's not obtainable.
      */
     public UUID getPlayerUUID(Resident resident) {
-    	// NPCs are not players
-    	if (resident.isNPC())
-    		return null;
-    	
-    	// Use stored UUID if it exists
-    	if (resident.hasUUID())
-    		return resident.getUUID();
-    	
-    	Player player = BukkitTools.getPlayerExact(resident.getName());
-    	
-    	if (player != null)
-    		return player.getUniqueId();
-        
+        // TODO: Store UUIDs in the db, so we don't need to rely on the player being online.
+        for (Player player : BukkitTools.getOnlinePlayers()) {
+            if (player != null) {
+                if (player.getName().equals(resident.getName())) {
+                    return player.getUniqueId();
+                }
+            }
+        }
         return null;
     }
     
@@ -217,14 +197,11 @@ public class TownyAPI {
     public boolean isWilderness(WorldCoord worldCoord) {
         
         try {
-        	// Do not throw an exception to reduce object creation
-        	if (worldCoord.hasTownBlock() && worldCoord.getTownBlock().hasTown())
-        		return false;
-        } catch (NotRegisteredException ignore) {
+            return worldCoord.getTownBlock().getTown() == null;
+        } catch (NotRegisteredException e) {
+            // Must be wilderness
+            return true;
         }
-
-		// Must be wilderness
-		return true;
     }    
     
     /**
@@ -245,7 +222,7 @@ public class TownyAPI {
      * Returns {@link TownyWorld} unless it is null.
      * 
      * @param worldName - the name of the world to get.
-     * @return TownyWorld or {@code null}.
+     * @return TownyWorld or null.
      */
     public TownyWorld getTownyWorld(String worldName) {
     	try {
@@ -261,32 +238,32 @@ public class TownyAPI {
      * Get the {@link Town} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} for.
-     * @return {@link Town} at this location, or {@code null} for none.
+     * @return {@link Town} at this location, or null for none.
      */
     public Town getTown(Location location) {
         try {
             WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            if (worldCoord.hasTownBlock()) {
-            	TownBlock tb = worldCoord.getTownBlock();
-            	if (tb.hasTown())
-            		return tb.getTown();
-			}
-        } catch (NotRegisteredException ignore) {
+            return worldCoord.getTownBlock().getTown();
+        } catch (NotRegisteredException e) {
+            // No data so return null
+            return null;
         }
-
-		// No data so return null
-		return null;
     }
     
     /**
      * Get the name of a {@link Town} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} name for.
-     * @return {@link String} containg the name of the {@link Town} at this location, or {@code null} for none.
+     * @return {@link String} containg the name of the {@link Town} at this location, or null for none.
      */
     public String getTownName(Location location) {
-    	Town town = getTown(location);
-    	return town != null ? town.getName() : null;
+        try {
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+            return worldCoord.getTownBlock().getTown().getName();
+        } catch (NotRegisteredException e) {
+            // No data so return null
+            return null;
+        }
     }
     
     
@@ -294,29 +271,32 @@ public class TownyAPI {
      * Get the {@link UUID} of a {@link Town} at the specified {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} {@link UUID} for.
-     * @return {@link UUID} of any {@link Town} at this {@link Location}, or {@code null} for none.
+     * @return {@link UUID} of any {@link Town} at this {@link Location}, or null for none.
      */
     public UUID getTownUUID(Location location) {
-    	Town town = getTown(location);
-    	return town != null ? town.getUuid() : null;
+        try {
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+            return worldCoord.getTownBlock().getTown().getUuid();
+        } catch (NotRegisteredException e) {
+            // No data so return null
+            return null;
+        }
     }
     
     /**
      * Get the {@link TownBlock} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link TownBlock} of.
-     * @return {@link TownBlock} at this {@link Location}, or {@code null} for none.
+     * @return {@link TownBlock} at this {@link Location}, or null for none.
      */
     public TownBlock getTownBlock(Location location) {
         try {
             WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            if (worldCoord.hasTownBlock())
-            	return worldCoord.getTownBlock();
-        } catch (NotRegisteredException ignore) {
+            return worldCoord.getTownBlock();
+        } catch (NotRegisteredException e) {
+            // No data so return null
+            return null;
         }
-
-		// No data so return null
-		return null;
     }
     
     /**

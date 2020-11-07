@@ -1333,12 +1333,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
-			result = rs.getBoolean("wildernessmobs");
-			try {
-				world.setWildernessMobs(result);
-			} catch (Exception ignored) {
-			}
-
 			result = rs.getBoolean("worldmobs");
 			try {
 				world.setWorldMobs(result);
@@ -1974,8 +1968,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("claimable", world.isClaimable());
 			// has monster spawns
 			nat_hm.put("worldmobs", world.hasWorldMobs());
-			// has wilderness monster spawns
-			nat_hm.put("wildernessmobs", world.hasWildernessMobs());
 			// force town mob spawns
 			nat_hm.put("forcetownmobs", world.isForceTownMobs());
 			// has firespread enabled

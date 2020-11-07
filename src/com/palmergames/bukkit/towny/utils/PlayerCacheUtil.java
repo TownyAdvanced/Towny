@@ -242,6 +242,9 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
+		
+		//if (isTownyAdmin(player))
+		//        return TownBlockStatus.ADMIN;
 
 		try {
 			if (!worldCoord.getTownyWorld().isUsingTowny())
@@ -251,24 +254,9 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.NOT_REGISTERED;
 		}
 
-		if (!worldCoord.hasTownBlock()) {
-			// Has to be wilderness.
-
-			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
-			if (TownySettings.getNationZonesEnabled()) {
-				// This nation zone system can be disabled during wartime.
-				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
-					// Returns either UNCLAIMED_ZONE or NATION_ZONE.
-					return TownyAPI.getInstance().hasNationZone(worldCoord);
-				}				
-			}
-	
-			// Otherwise treat as normal wilderness. 
-			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
-
-		TownBlock townBlock = null;
-		Town town = null;
+		//TownyUniverse universe = plugin.getTownyUniverse();
+		TownBlock townBlock;
+		Town town;
 		try {
 			townBlock = worldCoord.getTownBlock();
 			town = townBlock.getTown();
@@ -282,7 +270,21 @@ public class PlayerCacheUtil {
 				townBlock.setLocked(false);
 			}
 
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException e) {
+			// Has to be wilderness because townblock = null;
+
+			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
+			if (TownySettings.getNationZonesEnabled()) {
+				// This nation zone system can be disabled during wartime.
+				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
+					// Returns either UNCLAIMED_ZONE or NATION_ZONE.
+					return TownyAPI.getInstance().hasNationZone(worldCoord);
+				}				
+			}
+	
+			// Otherwise treat as normal wilderness. 
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
 
 		/*
 		 * Find the resident data for this player.
