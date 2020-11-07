@@ -5217,3 +5217,4 @@ v0.92.0.11:
   - New Config option: protection.wilderness_mob_removal_entities
     - default: Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse
     - Remove living entities in the wilderness in all worlds that have the wildernessmobs turned off in.
+  - Update polish.yml courtesy of Martinez.
