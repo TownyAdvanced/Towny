@@ -5192,3 +5192,19 @@ v0.92.0.11:
   - API: Add ResidentSpawnEvent, fires when someone uses /res spawn.
   - Fix deny_bed_use not doing very much in the daytime.
   - Fix a bunch of cases where we were pointlessly using NREs in the CombatUtil.
+  - Explosions revamp.
+    - In order to accomodate all of the Listener class changes in this pre-release version, explosions were re-tested (big thanks to SirSalad and Drainer for their help.)
+    - Fixes entities being harmed by blockexplosions, entityexplosions and lightning all in one tiny method, (except hanging entities and vehicles.)
+      - Hanging entities and vehicles are also kept safe from explosions in their own events.
+      - Vehicles now prevent the damage instead of just destruction, meaning carts and boats wont get tossed around by explosions.
+    - Unifies the canLocationExplode methods into one ExplosionUtil method.
+      - Rewrote the method to be more simple. It will change again when the war parts are removed and turned into an event.
+    - Fixes vehicles being destroyed by null attackers (respawn anchor, beds, tnt minecarts, probably others,) and adds Boats to the list of protected things.
+    - Adds RespawnAnchors to the BedExplodeEvent system, since their BlockExplodeEvents also register an AIR block where they explode.
+    - Made blocks and entities that explode actually blow up the blocks in their block lists that are allowed to explode according to the townblock/world setting.
+      - Previous behaviour was to cancel the whole explosion if any block could not be blown up.
+    - Set priority of BedClickExplosion EventPriority to Monitor.
+  - Add boat to possible switch use.
+  - Move switch tests for vehicle entering to the Vehicle listener.
+    - Add the option to use SADDLE to protect the saddle-wearing vehicles in the switch list (not recommended, see switch_ids section of the config.)
+0.96.3.3:

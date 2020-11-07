@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Location;
@@ -28,6 +29,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -295,12 +297,16 @@ public class TownyBlockListener implements Listener {
 		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material))
 			revertingThisMaterial = true;
 		
+		// Blocks that will be allowed to explode.
+		List<Block> toKeep = new ArrayList<Block>();
+		
 		for (Block block : blocks) {
 			count++;
 			
-			if (!locationCanExplode(townyWorld, block.getLocation())) {
-				event.setCancelled(true);
-				return;
+			if (!ExplosionUtil.locationCanExplode(block.getLocation())) {
+				continue;
+			} else {
+				toKeep.add(block);
 			}
 			
 			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisMaterial) {
@@ -308,49 +314,7 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 		
+		event.blockList().clear();
+		event.blockList().addAll(toKeep);
 	}
-	
-	/**
-	 * Test if this location has explosions enabled.
-	 * 
-	 * @param world - Towny-enabled World to check in
-	 * @param target - Location to check
-	 * @return true if allowed.
-	 */
-	public boolean locationCanExplode(TownyWorld world, Location target) {
-
-		Coord coord = Coord.parseCoord(target);
-
-		if (world.isWarZone(coord) && !WarZoneConfig.isAllowingExplosionsInWarZone()) {
-			return false;
-		}
-		TownBlock townBlock = null;
-		boolean isNeutral = false;
-		townBlock = TownyAPI.getInstance().getTownBlock(target);
-		if (townBlock != null && townBlock.hasTown())
-			if (!War.isWarZone(townBlock.getWorldCoord()))
-				isNeutral = true;
-
-		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
-			isNeutral = !world.isExpl();
-			if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return false;				
-			if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return true;	
-		}
-		
-		try {			
-			if (world.isUsingTowny() && !world.isForceExpl()) {
-				if (TownyAPI.getInstance().isWarTime() && WarZoneConfig.explosionsBreakBlocksInWarZone() && !isNeutral){
-					return true;				
-				}
-				if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && WarZoneConfig.isAllowingExplosionsInWarZone() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG()))
-					return false;
-			}
-		} catch (NotRegisteredException e) {
-			return world.isExpl();
-		}
-		return true;
-	}
-
 }

@@ -343,16 +343,21 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	/**
+<<<<<<< Upstream, based on origin/master
 	 * Handles clicking on beds in the nether, sending blocks to a map so we can track when explosions occur from beds.
 	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds exploding, which is why this is necessary.
 	 * 
 	 * Also denies the use of beds in plots the player doesn't own and plots which are not inn plots.
 	 *   - Also denies enemies and outlaws using inn plots.
 	 *   
+=======
+	 * Handles clicking on beds in the nether/respawn anchors in the overworld sending blocks to a map so we can track when explosions occur from beds.
+	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds/anchors exploding, which is why this is necessary.
+>>>>>>> edeaa1f More explosions protections.
 	 * @param event PlayerInteractEvent
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerInteractWithBed(PlayerInteractEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerBlowsUpBedOrRespawnAnchor(PlayerInteractEvent event) {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -364,12 +369,29 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		if (event.hasBlock()) {
+			/*
+			 * Catches respawn anchors blowing up and allows us to track their explosions.
+			 */
+			if (block.getType() == Material.RESPAWN_ANCHOR) {
+				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
+				if (anchor.getCharges() == 4)
+					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
+				return;
+			}
+			
+			/*
+			 * Catches beds blowing up and allows us to track their explosions.
+			 */
 			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
 				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
 				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 				return;
 			}
 			
+			/*
+			 * Prevents setting the spawn point of the player using beds, 
+			 * except in allowed plots (personally-owned and Inns)
+			 */
 			if (Tag.BEDS.isTagged(block.getType())) {
 				if (!TownySettings.getBedUse())
 					return;
@@ -392,6 +414,7 @@ public class TownyPlayerListener implements Listener {
 					isOwner = townblock.isOwner(resident);
 					isInnPlot = townblock.getType() == TownBlockType.INN;
 					
+					//Prevent enemies and outlaws using the Inn plots.
 					if (CombatUtil.isEnemyTownBlock(event.getPlayer(), townblock.getWorldCoord()) || town.hasOutlaw(resident)) {
 						event.setCancelled(true);
 						TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_no_sleep_in_enemy_inn"));
@@ -406,7 +429,6 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
-		
 	}
 
 	
@@ -464,6 +486,7 @@ public class TownyPlayerListener implements Listener {
 				case LEASH_HITCH:
 				case MINECART_COMMAND:
 				case MINECART_TNT:
+				case MINECART_MOB_SPAWNER:
 					mat = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					break;
 				/*
@@ -481,8 +504,6 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Afterwards they will remain as Switch perm checks.
 				 */
-				case MINECART:
-				case MINECART_MOB_SPAWNER:
 				case MINECART_CHEST:
 				case MINECART_FURNACE:				
 				case MINECART_HOPPER:
