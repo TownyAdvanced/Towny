@@ -5208,3 +5208,12 @@ v0.92.0.11:
   - Move switch tests for vehicle entering to the Vehicle listener.
     - Add the option to use SADDLE to protect the saddle-wearing vehicles in the switch list (not recommended, see switch_ids section of the config.)
 0.96.3.3:
+  - New Command: /tw toggle wildernessmobs, courtesy of jaxarthur with PR #4422 (First-Time Contributor!)
+    - toggles mobs on and off in the wilderness only.
+    - Closes #4169.
+  - New Config option: new_world_settings.mobs.wilderness_monsters_on
+    - default: true
+    - Do new worlds have wilderness_monsters_on enabled by default?
+  - New Config option: protection.wilderness_mob_removal_entities
+    - default: Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse
+    - Remove living entities in the wilderness in all worlds that have the wildernessmobs turned off in.
