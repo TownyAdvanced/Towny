@@ -1197,6 +1197,13 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_WORLD);
 	}
 
+	public static List<String> getWildernessMobRemovalEntities() {
+
+		if (getDebug())
+			System.out.println("[Towny] Debug: Reading World Mob removal entities. ");
+		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_WILDERNESS);
+	}
+
 	public static List<String> getTownMobRemovalEntities() {
 
 		if (getDebug())
@@ -1931,6 +1938,10 @@ public class TownySettings {
 	public static boolean isWorldMonstersOn() {
 
 		return getBoolean(ConfigNodes.NWS_WORLD_MONSTERS_ON);
+	}
+	
+	public static boolean isWildernessMonstersOn() {
+		return getBoolean(ConfigNodes.NWS_WILDERNESS_MONSTERS_ON);
 	}
 
 	public static boolean isExplosions() {
