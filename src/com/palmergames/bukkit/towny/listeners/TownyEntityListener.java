@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -442,6 +443,11 @@ public class TownyEntityListener implements Listener {
 				// Failed to fetch a world
 				return;
 			}
+
+			MobSpawnRemovalEvent mobSpawnRemovalEvent;
+			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
+			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
+			if(mobSpawnRemovalEvent.isCancelled()) return;
 
 			// remove from world if set to remove mobs globally
 			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
