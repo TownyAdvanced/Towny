@@ -137,14 +137,14 @@ public class TownClaim extends Thread {
 			if (resident == null) {
 				return;
 			}
-			int townSize = town.getTownBlocks().size();
-			
+			int townSize = town.getTownBlocks().size() - 1; // size() - 1 because the homeblock will not be unclaimed.
+			double refund = TownySettings.getClaimRefundPrice() * townSize;
 			// Send confirmation message,
 			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
-				if (TownySettings.isUsingEconomy() && TownySettings.getClaimRefundPrice() > 0.0) {
+				if (TownySettings.isUsingEconomy() && refund > 0.0) {
 					try {
-						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); // townSize - 1 because the homeblock will not be unclaimed.
+						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); 
 						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
 					} catch (EconomyException e) {
 						e.printStackTrace();
