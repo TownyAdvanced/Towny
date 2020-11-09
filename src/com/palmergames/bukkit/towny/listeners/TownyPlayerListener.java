@@ -75,7 +75,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -815,7 +814,8 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 	}
-	
+
+
 	/**
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
