@@ -5222,3 +5222,5 @@ v0.92.0.11:
     - Closes #4388.
     - Also fixes colour encoding lost in /tw status screen.
   - Fix unclaim refund amount getting ahead of itself.
+0.96.3.4:
+  - Updated polish.yml courtesy of Martinez and EmpressKedavra.
