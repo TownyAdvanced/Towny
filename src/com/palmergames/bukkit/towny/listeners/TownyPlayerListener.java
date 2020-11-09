@@ -14,35 +14,25 @@ import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
+import com.palmergames.util.TimeMgmt;
 import net.citizensnpcs.api.CitizensAPI;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -73,6 +63,8 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -771,27 +763,84 @@ public class TownyPlayerListener implements Listener {
 		}		
 	}
 	
-	/*
+	/**
 	 * onOutlawEnterTown
-	 * - Shows message to outlaws entering towns in which they are considered an outlaw.
-	 */
+	 * - Handles outlaws entering a town they are outlawed in.
+	 **/
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onOutlawEnterTown(PlayerEnterTownEvent event) throws NotRegisteredException {
+
+		Resident outlaw = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
+		Town town = event.getEnteredtown();
+		TownBlock location = event.getTo().getTownBlock();
 		
-		Player player = event.getPlayer();		
-		WorldCoord to = event.getTo();
-		Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-
-		if (to.getTownBlock().getTown().hasOutlaw(resident))
-			TownyMessaging.sendMsg(player, Translation.of("msg_you_are_an_outlaw_in_this_town", to.getTownBlock().getTown()));
+		String[] split = new String[0];
+		long cooldown = TownySettings.getOutlawKickCooldown();
+		
+		// If this resident is an outlaw in this town
+		if (location.getTown().hasOutlaw(outlaw)) {
+			if (!TownySettings.canOutlawsEnterTowns()) {
+				// Are towns warned when there is an outlaw entering?
+				if (TownySettings.doTownsGetWarnedOnOutlaw()) {
+					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify").replace("%s", outlaw.getName()));
+				}
+				// Cooldown messages
+				if (cooldown < 1) {
+					TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kick", town));
+				} else {
+					TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kick_cooldown").replace("%c", TimeMgmt.formatCountdownTime(cooldown)).replace("%s", town.getFormattedName()));
+				}
+				
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						
+						if (town.hasOutlaw(outlaw)) {
+							
+							Player player = outlaw.getPlayer();
+							
+							// Outlaw has/doesn't have a town.
+							if (!outlaw.hasTown()) {
+								if (player.getBedSpawnLocation() == null) { 
+									player.teleport(town.getWorld().getSpawnLocation());
+								} else {
+									player.teleport(player.getBedLocation());
+								}
+							} else if (outlaw.hasTown()) {
+								try {
+									if (outlaw.getTown().hasSpawn()) {
+										try {
+											SpawnUtil.sendToTownySpawn(player, split, outlaw.getTown(), Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.TOWN);
+										} catch(TownyException exception) {
+											player.teleport(town.getWorld().getSpawnLocation());
+										}
+									} else {
+										try {
+											SpawnUtil.sendToTownySpawn(player, split, outlaw, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
+										} catch(TownyException exception) {
+											player.teleport(town.getWorld().getSpawnLocation());
+										}
+									}
+								} catch (NotRegisteredException e) {
+									player.teleport(town.getWorld().getSpawnLocation());
+								}
+								TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
+							}
+						}
+					}
+				}.runTaskLater(plugin, cooldown * 20);
+			}
+			else {
+				TownyMessaging.sendMsg(outlaw, Translation.of("msg_you_are_an_outlaw_in_this_town", town));
+			}
+		}
 	}
-
-
-	/**
+		
+		/**
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
 	 * 
-	 * @author - Articdive
+	 * @author - Articdiv
 	 * @param event - PlayerDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -1063,3 +1112,4 @@ public class TownyPlayerListener implements Listener {
 	
 	
 }
+
