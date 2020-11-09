@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -30,6 +29,8 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
 import com.palmergames.util.TimeMgmt;
+
+import io.papermc.lib.PaperLib;
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.*;
@@ -763,75 +764,41 @@ public class TownyPlayerListener implements Listener {
 		}		
 	}
 	
-	/**
+	/*
 	 * onOutlawEnterTown
 	 * - Handles outlaws entering a town they are outlawed in.
-	 **/
+	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onOutlawEnterTown(PlayerEnterTownEvent event) throws NotRegisteredException {
 
 		Resident outlaw = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 		Town town = event.getEnteredtown();
-		TownBlock location = event.getTo().getTownBlock();
 		
-		String[] split = new String[0];
-		long cooldown = TownySettings.getOutlawKickCooldown();
-		
-		// If this resident is an outlaw in this town
-		if (location.getTown().hasOutlaw(outlaw)) {
-			if (!TownySettings.canOutlawsEnterTowns()) {
-				// Are towns warned when there is an outlaw entering?
-				if (TownySettings.doTownsGetWarnedOnOutlaw()) {
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify").replace("%s", outlaw.getName()));
+		if (town.hasOutlaw(outlaw)) {
+			if (TownySettings.doTownsGetWarnedOnOutlaw()) {
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
+			}
+			if (TownySettings.canOutlawsEnterTowns()) {
+				TownyMessaging.sendMsg(outlaw, Translation.of("msg_you_are_an_outlaw_in_this_town", town));
+			} else {
+				if (TownySettings.getOutlawTeleportWarmup() > 0) {
+					TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
 				}
-				// Cooldown messages
-				if (cooldown < 1) {
-					TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kick", town));
-				} else {
-					TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kick_cooldown").replace("%c", TimeMgmt.formatCountdownTime(cooldown)).replace("%s", town.getFormattedName()));
-				}
-				
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						
-						if (town.hasOutlaw(outlaw)) {
-							
-							Player player = outlaw.getPlayer();
-							
-							// Outlaw has/doesn't have a town.
-							if (!outlaw.hasTown()) {
-								if (player.getBedSpawnLocation() == null) { 
-									player.teleport(town.getWorld().getSpawnLocation());
-								} else {
-									player.teleport(player.getBedLocation());
-								}
-							} else if (outlaw.hasTown()) {
-								try {
-									if (outlaw.getTown().hasSpawn()) {
-										try {
-											SpawnUtil.sendToTownySpawn(player, split, outlaw.getTown(), Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.TOWN);
-										} catch(TownyException exception) {
-											player.teleport(town.getWorld().getSpawnLocation());
-										}
-									} else {
-										try {
-											SpawnUtil.sendToTownySpawn(player, split, outlaw, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
-										} catch(TownyException exception) {
-											player.teleport(town.getWorld().getSpawnLocation());
-										}
-									}
-								} catch (NotRegisteredException e) {
-									player.teleport(town.getWorld().getSpawnLocation());
-								}
-								TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
-							}
+						if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName())) {
+							Location spawnLocation = town.getWorld().getSpawnLocation();
+							Player outlawedPlayer = outlaw.getPlayer();
+							if (outlawedPlayer.getBedSpawnLocation() != null)
+								spawnLocation = outlawedPlayer.getBedSpawnLocation();
+							if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
+								spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
+							TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
+							PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
 						}
 					}
-				}.runTaskLater(plugin, cooldown * 20);
-			}
-			else {
-				TownyMessaging.sendMsg(outlaw, Translation.of("msg_you_are_an_outlaw_in_this_town", town));
+				}.runTaskLater(plugin, TownySettings.getOutlawTeleportWarmup() * 20);
 			}
 		}
 	}

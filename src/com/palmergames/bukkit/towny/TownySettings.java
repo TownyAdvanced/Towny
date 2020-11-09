@@ -2907,5 +2907,17 @@ public class TownySettings {
 	public static boolean doBankruptTownsPayNationTax() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
 	}
+
+	public static boolean canOutlawsEnterTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
+	}
+	
+	public static int getOutlawTeleportWarmup() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
+	}
+	
+	public static boolean doTownsGetWarnedOnOutlaw() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
+	}
 }
 
