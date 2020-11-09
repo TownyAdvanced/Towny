@@ -5221,3 +5221,4 @@ v0.92.0.11:
   - Fix wonky resident lists by adopting ChatPaginator in formatting the status screens.
     - Closes #4388.
     - Also fixes colour encoding lost in /tw status screen.
+  - Fix unclaim refund amount getting ahead of itself.

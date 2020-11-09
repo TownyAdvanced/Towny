@@ -144,7 +144,7 @@ public class TownClaim extends Thread {
 				TownClaim.townUnclaimAll(plugin, town);
 				if (TownySettings.isUsingEconomy() && TownySettings.getClaimRefundPrice() > 0.0) {
 					try {
-						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
+						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); // townSize - 1 because the homeblock will not be unclaimed.
 						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
 					} catch (EconomyException e) {
 						e.printStackTrace();
