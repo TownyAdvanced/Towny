@@ -819,7 +819,7 @@ public class TownyPlayerListener implements Listener {
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
 	 * 
-	 * @author - Articdiv
+	 * @author - Articdive
 	 * @param event - PlayerDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
