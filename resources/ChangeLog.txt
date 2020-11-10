@@ -5224,3 +5224,4 @@ v0.92.0.11:
   - Fix unclaim refund amount getting ahead of itself.
 0.96.3.4:
   - Updated polish.yml courtesy of Martinez and EmpressKedavra.
+  - Typos fixed in the english.yml courtesy of jowsey with PR #4432 (First-Time Contributor!)
