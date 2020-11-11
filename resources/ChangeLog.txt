@@ -5226,3 +5226,4 @@ v0.92.0.11:
   - Updated polish.yml courtesy of Martinez and EmpressKedavra.
   - Typos fixed in the english.yml courtesy of jowsey with PR #4432 (First-Time Contributor!)
   - Add item_use test for shears carving pumpkins.
+  - Add resident alias to /n list by, courtesy of sirsalad with PR #4433 (First-Time Contributor!)
