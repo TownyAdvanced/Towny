@@ -1115,7 +1115,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				i++;
 				if (i < split.length) {
 					comparatorSet = true;
-					if (split[i].equalsIgnoreCase("residents")) {
+					if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_NUM_RESIDENTS;
