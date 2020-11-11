@@ -547,6 +547,27 @@ public enum ConfigNodes {
 			"",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN(
+			"global_town_settings.allow_outlaws_to_enter_town",
+			"true",
+			"",
+			"# Can outlaws roam freely on the towns they are outlawed in?",
+			"# If false, outlaws will not be teleported away when they spend too long in the towns they are outlawed in.",
+			"# The time is set below in the outlaw_teleport_warmup."),
+	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
+			"global_town_settings.warn_town_on_outlaw",
+			"false",
+			"",
+			"# Should towns be warned in case an outlaw roams the town?",
+			"# Warning: Outlaws can use this feature to spam residents with warnings!",
+			"# It is recommended to set this to true only if you're using outlaw teleporting with a warmup of 0 seconds."),
+	GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP(
+			"global_town_settings.outlaw_teleport_warmup",
+			"5",
+			"",
+			"# How much seconds are required for outlaws to be teleported away?",
+			"# You can set this to 0 to instantly teleport the outlaw from town.",
+			"# This will not have any effect if allow_outlaws_to_enter_town is enabled."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",
