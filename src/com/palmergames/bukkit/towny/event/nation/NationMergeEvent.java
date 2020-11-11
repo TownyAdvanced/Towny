@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.nation;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.Bukkit;

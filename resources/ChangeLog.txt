@@ -5247,4 +5247,4 @@ v0.92.0.11:
     - How many seconds are required for outlaws to be teleported away?
     - You can set this to 0 to instantly teleport the outlaw from town.
     - This will not have any effect if allow_outlaws_to_enter_town is enabled.
-
+  - Move NationPreMergeEvent, NationMergeEvent, PreNewNationEvent to nation subpackage.
