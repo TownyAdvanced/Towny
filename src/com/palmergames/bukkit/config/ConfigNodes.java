@@ -565,7 +565,7 @@ public enum ConfigNodes {
 			"global_town_settings.outlaw_teleport_warmup",
 			"5",
 			"",
-			"# How much seconds are required for outlaws to be teleported away?",
+			"# How many seconds are required for outlaws to be teleported away?",
 			"# You can set this to 0 to instantly teleport the outlaw from town.",
 			"# This will not have any effect if allow_outlaws_to_enter_town is enabled."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
