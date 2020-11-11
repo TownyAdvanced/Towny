@@ -5227,3 +5227,5 @@ v0.92.0.11:
   - Typos fixed in the english.yml courtesy of jowsey with PR #4432 (First-Time Contributor!)
   - Add item_use test for shears carving pumpkins.
   - Add resident alias to /n list by, courtesy of sirsalad with PR #4433 (First-Time Contributor!)
+  - Add friendlyfire and wildernessmobs to the /tw status screen.
+  - Bump language files to 0.89.
