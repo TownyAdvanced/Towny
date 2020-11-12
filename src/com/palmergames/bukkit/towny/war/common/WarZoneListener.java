@@ -190,7 +190,6 @@ public class WarZoneListener implements Listener {
 		event.setCancelled(false);
 	}
 
-
 	@EventHandler (priority=EventPriority.HIGH)
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {
 		if (!(FlagWarConfig.isAllowingAttacks() && event.getMaterial() == FlagWarConfig.getFlagBaseMaterial()))
@@ -207,6 +206,4 @@ public class WarZoneListener implements Listener {
 				event.setMessage(e.getMessage());
 			}
 	}
-	
-	
 }

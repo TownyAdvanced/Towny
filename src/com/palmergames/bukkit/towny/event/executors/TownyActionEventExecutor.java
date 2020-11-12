@@ -174,11 +174,12 @@ public class TownyActionEventExecutor {
 	}
 	
 	/**
-	 * Test if explosions can destroy blocks here.
+	 * Filters out blocks which should not be exploded, from a list
+	 * of blocks which have been caused to explode.
 	 * 
-	 * First uses Towny's internal plot permissions and
-	 * then fires a TownyExplosionEvent to let Towny's war
-	 * systems and other plugins decide how to proceed.
+	 * First uses Towny's plot permissions to decide whether a block should be filtered out.
+	 * Then, fires a TownyExplodingBlockEvent which allows Towny's internal war systems,
+	 * as well as outside plugins to alter the block list that is eventually used.
 	 * 
 	 * @param blockList - List of Blocks which might be exploded.
 	 * @return filteredBlocks - List of Blocks which are going to be allowed to explode.
