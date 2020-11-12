@@ -253,10 +253,10 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Pay the nation tax with at least some amount of debt.
 						town.getAccount().withdraw(taxAmount, "Nation Tax to " + nation.getName()); // .withdraw() is used because other economy methods do not allow a town to go into debt.
 						nation.getAccount().deposit(taxAmount, "Nation Tax from " + town.getName());
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax_with_debt", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 
 						// Check if the town was newly bankrupted and punish them for it.
-						if (!townWasBankrupt && town.isBankrupt()) {
+						if (!townWasBankrupt) {
 							town.setOpen(false);
 							universe.getDataSource().saveTown(town);
 							localNewlyDelinquentTowns.add(town.getName());
@@ -496,10 +496,10 @@ public class DailyTimerTask extends TownyTimerTask {
 							
 							// Finally pay the upkeep or the modified upkeep up to the debtcap. 
 							town.getAccount().withdraw(upkeep, "Town Upkeep");
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_payed_upkeep_with_debt", TownyEconomyHandler.getFormattedBalance(upkeep)));
 							
 							// Check if the town was newly bankrupted and punish them for it.
-							if(!townWasBankrupt && town.isBankrupt()) {
+							if(!townWasBankrupt) {
 								town.setOpen(false);
 								universe.getDataSource().saveTown(town);
 								bankruptedTowns.add(town.getName());
