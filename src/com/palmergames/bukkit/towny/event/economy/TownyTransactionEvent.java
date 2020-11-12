@@ -1,16 +1,10 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.economy;
 
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Deprecated as of 0.96.3.4 use {@link com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent} instead
-
- * @author Siris
- */
-@Deprecated
 public class TownyTransactionEvent extends Event {
 	
 	private final Transaction transaction;

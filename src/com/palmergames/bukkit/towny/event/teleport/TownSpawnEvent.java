@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
-import com.palmergames.bukkit.towny.event.teleport.SpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -8,16 +7,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
- * An event called when /res spawn occurs.
+ * An event called when town spawns occur.
  * 
- * @author LlmDl
+ * @author Suneet Tipirneni (Siris)
  */
-public class ResidentSpawnEvent extends SpawnEvent {
+public class TownSpawnEvent extends SpawnEvent {
 	
 	Town fromTown;
 	private Town toTown;
 	
-	public ResidentSpawnEvent(Player player, Location from, Location to) {
+	public TownSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
 
 		try {

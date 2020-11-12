@@ -1,14 +1,8 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.economy;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Transaction;
 
-/**
- * Deprecated as of 0.96.3.4 use {@link com.palmergames.bukkit.towny.event.economy.NationTransactionEvent} instead
-
- * @author Siris
- */
-@Deprecated
 public class NationTransactionEvent extends BankTransactionEvent {
 	
 	final Nation nation;

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.teleport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,10 +10,8 @@ import org.bukkit.event.HandlerList;
 /**
  * A class which provides the basis for spawn events.
  * 
- * Deprecated as of 0.96.3.4, use {@link com.palmergames.bukkit.towny.event.teleport.SpawnEvent} instead.
  * @author Suneet Tipirneni (Siris)
  */
-@Deprecated
 public abstract class SpawnEvent extends Event implements Cancellable {
 	private final Location from;
 	private final Location to;

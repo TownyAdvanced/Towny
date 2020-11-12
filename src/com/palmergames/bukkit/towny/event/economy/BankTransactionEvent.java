@@ -1,34 +1,38 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.economy;
 
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Deprecated as of 0.96.3.4 use {@link com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent} instead
-
- * @author Siris
+ * Called whenever a deposit is made to any object with
+ * an associated bank.
  */
-@Deprecated
-public class TownyTransactionEvent extends Event {
-	
-	private final Transaction transaction;
+public class BankTransactionEvent extends Event {
+
+	private final Account account;
 	private static final HandlerList handlers = new HandlerList();
+	private final Transaction transaction;
 	
-	public TownyTransactionEvent(Transaction transaction) {
+	public BankTransactionEvent(Account account, Transaction transaction) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.transaction = transaction;
+		this.account = account;
 	}
-
+	
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
 	public static HandlerList getHandlerList() {
-
 		return handlers;
+	}
+
+	public Account getAccount() {
+		return account;
 	}
 
 	public Transaction getTransaction() {

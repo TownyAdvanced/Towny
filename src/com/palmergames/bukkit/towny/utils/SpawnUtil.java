@@ -2,9 +2,9 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import com.palmergames.bukkit.towny.event.NationSpawnEvent;
-import com.palmergames.bukkit.towny.event.SpawnEvent;
-import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.SpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;

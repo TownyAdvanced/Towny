@@ -9,8 +9,10 @@ import org.bukkit.entity.Player;
 /**
  * An event called when town spawns occur.
  * 
+ * Deprecated as of 0.96.3.4, use {@link com.palmergames.bukkit.towny.event.teleport.TownSpawnEvent} instead.
  * @author Suneet Tipirneni (Siris)
  */
+@Deprecated
 public class TownSpawnEvent extends SpawnEvent {
 	
 	Town fromTown;

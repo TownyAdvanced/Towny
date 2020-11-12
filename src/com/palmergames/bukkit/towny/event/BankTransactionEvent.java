@@ -9,7 +9,10 @@ import org.bukkit.event.HandlerList;
 /**
  * Called whenever a deposit is made to any object with
  * an associated bank.
+ * 
+ * Deprecated as of 0.96.3.4 use {@link com.palmergames.bukkit.towny.event.economy.BankTransactionEvent} instead.
  */
+@Deprecated
 public class BankTransactionEvent extends Event {
 
 	private final Account account;

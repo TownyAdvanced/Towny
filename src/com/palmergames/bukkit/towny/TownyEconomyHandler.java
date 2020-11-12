@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
-import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
+import com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent;
 import com.palmergames.bukkit.towny.object.economy.adapter.ReserveEconomyAdapter;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
