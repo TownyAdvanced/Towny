@@ -12,7 +12,11 @@ import org.jetbrains.annotations.Nullable;
  * Part of the API which lets Towny's war and other plugins modify Towny's
  * plot-permission-decision outcomes.
  * 
- * Explosion events are thrown when an explosion occurs in a Towny world.
+ * TownyExplodingBlockEvents are thrown when an explosion occurs 
+ * in a Towny world, causing block damage.
+ * 
+ * - When a bed/respawn anchor explodes causing block damage.
+ * - When a an entity explodes causing block damage.
  * 
  * @author LlmDl
  */
@@ -34,7 +38,7 @@ public class TownyExplodingBlockEvent extends Event {
 		this.vanillaBlockList = vanillaBlockList;
 		this.filteredBlockList = townyFilteredList;
 	}
-	
+
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
@@ -53,7 +57,7 @@ public class TownyExplodingBlockEvent extends Event {
 		this.blockList.addAll(blockList);
 		this.isChanged = true;
 	}
-	
+
 	/**
 	 * The block list that will ultimately be used to set which blocks are allowed, as long as setBlockList() has been used by someone.
 	 * 
@@ -63,7 +67,7 @@ public class TownyExplodingBlockEvent extends Event {
 	public List<Block> getBlockList() {
 		return blockList;
 	}
-	
+
 	/**
 	 * The blocklist of blocks exploding because of the explosion event that triggered this event.
 	 * 
@@ -82,7 +86,7 @@ public class TownyExplodingBlockEvent extends Event {
 	public final List<Block> getTownyFilteredBlockList() {
 		return filteredBlockList;
 	}
-	
+
 	/**
 	 * Has any plugin or Towny's WarZoneListener modified the list of blocks to explode?
 	 * 
@@ -91,5 +95,5 @@ public class TownyExplodingBlockEvent extends Event {
 	public boolean isChanged() {
 		return isChanged;
 	}
-	
+
 }

@@ -567,7 +567,7 @@ public class TownyEntityListener implements Listener {
 
 		case WITHER:
 
-			if (!TownyActionEventExecutor.isAllowedExplosion(event.getBlock().getLocation())) {
+			if (!TownyActionEventExecutor.canLocationExplode(event.getBlock().getLocation())) {
 				event.setCancelled(true);
 				return;
 			}
