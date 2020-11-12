@@ -227,6 +227,7 @@ public class TownyActionEventExecutor {
 	 * 
 	 * @param loc - Location to check
 	 * @param entity - Entity which will be damaged.
+	 * @param cause - DamageCause which has caused the damage.
 	 * @return true if allowed.
 	 */
 	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause) {
