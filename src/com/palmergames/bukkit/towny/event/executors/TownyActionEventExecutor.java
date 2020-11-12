@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlockEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplosionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -238,27 +237,6 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, entity, canExplode);
-		BukkitTools.getPluginManager().callEvent(event);
-
-		/*
-		 * Finally return the results after Towny lets its own 
-		 * war systems and other plugins have a say.
-		 */
-		return !event.isCancelled();
-	}
-	
-	public static boolean canLocationExplode(Location loc) {
-		/*
-		 *  canExplode will get Towny's normal response as to 
-		 *  whether an explosion is allowed in the given location.
-		 */		
-		boolean canExplode = isAllowedExplosion(loc);
-
-		/*
-		 * Fire a TownyExplosionEvent to let Towny's war systems 
-		 * and other plugins have a say in the results.
-		 */
-		TownyExplosionEvent event = new TownyExplosionEvent(loc, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

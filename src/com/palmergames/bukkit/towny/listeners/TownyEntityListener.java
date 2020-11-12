@@ -527,10 +527,10 @@ public class TownyEntityListener implements Listener {
 
 	/**
 	 * Handles:
-	 *  Wither explosions
-	 *  Enderman thieving protected blocks
-	 *  Ravagers breaking protected blocks
-	 *  Crop Trampling 
+	 *  Enderman thieving protected blocks.
+	 *  Ravagers breaking protected blocks.
+	 *  Water being used to put out campfires.
+	 *  Crop Trampling.
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
@@ -564,38 +564,29 @@ public class TownyEntityListener implements Listener {
 		}
 
 		switch (event.getEntity().getType()) {
-
-		case WITHER:
-
-			if (!TownyActionEventExecutor.canLocationExplode(event.getBlock().getLocation())) {
-				event.setCancelled(true);
-				return;
-			}
-			break;
-
-		case ENDERMAN:
-
-			if (townyWorld.isEndermanProtect())
-				event.setCancelled(true);
-			break;
-			
-		case RAVAGER:
-			
-			if (townyWorld.isDisableCreatureTrample())
-				event.setCancelled(true);
-			break;
 	
-		/*
-		 * Protect campfires from SplashWaterBottles. Uses a destroy test.
-		 */
-		case SPLASH_POTION:			if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
-				return;
-			event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
-			break;
-		default:
-
+			case ENDERMAN:
+	
+				if (townyWorld.isEndermanProtect())
+					event.setCancelled(true);
+				break;
+				
+			case RAVAGER:
+				
+				if (townyWorld.isDisableCreatureTrample())
+					event.setCancelled(true);
+				break;
+		
+			/*
+			 * Protect campfires from SplashWaterBottles. Uses a destroy test.
+			 */
+			case SPLASH_POTION:			
+				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
+					return;
+				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
+				break;
+			default:
 		}
-
 	}
 
 	/**
