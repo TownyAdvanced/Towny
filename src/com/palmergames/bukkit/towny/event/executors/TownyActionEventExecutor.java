@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -182,9 +183,11 @@ public class TownyActionEventExecutor {
 	 * as well as outside plugins to alter the block list that is eventually used.
 	 * 
 	 * @param blockList - List of Blocks which might be exploded.
+	 * @param mat - Material which caused a block explosion.
+	 * @param entity - Entity which caused a entity explosion.
 	 * @return filteredBlocks - List of Blocks which are going to be allowed to explode.
 	 */
-	public static List<Block> filterExplodableBlocks(List<Block> blockList) {
+	public static List<Block> filterExplodableBlocks(List<Block> blockList, Material mat, Entity entity) {
 		/* 
 		 * Sort blocks into lowest Y to highest Y in order to preserve
 		 * blocks affected by gravity or tile entities requiring a base. 
@@ -201,7 +204,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplodingBlockEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplodingBlockEvent event = new TownyExplodingBlockEvent(blockList, filteredBlocks);
+		TownyExplodingBlockEvent event = new TownyExplodingBlockEvent(blockList, filteredBlocks, mat, entity);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*
@@ -226,7 +229,7 @@ public class TownyActionEventExecutor {
 	 * @param entity - Entity which will be damaged.
 	 * @return true if allowed.
 	 */
-	public static boolean canExplosionDamageEntities(Location loc, Entity entity) {
+	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause) {
 		/*
 		 *  canExplode will get Towny's normal response as to 
 		 *  whether an explosion is allowed in the given location.
@@ -237,7 +240,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, entity, canExplode);
+		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, canExplode);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

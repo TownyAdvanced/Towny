@@ -274,19 +274,19 @@ public class TownyBlockListener implements Listener {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
 		} catch (NotRegisteredException ignored) {}
 
-		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList());
-		event.blockList().clear();
-		event.blockList().addAll(blocks);
-
-		if (event.blockList().isEmpty())
-			return;
-		
 		Material material = event.getBlock().getType();
 		/*
 		 * event.getBlock() doesn't return the bed when a bed or respawn anchor is the cause of the explosion, so we use this workaround.
 		 */
 		if (material == Material.AIR && townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
 			material = townyWorld.getBedExplosionMaterial(event.getBlock().getLocation());
+		
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null);
+		event.blockList().clear();
+		event.blockList().addAll(blocks);
+
+		if (event.blockList().isEmpty())
+			return;
 		
 		/*
 		 * Don't regenerate block explosions unless they are on the list of blocks whose explosions regenerate.

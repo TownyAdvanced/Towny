@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.event.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
@@ -19,12 +21,19 @@ import org.jetbrains.annotations.Nullable;
  * - When a an entity explodes causing block damage.
  * 
  * @author LlmDl
+ * 
+ * @param vanillaBlockList - List of Blocks which were involved in the original explosion.
+ * @param townyFilteredList - List of Blocks Towny has already filtered, these blocks will explode unless {@link #setBlockList(List)} is used.
+ * @param mat - Material which caused the block explosion or null if it is an entity explosion.
+ * @param entity - Entity which caused the entity explosion or null if it is a block explosion. 
  */
 public class TownyExplodingBlockEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final List<Block> vanillaBlockList;
 	private final List<Block> filteredBlockList;
+	private final Material material;
+	private final Entity entity;
 	private List<Block> blockList = new ArrayList<Block>();
 	private boolean isChanged = false;
 
@@ -33,10 +42,14 @@ public class TownyExplodingBlockEvent extends Event {
 	 * 
 	 * @param vanillaBlockList - List of Blocks which were involved in the original explosion.
 	 * @param townyFilteredList - List of Blocks Towny has already filtered, these blocks will explode unless {@link #setBlockList(List)} is used.
+	 * @param mat - Material which caused the block explosion or null if it is an entity explosion.
+	 * @param entity - Entity which caused the entity explosion or null if it is a block explosion. 
 	 */
-	public TownyExplodingBlockEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList) {
+	public TownyExplodingBlockEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity) {
 		this.vanillaBlockList = vanillaBlockList;
 		this.filteredBlockList = townyFilteredList;
+		this.material = mat;
+		this.entity = entity;
 	}
 
 	public static HandlerList getHandlerList() {
@@ -94,6 +107,44 @@ public class TownyExplodingBlockEvent extends Event {
 	 */
 	public boolean isChanged() {
 		return isChanged;
+	}
+	
+	/**
+	 * Whether this event has a material.
+	 * 
+	 * @return true if this was a block explosion.
+	 */
+	public boolean hasMaterial() {
+		return material != null;
+	}
+
+	/**
+	 * Returns the material causing the block explosion.
+	 * 
+	 * @return material responsible for explosion or null if it is a entity explosion.
+	 */
+	@Nullable
+	public Material getMaterial() {
+		return material;
+	}
+
+	/**
+	 * Whether this event has a entity.
+	 * 
+	 * @return true is this was an entity explosion.
+	 */
+	public boolean hasEntity() {
+		return entity != null;
+	}
+	
+	/**
+	 * Returns the entity causing the entity explosion.
+	 * 
+	 * @return entity responsible for explosion or null if it is a block explosion.
+	 */
+	@Nullable
+	public Entity getEntity() {
+		return entity;
 	}
 
 }
