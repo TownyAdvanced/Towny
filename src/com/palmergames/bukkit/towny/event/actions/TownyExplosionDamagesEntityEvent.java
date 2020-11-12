@@ -14,17 +14,17 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
  * TownyExplosionDamagesEntityEvents are thrown when an explosion 
  * occurs in a Towny world, causing damage to an entity.
  * 
- *  - When an entity explosion, block explosion or lightning damages an entity.
- *  - When an explosion would damage a Hanging entity.
- *  - When a pig is zapped by lightning.
- *  - When an explosion would damage a vehicle.
- * 
- * @author LlmDl
+ * <br> - When an entity explosion, block explosion or lightning damages an entity.
+ * <br> - When an explosion would damage a Hanging entity.
+ * <br> - When a pig is zapped by lightning.
+ * <br> - When an explosion would damage a Vehicle.
  * 
  * @param location - Location of the entity being damaged.
  * @param entity - Entity getting exploded.
  * @param cause - DamageCause.
  * @param canExplode - Whether Towny will cancel this already.
+ * 
+ * @author LlmDl
  */
 public class TownyExplosionDamagesEntityEvent extends Event implements Cancellable {
 
@@ -35,16 +35,17 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 	private boolean canExplode;
 
 	/**
-	 * Event thrown when an explosion damages an entity.
+	 * Event thrown when an explosion damages an entity. 
+	 * Use ignorecancelled = true in order to filter out explosions Towny will already have stopped.
 	 * 
 	 * @param location - Location of the entity being damaged.
-	 * @param entity - Entity getting exploded.
+	 * @param harmedEntity - Entity getting exploded.
 	 * @param cause - DamageCause.
 	 * @param canExplode - Whether Towny will cancel this already.
 	 */
-	public TownyExplosionDamagesEntityEvent(Location location, Entity entity, DamageCause cause, boolean canExplode) {
+	public TownyExplosionDamagesEntityEvent(Location location, Entity harmedEntity, DamageCause cause, boolean canExplode) {
 		this.location = location;
-		this.entity = entity;
+		this.entity = harmedEntity;
 		this.cause = cause;
 		this.canExplode = canExplode;
 	}
@@ -67,14 +68,23 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 		this.canExplode = cancel;
 	}
 
+	/**
+	 * @return location of the harmed entity.
+	 */
 	public Location getLocation() {
 		return location;
 	}
 
+	/**
+	 * @return entity which will be damaged by the explosion.
+	 */
 	public Entity getEntity() {
 		return entity;
 	}
 	
+	/**
+	 * @return cause of the explosion.
+	 */
 	public DamageCause getCause() {
 		return cause;
 	}
