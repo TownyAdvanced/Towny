@@ -1367,12 +1367,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationLeave(Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Town town = null;
-		Nation nation = null;
 
 		try {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
-			nation = town.getNation();
 			
 			if (town.isConquered())
 				throw new TownyException(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
@@ -1384,13 +1382,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 			}
-			
-			town.removeNation();
 
-			plugin.resetCache();
+			final Town finalTown = town;
+			final Nation nation = town.getNation();
+			Confirmation.runOnAccept(() -> {
+				finalTown.removeNation();
 
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
+				plugin.resetCache();
+
+				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(finalTown.getName())));
+				TownyMessaging.sendPrefixedTownMessage(finalTown, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
+
+			}).sendTo(player);
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
