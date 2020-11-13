@@ -670,8 +670,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 									TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
 									if (tb == null)
 										continue;
-									if (!tb.getName().equalsIgnoreCase("")) {
-										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + tb.getName() +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
+									String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
+									if (!name.equalsIgnoreCase("")) {
+										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + name +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
 									} else {
 										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
 									}

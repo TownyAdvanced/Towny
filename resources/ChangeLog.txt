@@ -5256,3 +5256,5 @@ v0.92.0.11:
     - Closes #4438.
   - Add clear to /res set mode tab-completes.
   - es-419.yml updated to 0.89, courtesy of EuGNosii with PR #4437.
+  - Use PlotGroup names in /t outpost list & /t outpost {name}, when available.
+    - Closes #4430.

@@ -299,11 +299,12 @@ public class TownySpigotMessaging {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
 			if (tb == null)
 				continue;
+			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
 			TextComponent line = new TextComponent(Integer.toString(i + 1));
 			line.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 			TextComponent dash = new TextComponent(" - ");
-			dash.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
-			TextComponent outpostName = new TextComponent(tb.getName());
+			dash.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);			
+			TextComponent outpostName = new TextComponent(name); 
 			outpostName.setColor(net.md_5.bungee.api.ChatColor.GREEN);
 			TextComponent worldName = new TextComponent(outpost.getWorld().getName());
 			worldName.setColor(net.md_5.bungee.api.ChatColor.BLUE);
@@ -311,7 +312,7 @@ public class TownySpigotMessaging {
 			coords.setColor(net.md_5.bungee.api.ChatColor.BLUE);
 
 			line.addExtra(dash);
-			if (!tb.getName().equalsIgnoreCase("")) {
+			if (!name.equalsIgnoreCase("")) {
 				line.addExtra(outpostName);
 				line.addExtra(dash);
 			}
@@ -324,7 +325,7 @@ public class TownySpigotMessaging {
 			if (TownySettings.isUsingEconomy())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			String hoverText = Translation.of("msg_click_spawn", tb.getName().equalsIgnoreCase("") ? "outpost" : tb.getName()) + "\n" + spawnCost;
+			String hoverText = Translation.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name) + "\n" + spawnCost;
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 			
