@@ -5248,3 +5248,5 @@ v0.92.0.11:
     - You can set this to 0 to instantly teleport the outlaw from town.
     - This will not have any effect if allow_outlaws_to_enter_town is enabled.
   - Move NationPreMergeEvent, NationMergeEvent, PreNewNationEvent to nation subpackage.
+  - Fix the newly bankrupted towns listings on new day possibly not showing being displayed.
+  - Fix global_town_settings.spawn_warnings in the config being unused.

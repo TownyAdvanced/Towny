@@ -1535,7 +1535,7 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
 	
-	public static boolean getSpawnWarnConfirmations() {
+	public static boolean isSpawnWarnConfirmationUsed() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
 	}
 
