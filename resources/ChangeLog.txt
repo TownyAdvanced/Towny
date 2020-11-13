@@ -5250,3 +5250,8 @@ v0.92.0.11:
   - Move NationPreMergeEvent, NationMergeEvent, PreNewNationEvent to nation subpackage.
   - Fix the newly bankrupted towns listings on new day possibly not showing being displayed.
   - Fix global_town_settings.spawn_warnings in the config being unused.
+0.96.3.5:
+  - Fix town column in towny_nation table missing from sql cleanup.
+  - Fix missing feedback message for /res set mode clear.
+    - Closes #4438.
+  - Add clear to /res set mode tab-completes.

@@ -83,7 +83,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"plotborder",
 		"constantplotborder",
 		"ignoreplots",
-		"reset"
+		"reset",
+		"clear"
 	);
 	
 	private static final List<String> residentConsoleTabCompletes = Arrays.asList(
