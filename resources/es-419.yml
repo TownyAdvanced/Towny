@@ -1171,11 +1171,11 @@ status_world_explrevert_block: '&2Revertir Explosiones por Bloques: '
 msg_nation_already_peaceful: '&cLa nación ya es pacífica.'
 msg_nation_already_not_peaceful: '&cLa nación no es pacífica.'
 
-#Added in 0.89
+# Añadido en la versión 0.89
 status_world_friendlyfire: '&2Fuego Amigable: '
 status_world_wildernessmobs: '&2Mobs en el Exterior: '
 msg_outlaw_kick_cooldown: '&cEres considerado un bandido en %s. Tienes %s restantes para volver a tu ciudad, o serás teletransportado lejos.'
 msg_outlaw_kicked: '&4No eres bienvenido/a en %s. Fuiste teletransportado/a lejos.'
 msg_outlaw_town_notify: '&cUn bandido, %s, entró al territorio de la ciudad.'
-msg_your_town_payed_upkeep_with_debt: '&cTu ciudad pagó la mantención diaria de %s usando su deuda.'
-msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales de %s usando su deuda.'
+msg_your_town_payed_upkeep_with_debt: '&cTu ciudad pagó la mantención diaria, con un costo de %s usando su deuda.'
+msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales, con un costo de %s usando su deuda.'
