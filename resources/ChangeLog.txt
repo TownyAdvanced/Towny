@@ -5260,3 +5260,5 @@ v0.92.0.11:
     - Closes #4430.
   - Add confirmations to /t leave & /n leave.
     - Closes #4434.
+  - Prevent arrows hitting Target/WoodenButton/PressurePlates from delivering power, based on Switch perms.
+    - Closes #4413.
