@@ -201,9 +201,11 @@ public class TownyPlayerListener implements Listener {
 			Resident resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
 			// If player is jailed send them to their jailspawn.
 			if (resident.isJailed()) {
-				Town respawnTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
-				respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
-				event.setRespawnLocation(respawn);
+				Town respawnTown = townyUniverse.getTown(resident.getJailTown());
+				if (respawnTown != null) {
+					respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
+					event.setRespawnLocation(respawn);
+				}
 			}
 		} catch (TownyException e) {
 			// Town has not set respawn location. Using default.

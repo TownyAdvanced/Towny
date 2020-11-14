@@ -215,10 +215,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				if (split.length > 1) {
-					try {
-						town = townyUniverse.getDataSource().getTown(split[1]);
-					} catch (NotRegisteredException x) {
-						sendErrorMsg(player, x.getMessage());
+					town = townyUniverse.getTown(split[1]);
+					
+					if (town == null) {
+						sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
 						return;
 					}
 				} else if (split.length == 1)

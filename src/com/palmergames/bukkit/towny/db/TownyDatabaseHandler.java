@@ -358,18 +358,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Town> getTowns(String[] names) {
 
 		List<Town> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getTown(name));
-			} catch (NotRegisteredException ignored) {
+		for (String name : names) {
+			Town t = universe.getTown(name);
+			
+			if (t != null) {
+				matches.add(t);
 			}
+		}
+		
 		return matches;
 	}
 
 	@Override
 	public List<Town> getTowns() {
 
-		return new ArrayList<>(universe.getTownsMap().values());
+		return new ArrayList<>(universe.getTowns());
 	}
 
 	@Deprecated

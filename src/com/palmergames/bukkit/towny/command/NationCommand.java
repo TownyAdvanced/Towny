@@ -2265,7 +2265,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 			} else if (split[0].equalsIgnoreCase("capital")) {
 				try {
-					Town newCapital = townyUniverse.getDataSource().getTown(split[1]);
+					Town newCapital = townyUniverse.getTown(split[1]);
+					
+					if (newCapital == null) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
+						return;
+					}
 
 		            if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
 		              TownyMessaging.sendMessage(player, Translation.of("msg_not_enough_residents_capital", newCapital.getName()));

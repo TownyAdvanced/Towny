@@ -183,12 +183,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						groupID = UUID.fromString(tokens[1]);
 						groupName = tokens[2];
 					}
-					Town town = null;
-					try {
-						town = getTown(townName);
-					} catch (NotRegisteredException e) {
-						continue;
-					}
+					Town town = universe.getTown(townName);
+					
 					if (town != null)
 						universe.newGroup(town, groupName, groupID);
 				}
@@ -448,13 +444,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("town");
 				if (line != null) {
-					Town town = null;
-					try {
-						town = getTown(line);
-					} catch (NotRegisteredException e1) {
+					Town town = universe.getTown(line);
+					
+					if (town == null) {
 						TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
 					}
-					if (town != null) {
+					else {
 						resident.setTown(town);
 						
 						line = keys.get("title");
@@ -835,8 +830,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("capital");
 				if (line != null) {
-					try {
-						Town town = universe.getDataSource().getTown(line);
+					Town town = universe.getTown(line);
+					if (town != null) {
 						try {
 							nation.forceSetCapital(town);
 						} catch (EmptyNationException e1) {
@@ -844,7 +839,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							removeNation(nation);
 							return true;
 						}
-					} catch (NotRegisteredException | NullPointerException e) {
+					}
+					else {
 						TownyMessaging.sendDebugMsg("Nation " + nation.getName() + " could not set capital to " + line + ", selecting a new capital...");
 						if (!nation.findNewCapital()) {
 							System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
@@ -1284,7 +1280,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 			File groupFile = new File(path);
 			if (groupFile.exists() && groupFile.isFile()) {
-				String test = null;
 				try {
 					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
 
@@ -1296,11 +1291,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null)
 						group.setID(UUID.fromString(line.trim()));
 					
-					test = "town";
 					line = keys.get("town");
 					if (line != null && !line.isEmpty()) {
-						Town town = getTown(line.trim());
-						group.setTown(town);
+						Town town = universe.getTown(line.trim());
+						if (town != null) {
+							group.setTown(town);	
+						}
+						else {
+							TownyMessaging.sendDebugMsg("Group file missing Town, deleting " + path);
+							deletePlotGroup(group);
+							TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in group.txt");
+							continue;
+						}
 					}
 					else {
 						TownyMessaging.sendErrorMsg("Could not add to town!");
@@ -1312,12 +1314,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						group.setPrice(Double.parseDouble(line.trim()));
 
 				} catch (Exception e) {
-					if (test.equals("town")) {
-						TownyMessaging.sendDebugMsg("Group file missing Town, deleting " + path);
-						deletePlotGroup(group);
-						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in group.txt");
-						continue;
-					}
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading Group file " + path + " at line: " + line);
 					return false;
 				}
@@ -1355,16 +1351,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							deleteTownBlock(townBlock);
 							continue;
 						}
-						Town town = null;
-						try {
-							town = getTown(line.trim());
-						} catch (NotRegisteredException e) {
+						Town town = universe.getTown(line.trim());
+						
+						if (town == null) {
 							TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line + ", deleting " + path);
-							e.printStackTrace();
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
+						
 						townBlock.setTown(town);
 						try {
 							town.addTownBlock(townBlock);

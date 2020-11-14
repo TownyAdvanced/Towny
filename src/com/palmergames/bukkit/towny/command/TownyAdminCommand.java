@@ -330,10 +330,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									}
 							}
 							break;
-						case "set":
-							try {
-								return TownCommand.townSetTabComplete(TownyUniverse.getInstance().getDataSource().getTown(args[1]), StringMgmt.remArgs(args, 2));
-							} catch (NotRegisteredException ignored) {}
+						case "set": {
+							final Town town = TownyUniverse.getInstance().getTown(args[1]);
+							if (town != null)
+								return TownCommand.townSetTabComplete(town, StringMgmt.remArgs(args, 2));
+							break;
+						}
 						case "toggle":
 							if (args.length == 4)
 								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
@@ -347,10 +349,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								switch (args[3].toLowerCase()) {
 									case "add":
 										return getTownyStartingWith(args[4], "r");
-									case "remove":
-										try {
-											return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(args[1]).getOutlaws()), args[4]);
-										} catch (TownyException ignore) {}
+									case "remove": {
+										final Town town = TownyUniverse.getInstance().getTown(args[1]);
+										
+										if (town != null)
+											return NameUtil.filterByStart(NameUtil.getNames(town.getOutlaws()), args[4]);
+										
+										break;
+									}
 								}
 							}
 						case "invite":
@@ -682,12 +688,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			if (split.length != 2)
 				throw new TownyException(Translation.of("msg_err_invalid_input", "Eg: givebonus [town/player] [n]"));
-			try {
-				town = townyUniverse.getDataSource().getTown(split[0]);
+			
+			if ((town = townyUniverse.getTown(split[0])) != null) {
 				isTown = true;
-			} catch (NotRegisteredException e) {
+			}
+			else { 
 				town = townyUniverse.getDataSource().getResident(split[0]).getTown();
 			}
+			
 			try {
 				town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[1].trim()));
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_give_total", town.getName(), split[1], town.getBonusBlocks()));
@@ -817,22 +825,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				if(resident.isJailed())	{
 					resident.setJailed(false);
-					final String town = resident.getJailTown();
+					final String jailTownName = resident.getJailTown();
 					final int index = resident.getJailSpawn();
-					try	{
-						final Location loc = Bukkit.getWorld(TownyAPI.getInstance().getDataSource().getTown(town).getHomeblockWorld().getName()).getSpawnLocation();
-
-						// Use teleport warmup
-						jailedPlayer.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-						TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
-
-						resident.removeJailSpawn();
-						resident.setJailTown(" ");
-						TownyMessaging.sendMsg(player, "You have been freed from jail.");
-						TownyMessaging.sendPrefixedTownMessage(townyUniverse.getDataSource().getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
-					} catch (TownyException e) {
-						e.printStackTrace();
+					
+					final Town jailTown = townyUniverse.getTown(jailTownName);
+					
+					if (jailTown == null) {
+						throw new TownyException(String.format("Invalid jail town of '%s'", jailTownName));
 					}
+					
+					final Location loc = Bukkit.getWorld(jailTown.getHomeblockWorld().getName()).getSpawnLocation();
+
+					// Use teleport warmup
+					jailedPlayer.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+					TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
+
+					resident.removeJailSpawn();
+					resident.setJailTown("");
+					TownyMessaging.sendMsg(player, "You have been freed from jail.");
+					TownyMessaging.sendPrefixedTownMessage(jailTown, jailedPlayer.getName() + " has been freed from jail number " + index);
 				} else {
 					throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
 				}
@@ -884,7 +895,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			Town town = townyUniverse.getDataSource().getTown(split[0]);
+			Town town = townyUniverse.getTown(split[0]);
+			
+			if (town == null) {
+				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_not_registered_1", split[0]));
+				return;
+			}
+			
 			
 			if (split.length == 1) {
 				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(town));
@@ -1365,7 +1382,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else
 				try {
 					Resident newMayor;
-					Town town = townyUniverse.getDataSource().getTown(split[1]);
+					Town town = townyUniverse.getTown(split[1]);
+					
+					if (town == null) {
+						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_not_registered_1", split[1]));
+						return;
+					}
 
 					if (split[2].equalsIgnoreCase("npc")) {
 						String name = nextNpcName();
@@ -1417,9 +1439,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", "[nation name]"));
 
 			} else {
+				final Town newCapital = townyUniverse.getTown(split[1]);
+				
+				if (newCapital == null) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
+					return;
+				}
 				
 				try {
-					Town newCapital = townyUniverse.getDataSource().getTown(split[1]);
 					Nation nation = newCapital.getNation();
 					NationCommand.nationSet(player, split, true, nation);
 				} catch (Exception e) {
@@ -1498,20 +1525,26 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			if (tb != null) {
-				try {
-					Town newTown = townyUniverse.getDataSource().getTown(split[1]);
-					if (newTown != null) {
-						tb.setResident(null);
-						tb.setTown(newTown);
-						tb.setType(TownBlockType.RESIDENTIAL);
-						tb.setName("");
-						TownyMessaging.sendMessage(player, Translation.of("changed_plot_town", newTown.getName()));
-					}
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				Town newTown = townyUniverse.getTown(split[1]);
+				
+				if (newTown != null) {
+					tb.setResident(null);
+					tb.setTown(newTown);
+					tb.setType(TownBlockType.RESIDENTIAL);
+					tb.setName("");
+					TownyMessaging.sendMessage(player, Translation.of("changed_plot_town", newTown.getName()));
+				}
+				else {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
 				}
 			} else {
-				Town town = townyUniverse.getDataSource().getTown(split[1]);
+				Town town = townyUniverse.getTown(split[1]);
+				
+				if (town == null) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
+					return;
+				}
+				
 				TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 				List<WorldCoord> selection;

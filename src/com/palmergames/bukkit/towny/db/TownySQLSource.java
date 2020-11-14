@@ -618,12 +618,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				UUID id = UUID.fromString(rs.getString("groupID"));
 				String groupName = rs.getString("groupName");
-				Town town = null;
-				try {
-					town = getTown(rs.getString("town"));
-				} catch (NotRegisteredException e) {
+				Town town = universe.getTown(rs.getString("town"));;
+				
+				if (town == null)
 					continue;
-				}
 
 				try {
 					TownyUniverse.getInstance().newGroup(town, groupName, id);
@@ -784,15 +782,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			line = rs.getString("town");
 			if ((line != null) && (!line.isEmpty())) {
-				Town town = null;
-				try {
-					town = getTown(line);
-				} catch (NotRegisteredException e) {
+				Town town = universe.getTown(line);
+				if (town == null) {
 					TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
 					resident.setTown(null);
 				}
-				if (town != null) {
-					resident.setTown(getTown(line));
+				else {
+					resident.setTown(town);
 
 					try {
 						resident.setTitle(rs.getString("title"));
@@ -882,7 +878,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String search;
 		String name = null;
 		try {
-			Town town = getTown(rs.getString("name"));
+			Town town = universe.getTown(rs.getString("name"));
+			
+			if (town == null) {
+				TownyMessaging.sendErrorMsg("SQL: Load Town " + name + ". Town was not registered properly on load!");
+				return false;
+			}
+			
 			name = town.getName();
 
 			TownyMessaging.sendDebugMsg("Loading town " + name);
@@ -1138,8 +1140,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
 
-			try {
-				Town town = universe.getDataSource().getTown(rs.getString("capital"));
+			Town town = universe.getTown(rs.getString("capital"));
+			if (town != null) {
 				try {
 					nation.forceSetCapital(town);
 				} catch (EmptyNationException e1) {
@@ -1147,7 +1149,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					removeNation(nation);
 					return true;
 				}
-			} catch (NotRegisteredException | NullPointerException e) {
+			}
+			else {
 				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
 				if (!nation.findNewCapital()) {
 					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
@@ -1605,17 +1608,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				line = rs.getString("town");
 				if (line != null) {
-					Town town;
-					try {
-						town = getTown(line.trim());
-					} catch (NotRegisteredException e) {
+					Town town = universe.getTown(line.trim());
+					
+					if (town == null) {
 						TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line
-								+ " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
-								+ townBlock.getZ());
+							+ " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
+							+ townBlock.getZ());
 						TownyUniverse.getInstance().removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
 						continue;
 					}
+					
 					townBlock.setTown(town);
 					try {
 						town.addTownBlock(townBlock);
@@ -1735,9 +1738,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 					line = rs.getString("town");
 					if (line != null) {
-						try {
-							plotGroup.setTown(getTown(line.trim()));
-						} catch (Exception ignored) {
+						Town town = universe.getTown(line.trim());
+						if (town != null) {
+							plotGroup.setTown(town);
 						}
 					}
 

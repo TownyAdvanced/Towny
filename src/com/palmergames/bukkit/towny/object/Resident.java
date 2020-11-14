@@ -131,7 +131,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 					TownyMessaging.sendPrefixedTownMessage(this.getTown(),  Translation.of("msg_player_escaped_jail_into_wilderness", this.getName(), TownyUniverse.getInstance().getDataSource().getWorld(getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 				else 
 					TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
-				TownyMessaging.sendPrefixedTownMessage(TownyAPI.getInstance().getDataSource().getTown(this.getJailTown()), Translation.of("msg_player_escaped_jail_into_wilderness", this.getName(), TownyUniverse.getInstance().getDataSource().getWorld(getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
+				
+				Town jailTown = TownyUniverse.getInstance().getTown(this.getJailTown());
+				if (jailTown != null)
+					TownyMessaging.sendPrefixedTownMessage(jailTown, Translation.of("msg_player_escaped_jail_into_wilderness", this.getName(), TownyUniverse.getInstance().getDataSource().getWorld(getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
 		}
 		this.setJailed(false);
