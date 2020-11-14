@@ -3410,7 +3410,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				/*
 				 * Filter out any unallowed claims.
 				 */
-
+				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+				
 				// Filter out townblocks already owned.
 				selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 				if (selection.isEmpty())
@@ -3425,6 +3426,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
 				if (selection.isEmpty())
 					throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
+				
+				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				
 				// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
 				if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
@@ -3560,12 +3563,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				if (edgeTownBlock.isOwner(owner)) {
-					//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
+					TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
 					return true;
 				}
 			} catch (NotRegisteredException e) {
 			}
-		//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
+		TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
 		return false;
 	}
 

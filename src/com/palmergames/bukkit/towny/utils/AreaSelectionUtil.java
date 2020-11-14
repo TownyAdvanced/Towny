@@ -83,8 +83,6 @@ public class AreaSelectionUtil {
 				} else if (owner instanceof Resident) {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
-				
-				
 
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
@@ -103,13 +101,30 @@ public class AreaSelectionUtil {
 					}
 					if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
 						throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+
+					// Calculate how many TownBlocks are needed to claim the radius. 
+					// Start blocks at 0 if the plot is unclaimed.
+					int neededBlocks = pos.getTownBlock().hasTown() ? 0 : 1;
+					for (int i = 1; i <= r; i++)
+						neededBlocks += i * 8;
+					
+					// Rethink how much of a radius will be used, as there's not enough available TownBlocks.
+					if (neededBlocks > available) {
+						int i = 1;
+						r=0;
+						while (available - ((i * 8) + r) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
+							r += i * 8;
+							i++;
+						}
+						r = i-1; // Finally reduce the radius by 1 and replace the original r.
+					}
 				}
 					
 				if (r > 1000)
 					r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
-						if (out.size() < available) {
+						if (out.size() <= available) {
 							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
 						}
 			} else {
