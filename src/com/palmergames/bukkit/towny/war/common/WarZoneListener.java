@@ -101,7 +101,7 @@ public class WarZoneListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority=EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority=EventPriority.LOWEST)
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {
 		if (!(FlagWarConfig.isAllowingAttacks() && event.getMaterial() == FlagWarConfig.getFlagBaseMaterial()))
 			return;

@@ -5263,3 +5263,4 @@ v0.92.0.11:
   - Prevent arrows hitting Target/WoodenButton/PressurePlates from delivering power, based on Switch perms.
     - Closes #4413.
   - Hit the townblock cost increase with the rounding stick.
+  - Fix FlagWar's flag blocks not being allowed to be placed.
