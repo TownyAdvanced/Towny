@@ -274,6 +274,24 @@ public class AreaSelectionUtil {
 		return out;
 	}
 	
+	/**
+	 * Returns a List containing only claimed townblocks, which are not owned by the given owner.
+	 * 
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks not owned by the given owner.
+	 */
+	public static List<WorldCoord> filterUnownedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
+
+		List<WorldCoord> out = new ArrayList<>();
+		for (WorldCoord worldCoord : selection)
+			try {
+				if (!worldCoord.getTownBlock().isOwner(owner))
+					out.add(worldCoord);
+			} catch (NotRegisteredException ignored) {
+			}
+		return out;
+	}
+	
 	public static boolean filterHomeBlock(Town town, List<WorldCoord> selection) {
 		WorldCoord homeCoord;
 		
@@ -362,13 +380,19 @@ public class AreaSelectionUtil {
 			}
 		return out;
 	}
-
-	public static List<WorldCoord> filterUnownedPlots(List<WorldCoord> selection) {
+	
+	/**
+	 * Returns a List containing only claimed townblocks, which are not personally owned by a resident.
+	 * 
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks not owned by the given owner.
+	 */
+	public static List<WorldCoord> filterOutResidentBlocks(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (worldCoord.getTownBlock().getPlotPrice() > -1)
+				if (!worldCoord.getTownBlock().hasResident())
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}
