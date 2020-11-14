@@ -5264,3 +5264,5 @@ v0.92.0.11:
     - Closes #4413.
   - Hit the townblock cost increase with the rounding stick.
   - Fix FlagWar's flag blocks not being allowed to be placed.
+  - API: Added MobSpawnRemovalEvent, courtesy of lucasboss45 with PR #4424 (First-Time Contributor!)
+    - a cancellable event to the removal of mobs on spawn.
