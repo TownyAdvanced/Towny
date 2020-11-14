@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event.mobs;
+package com.palmergames.bukkit.towny.event;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
