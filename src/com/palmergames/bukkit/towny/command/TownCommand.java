@@ -3459,7 +3459,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					try {					
 						if (outpost)
 							blockCost = TownySettings.getOutpostCost();
-						else if (selection.size() > 1)
+						else if (selection.size() == 1)
 							blockCost = town.getTownBlockCost();
 						else
 							blockCost = town.getTownBlockCostN(selection.size());
@@ -3567,15 +3567,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
 		return false;
-	}
-
-	public static void checkIfSelectionIsValid(Town town, List<WorldCoord> selection, boolean attachedToEdge, double blockCost) throws TownyException {
-		if (attachedToEdge && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty()) {
-			if (selection.size() == 0)
-				throw new TownyException(Translation.of("msg_already_claimed_2"));
-			else
-				throw new TownyException(Translation.of("msg_err_not_attached_edge"));
-		}
 	}
 
 	private void townWithdraw(Player player, int amount) {
