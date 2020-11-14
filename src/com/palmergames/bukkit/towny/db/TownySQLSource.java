@@ -530,7 +530,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			while (rs.next()) {
 				try {
-					newTown(rs.getString("name"));
+					TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
 				} catch (AlreadyRegisteredException ignored) {
 				}
 			}
@@ -1045,6 +1045,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (IllegalArgumentException | NullPointerException ee) {
 				town.setUUID(UUID.randomUUID());
 			}
+			TownyUniverse.getInstance().registerTownUUID(town);
 
 			int conqueredDays = rs.getInt("conqueredDays");
 			town.setConqueredDays(conqueredDays);

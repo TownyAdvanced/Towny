@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -254,10 +255,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 			
 			try {
-				newTown(name);
+				TownyUniverse.getInstance().newTownInternal(name);
 			} catch (AlreadyRegisteredException e) {
 				// Should not be possible in flatfile.
-			} catch (NotRegisteredException e) {
+			} catch (InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
 				e.printStackTrace();
 				return false;
@@ -775,6 +776,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					town.setUUID(townUUID);
+					TownyUniverse.getInstance().registerTownUUID(town);
 				}
 				line = keys.get("registered");
 				if (line != null) {

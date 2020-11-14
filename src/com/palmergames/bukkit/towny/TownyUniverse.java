@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -33,7 +34,6 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -407,6 +407,50 @@ public class TownyUniverse {
     
     public Trie getTownsTrie() {
     	return townsTrie;
+	}
+
+	// Internal use only.
+	public void newTownInternal(String name) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
+    	newTown(name, false);
+	}
+
+	/**
+	 * Create a new town from the string name.
+	 *
+	 * @param name Town name
+	 * @throws AlreadyRegisteredException Town name is already in use.
+	 * @throws InvalidNameException Town name is invalid.
+	 */
+	public void newTown(String name) throws AlreadyRegisteredException, InvalidNameException {
+		newTown(name, true);
+	}
+
+	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
+		String filteredName = NameValidation.checkAndFilterName(name);;
+
+		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
+		
+		if (townNameMap.containsKey(town.getName())
+			|| (town.getUUID() != null && townUUIDMap.containsKey(town.getUUID())))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+
+		townNameMap.put(town.getName().toLowerCase(), town);
+		townsTrie.addKey(town.getName());
+
+		if (town.getUUID() != null)
+			townUUIDMap.put(town.getUUID(), town);
+	}
+	
+	// This is used internally since UUIDs are assigned after town objects are created.
+	public void registerTownUUID(Town town) throws AlreadyRegisteredException {
+		if (town.getUUID() != null) {
+			
+			if (townUUIDMap.containsKey(town.getUUID())) {
+				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
+			}
+			
+			townUUIDMap.put(town.getUUID(), town);
+		}
 	}
 	
     public Map<String, TownyWorld> getWorldMap() {

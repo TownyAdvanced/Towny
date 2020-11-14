@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -41,8 +42,6 @@ import com.palmergames.util.FileMgmt;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
-import javax.naming.InvalidNameException;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -187,20 +186,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getResidentsTrie().addKey(filteredName);
 	}
 
+	/**
+	 * Create a new town from a name
+	 * 
+	 * @param name town name
+	 * @throws AlreadyRegisteredException thrown if town already exists.
+	 * @throws NotRegisteredException thrown if town has an invalid name.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#newTown(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(name);
+			universe.newTown(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
-
-		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
-		universe.getTownsTrie().addKey(filteredName);
 	}
 
 	@Override
