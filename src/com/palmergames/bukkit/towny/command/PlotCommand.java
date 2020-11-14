@@ -244,7 +244,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_war_cannot_do"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-					// selection = TownyUtil.filterUnownedPlots(selection);
+					selection = AreaSelectionUtil.filterPlotsForSale(selection);
 
 					if (selection.size() > 0) {
 
@@ -306,9 +306,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (cost != 0) {
 							String title = Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost));
+							final List<WorldCoord> finalSelection = selection;
 							Confirmation.runOnAccept(() ->  {	
 								// Start the claim task
-								new PlotClaim(plugin, player, resident, selection, true, false, false).start();
+								new PlotClaim(plugin, player, resident, finalSelection, true, false, false).start();
 							})
 							.setTitle(title)
 							.sendTo(player);
@@ -432,7 +433,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					selection = AreaSelectionUtil.filterPlotsForSale(selection);
 					
 					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 						for (WorldCoord worldCoord : selection) {
@@ -445,18 +446,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return true;
 					}
 					
-					if (!townBlock.getType().equals(TownBlockType.EMBASSY)) 
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
-					else
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
+					selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
 
-					for (WorldCoord worldCoord : selection) {
-						setPlotForSale(resident, worldCoord, -1);
-					}
-					
-					if (selection.isEmpty()){
+					if (selection.isEmpty())
 						throw new TownyException(Translation.of("msg_area_not_own"));
-					}
+
+					for (WorldCoord worldCoord : selection)
+						setPlotForSale(resident, worldCoord, -1);
 
 				} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
 

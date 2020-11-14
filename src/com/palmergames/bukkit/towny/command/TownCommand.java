@@ -173,6 +173,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	
 	private static final List<String> townClaimTabCompletes = Arrays.asList(
 		"outpost",
+		"auto",
 		"circle",
 		"rect"
 	);
@@ -3339,6 +3340,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player.sendMessage(ChatTools.formatTitle("/town claim"));
 			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "", Translation.of("msg_block_claim")));
 			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "outpost", Translation.of("mayor_help_3")));
+			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[auto]", Translation.of("mayor_help_5")));
 			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[circle/rect] [radius]", Translation.of("mayor_help_4")));
 			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[circle/rect] auto", Translation.of("mayor_help_5")));
 		} else {
@@ -3346,9 +3348,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyAPI.getInstance().isWarTime()) {
-					throw new TownyException(Translation.of("msg_war_cannot_do"));
-				}
 
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
@@ -3358,16 +3357,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				if (!world.isUsingTowny()) {
+				if (!world.isUsingTowny())
 					throw new TownyException(Translation.of("msg_set_use_towny_off"));
-				}
+				
+				if (!world.isClaimable())
+					throw new TownyException(Translation.of("msg_not_claimable"));
 
-				double blockCost = 0;
+				if (TownyAPI.getInstance().isWarTime())
+					throw new TownyException(Translation.of("msg_war_cannot_do"));
+
 				List<WorldCoord> selection;
-				boolean attachedToEdge = true, outpost = false;
+				boolean outpost = false;
 				boolean isAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 
+				/*
+				 * Make initial selection of WorldCoord(s)
+				 */
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 
 					if (TownySettings.isAllowingOutposts()) {
@@ -3380,9 +3386,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
 							throw new TownyException(Translation.of("msg_already_claimed_1", key));
 
-						
+						// Select a single WorldCoord using the AreaSelectionUtil.
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
-						attachedToEdge = false;
 						outpost = true;
 					} else
 						throw new TownyException(Translation.of("msg_outpost_disable"));
@@ -3391,37 +3396,48 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
+					// Select the area, can be one or many.
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					
+					// Initial has returned 0, because they cannot claim any more.
 					if (selection.size() == 0)
 						throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 					
 					if ((selection.size() > 1) && (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
-
-					if (TownySettings.isUsingEconomy())
-						blockCost = town.getTownBlockCost();
 				}
+				
+				/*
+				 * Filter out any unallowed claims.
+				 */
 
-				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
-					throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
+				// Filter out townblocks already owned.
+				selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
+				if (selection.isEmpty())
+					throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 
-				if(world.getMinDistanceFromOtherTowns(key, town) < TownySettings.getMinDistanceFromTownHomeblocks())
+				// Filter out townblocks too close to another Town's homeblock.
+				selection = AreaSelectionUtil.filterInvalidProximityToHomeblock(selection, town);
+				if (selection.isEmpty())
 					throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
-				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
+				// Filter out townblocks too close to other Towns' normal townblocks.
 				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
+				if (selection.isEmpty())
+					throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
 				
-				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
+				// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
+				if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
+					throw new TownyException(Translation.of("msg_err_not_attached_edge"));
 								
-				//Check if other plugins have a problem with claiming this area
+				/*
+				 * Allow other plugins to have a say in whether the claim is allowed.
+				 */
 				int blockedClaims = 0;
 
 				String cancelMessage = "";
 				boolean isHomeblock = town.getTownBlocks().size() == 0;
-				for(WorldCoord coord : selection){
+				for (WorldCoord coord : selection) {
 					//Use the user's current world
 					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
@@ -3431,16 +3447,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 
-				if(blockedClaims > 0){
+				if (blockedClaims > 0) {
 					throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
 				}
 				
+				/*
+				 * See if the Town can pay (if required.)
+				 */
 				if (TownySettings.isUsingEconomy()) {
+					double blockCost = 0;
 					try {					
-						if (selection.size() == 1 && !outpost)
-							blockCost = town.getTownBlockCost();
-						else if (selection.size() == 1 && outpost)
+						if (outpost)
 							blockCost = TownySettings.getOutpostCost();
+						else if (selection.size() > 1)
+							blockCost = town.getTownBlockCost();
 						else
 							blockCost = town.getTownBlockCostN(selection.size());
 	
@@ -3451,7 +3471,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						throw new TownyException("Economy Error");
 					}
 				}
+				
+				/*
+				 * Actually start the claiming process.
+				 */
 				new TownClaim(plugin, player, town, selection, outpost, true, false).start();
+
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -3544,38 +3569,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		return false;
 	}
 
-	public static void checkIfSelectionIsValid(TownBlockOwner owner, List<WorldCoord> selection, boolean attachedToEdge, double blockCost, boolean force) throws TownyException {
-
-		if (force)
-			return;
-		Town town = (Town) owner;
-
-		if (owner instanceof Town) {
-			// Town town = (Town)owner;
-			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
-			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 0)
-				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
-		}
-
-
-		if (TownySettings.isUsingEconomy()) {
-			try {
-				if (selection.size() == 1)
-					blockCost = town.getTownBlockCost();
-				else
-					blockCost = town.getTownBlockCostN(selection.size());
-	
-				double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-				if (TownySettings.isUsingEconomy() && !((Town) owner).getAccount().canPayFromHoldings(blockCost))
-					throw new TownyException(Translation.of("msg_err_cant_afford_blocks2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-			} catch (EconomyException e1) {
-				throw new TownyException("Economy Error");
-			}
-		}
-		
-		if (attachedToEdge && !isEdgeBlock(owner, selection) && !town.getTownBlocks().isEmpty()) {
+	public static void checkIfSelectionIsValid(Town town, List<WorldCoord> selection, boolean attachedToEdge, double blockCost) throws TownyException {
+		if (attachedToEdge && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty()) {
 			if (selection.size() == 0)
 				throw new TownyException(Translation.of("msg_already_claimed_2"));
 			else
