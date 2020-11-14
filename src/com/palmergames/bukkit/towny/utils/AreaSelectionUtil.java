@@ -85,10 +85,14 @@ public class AreaSelectionUtil {
 				}
 
 				if (args[0].equalsIgnoreCase("auto")) {
-					// Attempt to select outwards until no town blocks remain
-
-					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
-						r += 1;
+					// Attempt to select outwards until no town blocks remain. 
+					// This will make a less perfect claim than /t claim rect # or /t claim circle auto.
+					r = 1;
+					int total = 0;
+					while (available - ((r * 8) + total) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
+						total += r * 8;
+						r++;
+					}
 					
 					if (TownySettings.getMaxClaimRadiusValue() > 0) 
 						r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
@@ -110,13 +114,13 @@ public class AreaSelectionUtil {
 					
 					// Rethink how much of a radius will be used, as there's not enough available TownBlocks.
 					if (neededBlocks > available) {
-						int i = 1;
-						r=0;
-						while (available - ((i * 8) + r) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
-							r += i * 8;
-							i++;
+						r = 1; 
+						int total = 0;
+						while (available - ((r * 8) + total) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
+							total += r * 8;
+							r++;
 						}
-						r = i-1; // Finally reduce the radius by 1 and replace the original r.
+						r--; // Finally reduce the radius by 1 (so that we have a perfect ring of claims,) and replace the original r.
 					}
 				}
 					
@@ -168,13 +172,23 @@ public class AreaSelectionUtil {
 					if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
 						throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 					}
+					
+					int radius = 0;
+					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+						while (available - Math.ceil(Math.PI * radius * radius) >= 0)
+							radius += 1;
+					
+					radius--;// We lower the radius by one so that we get only perfect circle claims.
+					
+					r = Math.min(r, radius); // This will ensure that if they've give too high of a radius we lower it to what they are able to actually claim.
+					
 				}
 				
 				if (r > 1000)
 					r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
-						if ((x * x + z * z <= r * r) && (out.size() < available)) {
+						if ((x * x + z * z <= r * r) && (out.size() <= available)) {
 							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
 						}
 							
