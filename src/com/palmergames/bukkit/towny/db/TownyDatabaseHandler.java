@@ -369,12 +369,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return matches;
 	}
 
+	/**
+	 * @return a list of all towns.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTowns()} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Town> getTowns() {
 
 		return new ArrayList<>(universe.getTowns());
 	}
 
+	/**
+	 * Gets a town from the passed-in name.
+	 * @param name Town Name
+	 * @return town associated with the name.
+	 * @throws NotRegisteredException Town does not exist.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTown(String)} instead.
+	 */
 	@Deprecated
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
@@ -386,6 +400,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return town;
 	}
 
+	/**
+	 * Returns the associated town with the passed-in uuid.
+	 * @param uuid UUID of the town to fetch.
+	 * @return town associated with the uuid.
+	 * @throws NotRegisteredException Thrown if town doesn't exist.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTown(UUID)} instead.
+	 */
 	@Deprecated
 	@Override
 	public Town getTown(UUID uuid) throws NotRegisteredException {

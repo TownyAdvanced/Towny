@@ -351,7 +351,11 @@ public class TownyUniverse {
 	// =========== Town Methods ===========
 	
 	public boolean hasTown(@NotNull String townName) {
-		Validate.notNull(townName);
+		Validate.notNull(townName, "Town Name cannot be null!");
+		
+		// Fast-fail
+		if (townName.isEmpty())
+			return false;
 		
     	String formattedName;
 		try {
