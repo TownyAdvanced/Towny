@@ -452,17 +452,27 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == pos.getTownBlock().getTown())) {
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to put their town's plots for sale.
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
 						selection = AreaSelectionUtil.filterOutResidentBlocks(selection); // Filter out any resident-owned plots.
 					} else {
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident putting their own plots up for sale.
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
 					}
 
 					if (selection.isEmpty())
-						throw new TownyException(Translation.of("msg_area_not_own"));
+						throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 
-					for (WorldCoord worldCoord : selection)
+					// Set each WorldCoord in selection not for sale.
+					for (WorldCoord worldCoord : selection) {
+						
+						// Skip over any plots that are part of a PlotGroup.
+						if (worldCoord.getTownBlock().hasPlotObjectGroup()) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group_plot_nfs", worldCoord));
+							continue;
+						}
+						
 						setPlotForSale(resident, worldCoord, -1);
+					}
+						
 
 				} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
 
@@ -473,10 +483,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					double plotPrice = pos.getTownBlock().getTown().getPlotTypePrice(pos.getTownBlock().getType());
 
 					if (split.length > 1) {
+						/*
+						 * This is not a case of '/plot fs' and has a cost and/or an area selection involved.
+						 */
 
+						// areaSelectPivot is how Towny handles the 'within' area selection when setting plots for sale.
+						// Will return -1 if the word 'within' is not found.
 						int areaSelectPivot = AreaSelectionUtil.getAreaSelectPivot(split);
 						List<WorldCoord> selection;
-						if (areaSelectPivot >= 0) {
+						
+						if (areaSelectPivot >= 0) { // 'within' has been used in the command, make a selection.
 							selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot + 1, split.length));
 							
 							// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
@@ -489,7 +505,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							if (selection.isEmpty()) 
 								throw new TownyException(Translation.of("msg_err_empty_area_selection"));
-						} else {
+
+						} else { // No 'within' found so this will be a case of /plot fs $, add a single coord to selection.
 							selection = new ArrayList<>();
 							selection.add(pos);
 						}
@@ -509,10 +526,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 						}
 
+						// Set each WorldCoord in selection for sale.
 						for (WorldCoord worldCoord : selection) {
 							TownBlock townBlock = worldCoord.getTownBlock();
 							
-							// Check if a group is present in a townblock
+							// Skip over any plots that are part of a PlotGroup.
 							if (townBlock.hasPlotObjectGroup()) {
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group_plot_fs2", worldCoord));
 								continue;
@@ -522,18 +540,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							setPlotForSale(resident, worldCoord, plotPrice);
 						}
 					} else {
-						// basic 'plot fs' command
-
+						/*
+						 * basic 'plot fs' command
+						 */
+						
+						// Skip over any plots that are part of a PlotGroup.
 						if (pos.getTownBlock().hasPlotObjectGroup()) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group_plot_fs2", pos));
 							return false;
 						}
-						
+
+						// Otherwise continue on normally.
 						setPlotForSale(resident, pos, plotPrice);
-						
-						// Update group price if neccessary.
-						if (pos.getTownBlock().hasPlotObjectGroup())
-							pos.getTownBlock().getPlotObjectGroup().addPlotPrice(plotPrice);
 					}
 
 				} else if (split[0].equalsIgnoreCase("perm") || split[0].equalsIgnoreCase("info")) {
