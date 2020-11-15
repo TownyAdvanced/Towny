@@ -5267,3 +5267,6 @@ v0.92.0.11:
   - API: Added MobSpawnRemovalEvent, courtesy of lucasboss45 with PR #4424 (First-Time Contributor!)
     - a cancellable event to the removal of mobs on spawn.
   - Actually fix FlagWar's flag blocks not being placed correctly.
+0.96.3.6:
+  - Fix spam about respawn anchors on sub-1.16.* servers.
+    - Closes #4444.

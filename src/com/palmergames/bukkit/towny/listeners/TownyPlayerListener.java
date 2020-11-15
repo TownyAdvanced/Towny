@@ -368,7 +368,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType() == Material.RESPAWN_ANCHOR) {
+			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
 				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() == 4)
 					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
