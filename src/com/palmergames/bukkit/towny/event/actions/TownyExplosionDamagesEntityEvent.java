@@ -22,7 +22,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
  * @param location - Location of the entity being damaged.
  * @param entity - Entity getting exploded.
  * @param cause - DamageCause.
- * @param canExplode - Whether Towny will cancel this already.
+ * @param cancelled - Whether Towny will cancel this already.
  * 
  * @author LlmDl
  */
