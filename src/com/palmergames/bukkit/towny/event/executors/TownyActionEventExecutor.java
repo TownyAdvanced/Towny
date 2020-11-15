@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlockEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
@@ -98,7 +98,7 @@ public class TownyActionEventExecutor {
 				 */
 				if (world.isForceExpl() || world.isExpl())
 					canExplode = true;
-				if (!world.isExpl())
+				else if (!world.isExpl())
 					canExplode = false;			
 			} else {
 				/*
@@ -204,7 +204,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplodingBlockEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplodingBlockEvent event = new TownyExplodingBlockEvent(blockList, filteredBlocks, mat, entity);
+		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

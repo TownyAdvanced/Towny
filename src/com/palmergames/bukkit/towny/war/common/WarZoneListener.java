@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlockEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
@@ -110,7 +110,7 @@ public class WarZoneListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onExplosionDamagingBlocks(TownyExplodingBlockEvent event) {
+	public void onExplosionDamagingBlocks(TownyExplodingBlocksEvent event) {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 

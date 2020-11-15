@@ -32,7 +32,7 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 	private final Location location;
 	private final Entity entity;
 	private final DamageCause cause;
-	private boolean canExplode;
+	private boolean cancelled;
 
 	/**
 	 * Event thrown when an explosion damages an entity. 
@@ -41,13 +41,13 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 	 * @param location - Location of the entity being damaged.
 	 * @param harmedEntity - Entity getting exploded.
 	 * @param cause - DamageCause.
-	 * @param canExplode - Whether Towny will cancel this already.
+	 * @param cancelled - Whether Towny will cancel this already.
 	 */
-	public TownyExplosionDamagesEntityEvent(Location location, Entity harmedEntity, DamageCause cause, boolean canExplode) {
+	public TownyExplosionDamagesEntityEvent(Location location, Entity harmedEntity, DamageCause cause, boolean cancelled) {
 		this.location = location;
 		this.entity = harmedEntity;
 		this.cause = cause;
-		this.canExplode = canExplode;
+		this.cancelled = cancelled;
 	}
 
 	public static HandlerList getHandlerList() {
@@ -60,12 +60,12 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 
 	@Override
 	public boolean isCancelled() {
-		return canExplode;
+		return cancelled;
 	}
 
 	@Override
 	public void setCancelled(boolean cancel) {
-		this.canExplode = cancel;
+		this.cancelled = cancel;
 	}
 
 	/**

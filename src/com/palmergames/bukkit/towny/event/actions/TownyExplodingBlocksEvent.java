@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * 
  * @author LlmDl
  */
-public class TownyExplodingBlockEvent extends Event {
+public class TownyExplodingBlocksEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final List<Block> vanillaBlockList;
@@ -45,7 +45,7 @@ public class TownyExplodingBlockEvent extends Event {
 	 * @param mat - Material which caused the block explosion or null if it is an entity explosion.
 	 * @param entity - Entity which caused the entity explosion or null if it is a block explosion. 
 	 */
-	public TownyExplodingBlockEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity) {
+	public TownyExplodingBlocksEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity) {
 		this.vanillaBlockList = vanillaBlockList;
 		this.filteredBlockList = townyFilteredList;
 		this.material = mat;
