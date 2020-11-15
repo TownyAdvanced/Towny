@@ -235,13 +235,13 @@ public class TownyActionEventExecutor {
 		 *  canExplode will get Towny's normal response as to 
 		 *  whether an explosion is allowed in the given location.
 		 */		
-		boolean canExplode = isAllowedExplosion(loc);
+		boolean cancelled = !isAllowedExplosion(loc);
 
 		/*
 		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, canExplode);
+		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, cancelled);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*
