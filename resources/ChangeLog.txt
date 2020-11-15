@@ -5270,3 +5270,5 @@ v0.92.0.11:
 0.96.3.6:
   - Fix spam about respawn anchors on sub-1.16.* servers.
     - Closes #4444.
+  - Add LEAD back to the item_use_ids.
+    - Closes #4445.
