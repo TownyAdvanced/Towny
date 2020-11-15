@@ -81,6 +81,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Handle events for all Player related events
@@ -585,6 +586,7 @@ public class TownyPlayerListener implements Listener {
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
 		Resident resident = null;
+
 		try {
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException ignored) {
@@ -790,7 +792,7 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.doTownsGetWarnedOnOutlaw()) {
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
 			}
-			if (TownySettings.canOutlawsEnterTowns()) {
+			if (TownySettings.canOutlawsEnterTowns() || TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
 				TownyMessaging.sendMsg(outlaw, Translation.of("msg_you_are_an_outlaw_in_this_town", town));
 			} else {
 				if (TownySettings.getOutlawTeleportWarmup() > 0) {
@@ -802,7 +804,11 @@ public class TownyPlayerListener implements Listener {
 						if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName())) {
 							Location spawnLocation = town.getWorld().getSpawnLocation();
 							Player outlawedPlayer = outlaw.getPlayer();
-							if (outlawedPlayer.getBedSpawnLocation() != null)
+							if (!TownySettings.getOutlawTeleportWorld().equals("")) {
+								spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
+							}
+							// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
+							if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
 								spawnLocation = outlawedPlayer.getBedSpawnLocation();
 							if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 								spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
