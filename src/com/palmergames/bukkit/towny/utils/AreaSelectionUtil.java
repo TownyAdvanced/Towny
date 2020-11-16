@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
@@ -31,16 +32,24 @@ public class AreaSelectionUtil {
 			out.add(pos);
 
 		} else {
+			int available = 0;
+			if (owner instanceof Town) {
+				Town town = (Town) owner;
+				available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+			} else if (owner instanceof Resident) {
+				available = TownySettings.getMaxResidentPlots((Resident) owner);
+			}
+			
 			if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("rect")) {
-					out = selectWorldCoordAreaRect(owner, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args));
 				} else if (args[0].equalsIgnoreCase("circle")) {
-					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args));
 				} else {
 					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) {
-				out = selectWorldCoordAreaRect(owner, pos, args);
+				out = selectWorldCoordAreaRect(available, pos, args);
 			} else if (args[0].equalsIgnoreCase("outpost")) {
 				TownBlock tb = pos.getTownBlock();
 				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
@@ -60,7 +69,7 @@ public class AreaSelectionUtil {
 				try {
 					Integer.parseInt(args[0]);
 					// Treat as rect to serve for backwards capability.
-					out = selectWorldCoordAreaRect(owner, pos, args);
+					out = selectWorldCoordAreaRect(available, pos, args);
 				} catch (NumberFormatException e) {
 					throw new TownyException(Translation.of("msg_err_invalid_property", args[0]));
 				}
@@ -70,131 +79,143 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	private static List<WorldCoord> selectWorldCoordAreaRect(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
-		if (pos.getTownyWorld().isClaimable()) {
-			if (args.length > 0) {
-				int r = 0, available = 1000;
+		if (args.length > 0) {
+			int r = 0; // The radius of the claim.
+			
+			if (args[0].equalsIgnoreCase("auto")) {
+				r = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
+				
+				if (TownySettings.getMaxClaimRadiusValue() > 0) 
+					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
-				if (owner instanceof Town) {
-					Town town = (Town) owner;
-					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-				} else if (owner instanceof Resident) {
-					available = TownySettings.getMaxResidentPlots((Resident) owner);
+			} else {
+				try {
+					r = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					throw new TownyException(Translation.of("msg_err_invalid_radius"));
 				}
+				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 
-				if (args[0].equalsIgnoreCase("auto")) {
-					// Attempt to select outwards until no town blocks remain. 
-					// This will make a less perfect claim than /t claim rect # or /t claim circle auto.
-					r = 1;
+				// Calculate how many TownBlocks are needed to claim the radius. 
+				// Start blocks at 0 if the plot is unclaimed.
+				int neededBlocks = pos.getTownBlock().hasTown() ? 0 : 1;
+				neededBlocks += 4 * r * (r + 1);
+				
+				// Rethink how much of a radius will be used, as there's not enough available TownBlocks.
+				if (neededBlocks > available) {
+					r = 1; 
 					int total = 0;
 					while (available - ((r * 8) + total) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
 						total += r * 8;
 						r++;
 					}
-					
-					if (TownySettings.getMaxClaimRadiusValue() > 0) 
-						r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
-
-				} else {
-					try {
-						r = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_err_invalid_radius"));
-					}
-					if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
-						throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
-
-					// Calculate how many TownBlocks are needed to claim the radius. 
-					// Start blocks at 0 if the plot is unclaimed.
-					int neededBlocks = pos.getTownBlock().hasTown() ? 0 : 1;
-					for (int i = 1; i <= r; i++)
-						neededBlocks += i * 8;
-					
-					// Rethink how much of a radius will be used, as there's not enough available TownBlocks.
-					if (neededBlocks > available) {
-						r = 1; 
-						int total = 0;
-						while (available - ((r * 8) + total) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
-							total += r * 8;
-							r++;
-						}
-						r--; // Finally reduce the radius by 1 (so that we have a perfect ring of claims,) and replace the original r.
-					}
+					r--; // Finally reduce the radius by 1 (so that we have a perfect ring of claims,) and replace the original r.
 				}
-					
-				if (r > 1000)
-					r = 1000;
-				for (int z = -r; z <= r; z++)
-					for (int x = -r; x <= r; x++)
-						if (out.size() <= available) {
-							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
-						}
-			} else {
-				throw new TownyException(Translation.of("msg_err_invalid_radius"));
 			}
+
+			/*
+			 *  Area claims are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
+			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
+			 */
+			if (r > 961)
+				r = 961;
+
+			/*
+			 * Adds WorldCoords in a spiral-out pattern.
+			 */
+			int coordX = (r*2)+1;
+			int coordZ = (r*2)+1;
+			int x = 0, z = 0, dx = 0, dz = -1;
+			int t = Math.max(r, r);
+			for (int i = 0; i <= available; i++) {
+				if ((-coordX / 2 <= x) && (x <= coordX / 2) && (-coordZ / 2 <= z) && (z <= coordZ / 2)) {
+					out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
+				}
+
+				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
+					t = dx;
+					dx = -dz;
+					dz = t;
+				}
+				x += dx;
+				z += dz;
+			}
+
+		} else {
+			throw new TownyException(Translation.of("msg_err_invalid_radius"));
 		}
 
 		return out;
 	}
 
-	private static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
-		if (pos.getTownyWorld().isClaimable()) {
-			if (args.length > 0) {
-				int r = 0, available = 0;
-				if (owner instanceof Town) {
-					Town town = (Town) owner;
-					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-				} else if (owner instanceof Resident) {
-					available = TownySettings.getMaxResidentPlots((Resident) owner);
-				}
+		if (args.length > 0) {
+			int r = 0; // The radius of the claim.
 
-				if (args[0].equalsIgnoreCase("auto")) {
-					// Attempt to select outwards until no town blocks remain
+			if (args[0].equalsIgnoreCase("auto")) {
+				// Attempt to select outwards until no town blocks remain
+				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+					while (available - Math.ceil(Math.PI * r * r) >= 0)
+						r += 1;
+				
+				if (TownySettings.getMaxClaimRadiusValue() > 0) 
+					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
-					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-						while (available - Math.ceil(Math.PI * r * r) >= 0)
-							r += 1;
-					
-					if (TownySettings.getMaxClaimRadiusValue() > 0) 
-						r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
-
-				} else {
-					try {
-						r = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_err_invalid_radius"));
-					}
-					
-					if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-						throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
-					}
-					
-					int radius = 0;
-					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-						while (available - Math.ceil(Math.PI * radius * radius) >= 0)
-							radius += 1;
-					
-					radius--;// We lower the radius by one so that we get only perfect circle claims.
-					
-					r = Math.min(r, radius); // This will ensure that if they've give too high of a radius we lower it to what they are able to actually claim.
-					
+			} else {
+				try {
+					r = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					throw new TownyException(Translation.of("msg_err_invalid_radius"));
 				}
 				
-				if (r > 1000)
-					r = 1000;
-				for (int z = -r; z <= r; z++)
-					for (int x = -r; x <= r; x++)
-						if ((x * x + z * z <= r * r) && (out.size() <= available)) {
-							out.add(new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z));
-						}
-							
-			} else {
-				throw new TownyException(Translation.of("msg_err_invalid_radius"));
+				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+				
+				int radius = 0;
+				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+					while (available - Math.ceil(Math.PI * radius * radius) >= 0)
+						radius += 1;
+				
+				radius--;// We lower the radius by one so that we get only perfect circle claims.
+				
+				r = Math.min(r, radius); // This will ensure that if they've give too high of a radius we lower it to what they are able to actually claim.
+				
 			}
+
+			if (r > 1000)
+				r = 1000;
+			
+			/*
+			 * Adds WorldCoords in a spiral-out pattern.
+			 */
+			int coordX = (r*2)+1;
+			int coordZ = (r*2)+1;
+			int x = 0, z = 0, dx = 0, dz = -1;
+			int t = Math.max(r, r);
+			for (int i = 0; i <= available; i++) {
+				if ((-coordX / 2 <= x) && (x <= coordX / 2) && (-coordZ / 2 <= z) && (z <= coordZ / 2)) {
+					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= available)) {
+						out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
+					}
+				}
+
+				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
+					t = dx;
+					dx = -dz;
+					dz = t;
+				}
+				x += dx;
+				z += dz;
+			}
+
+		} else {
+			throw new TownyException(Translation.of("msg_err_invalid_radius"));
 		}
 
 		return out;
