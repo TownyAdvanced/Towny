@@ -1943,29 +1943,29 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[2].equalsIgnoreCase("set")) {
 				CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 				if (town.hasMeta()) {
-					for (CustomDataField cdf: town.getMetadata()) {
-						if (cdf.equals(md)) {
-
-							// Check if the given value is valid for this field.
-							try {
-								cdf.isValidType(val);
-							} catch (InvalidMetadataTypeException e) {
-								TownyMessaging.sendErrorMsg(player, e.getMessage());
-								return;
-							}
-							
-							// Change state TODO: Add type casting..
-							cdf.setValue(val);
-
-							// Let user know that it was successful.
-							TownyMessaging.sendMsg(player, Translation.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
-
-							// Save changes.
-							townyUniverse.getDataSource().saveTown(town);
-
-							return;
-						}
+					CustomDataField cdf = town.getMetadata(md.getKey());
+					
+					if (cdf == null) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_key_x_is_not_part_of_this_town", mdKey));
+						return;
 					}
+
+					// Check if the given value is valid for this field.
+					try {
+						cdf.isValidType(val);
+					} catch (InvalidMetadataTypeException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+						return;
+					}
+
+					// Change state TODO: Add type casting..
+					cdf.setValue(val);
+
+					// Let user know that it was successful.
+					TownyMessaging.sendMsg(player, Translation.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
+
+					// Save changes.
+					townyUniverse.getDataSource().saveTown(town);
 				}
 
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_key_x_is_not_part_of_this_town", mdKey));
@@ -2006,12 +2006,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 
 			if (town.hasMeta()) {
-				for (CustomDataField cdf : town.getMetadata()) {
-					if (cdf.equals(md)) {
-						town.removeMetaData(cdf);
-						TownyMessaging.sendMsg(player, Translation.of("msg_data_successfully_deleted"));
-						return;
-					}
+				if (town.hasMeta(md.getKey())) {
+					town.removeMetaData(md);
+					TownyMessaging.sendMsg(player, Translation.of("msg_data_successfully_deleted"));
+					return;
 				}
 			}
 			

@@ -757,12 +757,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		receivedInvites.remove(invite);
 	}
 
+	@Override
 	public void addMetaData(CustomDataField md) {
 		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	@Override
 	public void removeMetaData(CustomDataField md) {
 		super.removeMetaData(md);
 

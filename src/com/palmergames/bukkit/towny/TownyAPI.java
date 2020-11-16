@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -197,7 +198,40 @@ public class TownyAPI {
 		}
     }
     
-    /**     * Get the name of a {@link Town} at a specific {@link Location}.
+    /**
+     * Returns {@link TownyWorld} unless it is null.
+     * 
+     * @param world - the name of the world to get.
+     * @return TownyWorld or null.
+     */
+    public TownyWorld getTownyWorld(String worldName) {
+    	try {
+    		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(worldName);
+    		return townyWorld;
+    	} catch (NotRegisteredException e) {
+			return null;
+		}
+    }
+    
+    
+    /**
+     * Get the {@link Town} at a specific {@link Location}.
+     *
+     * @param location {@link Location} to get {@link Town} for.
+     * @return {@link Town} at this location, or null for none.
+     */
+    public Town getTown(Location location) {
+        try {
+            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+            return worldCoord.getTownBlock().getTown();
+        } catch (NotRegisteredException e) {
+            // No data so return null
+            return null;
+        }
+    }
+    
+    /**
+     * Get the name of a {@link Town} at a specific {@link Location}.
      *
      * @param location {@link Location} to get {@link Town} name for.
      * @return {@link String} containg the name of the {@link Town} at this location, or null for none.
