@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.exceptions;
 
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public class NotRegisteredException extends TownyException {
 
@@ -8,7 +8,7 @@ public class NotRegisteredException extends TownyException {
 
 	public NotRegisteredException() {
 
-		super(TownySettings.getLangString("not_registered"));
+		super(Translation.of("not_registered"));
 	}
 
 	public NotRegisteredException(String message) {

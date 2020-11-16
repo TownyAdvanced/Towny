@@ -11,7 +11,7 @@ public class MobRemovalEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
 	private boolean cancelled = false;
-	private Entity entity;
+	private final Entity entity;
 	
 	public MobRemovalEvent(Entity entity) {
 		super(!Bukkit.getServer().isPrimaryThread());

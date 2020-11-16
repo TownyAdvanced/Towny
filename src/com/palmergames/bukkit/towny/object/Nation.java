@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -16,68 +15,49 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
+import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyObject implements ResidentList, TownyInviter, Bank {
+public class Nation extends Government {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	//private List<Resident> assistants = new ArrayList<Resident>();
-	private List<Town> towns = new ArrayList<>();
+	private final List<Town> towns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private List<Siege> sieges = new ArrayList<>();
 	private Town capital;
-	private double taxes, spawnCost;
 	private boolean neutral = false;
-	private String nationBoard = TownySettings.getNationDefaultBoard();
 	private String mapColorHexCode = "";
-	private String tag = "";
 	public UUID uuid;
-	private long registered;
 	private Location nationSpawn;
-	private boolean isPublic = TownySettings.getNationDefaultPublic();
-	private boolean isOpen = TownySettings.getNationDefaultOpen();
-	private transient List<Invite> receivedinvites = new ArrayList<>();
-	private transient List<Invite> sentinvites = new ArrayList<>();
-	private transient List<Invite> sentallyinvites = new ArrayList<>();
-	private transient EconomyAccount account;
+	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
+	@SuppressWarnings("unused")
+	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 
 	public Nation(String name) {
 		super(name);
-	}
-
-	public void setTag(String text) throws TownyException {
-
-		if (text.length() > 4) {
-			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
-		}
-		this.tag = text.toUpperCase().trim();
-		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this, this.tag));
-	}
-
-	public String getTag() {
-
-		return tag;
-	}
-
-	public boolean hasTag() {
-
-		return !tag.isEmpty();
+		
+		// Set defaults
+		setBoard(TownySettings.getNationDefaultBoard());
+		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
 	public void addAlly(Nation nation) throws AlreadyRegisteredException {
@@ -164,8 +144,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	public List<Town> getTowns() {
-
-		return towns;
+		return Collections.unmodifiableList(towns);
 	}
 
 	public boolean isKing(Resident resident) {
@@ -231,41 +210,39 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return capital;
 	}
 
-	public Location getNationSpawn() throws TownyException {
+	@Override
+	public Location getSpawn() throws TownyException {
 		if(nationSpawn == null){
-			throw new TownyException(TownySettings.getLangString("msg_err_nation_has_not_set_a_spawn_location"));
+			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
 		}
 
 		return nationSpawn;
 	}
 
-	public boolean hasNationSpawn(){
-		return (nationSpawn != null);
-	}
-
-	public void setNationSpawn(Location spawn) throws TownyException {
+	@Override
+	public void setSpawn(Location spawn) throws TownyException {
 		if (TownyAPI.getInstance().isWilderness(spawn))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_wild"), "set spawn"));
+			throw new TownyException(Translation.of("msg_cache_block_error_wild", "set spawn"));
 
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
 
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 			if(!townBlock.hasTown()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 			if(townBlock.getTown() != this.getCapital()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			}
 		} else {
 			if(!townBlock.hasTown()){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
 			}
 
 			if(!towns.contains(townBlock.getTown())){
-				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
 			}
 		}
 
@@ -445,12 +422,6 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		this.taxes = Math.min(taxes, TownySettings.getMaxNationTax());
 	}
 
-	public double getTaxes() {
-
-		setTaxes(taxes); //make sure the tax level is right.
-		return taxes;
-	}
-
 	public void clear() {
 
 		//TODO: Check cleanup
@@ -484,8 +455,8 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_left_nation"), this.getName()));
-						TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
+						TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
 						this.remove(town);
 						it.remove();
 					}
@@ -523,18 +494,22 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 		return removedTowns;
 	}	
 
-	public void setNeutral(boolean neutral) throws TownyException {
+	public void toggleNeutral(boolean neutral) throws TownyException {
 
 		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
+			throw new TownyException(Translation.of("msg_err_fight_like_king"));
 		else {
-			if (neutral) {
-				for (Resident resident : getResidents()) {
+			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
+				for (Resident resident : getResidents())
 					FlagWar.removeAttackerFlags(resident.getName());
-				}
-			}
-			this.neutral = neutral;
+			
+			setNeutral(neutral);
 		}
+	}
+	
+	public void setNeutral(boolean neutral) {
+
+		this.neutral = neutral;
 	}
 
 	public boolean isNeutral() {
@@ -545,9 +520,9 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
-			throw new TownyException(TownySettings.getLangString("msg_err_king_not_in_nation"));
+			throw new TownyException(Translation.of("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
-			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
+			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
@@ -566,27 +541,14 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}
 			
-			this.getAccount().collect(amount, null);
+			this.getAccount().deposit(amount, null);
 		}
 
-	}
-
-	@Override
-	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-
-		//if (!isKing(resident))// && !hasAssistant(resident))
-		//	throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
-
-		if (TownySettings.isUsingEconomy()) {
-			if (!getAccount().payTo(amount, resident, "Nation Withdraw"))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
-		} else
-			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
 	}
 
 	@Override
@@ -629,12 +591,11 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	@Override
-	public List<Resident> getOutlaws() {
-
+	public Collection<Resident> getOutlaws() {
 		List<Resident> out = new ArrayList<>();
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
-		return out;
+		return Collections.unmodifiableList(out);
 	}
 
 	public UUID getUuid() {
@@ -648,106 +609,21 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	public boolean hasValidUUID() {
 		return uuid != null;
 	}
-
-	public long getRegistered() {
-		return registered;
-	}
-
-	public void setRegistered(long registered) {
-		this.registered = registered;
-	}
-
-	@Override
-	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
-	}
-
-	@Override
-	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
-			receivedinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
-		}
-	}
-
-	@Override
-	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
-	}
-
-	@Override
-	public List<Invite> getSentInvites() {
-		return sentinvites;
-	}
-
-	@Override
-	public void newSentInvite(Invite invite) throws TooManyInvitesException {
-		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
-			sentinvites.add(invite);
-		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_invites"));
-		}
-	}
-
-	@Override
-	public void deleteSentInvite(Invite invite) {
-		sentinvites.remove(invite);
-	}
 	
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
-		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
-			sentallyinvites.add(invite);
+		if (sentAllyInvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
+			sentAllyInvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
+			throw new TooManyInvitesException(Translation.of("msg_err_nation_sent_too_many_requests"));
 		}
 	}
 	
 	public void deleteSentAllyInvite(Invite invite) {
-		sentallyinvites.remove(invite);
+		sentAllyInvites.remove(invite);
 	}
 	
 	public List<Invite> getSentAllyInvites() {
-		return sentallyinvites;
-	}
-	
-	public void setNationBoard(String nationBoard) {
-
-		this.nationBoard = nationBoard;
-	}
-
-	public String getNationBoard() {
-		return nationBoard;
-	}
-
-    public void setPublic(boolean isPublic) {
-
-        this.isPublic = isPublic;
-    }
-
-    public boolean isPublic() {
-
-        return isPublic;
-    }
-    
-    public void setOpen(boolean isOpen) {
-    	
-    	this.isOpen = isOpen;
-    }
-    
-    public boolean isOpen() {
-    	
-    	return isOpen;
-    }
-    
-	public void setSpawnCost(double spawnCost) {
-
-		this.spawnCost = spawnCost;
-	}
-
-	public double getSpawnCost() {
-
-		return spawnCost;
+		return Collections.unmodifiableList(sentAllyInvites);
 	}
 
 	public List<Town> getTownsUnderSiegeAttack() {
@@ -845,24 +721,22 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
-
-		if (account == null) {
-
-			String accountName = StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-			World world;
-
-			if (hasCapital() && getCapital().hasWorld()) {
-				world = BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
-
-			account = new EconomyAccount(accountName, world);
+	public World getWorld() {
+		if (hasCapital() && getCapital().hasWorld()) {
+			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
+		} else {
+			return BukkitTools.getWorlds().get(0);
 		}
+	}
 
-		
-		return account;
+	@Override
+	public String getBankAccountPrefix() {
+		return ECONOMY_ACCOUNT_PREFIX;
+	}
+
+	@Override
+	public double getBankCap() {
+		return TownySettings.getNationBankCap();
 	}
 
 	/**
@@ -926,7 +800,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) throws EconomyException {
-		return getAccount().pay(amount, reason);
+		return getAccount().withdraw(amount, reason);
 	}
 
 	/**
@@ -939,7 +813,7 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().collect(amount, reason);
+		return getAccount().deposit(amount, reason);
 	}
 
 	public String getMapColorHexCode() {
@@ -948,5 +822,26 @@ public class Nation extends TownyObject implements ResidentList, TownyInviter, B
 
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
+	}
+	
+	/**
+	 * @deprecated As of 0.96.2.0, please use {@link #getSpawn()} instead.
+	 * 
+	 * @return getSpawn()
+	 * @throws TownyException When a nation spawn isn't available
+	 */
+	@Deprecated
+	public Location getNationSpawn() throws TownyException {
+		return getSpawn();
+	}
+	
+	/**
+	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
+	 *  
+	 * @return getBoard()
+	 */
+	@Deprecated
+	public String getNationBoard() {
+		return getBoard();
 	}
 }

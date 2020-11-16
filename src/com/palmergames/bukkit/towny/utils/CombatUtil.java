@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -351,13 +352,13 @@ public class CombatUtil {
 				try {
 					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 					if (!townBlock.getType().equals(TownBlockType.ARENA))
-						attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
+						attacker.sendMessage(Translation.of("msg_err_friendly_fire_disable"));
 						return true;
 				} catch (TownyException x) {
 					// World or TownBlock failure
 					// But we are configured to prevent friendly fire in the
 					// wilderness too.					
-					attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
+					attacker.sendMessage(Translation.of("msg_err_friendly_fire_disable"));
 					return true;
 				}
 			}		

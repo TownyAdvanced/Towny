@@ -9,7 +9,7 @@ public class DeleteNationEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private String nationName;
+    private final String nationName;
 
     @Override
     public HandlerList getHandlers() {

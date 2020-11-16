@@ -40,8 +40,12 @@ public enum NationSpawnLevel {
 			null,
 			null);
 
-	private ConfigNodes isAllowingConfigNode, ecoPriceConfigNode;
-	private String permissionNode, notAllowedLangNode, notAllowedLangNodeWar, notAllowedLangNodePeace;
+	private final ConfigNodes isAllowingConfigNode;
+	private final ConfigNodes ecoPriceConfigNode;
+	private final String permissionNode;
+	private final String notAllowedLangNode;
+	private final String notAllowedLangNodeWar;
+	private final String notAllowedLangNodePeace;
 
 	NationSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
 
@@ -59,12 +63,12 @@ public enum NationSpawnLevel {
 			boolean war = TownyAPI.getInstance().isWarTime();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
+				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
 			else if(level == NSpawnLevel.PEACE && war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodePeace));
+				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
-			throw new TownyException(TownySettings.getLangString(notAllowedLangNode));
+			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 

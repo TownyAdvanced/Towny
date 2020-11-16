@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -402,12 +403,12 @@ public class PlayerCacheUtil {
 			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
-			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error"));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error"));
 			return false;
 		}
 
 		if (status == TownBlockStatus.LOCKED) {
-			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error_locked"));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_locked"));
 			return false;
 		}
 
@@ -431,7 +432,7 @@ public class PlayerCacheUtil {
 						return true;
 					} else {
 						// Don't have permission to build/destroy/switch/item_use here
-						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
+						cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
 						return false;
 					}
 				}
@@ -459,7 +460,7 @@ public class PlayerCacheUtil {
 							try {
 								playersNation = playersTown.getNation();
 							} catch (Exception e1) {							
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 								return false;
 							}
 							if (playersNation.equals(nearestNation)){
@@ -467,11 +468,11 @@ public class PlayerCacheUtil {
 									return true;
 								} else {
 									// Don't have permission to build/destroy/switch/item_use here
-									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
+									cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
 									return false;
 								}
 							} else {
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 								return false;
 							}
 						}
@@ -518,7 +519,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("msg_cache_block_error_plot_friends"), TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_friends"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_TOWN) {
@@ -543,7 +544,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("msg_cache_block_error_plot_town_members"), TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_town_members"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_ALLY) {
@@ -568,7 +569,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("msg_cache_block_error_plot_allies"), TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_allies"), Translation.of(action.toString())));
 				return false;
 
 			} else {
@@ -594,7 +595,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), TownySettings.getLangString("msg_cache_block_error_plot_outsiders"), TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_outsiders"), Translation.of(action.toString())));
 				return false;
 
 			}
@@ -633,7 +634,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_resident", Translation.of(action.toString())));
 			return false;
 		} else if (status == TownBlockStatus.TOWN_NATION) {
 			/*
@@ -666,7 +667,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_nation"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_nation", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.TOWN_ALLY) {
@@ -701,7 +702,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_allies", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
@@ -732,7 +733,7 @@ public class PlayerCacheUtil {
 				}
 
 			}
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_outsider", Translation.of(action.toString())));
 			return false;
 		}
 

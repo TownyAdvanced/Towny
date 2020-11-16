@@ -10,7 +10,7 @@ public class PlotClearEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	private TownBlock townBlock;
+	private final TownBlock townBlock;
 
 	@Override
 	public HandlerList getHandlers() {

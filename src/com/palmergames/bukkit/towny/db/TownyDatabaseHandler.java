@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -70,7 +71,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public boolean hasResident(String name) {
-
 		try {
 			return TownySettings.isFakeResident(name) || universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
@@ -80,7 +80,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public boolean hasTown(String name) {
-
 		return universe.getTownsMap().containsKey(name.toLowerCase());
 	}
 
@@ -170,7 +169,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
 		}
 
 		if (!hasTown(name))
@@ -509,7 +509,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
@@ -701,7 +701,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				try {
 					townBalance = town.getAccount().getHoldingBalance();					
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.getAccount().pay(townBalance, "Town Rename");
+						town.getAccount().deposit(townBalance, "Town Rename");
 					} 
 					town.getAccount().removeAccount();
 					
@@ -787,7 +787,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTownBlock(townBlock);
 			}
 			
-			if (town.hasObjectGroups())
+			if (town.hasPlotGroups())
 				for (PlotGroup pg : town.getPlotObjectGroups()) {
 					pg.setTown(town);
 					savePlotGroup(pg);
@@ -850,7 +850,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
 					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.getAccount().pay(nationBalance, "Nation Rename");
+						nation.getAccount().withdraw(nationBalance, "Nation Rename");
 					}
 					nation.getAccount().removeAccount();
 					
@@ -997,7 +997,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (resident.hasTown()) {
 				town = resident.getTown();
 			}
-			List<TownBlock> townBlocks = resident.getTownBlocks();
+			Collection<TownBlock> townBlocks = resident.getTownBlocks();
 			List<String> townRanks = resident.getTownRanks();
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
@@ -1143,7 +1143,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
 			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), name));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", name));
 			lock.unlock();
 		}
 	}

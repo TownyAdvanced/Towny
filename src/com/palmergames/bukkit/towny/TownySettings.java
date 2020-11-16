@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -32,7 +33,6 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -62,8 +62,8 @@ public class TownySettings {
 	}
 
 	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
-	public static int uuidCount;
+	private static CommentedConfiguration config, newConfig, playermap;
+	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -299,41 +299,7 @@ public class TownySettings {
 		ChunkNotification.loadFormatStrings();
 	}
 
-	// This will read the language entry in the config.yml to attempt to load
-	// custom languages
-	// if the file is not found it will load the default from resource
-	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
-
-		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
-		String fullPath = filepath + File.separator + res;
-		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
-		
-		if (file != null) {
-			// read the (language).yml into memory
-			language = new CommentedConfiguration(file);
-			language.load();
-			newLanguage = new CommentedConfiguration(file);
-			try {
-				newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
-			} catch (IOException e) {
-				TownyMessaging.sendMsg("Custom language file detected, not updating.");
-				return;
-			} catch (InvalidConfigurationException e) {
-				TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
-			}
-			String resVersion = newLanguage.getString("version");
-			String langVersion = TownySettings.getLangString("version");
-			
-			if (!langVersion.equalsIgnoreCase(resVersion)) {
-				language = newLanguage;
-				newLanguage = null;
-				TownyMessaging.sendMsg("Newer language file available, language file updated.");
-				FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
-			}
-		}
-	}
-
-	private static void sendError(String msg) {
+	public static void sendError(String msg) {
 
 		System.out.println("[Towny] Error could not read " + msg);
 	}
@@ -404,9 +370,16 @@ public class TownySettings {
 		return data;
 	}
 
+	/**
+	 * @deprecated As of 0.96.2.5+ use {@link Translation#of(String)} instead.
+	 * Gets the lang string from the key.
+	 * 
+	 * @param root The key for the language string.
+	 * @return The translated lang string.
+	 */
+	@Deprecated
 	public static String getLangString(String root) {
-
-		String data = language.getString(root.toLowerCase());
+		String data = Translation.of(root);
 
 		if (data == null) {
 			sendError(root.toLowerCase() + " from " + config.getString("language"));
@@ -803,12 +776,12 @@ public class TownySettings {
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, fallenNation.getName()));
 	}
 	
 	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWN_ELIM"), town.getName(), n, fallenTown.getName(), fallenTownBlocks));
+		return parseString(Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, fallenTown.getName(), fallenTownBlocks));
 	}
 	
 	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
@@ -820,98 +793,98 @@ public class TownySettings {
 		} catch (NotRegisteredException e) {
 			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
 		}
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
+		return parseString(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName));
 	}
 	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL"), attacker.getName(), dead.getName(), n, attackingTown.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), dead.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, Player defender, int n, Town attackingTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING"), attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
+		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeKingKilled(Nation kingsNation) {
 
-		return parseString(String.format(getLangString("MSG_WAR_KING_KILLED"), kingsNation.getName()));
+		return parseString(Translation.of("MSG_WAR_KING_KILLED", kingsNation.getName()));
 	}
 	
 	public static String[] getWarTimeMayorKilled(Town mayorsTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
+		return parseString(Translation.of("MSG_WAR_MAYOR_KILLED", mayorsTown.getName()));
 	}
 	
 	public static String[] getWarTimeWinningNationSpoilsMsg(Nation winningNation, String money)
 	{
-		return parseString(String.format(getLangString("MSG_WAR_WINNING_NATION_SPOILS"), winningNation.getName(), money));
+		return parseString(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), money));
 	}
 	
 	public static String[] getWarTimeWinningTownSpoilsMsg(Town winningTown, String money, int score)
 	{
-		return parseString(String.format(getLangString("MSG_WAR_WINNING_TOWN_SPOILS"), winningTown.getName(), money, score));
+		return parseString(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTown.getName(), money, score));
 	}
 	//Score Methods
 
 	public static String[] getCouldntPayTaxesMsg(TownyObject obj, String type) {
 
-		return parseString(String.format(getLangString("MSG_COULDNT_PAY_TAXES"), obj.getName(), type));
+		return parseString(Translation.of("MSG_COULDNT_PAY_TAXES", obj.getName(), type));
 	}
 
 	public static String getPayedTownTaxMsg() {
 
-		return getLangString("MSG_PAYED_TOWN_TAX");
+		return Translation.of("MSG_PAYED_TOWN_TAX");
 	}
 
 	public static String getPayedResidentTaxMsg() {
 
-		return getLangString("MSG_PAYED_RESIDENT_TAX");
+		return Translation.of("MSG_PAYED_RESIDENT_TAX");
 	}
 
 	public static String getTaxExemptMsg() {
 
-		return getLangString("MSG_TAX_EXEMPT");
+		return Translation.of("MSG_TAX_EXEMPT");
 	}
 
 	public static String[] getDelResidentMsg(Resident resident) {
 
-		return parseString(String.format(getLangString("MSG_DEL_RESIDENT"), resident.getName()));
+		return parseString(Translation.of("MSG_DEL_RESIDENT", resident.getName()));
 	}
 
 	public static String[] getDelTownMsg(Town town) {
 
-		return parseString(String.format(getLangString("MSG_DEL_TOWN"), town.getName()));
+		return parseString(Translation.of("MSG_DEL_TOWN", town.getName()));
 	}
 
 	public static String[] getDelNationMsg(Nation nation) {
 
-		return parseString(String.format(getLangString("MSG_DEL_NATION"), nation.getName()));
+		return parseString(Translation.of("MSG_DEL_NATION", nation.getName()));
 	}
 
 	public static String[] getBuyResidentPlotMsg(String who, String owner, Double price) {
 
-		return parseString(String.format(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner, price));
+		return parseString(Translation.of("MSG_BUY_RESIDENT_PLOT", who, owner, price));
 	}
 
 	public static String[] getPlotForSaleMsg(String who, WorldCoord worldCoord) {
 
-		return parseString(String.format(getLangString("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
+		return parseString(Translation.of("MSG_PLOT_FOR_SALE", who, worldCoord.toString()));
 	}
 
 	public static String getMayorAbondonMsg() {
 
-		return parseSingleLineString(getLangString("MSG_MAYOR_ABANDON"));
+		return parseSingleLineString(Translation.of("MSG_MAYOR_ABANDON"));
 	}
 
 	public static String getNotPermToNewTownLine() {
 
-		return parseSingleLineString(getLangString("MSG_ADMIN_ONLY_CREATE_TOWN"));
+		return parseSingleLineString(Translation.of("MSG_ADMIN_ONLY_CREATE_TOWN"));
 	}
 
 	public static String getNotPermToNewNationLine() {
 
-		return parseSingleLineString(getLangString("MSG_ADMIN_ONLY_CREATE_NATION"));
+		return parseSingleLineString(Translation.of("MSG_ADMIN_ONLY_CREATE_NATION"));
 	}
 
 	public static String getKingPrefix(Resident resident) {
@@ -1233,7 +1206,7 @@ public class TownySettings {
 
 	public static String getUnclaimedZoneName() {
 
-		return getLangString("UNCLAIMED_ZONE_NAME");
+		return Translation.of("UNCLAIMED_ZONE_NAME");
 	}
 
 	public static int getMaxTitleLength() {
@@ -1581,7 +1554,7 @@ public class TownySettings {
 
 	public static String getUnclaimedPlotName() {
 
-		return getLangString("UNCLAIMED_PLOT_NAME");
+		return Translation.of("UNCLAIMED_PLOT_NAME");
 	}
 
 	public static long getDayInterval() {
@@ -2645,6 +2618,10 @@ public class TownySettings {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
 	}
+	
+	public static String getDebtAccountPrefix() {
+		return getString(ConfigNodes.ECO_DEBT_PREFIX);
+	}
 
 	public static String getTownDebtAccountPrefix() {
 
@@ -2761,36 +2738,36 @@ public class TownySettings {
 	
 	public static String getListPageMsg(int page, int total) {
 		 
-	    return parseString(String.format(getLangString("LIST_PAGE"), page, total))[0];
+	    return parseString(Translation.of("LIST_PAGE", page, total))[0];
 	}
 	
 	public static String getListNotEnoughPagesMsg(int max) {
 	 
-	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), max))[0];
+	    return parseString(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", max))[0];
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_no_town")));
+		return parseString(Translation.of("msg_war_a_player_has_no_town"));
 	}
 	
 	public static String[] getWarAPlayerHasNoNationMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_no_nation")));
+		return parseString(Translation.of("msg_war_a_player_has_no_nation"));
 	}
 	
 	public static String[] getWarAPlayerHasANeutralNationMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_a_neutral_nation")));
+		return parseString(Translation.of("msg_war_a_player_has_a_neutral_nation"));
 	}
 	
 	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_been_removed_from_war")));
+		return parseString(Translation.of("msg_war_a_player_has_been_removed_from_war"));
 	}
 	
 	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
-		return parseString(String.format(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
+		return parseString(Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
 	}
 	
 	public static String[] getWarAPlayerIsAnAllyMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally")));
+		return parseString(Translation.of("msg_war_a_player_is_an_ally"));
 	}
 	
 	public static boolean isNotificationUsingTitles() {
@@ -2964,6 +2941,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
 	}
 
+	public static List<String> getOrderOfMayoralSuccession() {
+		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
+	}
+
 	public static boolean isWarAllowed() {
 		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
 	}
@@ -3014,9 +2995,17 @@ public class TownySettings {
 		return "<50%";
 	}
 
+	public static int getUUIDCount() {
+		return uuidCount;
+	}
+	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
 		
+	}
+	
+	public static void incrementUUIDCount() {
+		uuidCount++;
 	}
 
 	public static boolean isTownBankruptcyEnabled() {

@@ -1,7 +1,7 @@
 package com.palmergames.util;
 
 import java.text.NumberFormat;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Translation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,16 +59,16 @@ public class TimeMgmt {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) (l / 3600.0);
-			out = h + TownySettings.getLangString("msg_hours");
+			out = h + Translation.of("msg_hours");
 			l -= h * 3600;
 		}
 		if (l >= 60) {
 			int m = (int) (l / 60.0);
-			out += (out.length() > 0 ? ", " : "") + m + TownySettings.getLangString("msg_minutes");
+			out += (out.length() > 0 ? ", " : "") + m + Translation.of("msg_minutes");
 			l -= m * 60;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + TownySettings.getLangString("msg_seconds");
+			out += (out.length() > 0 ? ", " : "") + l + Translation.of("msg_seconds");
 		return out;
 	}
 
@@ -82,22 +82,22 @@ public class TimeMgmt {
 
             if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("msg_days");
+                timeUnit = Translation.of("msg_days");
                 timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
 
             } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("msg_hours");
+                timeUnit = Translation.of("msg_hours");
                 timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
 
             } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("msg_minutes");
+                timeUnit = Translation.of("msg_minutes");
                 timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
 
             } else {
                 numberFormat.setMaximumFractionDigits(0);
-                timeUnit = TownySettings.getLangString("msg_seconds");
+                timeUnit = Translation.of("msg_seconds");
                 timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
             }
 
@@ -105,7 +105,7 @@ public class TimeMgmt {
             return numberFormat.format(timeRoundedUp) + timeUnit;
 
         } else {
-            return "0" + TownySettings.getLangString("msg_seconds");
+            return "0" + Translation.of("msg_seconds");
         }
     }
 }

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -11,28 +12,52 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
 public class TownySpigotMessaging {
+	@SuppressWarnings("deprecation")
+	final static class HoverCompatibilityWrapper {
+		
+		final TextComponent base;
+		
+		public HoverCompatibilityWrapper(TextComponent base) {
+			this.base = base;
+		}
+		
+		public void setHoverText(String hoverText) {
+			if (Towny.is116Plus()) {
+				base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
+				return;
+			}
+
+			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
+		}
+	}
+	
+	private static HoverCompatibilityWrapper adaptForHover(TextComponent base) {
+		return new HoverCompatibilityWrapper(base);
+	}
+	
 	public static void sendSpigotRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 				String secondline = "/towny:t invite accept " + invite.getSender().getName();
 				String thirdline = "/towny:t invite deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = TownySettings.getLangString("invitation_prefix") + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
 				String secondline = "/towny:n ally accept " + invite.getSender().getName();
 				String thirdline = "/towny:n ally deny " + invite.getSender().getName();
 				sendSpigotConfirmMessage(player, firstline, secondline, thirdline, "");
@@ -51,7 +76,7 @@ public class TownySpigotMessaging {
 	public static void sendSpigotConfirmMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
 
 		if (firstline == null) {
-			firstline = TownySettings.getLangString("confirmation_prefix") + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			firstline = Translation.of("confirmation_prefix") + Translation.of("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = "/" + TownySettings.getConfirmCommand();
@@ -60,25 +85,25 @@ public class TownySpigotMessaging {
 			cancelline = "/" + TownySettings.getCancelCommand();
 		}
 		if (lastline == null) {
-			lastline = TownySettings.getLangString("this_message_will_expire2");
+			lastline = Translation.of("this_message_will_expire2");
 		} else {
 			lastline = "";
 		}
 
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = new TextComponent(ChatColor.GREEN + confirmline.replace('/', '[').concat("]"));
-		confirmComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_accept")).create()));
+		adaptForHover(confirmComponent).setHoverText(Translation.of("msg_confirmation_spigot_hover_accept"));
 		confirmComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + confirmline.replace("/","")));
 
 		// Create cancel button based on given params.
 		TextComponent cancelComponent = new TextComponent(ChatColor.GREEN + cancelline.replace('/', '[').concat("]"));
-		cancelComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_confirmation_spigot_hover_cancel")).create()));
+		adaptForHover(cancelComponent).setHoverText(Translation.of("msg_confirmation_spigot_hover_cancel"));
 		cancelComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:" + cancelline.replace("/","")));
 		
 		// Use spigot to send the message.
 		player.spigot().sendMessage(new ComponentBuilder(firstline + "\n")
-			.append(confirmComponent).append(ChatColor.WHITE + " - " + String.format(TownySettings.getLangString("msg_confirmation_spigot_click_accept"), confirmline.replace('/', '[').replace("[",""), confirmline) + "\n")
-			.append(cancelComponent).append(ChatColor.WHITE + " - " + String.format(TownySettings.getLangString("msg_confirmation_spigot_click_cancel"), cancelline.replace('/', '['), cancelline).replace("[","") + "\n")
+			.append(confirmComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace('/', '[').replace("[",""), confirmline) + "\n")
+			.append(cancelComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace('/', '['), cancelline).replace("[","") + "\n")
 			.append(lastline)
 			.create());
 	}
@@ -109,29 +134,32 @@ public class TownySpigotMessaging {
 				townName.addExtra(nextComponent);
 			}
 			
+			/*
+			 * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
+			 * {@link Town#isOpen()}.
+			 */
 			if (town.isEffectivelyOpen()) {
-				TextComponent nextComponent = new TextComponent(TownySettings.getLangString("status_title_open"));
+                TextComponent nextComponent = new TextComponent(Translation.of("status_title_open"));
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				townName.addExtra(nextComponent);
 			}
 			
 			String spawnCost;
 
-			spawnCost = ChatColor.RESET + String.format(TownySettings.getLangString("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 			
-			String hoverText = String.format(TownySettings.getLangString("msg_click_spawn"), town) + "\n" + spawnCost;
+			String hoverText = Translation.of("msg_click_spawn", town) + "\n" + spawnCost;
 			
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 			
-			townName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-				new ComponentBuilder(hoverText).create()));
+			adaptForHover(townName).setHoverText(hoverText);
 			townName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:town spawn " + town + " -ignore"));
 			townsformatted[i % 10] = townName;
 			
 		}
 		
-		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
+		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
 		for (BaseComponent baseComponent : townsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}
@@ -145,12 +173,12 @@ public class TownySpigotMessaging {
 		TextComponent backButton = new TextComponent("<<<");
 		backButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page - 1)));
-		backButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_previous_page")).create()));
+		adaptForHover(backButton).setHoverText(Translation.of("msg_hover_previous_page"));
 		
 		TextComponent forwardButton = new TextComponent(">>>");
 		forwardButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
-		forwardButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TownySettings.getLangString("msg_hover_next_page")).create()));
+		adaptForHover(forwardButton).setHoverText(Translation.of("msg_hover_next_page"));
 		
 		TextComponent pageText = new TextComponent("   " + TownySettings.getListPageMsg(page, total) + "   ");
 
@@ -217,29 +245,28 @@ public class TownySpigotMessaging {
 			}
 
 			if (nation.isOpen()) {
-				TextComponent nextComponent = new TextComponent(TownySettings.getLangString("status_title_open"));
+				TextComponent nextComponent = new TextComponent(Translation.of("status_title_open"));
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				nationName.addExtra(nextComponent);
 			}
 
 			String spawnCost;
 
-			spawnCost = ChatColor.RESET + String.format(TownySettings.getLangString("msg_spawn_cost"), TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
-			String hoverText = String.format(TownySettings.getLangString("msg_click_spawn"), nation) + "\n" + spawnCost;
+			String hoverText = Translation.of("msg_click_spawn", nation) + "\n" + spawnCost;
 
 			TextComponent hoverComponent = new TextComponent(hoverText);
 			hoverComponent.setColor(net.md_5.bungee.api.ChatColor.GOLD);
 
 
-			nationName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-				new ComponentBuilder(hoverText).create()));
+			adaptForHover(nationName).setHoverText(hoverText);
 			nationName.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/towny:nation spawn " + nation + " -ignore"));
 			nationsformatted[i % 10] = nationName;
 
 		}
 
-		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
+		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
 		for (BaseComponent baseComponent : nationsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}

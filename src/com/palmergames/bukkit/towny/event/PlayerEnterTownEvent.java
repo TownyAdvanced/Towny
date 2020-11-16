@@ -11,11 +11,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerEnterTownEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
-	private Town enteredtown;
-	private PlayerMoveEvent pme;
-	private WorldCoord from;
-	private WorldCoord to;
-	private Player player;
+	private final Town enteredtown;
+	private final PlayerMoveEvent pme;
+	private final WorldCoord from;
+	private final WorldCoord to;
+	private final Player player;
 
 	@Override
 	public HandlerList getHandlers() {

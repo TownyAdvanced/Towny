@@ -16,8 +16,9 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -30,11 +31,13 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements TownyInviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -51,16 +54,16 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
-	private List<String> modes = new ArrayList<>();
+	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
-	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
 	private int nationRefundAmount = 0;
 
-	private List<String> townRanks = new ArrayList<>();
-	private List<String> nationRanks = new ArrayList<>();
+	private final List<String> townRanks = new ArrayList<>();
+	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final TownyPermission permissions = new TownyPermission();
 
 	public Resident(String name) {
 		super(name);
@@ -112,8 +115,8 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.setJailed(true);
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
-		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_you_have_been_sent_to_jail"));
-		TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
+		TownyMessaging.sendMsg(player, Translation.of("msg_you_have_been_sent_to_jail"));
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", player.getName(), index));
 
 	}
 	
@@ -122,11 +125,11 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.removeJailSpawn();
 		this.setJailTown(" ");
 		if (!escaped) {
-			TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else
 			try {
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+				TownyMessaging.sendGlobalMessage(Translation.of("msg_player_escaped_jail_into_wilderness", player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
 	}
 
@@ -137,7 +140,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				Location loc = this.getTown().getSpawn();				
 				if (BukkitTools.isOnline(player.getName())) {
 					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(player, loc);
 				}
 				freeFromJail(player, index, false);
@@ -150,7 +153,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 				Location loc = town.getJailSpawn(index);
 
 				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				player.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().jailTeleport(player, loc);
 
 				sendToJail(player, index, town);
@@ -158,7 +161,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 					if (days > 10000)
 						days = 10000;
 					this.setJailDays(days);
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
+					TownyMessaging.sendMsg(player, Translation.of("msg_you've_been_jailed_for_x_days", days));
 				}
 			} catch (TownyException e) {
 				e.printStackTrace();
@@ -310,7 +313,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		if (hasTown())
 			return town;
 		else
-			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
+			throw new NotRegisteredException(Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -397,8 +400,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<Resident> getFriends() {
-
-		return friends;
+		return Collections.unmodifiableList(friends);
 	}
 
 	public void removeFriend(Resident resident) {
@@ -524,12 +526,10 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 //	}	
 	
 	public List<String> getModes() {
-
-		return this.modes;
+		return Collections.unmodifiableList(modes);
 	}
 	
 	public boolean hasMode(String mode) {
-
 		return this.modes.contains(mode.toLowerCase());
 	}
 	
@@ -556,7 +556,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
@@ -565,7 +565,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -575,7 +575,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 		this.modes.clear();
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
-			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
+			TownyMessaging.sendErrorMsg(Translation.of("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
 	}
 	
@@ -591,7 +591,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 
 
@@ -631,7 +631,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<String> getTownRanks() {
-		return townRanks;
+		return Collections.unmodifiableList(townRanks);
 	}
 	
 	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change. 
@@ -693,7 +693,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	public List<String> getNationRanks() {
-		return nationRanks;
+		return Collections.unmodifiableList(nationRanks);
 	}
 
 	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change.
@@ -738,23 +738,23 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 
 	@Override
 	public List<Invite> getReceivedInvites() {
-		return receivedinvites;
+		return Collections.unmodifiableList(receivedInvites);
 	}
 
 	@Override
 	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
+		if (receivedInvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
 			// We use 9 because if it is = 9 it adds the tenth
-			receivedinvites.add(invite);
+			receivedInvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(Translation.of("msg_err_player_has_too_many_invites", this.getName()));
 		}
 	}
 
 	@Override
 	public void deleteReceivedInvite(Invite invite) {
-		receivedinvites.remove(invite);
+		receivedInvites.remove(invite);
 	}
 
 	public void addMetaData(CustomDataField md) {
@@ -770,7 +770,7 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 	}
 
 	@Override
-	public EconomyAccount getAccount() {
+	public Account getAccount() {
 		if (account == null) {
 
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);
@@ -835,14 +835,13 @@ public class Resident extends TownyObject implements TownyInviteReceiver, Econom
 			return getTitle() + " " + getName();
 	}
 
-	@Override
-	public void setTownblocks(List<TownBlock> townBlocks) {
-		this.townBlocks = townBlocks;
+	public void setTownblocks(Collection<TownBlock> townBlocks) {
+		this.townBlocks = new ArrayList<>(townBlocks);
 	}
 
 	@Override
-	public List<TownBlock> getTownBlocks() {
-		return townBlocks;
+	public Collection<TownBlock> getTownBlocks() {
+		return Collections.unmodifiableCollection(townBlocks);
 	}
 
 	@Override
