@@ -23,18 +23,34 @@ import org.bukkit.Location;
 
 public class AreaSelectionUtil {
 	
-	private final static int maxRadiusAllowedRect = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
-	private final static int maxRadiusAllowedCirc= 18; // A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying.
+	private final static int MAX_RECT_RADIUS = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
+	private final static int MAX_CIRC_RADIUS = 18; // A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying.
 
+	/**
+	 * Method to select a List&lt;WorldCoord&gt; of coordinates. 
+	 * Area claims can be either circular or rectangular.
+	 * 
+	 * @param owner - {@link com.palmergames.bukkit.towny.object.TownBlockOwner} making the selection. 
+	 * @param pos - WorldCoord where the selection is being made from.
+	 * @param args - Subcommands like rect, circle, auto or #.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid subcommands are given.
+	 */
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 
 		if (args.length == 0) {
-			// claim with no sub command entered so attempt selection of one plot
+			/*
+			 * Either /{command} {claim|unclaim} or /town claim {outpost}
+			 */
 			out.add(pos);
 
 		} else {
+			
+			/*
+			 * First, determine what is available to be claimed.
+			 */
 			int available = 0;
 			if (owner instanceof Town) {
 				Town town = (Town) owner;
@@ -43,7 +59,10 @@ public class AreaSelectionUtil {
 				available = TownySettings.getMaxResidentPlots((Resident) owner);
 			}
 			
-			if (args.length > 1) {
+			/*
+			 * Second, handle different subcommands for /{command} {claim|unclaim} {rect|circle|auto|#} {#}
+			 */
+			if (args.length > 1) { // Has to be /{command} {claim|unclaim} {rect|circle} {auto|#}
 				if (args[0].equalsIgnoreCase("rect")) {
 					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args));
 				} else if (args[0].equalsIgnoreCase("circle")) {
@@ -51,24 +70,9 @@ public class AreaSelectionUtil {
 				} else {
 					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
-			} else if (args[0].equalsIgnoreCase("auto")) {
+			} else if (args[0].equalsIgnoreCase("auto")) { // Is /{command} {claim|unclaim} {auto}
 				out = selectWorldCoordAreaRect(available, pos, args);
-			} else if (args[0].equalsIgnoreCase("outpost")) {
-				TownBlock tb = pos.getTownBlock();
-				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
-					Town town = tb.getTown();
-					if (isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
-						tb.setOutpost(true);
-						out.add(pos);
-					} else {
-						throw new TownyException(Translation.of("msg_err_unclaim_not_outpost"));
-						// Lang String required.
-					}
-				}
-				if (tb.isOutpost()) { // flatfile skipper
-					out.add(pos);
-				}
-			} else {
+			} else { // Is /{command} {claim|unclaim} #
 				try {
 					Integer.parseInt(args[0]);
 					// Treat as rect to serve for backwards capability.
@@ -82,11 +86,20 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Selects a square shaped area of WorldCoords. Works in a spiral out fashion.
+	 * 
+	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
+	 * @param pos - WorldCoord where the selection is centered at.
+	 * @param args - subcommand arguments like auto or a number.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid radii are given.
+	 */
 	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = maxRadiusAllowedRect;  // The radius of the claim.
+			int r = MAX_RECT_RADIUS;  // The radius of the claim.
 
 			/*
 			 *  Area selections are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
@@ -161,11 +174,20 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Selects a circle shaped area of WorldCoords. Works in a spiral out fashion.
+	 * 
+	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
+	 * @param pos - WorldCoord where the selection is centered at.
+	 * @param args - subcommand arguments like auto or a number.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid radii are given.
+	 */
 	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = maxRadiusAllowedCirc; // The radius of the claim.
+			int r = MAX_CIRC_RADIUS; // The radius of the claim.
 
 			/*
 			 *  Area selections are capped at a 18 radius (1009 maximum.)

@@ -224,7 +224,7 @@ public class TownClaim extends Thread {
 			if (town != townBlock.getTown() && !force) {
 				throw new TownyException(Translation.of("msg_area_not_own"));
 			}
-			if (!townBlock.isOutpost() && townBlock.hasTown()) {
+			if (!townBlock.isOutpost() && townBlock.hasTown()) { // TODO: Find out if we actually have to be doing this on every unclaim. How poorly are we not saving townblocks' outpost status?
 				if (AreaSelectionUtil.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
 					townBlock.setOutpost(true);
 				}
