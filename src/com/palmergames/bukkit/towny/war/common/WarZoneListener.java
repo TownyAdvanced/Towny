@@ -1,7 +1,11 @@
 package com.palmergames.bukkit.towny.war.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +15,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -18,6 +24,8 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -99,6 +107,87 @@ public class WarZoneListener implements Listener {
 			}
 			event.setCancelled(false);
 		}
+	}
+	
+	@EventHandler
+	public void onExplosionDamagingBlocks(TownyExplodingBlocksEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+
+		List<Block> alreadyAllowed = event.getTownyFilteredBlockList();
+		List<Block> toAllow = new ArrayList<Block>();
+		
+		int count = 0;
+		for (Block block : event.getVanillaBlockList()) {
+			// Wilderness, skip it.
+			if (TownyAPI.getInstance().isWilderness(block))
+				continue;
+			
+			// Non-warzone, skip it.
+			if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(block.getLocation()).getWorldCoord()))
+				continue;
+			
+			// A war that doesn't allow any kind of explosions.
+			if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+				// Remove from the alreadyAllowed list if it exists there.
+				if (alreadyAllowed.contains(block))
+					alreadyAllowed.remove(block);
+				continue;
+			}
+
+			// A war that does allow explosions and explosions regenerate.
+			if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
+				// Skip this block if it is in the ignore list. TODO: with the blockdata nowadays this might not even be necessary.
+				if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())) {
+					// Remove from the alreadyAllowed list if it exists there.
+					if (alreadyAllowed.contains(block))
+						alreadyAllowed.remove(block);
+					continue;
+				}
+				count++;
+				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()));
+			}
+			// This is an allowed explosion, so add it to our War-allowed list.
+			toAllow.add(block);
+		}
+		// Add all TownyFilteredBlocks to our list, since our list will be used.
+		toAllow.addAll(alreadyAllowed);
+		
+		// Return the list of allowed blocks for this block explosion event.
+		event.setBlockList(toAllow);
+	}
+
+	@EventHandler
+	public void onExplosionDamagingEntity(TownyExplosionDamagesEntityEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		/*
+		 * Handle occasions in the wilderness first.
+		 */
+		if (TownyAPI.getInstance().isWilderness(event.getLocation()))
+			return;
+
+		/*
+		 * Must be inside of a town.
+		 */
+		
+		// Not in a war zone, do not modify the outcome of the event.
+		if (!War.isWarZone(TownyAPI.getInstance().getTownBlock(event.getLocation()).getWorldCoord()))
+			return;
+			
+		/*
+		 * Stops any type of exploding damage if wars are not allowing explosions.
+		 */
+		if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		/*
+		 * Explosions must be allowed, so un-cancel the event.
+		 */
+		event.setCancelled(false);
 	}
 
 	@EventHandler (priority=EventPriority.HIGH)

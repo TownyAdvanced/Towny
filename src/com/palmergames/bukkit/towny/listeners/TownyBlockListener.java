@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Location;
@@ -29,7 +28,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -271,50 +269,38 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
-		TownyWorld townyWorld;
-		List<Block> blocks = event.blockList();
-		int count = 0;
-
+		TownyWorld townyWorld = null;
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
-			return;
-		}
+		} catch (NotRegisteredException ignored) {}
 
 		Material material = event.getBlock().getType();
-		boolean revertingThisMaterial = false;
-		
 		/*
-		 * event.getBlock() doesn't return the bed when the bed is the cause of the explosion, so we use this workaround.
+		 * event.getBlock() doesn't return the bed when a bed or respawn anchor is the cause of the explosion, so we use this workaround.
 		 */
-		if (townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
+		if (material == Material.AIR && townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
 			material = townyWorld.getBedExplosionMaterial(event.getBlock().getLocation());
+		
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null);
+		event.blockList().clear();
+		event.blockList().addAll(blocks);
+
+		if (event.blockList().isEmpty())
+			return;
 		
 		/*
 		 * Don't regenerate block explosions unless they are on the list of blocks whose explosions regenerate.
 		 */
-		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material))
-			revertingThisMaterial = true;
-		
-		// Blocks that will be allowed to explode.
-		List<Block> toKeep = new ArrayList<Block>();
-		
-		for (Block block : blocks) {
-			count++;
-			
-			if (!ExplosionUtil.locationCanExplode(block.getLocation())) {
-				continue;
-			} else {
-				toKeep.add(block);
-			}
-			
-			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisMaterial) {
+		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material)) {
+			int count = 0;
+			for (Block block : blocks) {
+				// Only regenerate in the wilderness.
+				if (!TownyAPI.getInstance().isWilderness(block))
+					continue;
+				count++;
+				// Cancel the event outright if this will cause a revert to start on an already operating revert.
 				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
 			}
 		}
-		
-		event.blockList().clear();
-		event.blockList().addAll(toKeep);
 	}
 }
