@@ -22,6 +22,9 @@ import java.util.List;
 import org.bukkit.Location;
 
 public class AreaSelectionUtil {
+	
+	private final static int maxRadiusAllowedRect = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
+	private final static int maxRadiusAllowedCirc= 18; // A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying.
 
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
@@ -83,15 +86,29 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = 0; // The radius of the claim.
-			
+			int r = maxRadiusAllowedRect;  // The radius of the claim.
+
+			/*
+			 *  Area selections are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
+			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
+			 */
+
 			if (args[0].equalsIgnoreCase("auto")) {
-				r = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
 				
+				/*
+				 * Select everything possible in a rectangle shape.
+				 */
+
 				if (TownySettings.getMaxClaimRadiusValue() > 0) 
 					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
 			} else {
+			
+				/*
+				 * Select an area that will claim a perfect square shape, using a given radius
+				 * or the reduced radius that will give a perfect square.
+				 */
+				
 				try {
 					r = Integer.parseInt(args[0]);
 				} catch (NumberFormatException e) {
@@ -118,21 +135,13 @@ public class AreaSelectionUtil {
 			}
 
 			/*
-			 *  Area claims are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
-			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
-			 */
-			if (r > 961)
-				r = 961;
-
-			/*
 			 * Adds WorldCoords in a spiral-out pattern.
 			 */
-			int coordX = (r*2)+1;
-			int coordZ = (r*2)+1;
+			int sideLength = (r * 2) + 1;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			int t = Math.max(r, r);
+			int t = r;
 			for (int i = 0; i <= available; i++) {
-				if ((-coordX / 2 <= x) && (x <= coordX / 2) && (-coordZ / 2 <= z) && (z <= coordZ / 2)) {
+				if ((-sideLength / 2 <= x) && (x <= sideLength / 2) && (-sideLength / 2 <= z) && (z <= sideLength / 2)) {
 					out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
 				}
 
@@ -156,10 +165,19 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = 0; // The radius of the claim.
+			int r = maxRadiusAllowedCirc; // The radius of the claim.
 
+			/*
+			 *  Area selections are capped at a 18 radius (1009 maximum.)
+			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
+			 */
+			
 			if (args[0].equalsIgnoreCase("auto")) {
-				// Attempt to select outwards until no town blocks remain
+				
+				/*
+				 * Select everything possible in a circle shape.
+				 */
+				
 				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
 					while (available - Math.ceil(Math.PI * r * r) >= 0)
 						r += 1;
@@ -168,6 +186,12 @@ public class AreaSelectionUtil {
 					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
 			} else {
+				
+				/*
+				 * Select an area that will claim a perfect circle shape, using a given radius
+				 * or the reduced radius that will give a perfect circle.
+				 */
+				
 				try {
 					r = Integer.parseInt(args[0]);
 				} catch (NumberFormatException e) {
@@ -187,19 +211,15 @@ public class AreaSelectionUtil {
 				r = Math.min(r, radius); // This will ensure that if they've give too high of a radius we lower it to what they are able to actually claim.
 				
 			}
-
-			if (r > 1000)
-				r = 1000;
 			
 			/*
 			 * Adds WorldCoords in a spiral-out pattern.
 			 */
-			int coordX = (r*2)+1;
-			int coordZ = (r*2)+1;
+			int sideLength = (r * 2) + 1;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			int t = Math.max(r, r);
+			int t = r;
 			for (int i = 0; i <= available; i++) {
-				if ((-coordX / 2 <= x) && (x <= coordX / 2) && (-coordZ / 2 <= z) && (z <= coordZ / 2)) {
+				if ((-sideLength / 2 <= x) && (x <= sideLength / 2) && (-sideLength / 2 <= z) && (z <= sideLength / 2)) {
 					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= available)) {
 						out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
 					}
