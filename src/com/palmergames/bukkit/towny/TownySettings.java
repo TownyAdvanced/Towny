@@ -198,6 +198,10 @@ public class TownySettings {
 		return getNationLevel(calcNationLevel(nation));
 	}
 
+	public static CommentedConfiguration getConfig() {
+		return config;
+	}
+
 	public static int calcTownLevel(Town town) {
 //Creatorfromhell's PR for replacing SortedMap town and nation levels.
 //		Integer level = configTownLevel.floorKey(town.getNumResidents());

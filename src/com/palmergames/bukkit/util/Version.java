@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.util;
 
+import java.util.Objects;
+
 public class Version implements Comparable<Version> {
 
 	private final String version;
@@ -12,7 +14,7 @@ public class Version implements Comparable<Version> {
 		if(version == null)
 			throw new IllegalArgumentException("Version can not be null");
 		if(!version.matches("[0-9]+(\\.[0-9]+)*"))
-			throw new IllegalArgumentException("Invalid version format");
+			throw new IllegalArgumentException("Invalid version format: " + version);
 		this.version = version;
 	}
 
@@ -35,14 +37,23 @@ public class Version implements Comparable<Version> {
 		return 0;
 	}
 
-	@Override public boolean equals(Object that) {
-		if(this == that)
-			return true;
-		if(that == null)
-			return false;
-		if(this.getClass() != that.getClass())
-			return false;
-		return this.compareTo((Version) that) == 0;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Version)) return false;
+		Version version1 = (Version) o;
+		return Objects.equals(version, version1.version);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(version);
+	}
+
+	@Override
+	public String toString() {
+		return "Version{" +
+			"version='" + version + '\'' +
+			'}';
+	}
 }

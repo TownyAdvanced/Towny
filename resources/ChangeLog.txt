@@ -4804,3 +4804,10 @@ v0.92.0.11:
     - default: tar
     - Valid entries are: tar for tar.gz and zip for zip, use none for no backup.
   - Allow for nations and towns to set tags less than 4 characters.
+0.96.2.8:
+  - Fix Nations generating debt accounts.
+  - Hotfix: Fix file IO synchronization, courtesy of silverwolfg11 with PR #4210.
+  - Remove Manual Config Changes and Migrate them automatically instead, courtesy of Siris with PR #4209.
+    - Expect REQUIRED CHANGES in the updating process to become very infrequent.
+  - Fix for confirmations' clickable commands executing wrong command.
+    - Closes #4215.
