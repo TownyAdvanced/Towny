@@ -585,12 +585,14 @@ public class TownyFormatter {
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			out.add(Translation.of("status_world_explrevert_entity") + (world.isUsingPlotManagementWildEntityRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " +
 			        Translation.of("status_world_explrevert_block") + (world.isUsingPlotManagementWildBlockRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
+			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
+			out.add(Translation.of("status_plot_clear_deletion") + (world.isUsingPlotManagementMayorDelete() ? Translation.of("status_on") + Colors.LightGreen +" (see /towny plotclearblocks)" : Translation.of("status_off"))); 
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
-			//     Ignored Blocks: SAPLING, GOLD_ORE, IRON_ORE
+			//     Ignored Blocks: see /towny wildsblocks
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
-			out.add("    " + Translation.of("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+			out.add("    " + Translation.of("status_world_ignoredblocks") + Colors.LightGreen + " see /towny wildsblocks");
 
 			out.addAll(getExtraFields(world));
 		}

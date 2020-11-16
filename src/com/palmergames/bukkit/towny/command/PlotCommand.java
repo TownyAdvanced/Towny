@@ -771,10 +771,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLEAR.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
-
+					
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-
+					
 					if (townBlock != null) {
+						
+						if (!townBlock.getWorld().isUsingPlotManagementMayorDelete())
+							throw new TownyException(Translation.of("msg_err_plot_clear_disabled_in_this_world"));
 
 						/*
 						  Only allow mayors or plot owners to use this command.

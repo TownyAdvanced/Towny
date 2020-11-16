@@ -64,7 +64,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"switches",
 		"itemuse",
 		"farmblocks",
-		"wildsblocks"
+		"wildsblocks",
+		"plotclearblocks"
 	);
 	
 	private static final List<String> townyConsoleTabCompletes = Arrays.asList(
@@ -242,6 +243,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), "Towny WildsBlocks List");
+			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), "Towny Plot Clear Delete List");
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

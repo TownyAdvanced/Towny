@@ -65,7 +65,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertunclaim",
 		"revertentityexpl",
 		"revertblockexpl",
-		"warallowed"
+		"warallowed",
+		"plotcleardelete"
 	);
 	
 	private static List<String> townySetTabCompletes = Arrays.asList(
@@ -326,6 +327,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/wildernessmobs/worldmobs", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim", ""));
 				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertentityexpl/revertblockexpl", ""));
+				player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "plotcleardelete", ""));
 			} else {
 				sender.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
@@ -338,6 +340,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "townmobs/worldmobs", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim", ""));
 				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertentityexpl/revertblockexpl", ""));
+				sender.sendMessage(ChatTools.formatCommand("", "/TownyWorld {world} toggle", "plotcleardelete", ""));
 			}
 		} else {
 
@@ -503,7 +506,16 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
-				
+
+			} else if (split[0].equalsIgnoreCase("plotcleardelete")) {
+
+				Globalworld.setUsingPlotManagementMayorDelete(choice.orElse(!Globalworld.isUsingPlotManagementWildBlockRevert()));
+				msg = Translation.of("msg_changed_world_setting", "Plot Clear Delete", Globalworld.getName(), Globalworld.isUsingPlotManagementMayorDelete() ? Translation.of("enabled") : Translation.of("disabled"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+			
 			} else {
 				msg = Translation.of("msg_err_invalid_property", "'" + split[0] + "'");
 				if (player != null)
