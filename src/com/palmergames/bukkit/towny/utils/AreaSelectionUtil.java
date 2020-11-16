@@ -99,7 +99,7 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = MAX_RECT_RADIUS;  // The radius of the claim.
+			int r = MAX_RECT_RADIUS;  // The greatest possible radius of a selection.
 
 			/*
 			 *  Area selections are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
@@ -130,38 +130,34 @@ public class AreaSelectionUtil {
 				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
 					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 
-				// Calculate how many TownBlocks are needed to claim the radius. 
-				// Start blocks at 0 if the plot is unclaimed.
-				int neededBlocks = pos.getTownBlock().hasTown() ? 0 : 1;
-				neededBlocks += 4 * r * (r + 1);
-				
-				// Rethink how much of a radius will be used, as there's not enough available TownBlocks.
-				if (neededBlocks > available) {
-					r = 1; 
-					int total = 0;
-					while (available - ((r * 8) + total) >= 0) { // Radius 1 grabs 8 blocks, 2 grabs 16 more requiring 24, 3 grabs 24 more requiring 48, etc...
-						total += r * 8;
-						r++;
-					}
-					r--; // Finally reduce the radius by 1 (so that we have a perfect ring of claims,) and replace the original r.
+				/*
+				 * Calculate how many townblocks will be needed to claim the desired radius,
+				 * dropping the radius if it will be required, to make a perfect a perfect square.
+				 */
+				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
+				int claimRadius = 1;
+				while (claimRadius <= r && needed < available) {
+				    needed += (claimRadius * 8);
+				    claimRadius++;
 				}
+				// Claim Radius will always overshoot by 1
+				r = claimRadius - 1;
 			}
 
 			/*
 			 * Adds WorldCoords in a spiral-out pattern.
 			 */
-			int sideLength = (r * 2) + 1;
+			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			int t = r;
 			for (int i = 0; i <= available; i++) {
-				if ((-sideLength / 2 <= x) && (x <= sideLength / 2) && (-sideLength / 2 <= z) && (z <= sideLength / 2)) {
-					out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
+				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
+					out.add(pos.add(x,z));
 				}
 
 				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
-					t = dx;
+					int swap = dx;
 					dx = -dz;
-					dz = t;
+					dz = swap;
 				}
 				x += dx;
 				z += dz;
@@ -187,7 +183,7 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
-			int r = MAX_CIRC_RADIUS; // The radius of the claim.
+			int r = MAX_CIRC_RADIUS; // The greatest possible radius of a selection.
 
 			/*
 			 *  Area selections are capped at a 18 radius (1009 maximum.)
@@ -237,20 +233,19 @@ public class AreaSelectionUtil {
 			/*
 			 * Adds WorldCoords in a spiral-out pattern.
 			 */
-			int sideLength = (r * 2) + 1;
+			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			int t = r;
 			for (int i = 0; i <= available; i++) {
-				if ((-sideLength / 2 <= x) && (x <= sideLength / 2) && (-sideLength / 2 <= z) && (z <= sideLength / 2)) {
+				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
 					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= available)) {
-						out.add(new WorldCoord(pos.getWorldName(), pos.add(x, z)));
+						out.add(pos.add(x,z));
 					}
 				}
 
 				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
-					t = dx;
+					int swap = dx;
 					dx = -dz;
-					dz = t;
+					dz = swap;
 				}
 				x += dx;
 				z += dz;
