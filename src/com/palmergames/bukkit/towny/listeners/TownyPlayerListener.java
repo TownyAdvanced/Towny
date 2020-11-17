@@ -586,7 +586,6 @@ public class TownyPlayerListener implements Listener {
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
 		Resident resident = null;
-
 		try {
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException ignored) {
@@ -789,7 +788,7 @@ public class TownyPlayerListener implements Listener {
 		Town town = event.getEnteredtown();
 		
 		if (town.hasOutlaw(outlaw)) {
-			if (TownySettings.doTownsGetWarnedOnOutlaw()) {
+			if (TownySettings.doTownsGetWarnedOnOutlaw() && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
 			}
 			// If outlaws can enter towns OR the outlaw has towny.outlaw.tpbypass perm, player is warned but not teleported.
