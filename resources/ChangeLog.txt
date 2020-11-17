@@ -5297,3 +5297,10 @@ v0.92.0.11:
   - Fix clickable pages on the /town outpost list pages.
     - Closes #4448.
   - Update pom to use spigot 1.16.4.
+  - Configurable teleport world for new outlaw-teleporting feature, courtesy of Momshroom with PR #4442.
+    - Also prevents outlaws from being teleported to their bed if the bedspawn is in the town they're outlawed in.
+  - New Config Option: global_town_settings.outlaw_teleport_world
+    - default: "" 
+    - What world do you want the outlaw teleported to if they aren't part of a town and don't have a bedspawn outside of the town they are outlawed in.
+    - They will go to the listed world's spawn. 
+    - If blank, they will go to the spawnpoint of the world the town is in.
