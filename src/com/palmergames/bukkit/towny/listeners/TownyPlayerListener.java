@@ -792,7 +792,8 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.doTownsGetWarnedOnOutlaw()) {
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
 			}
-			if (TownySettings.canOutlawsEnterTowns() || TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
+			// If outlaws can enter towns OR the outlaw has towny.outlaw.tpbypass perm, player is warned but not teleported.
+			if (TownySettings.canOutlawsEnterTowns() || TownyUniverse.getInstance().getPermissionSource().has(outlaw.getPlayer(), PermissionNodes.TOWNY_OUTLAW_TPBYPASS.getNode())) {
 				TownyMessaging.sendMsg(outlaw, Translation.of("msg_you_are_an_outlaw_in_this_town", town));
 			} else {
 				if (TownySettings.getOutlawTeleportWarmup() > 0) {
