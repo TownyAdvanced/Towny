@@ -5263,4 +5263,3 @@ v0.92.0.11:
   - Prevent arrows hitting Target/WoodenButton/PressurePlates from delivering power, based on Switch perms.
     - Closes #4413.
   - Hit the townblock cost increase with the rounding stick.
-  - Add catches for NPEs when town.getAccount() returns null.
