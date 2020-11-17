@@ -547,6 +547,20 @@ public class War {
 			}
 		} else {
 			launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
+			// If there's more than one Town involved we want to award it to the town with the most players present.
+			if (wzd.getAttackerTowns().size() > 1) {
+				Hashtable<Town, Integer> attackerCount = new Hashtable<Town, Integer>();
+				for (Town town : wzd.getAttackerTowns()) {
+					for (Player player : wzd.getAttackers()) {
+						if (town.hasResident(TownyAPI.getInstance().getDataSource().getResident(player.getName())))
+							attackerCount.put(town, attackerCount.get(town) + 1);
+					}
+				}
+				KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(attackerCount);
+				kvTable.sortByValue();
+				kvTable.reverse();
+				attacker = kvTable.getKeyValues().get(0).key;
+			}
 			remove(attacker, townBlock);
 		}
 
