@@ -5290,3 +5290,4 @@ v0.92.0.11:
     - Opens GUI showing blocks removed by /plot clear.
   - Fix usingPlotManagementMayorDelete setting in the world files not being used.
   - Bump language files to 0.90.
+  - Add catches for NPEs when town.getAccount() returns null.
