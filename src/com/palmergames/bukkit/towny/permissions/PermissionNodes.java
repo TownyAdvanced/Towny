@@ -7,7 +7,7 @@ package com.palmergames.bukkit.towny.permissions;
 public enum PermissionNodes {
 	TOWNY_ADMIN("towny.admin"),
 	TOWNY_ADMIN_NATION_ZONE("towny.admin.nation_zone"),
-	
+	TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS("towny.admin.outlaw.teleport_bypass"),
 	/*
 	 * Nation command permissions
 	 */
@@ -378,7 +378,6 @@ public enum PermissionNodes {
 	TOWNY_CHAT_SPY("towny.chat.spy"),
 	
 	TOWNY_OUTLAW_JAILER("towny.outlaw.jailer"),
-	TOWNY_OUTLAW_TPBYPASS("towny.outlaw.tpbypass"),
 	TOWNY_BYPASS_DEATH_COSTS("towny.bypass_death_costs"),
 
 	// Info nodes
