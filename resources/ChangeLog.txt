@@ -5291,3 +5291,5 @@ v0.92.0.11:
   - Fix usingPlotManagementMayorDelete setting in the world files not being used.
   - Bump language files to 0.90.
   - Add catches for NPEs when town.getAccount() returns null.
+  - Add some logic to entities damaging entities during War Time (when one or both entity is not a player.)
+    - Closes #4447.

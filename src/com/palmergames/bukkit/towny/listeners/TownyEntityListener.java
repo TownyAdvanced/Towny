@@ -146,6 +146,14 @@ public class TownyEntityListener implements Listener {
 				
 				// One of the attackers/defenders is not a player.
 				if (!(attacker instanceof Player) || !(defender instanceof Player)) {
+					if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
+						// Remove the projectile here so no
+						// other events can fire to cause damage
+						if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
+							attacker.remove();
+
+						event.setCancelled(true);
+					}
 					return;
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
