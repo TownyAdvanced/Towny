@@ -2554,6 +2554,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town.getAccount().setBalance(0, "Setting 0 balance for Town");
 			} catch (EconomyException e) {
 				e.printStackTrace();
+			} catch (NullPointerException e1) {
+				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 			}
 		}
 		
@@ -3472,6 +3474,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 					} catch (EconomyException e1) {
 						throw new TownyException("Economy Error");
+					} catch (NullPointerException e2) {
+						throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 					}
 				}
 				
