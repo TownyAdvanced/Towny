@@ -65,7 +65,7 @@ permissions:
         description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
         default: false
 
-    towny.outlaw.tpbypass:
+    towny.admin.outlaw.teleport_bypass:
         description: Admin perm allowing player to bypass being teleported out of towns they are outlawed in.
         default: false
 
