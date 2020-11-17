@@ -58,10 +58,15 @@ permissions:
             towny.wild.*: true
             towny.claimed.*: true
             towny.admin.nation_zone: true
+            towny.admin.outlaw.teleport_bypass: true
             towny.admin.spawn: true
 
     towny.outlaw.jailer:
         description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
+        default: false
+
+    towny.admin.outlaw.teleport_bypass:
+        description: Admin perm allowing player to bypass being teleported out of towns they are outlawed in.
         default: false
 
     towny.town.resident:

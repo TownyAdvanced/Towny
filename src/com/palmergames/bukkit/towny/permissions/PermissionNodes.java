@@ -7,7 +7,7 @@ package com.palmergames.bukkit.towny.permissions;
 public enum PermissionNodes {
 	TOWNY_ADMIN("towny.admin"),
 	TOWNY_ADMIN_NATION_ZONE("towny.admin.nation_zone"),
-	
+	TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS("towny.admin.outlaw.teleport_bypass"),
 	/*
 	 * Nation command permissions
 	 */

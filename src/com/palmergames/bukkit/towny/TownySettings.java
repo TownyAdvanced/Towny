@@ -2916,6 +2916,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
 	}
 	
+	public static String getOutlawTeleportWorld() { 
+		return getString(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WORLD); 
+	}
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}
