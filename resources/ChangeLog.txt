@@ -5304,3 +5304,10 @@ v0.92.0.11:
     - What world do you want the outlaw teleported to if they aren't part of a town and don't have a bedspawn outside of the town they are outlawed in.
     - They will go to the listed world's spawn. 
     - If blank, they will go to the spawnpoint of the world the town is in.
+  - Area Claiming and AreaSelectionUtil fix-up, with PR #4441.
+    - Massively improves the /t claim auto|rect|circle auto claiming options.
+      - Circles and Square shaped claims are now made in an outward-spiral shape, leading to centered claims.
+    - /t claim {rect|circle} # claims now have their # downsized to a radius which will allow for a full-ring of claims.
+      - Makes for perfect circle/square claiming.
+    - Closes #4427.
+    - Closes #4395.
