@@ -944,7 +944,7 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_PASSWORD);
 	}
 	
-	public static String getSQLFlags) {
+	public static String getSQLFlags() {
 		
 		return getString(ConfigNodes.PLUGIN_DATABASE_FLAGS);
 	}
