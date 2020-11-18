@@ -5311,3 +5311,9 @@ v0.92.0.11:
       - Makes for perfect circle/square claiming.
     - Closes #4427.
     - Closes #4395.
+  - Add SQL Flags to Towny, courtesy of 0xBit-MC with PR #4450 (First-Time Contributor!)
+    - Closes #4446.
+  - New Config Option: plugin.database.sql.flags
+    - Default: "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"
+    - Allows for finer-grain editing of what flags will be used for your mysql connection.
+  
