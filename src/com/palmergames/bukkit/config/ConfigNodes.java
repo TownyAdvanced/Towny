@@ -853,7 +853,7 @@ public enum ConfigNodes {
 	PLUGIN_DATABASE_TABLEPREFIX("plugin.database.sql.table_prefix", "towny_"),
 	PLUGIN_DATABASE_USERNAME("plugin.database.sql.username", "root"),
 	PLUGIN_DATABASE_PASSWORD("plugin.database.sql.password", ""),
-	PLUGIN_DATABASE_SSL("plugin.database.sql.ssl", "false"),
+	PLUGIN_DATABASE_FLAGS("plugin.database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
 
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",
