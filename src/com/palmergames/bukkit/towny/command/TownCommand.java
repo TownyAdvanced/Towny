@@ -2476,7 +2476,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
-				town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n));
+				if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+					return;
+				}
 			} catch (EconomyException ignored) {
 			}
 			town.addPurchasedBlocks(n);
@@ -2561,7 +2564,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Confirmation.runOnAccept(() -> {			
 					try {
 						// Make the resident pay here.
-						resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost");
+						if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+							// Send economy message
+							TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					
@@ -3607,7 +3614,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_unclaim"));
 				}
 
-				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -3616,13 +3622,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
 					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
 				} else {
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 					if (selection.isEmpty())
 						throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 
 					if (selection.get(0).getTownBlock().isHomeBlock())
 						throw new TownyException(Translation.of("msg_err_cannot_unclaim_homeblock"));
+					
+					if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
+						// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_unclaim_homeblock"));
+					}
 					
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();

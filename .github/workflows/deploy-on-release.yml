@@ -19,6 +19,6 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  echo "<settings><servers><server><id>github-towny</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server>" > ~/.m2/settings.xml
-                  echo "<server><id>github-tne</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" >> ~/.m2/settings.xml
+                  echo "<settings><servers><server><id>github-towny</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+
                   mvn -B deploy --file pom_deb.xml

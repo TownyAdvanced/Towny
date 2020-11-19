@@ -1269,7 +1269,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
-						town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost");
+						if (!town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
+							return;
+						}
 					} catch (EconomyException ignored) {
 					}
 					try {

@@ -38,7 +38,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private boolean isOpen = false;
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
-	protected double taxes = -1;
+	protected double taxes;
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
 	protected Government(String name) {

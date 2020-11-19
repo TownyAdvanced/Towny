@@ -4819,3 +4819,12 @@ v0.92.0.11:
   - Fix being able to confirm cancelled confirmations.
   - Clean up HelpMenu, courtesy of silverwolfg11 with PR #4223.
   - Fix new day task not collecting taxes properly, courtesy of silverwolfg11 with PR #4225.
+0.96.2.10:
+  - Prevent residents from being able to unclaim homeblocks, courtesy of silverworlfg11 with PR #4228.
+    - Closes #4231.
+  - Fix ClassNotFound exception due to old bungeecord version, courtesy of silverwolfg11 with PR #4238.
+  - Fix taxes being below 0, courtesy of silverwolfg11 with PR #4243.
+  - Fix economy bug with town confirmation, courtesy of silverwolfg11 with PR #4241.
+  - GM Source fetching player suffix instead of prefix, courtesy of ElgarL with PR #4247.
+    - Also fixes GM repo and solves issue with building Towny from source.
+  - Update Reserve/TheNewChat maven repositories, courtesy of creatorfromhell with PR #4240.

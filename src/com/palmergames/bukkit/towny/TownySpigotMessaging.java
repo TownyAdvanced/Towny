@@ -30,8 +30,13 @@ public class TownySpigotMessaging {
 		
 		public void setHoverText(String hoverText) {
 			if (Towny.is116Plus()) {
-				base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
-				return;
+				try {
+					base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverText)));
+					return;
+				} catch (Exception ignore) {
+					// The above code can throw a ClassNotFoundException if there is an old version of BungeeCord installed.
+					// Default to the code below.
+				}
 			}
 
 			base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));

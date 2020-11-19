@@ -63,7 +63,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			user = handler.getUserSuffix(player.getName());
 		} else if (node == "userprefix") {
 			group = "";
-			user = handler.getUserSuffix(player.getName());					
+			user = handler.getUserPrefix(player.getName());					
 		} else if (node == "usersuffix") {
 			group = "";
 			user = handler.getUserSuffix(player.getName());					
