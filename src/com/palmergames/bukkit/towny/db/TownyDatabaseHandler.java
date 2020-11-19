@@ -335,7 +335,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getResidentsTrie().removeKey(resident.getName());
 
 		// Clear accounts
-		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
+		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
 			resident.getAccount().removeAccount();
 
 		plugin.deleteCache(resident.getName());

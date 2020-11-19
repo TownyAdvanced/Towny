@@ -69,6 +69,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			rootFolderPath,
 			dataFolderPath,
 			dataFolderPath + File.separator + "residents",
+			dataFolderPath + File.separator + "residents" + File.separator + "deleted",
 			dataFolderPath + File.separator + "towns",
 			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
 			dataFolderPath + File.separator + "nations",
@@ -683,30 +684,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("JailTown");
 				if (line != null)
 					resident.setJailTown(line);
-				
-				line = keys.get("town");
-				if (line != null)
-					resident.setTown(getTown(line));
-
-				line = keys.get("title");
-				if (line != null)
-					resident.setTitle(line);
-				
-				line = keys.get("surname");
-				if (line != null)
-					resident.setSurname(line);
-				
-				try {
-					line = keys.get("town-ranks");
-					if (line != null)
-						resident.setTownRanks(Arrays.asList((line.split(","))));
-				} catch (Exception e) {}
-
-				try {
-					line = keys.get("nation-ranks");
-					if (line != null)
-						resident.setNationRanks(Arrays.asList((line.split(","))));
-				} catch (Exception e) {}
 
 				line = keys.get("friends");
 				if (line != null) {
@@ -731,9 +708,42 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					resident.setMetadata(line.trim());
-				
+
+				line = keys.get("town");
+				if (line != null) {
+					Town town = null;
+					try {
+						town = getTown(line);
+					} catch (NotRegisteredException e1) {
+						TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
+					}
+					if (town != null) {
+						resident.setTown(town);
+						
+						line = keys.get("title");
+						if (line != null)
+							resident.setTitle(line);
+						
+						line = keys.get("surname");
+						if (line != null)
+							resident.setSurname(line);
+						
+						try {
+							line = keys.get("town-ranks");
+							if (line != null)
+								resident.setTownRanks(Arrays.asList((line.split(","))));
+						} catch (Exception e) {}
+
+						try {
+							line = keys.get("nation-ranks");
+							if (line != null)
+								resident.setNationRanks(Arrays.asList((line.split(","))));
+						} catch (Exception e) {}
+					}
+				}
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			} finally {
 				saveResident(resident);
@@ -2634,8 +2644,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public void deleteResident(Resident resident) {
 
 		File file = new File(getResidentFilename(resident));
-		if (file.exists())
-			file.delete();
+		if (file.exists()) {
+			FileMgmt.moveFile(file, ("deleted"));
+		}
 	}
 
 	@Override
