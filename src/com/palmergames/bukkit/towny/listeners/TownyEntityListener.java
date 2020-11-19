@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -150,9 +151,10 @@ public class TownyEntityListener implements Listener {
 					return;
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
+				TownyWorld world = universe.getDataSource().getTownWorld(attacker.getLocation().getWorld().toString());
 				//Cancel because one of two players has no town and should not be interfering during war.
 				if (!universe.getDataSource().getResident(attacker.getName()).hasTown() || !universe.getDataSource().getResident(defender.getName()).hasTown()){
-					TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoTownMsg());
+					TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_no_town"));
 					event.setCancelled(true);
 					return;
 				}
@@ -162,35 +164,35 @@ public class TownyEntityListener implements Listener {
 	
 					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
-						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoNationMsg());
+						TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_no_nation"));
 						event.setCancelled(true);
 						return;
 					}
 					
 					//Cancel because one of the two player's nations is neutral.
 					if (attackerTown.getNation().isNeutral() || defenderTown.getNation().isNeutral() ) {
-						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasANeutralNationMsg());
+						TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_a_neutral_nation"));
 						event.setCancelled(true);
 						return;
 					}
 					
 					//Cancel because one of the two players are no longer involved in the war.
 					if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
-						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasBeenRemovedFromWarMsg());
+						TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_been_removed_from_war"));
 						event.setCancelled(true);
 						return;
 					}
 					
 					//Cancel because one of the two players considers the other an ally.
-					if ( ((attackerTown.getNation().hasAlly(defenderTown.getNation())) || (defenderTown.getNation().hasAlly(attackerTown.getNation()))) && !TownySettings.getFriendlyFire()){
-						TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerIsAnAllyMsg());
+					if ( ((attackerTown.getNation().hasAlly(defenderTown.getNation())) || (defenderTown.getNation().hasAlly(attackerTown.getNation()))) && !world.isFriendlyFireEnabled()){
+						TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_is_an_ally"));
 						event.setCancelled(true);
 						return;
 					}
 				} catch (NotRegisteredException e) {
 					//One of the players has no nation.
 				}
-				if (CombatUtil.preventFriendlyFire((Player) attacker, (Player) defender)) {
+				if (CombatUtil.preventFriendlyFire((Player) attacker, (Player) defender, world)) {
 					// Remove the projectile here so no
 					// other events can fire to cause damage
 					if (attacker instanceof Projectile)
@@ -807,7 +809,7 @@ public class TownyEntityListener implements Listener {
 							// Wilderness explosion regeneration
 
 							if (townyWorld.isExpl()) {
-								if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
+								if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {										
 									TownyRegenAPI.beginProtectionRegenTask(block, count);
 								}
 							} else {
@@ -858,7 +860,7 @@ public class TownyEntityListener implements Listener {
 				} else {
 					// Wilderness explosion regeneration
 					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
+						if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 						}
 					} else {
@@ -1018,7 +1020,7 @@ public class TownyEntityListener implements Listener {
 					if (tb == null) {
 					    // We're in the wilderness because the townblock is null;
 						if (townyWorld.isExpl())
-							if (townyWorld.isUsingPlotManagementWildRevert() && (remover != null))
+							if (townyWorld.isUsingPlotManagementWildEntityRevert() && (remover != null))
 								if (townyWorld.isProtectingExplosionEntity((Entity)remover))
 									event.setCancelled(true);
 					}

@@ -133,7 +133,7 @@ public class CombatUtil {
 				/*
 				 * Defending player is in a warzone
 				 */
-				if (world.isWarZone(coord) && !preventFriendlyFire(attackingPlayer, defendingPlayer))
+				if (world.isWarZone(coord) && !preventFriendlyFire(attackingPlayer, defendingPlayer, world))
 					return false;
 
 				/*
@@ -149,7 +149,7 @@ public class CombatUtil {
 				 * Check the defenders TownBlock and it's Town for their PvP
 				 * status, else the world.
 				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
+				if (preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
 
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
@@ -331,11 +331,30 @@ public class CombatUtil {
 	/**
 	 * Should we be preventing friendly fire?
 	 * 
+	 * Deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
+	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if we should cancel damage.
 	 */
+	@Deprecated
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
+		TownyWorld world = null;
+		try {
+			world = TownyUniverse.getInstance().getDataSource().getWorld(attacker.getLocation().getWorld().getName());
+		} catch (NotRegisteredException ignored) {}
+		return preventFriendlyFire(attacker, defender, world);
+	}
+	
+	/**
+	 * Should we be preventing friendly fire?
+	 * 
+	 * @param attacker - Attacking Player
+	 * @param defender - Defending Player (receiving damage)
+	 * @param world - TownyWorld being tested.
+	 * @return true if we should cancel damage.
+	 */
+	public static boolean preventFriendlyFire(Player attacker, Player defender, TownyWorld world) {
 
 		/*
 		 * Don't block potion use (self damaging) on ourselves.
@@ -344,7 +363,7 @@ public class CombatUtil {
 			return false;
 
 		if ((attacker != null) && (defender != null))
-			if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
+			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 				try {
 					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 					if (!townBlock.getType().equals(TownBlockType.ARENA))
@@ -438,7 +457,7 @@ public class CombatUtil {
 	 * 
 	 * @param a - Town A in comparison
 	 * @param b - Town B in comparison
-	 * @return true if they are allies.
+	 * @return true if they are in the same nation.
 	 */
 	public static boolean isSameNation(Town a, Town b) {
 
@@ -467,7 +486,52 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Is resident a in a nation with resident b?
+	 * 
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same nation.
+	 */
+	public static boolean isSameNation(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+				
+		return isSameNation(townA, townB);
+	}
 	
+	
+	/**
+	 * Is resident a in a town with resident b?
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same town.
+	 */
+	public static boolean isSameTown(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		
+		return isSameTown(townA, townB);
+	}
+
 	/**
 	 * Can resident a attack resident b?
 	 * 

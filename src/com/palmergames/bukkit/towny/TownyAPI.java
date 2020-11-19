@@ -133,6 +133,26 @@ public class TownyAPI {
         return players;
     }
     
+    /**
+     * Gets all online {@link Player}s for a specific {@link Town}.
+     * 
+     * @param town {@link Town} of which you want all the online {@link Player}s.
+     * @return {@link List} of all online {@link Player}s in the specified {@link Town}.
+     */
+    public List<Player> getOnlinePlayersInTown(Town town){
+    	return getOnlinePlayers(town);
+    }
+
+    /**
+     * Gets all online {@link Player}s for a specific {@link Nation}.
+     * 
+     * @param nation {@link Nation} of which you want all the online {@link Player}s.
+     * @return {@link List} of all online {@link Player}s in the specified {@link Nation}.
+     */
+    public List<Player> getOnlinePlayersInNation(Nation nation){
+    	return getOnlinePlayers(nation);
+    }
+    
     /** 
      * Gets all online {@link Player}s for a specific {@link Nation}s alliance.
      * 

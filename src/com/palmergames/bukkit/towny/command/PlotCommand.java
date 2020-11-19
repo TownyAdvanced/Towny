@@ -687,6 +687,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 						}
 						
+						/*
+						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.
+						 */
+						
 						try {
 							String plotTypeName = split[0];
 							
@@ -699,14 +703,56 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (townBlockType == null)
 								throw new TownyException(Translation.of("msg_err_not_block_type"));
 							
+							try {
+								// Test we are allowed to work on this plot
+								plotTestOwner(resident, townBlock); // ignore the return as we
+								// are only checking for an
+								// exception
+							} catch (TownyException e) {
+								TownyMessaging.sendErrorMsg(resident, e.getMessage());
+								return false;
+							}
+							
 							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
-							if (!preEvent.isCancelled()) {
-								setPlotType(resident, townBlock.getWorldCoord(), townBlockType);
-								player.sendMessage(Translation.of("msg_plot_set_type", plotTypeName));
-							} else {
+							if (preEvent.isCancelled()) {
 								player.sendMessage(preEvent.getCancelMessage());
+								return false;
+							}
+								
+							double cost = townBlockType.getCost();
+							
+							// Test if we can pay first to throw an exception.
+							if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
+								throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
+
+							// Handle payment via a confirmation to avoid suprise costs.
+							if (cost > 0 && TownySettings.isUsingEconomy()) {
+								Confirmation.runOnAccept(() -> {
+							
+									try {
+										resident.getAccount().withdraw(cost, String.format("Plot set to %s", townBlockType));
+									} catch (EconomyException ignored) {
+									}					
+
+									TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
+
+									try {
+										townBlock.setType(townBlockType, resident);
+										
+									} catch (TownyException e) {
+										TownyMessaging.sendErrorMsg(resident, e.getMessage());
+									}
+									player.sendMessage(Translation.of("msg_plot_set_type", townBlockType));
+								})
+									.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
+							
+							// No cost or economy so no confirmation.
+							} else {
+								townBlock.setType(townBlockType, resident);
+								player.sendMessage(Translation.of("msg_plot_set_type", plotTypeName));
 							}
 						} catch (NotRegisteredException nre) {
 							player.sendMessage(Translation.of("msg_err_not_part_town"));
@@ -942,36 +988,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Set the plot type if we are permitted
-	 * 
-	 * @param resident - Residen object.
-	 * @param worldCoord - worldCoord.
-	 * @param type - plot type.
-	 * @throws TownyException - Exception.
-	 * @throws EconomyException - Exception thrown if error with economy.
-	 */
-	private void setPlotType(Resident resident, WorldCoord worldCoord, TownBlockType type) throws TownyException, EconomyException {
-		TownBlock townBlock = worldCoord.getTownBlock();
-
-		// Test we are allowed to work on this plot
-		plotTestOwner(resident, townBlock); // ignore the return as we
-		// are only checking for an
-		// exception
-
-		townBlock.setType(type, resident);
-		Town town = resident.getTown();
-		if (townBlock.isJail()) {
-			Player p = TownyAPI.getInstance().getPlayer(resident);
-			if (p == null) {
-				throw new TownyException(Translation.of("msg_err_not_part_town"));
-			}
-			town.addJailSpawn(p.getLocation());
-		}
-
-		
-	}
-
-	/**
 	 * Set the plot for sale/not for sale if permitted
 	 * 
 	 * @param resident - Resident Object.
@@ -996,9 +1012,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if (forSale != -1) {
-					TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+					TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 					if (townBlock.getTown() != resident.getTown())
-						TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+						TownyMessaging.sendMessage(resident, Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 				} else {
 					Player p = TownyAPI.getInstance().getPlayer(resident);
 					if (p == null) {
@@ -1295,7 +1311,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					&& (townBlock.getTown() == resident.getTown()))				
 					return owner;
 					
-			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown();
+			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown() && townBlock.getTown() == resident.getTown();  //Last test makes it so mayors cannot alter embassy plots owned by their residents in towns they are not mayor of.
 
 			if ((resident == owner)
 					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
@@ -1588,6 +1604,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				return true;
 			}
+			
+			/*
+			 * After all other set commands are tested for we attempt to set the townblocktype.
+			 */
+			
 			String plotTypeName = split[1];
 
 			// Stop setting plot groups to Jail plot, because that would set a spawn point for each plot in the location of the player.			
@@ -1599,29 +1620,80 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (plotTypeName.equalsIgnoreCase("reset"))
 				plotTypeName = "default";
 
-			TownBlockType townBlockType = TownBlockType.lookup(plotTypeName);
+			TownBlockType type = TownBlockType.lookup(plotTypeName);
 
-			if (townBlockType == null)
+			if (type == null)
 				throw new TownyException(Translation.of("msg_err_not_block_type"));
 				
 			for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+				
 				try {
-					// Allow for PlotPreChangeTypeEvent to trigger
-					PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, tb, resident);
-					BukkitTools.getPluginManager().callEvent(preEvent);
-
-					if (!preEvent.isCancelled()) {
-						setPlotType(resident, tb.getWorldCoord(), townBlockType);
-					} else {
-						player.sendMessage(preEvent.getCancelMessage());
-					}
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_could_not_set_group_type") + e.getMessage());
+					// Test we are allowed to work on this plot
+					plotTestOwner(resident, townBlock); // ignore the return as we
+					// are only checking for an
+					// exception
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(resident, e.getMessage());
+					return false;
+				}
+				
+				// Allow for PlotPreChangeTypeEvent to trigger
+				PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, tb, resident);
+				BukkitTools.getPluginManager().callEvent(preEvent);
+				
+				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
+				if (preEvent.isCancelled()) {
+					player.sendMessage(preEvent.getCancelMessage());
 					return false;
 				}
 			}
+			
+			int amount = townBlock.getPlotObjectGroup().getTownBlocks().size();			
+			double cost = type.getCost() * amount;
+			
+			try {
+				// Test if we can pay first to throw an exception.
+				if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
+					throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
 
-			TownyMessaging.sendMsg(player, Translation.of("msg_set_group_type_to_x", plotTypeName));
+				// Handle payment via a confirmation to avoid suprise costs.
+				if (cost > 0 && TownySettings.isUsingEconomy()) {
+					Confirmation.runOnAccept(() -> {
+				
+						try {
+							resident.getAccount().withdraw(cost, String.format("Plot (" + amount + ") set to %s", type));
+						} catch (EconomyException ignored) {
+						}					
+
+						TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
+
+						for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+							try {
+								tb.setType(type, resident);
+							} catch (TownyException ignored) {
+								// Cannot be set to jail type as a group.
+							}
+						}
+						TownyMessaging.sendMsg(player, Translation.of("msg_set_group_type_to_x", type));
+						
+					})
+						.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+						.sendTo(BukkitTools.getPlayerExact(resident.getName()));
+				
+				// No cost or economy so no confirmation.
+				} else {
+
+					for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+						tb.setType(type, resident);
+						TownyMessaging.sendMsg(player, Translation.of("msg_set_group_type_to_x", plotTypeName));
+					}
+
+				}
+
+				
+			} catch (EconomyException e) {
+				TownyMessaging.sendErrorMsg(resident, e.getMessage());
+			}
 			
 		} else {
 

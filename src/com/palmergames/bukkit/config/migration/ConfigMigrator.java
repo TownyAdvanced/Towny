@@ -36,7 +36,7 @@ public class ConfigMigrator {
 	}
 
 	/**
-	 * Migrates configuration to latest version availibe in the given JSON file.
+	 * Migrates configuration to latest version available in the given JSON file.
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.

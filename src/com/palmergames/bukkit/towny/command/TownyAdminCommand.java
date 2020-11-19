@@ -917,7 +917,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
 					Confirmation.runOnAccept(() -> {
-						TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+						TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
 					})
 						.sendTo(sender);
@@ -1005,12 +1005,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				town.getAccount().deposit(amount, "Admin Deposit");
-				
-				// Send notifications
-				String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
-				TownyMessaging.sendMessage(sender, depositMessage);
-				TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
+				if (town.getAccount().deposit(amount, "Admin Deposit")) {
+					// Send notifications
+					String depositMessage = Translation.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
+					TownyMessaging.sendMessage(sender, depositMessage);
+					TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_unable_to_deposit_x", amount));
+				}
+
 			} else if (split[1].equalsIgnoreCase("withdraw")) {
 				
 				if (!TownySettings.isUsingEconomy())
@@ -1029,12 +1032,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				town.getAccount().withdraw(amount, "Admin Withdraw");
-				
-				// Send notifications
-				String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
-				TownyMessaging.sendMessage(sender, withdrawMessage);
-				TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+				if (town.getAccount().withdraw(amount, "Admin Withdraw")) {				
+					// Send notifications
+					String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("town_sing"));
+					TownyMessaging.sendMessage(sender, withdrawMessage);
+					TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_unable_to_withdraw_x", amount));
+				}
 			} else if (split[1].equalsIgnoreCase("outlaw")) {
 				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("leavenation")) {
@@ -1214,7 +1219,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					Confirmation.runOnAccept(() -> {
 						TownyUniverse.getInstance().getDataSource().removeNation(nation);
-						TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+						TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
 					})
 					.sendTo(sender); // It takes the nation, an admin deleting another town has no confirmation.
 				}
@@ -1761,7 +1766,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						Resident resident = townyUniverse.getDataSource().getResident(name);
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							townyUniverse.getDataSource().removeResident(resident);
-							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
+							TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_RESIDENT", resident.getName()));
 						} else
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_online_or_npc", name));
 					} catch (NotRegisteredException x) {

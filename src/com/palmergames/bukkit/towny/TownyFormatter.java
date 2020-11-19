@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -336,9 +337,11 @@ public class TownyFormatter {
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
-		try {
-			out.add(Translation.of("status_town_board", town.getBoard()));
-		} catch (NullPointerException ignored) {
+		if (!town.getBoard().isEmpty()) {
+			try {
+				out.add(Translation.of("status_town_board", town.getBoard()));
+			} catch (NullPointerException ignored) {
+			}
 		}
 		// Created Date
 		long registered= town.getRegistered();
@@ -396,6 +399,12 @@ public class TownyFormatter {
 				String bankString = "";
 
 				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank" , town.getAccount().getHoldingFormattedBalance());
+				if (town.isBankrupt()) {
+					if (town.getAccount().getDebtCap() == 0)
+						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+					bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
+				}
+				
 				if (town.hasUpkeep())
 					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
@@ -544,6 +553,14 @@ public class TownyFormatter {
 		title += (nation.isOpen() ? Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
+		// Board: Get your fried chicken
+		if (!nation.getBoard().isEmpty()) {
+			try {
+				out.add(Translation.of("status_town_board", nation.getBoard()));
+			} catch (NullPointerException ignored) {
+			}
+		}
+		
 		// Created Date
 		long registered = nation.getRegistered();
 		if (registered != 0) {
@@ -709,8 +726,9 @@ public class TownyFormatter {
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
 			// + "No"));
 
-			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " + 
-			        Translation.of("status_world_explrevert") + (world.isUsingPlotManagementWildRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
+			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad"))); 
+			out.add(Translation.of("status_world_explrevert_entity") + (world.isUsingPlotManagementWildEntityRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " +
+			        Translation.of("status_world_explrevert_block") + (world.isUsingPlotManagementWildBlockRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
 			// Wilderness:
 			// Build, Destroy, Switch
 			// Ignored Blocks: 34, 45, 64

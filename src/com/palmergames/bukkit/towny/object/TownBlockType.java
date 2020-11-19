@@ -4,14 +4,16 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 /**
  * @author dumptruckman
  */
 public enum TownBlockType {
-	RESIDENTIAL(0, "default", "+") {  // The default Block Type.
+	RESIDENTIAL(0, "default", "+", 0.0) {  // The default Block Type.
 	},
 
-	COMMERCIAL(1, "Shop", "C") {  // Just like residential but has additional tax
+	COMMERCIAL(1, "Shop", "C", TownySettings.getPlotSetCommercialCost()) {  // Just like residential but has additional tax
 
 		@Override
 		public double getTax(Town town) {
@@ -20,10 +22,10 @@ public enum TownBlockType {
 		}
 	},
 
-	ARENA(2, "Arena", "A") {	//Always PVP enabled.
+	ARENA(2, "Arena", "A", TownySettings.getPlotSetArenaCost()) {	//Always PVP enabled.
 	},
 
-	EMBASSY(3, "Embassy", "E") {  // For other towns to own a plot in your town.
+	EMBASSY(3, "Embassy", "E", TownySettings.getPlotSetEmbassyCost()) {  // For other towns to own a plot in your town.
 
 		@Override
 		public double getTax(Town town) {
@@ -31,17 +33,17 @@ public enum TownBlockType {
 			return town.getEmbassyPlotTax() + town.getPlotTax();
 		}
 	},
-	WILDS(4, "Wilds", "W") {	//Follows wilderness protection settings, but town owned.
+	WILDS(4, "Wilds", "W", TownySettings.getPlotSetWildsCost()) {	//Follows wilderness protection settings, but town owned.
 	},
-	SPLEEF(5, "Spleef", "+") {	//Follows wilderness protection settings, but town owned.
+	SPLEEF(5, "Spleef", "+", 0.0) {	//Follows wilderness protection settings, but town owned.
 	},
-	INN(6, "Inn", "I") {	//Allows use of beds outside your own plot.
+	INN(6, "Inn", "I", TownySettings.getPlotSetInnCost()) {	//Allows use of beds outside your own plot.
 	},
-	JAIL(7, "Jail", "J") {	//Enables setting the jail spawn.		
+	JAIL(7, "Jail", "J", TownySettings.getPlotSetInnCost()) {	//Enables setting the jail spawn.		
 	},
-	FARM(8, "Farm", "F") {	//Follows wilderness protection settings, but town owned.
+	FARM(8, "Farm", "F", TownySettings.getPlotSetInnCost()) {	//Follows wilderness protection settings, but town owned.
 	},
-	BANK(9, "Bank", "B") { // Enables depositing into town and nation banks, if that has been enabled in the config.		
+	BANK(9, "Bank", "B", TownySettings.getPlotSetBankCost()) { // Enables depositing into town and nation banks, if that has been enabled in the config.		
 	}
 
 	// These are subject to change, and may not necessarily be added:
@@ -59,14 +61,16 @@ public enum TownBlockType {
 
 	private int id;
 	private String name, asciiMapKey;
+	private double cost;
 	private static final Map<Integer, TownBlockType> idLookup = new HashMap<Integer, TownBlockType>();
 	private static final Map<String, TownBlockType> nameLookup = new HashMap<String, TownBlockType>();
 
-	TownBlockType(int id, String name, String asciiMapKey) {
+	TownBlockType(int id, String name, String asciiMapKey, double cost) {
 
 		this.id = id;
 		this.name = name;
 		this.asciiMapKey = asciiMapKey;
+		this.cost = cost;
 	}
 
 	static {
@@ -95,6 +99,11 @@ public enum TownBlockType {
 	public String getAsciiMapKey() {
 
 		return asciiMapKey;
+	}
+	
+	public double getCost() {
+		
+		return cost;
 	}
 
 	public static TownBlockType lookup(int id) {

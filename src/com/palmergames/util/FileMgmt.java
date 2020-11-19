@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -512,42 +511,6 @@ public final class FileMgmt {
 
 			if (deleted.size() > 0) {
 				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
-			}
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
-	public static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
-		try {
-			writeLock.lock();
-
-			int count = 0;
-
-			if (residentDir.isDirectory()) {
-				File[] children = residentDir.listFiles();
-				if (children != null) {
-					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains(".txt"))
-									filename = filename.split("\\.txt")[0];
-
-								// Delete the file if there is no matching resident.
-								if (!fileNames.contains(filename.toLowerCase())) {
-									deleteFile(child);
-									count++;
-								}
-							}
-
-						} catch (Exception ignored) {}
-					}
-
-					if (count > 0) {
-						System.out.println(String.format("[Towny] Deleted %d old files.", count));
-					}
-				}
 			}
 		} finally {
 			writeLock.unlock();

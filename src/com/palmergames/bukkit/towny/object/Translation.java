@@ -5,7 +5,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
-import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -57,7 +57,7 @@ public final class Translation {
 	}
 
 	private static String parseSingleLineString(String str) {
-		return NameUtil.translateColorCodes(str);
+		return Colors.translateColorCodes(str);
 	}
 	
 	/**

@@ -246,6 +246,13 @@ public enum ConfigNodes {
 			"",
 			"# Do new worlds have pvp forced on by default?",
 			"# This setting overrides a towns' setting."),
+	NWS_FRIENDLY_FIRE_ENABLED(
+			"new_world_settings.pvp.friendly_fire_enabled",
+			"false",
+			"",
+			"# Do new world have friendly fire enabled by default?",
+			"# Does not affect Arena Plots which have FF enabled all the time.",
+			"# When true players on the same town or nation will harm each other."),	
 	NWS_WAR_ALLOWED(
 			"new_world_settings.pvp.war_allowed",
 			"true",
@@ -381,10 +388,26 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",			
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull",
+			"# The list of entities whose explosions should be reverted."),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_HEADER(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion",
+			"",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected."),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_ENABLE(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion.enabled",
+			"true",
+			"# Enabling this will slowly regenerate holes created in the",
+			"# wilderness by exploding blocks like beds."),
+	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST(
+			"new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
+			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED",
+			"# The list of blocks whose explosions should be reverted."),
+		
 
 	GTOWN_SETTINGS(
 			"global_town_settings",
@@ -397,11 +420,6 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			""),
-	GTOWN_SETTINGS_FRIENDLY_FIRE(
-			"global_town_settings.friendly_fire",
-			"true",
-			"",
-			"# can residents/Allies harm other residents when in an area with pvp enabled? Other than an Arena plot."),
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
 			"",
@@ -570,10 +588,10 @@ public enum ConfigNodes {
 	),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
-			"BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE",
+			"BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS",
 			"",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line.",
-			"# Not included by default but some servers add GRASS_BLOCK,FARMLAND,DIRT to their list."
+			"# Not included by default but some servers add GRASS_BLOCK,FARMLAND,DIRT,NETHERRACK,CRIMSON_NYLIUM,WARPED_NYLIUM to their list."
 	),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
@@ -1604,6 +1622,11 @@ public enum ConfigNodes {
 			"1.0",
 			"",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
+	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM(
+			"economy.new_expand.price_purchased_bonus_townblock_max_price",
+			"-1.0",
+			"",
+			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium."),
 
 	ECO_DEATH("economy.death", "", ""),
 	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", 

@@ -199,11 +199,11 @@ public class TownyEntityMonitorListener implements Listener {
 			Nation defenderNation = defenderResident.getTown().getNation();
 			Town defenderTown = defenderResident.getTown();
 			if (warEvent.isWarringNation(defenderNation) && defenderResident.isKing()){
-				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeKingKilled(defenderNation));
+				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_KING_KILLED", defenderNation.getName()));
 				if (attackerResident != null)
 					warEvent.remove(attackerResident.getTown(), defenderNation);
 			}else if (warEvent.isWarringNation(defenderNation) && defenderResident.isMayor()) {
-				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeMayorKilled(defenderTown));
+				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_MAYOR_KILLED", defenderTown.getName()));
 				if (attackerResident != null)
 					warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
 			}
@@ -544,7 +544,7 @@ public class TownyEntityMonitorListener implements Listener {
 							index++;
 							TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
 						}
-						TownyMessaging.sendPrefixedTownMessage(attackerTown, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+						TownyMessaging.sendPrefixedTownMessage(attackerTown, Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
 						return;
 					}
 				}
@@ -596,7 +596,7 @@ public class TownyEntityMonitorListener implements Listener {
 					index++;
 					TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
 				}
-				TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
 				return;
 			}
 

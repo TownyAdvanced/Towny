@@ -345,7 +345,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		if (page > total) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+			TownyMessaging.sendErrorMsg(player, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 			return;
 		}
 
@@ -360,7 +360,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		}
 		player.sendMessage(ChatTools.formatList("War Participants",
 				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
-				warparticipantsformatted, TownySettings.getListPageMsg(page, total)
+				warparticipantsformatted, Translation.of("LIST_PAGE", page, total)
 				)
 		);
 		output.clear();

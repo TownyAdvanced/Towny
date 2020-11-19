@@ -7,6 +7,7 @@ public class CleanupBackupTask implements Runnable {
 
 	@Override
 	public void run() {
+		Towny.getPlugin().getLogger().info("Cleaning up old backups...");
 		TownyUniverse.getInstance().getDataSource().cleanupBackups();
 		Towny.getPlugin().getLogger().info("Successfully cleaned backups.");
 	}

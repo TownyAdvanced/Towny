@@ -1,10 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -12,9 +10,9 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.util.BukkitTools;
-
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.util.Objects;
 
 public class TownBlock extends TownyObject {
@@ -201,13 +199,7 @@ public class TownBlock extends TownyObject {
 
 			case EMBASSY:
 
-			case WILDS:
-
-			case FARM:
-
 			case BANK:
-
-				//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
 
 				if (this.hasResident()) {
 					setPermissions(this.resident.getPermissions().toString());
@@ -231,7 +223,14 @@ public class TownBlock extends TownyObject {
 
 			case INN:
 			
-				setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+				setPermissions("residentSwitch,nationSwitch,allySwitch,outsiderSwitch");
+				break;
+			
+			case FARM:
+			
+			case WILDS:
+				
+				setPermissions("residentBuild,residentDestroy");
 				break;
 		}
 			
@@ -258,70 +257,22 @@ public class TownBlock extends TownyObject {
 		setType(type, resident);
 	}
 
-	public void setType(TownBlockType type, Resident resident) throws TownyException, EconomyException {
-		double cost;
-		switch (type) {
-			case COMMERCIAL:
-				cost = TownySettings.getPlotSetCommercialCost();
-				break;
-			case EMBASSY:
-				cost = TownySettings.getPlotSetEmbassyCost();
-				break;
-			case ARENA:
-				cost = TownySettings.getPlotSetArenaCost();
-				break;
-			case WILDS:
-				cost = TownySettings.getPlotSetWildsCost();
-				break;
-			case INN:
-				cost = TownySettings.getPlotSetInnCost();
-				break;
-			case JAIL:
-				cost = TownySettings.getPlotSetJailCost();
-				break;
-			case FARM:
-				cost = TownySettings.getPlotSetFarmCost();
-				break;
-			case BANK:
-				cost = TownySettings.getPlotSetBankCost();
-				break;
-			default: 
-				cost = 0;
-		}
-		
-		// Test if we can pay first to throw an exception.
-		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
-			throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+	public void setType(TownBlockType type, Resident resident) throws TownyException {
+		// Attempt to clear a jail spawn in case this was a jail plot until now.
+		if (this.isJail())
+			this.getTown().removeJailSpawn(this.getCoord());
 
-		// Handle payment via a confirmation to avoid suprise costs.
-		if (cost > 0 && TownySettings.isUsingEconomy()) {
-			Confirmation.runOnAccept(() -> {
-		
-				try {
-					resident.getAccount().withdraw(cost, String.format("Plot set to %s", type));
-				} catch (EconomyException ignored) {
-				}					
+		setType(type);
 
-				TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
-			
-				if (this.isJail())
-					try {
-						this.getTown().removeJailSpawn(this.getCoord());
-					} catch (NotRegisteredException ignored) {
-					}
+		if (this.isJail()) {
+			Player p = TownyAPI.getInstance().getPlayer(resident);
+			if (p == null)
+				throw new TownyException(Translation.of("msg_err_not_part_town"));
 				
-				setType(type);
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
-			})
-				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-				.sendTo(BukkitTools.getPlayerExact(resident.getName()));
-		// No payment required so just change the type.
-		} else {
-			if (this.isJail())
-				this.getTown().removeJailSpawn(this.getCoord());
-			setType(type);
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+			this.getTown().addJailSpawn(p.getLocation());
 		}
+
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 
 	public boolean isHomeBlock() {
