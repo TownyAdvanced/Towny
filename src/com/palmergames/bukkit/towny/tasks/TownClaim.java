@@ -141,7 +141,7 @@ public class TownClaim extends Thread {
 			// Send confirmation message,
 			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
-				if (TownySettings.getClaimRefundPrice() > 0.0) {
+				if (TownySettings.isUsingEconomy() && TownySettings.getClaimRefundPrice() > 0.0) {
 					try {
 						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
 						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
