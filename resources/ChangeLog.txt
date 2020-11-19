@@ -4911,3 +4911,35 @@ v0.92.0.11:
   - Fix permissions not being give to members who've just joined a town.
   - API Change: TownPreClaimEvent has new isOutpost() and isHomeBlock() methods.
   - Fix upgrading from versions with added text in version causing issues with config migration, courtesy of Siris with PR #4282.
+0.96.2.18:
+  - Added NETHER_PORTAL to new_world_settings.plot_management.revert_on_unclaim.block_ignore.
+    - Closes #4305.
+  - Cleaned up config comments, fixed white-spacing. Should be much more readable.
+  - Fix ConfigMigrator not migrating worldActions onto existing world settings.
+  - Add Hyperverse to plugin.yml's soft-depend.
+  - Further improve config comments.
+  - Add fire and air to the list of blocks Towny will not try an explosion regen task on.
+    - Improves but doesn't completely solve #4306.
+  - Optimize `hasNationZone()` method, courtesy of silverwolfg11 with PR #4312.
+    - Also adds MathUtil.
+  - Fix nation-alliance invite showing the wrong nation in the confirmation.
+  - Fix nation deletion not removing the nation from the towns.
+    - Closes #4320.
+  - Fix incorrect information being seen on /n ally received output.
+    - Closes #4319.
+  - New Config option: economy.new_expand.max_price_claim_townblock, courtesy of the-codeboy with PR #4311.
+    - Default: -1.0
+    - The maximum price for an additional townblock. No matter how many blocks a town has the price will not be above this. 
+    - Set to -1 to deactivate this.
+  - Improve delete events, courtesy of silverwolfg11 with PR #4324.
+    - Adds easy access to the UUID and date of registration for the resident/town/nation being deleted.
+    - Also returns the Nation object for the PreDeleteNationEvent rather than just the name, spotted by NNYaKNpGms0eUVpiSdHx on the Discord.
+  - Optimize town distance checks, courtesy of silverwolfg11 with PR #4323.
+  - Clean up and beautify the Towny startup logging.
+  - Add Wither and WitherSkull to explosion revert settings.
+    - These will be automatically added to the config and world settings.
+    - Closes #4307.
+  - Fix item_frames being broken by boats.
+    - Closes #4093.
+  - When /tw toggle revertunclaim is used, any active reverts will be stopped.
+    - Removes necessity to stop the server and manually delete the towny\data\regen.txt. 

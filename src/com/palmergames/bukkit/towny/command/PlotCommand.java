@@ -49,7 +49,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -841,7 +840,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// '/plot set perm off'
 
 					try {
-						boolean b = plugin.parseOnOff(split[0]);
+						boolean b = StringMgmt.parseOnOff(split[0]);
 
 						permChange = new TownyPermissionChange(TownyPermissionChange.Action.ALL_PERMS, b);
 					} catch (Exception e) {
@@ -855,7 +854,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				boolean b;
 
 				try {
-					b = plugin.parseOnOff(split[1]);
+					b = StringMgmt.parseOnOff(split[1]);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_plot_set_perm_syntax_error"));
 					return null;
@@ -909,7 +908,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				try {
-					boolean b = plugin.parseOnOff(split[2]);
+					boolean b = StringMgmt.parseOnOff(split[2]);
 
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 				} catch (Exception e) {

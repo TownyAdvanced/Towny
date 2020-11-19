@@ -1550,6 +1550,11 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK_INCREASE);
 	}
 	
+	public static double getMaxClaimPrice() {
+		
+		return getDouble(ConfigNodes.ECO_MAX_PRICE_CLAIM_TOWNBLOCK);
+	}
+	
 	public static double getClaimRefundPrice() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK_REFUND);

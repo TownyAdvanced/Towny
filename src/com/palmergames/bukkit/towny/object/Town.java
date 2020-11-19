@@ -458,7 +458,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public double getTownBlockCost() {
-		return (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
+		double price = (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
+		double maxprice = TownySettings.getMaxClaimPrice();
+		return (maxprice == -1 ? price : Math.min(price, maxprice));
 	}
 
 	public double getTownBlockCostN(int inputN) throws TownyException {
@@ -472,8 +474,16 @@ public class Town extends Government implements TownBlockOwner {
 		double nextprice = getTownBlockCost();
 		int i = 1;
 		double cost = nextprice;
+		boolean hasmaxprice = TownySettings.getMaxClaimPrice() != -1;
+		double maxprice = TownySettings.getMaxClaimPrice();
 		while (i < inputN){
-			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());			
+			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());
+			
+			if(hasmaxprice && nextprice > maxprice) {
+				cost += maxprice * ( inputN - i);
+				break;
+			}
+			
 			cost += nextprice;
 			i++;
 		}

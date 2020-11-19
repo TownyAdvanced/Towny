@@ -47,20 +47,11 @@ public class OutpostUtil {
 			throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
 		// Outposts can have a minimum required distance from other towns' townblocks.
-		if (!isPlotSetOutpost) {
-			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
-				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
-			// Outposts can have a minimum required distance from other outposts.
-			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot())
-				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
-		} else {
-			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks())
-				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
-			// Outposts can have a minimum required distance from other outposts.
-			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceForOutpostsFromPlot())
-				throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
-
-		}
+		int minDistance = world.getMinDistanceFromOtherTownsPlots(key, isPlotSetOutpost ? town : null);
+		// Outposts can have a minimum required distance from other outposts.
+		if (minDistance < TownySettings.getMinDistanceFromTownPlotblocks() ||
+			minDistance < TownySettings.getMinDistanceForOutpostsFromPlot())
+			throw new TownyException(Translation.of("msg_too_close2", Translation.of("townblock")));
 
 		return true;		
 	}

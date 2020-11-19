@@ -47,6 +47,7 @@ public class ConfigMigrator {
 			// If a migration version is greater than our version, upgrade with it.
 			if (configVersion.compareTo(migration.version) < 0) {
 				// Perform all desired changes.
+				System.out.println("[Towny] Config: " + migration.version + " applying " + migration.changes.size() + " automatic update" + (migration.changes.size() == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
 					performChange(change);
 				}
@@ -80,7 +81,8 @@ public class ConfigMigrator {
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
-				change.worldAction.getAction().accept(world, config.getString(change.path) + change.value);
+				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
+				change.worldAction.getAction().accept(world, change.value);
 			}
 		}
 	}

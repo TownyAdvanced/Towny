@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
@@ -49,6 +50,44 @@ public class TownyRegenAPI {
 
 		if (!worldCoords.contains(worldCoord))
 			worldCoords.add(worldCoord);
+	}
+	
+	/**
+	 * Removes a TownBlock from having a snapshot taken.
+	 * 
+	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
+	 */
+	private static void removeWorldCoord(WorldCoord worldCoord) {
+
+		if (worldCoords.contains(worldCoord))
+			worldCoords.remove(worldCoord);
+	}
+	
+	/**
+	 * Gets a list of WorldCoords which are having snapshots taken, for one TownyWorld.
+	 * 
+	 * @param world - TownyWorld to gather a list of WorldCoords in.
+	 * @return list - List<WorldCoord> matched to above world.
+	 */
+	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
+		List<WorldCoord> list = new ArrayList<>();
+		for (WorldCoord wc : worldCoords) {
+			try {
+				if (wc.getTownyWorld().equals(world))
+					list.add(wc);
+			} catch (NotRegisteredException ignored) {}
+		}		
+		return list;
+	}
+	
+	/**
+	 * Removes all worldcoords of given TownyWorld from having their snapshots taken.
+	 * 
+	 * @param world - TownyWorld to stop having snapshots made in.
+	 */
+	public static void removeWorldCoords(TownyWorld world) {
+		for (WorldCoord wc : getWorldCoords(world))
+			removeWorldCoord(wc);
 	}
 
 	/**
@@ -105,6 +144,26 @@ public class TownyRegenAPI {
 	public static void setPlotChunks(Hashtable<String, PlotBlockData> plotChunks) {
 
 		PlotChunks = plotChunks;
+	}
+	
+	/**
+	 * Removes all plotchunks currently in regeneration list for one world.
+	 * 
+	 * @param world - TownyWorld to have regeneration stop in.
+	 * @param save - True to save regen list.
+	 */
+	public static void removePlotChunksForWorld(TownyWorld world, boolean save) {
+		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
+		for (String key : getPlotChunks().keySet()) {
+			if (!getPlotChunks().get(key).getWorldName().equals(world.getName()))
+				plotChunks.put(key, getPlotChunks().get(key));
+		}
+		
+		if (!plotChunks.isEmpty())
+			setPlotChunks(plotChunks);
+		
+		if (save)
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
 	/**
@@ -451,7 +510,7 @@ public class TownyRegenAPI {
 	 * @param count - int for setting the delay to do one block at a time.
 	 */
 	public static void beginProtectionRegenTask(Block block, int count) {
-		if ((!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation())) && !isBlacklistedBlock(block.getType())) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
 			if (block.getType().equals(Material.PISTON_HEAD)) {
@@ -460,12 +519,16 @@ public class TownyRegenAPI {
 				block = baseBlock;
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
-			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
 			addProtectionRegenTask(task);
 			block.setType(Material.AIR);
 		}
 	}
 	
+	private static boolean isBlacklistedBlock(Material type) {		
+		return (type == Material.TNT || type == Material.AIR || type == Material.FIRE);
+	}
+
 	/**
 	 * Does a task for this block already exist?
 	 * 

@@ -38,7 +38,8 @@ public final class Translation {
 		try {
 			newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
 		} catch (IOException e) {
-			TownyMessaging.sendMsg("Custom language file detected, not updating.");
+			System.out.println("[Towny] Lang: Custom language file detected, not updating.");
+			System.out.println("[Towny] Lang: " + res + " v" + Translation.of("version") + " loaded.");
 			return;
 		} catch (InvalidConfigurationException e) {
 			TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
@@ -49,9 +50,10 @@ public final class Translation {
 
 		if (!langVersion.equalsIgnoreCase(resVersion)) {
 			language = newLanguage;
-			TownyMessaging.sendMsg("Newer language file available, language file updated.");
+			System.out.println("[Towny] Lang: Language file replaced with updated version.");
 			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
 		}
+		System.out.println("[Towny] Lang: " + res + " v" + Translation.of("version") + " loaded.");
 	}
 
 	private static String parseSingleLineString(String str) {
