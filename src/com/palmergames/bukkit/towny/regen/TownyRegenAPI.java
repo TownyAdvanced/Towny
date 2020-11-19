@@ -508,8 +508,10 @@ public class TownyRegenAPI {
 	 * 
 	 * @param block - Block which is being exploded.
 	 * @param count - int for setting the delay to do one block at a time.
+	 * 
+	 * @return true if the protectiontask was begun successfully. 
 	 */
-	public static void beginProtectionRegenTask(Block block, int count) {
+	public static boolean beginProtectionRegenTask(Block block, int count) {
 		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation())) && !isBlacklistedBlock(block.getType())) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
@@ -522,11 +524,14 @@ public class TownyRegenAPI {
 			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
 			addProtectionRegenTask(task);
 			block.setType(Material.AIR);
+			return true;
 		}
+		return false;
 	}
 	
+	//TODO: Make this a configurable list.
 	private static boolean isBlacklistedBlock(Material type) {		
-		return (type == Material.TNT || type == Material.AIR || type == Material.FIRE);
+		return (type == Material.TNT || type == Material.AIR || type == Material.FIRE || type == Material.NETHER_PORTAL);
 	}
 
 	/**

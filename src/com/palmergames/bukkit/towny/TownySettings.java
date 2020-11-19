@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
@@ -777,28 +776,6 @@ public class TownySettings {
 	}
 
 	//Need other languages Methods
-	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
-
-		return parseString(Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, fallenNation.getName()));
-	}
-	
-	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
-
-		return parseString(Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, fallenTown.getName(), fallenTownBlocks));
-	}
-	
-	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
-
-		String townBlockName = "";
-		try {
-			Town fallenTown = fallenTownBlock.getTown();
-			townBlockName = "[" + fallenTown.getName() + "](" + fallenTownBlock.getCoord().toString() + ")";
-		} catch (NotRegisteredException e) {
-			townBlockName = "(" + fallenTownBlock.getCoord().toString() + ")";
-		}
-		return parseString(Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName));
-	}
-	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
 
 		return parseString(Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), dead.getName(), n, attackingTown.getName()));
@@ -2747,6 +2724,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN);
 	}
 	
+	public static boolean getKeepInventoryInOwnTown() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_OWN_TOWN);
+	}
+	
+	public static boolean getKeepInventoryInAlliedTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ALLIED_TOWN);
+	}
+	
 	public static boolean getKeepInventoryInArenas() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
 	}
@@ -3020,15 +3005,34 @@ public class TownySettings {
 	
 	public static void setUUIDCount(int hasUUID) {
 		uuidCount = hasUUID;
-		
 	}
-	
+
 	public static void incrementUUIDCount() {
 		uuidCount++;
 	}
 
 	public static boolean isTownBankruptcyEnabled() {
-		return getBoolean(ConfigNodes.TOWN_BANKRUPTCY_ENABLED);
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
+	}
+
+	public static double getDebtCapMaximum() {
+		return getDouble(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_MAXIMUM);
+	}
+	
+	public static double getDebtCapOverride() {
+		return getDouble(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE);
+	}
+	
+	public static boolean isUpkeepDeletingTownsThatReachDebtCap() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP);
+	}
+	
+	public static boolean isNationTaxKickingTownsThatReachDebtCap() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP);
+	}
+
+	public static boolean doBankruptTownsPayNationTax() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
 	}
 
 	public static boolean getWarSiegeEnabled() {
@@ -3391,6 +3395,5 @@ public class TownySettings {
 	public static int getBannerControlVerticalDistanceBlocks() {
 		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_VERTICAL_DISTANCE_BLOCKS);
 	}
-
 }
 

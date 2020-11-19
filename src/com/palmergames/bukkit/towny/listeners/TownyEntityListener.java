@@ -859,7 +859,7 @@ public class TownyEntityListener implements Listener {
 					// Wilderness explosion regeneration
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
-							TownyRegenAPI.beginProtectionRegenTask(block, count);
+							event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count));
 						}
 					} else {
 						event.setCancelled(true);

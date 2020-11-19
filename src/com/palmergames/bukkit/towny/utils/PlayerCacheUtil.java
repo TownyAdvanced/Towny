@@ -377,7 +377,6 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
-
 		// Allow admins to have ALL permissions
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getPermissionSource().isTownyAdmin(player))

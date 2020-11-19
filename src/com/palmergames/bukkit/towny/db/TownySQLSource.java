@@ -2454,10 +2454,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean backup() throws IOException {
 
-		TownyMessaging.sendMsg("Performing backup");
-		TownyMessaging.sendMsg("***** Warning *****");
-		TownyMessaging.sendMsg("***** Only Snapshots and Regen files will be backed up");
-		TownyMessaging.sendMsg("***** Make sure you schedule a backup in MySQL too!!!");
+		System.out.println("Performing backup");
+		System.out.println("***** Warning *****");
+		System.out.println("***** Only Snapshots and Regen files will be backed up");
+		System.out.println("***** Make sure you schedule a backup in MySQL too!!!");
 		String backupType = TownySettings.getFlatFileBackupType();
 		long t = System.currentTimeMillis();
 		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t)

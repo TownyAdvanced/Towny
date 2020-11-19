@@ -680,6 +680,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								
+								if (Towny.isSpigot) {
+									TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
+									return;
+								}
+								
 								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
@@ -1524,7 +1530,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				if(town.isBankrupt())
-					throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_toggle_open"));
+					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -3224,8 +3230,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 
-		if(town.isBankrupt())
-			throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_invite"));
+		if (town.isBankrupt())
+			throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_invite"));
 
 		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
@@ -3685,7 +3691,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
 			TownyMessaging.sendDebugMsg("Claim Check Available: " + available);
 			TownyMessaging.sendDebugMsg("Claim Selection Size: " + selection.size());
-			if (available - selection.size() < 1)
+			if (available - selection.size() < 0)
 				throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 		}
 
@@ -3774,23 +3780,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				return;
 			}
 			
-			if (!resident.getAccount().payTo(amount, town, "Town Deposit"))
-				throw new TownyException(Translation.of("msg_insuf_funds"));
-
-			//If town is bankrupt, clear some debt
-			if(town.isBankrupt()) {
-				if(amount >= town.getDebtAccount().getHoldingBalance()) {
-					//Full debt repayment
-					town.getAccount().setBalance(amount - town.getDebtAccount().getHoldingBalance(), "Debt repayment");
-					town.getDebtAccount().setBalance(0, "Debt Repayment");
-					plugin.resetCache(); //Allow perms change to take effect immediately
-					TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_town_debts_cleared"), town.getFormattedName()));
-				} else {
-					//Partial debt repayment
-					town.getDebtAccount().pay(amount, "Debt repayment");
-					town.getAccount().setBalance(0, "Debt repayment");
-				}
-			}
+			// Deposit into town.
+			town.depositToBank(resident, amount);
 			
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
