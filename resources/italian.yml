@@ -1,8 +1,8 @@
 name: Towny
 version: 0.90
 language: italian
-author: Leomixer17
-website: 'http://townyadvanced.github.io/'
+author: Leonardo_DGS
+website: 'https://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -855,26 +855,26 @@ msg_process_unclaim: 'Processing Plot Unclaim...'
 msg_total_townblocks: 'Total TownBlocks: '
 
 # Added in 0.50
-friend_list: 'Friends List'
+friend_list: 'Lista Amici'
                          # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
                          # nationranks lists on the /nation screen; and probably more lists of residents.
 res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
 res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
 res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
-res_friend_added: 'Added '
+res_friend_added: 'Aggiunto '
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
 nationboard_message_colour_1: '&6'
 nationboard_message_colour_2: '&e'
-not_registered: 'Not registered.'
-msg_error_missing_comparator: '&bMust specify what to sort by.'
-msg_error_invalid_comparator: '&bInvalid comparator.'
-msg_error_multiple_comparators: '&bToo many comparators. Only specify one.'
-msg_error_comparator_failed: '&bComparator failed. Try a different one.'
-number_of_residents: '(Number of Residents)'
-number_of_towns: '(Number of Towns)'
-town_name: 'Town Name'
-nation_name: 'Nation Name'
+not_registered: 'Non registrato.'
+msg_error_missing_comparator: '&bDevi specificare in base a cosa ordinare.'
+msg_error_invalid_comparator: '&bComparatore non valido.'
+msg_error_multiple_comparators: '&bTroppi comparatori. Specificare solo uno.'
+msg_error_comparator_failed: '&bComparatore fallito. Provane uno diverso.'
+number_of_residents: '(Numero di residenti)'
+number_of_towns: '(Numero di città)'
+town_name: 'Nome della città'
+nation_name: 'Nome della nazione'
 refund_message: '&aRefunded $%s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bThe following towns could not afford their upkeep and have been disbanded: '
 msg_bankrupt_nation_multiple: '&bThe following nations could not afford their upkeep and have been disbanded: '
@@ -887,13 +887,13 @@ msg_bankrupt_nation2: '&b%s couldn''t afford to remain a nation.'
 status_embassy_town: '&2Embassies in'
 
 # Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try resident, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try resident, balance, name, townblocks, online, open.'
-msg_err_merging_for_kings_only: '&bMerging can only be done by a King.'
-msg_err_king_of_that_nation_is_not_online: '&bThe King of %s, %s, is not online. Merge failed.'
+msg_error_invalid_comparator_nation: '&bComparatore non valido. Prova resident, balance, towns, name, townblocks, online.'
+msg_error_invalid_comparator_town: '&bComparatore non valido. Prova resident, balance, name, townblocks, online, open.'
+msg_err_merging_for_kings_only: '&bLa fusione può essere eseguita solo da un Re.'
+msg_err_king_of_that_nation_is_not_online: '&bIl Re di %s, %s, non è online. fusione non riuscita.'
 nation1_has_merged_with_nation2: '&6The nation %s has agreed to merge together with the prevailing nation of %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Would you agree to dissolve your nation %s into the nation of %s? This will transfer all towns and nation bank money over to %s.'
-no_open_towns: 'No open towns to list.'
+no_open_towns: 'Nessuna città aperta da elencare.'
 
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'Nation has no allies to list.'
@@ -914,27 +914,27 @@ msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, yo
 # Added in 0.54:
 war_hud_homeblock: 'HOMEBLOCK'
 war_hud_wilderness: 'Wilderness'
-war_hud_true: 'True'
-war_hud_false: 'False'
+war_hud_true: 'Vero'
+war_hud_false: 'Falso'
 war_hud_peaceful: 'Peaceful'
 war_hud_fallen: 'Fallen'
 war_hud_townless: 'Townless!'
-war_hud_war: 'War'
+war_hud_war: 'Guerra'
 war_hud_score: 'Score: '
-war_hud_location: 'Location'
-war_hud_nation: 'Nation: '
-war_hud_town: 'Town: '
-war_hud_attackable: 'Attackable: '
-war_hud_health: 'Health: '
-war_hud_top_towns: 'Top Towns'
-war_stats_nations: '  Nations: '
-war_stats_towns: '  Towns: '
+war_hud_location: 'Posizione'
+war_hud_nation: 'Nazione: '
+war_hud_town: 'Città: '
+war_hud_attackable: 'Attaccabile: '
+war_hud_health: 'Salute: '
+war_hud_top_towns: 'Città migliori'
+war_stats_nations: '  Nazioni: '
+war_stats_towns: '  Città: '
 war_stats_warzone: '  WarZone: '
-war_stats_spoils_of_war: '  Spoils of War: '
-war_starts_in_x: 'War starts in %s'
+war_stats_spoils_of_war: '  Bottino di guerra: '
+war_starts_in_x: 'La guerra inizia tra %s'
 
 # Added in 0.55:
-msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
+msg_you_cannot_use_that_command_while_jailed: '&4Non puoi usare quel comando mentre sei in prigione.'
 
 # Added in 0.56:
 msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
@@ -1022,8 +1022,8 @@ msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s secon
 msg_plot_set_to_nfs: 'Plot is no longer for sale.'
 msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
 msg_the_wilderness: 'the Wilderness'
-msg_enemy_areas: 'Enemy areas'
-msg_neutral_towns: 'Neutral towns'
+msg_enemy_areas: 'Aree nemiche'
+msg_neutral_towns: 'Città neutrali'
 
 # Added in 0.64
 msg_err_no_nation_with_that_name: 'No nation found with name %s'
@@ -1068,10 +1068,10 @@ msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Click to accept'
-msg_confirmation_spigot_hover_cancel: 'Click to cancel'
-msg_confirmation_spigot_click_accept: 'Click %s or type %s'
-msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
+msg_confirmation_spigot_hover_accept: 'Clicca per accettare'
+msg_confirmation_spigot_hover_cancel: 'Clicca pe cancellare'
+msg_confirmation_spigot_click_accept: 'Clicca %s o digita %s'
+msg_confirmation_spigot_click_cancel: 'Clicca %s o digita %s'
 msg_you_cannot_kick_yourself: 'You cannot kick yourself.'
 msg_you_cannot_kick_this_resident: 'You cannot kick %s, they are the mayor or an assistant.'
 
@@ -1108,10 +1108,10 @@ msg_reset_config: '&2Config has been reset'
 msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
 
 # Added in 0.79
-msg_cache_block_error_plot_friends: 'friends'
-msg_cache_block_error_plot_allies: 'allies'
-msg_cache_block_error_plot_outsiders: 'outsiders'
-msg_cache_block_error_plot_town_members: 'town members'
+msg_cache_block_error_plot_friends: 'amici'
+msg_cache_block_error_plot_allies: 'alleati'
+msg_cache_block_error_plot_outsiders: 'estranei'
+msg_cache_block_error_plot_town_members: 'membri della città'
 msg_err_invalid_nation_map_color: '&cUnknown map color. Allowed colors are %s.'
 msg_nation_map_color_changed: '&bThe nation map color was changed to %s.'
 msg_err_unable_to_add_more_residents_without_nation: 'Your town cannot invite more than %s residents without first joining or creating a nation.'
@@ -1123,7 +1123,7 @@ msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and town
 bonus_townblocks: 'bonus townblocks'
 
 # Added in 0.80
-nomad_sing: 'Nomad'
+nomad_sing: 'Nomade'
 msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
 
 # Added in 0.81
@@ -1133,8 +1133,8 @@ msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
 invitation_prefix: "&8[&7Invitation&8] &9"
 confirmation_prefix: "&8[&7Confirmation&8] &9"
 this_message_will_expire2: '&9This will auto-expire in 20 seconds'
-msg_hover_next_page: 'Next Page'
-msg_hover_previous_page: 'Previous Page'
+msg_hover_next_page: 'Pagina successiva'
+msg_hover_previous_page: 'Pagina precedente'
 
 # Added in 0.83
 msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
@@ -1179,7 +1179,7 @@ msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 
 #Added in 0.89
-status_world_friendlyfire: '&2FriendlyFire: '
+status_world_friendlyfire: '&2Fuoco amico: '
 status_world_wildernessmobs: '&2Wilderness Mobs: '
 msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
 msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
@@ -1189,4 +1189,4 @@ msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt
 
 #Added in 0.90
 status_plot_clear_deletion: '&2PlotClearBlockDelete: '
-msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+msg_err_plot_clear_disabled_in_this_world: 'Il comando /plot clear è disabilitato in questo mondo.'
