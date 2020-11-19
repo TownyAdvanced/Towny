@@ -537,6 +537,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
@@ -1628,25 +1629,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 				}
-				
-			} else if (split[0].equalsIgnoreCase("peaceful")) {
 
+			} else if (split[0].equalsIgnoreCase("peaceful")) {
+				
 				if(!TownySettings.getWarCommonPeacefulTownsEnabled())
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-
+				
 				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-
+				
 				if(admin) {
 					town.setDesiredPeacefulnessValue(!town.isPeaceful());
 					town.setPeacefulnessChangeConfirmationCounterDays(1);
 					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
 				} else {
 					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
-
+						
 						//Here, no countdown is in progress, and the town wishes to change peacefulness status
 						town.setDesiredPeacefulnessValue(!town.isPeaceful());
-
+						
 						int counterValue;
 						if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
 							counterValue = TownySettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
@@ -1654,13 +1655,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
 						}
 						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
-
+						
 						//Send message to town
 						if (town.getDesiredPeacefulnessValue())
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_peaceful"), counterValue));
 						else
 							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_non_peaceful"), counterValue));
-
+						
 						//Remove any military nation ranks of residents
 						for(Resident peacefulTownResident: town.getResidents()) {
 							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
@@ -1669,7 +1670,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								}
 							}
 						}
-
+						
 					} else {
 						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
 						town.setDesiredPeacefulnessValue(town.isPeaceful());
@@ -3610,7 +3611,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 					throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-
+				
 				if (TownySettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
 					throw new TownyException(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
 

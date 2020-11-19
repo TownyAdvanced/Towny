@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -300,25 +299,7 @@ public class TownyAPI {
         }
     }
     
-	/**
-	 * Check if there is a {@link TownBlock} at a specific {@link Location}.
-	 *
-	 * @param location {@link Location} to check.
-	 * @return true if there is a {@link TownBlock} at the location, or false if there is not.
-	 */
-	public boolean hasTownBlock(Location location) {
-		try {
-			return townyUniverse.getDataSource().getWorld(location.getWorld().getName()).hasTownBlock(Coord.parseCoord(location));
-		} catch (NotRegisteredException e) {
-			return false;
-		} catch (Exception e) {
-			System.out.println("Problem finding townblock");
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	/**
+    /**
      * Get a list of active {@link Resident}s.
      *
      * @return {@link List} of active {@link Resident}s.

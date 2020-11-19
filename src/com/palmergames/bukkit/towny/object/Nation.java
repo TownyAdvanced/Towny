@@ -394,6 +394,7 @@ public class Nation extends Government {
 
 
 	private void remove(Town town) {
+
 		towns.remove(town);
 	}
 

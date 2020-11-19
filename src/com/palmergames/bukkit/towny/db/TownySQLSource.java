@@ -1332,7 +1332,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 	
-	@Override
+    @Override
 	public boolean loadSiege(Siege siege) {
 		if (!getContext())
 			return false;

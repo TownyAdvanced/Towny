@@ -231,7 +231,6 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (TownySettings.getWarSiegeEnabled()
 							&& TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
 						continue;
-
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
 						town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
@@ -318,6 +317,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -337,7 +337,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-
 			if (universe.getDataSource().hasTown(town.getName()) && !town.isRuined())
 				collectTownTaxes(town);
 		}
@@ -501,6 +500,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				
 					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
+						
 						if (town.getAccount().canPayFromHoldings(upkeep)) {
 						// Town is able to pay the upkeep.
 							town.getAccount().withdraw(upkeep, "Town Upkeep");

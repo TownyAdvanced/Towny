@@ -2875,7 +2875,7 @@ public class TownySettings {
 	public static void incrementUUIDCount() {
 		uuidCount++;
 	}
-
+	
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
