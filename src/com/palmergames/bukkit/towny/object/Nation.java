@@ -194,7 +194,7 @@ public class Nation extends Government {
 				setCapital(capital);
 				return;
 			}
-		} catch (NotRegisteredException e) {
+		} catch (NotRegisteredException | NullPointerException e) {
 		}
 		if (!findNewCapital())
 			throw new EmptyNationException(this);
