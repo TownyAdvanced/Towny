@@ -1497,10 +1497,6 @@ public enum ConfigNodes {
 			"",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
-	ECO_TOWN_DEBT_PREFIX(
-			"economy.debt_prefix",
-			"towndebt-",
-			"# Prefix to apply to all town debt economy accounts."),
 	ECO_TOWN_PREFIX(
 			"economy.town_prefix",
 			"town-",

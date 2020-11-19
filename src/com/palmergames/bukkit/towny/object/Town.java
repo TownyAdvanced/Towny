@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -37,8 +38,6 @@ import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 public class Town extends Government implements TownBlockOwner {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
-	private static final String ECONOMY_DEBT_ACCOUNT_PREFIX = TownySettings.getTownDebtAccountPrefix();
-
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
@@ -65,9 +64,8 @@ public class Town extends Government implements TownBlockOwner {
 	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private EconomyAccount debtAccount; //Applies if town is bankrupt
-	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
-	private TownyPermission permissions = new TownyPermission();
+	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
+	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined;
 	private int ruinDurationRemainingHours;
 	private long revoltImmunityEndTime;
@@ -77,6 +75,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean peaceful;
 	private boolean desiredPeacefulnessValue;
 	private int peacefulnessChangeConfirmationCounterDays;
+
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -1392,24 +1391,6 @@ public class Town extends Government implements TownBlockOwner {
 		return ECONOMY_ACCOUNT_PREFIX;
 	}
 
-	public EconomyAccount getDebtAccount() {
-		if (debtAccount == null) {
-
-			String accountName = StringMgmt.trimMaxLength(Town.ECONOMY_DEBT_ACCOUNT_PREFIX + getName(), 32);
-			World world;
-
-			if (hasWorld()) {
-				world = BukkitTools.getWorld(getHomeblockWorld().getName());
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
-
-			debtAccount = new EconomyAccount(accountName, world);
-		}
-
-		return debtAccount;
-	}
-
 	@Override
 	public String getFormattedName() {
 		if (this.isCapital()) {
@@ -1587,18 +1568,18 @@ public class Town extends Government implements TownBlockOwner {
 		double actualDebtIncrease;
 		double maximumDebtAmount = getEstimatedValueOfTown();
 
-		if(requestedDebtIncrease + getDebtAccount().getHoldingBalance() < maximumDebtAmount) {
+		if(requestedDebtIncrease + getAccount().getHoldingBalance() > maximumDebtAmount) {
 			actualDebtIncrease = requestedDebtIncrease;
 		} else {
-			actualDebtIncrease = maximumDebtAmount - getDebtAccount().getHoldingBalance();
+			actualDebtIncrease = maximumDebtAmount - getAccount().getHoldingBalance();
 		}
 
-		getDebtAccount().deposit(actualDebtIncrease, reason);
+		getAccount().withdraw(actualDebtIncrease, reason);
 		return actualDebtIncrease;
 	}
 
 	private double getEstimatedValueOfTown() {
-		return TownySettings.getNewTownPrice() + (getTownBlocks().size() * TownySettings.getClaimPrice());
+		return MoneyUtil.getEstimatedValueOfTown(this);
 	}
 
 }
