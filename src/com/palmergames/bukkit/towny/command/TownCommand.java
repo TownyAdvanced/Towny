@@ -3532,9 +3532,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				int blockedClaims = 0;
 
 				String cancelMessage = "";
+				boolean isHomeblock = town.getTownBlocks().size() == 0;
 				for(WorldCoord coord : selection){
 					//Use the user's current world
-					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player);
+					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
 					BukkitTools.getPluginManager().callEvent(preClaimEvent);
 					if(preClaimEvent.isCancelled()) {
 						blockedClaims++;

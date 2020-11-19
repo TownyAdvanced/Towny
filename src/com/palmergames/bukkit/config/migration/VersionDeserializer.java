@@ -11,6 +11,6 @@ import java.lang.reflect.Type;
 class VersionDeserializer implements JsonDeserializer<Version> {
 	@Override
 	public Version deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-		return new Version(jsonElement.getAsString());
+		return Version.fromString(jsonElement.getAsString());
 	}
 }

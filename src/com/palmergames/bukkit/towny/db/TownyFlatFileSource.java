@@ -2234,7 +2234,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("unclaimedZoneName=" + world.getUnclaimedZoneName());
 
 		list.add("");
-		list.add("# The following settings are only used if you are not using any permissions provider plugin");
+		list.add("# The following are blocks that will bypass the above build, destroy, switch and itemuse settings.");
 
 		// Unclaimed Zone Ignore Ids
 		if (world.getUnclaimedZoneIgnoreMaterials() != null)

@@ -90,20 +90,8 @@ public abstract class TownyPermissionSource {
 			return true;
 
 		// No node set but we are using permissions so check world settings
-		// (without UnclaimedIgnoreId's).
-		switch (action) {
+		return unclaimedZoneAction(world, material, action);
 
-		case BUILD:
-			return world.getUnclaimedZoneBuild();
-		case DESTROY:
-			return world.getUnclaimedZoneDestroy();
-		case SWITCH:
-			return world.getUnclaimedZoneSwitch();
-		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse();
-		}
-
-		return false;
 	}
 
 	public boolean unclaimedZoneAction(TownyWorld world, Material material, TownyPermission.ActionType action) {

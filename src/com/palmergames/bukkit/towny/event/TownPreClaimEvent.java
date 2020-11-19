@@ -20,6 +20,8 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     private final Town town;
     private final Player player;
     private boolean isCancelled = false;
+    private boolean isHomeblock = false;
+    private boolean isOutpost = false;
     private String cancelMessage = Translation.of("msg_claim_error");
 
     @Override
@@ -33,11 +35,13 @@ public class TownPreClaimEvent extends Event implements Cancellable{
         return handlers;
     }
 
-    public TownPreClaimEvent(Town _town, TownBlock _townBlock, Player _player) {
+    public TownPreClaimEvent(Town _town, TownBlock _townBlock, Player _player, boolean _isOutpost, boolean _isHomeblock) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.town = _town;
         this.townBlock = _townBlock;
         this.player = _player;
+        this.isOutpost = _isOutpost;
+        this.isHomeblock = _isHomeblock;
     }
 
     @Override
@@ -45,11 +49,35 @@ public class TownPreClaimEvent extends Event implements Cancellable{
         return isCancelled;
     }
 
+    /**
+     * Cancels the claiming of a townblock. If a group of townblocks are being claimed 
+     * using a single command, and one cancellation occurs, all of the townblock claims
+     * will be cancelled.
+     */
     @Override
     public void setCancelled(boolean cancelled) {
         isCancelled = cancelled;
     }
 
+    /**
+     * Whether the townblock being claimed will be an outpost.
+     * @return true if it will become an outpost.
+     */
+    public boolean isOutpost() {
+    	return isOutpost;
+    }
+    
+    /**
+     * Whether the townblock being claimed will be a homeblock.
+     * If there are multiple blocks being claimed using the larger selection commands,
+     * this will return true for every block in the selection, only the first would become a homeblock. 
+     * Cancelling the event will cause all claims to be cancelled.
+     * @return true if the townblock will become a homeblock, or if many townblocks are being claimed at once. 
+     */
+    public boolean isHomeBlock() {
+    	return isHomeblock;
+    }
+    
     /**
      *
      * @return the new TownBlock.

@@ -145,11 +145,10 @@ public class TownyUniverse {
             return false;
         }
         
-        Version lastRunVersion = new Version(TownySettings.getLastRunVersion(Towny.getPlugin().getVersion()));
-        Version curVersion = new Version(Towny.getPlugin().getVersion());
+        Version lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
         
         // Only migrate if the user just updated.
-        if (!lastRunVersion.equals(curVersion)) {
+        if (!lastRunVersion.equals(towny.getVersion())) {
 			System.out.println("[Towny] Performing Config Migrations...");
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();

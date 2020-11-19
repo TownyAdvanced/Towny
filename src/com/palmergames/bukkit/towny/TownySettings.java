@@ -2131,11 +2131,8 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
-
-		if (isTownyUpToDate(currentVersion))
-			return false;
-		else
-			return true; // Assume
+		// Assume
+		return !isTownyUpToDate(currentVersion);
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
@@ -2146,6 +2143,10 @@ public class TownySettings {
 	public static String getLastRunVersion(String currentVersion) {
 
 		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
+	}
+	
+	public static String getLastRunVersion() {
+		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0");
 	}
 
 	public static void setLastRunVersion(String currentVersion) {

@@ -326,11 +326,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		Towny.getPlugin().deleteCache(this.getName());
 		setTitle("");
 		setSurname("");
-		updatePerms();
-		
 
 		if (town == null) {
 			this.town = null;
+			updatePerms();
 			return;
 		}
 
@@ -338,6 +337,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			throw new AlreadyRegisteredException();
 
 		this.town = town;
+		updatePerms();
 		town.addResident(this);
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 	}
