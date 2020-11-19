@@ -253,7 +253,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			try {
 				if (TownRuinUtil.isPlayersTownRuined(player)) {
-					throw new TownyException(TownySettings.getLangString("msg_err_cannot_use_command_because_town_ruined"));
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 				}
 
 				if (split[0].equalsIgnoreCase("claim")) {

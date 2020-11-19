@@ -6,11 +6,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
@@ -30,7 +30,7 @@ public class SiegeWarMoneyUtil {
 				winnerNation.getAccount().collect(siege.getWarChestAmount(), "War Chest Captured/Returned");
 				String message =
 					String.format(
-						TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
+						Translation.of("msg_siege_war_attack_recover_war_chest"),
 						winnerNation.getFormattedName(),
 						TownyEconomyHandler.getFormattedBalance(siege.getWarChestAmount()));
 
@@ -57,7 +57,7 @@ public class SiegeWarMoneyUtil {
 				winnerTown.getAccount().collect(siege.getWarChestAmount(), "War Chest Captured");
 				String message =
 					String.format(
-						TownySettings.getLangString("msg_siege_war_attack_recover_war_chest"),
+						Translation.of("msg_siege_war_attack_recover_war_chest"),
 						winnerTown.getFormattedName(),
 						TownyEconomyHandler.getFormattedBalance(siege.getWarChestAmount()));
 
@@ -95,7 +95,7 @@ public class SiegeWarMoneyUtil {
 	 */
 	public static void claimNationRefund(Player player) throws Exception {
 		if(!(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeRefundInitialNationCostOnDelete())) {
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			throw new TownyException(Translation.of("msg_err_command_disable"));
 		}
 
 		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
@@ -106,9 +106,9 @@ public class SiegeWarMoneyUtil {
 			formerKing.getAccount().collect(refundAmount, "Nation Refund");
 			formerKing.setNationRefundAmount(0);
 			townyDataSource.saveResident(formerKing);
-			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_siege_war_nation_refund_claimed"), TownyEconomyHandler.getFormattedBalance(refundAmount)));
+			TownyMessaging.sendMsg(player, Translation.of("msg_siege_war_nation_refund_claimed", TownyEconomyHandler.getFormattedBalance(refundAmount)));
 		} else {
-			throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_refund_unavailable"));
+			throw new TownyException(Translation.of("msg_err_siege_war_nation_refund_unavailable"));
 		}
 	}
 
@@ -127,7 +127,7 @@ public class SiegeWarMoneyUtil {
 			TownyMessaging.sendMsg(
 				king,
 				String.format(
-					TownySettings.getLangString("msg_siege_war_nation_refund_available"),
+					Translation.of("msg_siege_war_nation_refund_available"),
 					TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 	}

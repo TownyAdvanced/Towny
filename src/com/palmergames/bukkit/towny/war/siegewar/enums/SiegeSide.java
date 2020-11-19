@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.enums;
 
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public enum SiegeSide {
 	ATTACKERS("msg_attackers"), DEFENDERS("msg_defenders"), NOBODY("msg_nobody");
@@ -12,6 +12,6 @@ public enum SiegeSide {
 	private String langStringId;
 
 	public String getFormattedName() {
-		return TownySettings.getLangString(langStringId);
+		return Translation.of(langStringId);
 	}
 }

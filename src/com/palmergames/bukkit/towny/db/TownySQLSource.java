@@ -873,11 +873,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 //                    }
 //                }
 
-                line = rs.getString("mayor");
-				if (line != null && !line.isEmpty())
-					town.setMayor(getResident(line));
-
-				 // line = rs.getString("assistants");
+                town.setMayor(getResident(rs.getString("mayor")));
+                // line = rs.getString("assistants");
                 // if (line != null) {
                 // tokens = line.split(",");
                 // for (String token : tokens) {
@@ -1066,7 +1063,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.setDesiredPeacefulnessValue(rs.getBoolean("desiredPeacefulnessValue"));
 				town.setPeacefulnessChangeConfirmationCounterDays(rs.getInt("peacefulnessChangeConfirmationCounterDays"));
 
-				s.close();
+                s.close();
                 return true;
             }
             s.close();
@@ -1713,7 +1710,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
             res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
-
+            
 			if (resident.hasMeta())
 				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
 			else
@@ -1788,7 +1785,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 twn_hm.put("uuid", UUID.randomUUID());
             }
             twn_hm.put("registered", town.getRegistered());
-
+        
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinDurationRemainingHours", Long.toString(town.getRuinDurationRemainingHours()));
 
@@ -1843,7 +1840,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-			nat_hm.put("taxes", nation.getTaxes());
+            nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
             nat_hm.put("nationSpawn", nation.hasSpawn() ? nation.getSpawn().getWorld().getName() + "#" + nation.getSpawn().getX() + "#" + nation.getSpawn().getY() + "#" + nation.getSpawn().getZ() + "#" + nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw() : "");

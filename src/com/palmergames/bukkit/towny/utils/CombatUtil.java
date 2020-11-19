@@ -117,7 +117,6 @@ public class CombatUtil {
 		Coord coord = Coord.parseCoord(defendingEntity);
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
-
 		/*
 		 * We have an attacking player
 		 */
@@ -148,13 +147,10 @@ public class CombatUtil {
 				 * Check the attackers TownBlock and it's Town for their PvP
 				 * status, else the world.
 				 * Check the defenders TownBlock and it's Town for their PvP
-				 * status, else the world
+				 * status, else the world.
 				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
-					|| preventPvP(world, attackerTB)
-					|| preventPvP(world, defenderTB)
-					)
-				{
+				if (preventFriendlyFire(attackingPlayer, defendingPlayer) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
+
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
 

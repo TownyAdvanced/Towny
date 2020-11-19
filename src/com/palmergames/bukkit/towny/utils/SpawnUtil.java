@@ -104,7 +104,6 @@ public class SpawnUtil {
 
 		case TOWN:
 			town = (Town) townyObject;
-
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(Translation.of("msg_err_outpost_spawn"));
@@ -180,7 +179,6 @@ public class SpawnUtil {
 					townSpawnPermission = TownSpawnLevel.UNAFFILIATED;
 				} else if (resident.getTown() == town) {
 					townSpawnPermission = outpost ? TownSpawnLevel.TOWN_RESIDENT_OUTPOST : TownSpawnLevel.TOWN_RESIDENT;
-
 				} else if (resident.hasNation() && town.hasNation()) {
 					Nation playerNation = resident.getTown().getNation();
 					Nation targetNation = town.getNation();
@@ -191,7 +189,7 @@ public class SpawnUtil {
 									Translation.of("msg_err_ally_isnt_public", town));
 						else
 							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
-					} else if (targetNation.hasEnemy(playerNation)) { 
+					} else if (targetNation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel. (except when peaceful towns are involved)
 						throw new TownyException(Translation.of("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
@@ -209,13 +207,12 @@ public class SpawnUtil {
 			}
 
 			TownyMessaging.sendDebugMsg(townSpawnPermission.toString() + " " + townSpawnPermission.isAllowed(town));
-
 			townSpawnPermission.checkIfAllowed(plugin, player, town);
 
-				// Check the permissions
-				if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic()
+			// Check the permissions
+			if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic()
 					: townSpawnPermission.hasPermissionNode(plugin, player, town))))
-					throw new TownyException(Translation.of("msg_err_not_public"));
+				throw new TownyException(Translation.of("msg_err_not_public"));
 
 			// Prevent outlaws from spawning into towns they're considered an outlaw in.
 			if (!isTownyAdmin && town.hasOutlaw(resident))
@@ -295,14 +292,13 @@ public class SpawnUtil {
 							Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_the_wilderness")));
 				if (inTown != null && resident.hasNation()
 						&& townyUniverse.getDataSource().getTown(inTown).hasNation()) {
-					Town inThisTown = townyUniverse.getDataSource().getTown(inTown);
-					Nation inNation = inThisTown.getNation();
+					Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
 					Nation playerNation = resident.getTown().getNation();
 					if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 						throw new TownyException(
 								Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_enemy_areas")));
 					if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation)
-						&& disallowedZones.contains("neutral"))
+							&& disallowedZones.contains("neutral"))
 						throw new TownyException(
 								Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_neutral_towns")));
 				}

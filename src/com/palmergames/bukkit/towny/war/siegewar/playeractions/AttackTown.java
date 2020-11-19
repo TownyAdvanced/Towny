@@ -43,63 +43,63 @@ public class AttackTown {
             Town townOfAttackingPlayer = attackingResident.getTown();
 
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_not_enabled_in_world"));
+				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
 
 			if(townOfAttackingPlayer == defendingTown)
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_own_town"));
+                throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_own_town"));
 
 			if(defendingTown.isPeaceful())
-				throw new TownyException(TownySettings.getLangString("msg_war_siege_err_cannot_attack_peaceful_town"));
+				throw new TownyException(Translation.of("msg_war_siege_err_cannot_attack_peaceful_town"));
 
             Nation nationOfAttackingPlayer= townOfAttackingPlayer.getNation();
             if (defendingTown.hasNation()) {
                 Nation nationOfDefendingTown = defendingTown.getNation();
 
                 if(nationOfAttackingPlayer == nationOfDefendingTown)
-                    throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_town_in_own_nation"));
+                    throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_town_in_own_nation"));
 
                 if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-                    throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));
+                    throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_non_enemy_nation"));
             }
             
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_already_attacking_town"));
+                throw new TownyException(Translation.of("msg_err_siege_war_nation_already_attacking_town"));
 
             if (defendingTown.isSiegeImmunityActive())
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_siege_immunity"));
+                throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_siege_immunity"));
 
 			if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_join_siege"));
+				throw new TownyException(Translation.of("msg_err_siege_war_cannot_join_siege"));
 
             if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.getAccount().canPayFromHoldings(defendingTown.getSiegeCost()))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+				throw new TownyException(Translation.of("msg_err_no_money"));
 
             if (!SiegeWarDistanceUtil.isUndergroundBannerControlEnabledInWorld(block.getWorld()) && SiegeWarDistanceUtil.doesLocationHaveANonAirBlockAboveIt(block.getLocation()))
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_banner_must_be_placed_above_ground"));
+                throw new TownyException(Translation.of("msg_err_siege_war_banner_must_be_placed_above_ground"));
 
             if(defendingTown.isRuined())
-                throw new TownyException(TownySettings.getLangString("msg_err_cannot_attack_ruined_town"));
+                throw new TownyException(Translation.of("msg_err_cannot_attack_ruined_town"));
 
             if(!SiegeWarDistanceUtil.isBannerToTownElevationDifferenceOk(block, townBlock)) {
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
+				throw new TownyException(Translation.of("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
 
             if(nationOfAttackingPlayer.getNumActiveAttackSieges() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
+				throw new TownyException(Translation.of("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
 
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = defendingTown.getHomeBlock().getCoord();
 				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-					throw new TownyException(TownySettings.getLangString("msg_err_nation_homeblock_in_another_world"));
+					throw new TownyException(Translation.of("msg_err_nation_homeblock_in_another_world"));
 				}
 				double distance;
 				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_not_close_enough_to_nation"));
+					throw new TownyException(Translation.of("msg_err_siege_war_town_not_close_enough_to_nation"));
 				}
 			}
 
@@ -149,7 +149,7 @@ public class AttackTown {
 				attackingNation.getAccount().pay(siege.getWarChestAmount(), "Cost of starting a siege.");
 				String moneyMessage =
 					String.format(
-						TownySettings.getLangString("msg_siege_war_attack_pay_war_chest"),
+						Translation.of("msg_siege_war_attack_pay_war_chest"),
 						attackingNation.getFormattedName(),
 						TownyEconomyHandler.getFormattedBalance(siege.getWarChestAmount()));
 
@@ -170,14 +170,14 @@ public class AttackTown {
 		//Send global message;
 		if (siege.getDefendingTown().hasNation()) {
 			TownyMessaging.sendGlobalMessage(String.format(
-				TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
+				Translation.of("msg_siege_war_siege_started_nation_town"),
 				attackingNation.getFormattedName(),
 				defendingTown.getNation().getFormattedName(),
 				defendingTown.getFormattedName()
 			));
 		} else {
 			TownyMessaging.sendGlobalMessage(String.format(
-				TownySettings.getLangString("msg_siege_war_siege_started_neutral_town"),
+				Translation.of("msg_siege_war_siege_started_neutral_town"),
 				attackingNation.getFormattedName(),
 				defendingTown.getFormattedName()
 			));

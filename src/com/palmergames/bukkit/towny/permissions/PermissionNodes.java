@@ -89,6 +89,8 @@ public enum PermissionNodes {
 	TOWNY_NATION_SIEGE_ABANDON("towny.nation.siege.abandon"),
 	TOWNY_NATION_SIEGE_INVADE("towny.nation.siege.invade"),
 	TOWNY_NATION_SIEGE_PLUNDER("towny.nation.siege.plunder"),
+
+	
 	/*
 	 * Town command permissions
 	 */
@@ -146,7 +148,8 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_TOGGLE_OPEN("towny.command.town.toggle.open"),
 			TOWNY_COMMAND_TOWN_TOGGLE_JAIL("towny.command.town.toggle.jail"),
 			TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL("towny.command.town.toggle.peaceful"),
-
+		
+		
 		TOWNY_COMMAND_TOWN_MAYOR("towny.command.town.mayor"),
 		TOWNY_COMMAND_TOWN_DELETE("towny.command.town.delete"),
 		TOWNY_COMMAND_TOWN_JOIN("towny.command.town.join"),
@@ -164,10 +167,10 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
 		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 		TOWNY_COMMAND_TOWN_OUTLAWLIST("towny.command.town.outlawlist"),
-
+	
 		TOWNY_TOWN_SIEGE_POINTS("towny.town.siege.points"),
 		TOWNY_TOWN_SIEGE_SURRENDER("towny.town.siege.surrender"),
-	
+
 	/*
 	 * Plot command permissions
 	 */
@@ -391,7 +394,7 @@ public enum PermissionNodes {
 	TOWNY_MAX_PLOTS("towny_maxplots"),
 	TOWNY_EXTRA_PLOTS("towny_extraplots"),
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts"),
-
+	
 	// Siegewar related war sickness immunities
 	TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA("towny.siege.war.immune.to.war.nausea"),
 	TOWNY_SIEGE_WAR_IMMUNE_TO_BATTLE_FATIGUE("towny.siege.war.immune.to.battle.fatigue");

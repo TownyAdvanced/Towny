@@ -22,8 +22,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+
 import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -376,6 +377,7 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
+
 		// Allow admins to have ALL permissions
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
@@ -389,7 +391,7 @@ public class PlayerCacheUtil {
 				townBlock = pos.getTownBlock();
 				targetTown = townBlock.getTown();
 				if(targetTown.isBankrupt() && !targetTown.isRuined())  {
-					cacheBlockErrMsg(player, TownySettings.getLangString("msg_err_bankrupt_town_cannot_build"));
+					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
 					return false;
 				}
 			} catch (NotRegisteredException e) {
@@ -448,12 +450,12 @@ public class PlayerCacheUtil {
 							Town nearestTown = null; 
 							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
 							Nation nearestNation = nearestTown.getNation();
-
+			
 							//During an active siege, nobody can alter the nation zone
 							if(TownySettings.getWarSiegeEnabled()
 								&& nearestTown.hasSiege()
 								&& nearestTown.getSiege().getStatus().isActive()) {
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_nation_zone_this_area_protected_but_besieged"), pos.getTownyWorld().getUnclaimedZoneName(), nearestNation.getName()));
+								cacheBlockErrMsg(player, Translation.of("msg_err_siege_war_nation_zone_this_area_protected_but_besieged", pos.getTownyWorld().getUnclaimedZoneName(), nearestNation.getName()));
 								return false;
 							}
 
@@ -482,6 +484,7 @@ public class PlayerCacheUtil {
 				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 				return false;
 			}
+
 		}
 
 		// Plot Permissions

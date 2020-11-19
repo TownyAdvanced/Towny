@@ -456,7 +456,6 @@ public class TownyAPI {
 			if (nearestTown == null) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
-
 			//If nearest town has an in-progress siege, and war disables config is true, nationzone is disabled.
 			if(TownySettings.getWarSiegeEnabled()
 				&& TownySettings.getNationZonesWarDisables()
@@ -464,7 +463,6 @@ public class TownyAPI {
 				&& nearestTown.getSiege().getStatus().isActive())	{
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
-
 			if (!nearestTown.hasNation()) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}

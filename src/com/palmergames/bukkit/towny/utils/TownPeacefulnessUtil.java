@@ -51,15 +51,15 @@ public class TownPeacefulnessUtil {
 
 				if(TownySettings.getWarSiegeEnabled()) {
 					if (town.isPeaceful()) {
-						message = String.format(TownySettings.getLangString("msg_war_siege_town_became_peaceful"), town.getFormattedName());
+						message = Translation.of("msg_war_siege_town_became_peaceful", town.getFormattedName());
 					} else {
-						message = String.format(TownySettings.getLangString("msg_war_siege_town_became_non_peaceful"), town.getFormattedName());
+						message = Translation.of("msg_war_siege_town_became_non_peaceful", town.getFormattedName());
 					}
 				} else {
 					if (town.isPeaceful()) {
-						message = String.format(TownySettings.getLangString("msg_war_common_town_became_peaceful"), town.getFormattedName());
+						message = Translation.of("msg_war_common_town_became_peaceful", town.getFormattedName());
 					} else {
-						message = String.format(TownySettings.getLangString("msg_war_common_town_became_non_peaceful"), town.getFormattedName());
+						message = Translation.of("msg_war_common_town_became_non_peaceful", town.getFormattedName());
 					}
 				}
 				TownyMessaging.sendGlobalMessage(message);
@@ -115,7 +115,7 @@ public class TownPeacefulnessUtil {
 
 				//Punish if the player is in a siege zone
 				if(SiegeWarDistanceUtil.isLocationInActiveSiegeZone(player.getLocation())) {
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_peaceful_player_punished_for_being_in_siegezone"));
+					TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_peaceful_player_punished_for_being_in_siegezone"));
 					int effectDurationTicks = (int)(TimeTools.convertToTicks(TownySettings.getShortInterval() + 5));
 					Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
 						public void run() {
@@ -181,9 +181,9 @@ public class TownPeacefulnessUtil {
 					//Guardian town list was empty. Peaceful town leaves nation
 					Nation previousNation = peacefulTown.getNation();
 					townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_left_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName()));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_left_nation", peacefulTown.getFormattedName(), previousNation.getFormattedName()));
 					if(previousNation.getNumTowns() == 0) {
-						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), previousNation.getName()));
+						TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", previousNation.getName()));
 					}
 				} else {
 					//Find guardian nation (the one with the largest guardian town)
@@ -201,14 +201,14 @@ public class TownPeacefulnessUtil {
 						Nation previousNation = peacefulTown.getNation();
 						townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
 						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
-						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_changed_nation"), peacefulTown.getFormattedName(), previousNation.getFormattedName(), guardianNation.getFormattedName()));
+						TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_changed_nation", peacefulTown.getFormattedName(), previousNation.getFormattedName(), guardianNation.getFormattedName()));
 						if(previousNation.getNumTowns() == 0) {
-							TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), previousNation.getName()));
+							TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", previousNation.getName()));
 						}
 					} else {
 						//Peaceful town joins nation
 						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
-						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_siege_peaceful_town_joined_nation"), peacefulTown.getFormattedName(), guardianNation.getFormattedName()));
+						TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_joined_nation", peacefulTown.getFormattedName(), guardianNation.getFormattedName()));
 					}
 				}
 			} catch (Exception e) {

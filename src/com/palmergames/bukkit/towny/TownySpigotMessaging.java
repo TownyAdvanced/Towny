@@ -134,12 +134,8 @@ public class TownySpigotMessaging {
 				townName.addExtra(nextComponent);
 			}
 			
-			/*
-			 * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-			 * {@link Town#isOpen()}.
-			 */
-			if (town.isEffectivelyOpen()) {
-                TextComponent nextComponent = new TextComponent(Translation.of("status_title_open"));
+			if (town.isOpen()) {
+				TextComponent nextComponent = new TextComponent(Translation.of("status_title_open"));
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				townName.addExtra(nextComponent);
 			}

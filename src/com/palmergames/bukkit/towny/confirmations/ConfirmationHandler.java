@@ -111,7 +111,7 @@ public class ConfirmationHandler {
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
 	}
-
+	
 	public static boolean hasConfirmation(CommandSender sender) {
 		return confirmations.containsKey(sender);
 	}

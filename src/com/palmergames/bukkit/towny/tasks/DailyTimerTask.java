@@ -1,7 +1,10 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -17,13 +20,14 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.util.ChatTools;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class DailyTimerTask extends TownyTimerTask {
 	
@@ -62,6 +66,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				collectTownCosts();
 				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
 				collectNationCosts();
+				
 				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(newlyBankruptTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 				
 			} catch (EconomyException ignored) {
@@ -294,6 +299,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -478,7 +484,6 @@ public class DailyTimerTask extends TownyTimerTask {
 								newlyBankruptTowns.add(town.getName());
 							}
 						}
-
 					} else if (upkeep < 0) {						
 						// Negative upkeep
 						if (TownySettings.isUpkeepPayingPlots()) {
@@ -497,6 +502,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							// Not paying plot owners so just pay the town
 							town.getAccount().withdraw(upkeep, "Negative Town Upkeep");
 						}
+
 					}
 				}
 			}			

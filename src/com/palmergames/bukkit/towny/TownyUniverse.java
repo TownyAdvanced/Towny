@@ -43,7 +43,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,7 +61,7 @@ public class TownyUniverse {
     private final Trie residentsTrie = new Trie();
     private final Map<String, Town> towns = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
-	private final Map<String, Nation> nations = new ConcurrentHashMap<>();
+    private final Map<String, Nation> nations = new ConcurrentHashMap<>();
     private final Map<String, Siege> sieges = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
@@ -247,15 +246,15 @@ public class TownyUniverse {
     public Map<String, Nation> getNationsMap() {
         return nations;
     }
-
+    
     public Map<String, Siege> getSiegesMap() {
-    	return sieges;
-	}
-
+        return sieges;
+    }
+    
     public Trie getNationsTrie() {
     	return nationsTrie;
 	}
-
+	
     public Map<String, Resident> getResidentMap() {
         return residents;
     }
@@ -568,7 +567,7 @@ public class TownyUniverse {
 
 	public Set<Player> getPlayersInBannerControlSessions() {
 		Set<Player> result = new HashSet<>();
-		for(Siege siege: sieges.values()) {
+		for (Siege siege : sieges.values()) {
 			result.addAll(siege.getBannerControlSessions().keySet());
 		}
 		return result;

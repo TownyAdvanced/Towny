@@ -538,7 +538,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_peasant_right"));
 					
 					boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownySettings.isUsingEconomy();
-
+					
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String nationName = String.join("_", newSplit);
 					newNation(player, nationName, resident.getTown().getName(), noCharge);
@@ -635,7 +635,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					Nation tbNation = tb.getTown().getNation();
-					Nation pNation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					Nation pNation= townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
 						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -686,6 +686,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new NotRegisteredException();
 					}
 				}
+					
 
 			} else if (split[0].equalsIgnoreCase("refund")) {
 				SiegeWarMoneyUtil.claimNationRefund(player);
@@ -845,7 +846,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(Translation.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 				}
 			}
-
+			
 			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
 				Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
 				if(!validGuardianNations.contains(nation)) {
@@ -856,7 +857,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement())); 
 				}
 			}
-
+			
 			// Check if the command is not cancelled
 			NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 			Bukkit.getPluginManager().callEvent(preEvent);
@@ -1314,7 +1315,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void newNation(Player player, String name, String capitalName, boolean noCharge) {
 
-		TownyUniverse universe = TownyUniverse.getInstance();
+		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
 
 			Town town = universe.getDataSource().getTown(capitalName);
@@ -1355,7 +1356,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				})
 					.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
 					.sendTo(player);
-
+				
                 // Send confirmation.
                 if(TownySettings.getWarSiegeEnabled() 
                     && TownySettings.getWarCommonPeacefulTownsEnabled()
@@ -1399,11 +1400,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void mergeNation(Player player, String name) throws TownyException {
-
+		
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		Nation nation;
 		Nation remainingNation;
-
+		
 		try {
 			nation = universe.getDataSource().getNation(name);
 			remainingNation = universe.getDataSource().getResident(player.getName()).getTown().getNation();
@@ -1461,7 +1462,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 			}
-
+			
 			if (TownySettings.getWarSiegeEnabled()) {
 
 				//If a peaceful town has no options, we don't let it revolt
@@ -1521,7 +1522,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0)
-
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
@@ -1662,12 +1662,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
 			try {
+				
 		        if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 		        	remove.add(town);
 		        	TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_enough_residents_join_nation", town.getName()));
 		        	continue;
 		        }
-
+		        
 				if (TownySettings.getNationRequiresProximity() > 0) {
 					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 					Coord townCoord = town.getHomeBlock().getCoord();
@@ -1685,7 +1686,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						continue;
 					}
 				}
-
+				
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
 					TownyMessaging.sendErrorMsg(player, 
 						String.format(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation"), 
@@ -1807,8 +1808,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		ArrayList<Town> remove = new ArrayList<>();
-		for (Town town : kicking) {
-
+		for (Town town : kicking)
 			if (town.isCapital())
 				remove.add(town);
 			else
@@ -1827,7 +1827,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						res.updatePermsForNationRemoval(); // Clears the nationRanks.
 						townyUniverse.getDataSource().saveResident(res);
 					}
-
+					
 					townyUniverse.getDataSource().saveTown(town);
 				} catch (NotRegisteredException e) {
 					remove.add(town);
@@ -1836,7 +1836,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// assistants
 					// so there will always be at least one resident.
 				}
-		}
 
 		for (Town town : remove)
 			kicking.remove(town);

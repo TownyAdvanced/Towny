@@ -326,16 +326,11 @@ public class TownyFormatter {
 			// without moving it first so this should not occur too often.
 			world = TownyUniverse.getInstance().getDataSource().getWorlds().get(0);
 		}
-		
+
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
-
-        title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
-        /*
-         * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-         * {@link Town#isOpen()}.  
-         */
-		title += (town.isEffectivelyOpen() ? Translation.of("status_title_open") : "");
+		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
+		title += (town.isOpen() ? Translation.of("status_title_open") : "");
 		title += (TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful() ? Translation.of("status_town_title_peaceful") : "");
 		out.add(ChatTools.formatTitle(title));
 
@@ -350,6 +345,7 @@ public class TownyFormatter {
 		if (registered != 0) {
 			out.add(Translation.of("status_founded", registeredFormat.format(town.getRegistered())));
 		}
+
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
@@ -530,7 +526,7 @@ public class TownyFormatter {
 		}
 
 		out.addAll(getExtraFields(town));
-
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -640,8 +636,8 @@ public class TownyFormatter {
 			System.arraycopy(entire, 0, enemies, 0, 11);
 			enemies[11] = Translation.of("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
-		
+        out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
+
         // Siege Attacks [3]: TownA, TownB, TownC
 		List<Town> siegeAttacks = nation.getTownsUnderSiegeAttack();
 		String[] formattedSiegeAttacks = getFormattedNames(siegeAttacks.toArray(new Town[0]));

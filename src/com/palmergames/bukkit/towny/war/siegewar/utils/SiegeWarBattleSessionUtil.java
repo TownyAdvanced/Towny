@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -38,7 +39,7 @@ public class SiegeWarBattleSessionUtil {
 					//Delete session is deletion time has been reached
 					if (System.currentTimeMillis() >= battleSession.getDeletionTime()) {
 						player.removeMetadata(METADATA_TAG_NAME, Towny.getPlugin());
-						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_war_siege_battle_session_ended"));
+						TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_ended"));
 						continue;
 					}
 
@@ -46,7 +47,7 @@ public class SiegeWarBattleSessionUtil {
 					if (!battleSession.isFirstWarningGiven()) {
 						if (System.currentTimeMillis() >= battleSession.getFirstWarningTime()) {
 							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_warning"), timeUntilExpiry));
+							TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_warning", timeUntilExpiry));
 							battleSession.setFirstWarningGiven(true);
 						} else {
 							continue;
@@ -58,7 +59,7 @@ public class SiegeWarBattleSessionUtil {
 						//phase 2
 						if (System.currentTimeMillis() >= battleSession.getSecondWarningTime()) {
 							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_warning"), timeUntilExpiry));
+							TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_warning", timeUntilExpiry));
 							battleSession.setSecondWarningGiven(true);
 						} else {
 							continue;
@@ -108,7 +109,7 @@ public class SiegeWarBattleSessionUtil {
 						}
 					});
 					String timeRemainingString = TimeMgmt.getFormattedTimeValue(battleSession.getDeletionTime() - System.currentTimeMillis());
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_expired"), timeRemainingString));
+					TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_expired", timeRemainingString));
 
 				} else {
 					//PLAYER DOES NOT HAVE SESSION
@@ -150,7 +151,7 @@ public class SiegeWarBattleSessionUtil {
 
 					String totalActiveTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 					String restTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_war_siege_battle_session_started"), totalActiveTimeString, restTimeString));
+					TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_started", totalActiveTimeString, restTimeString));
 				}
 			} catch (Exception e) {
 				try {

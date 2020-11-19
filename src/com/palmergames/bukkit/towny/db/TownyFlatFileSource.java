@@ -210,12 +210,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		names = getNationsKeys();
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
-		
+
 		path = dataFolderPath + File.separator + "sieges";
 		names = getSiegeKeys();
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
-
 	}
 
 	public String getResidentFilename(Resident resident) {
@@ -237,7 +236,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return dataFolderPath + File.separator + "sieges" + File.separator + siege.getName() + ".txt";
 	}
-	
+
 	public String getWorldFilename(TownyWorld world) {
 
 		return dataFolderPath + File.separator + "worlds" + File.separator + world.getName() + ".txt";
@@ -489,7 +488,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadSiegeList() {
 		TownyMessaging.sendDebugMsg("Loading Siege List");
 		String siegeName = null;
-		String line = null;
 		BufferedReader fin;
 
 		try {
@@ -694,39 +692,32 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						resident.setNationRanks(Arrays.asList((line.split(","))));
 				} catch (Exception e) {}
 
-				try {
-					line = keys.get("friends");
-					if (line != null) {
-						String[] tokens = line.split(",");
-						for (String token : tokens) {
-							if (!token.isEmpty()) {
-								Resident friend = getResident(token);
-								if (friend != null)
-									resident.addFriend(friend);
-							}
+				line = keys.get("friends");
+				if (line != null) {
+					String[] tokens = line.split(",");
+					for (String token : tokens) {
+						if (!token.isEmpty()) {
+							Resident friend = getResident(token);
+							if (friend != null)
+								resident.addFriend(friend);
 						}
 					}
-				} catch (Exception e) {}
-
-				try {
-					line = keys.get("protectionStatus");
-					if (line != null)
-						resident.setPermissions(line);
-				} catch (Exception e) {}
+				}
+				
+				line = keys.get("protectionStatus");
+				if (line != null)
+					resident.setPermissions(line);
 
 				line = keys.get("nationRefundAmount");
 				if (line != null)
 					resident.setNationRefundAmount(Integer.parseInt(line));
 
-				try {
-					line = keys.get("metadata");
-					if (line != null && !line.isEmpty())
-						resident.setMetadata(line.trim());
-				} catch (Exception e) {}
+				line = keys.get("metadata");
+				if (line != null && !line.isEmpty())
+					resident.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
-				e.printStackTrace();
 				return false;
 			} finally {
 				saveResident(resident);
@@ -787,7 +778,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-
+				
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
@@ -1217,7 +1208,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-
+				
 				line = keys.get("taxes");
 				if (line != null)
 					try {
@@ -2102,7 +2093,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Metadata
 		list.add("metadata=" + serializeMetadata(town));
-
+		
 		list.add("ruined=" + town.isRuined());
 		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
 
@@ -2172,7 +2163,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("taxes=" + nation.getTaxes());
 		// Nation Spawn Cost
 		list.add("spawnCost=" + nation.getSpawnCost());
-		// Neutral
+		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
 		if (nation.hasValidUUID()){
 			list.add("uuid=" + nation.getUuid());
@@ -2222,15 +2213,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("actualStartTime=" + siege.getStartTime());
 		list.add("scheduledEndTime=" + siege.getScheduledEndTime());
 		list.add("actualEndTime=" + siege.getActualEndTime());
-
+		
 		/*
 		 *  Make sure we only save in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getSiegeFilename(siege)));
-
+		
 		return true;
 	}
-	
+
 	@Override
 	public boolean saveWorld(TownyWorld world) {
 
@@ -2703,16 +2694,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			FileMgmt.moveFile(file, ("deleted"));
 		}
 	}
-	
+
 	@Override
 	public void deleteSiege(Siege siege) {
-
+		
 		File file = new File(getSiegeFilename(siege));
 		if (file.exists()) {
 			FileMgmt.moveFile(file, ("deleted"));
 		}
 	}
-	
+
 	@Override
 	public void deleteWorld(TownyWorld world) {
 

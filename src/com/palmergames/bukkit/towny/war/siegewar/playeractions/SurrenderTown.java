@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
@@ -38,18 +38,18 @@ public class SurrenderTown {
 			TownyUniverse universe = TownyUniverse.getInstance();
 			Resident resident = universe.getDataSource().getResident(player.getName());
             if(!resident.hasTown())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 
 			Town townOfAttackingResident = resident.getTown();
 			if(townOfAttackingResident != townWhereBlockWasPlaced)
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_not_your_town"));
+                throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_not_your_town"));
 			
 			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+                throw new TownyException(Translation.of("msg_err_command_disable"));
 
             Siege siege = townWhereBlockWasPlaced.getSiege();
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_siege_finished"));
+				throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_siege_finished"));
 
             //Surrender
             defenderSurrender(siege);
@@ -70,7 +70,7 @@ public class SurrenderTown {
 			siege.setStatus(SiegeStatus.PENDING_DEFENDER_SURRENDER);
 			TownyUniverse.getInstance().getDataSource().saveSiege(siege);
 			TownyMessaging.sendGlobalMessage(String.format(
-				TownySettings.getLangString("msg_siege_war_pending_town_surrender"),
+				Translation.of("msg_siege_war_pending_town_surrender"),
 				siege.getDefendingTown().getFormattedName(),
 				siege.getAttackingNation().getFormattedName(),
 				TimeMgmt.getFormattedTimeValue(timeUntilSurrenderConfirmation)));
@@ -79,7 +79,7 @@ public class SurrenderTown {
 			SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
 			SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_SURRENDER);
 			TownyMessaging.sendGlobalMessage(String.format(
-				TownySettings.getLangString("msg_siege_war_town_surrender"),
+				Translation.of("msg_siege_war_town_surrender"),
 				siege.getDefendingTown().getFormattedName(),
 				siege.getAttackingNation().getFormattedName()));
 		}

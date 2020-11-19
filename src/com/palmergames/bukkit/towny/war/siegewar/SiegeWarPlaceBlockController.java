@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -90,7 +91,7 @@ public class SiegeWarPlaceBlockController {
 						{
 							event.setCancelled(true);
 							event.setBuild(false);
-							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_siege_zone_block_placement_forbidden"));
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
 							return true;
 						}
 						break; //A forbidden material was found, but other conditions were not met.
@@ -175,7 +176,7 @@ public class SiegeWarPlaceBlockController {
 
 		//Ensure that only one of the cardinal points has a townblock
 		if(nearbyCardinalTownBlocks.size() > 1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_adjacent_cardinal_town_blocks"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_cardinal_town_blocks"));
 			event.setBuild(false);
 			event.setCancelled(true);
 			return true;
@@ -200,7 +201,7 @@ public class SiegeWarPlaceBlockController {
 		for(TownBlock adjacentTownBlock: adjacentTownBlocks) {
 			try {
 				if (adjacentTownBlock.hasTown() && adjacentTownBlock.getTown() != town) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_adjacent_towns"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_towns"));
 					event.setBuild(false);
 					event.setCancelled(true);
 					return true;
@@ -214,11 +215,11 @@ public class SiegeWarPlaceBlockController {
 		try {
 			Resident resident = universe.getDataSource().getResident(player.getName());
 			if(!resident.hasTown())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 
 			Town townOfResident = resident.getTown();
 			if(!townOfResident.hasNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
 
 			Nation nationOfResident = townOfResident.getNation();
 			if(town.hasSiege() && town.getSiege().getAttackingNation() == nationOfResident) {
@@ -238,7 +239,7 @@ public class SiegeWarPlaceBlockController {
 					return false;
 
 				if(SiegeWarBlockUtil.isSupportBlockUnstable(block)) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_banner_support_block_not_stable"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_banner_support_block_not_stable"));
 					event.setBuild(false);
 					event.setCancelled(true);
 					return true;
@@ -319,7 +320,7 @@ public class SiegeWarPlaceBlockController {
 
 		if(nearbyTownBlocks.size() > 1) {
 			//More than one town block nearby. Error
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_too_many_town_blocks_nearby"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_town_blocks_nearby"));
 			event.setBuild(false);
 			event.setCancelled(true);
 			return true;

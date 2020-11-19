@@ -56,7 +56,12 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
-import com.palmergames.bukkit.towny.utils.*;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
@@ -198,7 +203,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		output.add(ChatTools.formatCommand("", "/town", "", Translation.of("town_help_1")));
 		output.add(ChatTools.formatCommand("", "/town", "[town]", Translation.of("town_help_3")));
 		output.add(ChatTools.formatCommand("", "/town", "new [name]", Translation.of("town_help_11")));
-        output.add(ChatTools.formatCommand("", "/town", "reclaim", Translation.of("town_help_12")));
+		output.add(ChatTools.formatCommand("", "/town", "reclaim", Translation.of("town_help_12")));
 		output.add(ChatTools.formatCommand("", "/town", "here", Translation.of("town_help_4")));
 		output.add(ChatTools.formatCommand("", "/town", "list", ""));
 		output.add(ChatTools.formatCommand("", "/town", "online", Translation.of("town_help_10")));
@@ -1389,11 +1394,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Town town = towns.get(i);
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
 					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
-            /*
-             * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-             * {@link Town#isOpen()}.
-             */
-			if (town.isEffectivelyOpen())
+			if (town.isOpen())
 				output += Translation.of("status_title_open");
 			townsformatted.add(output);
 		}
@@ -1568,21 +1569,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_err_siege_bankrupt_town_cannot_toggle_open"));
 
 				town.setOpen(!town.isOpen());
-				/*
-				 * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-				 * {@link Town#isOpen()}.
-				 */
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isEffectivelyOpen() ? Translation.of("enabled") : Translation.of("disabled")));
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 
 				// Send a warning when toggling on (a reminder about plot
 				// permissions).
-				/*
-				 * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-				 * {@link Town#isOpen()}.
-				 */
-				if (town.isEffectivelyOpen())
+				if (town.isOpen())
 					throw new TownyException(Translation.of("msg_toggle_open_on_warning"));
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
@@ -3201,11 +3194,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (!console) {
 				// Check if town is town is free to join.
-			    /*
-			     * TODO: Revert use of {@link Town#isEffectivelyOpen()} back to
-			     * {@link Town#isOpen()}.
-			     */
-				if (!town.isEffectivelyOpen())
+				if (!town.isOpen())
 					throw new Exception(Translation.of("msg_err_not_open", town.getFormattedName()));
 				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown())
 					throw new Exception(Translation.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsPerTown()));
@@ -3263,6 +3252,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					town = specifiedTown;
 			}
+
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;

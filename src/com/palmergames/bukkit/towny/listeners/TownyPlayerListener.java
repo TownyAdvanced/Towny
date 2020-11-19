@@ -40,7 +40,9 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
 import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -157,7 +159,7 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-
+		
 		Player player = event.getPlayer();
 		
 		if (!TownySettings.isTownRespawning()) {
@@ -226,8 +228,7 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 	}
-
-
+	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 
@@ -235,7 +236,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		if(TownySettings.getWarSiegeEnabled()) {
 			if(SiegeWarItemUseController.evaluatePlayerBucketEmptyEvent(event)) {
 				return;
@@ -966,7 +967,7 @@ public class TownyPlayerListener implements Listener {
 
 
 	/**
-	 * onPlayerDeath
+	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
 	 * 
 	 * @author - Articdive
@@ -974,7 +975,7 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
-	public void onPlayerDeath(PlayerDeathEvent event) {
+	public void onPlayerDieInTown(PlayerDeathEvent event) {
 		boolean keepInventory = event.getKeepInventory();
 		boolean keepLevel = event.getKeepLevel();
 		Player player = event.getEntity();
@@ -990,12 +991,10 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
-
 		//Check for siege-war related death effects
 		if(TownySettings.getWarSiegeEnabled()) {
 			SiegeWarDeathController.evaluateSiegePlayerDeath(player, event);
 		}
-
 		if (TownySettings.getKeepExperienceInTowns()) {
 			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
 				TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);

@@ -644,7 +644,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public boolean removeTownRank(String rank) throws NotRegisteredException {
-		
+
 		if (hasTownRank(rank)) {
 			rank = getTownRank(rank);
 			townRanks.remove(rank);
@@ -706,7 +706,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public boolean removeNationRank(String rank) throws NotRegisteredException {
-		
+
 		if (hasNationRank(rank)) {
 			rank = getNationRank(rank);
 			nationRanks.remove(rank);

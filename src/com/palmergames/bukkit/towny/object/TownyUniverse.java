@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -102,10 +101,6 @@ public class TownyUniverse {
 
 	public Hashtable<String, Nation> getNationsMap() {
 		return new Hashtable<>(com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNationsMap());
-	}
-
-	public Hashtable<String, Siege> getSiegesMap() {
-		return new Hashtable<>(com.palmergames.bukkit.towny.TownyUniverse.getInstance().getSiegesMap());
 	}
 
 	public Hashtable<String, TownyWorld> getWorldMap() {

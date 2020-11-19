@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Town extends Government implements TownBlockOwner {
@@ -65,7 +63,6 @@ public class Town extends Government implements TownBlockOwner {
 	private UUID uuid;
 	private boolean isConquered = false;
 	private int conqueredDays;
-	private EconomyAccount account;
 	private EconomyAccount debtAccount; //Applies if town is bankrupt
 	private ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private TownyPermission permissions = new TownyPermission();
@@ -319,7 +316,7 @@ public class Town extends Government implements TownBlockOwner {
 		// Admin has disabled PvP for this town.
 		if (isAdminDisabledPVP()) 
 			return false;
-
+		
 		//Under siege
 		if(TownySettings.getWarSiegeEnabled()
 			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
@@ -926,24 +923,6 @@ public class Town extends Government implements TownBlockOwner {
 		return embassyPlotTax;
 	}
 
-	/*
-	 * TODO: Remove {@link Town#isEffectivelyOpen()}.
-	 */
-	public boolean isEffectivelyOpen() {
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
-			&& hasSiege()
-			&& getSiege().getStatus().isActive())  {
-			//Town is under siege, public joining disabled
-			return false;
-		} else if (isBankrupt()) {
-			//Town is bankrupt, public joining disabled
-			return false;
-		} else {
-			return isOpen();
-		}
-	}
-
 	public void collect(double amount) throws EconomyException {
 		
 		if (TownySettings.isUsingEconomy()) {
@@ -1408,7 +1387,7 @@ public class Town extends Government implements TownBlockOwner {
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
-
+	
 	public boolean isPeaceful() {
 		return peaceful;
 	}

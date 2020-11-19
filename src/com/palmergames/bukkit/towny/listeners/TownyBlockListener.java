@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
-import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,7 +40,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 
@@ -158,7 +156,7 @@ public class TownyBlockListener implements Listener {
 				event.setBuild(false);
 				event.setCancelled(true);
 
-				// Event War piggy backing on flag war's EditableMaterialInWarZone 
+			// Event War piggy backing on flag war's EditableMaterialInWarZone 
 			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
 					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
@@ -315,8 +313,8 @@ public class TownyBlockListener implements Listener {
 		return false;
 	}
 
-    private boolean isBurnCancelled(Block block) {
-		
+	private boolean isBurnCancelled(Block block) {
+
 		if(TownySettings.getWarSiegeEnabled()) {
 			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
 				return true;

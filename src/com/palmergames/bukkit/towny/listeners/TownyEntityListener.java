@@ -46,7 +46,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -81,28 +80,6 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * If the player has post-spawn damage immunity, prevent them being damaged
-	 *
-	 * @param event - EntityDamageEvent
-	 */
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityDamage(EntityDamageEvent event) {
-		try {
-			if (plugin.isError()) {
-				event.setCancelled(true);
-				return;
-			}
-
-			if(event.isCancelled())
-				return; //Already cancelled
-
-		} catch (Exception e) {
-			System.out.println("Problem listening for entity damage");
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
 	 * @param event - EntityDamageByEntityEvent
@@ -113,9 +90,6 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
-		if(event.isCancelled())
-			return; //Already cancelled
 
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
@@ -411,7 +385,7 @@ public class TownyEntityListener implements Listener {
 		ThrownPotion potion = event.getEntity();
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = null;
-
+		
 		try {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 		} catch (NotRegisteredException e) {
@@ -1106,5 +1080,7 @@ public class TownyEntityListener implements Listener {
 			}
 		} catch (NotRegisteredException ignored) {
 		}
+			
+			
 	}
 }

@@ -8,18 +8,14 @@ import java.util.Comparator;
 public class TownComparators {
 	public static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	public static final Comparator<Town> BY_OPEN = (t1, t2) -> {
-	    /*
-	     * TODO: Revert calls to {@link Town#isEffectivelyOpen()} back to calls
-	     * to {@link Town#isOpen()}.
-	     */
 		
 		// Both are open, fallback to population comparison.
-		if (t1.isEffectivelyOpen() && t2.isEffectivelyOpen()) {
+		if (t1.isOpen() && t2.isOpen()) {
 			return t2.getNumResidents() - t1.getNumResidents();
 		}
 		
 		// Less than.
-		if (t2.isEffectivelyOpen()) {
+		if (t2.isOpen()) {
 			return 1;
 		} else {
 			// Greater than.

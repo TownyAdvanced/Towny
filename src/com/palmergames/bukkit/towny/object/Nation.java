@@ -76,11 +76,8 @@ public class Nation extends Government {
 
 		if (!hasAlly(nation))
 			throw new NotRegisteredException();
-		else {
-			boolean result = getAllies().remove(nation);
-
-			return result;
-		}
+		else
+			return getAllies().remove(nation);
 	}
 
 	public boolean removeAllAllies() {
@@ -347,7 +344,6 @@ public class Nation extends Government {
 		else {
 
 			boolean isCapital = town.isCapital();
-
 			remove(town);
 
 			if (getNumTowns() == 0) {
@@ -375,7 +371,7 @@ public class Nation extends Government {
 			town.setNation(null);
 		} catch (AlreadyRegisteredException ignored) {
 		}
-
+		
 		//Reset occupation to false
 		town.setOccupied(false);
 
@@ -625,7 +621,7 @@ public class Nation extends Government {
 	public List<Invite> getSentAllyInvites() {
 		return Collections.unmodifiableList(sentAllyInvites);
 	}
-
+	
 	public List<Town> getTownsUnderSiegeAttack() {
 		List<Town> result = new ArrayList<>();
 		for(Siege siege: sieges) {

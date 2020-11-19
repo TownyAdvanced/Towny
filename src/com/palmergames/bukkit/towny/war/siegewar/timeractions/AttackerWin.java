@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.war.siegewar.timeractions;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -25,7 +25,7 @@ public class AttackerWin {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_WIN);
 
 		TownyMessaging.sendGlobalMessage(String.format(
-			TownySettings.getLangString("msg_siege_war_attacker_win"),
+			Translation.of("msg_siege_war_attacker_win"),
 			winnerNation.getFormattedName(),
 			siege.getDefendingTown().getFormattedName()
 		));

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -122,7 +123,7 @@ public class SiegeWarDeathController {
 						deadPlayer,
 						deadResident,
 						confirmedCandidateSiege,
-						TownySettings.getLangString("msg_siege_war_defender_death"));
+						Translation.of("msg_siege_war_defender_death"));
 
 				} else {
 					SiegeWarPointsUtil.awardPenaltyPoints(
@@ -130,7 +131,7 @@ public class SiegeWarDeathController {
 						deadPlayer,
 						deadResident,
 						confirmedCandidateSiege,
-						TownySettings.getLangString("msg_siege_war_attacker_death"));
+						Translation.of("msg_siege_war_attacker_death"));
 				}
 
 				degradeInventory(playerDeathEvent);

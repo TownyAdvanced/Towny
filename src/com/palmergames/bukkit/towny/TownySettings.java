@@ -70,7 +70,7 @@ public class TownySettings {
 	private static final List<HeldItemsCombination> tacticalVisibilityItems = new ArrayList<>();
 	private static List<Material> battleSessionsForbiddenBlockMaterials = null;
 	private static List<Material> battleSessionsForbiddenBucketMaterials = null;
-
+	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
@@ -210,7 +210,6 @@ public class TownySettings {
 //		return 0;
 		if(town.isRuined())
 			return 0;
-
 		int n = town.getNumResidents();
 		for (Integer level : configTownLevel.keySet())
 			if (n >= level)
@@ -2974,7 +2973,7 @@ public class TownySettings {
 	public static boolean isFlaggedInteractionNation() {
 		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
 	}
-
+	
 	public static boolean isNotificationsTownNamesVerbose() {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
 	}
@@ -3388,3 +3387,4 @@ public class TownySettings {
 	}
 
 }
+

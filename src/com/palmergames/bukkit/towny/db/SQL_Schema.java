@@ -106,7 +106,7 @@ public class SQL_Schema {
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
-	
+
 	private static String getSieges() {
 
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "SIEGES ("
@@ -185,7 +185,6 @@ public class SQL_Schema {
 		return columns;
 	}
 
-	
     private static String getRESIDENTS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
@@ -215,7 +214,7 @@ public class SQL_Schema {
 		columns.add("`uuid` mediumtext");
 		return columns;
 	}
-	
+
     private static String getTOWNBLOCKS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("

@@ -1365,6 +1365,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities town [town_name] [hours]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities all towns in nation [nation_name] [hours]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "siegeimmunities all to-wns [hours]", ""));
+
 			return;
 		}
 

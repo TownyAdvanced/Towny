@@ -95,12 +95,12 @@ public class TownyTimerHandler{
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
 			System.out.println("[Towny] Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-
+			
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			else
 				dailyTask = BukkitTools.scheduleSyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
-
+			
 			if (dailyTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
 		} else if (!on && isDailyTimerRunning()) {

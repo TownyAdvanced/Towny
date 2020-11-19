@@ -324,9 +324,9 @@ public abstract class TownyDataSource {
 	abstract public Town getTown(String name) throws NotRegisteredException;
 
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
-	
+
 	abstract public Siege getSiege(String name) throws NotRegisteredException;
-		
+
 	abstract public List<Nation> getNations(String[] names);
 
 	abstract public List<Nation> getNations();

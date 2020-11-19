@@ -34,7 +34,7 @@ public class PlayerJoinTownInvite implements Invite {
 	public Town getSender() {
 		return sender;
 	}
-
+	
 	@Override
 	public void accept() throws TownyException {
 		Resident resident = getReceiver();

@@ -37,7 +37,7 @@ public class SiegeWarItemUseController {
 						if(townBlock == null && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(event.getBlock().getLocation()))
 						{
 							event.setCancelled(true);
-							TownyMessaging.sendErrorMsg(event.getPlayer(), TownySettings.getLangString("msg_war_siege_zone_bucket_emptying_forbidden"));
+							TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_war_siege_zone_bucket_emptying_forbidden"));
 							return true;
 						}
 						break; //A forbidden material was found, but other conditions were not met.
@@ -70,7 +70,7 @@ public class SiegeWarItemUseController {
 				for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
 					if(siege.getBannerControlSessions().containsKey(event.getPlayer())) {
 						event.setCancelled(true);
-						TownyMessaging.sendErrorMsg(event.getPlayer(), TownySettings.getLangString("msg_war_siege_zone_milk_bucket_forbidden_while_attempting_banner_control"));
+						TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_war_siege_zone_milk_bucket_forbidden_while_attempting_banner_control"));
 						return true;
 					}
 				}

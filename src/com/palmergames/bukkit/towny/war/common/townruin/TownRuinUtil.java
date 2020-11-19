@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import org.bukkit.entity.Player;
 
@@ -66,7 +67,7 @@ public class TownRuinUtil {
 				Nation nation = town.getNation();
 				townyUniverse.getDataSource().removeTownFromNation(plugin, town, nation);
 				if (nation.getTowns().size() == 0) {
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", nation));
 				}
 			}
 		} catch (NotRegisteredException e) {
@@ -139,23 +140,23 @@ public class TownRuinUtil {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
 			if (!resident.hasTown())
-				throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
+				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined
 			town = resident.getTown();
 			if (!town.isRuined())
-				throw new TownyException(TownySettings.getLangString("msg_err_cannot_reclaim_town_unless_ruined"));
+				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
 			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
 			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+				throw new TownyException(Translation.of("msg_err_no_money"));
 
 			//Validate if player can remove at this time
 			int currentRuinDurationHours = TownySettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
 			if (currentRuinDurationHours < TownySettings.getWarCommonTownRuinsMinDurationHours()) {
 				int timeUntilReclaimAllowedHours =  TownySettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_reclaim_town_yet"), timeUntilReclaimAllowedHours));
+				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", timeUntilReclaimAllowedHours));
 			}
 
 			//Recover Town now
@@ -199,7 +200,7 @@ public class TownRuinUtil {
 			townyUniverse.getDataSource().saveTown(town);
 			plugin.resetCache();
 
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_town_reclaimed"), resident.getName(), town.getName()));
+			TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player,e.getMessage());
 		} catch (EconomyException ex) {
