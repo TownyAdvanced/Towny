@@ -1130,7 +1130,7 @@ public class TownySettings {
 
 	public static boolean isFakeResident(String name) {
 
-		return getString(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS).toLowerCase().contains(name.toLowerCase());
+		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
 	public static boolean isUsingEssentials() {

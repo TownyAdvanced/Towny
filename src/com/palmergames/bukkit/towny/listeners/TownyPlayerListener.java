@@ -1084,7 +1084,7 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		if (townyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
-			resident.freeFromJail(player, resident.getJailSpawn(), true);
+			resident.freeFromJail(resident.getJailSpawn(), true);
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
 	}

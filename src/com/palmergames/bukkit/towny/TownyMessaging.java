@@ -93,29 +93,37 @@ public class TownyMessaging {
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
 	 *
-	 * @param sender the Object sending the message
+	 * @param sender the CommandSender receiving the msg
 	 * @param msg the message being sent
 	 */
-	public static void sendMsg(Object sender, String msg) {
-		if (sender != null) {
-			if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p != null) {
-					p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
-				}
-			} else {
-				CommandSender toSend = (CommandSender) sender;
-				if (toSend instanceof ConsoleCommandSender) {
-					toSend.sendMessage(ChatColor.stripColor(msg));
-				} else {
-					toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
-				}
-			}
-		} else {
+	public static void sendMsg(CommandSender sender, String msg) {
+		if (sender == null) {
 			sendErrorMsg("Sender cannot be null!");
+			return;
+		}
+		
+		if (sender instanceof Player) {
+			Player p = (Player)sender;
+			p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+		} else if (sender instanceof ConsoleCommandSender) {
+			sender.sendMessage(ChatColor.stripColor(msg));
+		} else {
+			sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
 		}
 		
 		sendDevMsg(msg);
+	}
+	
+	/**
+	 * Sends a message (green) to the resident
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param resident to receive the msg
+	 * @param msg the message being sent
+	 */
+	public static void sendMsg(Resident resident, String msg) {
+		sendMsg(resident.getPlayer(), msg);
 	}
 
 	// todo: these two can probably be consolidated
