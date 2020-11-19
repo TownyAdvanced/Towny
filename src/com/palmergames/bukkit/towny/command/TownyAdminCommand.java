@@ -478,8 +478,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "all":
 							reloadConfig(false);
 							reloadLangs();
-							reloadDatabase();
 							reloadPerms();
+							reloadDatabase();
 							break;
 						default:
 							showReloadHelp();

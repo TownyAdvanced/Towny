@@ -194,7 +194,7 @@ public class Nation extends Government {
 				setCapital(capital);
 				return;
 			}
-		} catch (NotRegisteredException | NullPointerException e) {
+		} catch (NotRegisteredException e) {
 		}
 		if (!findNewCapital())
 			throw new EmptyNationException(this);
@@ -202,6 +202,7 @@ public class Nation extends Government {
 	
 	public void setCapital(Town capital) {
 
+		TownyMessaging.sendDebugMsg("Nation " + this.getName() + " has set a capital city of " + capital.getName());
 		this.capital = capital;
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
@@ -220,7 +221,7 @@ public class Nation extends Government {
 	 * 
 	 * @return whether it successfully set a capital.
 	 */
-	private boolean findNewCapital() {
+	public boolean findNewCapital() {
 		
 		int numResidents = 0;
 		Town tempCapital = null;

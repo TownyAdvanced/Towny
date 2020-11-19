@@ -222,43 +222,43 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (townyUniverse.getDataSource().hasTown(town.getName())) {
-						if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (TownySettings.getWarSiegeEnabled()
-								&& TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
-							continue;
-	
-						if (town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
-							//Town can afford tax
-							TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
-						} else {
-							//Town cannot afford tax
-							if (TownySettings.isTownBankruptcyEnabled()) {
-								//Take from town and pay to nation
-								if (town.isBankrupt()) {
-									double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes(), "Nation Tax");
-									nation.getAccount().collect(actualDebtIncrease, "Tax take from " + town.getName());
-								} else {
-									double preTaxTownBankBalance = town.getAccount().getHoldingBalance();
-									town.getAccount().setBalance(0, "Nation tax");
-									double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes() - preTaxTownBankBalance, "Nation Tax");
-									double paymentToNation = preTaxTownBankBalance + actualDebtIncrease;
-									nation.getAccount().collect(paymentToNation, "Tax take from " + town.getName());
-									localTownsNewlyBankrupt.add(town.getName());
-								}
+					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (TownySettings.getWarSiegeEnabled()
+							&& TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
+						continue;
+
+					if (town.getAccount().payTo(nation.getTaxes(), nation, "Nation Tax")) {
+						//Town can afford tax
+						TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+					} else {
+						//Town cannot afford tax
+						if (TownySettings.isTownBankruptcyEnabled()) {
+							//Take from town and pay to nation
+							if (town.isBankrupt()) {
+								double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes(), "Nation Tax");
+								nation.getAccount().collect(actualDebtIncrease, "Tax take from " + town.getName());
 							} else {
-								//If town is occupied, destroy it, otherwise remove from nation
-								if (TownySettings.getWarSiegeEnabled() && town.isOccupied()) {
-									townyUniverse.getDataSource().removeTown(town);
-									localTownsDestroyed.add(town.getName());
-								} else {
-									town.removeNation();;
-									localTownsRemovedFromNation.add(town.getName());
-									townyUniverse.getDataSource().saveTown(town);
-									townyUniverse.getDataSource().saveNation(nation);
-								}
+								double preTaxTownBankBalance = town.getAccount().getHoldingBalance();
+								town.getAccount().setBalance(0, "Nation tax");
+								double actualDebtIncrease = town.increaseTownDebt(nation.getTaxes() - preTaxTownBankBalance, "Nation Tax");
+								double paymentToNation = preTaxTownBankBalance + actualDebtIncrease;
+								nation.getAccount().collect(paymentToNation, "Tax take from " + town.getName());
+								localTownsNewlyBankrupt.add(town.getName());
+							}
+						} else {
+							//If town is occupied, destroy it, otherwise remove from nation
+							if (TownySettings.getWarSiegeEnabled() && town.isOccupied()) {
+								townyUniverse.getDataSource().removeTown(town);
+								localTownsDestroyed.add(town.getName());
+							} else {
+								town.removeNation();;
+								localTownsRemovedFromNation.add(town.getName());
+								townyUniverse.getDataSource().saveTown(town);
+								townyUniverse.getDataSource().saveNation(nation);
 							}
 						}
 					}
 				}
+			}
 
 			if(TownySettings.isTownBankruptcyEnabled()) {
 				if(localTownsNewlyBankrupt.size() > 0) {
