@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Send a list of all general townyworld help commands to player Command:
@@ -105,6 +106,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			case "toggle":
 				if (args.length == 2)
 					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
+				else if (args.length == 3)
+					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				break;
 			case "set":
 				if (args.length == 2)
@@ -338,10 +341,16 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			String msg;
+			Optional<Boolean> choice = Optional.empty();
+			if (!isConsole && split.length == 2) {
+				choice = BaseCommand.parseToggleChoice(split[1]);
+			} else if (isConsole && split.length == 3) {
+				choice = BaseCommand.parseToggleChoice(split[2]);
+			}
 
 			if (split[0].equalsIgnoreCase("claimable")) {
 
-				Globalworld.setClaimable(!Globalworld.isClaimable());
+				Globalworld.setClaimable(choice.orElse(!Globalworld.isClaimable()));
 				msg = Translation.of("msg_set_claim", Globalworld.getName(), Globalworld.isClaimable() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -350,7 +359,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("usingtowny")) {
 
-				Globalworld.setUsingTowny(!Globalworld.isUsingTowny());
+				Globalworld.setUsingTowny(choice.orElse(!Globalworld.isUsingTowny()));
 				plugin.resetCache();
 				msg = String.format(Globalworld.isUsingTowny() ? Translation.of("msg_set_use_towny_on") : Translation.of("msg_set_use_towny_off"));
 				if (player != null)
@@ -360,7 +369,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			
 			} else if (split[0].equalsIgnoreCase("warallowed")) {
 
-				Globalworld.setWarAllowed(!Globalworld.isWarAllowed());
+				Globalworld.setWarAllowed(choice.orElse(!Globalworld.isWarAllowed()));
 				plugin.resetCache();
 				msg = String.format(Globalworld.isWarAllowed() ? Translation.of("msg_set_war_allowed_on") : Translation.of("msg_set_war_allowed_off"));
 				if (player != null)
@@ -370,7 +379,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
-				Globalworld.setPVP(!Globalworld.isPVP());
+				Globalworld.setPVP(choice.orElse(!Globalworld.isPVP()));
 				msg = Translation.of("msg_changed_world_setting", "Global PVP", Globalworld.getName(), Globalworld.isPVP() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -379,7 +388,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("forcepvp")) {
 
-				Globalworld.setForcePVP(!Globalworld.isForcePVP());
+				Globalworld.setForcePVP(choice.orElse(!Globalworld.isForcePVP()));
 				msg = Translation.of("msg_changed_world_setting", "Force town PVP", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("forced") : Translation.of("adjustable"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -388,7 +397,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
 
-				Globalworld.setFriendlyFire(!Globalworld.isFriendlyFireEnabled());
+				Globalworld.setFriendlyFire(choice.orElse(!Globalworld.isFriendlyFireEnabled()));
 				msg = Translation.of("msg_changed_world_setting", "Friendly Fire", Globalworld.getName(), Globalworld.isForcePVP() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -397,7 +406,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
-				Globalworld.setExpl(!Globalworld.isExpl());
+				Globalworld.setExpl(choice.orElse(!Globalworld.isExpl()));
 				msg = Translation.of("msg_changed_world_setting", "Explosions", Globalworld.getName(), Globalworld.isExpl() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -406,7 +415,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("forceexplosion")) {
 
-				Globalworld.setForceExpl(!Globalworld.isForceExpl());
+				Globalworld.setForceExpl(choice.orElse(!Globalworld.isForceExpl()));
 				msg = Translation.of("msg_changed_world_setting", "Force town Explosions", Globalworld.getName(), Globalworld.isForceExpl() ? Translation.of("forced") : Translation.of("adjustable"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -415,7 +424,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
 
-				Globalworld.setFire(!Globalworld.isFire());
+				Globalworld.setFire(choice.orElse(!Globalworld.isFire()));
 				msg = Translation.of("msg_changed_world_setting", "Fire Spread", Globalworld.getName(), Globalworld.isFire() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -424,7 +433,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("forcefire")) {
 
-				Globalworld.setForceFire(!Globalworld.isForceFire());
+				Globalworld.setForceFire(choice.orElse(!Globalworld.isForceFire()));
 				msg = Translation.of("msg_changed_world_setting", "Force town Fire Spread", Globalworld.getName(), Globalworld.isForceFire() ? Translation.of("forced") : Translation.of("adjustable"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -433,7 +442,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("townmobs")) {
 
-				Globalworld.setForceTownMobs(!Globalworld.isForceTownMobs());
+				Globalworld.setForceTownMobs(choice.orElse(!Globalworld.isForceTownMobs()));
 				msg = Translation.of("msg_changed_world_setting", "Town Mob spawns", Globalworld.getName(), Globalworld.isForceTownMobs() ? Translation.of("forced") : Translation.of("adjustable"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -442,7 +451,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("worldmobs")) {
 
-				Globalworld.setWorldMobs(!Globalworld.hasWorldMobs());
+				Globalworld.setWorldMobs(choice.orElse(!Globalworld.hasWorldMobs()));
 				msg = Translation.of("msg_changed_world_setting", "World Mob spawns", Globalworld.getName(), Globalworld.hasWorldMobs() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -451,7 +460,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("revertunclaim")) {
 
-				Globalworld.setUsingPlotManagementRevert(!Globalworld.isUsingPlotManagementRevert());
+				Globalworld.setUsingPlotManagementRevert(choice.orElse(!Globalworld.isUsingPlotManagementRevert()));
 
 				if (!Globalworld.isUsingPlotManagementRevert()) {
 					TownyRegenAPI.removeWorldCoords(Globalworld); // Stop any active snapshots being made.
@@ -466,7 +475,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("revertentityexpl")) {
 
-				Globalworld.setUsingPlotManagementWildEntityRevert(!Globalworld.isUsingPlotManagementWildEntityRevert());
+				Globalworld.setUsingPlotManagementWildEntityRevert(choice.orElse(!Globalworld.isUsingPlotManagementWildEntityRevert()));
 				msg = Translation.of("msg_changed_world_setting", "Wilderness Entity Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildEntityRevert() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -475,7 +484,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("revertblockexpl")) {
 
-				Globalworld.setUsingPlotManagementWildBlockRevert(!Globalworld.isUsingPlotManagementWildBlockRevert());
+				Globalworld.setUsingPlotManagementWildBlockRevert(choice.orElse(!Globalworld.isUsingPlotManagementWildBlockRevert()));
 				msg = Translation.of("msg_changed_world_setting", "Wilderness Block Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildBlockRevert() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);

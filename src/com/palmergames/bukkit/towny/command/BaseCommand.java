@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -47,10 +48,10 @@ public class BaseCommand implements TabCompleter{
 		"itemuse"
 	);
 
-	private static final List<String> setOnOffCompletes = Arrays.asList(
+	public static final List<String> setOnOffCompletes = Collections.unmodifiableList(Arrays.asList(
 		"on",
 		"off"
-	);
+	));
 
 	private static final List<String> toggleTypeOnOffCompletes = Arrays.asList(
 		"build",
@@ -173,5 +174,16 @@ public class BaseCommand implements TabCompleter{
 		} catch (NotRegisteredException e) {
 			return Collections.emptyList();
 		}
+	}
+
+	/**
+	 * Parses the given string into a boolean choice.
+	 * @param str The string to parse
+	 * @return true for "ON", false for "OFF", or null if no match.
+	 */
+	protected static Optional<Boolean> parseToggleChoice(String str) {
+		if (str.equalsIgnoreCase("on")) return Optional.of(true);
+		else if (str.equalsIgnoreCase("off")) return Optional.of(false);
+		else return Optional.empty();
 	}
 }

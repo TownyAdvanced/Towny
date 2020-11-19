@@ -33,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Send a list of all towny resident help commands to player Command: /resident
@@ -62,6 +65,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"pvp",
 		"fire",
 		"mobs",
+		"explosion",
 		"plotborder",
 		"constantplotborder",
 		"ignoreplots",
@@ -92,6 +96,22 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"perm",
 		"mode"
 	);
+	
+	private static final List<String> residentToggleChoices = Arrays.asList(
+		"pvp",
+		"fire",
+		"mobs",
+		"explosion"
+	);
+	
+	private static final List<String> residentToggleModes = new ArrayList<>(residentToggleTabCompletes).stream()
+		.filter(str -> !residentToggleChoices.contains(str))
+		.collect(Collectors.toList());
+
+	private static final List<String> residentToggleModesUnionToggles = Stream.concat(
+		new ArrayList<>(residentToggleModes).stream(),
+		BaseCommand.setOnOffCompletes.stream()
+	).collect(Collectors.toList());
 
 	public ResidentCommand(Towny instance) {
 
@@ -132,6 +152,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
+						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+					} else if (args.length >= 3) {
+						String prevArg = args[args.length - 2].toLowerCase();
+						if (residentToggleModes.contains(prevArg)) {
+							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
+						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
+							return NameUtil.filterByStart(residentToggleModes, args[args.length - 1]);
+						}
 					}
 					break;
 				case "set":
@@ -361,6 +390,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "pvp", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "mobs", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "explosion", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "plotborder", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "constantplotborder", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "ignoreplots", ""));
@@ -377,6 +407,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		TownyPermission perm = resident.getPermissions();
+		
+		Optional<Boolean> choice = Optional.empty();
+		if (newSplit.length == 2 && residentToggleChoices.contains(newSplit[0].toLowerCase())) {
+			choice = BaseCommand.parseToggleChoice(newSplit[1]);
+		}
 
 		// Special case chat spy
 		if (newSplit[0].equalsIgnoreCase("spy")) {
@@ -396,17 +431,17 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
 					throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
-			}			
-			perm.pvp = !perm.pvp;
+			}
+			perm.pvp = choice.orElse(!perm.pvp);
 			// Add a task for the resident.
 			if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
-			perm.fire = !perm.fire;
+			perm.fire = choice.orElse(!perm.fire);
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {
-			perm.explosion = !perm.explosion;
+			perm.explosion = choice.orElse(!perm.explosion);
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
-			perm.mobs = !perm.mobs;
+			perm.mobs = choice.orElse(!perm.mobs);
 		} else {
 
 			resident.toggleMode(newSplit, true);

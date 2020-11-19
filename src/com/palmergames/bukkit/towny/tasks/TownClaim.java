@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -224,7 +225,7 @@ public class TownClaim extends Thread {
 				throw new TownyException(Translation.of("msg_area_not_own"));
 			}
 			if (!townBlock.isOutpost() && townBlock.hasTown()) {
-				if (townyUniverse.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
+				if (AreaSelectionUtil.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
 					townBlock.setOutpost(true);
 				}
 			}

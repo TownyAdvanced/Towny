@@ -158,7 +158,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
 		 */
 		if (TownySettings.isBackingUpDaily()) {			
-			universe.performBackup();
+			universe.performCleanupAndBackup();
 		}
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
@@ -361,6 +361,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			while (residentItr.hasNext()) {
 				resident = residentItr.next();
 
+				double tax = town.getTaxes();
 				/*
 				 * Only collect resident tax from this resident if it really
 				 * still exists. We are running in an Async thread so MUST
@@ -376,18 +377,34 @@ public class DailyTimerTask extends TownyTimerTask {
 						}
 						continue;
 					} else if (town.isTaxPercentage()) {
-						double cost = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						tax = resident.getAccount().getHoldingBalance() * tax / 100;
 						
 						// Make sure that the town percent tax doesn't remove above the
 						// allotted amount of cash.
-						cost = Math.min(cost, town.getMaxPercentTaxAmount());
+						tax = Math.min(tax, town.getMaxPercentTaxAmount());
+
+						// Handle if the bank cannot be paid because of the cap. Since it is a % 
+						// they will be able to pay but it might be more than the bank can accept,
+						// so we reduce it to the amount that the bank can accept, even if it
+						// becomes 0.
+						if (tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
 						
-						resident.getAccount().payTo(cost, town, "Town Tax (Percentage)");
-					} else if (!resident.getAccount().payTo(town.getTaxes(), town, "Town Tax")) {
-						removedResidents.add(resident.getName());
+						resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
+					} else {
+						// Check if the bank could take the money, reduce it to 0 if required so that 
+						// players do not get kicked in a situation they could be paying but cannot because
+						// of the bank cap.
+						if (tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
 						
-						// remove this resident from the town.
-						resident.removeTown();
+						if (resident.getAccount().canPayFromHoldings(tax))
+							resident.getAccount().payTo(tax, town, "Town tax (FlatRate)");
+						else {
+							removedResidents.add(resident.getName());					
+							// remove this resident from the town.
+							resident.removeTown();
+						}
 					}
 				}
 			}
@@ -421,22 +438,25 @@ public class DailyTimerTask extends TownyTimerTask {
 					 * verify all objects.
 					 */
 					if (universe.getDataSource().hasResident(resident.getName())) {
-						if (resident.hasTown())
-							if (resident.getTown() == townBlock.getTown())
-								if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
-									continue;
-							
-						if (!resident.getAccount().payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+						if (resident.hasTown() && resident.getTown() == townBlock.getTown())
+							if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
+								continue;
+						
+						double tax = townBlock.getType().getTax(town);
+
+						// If the tax would put the town over the bank cap we reduce what will be
+						// paid by the plot owner to what will be allowed.
+						if (tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+						
+						if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 							if (!lostPlots.contains(resident.getName()))
-									lostPlots.add(resident.getName());
+								lostPlots.add(resident.getName());
 
 							townBlock.setResident(null);
 							townBlock.setPlotPrice(-1);
-
 							// Set the plot permissions to mirror the towns.
 							townBlock.setType(townBlock.getType());
-							
-							universe.getDataSource().saveResident(resident);
 							universe.getDataSource().saveTownBlock(townBlock);
 						}
 					}

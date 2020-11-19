@@ -93,6 +93,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		this.settingsFolderPath = rootFolderPath + File.separator + "settings";
 		this.logFolderPath = rootFolderPath + File.separator + "logs";
 		this.backupFolderPath = rootFolderPath + File.separator + "backup";
+
+		if (!FileMgmt.checkOrCreateFolders(
+				rootFolderPath,
+				rootFolderPath + File.separator + "logs",
+				dataFolderPath,
+				dataFolderPath + File.separator + "plot-block-data"
+			) || !FileMgmt.checkOrCreateFiles(
+				dataFolderPath + File.separator + "regen.txt",
+				dataFolderPath + File.separator + "snapshot_queue.txt"
+			)) {
+				TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
+			}
 		
 		/*
 		 * Start our Async queue for pushing data to the flatfile database.

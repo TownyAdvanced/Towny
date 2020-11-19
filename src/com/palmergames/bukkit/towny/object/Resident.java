@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
@@ -540,12 +542,26 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		/*
 		 * Toggle any modes passed to us on/off.
 		 */
-		for (String mode : newModes) {
-			mode = mode.toLowerCase();
-			if (this.modes.contains(mode))
+		for (int i = 0; i < newModes.length; i++) {
+			String mode = newModes[i].toLowerCase();
+			
+			Optional<Boolean> choice = Optional.empty();
+			if (i + 1 < newModes.length) {
+				String bool = newModes[i + 1].toLowerCase();
+				if (BaseCommand.setOnOffCompletes.contains(bool)) {
+					choice = Optional.of(bool.equals("on"));
+					i++;
+				}
+			}
+			
+			boolean modeEnabled = this.modes.contains(mode);
+			if (choice.orElse(!modeEnabled)) {
+				if (!modeEnabled) {
+					this.modes.add(mode);
+				}
+			} else {
 				this.modes.remove(mode);
-			else
-				this.modes.add(mode);
+			}
 		}
 		
 		/*
