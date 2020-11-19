@@ -112,7 +112,7 @@ public class TownyUniverse {
         clearAllObjects();
                 
         // Try to load and save the database.
-        if (!loadAndSaveDatabase(TownySettings.getSaveDatabase(), TownySettings.getLoadDatabase()))
+        if (!loadAndSaveDatabase(TownySettings.getLoadDatabase(), TownySettings.getSaveDatabase()))
         	return false;
 
         // Try migrating the config and world files if the version has changed.
