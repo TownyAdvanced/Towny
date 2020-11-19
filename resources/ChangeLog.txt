@@ -5122,3 +5122,9 @@ v0.92.0.11:
   - Offline mode UUID task mercy branch #4384
     - Prevent the GatherUUIDTask from wiping the database on true offline mode servers.
   - Fix towns being able to get around the maxNumberResidentsWithoutNation setting.
+0.96.2.23:
+  - Fix plotManagementRevertSpeed still being in the getWorldColumns() in the SQL_Schema.
+  - Fix missing check to be sure that town banks are capped.
+  - Metadata Improvements, courtesy of Silverwolfg11 with PR #4386.
+    - Adds a new metadata field to store longs by introducing the LongDataField.
+    - Makes the CustomDataField class truly abstract relying less on switch statements and makes it much easier to add new metadata types in the future, potentially paving the way for even allowing developers to add their own metadata types in the future.
