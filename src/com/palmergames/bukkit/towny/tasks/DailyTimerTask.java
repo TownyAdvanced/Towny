@@ -21,11 +21,9 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.util.ChatTools;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -148,16 +146,12 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-
-		townyUniverse.getDataSource().cleanupBackups();
-		if (TownySettings.isBackingUpDaily())
-			try {
-				TownyMessaging.sendDebugMsg("Making backup.");
-				townyUniverse.getDataSource().backup();
-			} catch (IOException e) {
-				TownyMessaging.sendErrorMsg("Could not create backup.");
-				e.printStackTrace();
-			}
+		
+		// Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
+		if (TownySettings.isBackingUpDaily()) {
+			TownyMessaging.sendDebugMsg("Making backup.");
+			townyUniverse.performBackup();
+		}
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");

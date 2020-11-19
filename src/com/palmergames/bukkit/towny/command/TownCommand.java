@@ -2277,18 +2277,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						// Test whether towns will be removed from the nation
 						if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
 							// Do a dry-run of the proximity test.
-							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns());
+							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
 							
 							// Oh no, some the nation will lose at least one town, better make a confirmation.
 							if (!removedTowns.isEmpty()) {
 								final Town finalTown = town;
 								final TownBlock finalTB = TownyAPI.getInstance().getTownBlock(player.getLocation());
+								final Nation finalNation = nation;
 								oldWorld = town.getHomeblockWorld();
 								Confirmation confirmation = Confirmation.runOnAccept(() -> {
 									try {
 										// Set town homeblock and run the recheckTownDistance for real.
 										finalTown.setHomeBlock(finalTB);
 										finalTown.setSpawn(player.getLocation());
+										finalNation.recheckTownDistance();
 										TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2910,7 +2912,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
 					invited.remove(newMember);
-				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
+				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() == TownySettings.getMaxNumResidentsWithoutNation()) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
 					invited.remove(newMember);
 				} else {

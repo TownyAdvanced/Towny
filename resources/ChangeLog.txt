@@ -4828,3 +4828,18 @@ v0.92.0.11:
   - GM Source fetching player suffix instead of prefix, courtesy of ElgarL with PR #4247.
     - Also fixes GM repo and solves issue with building Towny from source.
   - Update Reserve/TheNewChat maven repositories, courtesy of creatorfromhell with PR #4240.
+0.96.2.11:
+  - Fix shaded dependencies, courtesy of silverwolfg11 with PR #4254.
+  - Fix global_town_settings.maximum_number_residents_without_nation not actually accounting for a town that does have a nation.
+    - Closes #4249.
+  - Fix a town moving the homeblock, nations changing their capital city not removing out-of-range towns when the nation-requires-proximity feature is enabled.
+    - Closes #4248.
+  - Fix colour codes in resident titles/surnames carrying on in the resident list seen on the /town status screens.
+    - Closes #4250.
+  - Correctly translate "allow explosion" in Chinese, courtesy of ishland with PR #4252.
+  - Concurrency QOL, courtesy of Siris with PR #4256.
+    - Improves locking of database for reads and writes in regards to synchronization.
+  - Remove exception printing stacktrace from invalid name in getTown(), courtesy of Siris with PR #4259.
+    - Closes #4257.
+  - Hotfix/bankcap bug, courtesy of Siris with PR #4260.
+    - Closes #4253.
