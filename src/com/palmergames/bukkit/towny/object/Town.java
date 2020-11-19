@@ -1593,7 +1593,7 @@ public class Town extends Government implements TownBlockOwner {
 			actualDebtIncrease = maximumDebtAmount - getDebtAccount().getHoldingBalance();
 		}
 
-		getDebtAccount().collect(actualDebtIncrease, reason);
+		getDebtAccount().deposit(actualDebtIncrease, reason);
 		return actualDebtIncrease;
 	}
 

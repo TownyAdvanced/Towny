@@ -146,7 +146,7 @@ public class AttackTown {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				//Pay upfront cost into warchest now
-				attackingNation.getAccount().pay(siege.getWarChestAmount(), "Cost of starting a siege.");
+				attackingNation.getAccount().withdraw(siege.getWarChestAmount(), "Cost of starting a siege.");
 				String moneyMessage =
 					String.format(
 						Translation.of("msg_siege_war_attack_pay_war_chest"),

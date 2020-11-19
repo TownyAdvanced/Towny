@@ -99,13 +99,13 @@ public class PlunderTown {
 				//Take from town and pay to nation
 				if(town.isBankrupt()) {
 					actualPlunderAmount = town.increaseTownDebt(fullPlunderAmount, "Plunder by " + nation.getName());
-					nation.getAccount().collect(actualPlunderAmount, "Plunder of " + town.getName());
+					nation.getAccount().deposit(actualPlunderAmount, "Plunder of " + town.getName());
 				} else {
 					double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
 					town.getAccount().setBalance(0, "Plunder by " + nation.getName());
 					double actualDebtIncrease = town.increaseTownDebt(fullPlunderAmount - prePaymentTownBankBalance, "Plunder by " + nation.getName());
 					actualPlunderAmount = prePaymentTownBankBalance + actualDebtIncrease;
-					nation.getAccount().collect(actualPlunderAmount, "Plunder of " + town.getName());
+					nation.getAccount().deposit(actualPlunderAmount, "Plunder of " + town.getName());
 					townNewlyBankrupted = true;
 				}
 			} else {

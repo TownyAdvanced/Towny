@@ -14,8 +14,6 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 public class SiegeWarMoneyUtil {
 
 	/**
@@ -27,7 +25,7 @@ public class SiegeWarMoneyUtil {
 		Nation winnerNation = siege.getAttackingNation();
 		if (TownySettings.isUsingEconomy()) {
 			try {
-				winnerNation.getAccount().collect(siege.getWarChestAmount(), "War Chest Captured/Returned");
+				winnerNation.getAccount().deposit(siege.getWarChestAmount(), "War Chest Captured/Returned");
 				String message =
 					String.format(
 						Translation.of("msg_siege_war_attack_recover_war_chest"),
@@ -54,7 +52,7 @@ public class SiegeWarMoneyUtil {
 		Town winnerTown= siege.getDefendingTown();
 		if(TownySettings.isUsingEconomy()) {
 			try {
-				winnerTown.getAccount().collect(siege.getWarChestAmount(), "War Chest Captured");
+				winnerTown.getAccount().deposit(siege.getWarChestAmount(), "War Chest Captured");
 				String message =
 					String.format(
 						Translation.of("msg_siege_war_attack_recover_war_chest"),
@@ -103,7 +101,7 @@ public class SiegeWarMoneyUtil {
 
 		if(formerKing.getNationRefundAmount() != 0) {
 			int refundAmount = formerKing.getNationRefundAmount();
-			formerKing.getAccount().collect(refundAmount, "Nation Refund");
+			formerKing.getAccount().deposit(refundAmount, "Nation Refund");
 			formerKing.setNationRefundAmount(0);
 			townyDataSource.saveResident(formerKing);
 			TownyMessaging.sendMsg(player, Translation.of("msg_siege_war_nation_refund_claimed", TownyEconomyHandler.getFormattedBalance(refundAmount)));

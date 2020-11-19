@@ -160,7 +160,7 @@ public class TownRuinUtil {
 			}
 
 			//Recover Town now
-			resident.getAccount().pay(townReclaimCost, "Cost of town reclaim.");
+			resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 			town.setRuined(false);
 			town.setRuinDurationRemainingHours(0);
 
