@@ -5075,3 +5075,35 @@ v0.92.0.11:
   - pt-br.yml updated to 0.86 by Plugner with PR #4348. (First-Time Contributor!)
   - New farmable nether blocks added to config by Momshroom with PR #4353. (First-Time Contributor!)
   - Fix bankruptcy test stopping players from using /t claim.
+0.96.2.21:
+  - New Config Option: new_world_settings.pvp.friendly_fire_enabled
+    - Default: false.
+    - Do new world have friendly fire enabled by default?
+    - Does not affect Arena Plots which have FF enabled all the time.
+    - When true players on the same town or nation will harm each other.
+  - Removed Config Option: global_town_settings.friendly_fire
+  - API: Added CombatUtil.preventFriendlyFire(attacker, defender, world).
+  - API: Deprecated CombatUtil.preventFriendlyFire(attacker, defender).
+  - Added friendlyFire setting to database as a world setting.
+    - Closes #1242.
+  - Made the plotManagementIgnoreIds also affect the wilderness explosion revert feature.
+  - Added FURNACE,BLAST_FURNACE,SMOKER,BREWING_STAND,TNT,AIR,FIRE,NETHER_QUARTZ_ORE to the plotManagementIgnoreIds and default config's new_world_settings.plot_management.revert_on_unclaim.block_ignore.
+  - Alter War to not use TownyMessaging.sendMessageToMode() methods, send prefixed messages instead.
+  - Fix Citizens NPCs that use actual Resident names from throwing TownyExceptions when they enter/exit towns.
+    - Closes #4375.
+  - Add placeholder: %townyadvanced_nation_tag_town_name%
+    - Displays nation tag (if set, otherwise blank,) followed by the Town name (if the player is part of a town.)
+    - Closes #4377.
+  - Add placeholders: %townyadvanced_daily_town_tax% & %townyadvanced_daily_nation_tax%
+    - Displays the daily tax charged by the town or the nation.
+    - Closes #4145.
+  - Datasource Cleanup
+    - PR #4367
+    - Greatly reduces redundancies in database code.
+  - New Command: /tw toggle friendlyfire
+    - Toggles friendlyfire on and off.
+  - Archive plot-block-data to save HDD space.
+    - Towny will convert all existing plot-block-data .data files into .zip files.
+    - Drastically reduces size on disk.
+    - New plot-block-data are made zipped.
+    - Closes #4327.

@@ -288,8 +288,6 @@ public class SQL_Schema {
 		}
 		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
 
-		TownyMessaging.sendDebugMsg("Checking done!");
-
 		/*
          *  Fetch NATIONS Table schema.
 		 */

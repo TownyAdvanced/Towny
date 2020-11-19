@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -21,7 +22,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
-import com.palmergames.bukkit.towny.tasks.CleanupBackupTask;
+import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -158,7 +159,7 @@ public class TownyUniverse {
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
             for (Town town : dataSource.getTowns()) {
-                TownySQLSource.validateTownOutposts(town);
+                TownyDatabaseHandler.validateTownOutposts(town);
             }
             towny.saveResource("outpostschecked.txt", false);
         }
@@ -171,7 +172,7 @@ public class TownyUniverse {
     
     public void performBackup() {
 		backupFuture = CompletableFuture
-			.runAsync(new CleanupBackupTask())
+			.runAsync(new CleanupTask())
 			.thenRunAsync(new BackupTask());
 	}
     

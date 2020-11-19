@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -535,10 +534,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
 								defenderResident.setJailed(index, attackerTown);
-								try {
-									TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-								} catch (TownyException e) {
-								}
+								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 								return;
 							}
 							index++;
@@ -587,10 +583,7 @@ public class TownyEntityMonitorListener implements Listener {
 					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
 					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
 						defenderResident.setJailed(index, town);
-						try {
-							TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-						} catch (TownyException e) {
-						}
+						TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
 						return;
 					}
 					index++;

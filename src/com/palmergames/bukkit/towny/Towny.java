@@ -468,7 +468,7 @@ public class Towny extends JavaPlugin {
 			}
 			System.out.println("------------------------------------");
 		} catch (IOException e) {
-			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
+			TownyMessaging.sendErrorMsg("Could not read ChangeLog.txt");
 		}
 	}
 
