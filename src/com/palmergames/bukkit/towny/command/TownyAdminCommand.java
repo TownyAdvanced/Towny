@@ -77,9 +77,8 @@ import java.util.stream.Collectors;
 public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> ta_help = new ArrayList<>();
 	private static final List<String> ta_panel = new ArrayList<>();
-	private static final List<String> ta_unclaim = new ArrayList<>();
+	
 	private static final List<String> adminTabCompletes = Arrays.asList(
 		"delete",
 		"plot",
@@ -190,39 +189,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private boolean isConsole;
 	private Player player;
 	private CommandSender sender;
-
-	static {
-		ta_help.add(ChatTools.formatTitle("/townyadmin"));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "", Translation.of("admin_panel_1")));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "set [] .. []", "'/townyadmin set' " + Translation.of("res_5")));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "unclaim [radius]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "town/nation", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "plot", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givebonus [town/player] [num]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle peaceful/war/debug/devmode", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "resident/town/nation", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "tpplot {world} {x} {z}", ""));
-
-		// TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin",
-		// "npc rename [old name] [new name]", ""));
-		// TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin",
-		// "npc list", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "checkperm {name} {node}", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reload", Translation.of("admin_panel_2")));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reset", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "backup", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "mysqldump", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "database [save/load]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "newday", Translation.of("admin_panel_3")));
-        ta_help.add(ChatTools.formatCommand("", "/townyadmin", "newhour", Translation.of("admin_panel_4")));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "purge [number of days]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "delete [] .. []", "delete a residents data files."));
-
-		ta_unclaim.add(ChatTools.formatTitle("/townyadmin unclaim"));
-		ta_unclaim.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin unclaim", "", Translation.of("townyadmin_help_1")));
-		ta_unclaim.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin unclaim", "[radius]", Translation.of("townyadmin_help_2")));
-
-	}
 
 	public TownyAdminCommand(Towny instance) {
 
@@ -450,9 +416,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			for (String line : ta_help) {
-				sender.sendMessage(line);
-			}
+			HelpMenu.TA_HELP.send(sender);
 		} else {
 
 			if (split[0].equalsIgnoreCase("set")) {
@@ -770,8 +734,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseAdminUnclaimCommand(String[] split) {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			for (String line : ta_unclaim)
-				((CommandSender) getSender()).sendMessage(line);
+			HelpMenu.TA_UNCLAIM.send((CommandSender) getSender());
 		} else {
 
 			if (isConsole) {

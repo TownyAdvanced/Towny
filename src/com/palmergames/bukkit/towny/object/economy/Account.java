@@ -131,7 +131,7 @@ public abstract class Account implements Nameable {
 	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
 		
 		if (amount > getHoldingBalance()) {
-			throw new EconomyException("Not enough money");
+			return false;
 		}
 
 		return withdraw(amount, reason) && collector.deposit(amount, reason);

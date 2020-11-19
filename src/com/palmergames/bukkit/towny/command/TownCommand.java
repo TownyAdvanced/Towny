@@ -102,8 +102,7 @@ import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 public class TownCommand extends BaseCommand implements CommandExecutor, TabCompleter {
 
 	private static Towny plugin;
-	private static final List<String> output = new ArrayList<>();
-	private static final List<String> invite = new ArrayList<>();
+
 	private static final List<String> townTabCompletes = Arrays.asList(
 		"here",
 		"leave",
@@ -197,37 +196,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"accept",
 		"deny"
 	);
-
-	static {
-		output.add(ChatTools.formatTitle("/town"));
-		output.add(ChatTools.formatCommand("", "/town", "", Translation.of("town_help_1")));
-		output.add(ChatTools.formatCommand("", "/town", "[town]", Translation.of("town_help_3")));
-		output.add(ChatTools.formatCommand("", "/town", "new [name]", Translation.of("town_help_11")));
-		output.add(ChatTools.formatCommand("", "/town", "reclaim", Translation.of("town_help_12")));
-		output.add(ChatTools.formatCommand("", "/town", "here", Translation.of("town_help_4")));
-		output.add(ChatTools.formatCommand("", "/town", "list", ""));
-		output.add(ChatTools.formatCommand("", "/town", "online", Translation.of("town_help_10")));
-		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
-		output.add(ChatTools.formatCommand("", "/town", "reslist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "outlawlist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "plots", ""));
-		output.add(ChatTools.formatCommand("", "/town", "outlaw add/remove [name]", ""));
-		output.add(ChatTools.formatCommand("", "/town", "say", "[message]"));
-		output.add(ChatTools.formatCommand("", "/town", "spawn", Translation.of("town_help_5")));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/town", "deposit [$]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("res_sing"), "/town", "rank add/remove [resident] [rank]", ""));
-		output.add(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "mayor ?", Translation.of("town_help_8")));
-		output.add(ChatTools.formatCommand(Translation.of("admin_sing"), "/town", "delete [town]", ""));
-		
-		invite.add(ChatTools.formatTitle("/town invite"));
-		invite.add(ChatTools.formatCommand("", "/town", "invite [player]", Translation.of("town_invite_help_1")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite -[player]", Translation.of("town_invite_help_2")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite sent", Translation.of("town_invite_help_3")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite received", Translation.of("town_invite_help_4")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", Translation.of("town_invite_help_5")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", Translation.of("town_invite_help_6")));
-	}
 
 	public TownCommand(Towny instance) {
 
@@ -404,7 +372,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
@@ -427,10 +395,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-					
-				for (String line : output)
-					sender.sendMessage(line);
-				
+			HelpMenu.TOWN_HELP.send(sender);
 		} else if (split[0].equalsIgnoreCase("list")) {
 
 			listTowns(sender, split);
@@ -468,10 +433,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				});
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-
-				for (String line : output)
-					player.sendMessage(line);
-
+				HelpMenu.TOWN_HELP.send(player);
+				
 			} else if (split[0].equalsIgnoreCase("here")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_HERE.getNode()))
@@ -909,24 +872,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_SEE_HOME.getNode())) {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			}
-			String[] msgs;
-			List<String> messages = new ArrayList<>();
 
-
-			for (String msg : invite) {
-				messages.add(Colors.strip(msg));
-			}
-			messages.add(sent);
-			messages.add(received);
-			msgs = messages.toArray(new String[0]);
-			player.sendMessage(msgs);
+			HelpMenu.TOWN_INVITE.send(player);
+			TownyMessaging.sendMessage(player, sent);
+			TownyMessaging.sendMessage(player, received);
 			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				for (String msg : invite) {
-					player.sendMessage(Colors.strip(msg));
-				}
+				HelpMenu.TOWN_INVITE.send(player);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
