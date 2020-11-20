@@ -452,8 +452,14 @@ public class TownyEntityListener implements Listener {
 			if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
 				event.setCancelled(true);
 			}
-			if (TownyAPI.getInstance().isWilderness(loc))
+			// Handle mob removal in wilderness
+			if (TownyAPI.getInstance().isWilderness(loc)) {
+				// Check if entity should be removed.
+				if (!townyWorld.hasWildernessMobs() && MobRemovalTimerTask.isRemovingWildernessEntity(livingEntity)) {
+					event.setCancelled(true);
+				}
 				return;
+			}
 			
 			// handle mob removal in towns
 			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);

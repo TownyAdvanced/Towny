@@ -255,6 +255,11 @@ public enum ConfigNodes {
 			"new_world_settings.mobs.world_monsters_on",
 			"true",
 			"# Do new worlds have world_monsters_on enabled by default?"),
+	NWS_WILDERNESS_MONSTERS_ON(
+			"new_world_settings.mobs.wilderness_monsters_on",
+			"true",
+			"",
+			"# Do new worlds have wilderness_monsters_on enabled by default?"),
 	NWS_FORCE_TOWN_MONSTERS_ON(
 			"new_world_settings.mobs.force_town_monsters_on",
 			"false",
@@ -1061,11 +1066,17 @@ public enum ConfigNodes {
 			"",
 			"# Disable creatures triggering stone pressure plates"),
 
+	PROT_MOB_REMOVE_WILDERNESS(
+			"protection.wilderness_mob_removal_entities",
+			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
+			"",
+			"# Remove living entities in the wilderness in all worlds that have wildernessmobs turned off."),
+
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# Globally remove living entities in all worlds that have their flag set."),
+			"# Globally remove living entities in all worlds that have worldmmobs turned off"),
 
 	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
 			"protection.world_prevent_villager_breeding",

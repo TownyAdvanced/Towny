@@ -56,6 +56,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isFire = TownySettings.isFire();
 	private boolean isForceFire = TownySettings.isForcingFire();
 	private boolean hasWorldMobs = TownySettings.isWorldMonstersOn();
+	private boolean hasWildernessMonsters = TownySettings.isWildernessMonstersOn();
 	private boolean isForceTownMobs = TownySettings.isForcingMonsters();
 	private boolean isExplosion = TownySettings.isExplosions();
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
@@ -266,6 +267,16 @@ public class TownyWorld extends TownyObject {
 	public boolean hasWorldMobs() {
 
 		return this.hasWorldMobs;
+	}
+	
+	public void setWildernessMobs(boolean hasMonsters) {
+		
+		this.hasWildernessMonsters = hasMonsters;
+	}
+	
+	public boolean hasWildernessMobs() {
+		
+		return this.hasWildernessMonsters;
 	}
 
 	public void setForceTownMobs(boolean setMobs) {

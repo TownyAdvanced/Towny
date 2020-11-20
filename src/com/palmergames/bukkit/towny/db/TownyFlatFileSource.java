@@ -1241,6 +1241,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setForceTownMobs(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+
+				line = keys.get("wildernessmobs");
+				if (line != null)
+					try {
+						world.setWildernessMobs(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
 				
 				line = keys.get("worldmobs");
 				if (line != null)
@@ -2031,6 +2038,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("claimable=" + world.isClaimable());
 		// has monster spawns
 		list.add("worldmobs=" + world.hasWorldMobs());
+		// has wilderness spawns
+		list.add("wildernessmobs=" + world.hasWildernessMobs());
 		// force town mob spawns
 		list.add("forcetownmobs=" + world.isForceTownMobs());
 		// has firespread enabled
