@@ -5250,3 +5250,20 @@ v0.92.0.11:
   - Move NationPreMergeEvent, NationMergeEvent, PreNewNationEvent to nation subpackage.
   - Fix the newly bankrupted towns listings on new day possibly not showing being displayed.
   - Fix global_town_settings.spawn_warnings in the config being unused.
+0.96.3.5:
+  - Fix town column in towny_nation table missing from sql cleanup.
+  - Fix missing feedback message for /res set mode clear.
+    - Closes #4438.
+  - Add clear to /res set mode tab-completes.
+  - es-419.yml updated to 0.89, courtesy of EuGNosii with PR #4437.
+  - Use PlotGroup names in /t outpost list & /t outpost {name}, when available.
+    - Closes #4430.
+  - Add confirmations to /t leave & /n leave.
+    - Closes #4434.
+  - Prevent arrows hitting Target/WoodenButton/PressurePlates from delivering power, based on Switch perms.
+    - Closes #4413.
+  - Hit the townblock cost increase with the rounding stick.
+  - Fix FlagWar's flag blocks not being allowed to be placed.
+  - API: Added MobSpawnRemovalEvent, courtesy of lucasboss45 with PR #4424 (First-Time Contributor!)
+    - a cancellable event to the removal of mobs on spawn.
+  - Actually fix FlagWar's flag blocks not being placed correctly.

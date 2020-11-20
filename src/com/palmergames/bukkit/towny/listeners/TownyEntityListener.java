@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -23,11 +24,15 @@ import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.util.ArraySort;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ItemLists;
+
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -55,6 +60,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
@@ -62,7 +68,6 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -443,6 +448,11 @@ public class TownyEntityListener implements Listener {
 				// Failed to fetch a world
 				return;
 			}
+
+			MobSpawnRemovalEvent mobSpawnRemovalEvent;
+			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
+			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
+			if(mobSpawnRemovalEvent.isCancelled()) return;
 
 			// remove from world if set to remove mobs globally
 			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
@@ -970,5 +980,61 @@ public class TownyEntityListener implements Listener {
 		
 		if (!!ExplosionUtil.locationCanExplode(event.getEntity().getLocation()))
 			event.setCancelled(true);
+	}
+	
+	/**
+	 * Allows us to treat the hitting of wooden plates and buttons by arrows as cancellable events.
+	 * 
+	 * @param event ProjectileHitEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onProjectileHitEventButtonOrPlate(ProjectileHitEvent event) {
+		/*
+		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+		 */
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+			return;
+		
+		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
+		Material material = block.getType();
+		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
+				/*
+				 * Since we are unable to cancel a ProjectileHitEvent we must
+				 * set the block to air then set it back to its original form. 
+				 */
+				BlockData data = block.getBlockData();
+				block.setType(Material.AIR);
+				BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
+			}
+		}
+	}
+	
+	/**
+	 * Allows us to treat the hitting of Target blocks by arrows as cancellable events.
+	 * 
+	 * @param event ProjectileHitEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onProjectileHitEventTarget(ProjectileHitEvent event) {
+		/*
+		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+		 */
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+			return;
+
+		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET.name())) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
+				/*
+				 * Since we are unable to cancel a ProjectileHitEvent we must
+				 * set the block to air then set it back to its original form. 
+				 */
+				BlockData data = event.getHitBlock().getBlockData();
+				event.getHitBlock().setType(Material.AIR);
+				BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
+			}
+		}
 	}
 }

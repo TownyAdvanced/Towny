@@ -596,6 +596,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void clearModes() {
 
 		this.modes.clear();
+		TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set")));
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg(Translation.of("msg_err_could_not_set_default_modes_for") + getName() + ".");

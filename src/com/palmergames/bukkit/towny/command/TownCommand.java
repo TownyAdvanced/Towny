@@ -702,8 +702,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 									TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
 									if (tb == null)
 										continue;
-									if (!tb.getName().equalsIgnoreCase("")) {
-										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + tb.getName() +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
+									String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
+									if (!name.equalsIgnoreCase("")) {
+										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + name +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
 									} else {
 										output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
 									}
@@ -2730,45 +2731,47 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 
-		if (resident.isJailed()) {
-			try {
-				if (resident.getJailTown().equals(resident.getTown().getName())) {
-					if (TownySettings.JailDeniesTownLeave()) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_cannot_abandon_town_while_jailed"));
-						return;
+		Confirmation.runOnAccept(() -> {
+			if (resident.isJailed()) {
+				try {
+					if (resident.getJailTown().equals(resident.getTown().getName())) {
+						if (TownySettings.JailDeniesTownLeave()) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_cannot_abandon_town_while_jailed"));
+							return;
+						}
+						resident.setJailed(false);
+						resident.setJailSpawn(0);
+						resident.setJailTown("");
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
 					}
-					resident.setJailed(false);
-					resident.setJailSpawn(0);
-					resident.setJailTown("");
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
 				}
+			}
+
+			try {
+				townRemoveResident(town, resident);
+			} catch (NotRegisteredException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				return;
+			}
+			
+			townyUniverse.getDataSource().saveResident(resident);
+			townyUniverse.getDataSource().saveTown(town);
+
+			// Reset everyones cache permissions as this player leaving could affect
+			// multiple areas
+			plugin.resetCache();
+
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_left_town", resident.getName()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_left_town", resident.getName()));
+
+			try {
+				checkTownResidents(town, resident);
 			} catch (NotRegisteredException e) {
 				e.printStackTrace();
 			}
-		}
-
-		try {
-			townRemoveResident(town, resident);
-		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			return;
-		}
-		
-		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
-
-		// Reset everyones cache permissions as this player leaving could affect
-		// multiple areas
-		plugin.resetCache();
-
-		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_left_town", resident.getName()));
-		TownyMessaging.sendMsg(player, Translation.of("msg_left_town", resident.getName()));
-
-		try {
-			checkTownResidents(town, resident);
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
-		}
+		}).sendTo(player);
 	}
 
 	/**

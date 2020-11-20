@@ -516,8 +516,8 @@ public class SQL_Schema {
     	
     	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
     	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
-    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
     	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
+    	cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
     	

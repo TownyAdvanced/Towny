@@ -42,6 +42,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.common.WarZoneListener;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
@@ -103,6 +104,7 @@ public class Towny extends JavaPlugin {
 	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener(this);
 	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
 	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
+	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -442,6 +444,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
+			pluginManager.registerEvents(warzoneListener, this);
 		}
 
 		// Always register these events.
