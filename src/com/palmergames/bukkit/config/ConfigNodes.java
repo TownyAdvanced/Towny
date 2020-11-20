@@ -1034,7 +1034,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT",
+			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT,LEAD",
 			"",
 			"# Items that can be blocked within towns via town/plot flags.",
 			"# These items will be the ones restricted by a town/resident/plot's item_use setting.",

@@ -5267,3 +5267,19 @@ v0.92.0.11:
   - API: Added MobSpawnRemovalEvent, courtesy of lucasboss45 with PR #4424 (First-Time Contributor!)
     - a cancellable event to the removal of mobs on spawn.
   - Actually fix FlagWar's flag blocks not being placed correctly.
+0.96.3.6:
+  - Fix spam about respawn anchors on sub-1.16.* servers.
+    - Closes #4444.
+  - Add LEAD back to the item_use_ids.
+    - Closes #4445.
+  - API: Added explosion events (PR #4420.)
+    - Creates 2 new events:
+      - TownyExplosionDamagesEntityEvent(Location location, Entity harmedEntity, DamageCause cause, boolean cancelled)
+      - TownyExplodingBlockEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity)
+    - Adds 2 TownyActionEventExecutor methods:
+      - canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause)
+        - Used when any entity is damaged by an explosion.
+      - filterExplodableBlocks(List<Block> blockList, Material mat, Entity entity)
+        - Used when an entity or block explosion would cause block damage.
+    - Moves all of the explosion decisions related to Flag and Event war from the standard listeners and into the WarZoneListener.
+    - Removes the short-lived ExplosionUtil.
