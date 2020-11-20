@@ -88,7 +88,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"fs",
 		"notforsale",
 		"forsale",
-		"perm"
+		"perm",
+		"rename"
 	);
 	
 	private static final List<String> plotSetTabCompletes = Arrays.asList(
@@ -1456,14 +1457,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("rename")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_RENAME.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
-			
-			String newName = split[1];
 
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_not_associated_with_a_group"));
 				return false;
 			}
 
+			if (split.length == 1) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_group_name_required"));
+				return false;
+			}
+		
+			String newName= split[1];			
 			String oldName = townBlock.getPlotObjectGroup().getName();
 			// Change name;
 			TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotObjectGroup(), newName);

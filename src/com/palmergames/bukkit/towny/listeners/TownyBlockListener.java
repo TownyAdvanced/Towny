@@ -5,31 +5,22 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarBreakBlockController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.utils.ExplosionUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,6 +32,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -60,46 +52,23 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
-		Block block = event.getBlock();
+		Block block = event.getBlock();		
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+			return;
 
+		/*
+		 * TODO: Get this using the Action event.
+		 */
 		//Siege War
 		if (TownySettings.getWarSiegeEnabled()) {
-			boolean skipPermChecks = SiegeWarBreakBlockController.evaluateSiegeWarBreakBlockRequest(player, block, event);
+			boolean skipPermChecks = SiegeWarBreakBlockController.evaluateSiegeWarBreakBlockRequest(event.getPlayer(), block, event);
 			if (skipPermChecks) {
 				return;
 			}
 		}
-
-		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY);
-		
-		// Allow destroy if we are permitted
-		if (bDestroy)
-			return;
-
-		/*
-		 * Fetch the players cache
-		 */
-		PlayerCache cache = plugin.getCache(player);
-
-		if ((cache.getStatus() == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
-				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-			if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
-				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "destroy", block.getType().toString().toLowerCase()));
-			}
-			return;
-		}
-
-		event.setCancelled(true);
-
-		/* 
-		 * display any error recorded for this plot
-		 */
-		if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
-			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
+	
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -110,77 +79,33 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		WorldCoord worldCoord;
-		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
 
-			//Siege War
-			if (TownySettings.getWarSiegeEnabled()) {
-				boolean skipPermChecks = SiegeWarPlaceBlockController.evaluateSiegeWarPlaceBlockRequest(player, block,event, plugin);
-				if(skipPermChecks) {
-					return;
-				}
-			}
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+			return;
 
-			TownyWorld world = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
+		/*
+		 * Allow portals to be made.
+		 */
+		if (block.getType() == Material.FIRE && block.getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+			return;
 
-			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.BUILD);
-
-			// Allow build if we are permitted
-			if (bBuild)
+		/*
+		 * TODO: Get this using the Action event.
+		 */
+		//Siege War
+		if (TownySettings.getWarSiegeEnabled()) {
+			boolean skipPermChecks = SiegeWarPlaceBlockController.evaluateSiegeWarPlaceBlockRequest(event.getPlayer(), block,event, plugin);
+			if(skipPermChecks) {
 				return;
-			
-			/*
-			 * Fetch the players cache
-			 */
-			PlayerCache cache = plugin.getCache(player);
-			TownBlockStatus status = cache.getStatus();
-
-			/*
-			 * Flag war
-			 */
-			if (((status == TownBlockStatus.ENEMY) && FlagWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == FlagWarConfig.getFlagBaseMaterial())) {
-
-				try {
-					if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
-						return;
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-				}
-
-				event.setBuild(false);
-				event.setCancelled(true);
-
-			// Event War piggy backing on flag war's EditableMaterialInWarZone 
-			} else if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
-					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
-				if (!WarZoneConfig.isEditableMaterialInWarZone(block.getType())) {
-					event.setBuild(false);
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_warzone_cannot_edit_material", "build", block.getType().toString().toLowerCase()));
-				}
-				return;
-			} else {
-				event.setBuild(false);
-				event.setCancelled(true);
 			}
-
-			/* 
-			 * display any error recorded for this plot
-			 */
-			if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
-				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_configured"));
-			event.setCancelled(true);
 		}
 
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {
+			event.setBuild(true);
+			event.setCancelled(true);
+		}
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
@@ -410,12 +335,16 @@ public class TownyBlockListener implements Listener {
 		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material))
 			revertingThisMaterial = true;
 		
+		// Blocks that will be allowed to explode.
+		List<Block> toKeep = new ArrayList<Block>();
+		
 		for (Block block : blocks) {
 			count++;
 			
-			if (!locationCanExplode(townyWorld, block.getLocation())) {
-				event.setCancelled(true);
-				return;
+			if (!ExplosionUtil.locationCanExplode(block.getLocation())) {
+				continue;
+			} else {
+				toKeep.add(block);
 			}
 			
 			if (TownyAPI.getInstance().isWilderness(block.getLocation()) && revertingThisMaterial) {
@@ -423,55 +352,17 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 		
+		event.blockList().clear();
+		event.blockList().addAll(toKeep);
 	}
 	
-	/**
-	 * Test if this location has explosions enabled.
-	 * 
-	 * @param world - Towny-enabled World to check in
-	 * @param target - Location to check
-	 * @return true if allowed.
+	/*
+	 * TODO: Put this back into an explosion test.
 	 */
-	public boolean locationCanExplode(TownyWorld world, Location target) {
-
-		if(TownySettings.getWarSiegeEnabled()) {
-			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
-				return false;
-			}
-		}
-
-		Coord coord = Coord.parseCoord(target);
-
-		if (world.isWarZone(coord) && !WarZoneConfig.isAllowingExplosionsInWarZone()) {
-			return false;
-		}
-		TownBlock townBlock = null;
-		boolean isNeutral = false;
-		townBlock = TownyAPI.getInstance().getTownBlock(target);
-		if (townBlock != null && townBlock.hasTown())
-			if (!War.isWarZone(townBlock.getWorldCoord()))
-				isNeutral = true;
-
-		if (TownyAPI.getInstance().isWilderness(target.getBlock().getLocation())) {
-			isNeutral = !world.isExpl();
-			if (!world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return false;				
-			if (world.isExpl() && !TownyAPI.getInstance().isWarTime())
-				return true;	
-		}
-		
-		try {			
-			if (world.isUsingTowny() && !world.isForceExpl()) {
-				if (TownyAPI.getInstance().isWarTime() && WarZoneConfig.explosionsBreakBlocksInWarZone() && !isNeutral){
-					return true;				
-				}
-				if ((!townBlock.getPermissions().explosion) || (TownyAPI.getInstance().isWarTime() && WarZoneConfig.isAllowingExplosionsInWarZone() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG()))
-					return false;
-			}
-		} catch (NotRegisteredException e) {
-			return world.isExpl();
-		}
-		return true;
-	}
-
+	
+//	if(TownySettings.getWarSiegeEnabled()) {
+//		if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
+//			return false;
+//		}
+//	}
 }

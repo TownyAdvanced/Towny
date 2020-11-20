@@ -62,7 +62,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"v",
 		"war",
 		"switches",
-		"itemuse"
+		"itemuse",
+		"farmblocks",
+		"wildsblocks"
 	);
 	
 	private static final List<String> townyConsoleTabCompletes = Arrays.asList(
@@ -234,6 +236,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), "Towny ItemUse List");
+			} else if (split[0].equalsIgnoreCase("farmblocks")) {
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), "Towny FarmBlocks List");
+			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), "Towny WildsBlocks List");
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

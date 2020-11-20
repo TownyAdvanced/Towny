@@ -1824,7 +1824,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		if (split[0].equalsIgnoreCase("war")) {
-			if (!choice.orElse(!TownyAPI.getInstance().isWarTime())) {
+			if (!choice.orElse(TownyAPI.getInstance().isWarTime())) {
 				townyUniverse.startWarEvent();
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_war_started"));
 			} else {

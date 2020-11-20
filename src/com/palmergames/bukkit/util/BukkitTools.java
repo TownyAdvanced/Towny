@@ -113,6 +113,10 @@ public class BukkitTools {
 		return getServer().getPlayer(playerId);
 	}
 	
+	public static Player getPlayer(UUID playerUUID) {
+		return server.getPlayer(playerUUID);
+	}
+	
 	/**
 	 * Tests if this player is online.
 	 * 

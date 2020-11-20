@@ -622,7 +622,6 @@ public class TownyMessaging {
 	 * @param resident resident to receive title &amp; subtitle message
 	 * @param title title message to send
 	 * @param subtitle subtitle message to send
-	 * @throws TownyException if the player is null
 	 */
 	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
 		Player player = TownyAPI.getInstance().getPlayer(resident);

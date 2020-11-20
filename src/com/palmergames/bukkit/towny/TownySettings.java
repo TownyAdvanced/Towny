@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.towny.war.siegewar.objects.HeldItemsCombination;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -64,6 +65,9 @@ public class TownySettings {
 	private static final List<HeldItemsCombination> tacticalVisibilityItems = new ArrayList<>();
 	private static List<Material> battleSessionsForbiddenBlockMaterials = null;
 	private static List<Material> battleSessionsForbiddenBucketMaterials = null;
+	
+	private static final List<String> ItemUseMaterials = new ArrayList<>();
+	private static final List<String> SwitchUseMaterials = new ArrayList<>();
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
 
@@ -277,10 +281,47 @@ public class TownySettings {
 			config.save();
 			
 			loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
+			loadSwitchAndItemUseMaterialsLists();
 			ChunkNotification.loadFormatStrings();
 		}
 	}
 	
+	private static void loadSwitchAndItemUseMaterialsLists() {
+
+		SwitchUseMaterials.clear();
+		ItemUseMaterials.clear();
+		
+		/*
+		 * Load switches from config value.
+		 * Scan over them and replace any grouping with the contents of the group.
+		 * Add single item or grouping to SwitchUseMaterials.
+		 */
+		List<String> switches = getStrArr(ConfigNodes.PROT_SWITCH_MAT);
+		for (String matName : switches) {
+			if (ItemLists.GROUPS.contains(matName)) {
+				List<String> group = ItemLists.getGrouping(matName);
+				SwitchUseMaterials.addAll(group);
+			} else {
+				SwitchUseMaterials.add(matName);
+			}
+		}
+
+		/*
+		 * Load items from config value.
+		 * Scan over them and replace any grouping with the contents of the group.
+		 * Add single item or grouping to ItemUseMaterials.
+		 */
+		List<String> items = getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
+		for (String matName : items) {
+			if (ItemLists.GROUPS.contains(matName)) {
+				List<String> group = ItemLists.getGrouping(matName);
+				ItemUseMaterials.addAll(group);
+			} else {
+				ItemUseMaterials.add(matName);
+			}
+		}
+	}
+
 	public static void loadPlayerMap(String filepath) {
 		if (FileMgmt.checkOrCreateFile(filepath)) {
 			File file = new File(filepath);
@@ -1372,22 +1413,22 @@ public class TownySettings {
 
 	public static List<String> getSwitchMaterials() {
 
-		return getStrArr(ConfigNodes.PROT_SWITCH_MAT);
+		return SwitchUseMaterials;
 	}
 	
 	public static List<String> getItemUseMaterials() {
 
-		return getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
+		return ItemUseMaterials;
 	}
 	
 	public static boolean isSwitchMaterial(String mat) {
 
-		return getSwitchMaterials().contains(mat);
+		return SwitchUseMaterials.contains(mat);
 	}
 
 	public static boolean isItemUseMaterial(String mat) {
 
-		return getItemUseMaterials().contains(mat);
+		return ItemUseMaterials.contains(mat);
 	}
 	
 	public static List<String> getFireSpreadBypassMaterials() {

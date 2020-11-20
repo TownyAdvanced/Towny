@@ -94,6 +94,7 @@ public class ResidentUtil {
 	 * ArrayList of strings is converted to valid Materials
 	 * and sent to be shown to the player.
 	 *  
+	 * @param resident The {@link Resident} to show the inventory to
 	 * @param list ArrayList of strings that will be converted to valid Materials.
 	 * @param name Name of the inventory window.
 	 */

@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -142,11 +144,18 @@ public class TownyEntityMonitorListener implements Listener {
 
 				/*
 				 * Player has died by a player: 
+				 * 
+				 * - Fire PlayerKilledPlayerEvent.
+				 * 
+				 * TODO: Move war-related things onto listeners for the PlayerKilledPlayerEvent.
 				 * - charge death payment,
 				 * - check for jailing attacking residents,
 				 * - award wartime death points.
 				 */
 				if (attackerPlayer != null) {
+					PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation());
+					BukkitTools.getPluginManager().callEvent(deathEvent);
+
 					deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 					if (TownyAPI.getInstance().isWarTime())
