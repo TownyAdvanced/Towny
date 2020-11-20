@@ -37,6 +37,10 @@ public class TownyBurnEvent extends Event implements Cancellable{
 		this.cancelled = cancelled;
 	}
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+	
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;

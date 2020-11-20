@@ -138,15 +138,17 @@ public class TownyActionEventExecutor {
 		/*
 		 *  Something being ignited in the wilderness.
 		 */
-		if (TownyAPI.getInstance().isWilderness(block) && (isNotPortal(block) && (!townyWorld.isForceFire() && !townyWorld.isFire()))) {
-			// Disallow because it is not above obsidian and neither Fire option is true.
-			return false;
+		if (TownyAPI.getInstance().isWilderness(block)) {
+			if (isNotPortal(block) && (!townyWorld.isForceFire() && !townyWorld.isFire()))
+				// Disallow because it is not above obsidian and neither Fire option is true.
+				return false;
 
 		/*
 		 *  Something being ignited in a town.
 		 */
-		} else if ((isNotPortal(block) && isNotFireSpreadBypassMat(block)) // Allows for NetherPortal/Netherrack/Soul_Sand/Soul_Soil ignition.
-				&& (!townyWorld.isForceFire() && !TownyAPI.getInstance().getTownBlock(block.getLocation()).getPermissions().fire)) { // Normal fire rules. 
+		} else {
+			if ((isNotPortal(block) && isNotFireSpreadBypassMat(block))          // Allows for NetherPortal/Netherrack/Soul_Sand/Soul_Soil ignition.
+			&& (!townyWorld.isForceFire() && !TownyAPI.getInstance().getTownBlock(block.getLocation()).getPermissions().fire)) // Normal fire rules. 
 				// Disallow because it is not above obsidian or on a FireSpreadBypassMat, and neither Fire option is true.
 				return false;
 		}
@@ -160,6 +162,12 @@ public class TownyActionEventExecutor {
 	}
 	
 	private static boolean isNotFireSpreadBypassMat(Block block) {
+		switch (block.getType()) {
+			case CAMPFIRE:
+				break;
+			default:
+				block = block.getRelative(BlockFace.DOWN);
+		}
 		return !TownySettings.isFireSpreadBypassMaterial(block.getType().name());
 	}
 	
