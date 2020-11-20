@@ -41,7 +41,7 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onDestroy(TownyDestroyEvent event) {
-		if (event.getTownBlock() == null)
+		if (event.isInWilderness())
 			return;
 		
 		Player player = event.getPlayer();
@@ -62,7 +62,7 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onBuild(TownyBuildEvent event) {
-		if (event.getTownBlock() == null)
+		if (event.isInWilderness())
 			return;
 		
 		Player player = event.getPlayer();
@@ -83,7 +83,7 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onItemUse(TownyItemuseEvent event) {
-		if (event.getTownBlock() == null)
+		if (event.isInWilderness())
 			return;
 		
 		Player player = event.getPlayer();
@@ -103,7 +103,7 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onSwitchUse(TownySwitchEvent event) {
-		if (event.getTownBlock() == null)
+		if (event.isInWilderness())
 			return;
 		
 		Player player = event.getPlayer();
@@ -177,7 +177,7 @@ public class WarZoneListener implements Listener {
 		/*
 		 * Handle occasions in the wilderness first.
 		 */
-		if (event.getTownBlock() == null)
+		if (event.isInWilderness())
 			return;
 
 		/*

@@ -97,6 +97,24 @@ public class TownyExplosionDamagesEntityEvent extends Event implements Cancellab
 	public TownBlock getTownBlock() {
 		return townblock;
 	}
+
+	/**
+	 * Did this action occur in the wilderness?
+	 * 
+	 * @return return true if this was in the wilderness.
+	 */
+	public boolean isInWilderness() {
+		return townblock == null;
+	}
+	
+	/**
+	 * Did this action occur inside of a town's townblock?
+	 * 
+	 * @return true if this has a townblock.
+	 */
+	public boolean hasTownBlock() {
+		return townblock != null;
+	}
 	
 	/**
 	 * @return cause of the explosion.

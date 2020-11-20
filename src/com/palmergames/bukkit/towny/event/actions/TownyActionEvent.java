@@ -80,6 +80,24 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	}
 
 	/**
+	 * Did this action occur in the wilderness?
+	 * 
+	 * @return return true if this was in the wilderness.
+	 */
+	public boolean isInWilderness() {
+		return townblock == null;
+	}
+	
+	/**
+	 * Did this action occur inside of a town's townblock?
+	 * 
+	 * @return true if this has a townblock.
+	 */
+	public boolean hasTownBlock() {
+		return townblock != null;
+	}
+
+	/**
 	 * @return cancellation message shown to players when their build attempt is cancelled or null.
 	 */
 	public String getMessage() {
