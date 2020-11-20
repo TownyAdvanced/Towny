@@ -5131,3 +5131,17 @@ v0.92.0.11:
   - Fix flipped save/load types.
 0.96.3.0:
   - Bump version for Release.
+0.96.3.1:
+  - Fix forcefire missing from /tw toggle tab-completion.
+  - Add GUIs to display the switch and itemuse lists of materials.
+    - https://user-images.githubusercontent.com/879756/97643654-5570f180-1a16-11eb-87e3-9c1b9dfb1823.PNG
+  - New Command: /towny switches
+    - Opens GUI showing all of the switch materials.
+  - New Command: /towny itemuse
+    - Opens GUI showing all of the itemuse materials.
+  - NationPreMergeEvent, NationMergeEvent, PreNewNationEvent, courtesy of Jena-Bot with PR #4402 (First-Time Contributor!)
+  - API: New Events:
+    - NationPreMergeEvent - Cancellable event thrown before a nation merge occurs.
+    - NationMergeEvent - Thrown when nations merge.
+    - PreNewNationEvent - Cancellable event thrown before a nation is created.
+  

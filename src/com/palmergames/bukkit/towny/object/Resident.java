@@ -29,7 +29,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,6 +65,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private final TownyPermission permissions = new TownyPermission();
+	private TownyInventory guiInventory;
 
 	public Resident(String name) {
 		super(name);
@@ -930,6 +930,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void addToNationRefundAmount(int amountToRefund) {
 		this.nationRefundAmount += amountToRefund;
+	}
+	
+	public TownyInventory getGUIInventory() {
+		return guiInventory;
+	}
+	
+	public void setGUIInventory(TownyInventory inventory) {
+		this.guiInventory = inventory;
 	}
 }
 

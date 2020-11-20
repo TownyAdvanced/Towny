@@ -1370,12 +1370,12 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_OUTPOST);
 	}
 
-	private static List<String> getSwitchMaterials() {
+	public static List<String> getSwitchMaterials() {
 
 		return getStrArr(ConfigNodes.PROT_SWITCH_MAT);
 	}
 	
-	private static List<String> getItemUseMaterials() {
+	public static List<String> getItemUseMaterials() {
 
 		return getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
 	}
