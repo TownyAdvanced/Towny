@@ -16,10 +16,10 @@ import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
-import com.palmergames.bukkit.towny.event.PreNewNationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
+import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
-import com.palmergames.bukkit.towny.event.NationPreMergeEvent;
-import com.palmergames.bukkit.towny.event.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -1145,7 +1145,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				i++;
 				if (i < split.length) {
 					comparatorSet = true;
-					if (split[i].equalsIgnoreCase("residents")) {
+					if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_NUM_RESIDENTS;

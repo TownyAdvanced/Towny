@@ -396,7 +396,7 @@ public class SpawnUtil {
 			final Location finalLoc = spawnLoc;
 			
 			// Skipping the confirmation.
-			if (ignoreWarn) {
+			if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed()) {
 				try {
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));

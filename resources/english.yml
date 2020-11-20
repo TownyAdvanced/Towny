@@ -1,5 +1,5 @@
 name: Towny
-version: 0.88
+version: 0.89
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -44,15 +44,15 @@ help_1: 'Try the following commands to learn more about towny.'
 help_2: 'Town Chat'
 help_3: 'Nation Chat'
 
-town_help_1: 'Your towns status'
+town_help_1: 'Your town''s status'
 town_help_2: '[mayor]'
-town_help_3: 'Selected towns status'
-town_help_4: 'Shortcut to the towns status of your location.'
-town_help_5: 'Teleport to towns spawn.'
+town_help_3: 'Selected town''s status'
+town_help_4: 'Shortcut to the town''s status of your location.'
+town_help_5: 'Teleport to town''s spawn.'
 town_help_6: 'New town with you as mayor.'
 town_help_7: 'New town with target mayor.'
 town_help_8: 'List commands for mayors.'
-town_help_9: 'Todays the day!'
+town_help_9: 'Today''s the day!'
 town_help_10: 'List all online residents in town'
 
 mayor_help_3: 'Claim area not attached to town'
@@ -62,9 +62,9 @@ mayor_help_6: 'Unclaim this town block'
 mayor_help_7: 'Attempt to unclaim around you.'
 mayor_help_8: 'Attempt to unclaim all townblocks.'
 
-nation_help_1: 'Your nations status'
+nation_help_1: 'Your nation''s status'
 nation_help_2: '[nation]'
-nation_help_3: 'Target nations status'
+nation_help_3: 'Target nation''s status'
 nation_help_4: 'List all nations'
 nation_help_5: 'Leave your nation'
 nation_help_6: 'Create a new nation'
@@ -1122,7 +1122,7 @@ bonus_townblocks: 'bonus townblocks'
 
 # Added in 0.80
 nomad_sing: 'Nomad'
-msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
+msg_new_town_advice: 'Congratulations on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
@@ -1346,7 +1346,7 @@ msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt t
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
 msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
-msg_payed_nation_tax: '&bPayed nation tax of %s'
+msg_payed_nation_tax: '&bYour town paid the nation tax of %s.'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
 msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
 msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
@@ -1365,3 +1365,12 @@ status_world_explrevert_block: '&2Block Explosion Revert: '
 #Added in 0.88
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
+
+#Added in 0.89
+status_world_friendlyfire: '&2FriendlyFire: '
+status_world_wildernessmobs: '&2Wilderness Mobs: '
+msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
+msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
+msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
+msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
+msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'

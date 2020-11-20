@@ -695,29 +695,30 @@ public class TownyFormatter {
 		if (!world.isUsingTowny()) {
 			out.add(Translation.of("msg_set_use_towny_off"));
 		} else {
-			// ForcePvP: No | Fire: Off
+			// ForcePvP: ON | FriendlyFire: ON 
 			out.add(Translation.of("status_world_forcepvp") + (world.isForcePVP() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
-					Translation.of("status_world_fire") + (world.isFire() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
-					Translation.of("status_world_forcefire") + (world.isForceFire() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
-				   );
+					Translation.of("status_world_friendlyfire") + (world.isFriendlyFireEnabled() ? Translation.of("status_on") : Translation.of("status_off")));
+			// Fire: ON | ForceFire: ON
+			out.add(Translation.of("status_world_fire") + (world.isFire() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
+					Translation.of("status_world_forcefire") + (world.isForceFire() ? Translation.of("status_forced") : Translation.of("status_adjustable")));
+			// Explosion: ON | ForceExplosion: ON
 			out.add(Translation.of("explosions2") + ": " + (world.isExpl() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
-				    Translation.of("status_world_forceexplosion") + (world.isForceExpl() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
-				   );
+				    Translation.of("status_world_forceexplosion") + (world.isForceExpl() ? Translation.of("status_forced") : Translation.of("status_adjustable")));
+			// WorldMobs: ON | Wilderness Mobs: ON
 			out.add(Translation.of("status_world_worldmobs") + (world.hasWorldMobs() ? Translation.of("status_on") : Translation.of("status_off")) + Colors.Gray + " | " + 
-				    Translation.of("status_world_forcetownmobs") + (world.isForceTownMobs() ? Translation.of("status_forced") : Translation.of("status_adjustable"))
-				   );
+				    Translation.of("status_world_wildernessmobs") + (world.hasWildernessMobs() ? Translation.of("status_on") : Translation.of("status_off")));
+			// ForceTownMobs: ON
+			out.add(Translation.of("status_world_forcetownmobs") + (world.isForceTownMobs() ? Translation.of("status_forced") : Translation.of("status_adjustable")));
+			// War will be allowed in this world.
 			out.add(Colors.Green + (world.isWarAllowed() ? Translation.of("msg_set_war_allowed_on") : Translation.of("msg_set_war_allowed_off")));
-			// Using Default Settings: Yes
-			// out.add(Colors.Green + "Using Default Settings: " +
-			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
-			// + "No"));
-
+			// Unclaim Revert: ON
 			out.add(Translation.of("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad"))); 
+			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			out.add(Translation.of("status_world_explrevert_entity") + (world.isUsingPlotManagementWildEntityRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")) + Colors.Gray + " | " +
 			        Translation.of("status_world_explrevert_block") + (world.isUsingPlotManagementWildBlockRevert() ? Translation.of("status_on_good") : Translation.of("status_off_bad")));
 			// Wilderness:
-			// Build, Destroy, Switch
-			// Ignored Blocks: 34, 45, 64
+			//     Build, Destroy, Switch, ItemUse
+			//     Ignored Blocks: SAPLING, GOLD_ORE, IRON_ORE
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
 			out.add("    " + Translation.of("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));

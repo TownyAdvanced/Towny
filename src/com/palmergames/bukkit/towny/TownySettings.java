@@ -1583,7 +1583,7 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
 	
-	public static boolean getSpawnWarnConfirmations() {
+	public static boolean isSpawnWarnConfirmationUsed() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
 	}
 
@@ -3315,6 +3315,18 @@ public class TownySettings {
 
 	public static int getBannerControlVerticalDistanceBlocks() {
 		return getInt(ConfigNodes.WAR_SIEGE_BANNER_CONTROL_VERTICAL_DISTANCE_BLOCKS);
+	}
+
+	public static boolean canOutlawsEnterTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
+	}
+	
+	public static int getOutlawTeleportWarmup() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
+	}
+	
+	public static boolean doTownsGetWarnedOnOutlaw() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}
 }
 

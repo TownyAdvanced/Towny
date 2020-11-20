@@ -1,5 +1,5 @@
 name: Towny
-version: 0.88
+version: 0.89
 language: italian
 author: Leomixer17
 website: 'http://townyadvanced.github.io/'
@@ -1177,3 +1177,12 @@ status_world_explrevert_block: '&2Block Explosion Revert: '
 #Added in 0.88
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
+
+#Added in 0.89
+status_world_friendlyfire: '&2FriendlyFire: '
+status_world_wildernessmobs: '&2Wilderness Mobs: '
+msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
+msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
+msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
+msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
+msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'

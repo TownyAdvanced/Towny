@@ -5222,3 +5222,31 @@ v0.92.0.11:
     - Closes #4388.
     - Also fixes colour encoding lost in /tw status screen.
   - Fix unclaim refund amount getting ahead of itself.
+0.96.3.4:
+  - Updated polish.yml courtesy of Martinez and EmpressKedavra.
+  - Typos fixed in the english.yml courtesy of jowsey with PR #4432 (First-Time Contributor!)
+  - Add item_use test for shears carving pumpkins.
+  - Add resident alias to /n list by, courtesy of sirsalad with PR #4433 (First-Time Contributor!)
+  - Add friendlyfire and wildernessmobs to the /tw status screen.
+  - Bump language files to 0.89.
+  - Settings to prevent Outlaws entering Towns, courtesy of EuGNosii with PR #4428.
+    - Options to teleport outlaws to their spawn point instantly or after a warmup has passed.
+    - Options to warn town members when an outlaw has entered the town.
+  - New Config Option: global_town_settings.allow_outlaws_to_enter_town
+    - default: true
+    - Can outlaws roam freely on the towns they are outlawed in?
+    - If false, outlaws will not be teleported away when they spend too long in the towns they are outlawed in.
+    - The time is set below in the outlaw_teleport_warmup.
+  - New Config Option: global_town_settings.warn_town_on_outlaw
+    - default: false
+    - Should towns be warned in case an outlaw roams the town?
+    - Warning: Outlaws can use this feature to spam residents with warnings!
+    - It is recommended to set this to true only if you're using outlaw teleporting with a warmup of 0 seconds.
+  - New Config Option: global_town_settings.outlaw_teleport_warmup
+    - default: 5
+    - How many seconds are required for outlaws to be teleported away?
+    - You can set this to 0 to instantly teleport the outlaw from town.
+    - This will not have any effect if allow_outlaws_to_enter_town is enabled.
+  - Move NationPreMergeEvent, NationMergeEvent, PreNewNationEvent to nation subpackage.
+  - Fix the newly bankrupted towns listings on new day possibly not showing being displayed.
+  - Fix global_town_settings.spawn_warnings in the config being unused.
