@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEve
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -128,10 +129,11 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
-	public static boolean canBuild(Player player, Location loc, Material mat) {
-		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, false);
+	public static boolean canBuild(Player player, Location loc, Material mat, TownBlock townblock) {
+		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, townblock, false);
 		return isAllowedAction(player, loc, mat, ActionType.BUILD, event);
 	}
 
@@ -141,10 +143,11 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
-	public static boolean canDestroy(Player player, Location loc, Material mat) {
-		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, false);
+	public static boolean canDestroy(Player player, Location loc, Material mat, TownBlock townblock) {
+		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, townblock, false);
 		return isAllowedAction(player, loc, mat, ActionType.DESTROY, event);
 	}
 
@@ -154,10 +157,11 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
-	public static boolean canSwitch(Player player, Location loc, Material mat) {
-		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, false);
+	public static boolean canSwitch(Player player, Location loc, Material mat, TownBlock townblock) {
+		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, townblock, false);
 		return isAllowedAction(player, loc, mat, ActionType.SWITCH, event);
 	}
 
@@ -167,10 +171,11 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
-	public static boolean canItemuse(Player player, Location loc, Material mat) {
-		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, false);
+	public static boolean canItemuse(Player player, Location loc, Material mat, TownBlock townblock) {
+		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, townblock, false);
 		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event);
 	}
 	
@@ -228,9 +233,10 @@ public class TownyActionEventExecutor {
 	 * @param loc - Location to check
 	 * @param entity - Entity which will be damaged.
 	 * @param cause - DamageCause which has caused the damage.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
-	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause) {
+	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause, TownBlock townblock) {
 		/*
 		 *  canExplode will get Towny's normal response as to 
 		 *  whether an explosion is allowed in the given location.
@@ -241,7 +247,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, cancelled);
+		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, townblock, cancelled);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

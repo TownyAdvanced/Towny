@@ -52,7 +52,7 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
+		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType(), TownyAPI.getInstance().getTownBlock(block.getLocation())));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -74,7 +74,7 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {
+		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType(), TownyAPI.getInstance().getTownBlock(block.getLocation()))) {
 			event.setBuild(true);
 			event.setCancelled(true);
 		}

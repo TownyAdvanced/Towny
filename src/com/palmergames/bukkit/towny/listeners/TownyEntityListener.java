@@ -259,7 +259,7 @@ public class TownyEntityListener implements Listener {
 					return;	
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) event.getTarget(), loc, Material.DIRT));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) event.getTarget(), loc, Material.DIRT, TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation())));
 			}
 		}
 	}
@@ -280,7 +280,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause(), TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation()))) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
@@ -515,7 +515,7 @@ public class TownyEntityListener implements Listener {
 					return;
 				if (TownySettings.isSwitchMaterial(block.getType().name())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType()));
+					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType(), TownyAPI.getInstance().getTownBlock(block.getLocation())));
 					return;
 				}
 			}
@@ -591,7 +591,7 @@ public class TownyEntityListener implements Listener {
 			case SPLASH_POTION:			
 				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
 					return;
-				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE, TownyAPI.getInstance().getTownBlock(event.getBlock().getLocation())));
 				break;
 			default:
 		}
@@ -750,7 +750,7 @@ public class TownyEntityListener implements Listener {
 				}
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat, TownyAPI.getInstance().getTownBlock(hanging.getLocation())));
 			} else if (remover instanceof Monster) {
 				/*
 				 * Probably a skeleton, cancel the break if it is in a town.
@@ -761,7 +761,7 @@ public class TownyEntityListener implements Listener {
 		
 			if (event.getCause() == RemoveCause.EXPLOSION) {
 				// Explosions are blocked in this plot
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation(), event.getEntity(), DamageCause.ENTITY_EXPLOSION)) {
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation(), event.getEntity(), DamageCause.ENTITY_EXPLOSION, TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation()))) {
 					event.setCancelled(true);
 				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
 				} else {
@@ -782,7 +782,7 @@ public class TownyEntityListener implements Listener {
 
 			case EXPLOSION:
 
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.BLOCK_EXPLOSION))
+				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.BLOCK_EXPLOSION, TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation())))
 					event.setCancelled(true);
 				break;
 
@@ -811,7 +811,7 @@ public class TownyEntityListener implements Listener {
 			return;
 
 		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING));
+		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING, TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation())));
 	}
 
 	/**
@@ -829,7 +829,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.LIGHTNING))
+		if (!!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.LIGHTNING, TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation())))
 			event.setCancelled(true);
 	}
 	
@@ -850,7 +850,7 @@ public class TownyEntityListener implements Listener {
 		Material material = block.getType();
 		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
+			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material, TownyAPI.getInstance().getTownBlock(block.getLocation()))) {
 				/*
 				 * Since we are unable to cancel a ProjectileHitEvent we must
 				 * set the block to air then set it back to its original form. 
@@ -877,7 +877,7 @@ public class TownyEntityListener implements Listener {
 
 		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET.name())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
+			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET, TownyAPI.getInstance().getTownBlock(event.getHitBlock().getLocation()))) {
 				/*
 				 * Since we are unable to cancel a ProjectileHitEvent we must
 				 * set the block to air then set it back to its original form. 

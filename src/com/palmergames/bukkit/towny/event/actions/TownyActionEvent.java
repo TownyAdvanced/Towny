@@ -5,6 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
+
+import com.palmergames.bukkit.towny.object.TownBlock;
 
 /**
  * Used by the TownyBuildEvent, TownyDestroyEvent, TownySwitchEvent
@@ -17,13 +20,15 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	protected final Player player;
 	protected final Location loc;
 	protected final Material mat;
+	protected final TownBlock townblock;
 	protected boolean cancelled;
 	protected String message;
 
-	public TownyActionEvent(Player player, Location loc, Material mat, boolean cancelled) {
+	public TownyActionEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
 		this.player = player;
 		this.loc = loc;
 		this.mat = mat;
+		this.townblock = townblock;
 		setCancelled(cancelled);
 	}
 
@@ -62,6 +67,16 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+	
+	/**
+	 * The {@link com.palmergames.bukkit.towny.object.TownBlock} this action occured in,
+	 * or null if in the wilderness.
+	 * @return TownBlock or null. 
+	 */
+	@Nullable
+	public TownBlock getTownBlock() {
+		return townblock;
 	}
 
 	/**

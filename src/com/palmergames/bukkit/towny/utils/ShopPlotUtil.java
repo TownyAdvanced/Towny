@@ -54,7 +54,7 @@ public class ShopPlotUtil {
 	 * @return true if the player can build and the plot is a shop
 	 */
 	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
-		if (TownyActionEventExecutor.canBuild(player, location, Material.DIRT) && isShopPlot(location))
+		if (TownyActionEventExecutor.canBuild(player, location, Material.DIRT, TownyAPI.getInstance().getTownBlock(location)) && isShopPlot(location))
 			return true;
 		else return false;
 	}

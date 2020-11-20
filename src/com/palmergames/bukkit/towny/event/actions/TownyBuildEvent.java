@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
+
 /**
  * Part of the API which lets Towny's war and other plugins modify Towny's
  * plot-permission-decision outcomes.
@@ -33,10 +35,11 @@ public class TownyBuildEvent extends TownyActionEvent {
 	 * @param player    involved in the build event.
 	 * @param loc       location of the block being built.
 	 * @param mat       material of the block being built.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
-	public TownyBuildEvent(Player player, Location loc, Material mat, boolean cancelled) {
-		super(player, loc, mat, cancelled);
+	public TownyBuildEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
+		super(player, loc, mat, townblock, cancelled);
 	}
 
 	public static HandlerList getHandlerList() {
