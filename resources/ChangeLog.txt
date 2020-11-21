@@ -5323,3 +5323,5 @@ v0.92.0.11:
     - Allows for Towny, and then Towny's war systems and other plugins to decide if a block can ignite or burn.
   - Fix sticky pistons retracting on the edge of plots.
     - Closes #4456.
+  - Add Dragon Fireball Damage handling.
+    - Closes #4100.
