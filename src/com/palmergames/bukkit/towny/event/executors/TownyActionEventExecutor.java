@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,8 +14,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
@@ -122,6 +125,52 @@ public class TownyActionEventExecutor {
 		return approvedBlocks;
 	}
 
+	/**
+	 * Towny's primary internal test to determine if something can burn
+	 * at the given location, based on Towny's plot permissions.
+	 * 
+	 * @param block - Block being tested.
+	 * @return true if the burn is allowed.
+	 */
+	private static boolean isAllowedBurn(Block block) {
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(block.getWorld().getName());
+			
+		/*
+		 *  Something being ignited in the wilderness.
+		 */
+		if (TownyAPI.getInstance().isWilderness(block)) {
+			if (isNotPortal(block) && (!townyWorld.isForceFire() && !townyWorld.isFire()))
+				// Disallow because it is not above obsidian and neither Fire option is true.
+				return false;
+
+		/*
+		 *  Something being ignited in a town.
+		 */
+		} else {
+			if ((isNotPortal(block) && isNotFireSpreadBypassMat(block))          // Allows for NetherPortal/Netherrack/Soul_Sand/Soul_Soil ignition.
+			&& (!townyWorld.isForceFire() && !TownyAPI.getInstance().getTownBlock(block.getLocation()).getPermissions().fire)) // Normal fire rules. 
+				// Disallow because it is not above obsidian or on a FireSpreadBypassMat, and neither Fire option is true.
+				return false;
+		}
+
+		// Fire is allowed here.
+		return true;
+	}
+	
+	private static boolean isNotPortal(Block block) {
+		return block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN;
+	}
+	
+	private static boolean isNotFireSpreadBypassMat(Block block) {
+		switch (block.getType()) {
+			case CAMPFIRE:
+				break;
+			default:
+				block = block.getRelative(BlockFace.DOWN);
+		}
+		return !TownySettings.isFireSpreadBypassMaterial(block.getType().name());
+	}
+	
 	/**
 	 * Can the player build this material at this location?
 	 * 
@@ -232,7 +281,7 @@ public class TownyActionEventExecutor {
 	 */
 	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause) {
 		/*
-		 *  canExplode will get Towny's normal response as to 
+		 *  isAllowedExplosion() will get Towny's normal response as to 
 		 *  whether an explosion is allowed in the given location.
 		 */		
 		boolean cancelled = !isAllowedExplosion(loc);
@@ -244,6 +293,37 @@ public class TownyActionEventExecutor {
 		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled);
 		BukkitTools.getPluginManager().callEvent(event);
 
+		/*
+		 * Finally return the results after Towny lets its own 
+		 * war systems and other plugins have a say.
+		 */
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Test is fire can burn this block.
+	 * 
+	 * First uses Towny's internal plot permission and then
+	 * fires a TownyBurnEvent to let Towny's war systems 
+	 * and other plugins decide how to proceed.
+	 * 
+	 * @param block - Block to check.
+	 * @return true is allowed to burn.
+	 */
+	public static boolean canBurn(Block block) {
+		/*
+		 * isAllowedBurn will get Towny's normal response as 
+		 * to whether the given block is allowed to burn.
+		 */
+		boolean cancelled = !isAllowedBurn(block);
+		
+		/*
+		 * Fire a TownyBurnEvent to let Towny's war system
+		 * and other plugins have a say in the results.
+		 */
+		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled);
+		BukkitTools.getPluginManager().callEvent(event);
+		
 		/*
 		 * Finally return the results after Towny lets its own 
 		 * war systems and other plugins have a say.

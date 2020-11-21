@@ -13,7 +13,9 @@ import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
@@ -220,5 +222,37 @@ public class WarZoneListener implements Listener {
 			} catch (TownyException e) {
 				event.setMessage(e.getMessage());
 			}
+	}
+	
+	@EventHandler
+	public void onBurn(TownyBurnEvent event) {
+		/*
+		 * Return early if this is in the wild.
+		 */
+		if (event.isInWilderness())
+			return;
+
+		/*
+		 * Is this a Town with a flag war WarZone?
+		 */
+		boolean inFlagWarTown = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName()).isWarZone(Coord.parseCoord(event.getLocation()));
+
+		/*
+		 * Is this in a Town with an Event War?
+		 */
+		boolean inEventWarTown = TownyAPI.getInstance().isWarTime() && War.isWarringTown(TownyAPI.getInstance().getTown(event.getLocation()));
+
+		/*
+		 * Event War (inWarringTown) & Flag War (isWarZone(coord)) fire control settings.
+		 */
+		if (inFlagWarTown || inEventWarTown) {
+			if (WarZoneConfig.isAllowingFireInWarZone()) {                         // Allow ignition using normal fire-during-war rule.
+				event.setCancelled(false);
+			} else if (inEventWarTown && TownySettings.isAllowWarBlockGriefing()) { // Allow ignition using exceptionally-griefy-war rule for Event War.
+				event.setCancelled(false);
+			} else {
+				event.setCancelled(true);
+			}
+		}
 	}
 }

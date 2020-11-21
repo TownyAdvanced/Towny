@@ -2,17 +2,12 @@ package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -92,8 +87,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		if (isBurnCancelled(event.getBlock()))
-			event.setCancelled(true);
+		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -107,8 +101,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		if (isBurnCancelled(event.getBlock()))
-			event.setCancelled(true);
+		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -193,65 +186,6 @@ public class TownyBlockListener implements Listener {
 				}
 			} catch (NotRegisteredException e) {
 				// Failed to fetch a resident
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean isBurnCancelled(Block block) {
-
-		Location loc = block.getLocation();
-		Coord coord = Coord.parseCoord(loc);
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(block.getWorld().getName());
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
-			
-		/*
-		 *  Something being ignited in the wilderness.
-		 */
-		if (townBlock == null) {
-				// Give the wilderness a pass on portal ignition.
-				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && (!townyWorld.isForceFire() && !townyWorld.isFire())) {
-					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within townblock" + coord.toString() + " (wilderness.)");
-					return true;
-				}
-		/*
-		 *  Something being ignited in a town.
-		 */
-		} else {
-			/*
-			 * Figure out if this is in a warring town for Event War.
-			 */
-			boolean inWarringTown = false;
-			if (TownyAPI.getInstance().isWarTime()) {
-				if (War.isWarringTown(TownyAPI.getInstance().getTown(loc)))
-					inWarringTown = true;
-			}
-			/*
-			 * Event War & Flag War's fire control settings.
-			 */
-			if (townyWorld.isWarZone(coord) || inWarringTown) {
-				if (WarZoneConfig.isAllowingFireInWarZone()) {                         // Allow ignition using normal fire-during-war rule.
-					return false;
-				} else if (inWarringTown && TownySettings.isAllowWarBlockGriefing()) { // Allow ignition using exceptionally-griefy-war rule for Event War.
-					return false;
-				} else {
-					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within townblock " + coord.toString() + " (war zone.)");
-					return true;
-				}
-			}
-		
-			/*
-			 * Finally, sort out rules for towns which are not involved in a war.
-			 */
-			if ((
-						(block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && // Allowed for portal ignition inside of Towns. 
-						(!TownySettings.isFireSpreadBypassMaterial(block.getType().name()))   // Allows for Netherrack/Soul_Sand/Soul_Soil ignition.
-					) && 
-						(!townyWorld.isForceFire() && !townBlock.getPermissions().fire) // Normal fire rules. 
-				) {
-				TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within townblock " + coord.toString() + " (in town.)");
 				return true;
 			}
 		}
