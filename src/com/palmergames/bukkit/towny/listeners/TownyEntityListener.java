@@ -27,6 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -39,6 +40,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
@@ -59,6 +61,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import java.util.ArrayList;
@@ -286,6 +289,37 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
+	/**
+	 * Removes dragon fireball AreaEffectClouds when they would spawn somewhere with PVP disabled.
+	 * 
+	 * @param event AreaEffectCloudApplyEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
+		if (!event.getEntity().getCustomEffects().stream().anyMatch(effect -> effect.getType().equals(PotionEffectType.HARM)))
+			return;
+
+		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
+			return;
+
+		TownyWorld townyWorld = null;
+		try {
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
+		} catch (NotRegisteredException e) {
+			// Failed to fetch a world
+			return;
+		}
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
+		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
+			event.setCancelled(true);
+			event.getEntity().remove();
+		}
+
+	}
+	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
