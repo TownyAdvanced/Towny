@@ -1623,7 +1623,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("conquered=" + town.isConquered());
 		list.add("conqueredDays " + town.getConqueredDays());
 		if (town.hasValidUUID()){
-			list.add("uuid=" + town.getUuid());
+			list.add("uuid=" + town.getUUID());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}

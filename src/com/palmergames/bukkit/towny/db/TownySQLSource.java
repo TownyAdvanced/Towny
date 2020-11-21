@@ -1873,7 +1873,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			twn_hm.put("jailSpawns", jailArray.toString());
 			if (town.hasValidUUID()) {
-				twn_hm.put("uuid", town.getUuid());
+				twn_hm.put("uuid", town.getUUID());
 			} else {
 				twn_hm.put("uuid", UUID.randomUUID());
 			}
