@@ -128,7 +128,6 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
-	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
 	public static boolean canBuild(Player player, Location loc, Material mat) {
@@ -142,7 +141,6 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
-	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
 	public static boolean canDestroy(Player player, Location loc, Material mat) {
@@ -156,7 +154,6 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
-	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat) {
@@ -170,7 +167,6 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
-	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
 	public static boolean canItemuse(Player player, Location loc, Material mat) {
@@ -232,7 +228,6 @@ public class TownyActionEventExecutor {
 	 * @param loc - Location to check
 	 * @param entity - Entity which will be damaged.
 	 * @param cause - DamageCause which has caused the damage.
-	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @return true if allowed.
 	 */
 	public static boolean canExplosionDamageEntities(Location loc, Entity harmedEntity, DamageCause cause) {
