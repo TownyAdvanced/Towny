@@ -398,9 +398,17 @@ public class TownyUniverse {
 	
 	@Unmodifiable
 	public Collection<Town> getTowns() {
-    	return Collections.unmodifiableCollection(townUUIDMap.values());
+    	return Collections.unmodifiableCollection(townNameMap.values());
 	}
 
+	/**
+	 * 
+	 * @return direct access to the town name map that TownyUniverse uses.
+	 * 
+	 * @deprecated It is not recommended to directly access the map, but rather use
+	 * other towny universe methods to ensure safe-access and safe-manipulation.
+	 */
+	@Deprecated
 	public Map<String, Town> getTownsMap() {
         return townNameMap;
     }
@@ -421,7 +429,9 @@ public class TownyUniverse {
 	 * @throws AlreadyRegisteredException Town name is already in use.
 	 * @throws InvalidNameException Town name is invalid.
 	 */
-	public void newTown(String name) throws AlreadyRegisteredException, InvalidNameException {
+	public void newTown(@NotNull String name) throws AlreadyRegisteredException, InvalidNameException {
+		Validate.notNull(name, "Name cannot be null!");
+		
 		newTown(name, true);
 	}
 
@@ -429,20 +439,13 @@ public class TownyUniverse {
 		String filteredName = NameValidation.checkAndFilterName(name);;
 
 		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
-		
-		if (townNameMap.containsKey(town.getName())
-			|| (town.getUUID() != null && townUUIDMap.containsKey(town.getUUID())))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		townNameMap.put(town.getName().toLowerCase(), town);
-		townsTrie.addKey(town.getName());
-
-		if (town.getUUID() != null)
-			townUUIDMap.put(town.getUUID(), town);
+		registerTown(town);
 	}
 	
 	// This is used internally since UUIDs are assigned after town objects are created.
-	public void registerTownUUID(Town town) throws AlreadyRegisteredException {
+	public void registerTownUUID(@NotNull Town town) throws AlreadyRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
 		if (town.getUUID() != null) {
 			
 			if (townUUIDMap.containsKey(town.getUUID())) {
@@ -450,6 +453,49 @@ public class TownyUniverse {
 			}
 			
 			townUUIDMap.put(town.getUUID(), town);
+		}
+	}
+
+	/**
+	 * Used to register a town into the TownyUniverse internal maps.
+	 * 
+	 * This does not create a new town, or save a new town.
+	 * 
+	 * @param town Town to register.
+	 * @throws AlreadyRegisteredException Town is already in the universe maps.
+	 */
+	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
+		if (townNameMap.putIfAbsent(town.getName().toLowerCase(), town) != null) {
+			throw new AlreadyRegisteredException(String.format("The town with name '%s' is already registered!", town.getName()));
+		}
+		
+		townsTrie.addKey(town.getName());
+		registerTownUUID(town);
+	}
+
+	/**
+	 * Used to unregister a town from the TownyUniverse internal maps.
+	 * 
+	 * This does not delete a town, nor perform any actions that affect the town internally.
+	 * 
+	 * @param town Town to unregister
+	 * @throws NotRegisteredException Town is not registered in the universe maps.
+	 */
+	public void unregisterTown(@NotNull Town town) throws NotRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
+		if (townNameMap.remove(town.getName().toLowerCase()) == null) {
+			throw new NotRegisteredException(String.format("The town with the name '%s' is not registered!", town.getName()));
+		}
+		
+		townsTrie.removeKey(town.getName());
+		
+		if (town.getUUID() != null) {
+			if (townUUIDMap.remove(town.getUUID()) == null) {
+				throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
+			}
 		}
 	}
 	

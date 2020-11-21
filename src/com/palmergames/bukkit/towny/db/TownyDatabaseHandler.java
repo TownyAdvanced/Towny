@@ -247,9 +247,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 	}
 
+	/**
+	 * Checks if a town with the name exists.
+	 * 
+	 * @param name Name of the town to check.
+	 * @return whether the town exists.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#hasTown(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public boolean hasTown(String name) {
-		return universe.getTownsMap().containsKey(name.toLowerCase());
+		return universe.hasTown(name);
 	}
 
 	@Override
@@ -680,9 +689,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Must already be removed
 		}
 		saveWorld(townyWorld);
+
+		try {
+			universe.unregisterTown(town);
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+		}
 		
-		universe.getTownsTrie().removeKey(town.getName());
-		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);
 		
@@ -807,7 +820,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					
 				} catch (EconomyException ignored) {
 				}
-			UUID oldUUID = town.getUuid();
+			UUID oldUUID = town.getUUID();
 			long oldregistration = town.getRegistered();
 
 			// Store the nation in case we have to update the capitol
@@ -829,11 +842,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * Remove the old town from the townsMap
 			 * and rename to the new name
 			 */
-			universe.getTownsTrie().removeKey(town.getName());
-			universe.getTownsMap().remove(town.getName().toLowerCase());
+			// Re-register the town in the unvierse maps
+			universe.unregisterTown(town);
 			town.setName(filteredName);
-			universe.getTownsMap().put(filteredName.toLowerCase(), town);
-			universe.getTownsTrie().addKey(filteredName);
+			universe.registerTown(town);
 			world.addTown(town);
 
 			// If this was a nation capitol

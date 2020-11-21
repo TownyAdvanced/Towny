@@ -91,7 +91,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 */
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
-			for (Town town : universe.getTownsMap().values()) {
+			for (Town town : universe.getTowns()) {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					universe.getDataSource().removeTown(town);
