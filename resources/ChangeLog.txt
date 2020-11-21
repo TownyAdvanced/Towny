@@ -5329,3 +5329,4 @@ v0.92.0.11:
     - Makes it possible to use them on crossbows in a pvp setting without needing explosions forced on.
 0.96.3.8
   - Update bstats metrics.
+  - Fix javadoc.

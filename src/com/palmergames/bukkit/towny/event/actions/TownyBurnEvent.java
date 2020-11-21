@@ -15,9 +15,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
  * 
  * TownyBurnEvents are thrown when a block is either burned or ignited.
  * 
- * @param block - Block being burned.
- * @param location - Location of the block.
- * @param cancelled - Whether the event is cancelled yet.
  * @author LlmDl
  */
 public class TownyBurnEvent extends Event implements Cancellable{
@@ -33,6 +30,7 @@ public class TownyBurnEvent extends Event implements Cancellable{
 	 * 
 	 * @param block - Block being burned.
 	 * @param location - Location of the block.
+	 * @param townblock - TownBlock where the event is happening.
 	 * @param cancelled - Whether the event is cancelled yet.
 	 */
 	public TownyBurnEvent(Block block, Location location, TownBlock townblock, boolean cancelled) {

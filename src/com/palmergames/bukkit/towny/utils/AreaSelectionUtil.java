@@ -346,6 +346,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, owned by the given owner.
 	 * 
+	 * @param owner - TownBlockOwner which owns the townblock.
 	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks owned by the given owner.
 	 */
@@ -364,6 +365,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, which are not owned by the given owner.
 	 * 
+	 * @param owner - TownBlockOwner which owns the townblock.
 	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks not owned by the given owner.
 	 */

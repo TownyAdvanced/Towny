@@ -275,7 +275,7 @@ public class TownyActionEventExecutor {
 	 * war systems and other plugins decide how to proceed.
 	 * 
 	 * @param loc - Location to check
-	 * @param entity - Entity which will be damaged.
+	 * @param harmedEntity - Entity which will be damaged.
 	 * @param cause - DamageCause which has caused the damage.
 	 * @return true if allowed.
 	 */

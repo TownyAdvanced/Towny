@@ -22,11 +22,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
  * <br> - When a pig is zapped by lightning.
  * <br> - When an explosion would damage a Vehicle.
  * 
- * @param location - Location of the entity being damaged.
- * @param entity - Entity getting exploded.
- * @param cause - DamageCause.
- * @param cancelled - Whether Towny will cancel this already.
- * 
  * @author LlmDl
  */
 public class TownyExplosionDamagesEntityEvent extends Event implements Cancellable {
