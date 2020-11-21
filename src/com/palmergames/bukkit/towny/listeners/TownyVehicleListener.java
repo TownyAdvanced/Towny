@@ -47,7 +47,7 @@ public class TownyVehicleListener implements Listener {
 			return;
 
 		if (event.getAttacker() == null) {  // Probably a respawn anchor or a TNT minecart or TNT lit by redstone.
-			event.setCancelled(!TownyActionEventExecutor.canExplosionDamageEntities(event.getVehicle().getLocation(), event.getVehicle(), DamageCause.ENTITY_EXPLOSION, TownyAPI.getInstance().getTownBlock(event.getVehicle().getLocation())));
+			event.setCancelled(!TownyActionEventExecutor.canExplosionDamageEntities(event.getVehicle().getLocation(), event.getVehicle(), DamageCause.ENTITY_EXPLOSION));
 			return;
 		}
 		
@@ -80,10 +80,10 @@ public class TownyVehicleListener implements Listener {
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle, TownyAPI.getInstance().getTownBlock(event.getVehicle().getLocation())));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), vehicle));
 			}
 		} else {
-			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getVehicle().getLocation(), event.getVehicle(), DamageCause.ENTITY_EXPLOSION, TownyAPI.getInstance().getTownBlock(event.getVehicle().getLocation())))
+			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getVehicle().getLocation(), event.getVehicle(), DamageCause.ENTITY_EXPLOSION))
 				event.setCancelled(true);
 		}
 	}
@@ -130,7 +130,7 @@ public class TownyVehicleListener implements Listener {
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				if (TownySettings.isSwitchMaterial(vehicle.name()))
-					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle, TownyAPI.getInstance().getTownBlock(event.getVehicle().getLocation())));
+					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
 		}	
 	}

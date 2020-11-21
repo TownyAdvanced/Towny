@@ -172,14 +172,14 @@ public class CombatUtil {
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
 					 */
 					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
-						return (!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT, TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation())));
+						return (!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT));
 
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
 					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) 						
-						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT, TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation())));
+						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
 
 				}
 				
@@ -213,7 +213,7 @@ public class CombatUtil {
 
 				if (material != null) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material, TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation()));
+					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
 				}
 			}
 
