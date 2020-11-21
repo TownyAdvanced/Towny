@@ -107,7 +107,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"enemylist",
 		"ally",
 		"spawn",
-		"king"
+		"king",
+		"bankhistory"
 	);
 
 	private static final List<String> nationSetTabCompletes = Arrays.asList(
@@ -662,6 +663,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					String message = StringMgmt.join(newSplit);
 					TownyMessaging.sendPrefixedNationMessage(nation, message);
 
+				} else if (split[0].equalsIgnoreCase("bankhistory")) {
+					
+					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+
+					parseNationBankHistoryCommand(player, newSplit, TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation());
 				} else {
 
 					final Nation nation = townyUniverse.getNation(split[0]);
@@ -2664,4 +2671,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
     }
+
+	private void parseNationBankHistoryCommand(Player player, String[] newSplit, Nation nation) {
+		if (nation.getAccount().getAuditor().getAuditHistory().size() < 1) {
+			TownyMessaging.sendErrorMsg(player, "No pages to display!");
+			return;
+		}
+
+		int pages;
+		try {
+			pages = Integer.parseInt(newSplit[0]);
+		} catch (NumberFormatException e) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+			return;
+		}
+
+		nation.generateBankHistoryBook(player, pages);
+	}
 }

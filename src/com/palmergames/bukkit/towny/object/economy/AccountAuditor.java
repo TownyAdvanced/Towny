@@ -9,5 +9,5 @@ public interface AccountAuditor extends AccountObserver {
 	 * 
 	 * @return The transaction history from this account.
 	 */
-	List<Audit> getAuditHistory();
+	List<String> getAuditHistory();
 }

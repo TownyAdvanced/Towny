@@ -35,6 +35,26 @@ public class BookFactory {
 		book.setItemMeta(meta);
 		return book;
 	}
+	
+	/**
+	 * Returns a book itemstack with the given title, author and pages.
+	 * 
+	 * @param title   Title of the book.
+	 * @param author  Author of the book.
+	 * @param pages List of Strings, each string intended to become one page in a book. 
+	 * @return book ItemStack suitable for giving directly to a player inventory.
+	 */
+	public static ItemStack makeBook(String title, String author, List<String> pages) {
+		
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta meta = (BookMeta) book.getItemMeta();
+		meta.setTitle(title);
+		meta.setAuthor(author);
+		for (String page : pages)
+			meta.addPage(page);
+		book.setItemMeta(meta);
+		return book;
+	}
 
 	/**
 	 * A method to feed raw text out of which lines for pages.
@@ -134,4 +154,5 @@ public class BookFactory {
 			pages.add(pageText);
 		return pages;
 	}
+
 }

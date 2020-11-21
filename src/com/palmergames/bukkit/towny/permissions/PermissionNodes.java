@@ -62,6 +62,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_DELETE("towny.command.nation.delete"),
 	TOWNY_COMMAND_NATION_ONLINE("towny.command.nation.online"),
 	TOWNY_COMMAND_NATION_SAY("towny.command.nation.say"),
+	TOWNY_COMMAND_NATION_BANKHISTORY("towny.command.nation.bankhistory"),
 	TOWNY_COMMAND_NATION_KICK("towny.command.nation.kick"),
 	// Invite System (Piece of hard work)
 	TOWNY_COMMAND_NATION_INVITE_SEE_HOME("towny.command.nation.invite"),
@@ -164,6 +165,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_ONLINE("towny.command.town.online"),
 		TOWNY_COMMAND_TOWN_SAY("towny.command.town.say"),
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
+		TOWNY_COMMAND_TOWN_BANKHISTORY("towny.command.town.bankhistory"),
 		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 		TOWNY_COMMAND_TOWN_OUTLAWLIST("towny.command.town.outlawlist"),
 	
