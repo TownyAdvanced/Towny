@@ -181,6 +181,7 @@ public class TownyUniverse {
     	worlds.clear();
         nations.clear();
         townNameMap.clear();
+        townUUIDMap.clear();
         residents.clear();
         townBlocks.clear();
     }
