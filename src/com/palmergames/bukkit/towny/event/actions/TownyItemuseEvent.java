@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
+
 /**
  * Part of the API which lets Towny's war and other plugins modify Towny's
  * plot-permission-decision outcomes.
@@ -35,10 +37,11 @@ public class TownyItemuseEvent extends TownyActionEvent {
 	 * @param player    involved in the itemuse event.
 	 * @param loc       location of the block which has an item being used on it.
 	 * @param mat       material of the item being used.
+	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
-	public TownyItemuseEvent(Player player, Location loc, Material mat, boolean cancelled) {
-		super(player, loc, mat, cancelled);
+	public TownyItemuseEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
+		super(player, loc, mat, townblock, cancelled);
 	}
 
 	public static HandlerList getHandlerList() {

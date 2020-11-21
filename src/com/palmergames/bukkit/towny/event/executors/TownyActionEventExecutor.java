@@ -131,7 +131,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canBuild(Player player, Location loc, Material mat) {
-		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, false);
+		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.BUILD, event);
 	}
 
@@ -144,7 +144,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canDestroy(Player player, Location loc, Material mat) {
-		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, false);
+		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.DESTROY, event);
 	}
 
@@ -157,7 +157,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat) {
-		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, false);
+		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.SWITCH, event);
 	}
 
@@ -170,7 +170,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canItemuse(Player player, Location loc, Material mat) {
-		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, false);
+		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event);
 	}
 	
@@ -241,7 +241,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, cancelled);
+		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

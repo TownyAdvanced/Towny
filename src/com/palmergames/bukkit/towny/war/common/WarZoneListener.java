@@ -41,6 +41,9 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onDestroy(TownyDestroyEvent event) {
+		if (event.isInWilderness())
+			return;
+		
 		Player player = event.getPlayer();
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
@@ -59,6 +62,9 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onBuild(TownyBuildEvent event) {
+		if (event.isInWilderness())
+			return;
+		
 		Player player = event.getPlayer();
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
@@ -77,6 +83,9 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onItemUse(TownyItemuseEvent event) {
+		if (event.isInWilderness())
+			return;
+		
 		Player player = event.getPlayer();
 		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
 		
@@ -94,6 +103,9 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onSwitchUse(TownySwitchEvent event) {
+		if (event.isInWilderness())
+			return;
+		
 		Player player = event.getPlayer();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
@@ -165,7 +177,7 @@ public class WarZoneListener implements Listener {
 		/*
 		 * Handle occasions in the wilderness first.
 		 */
-		if (TownyAPI.getInstance().isWilderness(event.getLocation()))
+		if (event.isInWilderness())
 			return;
 
 		/*
@@ -192,6 +204,9 @@ public class WarZoneListener implements Listener {
 
 	@EventHandler (priority=EventPriority.HIGH)
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {
+		if (event.getTownBlock() == null)
+			return;
+		
 		if (!(FlagWarConfig.isAllowingAttacks() && event.getMaterial() == FlagWarConfig.getFlagBaseMaterial()))
 			return;
 		Player player = event.getPlayer();
