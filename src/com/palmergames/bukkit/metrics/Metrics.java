@@ -27,7 +27,6 @@ import java.util.zip.GZIPOutputStream;
  * <p>
  * Check out https://bStats.org/ to learn more about bStats!
  */
-@SuppressWarnings({"unused"})
 public class Metrics {
 
     static {
@@ -267,8 +266,7 @@ public class Metrics {
     /**
      * Collects the data and sends it afterwards.
      */
-    @SuppressWarnings("deprecation")
-	private void submitData() {
+    private void submitData() {
         final JsonObject data = getServerData();
 
         JsonArray pluginData = new JsonArray();
