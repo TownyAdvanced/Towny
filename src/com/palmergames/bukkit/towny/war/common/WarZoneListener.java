@@ -214,7 +214,7 @@ public class WarZoneListener implements Listener {
 		/*
 		 * Return early if this is in the wild.
 		 */
-		if (TownyAPI.getInstance().isWilderness(event.getBlock()))
+		if (event.isInWilderness())
 			return;
 
 		/*
