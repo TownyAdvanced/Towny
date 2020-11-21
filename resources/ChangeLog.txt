@@ -5325,3 +5325,5 @@ v0.92.0.11:
     - Closes #4456.
   - Add Dragon Fireball Damage handling.
     - Closes #4100.
+  - Switch Explosive Fireworks to be handled like PVP damage when it is dealt to players, instead of Explosive Damage.
+    - Makes it possible to use them on crossbows in a pvp setting without needing explosions forced on.

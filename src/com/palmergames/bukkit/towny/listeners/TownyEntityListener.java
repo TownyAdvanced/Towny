@@ -83,6 +83,8 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
+	 * Also handles EntityExplosions that damage entities.
+	 * 
 	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -97,6 +99,21 @@ public class TownyEntityListener implements Listener {
 		
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
+		
+		/*
+		 * This test blocks all types of Entity_Explosion-caused damage based on the
+		 * explosion-setting of the plot permissions, (and then alterable via the
+		 * TownyExplosionDamagesEntityEvent,) EXCEPT for cases where the defender is a
+		 * Player and the attacker is a FIREWORK (which is more likely to be a PVP
+		 * action.)
+		 */
+		if (!(attacker.getType() == EntityType.FIREWORK && defender instanceof Player) 
+				&& event.getCause() == DamageCause.ENTITY_EXPLOSION 
+				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+			event.setDamage(0);
+			event.setCancelled(true);
+		}
+
 		
 		if (!TownyAPI.getInstance().isWarTime()) {
 
@@ -268,14 +285,14 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Prevent explosions from hurting entities.
+	 * Prevent block explosions and lightning from hurting entities.
 	 * 
 	 * Doesn't stop damage to vehicles or hanging entities.
 	 *  
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
+	public void onEntityTakesBlockExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 				return;
 		}
@@ -283,7 +300,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
