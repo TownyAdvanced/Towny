@@ -321,7 +321,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyBurnEvent to let Towny's war system
 		 * and other plugins have a say in the results.
 		 */
-		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), cancelled);
+		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled);
 		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
