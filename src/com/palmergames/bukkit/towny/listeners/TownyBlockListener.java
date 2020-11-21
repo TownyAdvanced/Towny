@@ -163,16 +163,10 @@ public class TownyBlockListener implements Listener {
 		Location locTo = blockTo.getLocation();
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
-		System.out.println("blockTo: " + blockTo.getLocation());
-		System.out.println("loc: " + loc);
-		System.out.println("locTo: " + locTo);
 		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
 		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
-		System.out.println("Curr TB: " + currentTownBlock.getCoord());
-		System.out.println("Dest TB: " + destinationTownBlock.getCoord());
 
 		if (currentTownBlock != destinationTownBlock) {
-			System.out.println("no Match!");
 			// Cancel if either is not null, but other is (wild to town).
 			if (((currentTownBlock == null) && (destinationTownBlock != null)) || ((currentTownBlock != null) && (destinationTownBlock == null))) {
 				return true;
