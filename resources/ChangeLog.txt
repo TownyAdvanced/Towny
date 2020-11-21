@@ -5317,3 +5317,9 @@ v0.92.0.11:
     - Default: "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"
     - Allows for finer-grain editing of what flags will be used for your mysql connection.
   - Italian.yml updated, courtesy of Leonardo_DGS with PR #4451.
+  - Don't delete town inside of `Resident#removeTown()`, courtesy of silverwolfg11 with PR #4457.
+  - Add Townblock To New Action Events with PR #4455.
+  - API: TownyBurnEvent.
+    - Allows for Towny, and then Towny's war systems and other plugins to decide if a block can ignite or burn.
+  - Fix sticky pistons retracting on the edge of plots.
+    - Closes #4456.
