@@ -691,7 +691,7 @@ public class Nation extends Government {
 	}
 
 	@Override
-	public void removeMetaData(CustomDataField md) {
+	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveNation(this);

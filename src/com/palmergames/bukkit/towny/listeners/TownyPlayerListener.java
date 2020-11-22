@@ -507,6 +507,11 @@ public class TownyPlayerListener implements Listener {
 					mat = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					actionType = ActionType.SWITCH;
 					break;
+				/*
+				 * Don't set {@code mat} for other entity types.
+				 */
+				default:
+				    break;
 			}
 
 			/*

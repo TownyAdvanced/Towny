@@ -1904,7 +1904,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 2) {
 			if (town.hasMeta()) {
 				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
-				for (CustomDataField field : town.getMetadata()) {
+				for (CustomDataField<?> field : town.getMetadata()) {
 					player.sendMessage(field.getKey() + " = " + field.getValue());
 				}
 			} else {
@@ -1928,7 +1928,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			String val = split.length == 5 ? split[4] : null;
 			
 			if (town.hasMeta() && town.hasMeta(mdKey)) {
-				CustomDataField cdf = town.getMetadata(mdKey);
+				CustomDataField<?> cdf = town.getMetadata(mdKey);
 
 				// Check if the given value is valid for this field.
 				try {
@@ -1960,7 +1960,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+			CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 
 			if (town.hasMeta() && town.hasMeta(md.getKey())) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_key_x_already_exists", mdKey));
@@ -1974,7 +1974,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[2].equalsIgnoreCase("remove")) {
 
 			if (town.hasMeta() && town.hasMeta(mdKey)) {
-				CustomDataField cdf = town.getMetadata(mdKey);
+				CustomDataField<?> cdf = town.getMetadata(mdKey);
 				town.removeMetaData(cdf);
 				TownyMessaging.sendMsg(player, Translation.of("msg_data_successfully_deleted"));
 				return;
@@ -2003,7 +2003,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 1) {
 			if (townBlock.hasMeta()) {
 				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
-				for (CustomDataField field : townBlock.getMetadata()) {
+				for (CustomDataField<?> field : townBlock.getMetadata()) {
 					player.sendMessage(field.getKey() + " = " + field.getValue());
 				}
 			} else {
@@ -2027,7 +2027,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			String val = split.length == 4 ? split[3] : null;
 			
 			if (townBlock.hasMeta() && townBlock.hasMeta(mdKey)) {
-				CustomDataField cdf = townBlock.getMetadata(mdKey);
+				CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
 
 				// Change state
 				try {
@@ -2060,7 +2060,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 
-			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+			CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 			if (townBlock.hasMeta() && townBlock.hasMeta(md.getKey())) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_key_x_already_exists", mdKey));
 				return false;
@@ -2073,7 +2073,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[1].equalsIgnoreCase("remove")) {
 
 			if (townBlock.hasMeta() && townBlock.hasMeta(mdKey)) {
-				CustomDataField cdf = townBlock.getMetadata(mdKey);
+				CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
 				townBlock.removeMetaData(cdf);
 				TownyMessaging.sendMsg(player, Translation.of("msg_data_successfully_deleted"));
 				return true;

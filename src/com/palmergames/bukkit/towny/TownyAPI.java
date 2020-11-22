@@ -431,7 +431,7 @@ public class TownyAPI {
         TeleportWarmupTimerTask.abortTeleportRequest(resident);
     }
     
-    public void registerCustomDataField(CustomDataField field) throws KeyAlreadyRegisteredException {
+    public void registerCustomDataField(CustomDataField<?> field) throws KeyAlreadyRegisteredException {
     	townyUniverse.addCustomCustomDataField(field);
 	}
 

@@ -1938,7 +1938,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
 
 			if (resident.hasMeta())
-				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
+				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField<?>>(resident.getMetadata()), ";"));
 			else
 				res_hm.put("metadata", "");
 
@@ -2277,7 +2277,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				tb_hm.put("groupID", "");
 			if (townBlock.hasMeta())
-				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
+				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField<?>>(townBlock.getMetadata()), ";"));
 			else
 				tb_hm.put("metadata", "");
 

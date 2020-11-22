@@ -29,7 +29,7 @@ public class BooleanDataField extends CustomDataField<Boolean> {
 	}
 
 	@Override
-	public CustomDataField clone() {
+	public CustomDataField<Boolean> clone() {
 		return new BooleanDataField(getKey(), getValue(), this.label);
 	}
 }

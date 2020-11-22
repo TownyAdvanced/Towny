@@ -854,7 +854,7 @@ public class TownyFormatter {
 		
 		String field = "";
 		
-		for (CustomDataField cdf : to.getMetadata()) {
+		for (CustomDataField<?> cdf : to.getMetadata()) {
 			if (!cdf.hasLabel())
 				continue;
 			

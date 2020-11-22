@@ -386,13 +386,13 @@ public class TownBlock extends TownyObject {
 	}
 	
 	@Override
-	public void addMetaData(CustomDataField md) {
+	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 	
 	@Override
-	public void removeMetaData(CustomDataField md) {
+	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
