@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -24,14 +23,7 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 		List<Town> towns = new ArrayList<>();
 		towns.add(town);
 		Nation nation = getSender();
-
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarCommonPeacefulTownsEnabled()
-			&& (town.isPeaceful() || town.getDesiredPeacefulnessValue())) {
-			//Player can only get here in some edge-case scenario/attempted exploit. So no attempted exception or messaging.
-		} else {
-			NationCommand.nationAdd(nation, towns);
-		}
+		NationCommand.nationAdd(nation, towns);
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
