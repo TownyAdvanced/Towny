@@ -12,14 +12,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
+import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -38,6 +41,9 @@ public class SiegeWarActionListener implements Listener {
 		plugin = instance;
 	}
 	
+	/*
+	 * SW will prevent an block break from altering an area around a banner.
+	 */
 	@EventHandler
 	public void onBlockBreak(TownyDestroyEvent event) {
 		if (TownySettings.getWarSiegeEnabled() && SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(event.getBlock())) {
@@ -46,6 +52,9 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW will prevent fire from altering an area around a banner.
+	 */
 	@EventHandler
 	public void onBurn(TownyBurnEvent event) {
 		if (TownySettings.getWarSiegeEnabled() && SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(event.getBlock())) {	
@@ -53,6 +62,9 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW will prevent an explosion from altering an area around a banner.
+	 */
 	@EventHandler
 	public void onBlockExplode(TownyExplodingBlocksEvent event) {
 		if (TownySettings.getWarSiegeEnabled()) {
@@ -67,6 +79,9 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW will prevent someone in a banner area from curing their poisoning with milk.
+	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerConsume(PlayerItemConsumeEvent event) {
 		if (plugin.isError()) {
@@ -93,6 +108,9 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW can affect the emptying of buckets, which could affect a banner.
+	 */
 	@EventHandler
 	public void onBucketUse(TownyBuildEvent event) {
 		if(TownySettings.getWarSiegeEnabled() && event.isInWilderness() && TownySettings.isWarSiegeZoneBucketEmptyingRestrictionsEnabled() && TownySettings.getWarSiegeZoneBucketEmptyingRestrictionsMaterials().contains(event.getMaterial())) {
@@ -103,6 +121,9 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW can affect whether an inventory is dropped and also can degrade an inventory.
+	 */
 	@EventHandler
 	public void onPlayerKillsPlayer(PlayerKilledPlayerEvent event) {
 		//Check for siege-war related death effects
@@ -116,12 +137,15 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 	
+	/*
+	 * SW limits which Towns can join or be added to a nation.
+	 */
 	@EventHandler
 	public void onNationAddTownEvent(NationPreAddTownEvent event) {
 		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && event.getTown().isPeaceful()) {
 			Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(event.getTown());
 			if(!validGuardianNations.contains(event.getNation())) {
-				event.setCancelMessage(String.format(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation"), 
+				event.setCancelMessage(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation", 
 						event.getTown().getName(),
 						event.getNation().getName(),
 						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
@@ -129,5 +153,31 @@ public class SiegeWarActionListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
+	}
+	
+	/*
+	 * SW warns peaceful towns who make nations their decision may be a poor one, but does not stop them.
+	 */
+	@EventHandler
+	public void onNewNationEvent(PreNewNationEvent event) {
+		if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled()
+				&& event.getTown().isPeaceful()) {
+			TownyMessaging.sendMsg(event.getTown().getMayor(),
+					Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
+		}
+	}
+	
+	/*
+	 * SW will warn a nation about to delete itself that it can claim a refund after the fact.
+	 */
+	@EventHandler
+	public void onNationDeleteEvent(PreDeleteNationEvent event) {
+		//If nation refund is enabled, warn the player that they will get a refund (and indicate how to claim it).
+		if (TownySettings.getWarSiegeEnabled() && TownySettings.isUsingEconomy()
+				&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+			TownyMessaging.sendMsg(event.getNation().getKing(), Translation.of("msg_err_siege_war_delete_nation_warning", TownyEconomyHandler.getFormattedBalance(amountToRefund)));
+		}
+
 	}
 }
