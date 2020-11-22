@@ -59,7 +59,6 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
@@ -79,7 +78,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -1283,13 +1281,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
 					.sendTo(player);
 				
-                // Send confirmation.
-                if(TownySettings.getWarSiegeEnabled() 
-                    && TownySettings.getWarCommonPeacefulTownsEnabled()
-                    && capitalTown.isPeaceful()) {
-                    TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
-                }
-
 			// Or, it is free, so just make the nation.
 			} else {
 				newNation(name, capitalTown);
@@ -1412,15 +1403,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-
-				//If nation refund is enabled, warn the player that they will get a refund (and indicate how to claim it).
-				if(TownySettings.getWarSiegeEnabled() 
-					&& TownySettings.isUsingEconomy()
-					&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-					int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
-					TownyMessaging.sendErrorMsg(player, String.format(Translation.of("msg_err_siege_war_delete_nation_warning"), TownyEconomyHandler.getFormattedBalance(amountToRefund)));
-				}
-
 				Nation nation = resident.getTown().getNation();
 				Confirmation.runOnAccept(() -> {
 					TownyUniverse.getInstance().getDataSource().removeNation(nation);
@@ -1535,7 +1517,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Tests here are performed to make sure the Towns are allowed to join the Nation:
 	 * - make sure the town has enough residents to join a nation (if it is required in the config.)
 	 * - make sure the town is close enough to the nation capital (if it is required in the config.)
-	 * - make sure the town is not siege-war-peaceful
 	 * 
 	 * Lastly, invites are sent and if successful, the third stage is called by the invite handler.
 	 * 
