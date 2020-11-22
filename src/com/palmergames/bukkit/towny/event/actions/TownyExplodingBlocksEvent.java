@@ -20,11 +20,6 @@ import org.jetbrains.annotations.Nullable;
  * <br> - When a bed/respawn anchor explodes causing block damage.
  * <br> - When a an entity explodes causing block damage.
  * 
- * @param vanillaBlockList - List of Blocks which were involved in the original explosion.
- * @param townyFilteredList - List of Blocks Towny has already filtered, these blocks will explode unless {@link #setBlockList(List)} is used.
- * @param mat - Material which caused the block explosion or null if it is an entity explosion.
- * @param entity - Entity which caused the entity explosion or null if it is a block explosion. 
- * 
  * @author LlmDl
  */
 public class TownyExplodingBlocksEvent extends Event {
