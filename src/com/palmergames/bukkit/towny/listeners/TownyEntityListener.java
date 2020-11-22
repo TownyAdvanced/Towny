@@ -649,8 +649,6 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Handles explosion regeneration in War (inside towns,)
-	 * and from regular non-war causes (outside towns.)  
 	 * Decides how explosions made by entities will be handled ie: TNT, Creepers, etc.
 	 * 
 	 * Handles wilderness entity explosion regeneration.
@@ -687,7 +685,6 @@ public class TownyEntityListener implements Listener {
 		if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 			int count = 0;
 			for (Block block : blocks) {
-				
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					return;
