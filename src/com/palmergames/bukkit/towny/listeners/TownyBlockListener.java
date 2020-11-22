@@ -257,14 +257,4 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 	}
-	
-	/*
-	 * TODO: Put this back into an explosion test.
-	 */
-	
-//	if(TownySettings.getWarSiegeEnabled()) {
-//		if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
-//			return false;
-//		}
-//	}
 }
