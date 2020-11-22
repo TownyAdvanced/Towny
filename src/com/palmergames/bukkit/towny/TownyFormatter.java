@@ -506,6 +506,10 @@ public class TownyFormatter {
 							siegeStatus = String.format(Translation.of("status_town_siege_status"), getStatusTownSiegeSummary(siege));
 							out.add(siegeStatus);
 							break;
+
+						case UNKNOWN:
+						    // Do nothing if status is {@code UNKNOWN}.
+						    break;
 					}
 				} else {
 					if (TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {

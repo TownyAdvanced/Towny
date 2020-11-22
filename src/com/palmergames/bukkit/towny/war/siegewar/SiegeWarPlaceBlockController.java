@@ -80,6 +80,10 @@ public class SiegeWarPlaceBlockController {
 				case CHEST:
 				case TRAPPED_CHEST:
 					return evaluatePlaceChest(player, block, event);
+				default:
+				    /*
+				     * Neither a banner, nor a chest.
+				     */
 			}
 
 			//Check for forbidden block placement
