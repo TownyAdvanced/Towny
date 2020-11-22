@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.palmergames.bukkit.towny.object.Resident;
 
@@ -16,6 +17,7 @@ public class PlayerKilledPlayerEvent extends Event {
 	private Resident killerRes;
 	private Resident victimRes;
 	private Location location;
+	private PlayerDeathEvent deathEvent;
 	
 	/**
 	 * An event fired from a EventPriority.MONITOR listener. 
@@ -28,13 +30,14 @@ public class PlayerKilledPlayerEvent extends Event {
 	 * @param victimRes - Resident that died.
 	 * @param location - Location of the player that died.
 	 */
-	public PlayerKilledPlayerEvent(Player killer, Player victim, Resident killerRes, Resident victimRes, Location location) {
+	public PlayerKilledPlayerEvent(Player killer, Player victim, Resident killerRes, Resident victimRes, Location location, PlayerDeathEvent event) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.killer = killer;
 		this.victim = victim;
 		this.killerRes = killerRes;
 		this.victimRes = victimRes;
 		this.location = location;
+		this.deathEvent = event;
 	}
 
 	@Override
@@ -59,6 +62,10 @@ public class PlayerKilledPlayerEvent extends Event {
 	}
 	public Location getLocation() {
 		return location;
+	}
+	
+	public PlayerDeathEvent getPlayerDeathEvent() {
+		return deathEvent;
 	}
 
 }
