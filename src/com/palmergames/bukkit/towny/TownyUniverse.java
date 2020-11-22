@@ -58,7 +58,7 @@ public class TownyUniverse {
     private final Map<String, Nation> nations = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final Map<String, CustomDataField> registeredMetadata = new HashMap<>();
+    private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
     
@@ -511,7 +511,7 @@ public class TownyUniverse {
 	 * Metadata Stuff
 	 */
 
-	public void addCustomCustomDataField(CustomDataField cdf) throws KeyAlreadyRegisteredException {
+	public void addCustomCustomDataField(CustomDataField<?> cdf) throws KeyAlreadyRegisteredException {
     	
     	if (this.getRegisteredMetadataMap().containsKey(cdf.getKey()))
     		throw new KeyAlreadyRegisteredException();
@@ -519,11 +519,11 @@ public class TownyUniverse {
     	this.getRegisteredMetadataMap().put(cdf.getKey(), cdf);
 	}
 
-	public Map<String, CustomDataField> getRegisteredMetadataMap() {
+	public Map<String, CustomDataField<?>> getRegisteredMetadataMap() {
 		return getRegisteredMetadata();
 	}
 	
-	public Map<String, CustomDataField> getRegisteredMetadata() {
+	public Map<String, CustomDataField<?>> getRegisteredMetadata() {
 		return registeredMetadata;
 	}
 

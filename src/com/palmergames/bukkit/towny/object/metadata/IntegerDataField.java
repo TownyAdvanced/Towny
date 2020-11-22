@@ -40,7 +40,7 @@ public class IntegerDataField extends CustomDataField<Integer> {
 	}
 
 	@Override
-	public CustomDataField clone() {
+	public CustomDataField<Integer> clone() {
 		return new IntegerDataField(getKey(), getValue(), this.label);
 	}
 }
