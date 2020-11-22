@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.war.siegewar.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,12 +15,15 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
@@ -109,6 +113,21 @@ public class SiegeWarActionListener implements Listener {
 			 * priority PlayerDeathEvent.
 			 */
 			SiegeWarDeathController.evaluateSiegePlayerDeath(event.getVictim(), event.getPlayerDeathEvent());
+		}
+	}
+	
+	@EventHandler
+	public void onNationAddTownEvent(NationPreAddTownEvent event) {
+		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && event.getTown().isPeaceful()) {
+			Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(event.getTown());
+			if(!validGuardianNations.contains(event.getNation())) {
+				event.setCancelMessage(String.format(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation"), 
+						event.getTown().getName(),
+						event.getNation().getName(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
+						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+				event.setCancelled(true);
+			}
 		}
 	}
 }

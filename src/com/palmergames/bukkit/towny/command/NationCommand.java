@@ -797,17 +797,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
-				Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
-				if(!validGuardianNations.contains(nation)) {
-					throw new Exception(String.format(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation"), 
-						town.getName(),
-						nation.getName(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement())); 
-				}
-			}
-			
 			// Check if the command is not cancelled
 			NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 			Bukkit.getPluginManager().callEvent(preEvent);
@@ -1641,18 +1630,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				
-				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
-					TownyMessaging.sendErrorMsg(player, 
-						String.format(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation"), 
-						town.getName(), 
-						nation.getName(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()
-					));
-					remove.add(town);
-					continue;
-				}
-
 				// Check if the command is not cancelled
 				NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 				Bukkit.getPluginManager().callEvent(preEvent);
