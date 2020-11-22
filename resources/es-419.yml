@@ -1,5 +1,5 @@
 name: Towny
-version: 0.89
+version: 0.90
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1179,3 +1179,7 @@ msg_outlaw_kicked: '&4No eres bienvenido/a en %s. Fuiste teletransportado/a lejo
 msg_outlaw_town_notify: '&cUn bandido, %s, entró al territorio de la ciudad.'
 msg_your_town_payed_upkeep_with_debt: '&cTu ciudad pagó la mantención diaria, con un costo de %s usando su deuda.'
 msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales, con un costo de %s usando su deuda.'
+
+#Added in 0.90
+status_plot_clear_deletion: '&2PlotClearBlockDelete: '
+msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'

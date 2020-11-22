@@ -81,9 +81,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 */
 		String hostname = TownySettings.getSQLHostName();
 		String port = TownySettings.getSQLPort();
+		String flags = TownySettings.getSQLFlags();
 		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
-
+		
 		String driver1;
 		if (this.type.equals("h2")) {
 
@@ -95,12 +96,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} else if (this.type.equals("mysql")) {
 
 			driver1 = "com.mysql.jdbc.Driver";
-			if (TownySettings.getSQLUsingSSL())
-				this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name
-						+ "?useUnicode=true&characterEncoding=utf-8");
-			else
-				this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name
-						+ "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8");
+			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + flags);
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
 

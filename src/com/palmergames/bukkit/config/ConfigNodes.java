@@ -552,7 +552,7 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Can outlaws roam freely on the towns they are outlawed in?",
-			"# If false, outlaws will not be teleported away when they spend too long in the towns they are outlawed in.",
+			"# If false, outlaws will be teleported away if they spend too long in the towns they are outlawed in.",
 			"# The time is set below in the outlaw_teleport_warmup."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
@@ -568,6 +568,15 @@ public enum ConfigNodes {
 			"# How many seconds are required for outlaws to be teleported away?",
 			"# You can set this to 0 to instantly teleport the outlaw from town.",
 			"# This will not have any effect if allow_outlaws_to_enter_town is enabled."),
+	GTOWN_SETTINGS_OUTLAW_TELEPORT_WORLD(
+			"global_town_settings.outlaw_teleport_world",
+			"",
+			"",
+			"# What world do you want the outlaw teleported to if they aren't part of a town",
+			"# and don't have a bedspawn outside of the town they are outlawed in.",
+			"# They will go to the listed world's spawn. ", 
+			"# If blank, they will go to the spawnpoint of the world the town is in."
+	),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",
@@ -844,7 +853,7 @@ public enum ConfigNodes {
 	PLUGIN_DATABASE_TABLEPREFIX("plugin.database.sql.table_prefix", "towny_"),
 	PLUGIN_DATABASE_USERNAME("plugin.database.sql.username", "root"),
 	PLUGIN_DATABASE_PASSWORD("plugin.database.sql.password", ""),
-	PLUGIN_DATABASE_SSL("plugin.database.sql.ssl", "false"),
+	PLUGIN_DATABASE_FLAGS("plugin.database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
 
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",

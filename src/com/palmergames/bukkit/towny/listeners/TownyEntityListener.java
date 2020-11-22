@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
-import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -29,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -41,6 +41,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
@@ -61,6 +62,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import java.util.ArrayList;
@@ -82,6 +84,8 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
+	 * Also handles EntityExplosions that damage entities.
+	 * 
 	 * @param event - EntityDamageByEntityEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -96,6 +100,21 @@ public class TownyEntityListener implements Listener {
 		
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
+		
+		/*
+		 * This test blocks all types of Entity_Explosion-caused damage based on the
+		 * explosion-setting of the plot permissions, (and then alterable via the
+		 * TownyExplosionDamagesEntityEvent,) EXCEPT for cases where the defender is a
+		 * Player and the attacker is a FIREWORK (which is more likely to be a PVP
+		 * action.)
+		 */
+		if (!(attacker.getType() == EntityType.FIREWORK && defender instanceof Player) 
+				&& event.getCause() == DamageCause.ENTITY_EXPLOSION 
+				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+			event.setDamage(0);
+			event.setCancelled(true);
+		}
+
 		
 		if (!TownyAPI.getInstance().isWarTime()) {
 
@@ -148,6 +167,14 @@ public class TownyEntityListener implements Listener {
 				
 				// One of the attackers/defenders is not a player.
 				if (!(attacker instanceof Player) || !(defender instanceof Player)) {
+					if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
+						// Remove the projectile here so no
+						// other events can fire to cause damage
+						if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
+							attacker.remove();
+
+						event.setCancelled(true);
+					}
 					return;
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
@@ -259,14 +286,14 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Prevent explosions from hurting entities.
+	 * Prevent block explosions and lightning from hurting entities.
 	 * 
 	 * Doesn't stop damage to vehicles or hanging entities.
 	 *  
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
+	public void onEntityTakesBlockExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 				return;
 		}
@@ -274,12 +301,43 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
 	}
 
+	/**
+	 * Removes dragon fireball AreaEffectClouds when they would spawn somewhere with PVP disabled.
+	 * 
+	 * @param event AreaEffectCloudApplyEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
+		if (!event.getEntity().getCustomEffects().stream().anyMatch(effect -> effect.getType().equals(PotionEffectType.HARM)))
+			return;
+
+		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
+			return;
+
+		TownyWorld townyWorld = null;
+		try {
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
+		} catch (NotRegisteredException e) {
+			// Failed to fetch a world
+			return;
+		}
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
+		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
+			event.setCancelled(true);
+			event.getEntity().remove();
+		}
+
+	}
+	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 

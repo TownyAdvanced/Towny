@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
@@ -21,48 +22,61 @@ import java.util.List;
 import org.bukkit.Location;
 
 public class AreaSelectionUtil {
+	
+	private final static int MAX_RECT_RADIUS = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
+	private final static int MAX_CIRC_RADIUS = 18; // A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying.
 
+	/**
+	 * Method to select a List&lt;WorldCoord&gt; of coordinates. 
+	 * Area claims can be either circular or rectangular.
+	 * 
+	 * @param owner - {@link com.palmergames.bukkit.towny.object.TownBlockOwner} making the selection. 
+	 * @param pos - WorldCoord where the selection is being made from.
+	 * @param args - Subcommands like rect, circle, auto or #.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid subcommands are given.
+	 */
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 
 		if (args.length == 0) {
-			// claim with no sub command entered so attempt selection of one plot
-			if (pos.getTownyWorld().isClaimable())
-				out.add(pos);
-			else
-				throw new TownyException(Translation.of("msg_not_claimable"));
+			/*
+			 * Either /{command} {claim|unclaim} or /town claim {outpost}
+			 */
+			out.add(pos);
+
 		} else {
-			if (args.length > 1) {
+			
+			/*
+			 * First, determine what is available to be claimed.
+			 */
+			int available = 0;
+			if (owner instanceof Town) {
+				Town town = (Town) owner;
+				available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+			} else if (owner instanceof Resident) {
+				available = TownySettings.getMaxResidentPlots((Resident) owner);
+			}
+			
+			/*
+			 * Second, handle different subcommands for /{command} {claim|unclaim} {rect|circle|auto|#} {#}
+			 */
+			if (args.length > 1) { // Has to be /{command} {claim|unclaim} {rect|circle} {auto|#}
 				if (args[0].equalsIgnoreCase("rect")) {
-					out = selectWorldCoordAreaRect(owner, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args));
 				} else if (args[0].equalsIgnoreCase("circle")) {
-					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args));
 				} else {
 					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
-			} else if (args[0].equalsIgnoreCase("auto")) {
-				out = selectWorldCoordAreaRect(owner, pos, args);
-			} else if (args[0].equalsIgnoreCase("outpost")) {
-				TownBlock tb = pos.getTownBlock();
-				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
-					Town town = tb.getTown();
-					if (isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
-						tb.setOutpost(true);
-						out.add(pos);
-					} else {
-						throw new TownyException(Translation.of("msg_err_unclaim_not_outpost"));
-						// Lang String required.
-					}
-				}
-				if (tb.isOutpost()) { // flatfile skipper
-					out.add(pos);
-				}
-			} else {
+			} else if (args[0].equalsIgnoreCase("auto")) { // Is /{command} {claim|unclaim} {auto}
+				out = selectWorldCoordAreaRect(available, pos, args);
+			} else { // Is /{command} {claim|unclaim} #
 				try {
 					Integer.parseInt(args[0]);
 					// Treat as rect to serve for backwards capability.
-					out = selectWorldCoordAreaRect(owner, pos, args);
+					out = selectWorldCoordAreaRect(available, pos, args);
 				} catch (NumberFormatException e) {
 					throw new TownyException(Translation.of("msg_err_invalid_property", args[0]));
 				}
@@ -72,101 +86,173 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	public static List<WorldCoord> selectWorldCoordAreaRect(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	/**
+	 * Selects a square shaped area of WorldCoords. Works in a spiral out fashion.
+	 * 
+	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
+	 * @param pos - WorldCoord where the selection is centered at.
+	 * @param args - subcommand arguments like auto or a number.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid radii are given.
+	 */
+	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
-		if (pos.getTownyWorld().isClaimable()) {
-			if (args.length > 0) {
-				int r = 0, available = 1000;
+		if (args.length > 0) {
+			int r = MAX_RECT_RADIUS;  // The greatest possible radius of a selection.
 
-				if (owner instanceof Town) {
-					Town town = (Town) owner;
-					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-				} else if (owner instanceof Resident) {
-					available = TownySettings.getMaxResidentPlots((Resident) owner);
-				}
+			/*
+			 *  Area selections are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
+			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
+			 */
+
+			if (args[0].equalsIgnoreCase("auto")) {
 				
-				
+				/*
+				 * Select everything possible in a rectangle shape.
+				 */
 
-				if (args[0].equalsIgnoreCase("auto")) {
-					// Attempt to select outwards until no town blocks remain
+				if (TownySettings.getMaxClaimRadiusValue() > 0) 
+					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
-					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
-						r += 1;
-
-				} else {
-					try {
-						r = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_err_invalid_radius"));
-					}
-				}
-				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
-				}
-					
-				if (r > 1000)
-					r = 1000;
-				for (int z = -r; z <= r; z++)
-					for (int x = -r; x <= r; x++)
-						if (out.size() < available) {
-							WorldCoord wc = new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z);
-							if (!wc.hasTownBlock())
-								out.add(wc);
-						}
 			} else {
-				throw new TownyException(Translation.of("msg_err_invalid_radius"));
+			
+				/*
+				 * Select an area that will claim a perfect square shape, using a given radius
+				 * or the reduced radius that will give a perfect square.
+				 */
+				
+				try {
+					r = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					throw new TownyException(Translation.of("msg_err_invalid_radius"));
+				}
+				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+
+				/*
+				 * Calculate how many townblocks will be needed to claim the desired radius,
+				 * dropping the radius if it will be required, to make a perfect a perfect square.
+				 */
+				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
+				int claimRadius = 1;
+				while (claimRadius <= r && needed < available) {
+				    needed += (claimRadius * 8);
+				    claimRadius++;
+				}
+				// Claim Radius will always overshoot by 1
+				r = claimRadius - 1;
 			}
+
+			/*
+			 * Adds WorldCoords in a spiral-out pattern.
+			 */
+			int halfSideLength = ((r * 2) + 1) / 2;
+			int x = 0, z = 0, dx = 0, dz = -1;
+			for (int i = 0; i <= available; i++) {
+				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
+					out.add(pos.add(x,z));
+				}
+
+				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
+					int swap = dx;
+					dx = -dz;
+					dz = swap;
+				}
+				x += dx;
+				z += dz;
+			}
+
+		} else {
+			throw new TownyException(Translation.of("msg_err_invalid_radius"));
 		}
 
 		return out;
 	}
 
-	public static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+	/**
+	 * Selects a circle shaped area of WorldCoords. Works in a spiral out fashion.
+	 * 
+	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
+	 * @param pos - WorldCoord where the selection is centered at.
+	 * @param args - subcommand arguments like auto or a number.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid radii are given.
+	 */
+	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
-		if (pos.getTownyWorld().isClaimable()) {
-			if (args.length > 0) {
-				int r = 0, available = 0;
-				if (owner instanceof Town) {
-					Town town = (Town) owner;
-					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-				} else if (owner instanceof Resident) {
-					available = TownySettings.getMaxResidentPlots((Resident) owner);
+		if (args.length > 0) {
+			int r = MAX_CIRC_RADIUS; // The greatest possible radius of a selection.
+
+			/*
+			 *  Area selections are capped at a 18 radius (1009 maximum.)
+			 *  Players need a permission node to use area claims and the max radius usable defaults to 4 (set in the config.)
+			 */
+			
+			if (args[0].equalsIgnoreCase("auto")) {
+				
+				/*
+				 * Select everything possible in a circle shape.
+				 */
+				
+				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+					while (available - Math.ceil(Math.PI * r * r) >= 0)
+						r += 1;
+				
+				if (TownySettings.getMaxClaimRadiusValue() > 0) 
+					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
+
+			} else {
+				
+				/*
+				 * Select an area that will claim a perfect circle shape, using a given radius
+				 * or the reduced radius that will give a perfect circle.
+				 */
+				
+				try {
+					r = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					throw new TownyException(Translation.of("msg_err_invalid_radius"));
 				}
-
-				if (args[0].equalsIgnoreCase("auto")) {
-					// Attempt to select outwards until no town blocks remain
-
-					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-						while (available - Math.ceil(Math.PI * r * r) >= 0)
-							r += 1;
-
-				} else {
-					try {
-						r = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_err_invalid_radius"));
+				
+				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
+					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+				
+				int radius = 0;
+				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+					while (available - Math.ceil(Math.PI * radius * radius) >= 0)
+						radius += 1;
+				
+				radius--;// We lower the radius by one so that we get only perfect circle claims.
+				
+				r = Math.min(r, radius); // This will ensure that if they've give too high of a radius we lower it to what they are able to actually claim.
+				
+			}
+			
+			/*
+			 * Adds WorldCoords in a spiral-out pattern.
+			 */
+			int halfSideLength = ((r * 2) + 1) / 2;
+			int x = 0, z = 0, dx = 0, dz = -1;
+			for (int i = 0; i <= available; i++) {
+				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
+					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= available)) {
+						out.add(pos.add(x,z));
 					}
 				}
-				
-				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+
+				if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
+					int swap = dx;
+					dx = -dz;
+					dz = swap;
 				}
-				
-				if (r > 1000)
-					r = 1000;
-				for (int z = -r; z <= r; z++)
-					for (int x = -r; x <= r; x++)
-						if ((x * x + z * z <= r * r) && (out.size() < available)) {
-							WorldCoord wc = new WorldCoord(pos.getWorldName(), pos.getX() + x, pos.getZ() + z);
-							if (!wc.hasTownBlock())
-								out.add(wc);
-						}
-							
-			} else {
-				throw new TownyException(Translation.of("msg_err_invalid_radius"));
+				x += dx;
+				z += dz;
 			}
+
+		} else {
+			throw new TownyException(Translation.of("msg_err_invalid_radius"));
 		}
 
 		return out;
@@ -197,12 +283,36 @@ public class AreaSelectionUtil {
 	}
 	
 	/**
+	 * Returns a list containing only townblocks that can be claimed.
+	 * Filters out townblocks too close to other town homeblocks as set in the config.
+	 * 
+
+	 * @param selection - List&lt;WorldCoord&gt; of coordinates
+	 * @param town - Town to check distance from
+	 * @return List of townblocks
+	 */
+	public static List<WorldCoord> filterInvalidProximityToHomeblock(List<WorldCoord> selection, Town town) {
+
+		List<WorldCoord> out = new ArrayList<>();
+		for (WorldCoord worldCoord : selection)
+			try {
+				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTowns(worldCoord, town) >= TownySettings.getMinDistanceFromTownHomeblocks()) {
+					out.add(worldCoord);
+				} else {
+					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town's homeblock." );					
+				}
+			} catch (NotRegisteredException ignored) {
+			}
+		return out;
+	}
+	
+	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 
 	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
-	public static List<WorldCoord> filterTownOwnedBlocks(List<WorldCoord> selection) {
+	public static List<WorldCoord> filterOutTownOwnedBlocks(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
@@ -221,7 +331,7 @@ public class AreaSelectionUtil {
 	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
-	public static List<WorldCoord> filterWildernessBlocks(List<WorldCoord> selection) {
+	public static List<WorldCoord> filterOutWildernessBlocks(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
@@ -233,12 +343,36 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Returns a List containing only claimed townblocks, owned by the given owner.
+	 * 
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks owned by the given owner.
+	 */
 	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().isOwner(owner))
+					out.add(worldCoord);
+			} catch (NotRegisteredException ignored) {
+			}
+		return out;
+	}
+	
+	/**
+	 * Returns a List containing only claimed townblocks, which are not owned by the given owner.
+	 * 
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks not owned by the given owner.
+	 */
+	public static List<WorldCoord> filterUnownedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
+
+		List<WorldCoord> out = new ArrayList<>();
+		for (WorldCoord worldCoord : selection)
+			try {
+				if (!worldCoord.getTownBlock().isOwner(owner))
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}
@@ -300,6 +434,11 @@ public class AreaSelectionUtil {
 		return seenGroups;
 	}
 
+	/**
+	 * Gather plots that are for sale only.
+	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are for sale.
+	 * @return List&lt;WorldCoord&gt; that are all for sale.
+	 */
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
@@ -312,24 +451,35 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Gather plots that are not for sale only.
+	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are not for sale.
+	 * @return List&lt;WorldCoord&gt; that are all not for sale.
+	 */
 	public static List<WorldCoord> filterPlotsNotForSale(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (worldCoord.getTownBlock().isForSale())
+				if (!worldCoord.getTownBlock().isForSale())
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
-
-	public static List<WorldCoord> filterUnownedPlots(List<WorldCoord> selection) {
+	
+	/**
+	 * Returns a List containing only claimed townblocks, which are not personally owned by a resident.
+	 * 
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks not owned by the given owner.
+	 */
+	public static List<WorldCoord> filterOutResidentBlocks(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (worldCoord.getTownBlock().getPlotPrice() > -1)
+				if (!worldCoord.getTownBlock().hasResident())
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}

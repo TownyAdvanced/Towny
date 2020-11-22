@@ -5283,3 +5283,47 @@ v0.92.0.11:
         - Used when an entity or block explosion would cause block damage.
     - Moves all of the explosion decisions related to Flag and Event war from the standard listeners and into the WarZoneListener.
     - Removes the short-lived ExplosionUtil.
+0.96.3.7:
+  - New Command: /tw toggle plotcleardelete
+    - Toggles whether the /plot clear command will work in a world.
+  - New Command: /towny plotclearblocks
+    - Opens GUI showing blocks removed by /plot clear.
+  - Fix usingPlotManagementMayorDelete setting in the world files not being used.
+  - Bump language files to 0.90.
+  - Add catches for NPEs when town.getAccount() returns null.
+  - Add some logic to entities damaging entities during War Time (when one or both entity is not a player.)
+    - Closes #4447.
+  - Make town with the most attackers in a townblock get the points in Event War.
+  - Fix clickable pages on the /town outpost list pages.
+    - Closes #4448.
+  - Update pom to use spigot 1.16.4.
+  - Configurable teleport world for new outlaw-teleporting feature, courtesy of Momshroom with PR #4442.
+    - Also prevents outlaws from being teleported to their bed if the bedspawn is in the town they're outlawed in.
+  - New Config Option: global_town_settings.outlaw_teleport_world
+    - default: "" 
+    - What world do you want the outlaw teleported to if they aren't part of a town and don't have a bedspawn outside of the town they are outlawed in.
+    - They will go to the listed world's spawn. 
+    - If blank, they will go to the spawnpoint of the world the town is in.
+  - Area Claiming and AreaSelectionUtil fix-up, with PR #4441.
+    - Massively improves the /t claim auto|rect|circle auto claiming options.
+      - Circles and Square shaped claims are now made in an outward-spiral shape, leading to centered claims.
+    - /t claim {rect|circle} # claims now have their # downsized to a radius which will allow for a full-ring of claims.
+      - Makes for perfect circle/square claiming.
+    - Closes #4427.
+    - Closes #4395.
+  - Add SQL Flags to Towny, courtesy of 0xBit-MC with PR #4450 (First-Time Contributor!)
+    - Closes #4446.
+  - New Config Option: plugin.database.sql.flags
+    - Default: "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"
+    - Allows for finer-grain editing of what flags will be used for your mysql connection.
+  - Italian.yml updated, courtesy of Leonardo_DGS with PR #4451.
+  - Don't delete town inside of `Resident#removeTown()`, courtesy of silverwolfg11 with PR #4457.
+  - Add Townblock To New Action Events with PR #4455.
+  - API: TownyBurnEvent.
+    - Allows for Towny, and then Towny's war systems and other plugins to decide if a block can ignite or burn.
+  - Fix sticky pistons retracting on the edge of plots.
+    - Closes #4456.
+  - Add Dragon Fireball Damage handling.
+    - Closes #4100.
+  - Switch Explosive Fireworks to be handled like PVP damage when it is dealt to players, instead of Explosive Damage.
+    - Makes it possible to use them on crossbows in a pvp setting without needing explosions forced on.

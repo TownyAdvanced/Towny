@@ -170,7 +170,7 @@ public class TownySpigotMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("town", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town", page, total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 	
@@ -277,7 +277,7 @@ public class TownySpigotMessaging {
 		}
 
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("nation", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:nation", page, total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 	
@@ -340,7 +340,7 @@ public class TownySpigotMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("outpost", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, total);
 		player.spigot().sendMessage(pageFooter);
 	}
 }

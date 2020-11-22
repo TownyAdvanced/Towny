@@ -167,12 +167,12 @@ public class PlotClaim extends Thread {
 		if (player != null) {
 			if (claim) {
 				if ((selection != null) && (selection.size() > 0) && (claimed > 0)) {
-					TownyMessaging.sendMsg(player, Translation.of("msg_claimed") + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+					TownyMessaging.sendMsg(player, Translation.of("msg_claimed") + " " + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				} else {
 					TownyMessaging.sendMsg(player, Translation.of("msg_not_claimed_1"));
 				}
 			} else if (selection != null) {
-				TownyMessaging.sendMsg(player, Translation.of("msg_unclaimed") + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, Translation.of("msg_unclaimed") + " " + ((selection.size() > 5) ? Translation.of("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			} else {
 				TownyMessaging.sendMsg(player, Translation.of("msg_unclaimed"));
 			}

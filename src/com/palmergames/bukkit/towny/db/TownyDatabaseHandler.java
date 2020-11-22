@@ -561,6 +561,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (town != null) {
 			resident.removeTown();
+			
+			// Delete the town if there are no more residents
+			if (town.getNumResidents() == 0) {
+				TownyUniverse.getInstance().getDataSource().removeTown(town);
+			}
 		}
 
 		// Delete the residents file.

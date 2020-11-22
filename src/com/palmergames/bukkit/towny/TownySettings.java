@@ -974,9 +974,9 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_PASSWORD);
 	}
 	
-	public static boolean getSQLUsingSSL() {
-
-		return getBoolean(ConfigNodes.PLUGIN_DATABASE_SSL);
+	public static String getSQLFlags() {
+		
+		return getString(ConfigNodes.PLUGIN_DATABASE_FLAGS);
 	}
 
 	public static int getMaxTownBlocks(Town town) {
@@ -3325,6 +3325,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
 	}
 	
+	public static String getOutlawTeleportWorld() { 
+		return getString(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WORLD); 
+	}
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}

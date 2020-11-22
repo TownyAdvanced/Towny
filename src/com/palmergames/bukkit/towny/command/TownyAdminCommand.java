@@ -765,7 +765,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				List<WorldCoord> selection;
 				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
-				selection = AreaSelectionUtil.filterWildernessBlocks(selection);
+				selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
 
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 
@@ -1576,7 +1576,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), newSplit);
 				}
 				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
+				selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				
 				new TownClaim(plugin, player, town, selection, false, true, false).start();
