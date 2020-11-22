@@ -29,7 +29,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -214,8 +213,6 @@ public class TownyPlayerListener implements Listener {
 			// Town has not set respawn location. Using default.
 		}
 	}
-
-
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
@@ -843,12 +840,6 @@ public class TownyPlayerListener implements Listener {
 		try {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException ignored) {}
-		
-		//Check for siege-war related death effects
-		if(TownySettings.getWarSiegeEnabled()) {
-			SiegeWarDeathController.evaluateSiegePlayerDeath(player, event);
-		}
-		
 		Location deathloc = player.getLocation();
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
 		if (tb != null && tb.hasTown()) {

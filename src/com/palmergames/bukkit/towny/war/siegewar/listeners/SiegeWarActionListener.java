@@ -18,7 +18,9 @@ import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
@@ -94,6 +96,19 @@ public class SiegeWarActionListener implements Listener {
 				event.setMessage(Translation.of("msg_war_siege_zone_bucket_emptying_forbidden"));
 				event.setCancelled(true);
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerKillsPlayer(PlayerKilledPlayerEvent event) {
+		//Check for siege-war related death effects
+		if(TownySettings.getWarSiegeEnabled()) {
+			/*
+			 * TODO: Evaluate if we're doing something bad in the SiegeWarDeathController
+			 * by moving to an PlayerKilledPlayerEvent which is fired from a MONITOR 
+			 * priority PlayerDeathEvent.
+			 */
+			SiegeWarDeathController.evaluateSiegePlayerDeath(event.getVictim(), event.getPlayerDeathEvent());
 		}
 	}
 }

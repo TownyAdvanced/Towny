@@ -48,7 +48,7 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();		
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
-	
+
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
@@ -62,7 +62,6 @@ public class TownyBlockListener implements Listener {
 		}
 
 		Block block = event.getBlock();
-
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
