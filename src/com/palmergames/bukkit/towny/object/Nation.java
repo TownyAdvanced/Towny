@@ -413,8 +413,7 @@ public class Nation extends Government {
 
 	private void removeAllSieges() {
 
-		for (Siege siege : new ArrayList<>(sieges))
-			sieges.remove(siege);
+		sieges.clear();
 	}
 
 	public void setTaxes(double taxes) {
@@ -642,29 +641,6 @@ public class Nation extends Government {
 			if(town.hasSiege() 
 				&& town.getSiege().getStatus().isActive()) {
 				result.add(town);
-			}
-		}
-		return result;
-	}
-
-	public List<Siege> getActiveAttackSieges() {
-		List<Siege> result = new ArrayList<>();
-		for(Siege siege: sieges) {
-			if(siege.getStatus().isActive()) {
-				result.add(siege);
-			}
-		}
-		return result;
-	}
-
-	public List<Siege> getActiveDefenceSieges(Town townToExclude) {
-		List<Siege> result = new ArrayList<>();
-		for(Town town: towns) {
-			if(town == townToExclude)
-				continue;
-
-			if(town.hasSiege() && town.getSiege().getStatus().isActive()) {
-				result.add(town.getSiege());
 			}
 		}
 		return result;
