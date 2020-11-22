@@ -303,8 +303,6 @@ permissions:
             towny.nation.siege.invade: true
             towny.nation.siege.plunder: true
 
-
-
     # Town command permissions
     towny.command.town.*:
         description: User can access all town related commands.
