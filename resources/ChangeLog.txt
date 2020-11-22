@@ -5330,3 +5330,4 @@ v0.92.0.11:
 0.96.3.8
   - Update bstats metrics.
   - Fix javadoc.
+  - Add getBlock() to TownyBuildEvent, TownyDestroyEvent and TownySwitchEvent.

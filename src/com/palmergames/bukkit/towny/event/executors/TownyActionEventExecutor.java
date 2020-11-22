@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event.executors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -124,6 +125,10 @@ public class TownyActionEventExecutor {
 		}
 		return approvedBlocks;
 	}
+	
+	private static Block getBlock(Location loc) {
+		return Bukkit.getWorld(loc.getWorld().getName()).getBlockAt(loc);
+	}
 
 	/**
 	 * Towny's primary internal test to determine if something can burn
@@ -180,7 +185,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canBuild(Player player, Location loc, Material mat) {
-		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
+		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.BUILD, event);
 	}
 
@@ -193,7 +198,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canDestroy(Player player, Location loc, Material mat) {
-		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
+		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.DESTROY, event);
 	}
 
@@ -206,7 +211,7 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat) {
-		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
+		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.SWITCH, event);
 	}
 
