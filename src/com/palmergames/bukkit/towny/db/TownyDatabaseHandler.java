@@ -273,18 +273,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	
 	@Override
+	@Deprecated
 	public Set<String> getResidentKeys() {
 
 		return universe.getResidentMap().keySet();
 	}
 
 	@Override
+	@Deprecated
 	public Set<String> getTownsKeys() {
 
 		return universe.getTownsMap().keySet();
 	}
 
 	@Override
+	@Deprecated
 	public Set<String> getNationsKeys() {
 
 		return universe.getNationsMap().keySet();
