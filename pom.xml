@@ -148,6 +148,11 @@
             <artifactId>commons-compress</artifactId>
             <version>1.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -205,6 +210,10 @@
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
                             <shadedPattern>com.palmergames.compress</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains.annotations</pattern>
+                            <shadedPattern>com.palmergames.annotations</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

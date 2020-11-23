@@ -91,7 +91,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 */
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
-			for (Town town : universe.getTownsMap().values()) {
+			for (Town town : universe.getTowns()) {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					universe.getDataSource().removeTown(town);
@@ -113,13 +113,11 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				            @Override
 				            public void run() {				            	
-				            	Town jailTown = null;
-								try {
-									jailTown = universe.getDataSource().getTown(resident.getJailTown());
-								} catch (NotRegisteredException ignored) {
+				            	Town jailTown = universe.getTown(resident.getJailTown());
+				            	if (jailTown != null) {
+									int index = resident.getJailSpawn();
+									resident.setJailed(index, jailTown);
 								}
-								int index = resident.getJailSpawn();
-				            	resident.setJailed(index, jailTown);
 				            }
 				            
 				        }.runTaskLater(this.plugin, 20);

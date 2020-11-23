@@ -1,11 +1,13 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,15 +26,20 @@ import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
+import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +60,14 @@ public class TownyUniverse {
     
     private final Map<String, Resident> residents = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
-    private final Map<String, Town> towns = new ConcurrentHashMap<>();
+    
+    private final Map<String, Town> townNameMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Town> townUUIDMap = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
+    
     private final Map<String, Nation> nations = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
+    
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -169,7 +180,8 @@ public class TownyUniverse {
     public void clearAllObjects() {
     	worlds.clear();
         nations.clear();
-        towns.clear();
+        townNameMap.clear();
+        townUUIDMap.clear();
         residents.clear();
         townBlocks.clear();
     }
@@ -336,13 +348,156 @@ public class TownyUniverse {
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
     }
-    
-    public Map<String, Town> getTownsMap() {
-        return towns;
+
+	// =========== Town Methods ===========
+	
+	public boolean hasTown(@NotNull String townName) {
+		Validate.notNull(townName, "Town Name cannot be null!");
+		
+		// Fast-fail
+		if (townName.isEmpty())
+			return false;
+		
+    	String formattedName;
+		try {
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+		} catch (InvalidNameException e) {
+			return false;
+		}
+		
+		return townNameMap.containsKey(formattedName);
+	}
+	
+	public boolean hasTown(@NotNull UUID townUUID) {
+		Validate.notNull(townUUID, "Town UUID cannot be null!");
+    	
+    	return townUUIDMap.containsKey(townUUID);
+	}
+	
+	@Nullable
+	public Town getTown(@NotNull String townName) {
+    	Validate.notNull(townName, "Town Name cannot be null!");
+    	
+    	// Fast-fail empty names
+    	if (townName.isEmpty())
+    		return null;
+    	
+		String formattedName;
+		try {
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+		} catch (InvalidNameException e) {
+			return null;
+		}
+		
+		return townNameMap.get(formattedName);
+	}
+	
+	@Nullable
+	public Town getTown(UUID townUUID) {
+    	return townUUIDMap.get(townUUID);
+	}
+	
+	@Unmodifiable
+	public Collection<Town> getTowns() {
+    	return Collections.unmodifiableCollection(townNameMap.values());
+	}
+
+	/**
+	 * 
+	 * @return direct access to the town name map that TownyUniverse uses.
+	 * 
+	 * @deprecated It is not recommended to directly access the map, but rather use
+	 * other towny universe methods to ensure safe-access and safe-manipulation.
+	 */
+	@Deprecated
+	public Map<String, Town> getTownsMap() {
+        return townNameMap;
     }
     
     public Trie getTownsTrie() {
     	return townsTrie;
+	}
+
+	// Internal use only.
+	public void newTownInternal(String name) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
+    	newTown(name, false);
+	}
+
+	/**
+	 * Create a new town from the string name.
+	 *
+	 * @param name Town name
+	 * @throws AlreadyRegisteredException Town name is already in use.
+	 * @throws InvalidNameException Town name is invalid.
+	 */
+	public void newTown(@NotNull String name) throws AlreadyRegisteredException, InvalidNameException {
+		Validate.notNull(name, "Name cannot be null!");
+		
+		newTown(name, true);
+	}
+
+	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
+		String filteredName = NameValidation.checkAndFilterName(name);;
+
+		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
+		registerTown(town);
+	}
+	
+	// This is used internally since UUIDs are assigned after town objects are created.
+	public void registerTownUUID(@NotNull Town town) throws AlreadyRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
+		if (town.getUUID() != null) {
+			
+			if (townUUIDMap.containsKey(town.getUUID())) {
+				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
+			}
+			
+			townUUIDMap.put(town.getUUID(), town);
+		}
+	}
+
+	/**
+	 * Used to register a town into the TownyUniverse internal maps.
+	 * 
+	 * This does not create a new town, or save a new town.
+	 * 
+	 * @param town Town to register.
+	 * @throws AlreadyRegisteredException Town is already in the universe maps.
+	 */
+	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
+		if (townNameMap.putIfAbsent(town.getName().toLowerCase(), town) != null) {
+			throw new AlreadyRegisteredException(String.format("The town with name '%s' is already registered!", town.getName()));
+		}
+		
+		townsTrie.addKey(town.getName());
+		registerTownUUID(town);
+	}
+
+	/**
+	 * Used to unregister a town from the TownyUniverse internal maps.
+	 * 
+	 * This does not delete a town, nor perform any actions that affect the town internally.
+	 * 
+	 * @param town Town to unregister
+	 * @throws NotRegisteredException Town is not registered in the universe maps.
+	 */
+	public void unregisterTown(@NotNull Town town) throws NotRegisteredException {
+		Validate.notNull(town, "Town cannot be null!");
+		
+		if (townNameMap.remove(town.getName().toLowerCase()) == null) {
+			throw new NotRegisteredException(String.format("The town with the name '%s' is not registered!", town.getName()));
+		}
+		
+		townsTrie.removeKey(town.getName());
+		
+		if (town.getUUID() != null) {
+			if (townUUIDMap.remove(town.getUUID()) == null) {
+				throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
+			}
+		}
 	}
 	
     public Map<String, TownyWorld> getWorldMap() {
@@ -432,7 +587,7 @@ public class TownyUniverse {
 	}
 
     public boolean hasGroup(String townName, UUID groupID) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 		
 		if (t != null) {
 			return t.getObjectGroupFromID(groupID) != null;
@@ -442,7 +597,7 @@ public class TownyUniverse {
 	}
 
 	public boolean hasGroup(String townName, String groupName) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 
 		if (t != null) {
 			return t.hasPlotGroupName(groupName);
@@ -460,7 +615,7 @@ public class TownyUniverse {
 	public Collection<PlotGroup> getGroups() {
     	List<PlotGroup> groups = new ArrayList<>();
     	
-		for (Town town : towns.values()) {
+		for (Town town : townNameMap.values()) {
 			if (town.hasPlotGroups()) {
 				groups.addAll(town.getPlotObjectGroups());
 			}
@@ -477,12 +632,8 @@ public class TownyUniverse {
 	 * @return PlotGroup if found, null if none found.
 	 */
 	public PlotGroup getGroup(String townName, UUID groupID) {
-		Town t = null;
-		try {
-			t = TownyUniverse.getInstance().getDataSource().getTown(townName);
-		} catch (NotRegisteredException e) {
-			return null;
-		}
+		Town t = getTown(townName);
+
 		if (t != null) {
 			return t.getObjectGroupFromID(groupID);
 		}
@@ -498,7 +649,7 @@ public class TownyUniverse {
 	 * @return the plot group if found, otherwise null
 	 */
 	public PlotGroup getGroup(String townName, String groupName) {
-		Town t = towns.get(townName);
+		Town t = townNameMap.get(townName);
 
 		if (t != null) {
 			return t.getPlotObjectGroupFromName(groupName);

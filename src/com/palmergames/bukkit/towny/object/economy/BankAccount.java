@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -84,12 +85,14 @@ public class BankAccount extends Account {
 	 */
 	public double getDebtCap() {
 		if (TownySettings.isDebtCapDeterminedByTownLevel()) { // town_level debtCapModifier * debt_cap.override.
-			Town town = null;
-			try {
-				town = TownyUniverse.getInstance().getDataSource().getTown(this.getName().replace(TownySettings.getTownAccountPrefix(), ""));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
+			String townName = this.getName().replace(TownySettings.getTownAccountPrefix(), "");
+			Town town = TownyUniverse.getInstance().getTown(townName);
+			
+			// For whatever reason, this just errors and continues
+			if (town == null) {
+				TownyMessaging.sendErrorMsg(String.format("Error fetching debt cap for town %s because town is not registered!", townName));
 			}
+			
 			return Double.parseDouble(TownySettings.getTownLevel(town).get(TownySettings.TownLevel.DEBT_CAP_MODIFIER).toString()) * TownySettings.getDebtCapOverride();
 		}
 		

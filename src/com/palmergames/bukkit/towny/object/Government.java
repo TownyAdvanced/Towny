@@ -19,6 +19,7 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A class which represents the structure of objects that
@@ -26,8 +27,9 @@ import java.util.List;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, SpawnLocation {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation {
 	
+	protected UUID uuid;
 	protected BankAccount account;
 	protected Location spawn;
 	protected String tag = "";
@@ -281,4 +283,14 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @return The {@link World} this object is in.
 	 */
 	public abstract World getWorld();
+
+	@Override
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	@Override
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
 }

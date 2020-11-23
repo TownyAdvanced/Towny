@@ -1,8 +1,7 @@
 package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.TownySettings;
-
-import javax.naming.InvalidNameException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -154,9 +154,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if (args.length >= 1) {
 			// We cut the first argument out of it so /invite *accept* args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
-			try {
-				town = townyUniverse.getDataSource().getTown(args[0]);
-			} catch (NotRegisteredException e) {
+			town = townyUniverse.getTown(args[0]);
+			
+			if (town == null) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 				return;
 			}
@@ -206,9 +206,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		if (args.length >= 1) {
-			try {
-				town = townyUniverse.getDataSource().getTown(args[0]);
-			} catch (NotRegisteredException e) {
+			town = townyUniverse.getTown(args[0]);
+			
+			if (town == null) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 				return;
 			}
