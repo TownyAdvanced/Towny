@@ -87,16 +87,13 @@ public class OnPlayerLogin implements Runnable {
 								try {
 									resident.setTown(town);
 									universe.getDataSource().saveTown(town);
-								} catch (AlreadyRegisteredException ignore) {
-								}
+								} catch (AlreadyRegisteredException ignore) {}
 							}
 						}
 						
 						universe.getDataSource().saveResident(resident);
 						
-					} catch (AlreadyRegisteredException | NotRegisteredException ex) {
-						// Should never happen
-					}
+					} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
 				}
 			} catch (NotRegisteredException ignored) {}
@@ -127,35 +124,27 @@ public class OnPlayerLogin implements Runnable {
 				resident = universe.getDataSource().getResident(player.getName());
 				loginExistingResident(resident);
 				
-			} catch (NotRegisteredException ex) {
-				// Should never happen
-			}
+			} catch (NotRegisteredException ignored) {}
 		}
 
 		if (resident != null) {
 			TownyPerms.assignPermissions(resident, player);
 				
 			try {
-				if (TownySettings.getShowTownBoardOnLogin() && !resident.getTown().getBoard().isEmpty()) {
+				if (TownySettings.getShowTownBoardOnLogin() && resident.hasTown() &&  !resident.getTown().getBoard().isEmpty())
 					TownyMessaging.sendTownBoard(player, resident.getTown());
-				}
-				if (TownySettings.getShowNationBoardOnLogin()) {
-					if (resident.getTown().hasNation() && !resident.getTown().getNation().getBoard().isEmpty()) {
-						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
-					}
-				}
-				resident.getTown(); // Exception check, this does not do anything at all!
-			} catch (NotRegisteredException ignored) {
-			}
+
+				if (TownySettings.getShowNationBoardOnLogin() && resident.getTown().hasNation() && !resident.getTown().getNation().getBoard().isEmpty())
+					TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+
+			} catch (NotRegisteredException ignored) {}
 		
-			if (TownyAPI.getInstance().isWarTime()) {
+			if (TownyAPI.getInstance().isWarTime())
 				universe.getWarEvent().sendScores(player, 3);
-			}
 		
 			//Schedule to setup default modes when the player has finished loading
-			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1) {
+			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
 				TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
-			}
 			
 			// Send any warning messages at login.
 			warningMessage(resident);
