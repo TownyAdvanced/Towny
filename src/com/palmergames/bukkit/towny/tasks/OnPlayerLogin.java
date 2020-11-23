@@ -55,45 +55,62 @@ public class OnPlayerLogin implements Runnable {
 		if (TownyTimerHandler.isGatherResidentUUIDTaskRunning() && player.getUniqueId().version() == 3)
 			GatherResidentUUIDTask.markOfflineMode();
 
+		
 		if (!universe.getResidentUUIDNameMap().containsKey(player.getUniqueId())) {
 			/*
-			 * No record of this resident exists
-			 * So create a fresh set of data.
+			 * No record of this resident's UUID.
 			 */
 			try {
-				universe.getDataSource().newResident(player.getName());
-				resident = universe.getDataSource().getResident(player.getName());
-				
-				if (TownySettings.isShowingRegistrationMessage())				
-					TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
-				resident.setRegistered(System.currentTimeMillis());
-				resident.setLastOnline(System.currentTimeMillis());
-				resident.setUUID(player.getUniqueId());
-				TownySettings.incrementUUIDCount();
-				if (!TownySettings.getDefaultTownName().equals("")) {
-					Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
-					if (town != null) {
-						try {
-							resident.setTown(town);
-							universe.getDataSource().saveTown(town);
-						} catch (AlreadyRegisteredException ignore) {
+				// If the universe has a resident and the resident has no UUID, log them in with their current name.
+				if (universe.getDataSource().hasResident(player.getName()) && !universe.getDataSource().getResident(player.getName()).hasUUID()) {
+					loginExistingResident(universe.getDataSource().getResident(player.getName()));
+					
+				// Else we're dealing with a new resident, because there's no resident by that UUID or resident by that Name without a UUID.
+				} else {
+
+					/*
+					 * Make a brand new Resident.
+					 */
+					try {
+						universe.getDataSource().newResident(player.getName());
+						resident = universe.getDataSource().getResident(player.getName());
+						
+						if (TownySettings.isShowingRegistrationMessage())				
+							TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
+						resident.setRegistered(System.currentTimeMillis());
+						resident.setLastOnline(System.currentTimeMillis());
+						resident.setUUID(player.getUniqueId());
+						TownySettings.incrementUUIDCount();
+						if (!TownySettings.getDefaultTownName().equals("")) {
+							Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
+							if (town != null) {
+								try {
+									resident.setTown(town);
+									universe.getDataSource().saveTown(town);
+								} catch (AlreadyRegisteredException ignore) {
+								}
+							}
 						}
+						
+						universe.getDataSource().saveResident(resident);
+						
+					} catch (AlreadyRegisteredException | NotRegisteredException ex) {
+						// Should never happen
 					}
+
 				}
-				
-				universe.getDataSource().saveResident(resident);
-				
-			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
-				// Should never happen
-			}
+			} catch (NotRegisteredException ignored) {}
 			
 		} else {
-			
+			/*
+			 * We do have record of this UUID being used before, log in the resident after checking for a name change.
+			 */
 			String oldname = universe.getResidentUUIDNameMap().get(player.getUniqueId());
 			try {
 				resident = universe.getDataSource().getResident(oldname);
 			} catch (NotRegisteredException ignored) {}
 			
+			// Name change test.
 			if (!resident.getName().equals(player.getName())) {
 				try {
 					universe.getDataSource().renamePlayer(resident, player.getName());
@@ -108,32 +125,16 @@ public class OnPlayerLogin implements Runnable {
 			 */
 			try {
 				resident = universe.getDataSource().getResident(player.getName());
-				if (TownySettings.isUsingEssentials()) {
-					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-					/*
-					 * Don't update last online for a player who is vanished.
-					 */
-					if (!ess.getUser(player).isVanished())
-						resident.setLastOnline(System.currentTimeMillis());
-				} else {
-					resident.setLastOnline(System.currentTimeMillis());
-				}
-				if (!resident.hasUUID()) {
-					resident.setUUID(player.getUniqueId());
-					TownySettings.incrementUUIDCount();
-				}
-				universe.getDataSource().saveResident(resident);
+				loginExistingResident(resident);
 				
 			} catch (NotRegisteredException ex) {
 				// Should never happen
 			}
 		}
 
-		if (resident != null)
-			
+		if (resident != null) {
 			TownyPerms.assignPermissions(resident, player);
-			
-			
+				
 			try {
 				if (TownySettings.getShowTownBoardOnLogin() && !resident.getTown().getBoard().isEmpty()) {
 					TownyMessaging.sendTownBoard(player, resident.getTown());
@@ -146,18 +147,43 @@ public class OnPlayerLogin implements Runnable {
 				resident.getTown(); // Exception check, this does not do anything at all!
 			} catch (NotRegisteredException ignored) {
 			}
-
-		if (TownyAPI.getInstance().isWarTime()) {
-			universe.getWarEvent().sendScores(player, 3);
-		}
-
-		//Schedule to setup default modes when the player has finished loading
-		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1) {
-			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
-		}
 		
-		// Send any warning messages at login.
-		warningMessage(resident);
+			if (TownyAPI.getInstance().isWarTime()) {
+				universe.getWarEvent().sendScores(player, 3);
+			}
+		
+			//Schedule to setup default modes when the player has finished loading
+			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1) {
+				TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
+			}
+			
+			// Send any warning messages at login.
+			warningMessage(resident);
+		}
+	}
+	
+	/**
+	 * Update last online, add UUID if needed, then save the resident.
+	 * 
+	 * @param resident Resident logging in.
+	 */
+	private void loginExistingResident(Resident resident) {
+		if (TownySettings.isUsingEssentials()) {
+			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+			/*
+			 * Don't update last online for a player who is vanished.
+			 */
+			if (!ess.getUser(player).isVanished())
+				resident.setLastOnline(System.currentTimeMillis());
+		} else {
+			resident.setLastOnline(System.currentTimeMillis());
+		}
+		if (!resident.hasUUID()) {
+			resident.setUUID(player.getUniqueId());
+			TownySettings.incrementUUIDCount();
+		}
+		universe.getDataSource().saveResident(resident);
+			
 	}
 	
 	/**
