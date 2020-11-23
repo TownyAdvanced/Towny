@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -59,7 +58,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1080,48 +1078,29 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String oldName = resident.getName();
 		
 		try {
-			
-			//data needed for a new resident
 			double balance = 0.0D;
-			Town town = null;
-			long registered;
-			long lastOnline;
-			UUID uuid = null;
-			boolean isMayor;
-			boolean isJailed;
-			boolean isNPC;
-			int JailSpawn;
-			
+
+			// Get balance in case this a server using ico5.  
 			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
 				try {
 					balance = resident.getAccount().getHoldingBalance();
 					resident.getAccount().removeAccount();
 				} catch (EconomyException ignored) {
 				}				
-			} else {
+			}
+			// Change account name over.
+			if (TownySettings.isUsingEconomy())
 				resident.getAccount().setName(newName);
-			}
 			
-			//get data needed for resident
-			List<Resident> friends = resident.getFriends();
-			List<String> nationRanks = resident.getNationRanks();
-			TownyPermission permissions = resident.getPermissions();
-			String surname = resident.getSurname();
-			String title = resident.getTitle();
-			if (resident.hasTown()) {
-				town = resident.getTown();
-			}
-			Collection<TownBlock> townBlocks = resident.getTownBlocks();
-			List<String> townRanks = resident.getTownRanks();
-			registered = resident.getRegistered();			
-			lastOnline = resident.getLastOnline();
-			if (resident.hasUUID())
-				uuid = resident.getUUID();
-			isMayor = resident.isMayor();
-			isNPC = resident.isNPC();
-			isJailed = resident.isJailed();			
-			JailSpawn = resident.getJailSpawn();
-			
+			//remove old resident from residentsMap and residentsTrie
+			universe.getResidentMap().remove(oldName.toLowerCase());
+			universe.getResidentsTrie().removeKey(oldName);
+			//rename the resident
+			resident.setName(newName);
+			// add new resident to residentsMap and residentsTrie
+			universe.getResidentMap().put(newName.toLowerCase(), resident);
+			universe.getResidentsTrie().addKey(newName);
+			// remove and readd resident to jailedResidentsMap if jailed.
 			if (resident.isJailed()) {
 				try {
 					universe.getJailedResidentMap().remove(universe.getDataSource().getResident(oldName));
@@ -1129,20 +1108,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (Exception ignored) {
 				}
 			}
-				
-			
-			//delete the resident and tidy up files
-			deleteResident(resident);
-		
-			//remove old resident from residentsMap
-			//rename the resident
-			universe.getResidentMap().remove(oldName.toLowerCase());
-			universe.getResidentsTrie().removeKey(oldName);
-			resident.setName(newName);
-			universe.getResidentMap().put(newName.toLowerCase(), resident);
-			universe.getResidentsTrie().addKey(newName);
-			
-			//add everything back to the resident
+			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
 			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
 					resident.getAccount().setName(resident.getName());
@@ -1151,41 +1117,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					e.printStackTrace();
 				}				
 			}
-			resident.setFriends(friends);
-			resident.setNationRanks(nationRanks);
-			resident.setPermissions(permissions.toString()); //not sure if this will work
-			resident.setSurname(surname);
-			resident.setTitle(title);
-			resident.setTown(town);
-			resident.setTownblocks(townBlocks);
-			try {
-				resident.setTownRanks(townRanks);
-			} catch (ConcurrentModificationException ignored) {
-				// If this gets tripped by TownyNameUpdater in the future we will at least not be deleting anyone, they just won't have their townranks.
-			}
-			resident.setRegistered(registered);
-			resident.setLastOnline(lastOnline);
-			if (uuid != null)
-				resident.setUUID(uuid);
-			if(isMayor)
-				town.setMayor(resident);
-			if (isNPC)
-				resident.setNPC(true);
-			resident.setJailed(isJailed);
-			resident.setJailSpawn(JailSpawn);
 			
-			//save stuff
+			// Save resident with new name.
 			saveResident(resident);
-			if(town != null){
-			    saveTown(town);
-		    }
-			for(TownBlock tb: townBlocks){
+
+			// Save townblocks resident owned personally with new name.
+			for(TownBlock tb: resident.getTownBlocks()){
 				saveTownBlock(tb);				
 			}
 			
-			//search and update all friends lists
-			//followed by outlaw lists
+			// Make an oldResident with the previous name for use in searching friends/outlawlists/deleting the old resident file.
 			Resident oldResident = new Resident(oldName);
+			
+			// Search and update all friends lists
 			List<Resident> toSaveResident = new ArrayList<>(getResidents());
 			for (Resident toCheck : toSaveResident){
 				if (toCheck.hasFriend(oldResident)) {
@@ -1196,7 +1140,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Resident toCheck : toSaveResident)
 				saveResident(toCheck);
 			
-			List<Town> toSaveTown = new ArrayList<>(getTowns());
+			// Search and update all outlaw lists.
+			List<Town> toSaveTown = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 			for (Town toCheckTown : toSaveTown) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					toCheckTown.removeOutlaw(oldResident);
@@ -1205,7 +1150,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			for (Town toCheckTown : toSaveTown)
 				saveTown(toCheckTown);	
-		
+
+			//delete the old resident and tidy up files
+			deleteResident(oldResident);
+
 		} finally {
 			lock.unlock();			
 		}
