@@ -5335,3 +5335,8 @@ v0.92.0.11:
   - API: Add PlayerDeathEvent to PlayerKilledPlayerEvent.
   - Tweaks to how players and non-protected mobs are dealt explosion damage.
   - Cleanup Warnings courtesy of docwhomc with PR #4463.
+  - Backend Town UUID Implementation, courtesy of silverwolfg11 with PR #4421.
+    - Switchs the maps tracking Towns from names to UUIDs.
+    - Move new town method to TownyUniverse.
+    - Create a InvalidNameException that is a TownyException.
+	- Create register / unregister methods for towns.
