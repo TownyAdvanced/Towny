@@ -55,7 +55,7 @@ public class OnPlayerLogin implements Runnable {
 		if (TownyTimerHandler.isGatherResidentUUIDTaskRunning() && player.getUniqueId().version() == 3)
 			GatherResidentUUIDTask.markOfflineMode();
 
-		if (!universe.getDataSource().hasResident(player.getName())) {
+		if (!universe.getResidentUUIDNameMap().containsKey(player.getUniqueId())) {
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
@@ -88,6 +88,21 @@ public class OnPlayerLogin implements Runnable {
 			}
 			
 		} else {
+			
+			String oldname = universe.getResidentUUIDNameMap().get(player.getUniqueId());
+			try {
+				resident = universe.getDataSource().getResident(oldname);
+			} catch (NotRegisteredException ignored) {}
+			
+			if (!resident.getName().equals(player.getName())) {
+				try {
+					universe.getDataSource().renamePlayer(resident, player.getName());
+				} catch (AlreadyRegisteredException e) {
+					e.printStackTrace();
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+			}
 			/*
 			 * This resident is known so fetch the data and update it.
 			 */
