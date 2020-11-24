@@ -27,7 +27,7 @@ public class StringDataField extends CustomDataField<String> {
 	}
 
 	@Override
-	public CustomDataField clone() {
+	public CustomDataField<String> clone() {
 		return new StringDataField(getKey(), getValue(), this.label);
 	}
 }

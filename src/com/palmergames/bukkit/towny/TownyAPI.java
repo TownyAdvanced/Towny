@@ -298,7 +298,7 @@ public class TownyAPI {
      */
     public UUID getTownUUID(Location location) {
     	Town town = getTown(location);
-    	return town != null ? town.getUuid() : null;
+    	return town != null ? town.getUUID() : null;
     }
     
     /**
@@ -431,7 +431,7 @@ public class TownyAPI {
         TeleportWarmupTimerTask.abortTeleportRequest(resident);
     }
     
-    public void registerCustomDataField(CustomDataField field) throws KeyAlreadyRegisteredException {
+    public void registerCustomDataField(CustomDataField<?> field) throws KeyAlreadyRegisteredException {
     	townyUniverse.addCustomCustomDataField(field);
 	}
 

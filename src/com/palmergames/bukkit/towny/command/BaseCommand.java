@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -163,17 +164,19 @@ public class BaseCommand implements TabCompleter{
 	/**
 	 * Returns the names a town's residents that start with a string
 	 *
-	 * @param town the town to get the residents of
+	 * @param townName the town to get the residents of
 	 * @param str the string to check if the town's residents start with
 	 * @return the resident names that match str
 	 */
 
-	public static List<String> getResidentsOfTownStartingWith(String town, String str) {
-		try {
-			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getTown(town).getResidents()), str);
-		} catch (NotRegisteredException e) {
-			return Collections.emptyList();
+	public static List<String> getResidentsOfTownStartingWith(String townName, String str) {
+		Town town = TownyUniverse.getInstance().getTown(townName);
+		
+		if (town != null) {
+			return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), str);
 		}
+		
+		return Collections.emptyList();
 	}
 
 	/**

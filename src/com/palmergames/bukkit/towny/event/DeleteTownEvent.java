@@ -22,7 +22,7 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	}
 
     public DeleteTownEvent(Town town) {
-    	super(town.getName(), town.getUuid(), town.getRegistered());
+    	super(town.getName(), town.getUUID(), town.getRegistered());
     }
 
     /**

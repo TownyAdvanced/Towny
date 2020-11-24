@@ -115,6 +115,12 @@ public class EntityTypeUtil {
 		case BOAT:
 			material = Material.OAK_BOAT;
 			break;
+
+		default:
+		    /*
+		     * TODO: Consider adding a warning message that conversion of an
+		     * entity to a material was unsuccessful.
+		     */
 		}
 					
 		return material;

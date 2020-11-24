@@ -91,11 +91,11 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 * @param str - The metadata string to load
 	 * @return - The data field defined by the string
 	 */
-    public static CustomDataField load(String str) {
+    public static CustomDataField<?> load(String str) {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.fromValue(Integer.parseInt(tokens[0]));
         String key = tokens[1];
-        CustomDataField field = null;
+        CustomDataField<?> field = null;
         
         switch (type) {
             case IntegerField:
@@ -148,7 +148,7 @@ public abstract class CustomDataField<T> implements Cloneable {
     @Override
     public boolean equals(Object rhs) {
         if (rhs instanceof CustomDataField)
-            return ((CustomDataField) rhs).getKey().equals(this.getKey());
+            return ((CustomDataField<?>) rhs).getKey().equals(this.getKey());
         
         return false;
     }
@@ -159,7 +159,7 @@ public abstract class CustomDataField<T> implements Cloneable {
         return getKey().hashCode();
     }
     
-    public abstract CustomDataField clone();
+    public abstract CustomDataField<T> clone();
     
 	/**
 	 * Returns a duplicate instance of the object.
@@ -167,7 +167,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 * @return See {@link #clone()}.
 	 */
 	@Deprecated
-    public CustomDataField newCopy() {
+    public CustomDataField<T> newCopy() {
     	return clone();
     }
     

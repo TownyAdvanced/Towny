@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -46,8 +47,6 @@ import com.palmergames.util.FileMgmt;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
-import javax.naming.InvalidNameException;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -192,20 +191,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getResidentsTrie().addKey(filteredName);
 	}
 
+	/**
+	 * Create a new town from a name
+	 * 
+	 * @param name town name
+	 * @throws AlreadyRegisteredException thrown if town already exists.
+	 * @throws NotRegisteredException thrown if town has an invalid name.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#newTown(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(name);
+			universe.newTown(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
-
-		if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-		universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
-		universe.getTownsTrie().addKey(filteredName);
 	}
 
 	@Override
@@ -250,9 +252,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 	}
 
+	/**
+	 * Checks if a town with the name exists.
+	 * 
+	 * @param name Name of the town to check.
+	 * @return whether the town exists.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#hasTown(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public boolean hasTown(String name) {
-		return universe.getTownsMap().containsKey(name.toLowerCase());
+		return universe.hasTown(name);
 	}
 
 	@Override
@@ -267,18 +278,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	
 	@Override
+	@Deprecated
 	public Set<String> getResidentKeys() {
 
 		return universe.getResidentMap().keySet();
 	}
 
 	@Override
+	@Deprecated
 	public Set<String> getTownsKeys() {
 
 		return universe.getTownsMap().keySet();
 	}
 
 	@Override
+	@Deprecated
 	public Set<String> getNationsKeys() {
 
 		return universe.getNationsMap().keySet();
@@ -363,54 +377,65 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Town> getTowns(String[] names) {
 
 		List<Town> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getTown(name));
-			} catch (NotRegisteredException ignored) {
+		for (String name : names) {
+			Town t = universe.getTown(name);
+			
+			if (t != null) {
+				matches.add(t);
 			}
+		}
+		
 		return matches;
 	}
 
+	/**
+	 * @return a list of all towns.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTowns()} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Town> getTowns() {
 
-		return new ArrayList<>(universe.getTownsMap().values());
+		return new ArrayList<>(universe.getTowns());
 	}
 
+	/**
+	 * Gets a town from the passed-in name.
+	 * @param name Town Name
+	 * @return town associated with the name.
+	 * @throws NotRegisteredException Town does not exist.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTown(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(String.format("The town with name '%s' is not valid.", name));
-		}
-
-		if (!hasTown(name))
-			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
-
-		return universe.getTownsMap().get(name);
+		Town town = universe.getTown(name);
+		
+		if (town == null)
+			throw new NotRegisteredException(String.format("The town with name '%s' is not registered!", name));
+		
+		return town;
 	}
 
+	/**
+	 * Returns the associated town with the passed-in uuid.
+	 * @param uuid UUID of the town to fetch.
+	 * @return town associated with the uuid.
+	 * @throws NotRegisteredException Thrown if town doesn't exist.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getTown(UUID)} instead.
+	 */
+	@Deprecated
 	@Override
 	public Town getTown(UUID uuid) throws NotRegisteredException {
-		String name = null;
-		for (Town town : this.getTowns()) {
-			if (uuid.equals(town.getUuid())) {
-				name = town.getName();
-			}
-		}
-
-		if (name == null) {
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		}
+		Town town = universe.getTown(uuid);	
 		
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		return universe.getTownsMap().get(name);
+		if (town == null)
+			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
+		
+		return town;
 	}
 
 	@Override
@@ -691,9 +716,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Must already be removed
 		}
 		saveWorld(townyWorld);
+
+		try {
+			universe.unregisterTown(town);
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+		}
 		
-		universe.getTownsTrie().removeKey(town.getName());
-		universe.getTownsMap().remove(town.getName().toLowerCase());
 		plugin.resetCache();
 		deleteTown(town);
 		
@@ -826,7 +855,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					
 				} catch (EconomyException ignored) {
 				}
-			UUID oldUUID = town.getUuid();
+			UUID oldUUID = town.getUUID();
 			long oldregistration = town.getRegistered();
 
 			// Store the nation in case we have to update the capitol
@@ -851,11 +880,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * Remove the old town from the townsMap
 			 * and rename to the new name
 			 */
-			universe.getTownsTrie().removeKey(town.getName());
-			universe.getTownsMap().remove(town.getName().toLowerCase());
+			// Re-register the town in the unvierse maps
+			universe.unregisterTown(town);
 			town.setName(filteredName);
-			universe.getTownsMap().put(filteredName.toLowerCase(), town);
-			universe.getTownsTrie().addKey(filteredName);
+			universe.registerTown(town);
 			world.addTown(town);
 
 			//Move/rename siege
@@ -874,7 +902,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (isCapital) {
 				nation.setCapital(town);
 			}
-			town.setUuid(oldUUID);
+			town.setUUID(oldUUID);
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				try {
