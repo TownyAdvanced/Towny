@@ -1366,7 +1366,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading siege " + siege.getName());
 
 			siege.setAttackingNation(getNation(rs.getString("attackingNation")));
-			siege.setDefendingTown(getTown(rs.getString("defendingTown")));
+			siege.setDefendingTown(universe.getTown(rs.getString("defendingTown")));
 
 			line = rs.getString("flagLocation");
 			listEntries = line.split(",");

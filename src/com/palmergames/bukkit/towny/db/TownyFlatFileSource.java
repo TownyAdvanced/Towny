@@ -1135,7 +1135,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				//Set town, and also register siege with town
 				line = keys.get("defendingTown");
-				Town defendingTown = getTown(line);
+				Town defendingTown = universe.getTown(line);
 				siege.setDefendingTown(defendingTown);
 				defendingTown.setSiege(siege);
 
