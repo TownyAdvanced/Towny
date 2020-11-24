@@ -23,12 +23,11 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +50,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Lukas Mansour (Articdive)
  */
-public class TownyUniverse {
+public class TownyUniverse implements Universe {
     private static TownyUniverse instance;
+    private static final Set<Universe> subuniverses = new HashSet<>();
     private final Towny towny;
     
     private final Map<String, Resident> residents = new ConcurrentHashMap<>();
@@ -60,7 +60,6 @@ public class TownyUniverse {
     private final Map<String, Town> towns = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
     private final Map<String, Nation> nations = new ConcurrentHashMap<>();
-    private final Map<String, Siege> sieges = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
@@ -177,7 +176,19 @@ public class TownyUniverse {
         towns.clear();
         residents.clear();
         townBlocks.clear();
-        sieges.clear();
+        for (Universe subuniverse : subuniverses) {
+            subuniverse.clearAllObjects();
+        }
+    }
+
+    @Override
+    public boolean registerSubUniverse(@NotNull Universe subuniverse) {
+        return subuniverses.add(subuniverse);
+    }
+
+    @Override
+    public boolean deregisterSubUniverse(@NotNull Universe subuniverse) {
+        return subuniverses.remove(subuniverse);
     }
     
     /**
@@ -325,10 +336,6 @@ public class TownyUniverse {
 
     public Map<String, Nation> getNationsMap() {
         return nations;
-    }
-    
-    public Map<String, Siege> getSiegesMap() {
-        return sieges;
     }
     
     public Trie getNationsTrie() {
@@ -619,18 +626,6 @@ public class TownyUniverse {
 	private boolean removeTownBlock(WorldCoord worldCoord) {
 
 		return townBlocks.remove(worldCoord) != null;
-	}
-
-	/*
-	 * Siege War Stuff
-	 */
-	
-	public Set<Player> getPlayersInBannerControlSessions() {
-		Set<Player> result = new HashSet<>();
-		for (Siege siege : sieges.values()) {
-			result.addAll(siege.getBannerControlSessions().keySet());
-		}
-		return result;
 	}
 
 	/*
