@@ -92,7 +92,7 @@ mode_5: 'Domyślne pisanie na kanale nacji'
 mode_6: 'Może budować %s we wrogich terytoriach, aby oznaczyć strefy wojenne.'
 
 plot_perms: 'Użyj %s zamiast %s do ustawiania uprawnień działki.'
-plot_perms_1: 'Mieszkaniec działki nie że korzystać z uprawnień koczownika.'
+plot_perms_1: 'Mieszkaniec działki nie że korzystać z uprawnień przejezdnego.'
 
 res_list: 'Mieszkańcy'
 res_sing: 'Mieszkaniec'
@@ -156,7 +156,7 @@ msg_nation_cant_neutral: '&bNację nie stać, na zostanie neutralną.'
 msg_neutral_disabled: '&bStatus neutralny nacji przestał obowiązywać.'
 msg_you_paid: '&bZapłaciłes %s, aby ustanowić status neutralny.'
 msg_nation_set_neutral: '&bPomyślnie zmieniono status neutralności nacji.'
-msg_nation_allow_neutral: '&bUstanawianie statusu neutralności przez nacje: %s'
+msg_nation_allow_neutral: '&bUstanawianie statusu neutralności przez nację: %s'
 msg_mobremoval_world: '&bBlokowanie spawnu mobów: %s'
 msg_mobremoval_town: '&bBlokowanie spawnu mobów w mieście: %s'
 msg_nation_neutral: '&bTwoja nacja jest teraz'
@@ -185,7 +185,7 @@ msg_kicked: '&b%s wyrzucił mieszkańca %s z miasta.'
 msg_nation_kicked_by: '&bTwoje miasto zostało wyrzucone z nacji przez %s.'
 msg_town_left_nation: '&bTwoje miasto opuściło nację %s.'
 msg_nation_town_left: '&bMiasto %s opuściło twoją nację.'
-msg_nation_kicked: '&b%s wyrzucił miato %s z nacji.'
+msg_nation_kicked: '&b%s wyrzucił miasto %s z nacji.'
 msg_raised_ass: '&b%s awansował mieszkańca %s na asystenta %s.'
 msg_lowered_to_res_by: '&bZostałeś zdegradowany do rangi mieszkańca przez %s.'
 msg_lowered_to_res: '&b%s zdegradował %s do rangi mieszkańca.'
@@ -366,7 +366,7 @@ msg_cache_block_error_plot: '&cJako właściciel działki nie masz uprawnienia "
 msg_cache_block_error_locked: '&cTa działka jest zablokowana!'
 msg_cache_block_error_town_resident: '&cMieszkańcy nie mają tutaj uprawnienia "%s".'
 msg_cache_block_error_town_allies: '&cSojusznicy nie mają tutaj uprawnienia "%s".'
-msg_cache_block_error_town_outsider: '&cKoczownicy nie mają tutaj uprawnienia "%s".'
+msg_cache_block_error_town_outsider: '&cPrzejezdni nie mają tutaj uprawnienia "%s".'
 
 msg_err_cant_afford_tp_town: '&cNie stać cię na teleportację do %s.'
 msg_err_not_public: '&cSpawn miasta jest niepubliczny.'
@@ -564,7 +564,7 @@ msg_err_max_residents_per_town_reached: '&cMaksymalna liczba mieszkańców (%s) 
 
 # Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cGracz %s nie był akywny od dłuższego czasu. Nie możesz go zaprosić.'
-msg_cant_toggle_pvp_outsider_in_town: 'W twoim miescie jest ktos z zewnatrz, nie możesz zmienic swojego statusu pvp!'
+msg_cant_toggle_pvp_outsider_in_town: 'W twoim mieście jest jakiś przejezdny, nie możesz zmienic swojego statusu pvp!'
 msg_err_unclaim_not_outpost: 'Błąd, ten teren nie jest wartownią!'
 outpost_plu: 'wartownie'
 
@@ -572,7 +572,7 @@ outpost_plu: 'wartownie'
 msg_err_not_enough_residents: 'Niewystarczająca liczba mieszkańców.'
 
 # Added in 0.37
-msg_err_friendly_fire_disable: 'Ogień bratobojczy jest wyłączony!'
+msg_err_friendly_fire_disable: 'Ogień bratobójczy jest wyłączony!'
 
 # Added in 0.38
 msg_claim_error: '&cInny plugin wstrzymał roszczenie (%s)/(%s) chunków miejskich, nie udało się dokończyć tej operacji.'
@@ -774,8 +774,8 @@ status_res_totaltax: '&2Całkowite podatki: &a'
 
 # Added in 0.45
 msg_err_enemy_war_your_town_has_no_claims: 'Nie możesz atakowac, kiedy nie masz zadnej kamienicy w miescie.'
-msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz operowac srodkami nacji, kiedy nie jesteś w stolicy nacji.'
-msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operowac srodkami miasta, kiedy w nim nie jestes.'
+msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz operować środkami nacji, kiedy nie jesteś w stolicy.'
+msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operować środkami miasta, kiedy w nim nie jesteś.'
 msg_time_until_a_new_day: 'Czas do nowego dnia: '
 msg_hours: ' godz'
 msg_minutes: ' minut'
@@ -1107,7 +1107,7 @@ msg_err_teleport_cancelled: 'Ruszyłeś się. Teleportacja anulowana.'
 # Added in 0.79
 msg_cache_block_error_plot_friends: 'przyjaciele'
 msg_cache_block_error_plot_allies: 'sojusznicy'
-msg_cache_block_error_plot_outsiders: 'koczownik'
+msg_cache_block_error_plot_outsiders: 'przejezdny'
 msg_cache_block_error_plot_town_members: 'mieszkańcy'
 msg_err_invalid_nation_map_color: '&cNieprawidlowy kolor mapy. Dozwolone kolory to %s.'
 msg_nation_map_color_changed: '&bKolor mapy nacji został zmieniony na %s.'
@@ -1120,7 +1120,7 @@ msg_ta_deposit_all_success: 'Pomyślnie wpłacono kwotę %s do banków wszystkic
 bonus_townblocks: 'Bonusowe chunki'
 
 # Added in 0.80
-nomad_sing: 'Koczownik'
+nomad_sing: 'Przejezdny'
 msg_new_town_advice: 'Gratulujemy utworzenia własnego miasta! Koszty jego utrzymania wynoszą dziennie %s. Możesz zadeponować pieniądze w banku swojego miasta używając komendy ''/t deposit <suma>''. Bez pieniędzy na koncie twoje miasto upadnie. Możesz sprawdzić wszelkie jego opłaty w dowolnym momencie za pomocą komendy /towny prices. Następna opłata zostanie pobrana za: %s. Władaj mądrze!'
 
 # Added in 0.81
@@ -1176,14 +1176,14 @@ msg_nation_already_peaceful: '&cNacja już jest pokojowa.'
 msg_nation_already_not_peaceful: '&cNacja już nie jest pokojowa.'
 
 #Added in 0.89
-status_world_friendlyfire: '&2FriendlyFire: '
-status_world_wildernessmobs: '&2Wilderness Mobs: '
-msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
-msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
-msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
-msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
-msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
+status_world_friendlyfire: '&2OgieńBratobójczy: '
+status_world_wildernessmobs: '&2DzikieMoby: '
+msg_outlaw_kick_cooldown: '&cMiasto %s uznaje cię za wygańca. Masz %s na opuszczenie tego terytorium. W preciwnym razie zostaniesz przeteleportowany do swojego punktu odrodzenia.'
+msg_outlaw_kicked: '&4Nie jesteś mile widziany w %s... Przeteleportowano cię .'
+msg_outlaw_town_notify: '&cWygnaniec o imieniu %s wkroczył na teren twojego miasta.'
+msg_your_town_payed_upkeep_with_debt: '&cTwoje miasto zapłaciło podatek w wysokości %s, spłacając równocześnie swój dług.'
+msg_payed_nation_tax_with_debt: '&cTwoja nacja zapłaciła podatek w wysokości %s, spłacając równocześnie swój dług.'
 
 #Added in 0.90
-status_plot_clear_deletion: '&2PlotClearBlockDelete: '
-msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+status_plot_clear_deletion: '&2ResetowanieDziałek: '
+msg_err_plot_clear_disabled_in_this_world: 'Komenda /plot clear jest wyłączona w tym świecie.'

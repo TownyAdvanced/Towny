@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.3.7</version>
+    <version>0.96.3.8</version>
 
     <licenses>
         <license>
@@ -148,6 +148,11 @@
             <artifactId>commons-compress</artifactId>
             <version>1.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -206,6 +211,10 @@
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
                             <shadedPattern>com.palmergames.compress</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains.annotations</pattern>
+                            <shadedPattern>com.palmergames.annotations</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

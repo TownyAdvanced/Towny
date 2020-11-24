@@ -39,7 +39,7 @@ public class LongDataField extends CustomDataField<Long> {
 	}
 
 	@Override
-	public CustomDataField clone() {
+	public CustomDataField<Long> clone() {
 		return new LongDataField(getKey(), getValue(), this.label);
 	}
 }

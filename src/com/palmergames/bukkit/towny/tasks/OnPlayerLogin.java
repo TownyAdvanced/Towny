@@ -69,11 +69,13 @@ public class OnPlayerLogin implements Runnable {
 				resident.setUUID(player.getUniqueId());
 				TownySettings.incrementUUIDCount();
 				if (!TownySettings.getDefaultTownName().equals("")) {
-					try {
-						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
-						resident.setTown(town);
-						universe.getDataSource().saveTown(town);
-					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
+					Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
+					if (town != null) {
+						try {
+							resident.setTown(town);
+							universe.getDataSource().saveTown(town);
+						} catch (AlreadyRegisteredException ignore) {
+						}
 					}
 				}
 				

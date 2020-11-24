@@ -36,7 +36,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 //import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -80,7 +80,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 	
 	/**
-	 * This handles EntityDeathEvents on MONITOR in order to handle Towny features such as:
+	 * This handles PlayerDeathEvents on MONITOR in order to handle Towny features such as:
 	 * - DeathPayments,
 	 * - Jailing Players,
 	 * - Awarding WarTimeDeathPoints.
@@ -88,96 +88,91 @@ public class TownyEntityMonitorListener implements Listener {
 	 * @throws NotRegisteredException When a towny object is not found.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onEntityDeath(EntityDeathEvent event) throws NotRegisteredException {
-		Entity defenderEntity = event.getEntity();
+	public void onPlayerDeath(PlayerDeathEvent event) throws NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		// Was this a player death?
-		if (defenderEntity instanceof Player) {
-			Player defenderPlayer = (Player) defenderEntity;
-			Resident defenderResident;
-			try {
-				defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
-			} catch (NotRegisteredException e1) {
-				// Usually an NPC or a Bot of some kind.
-				return;
-			}
-			
-			// Killed by another entity?			
-			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+		Player defenderPlayer = event.getEntity();
+		Resident defenderResident;
+		try {
+			defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
+		} catch (NotRegisteredException e1) {
+			// Usually an NPC or a Bot of some kind.
+			return;
+		}
+		
+		// Killed by another entity?			
+		if (defenderPlayer.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
-				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderEntity.getLastDamageCause();
+			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderPlayer.getLastDamageCause();
 
-				Entity attackerEntity = damageEvent.getDamager();
-				Player attackerPlayer = null;
-				Resident attackerResident = null;
+			Entity attackerEntity = damageEvent.getDamager();
+			Player attackerPlayer = null;
+			Resident attackerResident = null;
 
-				if (attackerEntity instanceof Projectile) { // Killed by projectile, try to narrow the true source of the kill.
-					Projectile projectile = (Projectile) attackerEntity;
-					if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
-						attackerPlayer = (Player) projectile.getShooter();
-						try {
-							attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
-						} catch (NotRegisteredException e) {
-							// Usually an NPC or a Bot of some kind.
-							attackerPlayer = null;
-						}
-					} else { // Something else shot a projectile.
-						try {
-							attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
-						} catch (Exception e) { // This would be a dispenser kill, should count as environmental death.
-						}
-					}
-
-				} else if (attackerEntity instanceof Player) {
-					// This was a player kill
-					attackerPlayer = (Player) attackerEntity;
+			if (attackerEntity instanceof Projectile) { // Killed by projectile, try to narrow the true source of the kill.
+				Projectile projectile = (Projectile) attackerEntity;
+				if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
+					attackerPlayer = (Player) projectile.getShooter();
 					try {
 						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
 					} catch (NotRegisteredException e) {
 						// Usually an NPC or a Bot of some kind.
 						attackerPlayer = null;
 					}
+				} else { // Something else shot a projectile.
+					try {
+						attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
+					} catch (Exception e) { // This would be a dispenser kill, should count as environmental death.
+					}
 				}
 
-				/*
-				 * Player has died by a player: 
-				 * 
-				 * - Fire PlayerKilledPlayerEvent.
-				 * 
-				 * TODO: Move war-related things onto listeners for the PlayerKilledPlayerEvent.
-				 * - charge death payment,
-				 * - check for jailing attacking residents,
-				 * - award wartime death points.
-				 */
-				if (attackerPlayer != null) {
-					PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation());
-					BukkitTools.getPluginManager().callEvent(deathEvent);
-
-					deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
-					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-					if (TownyAPI.getInstance().isWarTime())
-						wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-					
-				/*
-				 * Player has died from an entity but not a player & death price is not PVP only.
-				 */
-				} else if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-					deathPayment(defenderPlayer, defenderResident);
-				}
-
-			/*
-			 * Player has died from non-entity cause, ie: Environmental.
-			 */
-			} else {
-				if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-					deathPayment(defenderPlayer, defenderResident);
+			} else if (attackerEntity instanceof Player) {
+				// This was a player kill
+				attackerPlayer = (Player) attackerEntity;
+				try {
+					attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
+				} catch (NotRegisteredException e) {
+					// Usually an NPC or a Bot of some kind.
+					attackerPlayer = null;
 				}
 			}
-		}
 
+			/*
+			 * Player has died by a player: 
+			 * 
+			 * - Fire PlayerKilledPlayerEvent.
+			 * 
+			 * TODO: Move war-related things onto listeners for the PlayerKilledPlayerEvent.
+			 * - charge death payment,
+			 * - check for jailing attacking residents,
+			 * - award wartime death points.
+			 */
+			if (attackerPlayer != null) {
+				PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event);
+				BukkitTools.getPluginManager().callEvent(deathEvent);
+
+				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
+				isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (TownyAPI.getInstance().isWarTime())
+					wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				
+			/*
+			 * Player has died from an entity but not a player & death price is not PVP only.
+			 */
+			} else if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
+				deathPayment(defenderPlayer, defenderResident);
+			}
+
+		/*
+		 * Player has died from non-entity cause, ie: Environmental.
+		 */
+		} else {
+			if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
+				deathPayment(defenderPlayer, defenderResident);
+			}
+		}
 	}
 
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {

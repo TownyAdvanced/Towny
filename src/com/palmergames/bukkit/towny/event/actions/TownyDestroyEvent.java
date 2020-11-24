@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event.actions;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 public class TownyDestroyEvent extends TownyActionEvent {
 
 	private static final HandlerList handlers = new HandlerList();
+	private final Block block;
 
 	/**
 	 * Destroy event thrown when a player attempts to destroy blocks in the world.
@@ -35,11 +37,17 @@ public class TownyDestroyEvent extends TownyActionEvent {
 	 * @param player    involved in the destroy event.
 	 * @param loc       location of the block being destroyed.
 	 * @param mat       material of the block being destroyed.
+	 * @param block     block being destroyed.
 	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
-	public TownyDestroyEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
+	public TownyDestroyEvent(Player player, Location loc, Material mat, Block block, TownBlock townblock, boolean cancelled) {
 		super(player, loc, mat, townblock, cancelled);
+		this.block = block;
+	}
+	
+	public Block getBlock() {
+		return block;
 	}
 
 	public static HandlerList getHandlerList() {

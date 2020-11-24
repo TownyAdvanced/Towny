@@ -886,7 +886,7 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Register bStats Metrics
 		 */
-		Metrics metrics = new Metrics(this);
+		Metrics metrics = new Metrics(this, 2244);
 		
 		metrics.addCustomChart(new Metrics.SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		

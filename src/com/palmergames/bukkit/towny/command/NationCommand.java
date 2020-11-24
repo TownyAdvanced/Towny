@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -71,7 +72,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -487,7 +487,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String nationName = String.join("_", newSplit);
-					newNation(player, nationName, resident.getTown().getName(), noCharge);
+					newNation(player, nationName, resident.getTown(), noCharge);
 
 				}
 			} else if (split[0].equalsIgnoreCase("join")) {
@@ -620,7 +620,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
-					Town town = TownyAPI.getInstance().getDataSource().getTown(split[2]);
+					Town town = TownyUniverse.getInstance().getTown(split[2]);
 					Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if (town != null) {
 						if (!town.hasNation())
@@ -1250,16 +1250,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 * @param player - Player creating the new nation.
 	 * @param name - Nation name.
-	 * @param capitalName - Capital city name.
+	 * @param capitalTown - Capital city town.
 	 * @param noCharge - charging for creation - /ta nation new NAME CAPITAL has no charge.
 	 */
-	public static void newNation(Player player, String name, String capitalName, boolean noCharge) {
+	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
 
 		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
-
-			Town town = universe.getDataSource().getTown(capitalName);
-			if (town.hasNation())
+			if (capitalTown.hasNation())
 				throw new TownyException(Translation.of("msg_err_already_nation"));
 
 			// Check the name is valid and doesn't already exist.
@@ -1273,24 +1271,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || universe.getDataSource().hasNation(filteredName))
 				throw new TownyException(Translation.of("msg_err_invalid_name", name));
 
-			PreNewNationEvent preEvent = new PreNewNationEvent(town, name);
+			PreNewNationEvent preEvent = new PreNewNationEvent(capitalTown, name);
 			Bukkit.getPluginManager().callEvent(preEvent);
 
 			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(town, preEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(capitalTown, preEvent.getCancelMessage());
 				return;
 			}
 
 			// If it isn't free to make a nation, send a confirmation.
 			if (!noCharge && TownySettings.isUsingEconomy()) {
 				// Test if they can pay.
-				if (!town.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
+				if (!capitalTown.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 
 				Confirmation.runOnAccept(() -> {				
 					try {
 						// Town pays for nation here.
-						if (!town.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
+						if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 							return;
 						}
@@ -1298,7 +1296,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					try {
 						// Actually make nation.
-						newNation(name, town);
+						newNation(name, capitalTown);
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
@@ -1311,13 +1309,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 // Send confirmation.
                 if(TownySettings.getWarSiegeEnabled() 
                     && TownySettings.getWarCommonPeacefulTownsEnabled()
-                    && town.isPeaceful()) {
+                    && capitalTown.isPeaceful()) {
                     TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
                 }
 
 			// Or, it is free, so just make the nation.
 			} else {
-				newNation(name, town);
+				newNation(name, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException | EconomyException x) {
@@ -2366,7 +2364,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 			} else if (split[0].equalsIgnoreCase("capital")) {
 				try {
-					Town newCapital = townyUniverse.getDataSource().getTown(split[1]);
+					Town newCapital = townyUniverse.getTown(split[1]);
+					
+					if (newCapital == null) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
+						return;
+					}
 
 		            if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
 		              TownyMessaging.sendMessage(player, Translation.of("msg_not_enough_residents_capital", newCapital.getName()));

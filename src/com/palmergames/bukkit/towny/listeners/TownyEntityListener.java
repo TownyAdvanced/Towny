@@ -105,10 +105,12 @@ public class TownyEntityListener implements Listener {
 		 * This test blocks all types of Entity_Explosion-caused damage based on the
 		 * explosion-setting of the plot permissions, (and then alterable via the
 		 * TownyExplosionDamagesEntityEvent,) EXCEPT for cases where the defender is a
-		 * Player and the attacker is a FIREWORK (which is more likely to be a PVP
-		 * action.)
+		 * (Player or protected mob) and the attacker is an Explosive EntityType.
 		 */
-		if (!(attacker.getType() == EntityType.FIREWORK && defender instanceof Player) 
+		
+		List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
+		
+		if (!(EntityTypeUtil.isExplosive(attacker.getType()) && (defender instanceof Player || !EntityTypeUtil.isInstanceOfAny(prots, defender))) 
 				&& event.getCause() == DamageCause.ENTITY_EXPLOSION 
 				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
 			event.setDamage(0);

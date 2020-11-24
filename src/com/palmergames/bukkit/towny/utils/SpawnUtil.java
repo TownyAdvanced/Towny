@@ -293,8 +293,8 @@ public class SpawnUtil {
 					throw new TownyException(
 							Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_the_wilderness")));
 				if (inTown != null && resident.hasNation()
-						&& townyUniverse.getDataSource().getTown(inTown).hasNation()) {
-					Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
+						&& townyUniverse.hasTown(inTown) && townyUniverse.getTown(inTown).hasNation()) {
+					Nation inNation = townyUniverse.getTown(inTown).getNation();
 					Nation playerNation = resident.getTown().getNation();
 					if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 						throw new TownyException(

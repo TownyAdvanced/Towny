@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event.actions;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 public class TownyBuildEvent extends TownyActionEvent {
 
 	private static final HandlerList handlers = new HandlerList();
+	private final Block block;
 
 	/**
 	 * Build event thrown when a player attempts to build blocks in the world.
@@ -35,13 +37,19 @@ public class TownyBuildEvent extends TownyActionEvent {
 	 * @param player    involved in the build event.
 	 * @param loc       location of the block being built.
 	 * @param mat       material of the block being built.
+	 * @param block     block being built.
 	 * @param townblock - TownBlock or null if in the wilderness.
 	 * @param cancelled true if Towny has already determined this will be cancelled.
 	 */
-	public TownyBuildEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
+	public TownyBuildEvent(Player player, Location loc, Material mat, Block block, TownBlock townblock, boolean cancelled) {
 		super(player, loc, mat, townblock, cancelled);
+		this.block = block; 
 	}
 
+	public Block getBlock() {
+		return block;
+	}
+	
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
