@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +74,9 @@ public class SiegeWarDistanceUtil {
 	 * @param block the given block
 	 * @return a SiegeZoneDistance object containing both the siege and distance. Null if not found.
 	 */
-	public static SiegeDistance findNearestSiegeDistance(Block block) {
-		//Find the nearest siege zone to the given block
+	@Nullable
+	public static Siege findNearestSiege(Block block) {
+		//Find the nearest siege zone to the given block within the given radius.
 		Siege nearestSiege = null;
 		double distanceToNearestSiegeZone = -1;
 		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
@@ -83,6 +84,9 @@ public class SiegeWarDistanceUtil {
 			if(!block.getLocation().getWorld().getName().equalsIgnoreCase(siege.getFlagLocation().getWorld().getName())) {
 				continue;
 			}
+			
+			if(block.getLocation().distance(siege.getFlagLocation()) > TOWNBLOCKSIZE)
+				continue;
 
 			if (nearestSiege == null) {
 				nearestSiege = siege;
@@ -96,11 +100,7 @@ public class SiegeWarDistanceUtil {
 			}
 		}
 	
-		if(nearestSiege == null) {
-			return null;
-		} else {
-			return new SiegeDistance(nearestSiege, distanceToNearestSiegeZone);
-		}
+		return nearestSiege;
 	}
 
 	/**
