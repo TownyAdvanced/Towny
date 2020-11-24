@@ -55,11 +55,7 @@ public class SiegeWarPlaceBlockController {
 	 * @param plugin The Towny object
 	 * @return true if subsequent perm checks for the event should be skipped
 	 */
-	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player,
-													 Block block,
-													 BlockPlaceEvent event,
-													 Towny plugin)
-	{
+	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
 		
 		Material mat = block.getType();
 		//Banner placement
@@ -90,11 +86,7 @@ public class SiegeWarPlaceBlockController {
      * Determines which type of banner this is, and where it is being placed.
 	 * Then calls an appropriate private method.
  	*/
-	private static boolean evaluatePlaceBanner(Player player,
-											   Block block,
-											   BlockPlaceEvent event,
-											   Towny plugin)
-	{
+	private static boolean evaluatePlaceBanner(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
 
 		if(TownyAPI.getInstance().isWilderness(block)) {
 			//Wilderness found
@@ -142,6 +134,10 @@ public class SiegeWarPlaceBlockController {
 	 */
 	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
 		try {
+			// Fail early if this is not a siege-enabled world.
+			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))
+				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
+			
 			Resident resident = null;
 			try {
 				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
@@ -191,7 +187,7 @@ public class SiegeWarPlaceBlockController {
 					}
 				} catch (NotRegisteredException nre) {}
 			}
-	
+
 			//If the town has a siege where the player's nation is already attacking, 
 			//attempt invasion, otherwise attempt attack
 			Nation nationOfResident = resident.getTown().getNation();
@@ -260,11 +256,8 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as a plunder request.
 	 */
 	private static boolean evaluatePlaceChest(Player player, Block block, BlockPlaceEvent event) {
-		if (!TownySettings.getWarSiegePlunderEnabled())
+		if (!TownySettings.getWarSiegePlunderEnabled() || !TownyAPI.getInstance().isWilderness(block))
 			return false;
-
-		if (!TownyAPI.getInstance().isWilderness(block))
-			return false;   //The chest is being placed in a town. Normal block placement
 
 		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 		if (nearbyTownBlocks.size() == 0)
@@ -282,20 +275,14 @@ public class SiegeWarPlaceBlockController {
 		Town town = null;
 		try {
 			town = nearbyTownBlocks.get(0).getTown();
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 
-		//If the town has a siege, attempt plunder, otherwise return false
-		if(town.hasSiege()) {
-			PlunderTown.processPlunderTownRequest(
-				player,
-				town,
-				event);
-		} else {
+		//If there is no siege, do normal block placement
+		if(!town.hasSiege())
 			return false;
-		}
 
+		//Attempt plunder.
+		PlunderTown.processPlunderTownRequest(player, town, event);
 		return true;
 
 	}
