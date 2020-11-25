@@ -2608,13 +2608,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				nation.toggleNeutral(value);
-
-				// send message depending on if using an economy and charging
-				// for peaceful
-				if (TownySettings.isUsingEconomy() && cost > 0)
-					TownyMessaging.sendMsg(player, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
-				else
-					TownyMessaging.sendMsg(player, Translation.of("msg_nation_set_peaceful"));
+				
+				// Only send status message if switching nation to peaceful.
+				if (value) {
+					// send message depending on if using an economy and charging
+					// for peaceful
+					if (TownySettings.isUsingEconomy() && cost > 0)
+						TownyMessaging.sendMsg(player, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+					else
+						TownyMessaging.sendMsg(player, Translation.of("msg_nation_set_peace"));
+				}
 
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
 						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
