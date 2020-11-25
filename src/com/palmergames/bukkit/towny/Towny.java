@@ -101,7 +101,7 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
-	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener();
+	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener(this);
 	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
 	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
