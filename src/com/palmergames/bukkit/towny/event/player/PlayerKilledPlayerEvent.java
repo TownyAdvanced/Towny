@@ -24,11 +24,12 @@ public class PlayerKilledPlayerEvent extends Event {
 	 * Do not use to un-kill someone or you're likely to cause 
 	 * issues with other plugins.
 	 * 
-	 * @param killer - Player that killed the victim.
-	 * @param victim - Player that died.
-	 * @param killerRes - Resident that killed the victim.
-	 * @param victimRes - Resident that died.
-	 * @param location - Location of the player that died.
+	 * @param killer {@link Player} that killed the victim.
+	 * @param victim {@link Player} that died.
+	 * @param killerRes {@link Resident} that killed the victim.
+	 * @param victimRes {@link Resident} that died.
+	 * @param location {@link Location} of the player that died.
+	 * @param event The {@link PlayerDeathEvent}.
 	 */
 	public PlayerKilledPlayerEvent(Player killer, Player victim, Resident killerRes, Resident victimRes, Location location, PlayerDeathEvent event) {
 		super(!Bukkit.getServer().isPrimaryThread());
