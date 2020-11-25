@@ -1,5 +1,5 @@
 name: Towny
-version: 0.90
+version: 0.91
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1191,3 +1191,9 @@ msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt
 #Added in 0.90
 status_plot_clear_deletion: '&2PlotClearBlockDelete: '
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+
+#Added in 0.91
+msg_universe_attribution: 'Authors: '
+msg_universe_contributors: ' And contributors like you. '
+msg_universe_heart: '<3'
+townblock_plu: 'TownBlocks'

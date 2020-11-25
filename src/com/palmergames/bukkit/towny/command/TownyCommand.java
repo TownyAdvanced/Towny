@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,7 +25,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -432,18 +432,43 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public List<String> getUniverseStats() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyDataSource townyDS = townyUniverse.getDataSource();
 		List<String> output = new ArrayList<>();
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
+		output.add(""); // Intentionally left blank
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + Translation.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + Translation.of("msg_universe_contributors") + Colors.Rose + Translation.of("msg_universe_heart"));
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDataSource().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDataSource().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDataSource().getNations().size());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70----- ");
-		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
-		if (test != null){
-			output.add("\u00A70-----------   \u00A76[\u00A7eTownyChat " + BukkitTools.getPluginManager().getPlugin("TownyChat").getDescription().getVersion() + "\u00A76]");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + Translation.of("res_list")+ ": " + Colors.LightBlue + townyDS.getResidents().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("town_plu") + ": " + Colors.LightBlue + townyDS.getTowns().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("nation_plu") + ": " + Colors.LightBlue + townyDS.getNations().size());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + Translation.of("world_plu") + ": " + Colors.LightBlue + townyDS.getWorlds().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
+		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
+		output.add(""); // Intentionally left blank
+		
+
+		// Other TownyAdvanced plugins to report versions
+		int plugins = 0;
+		String townyPlugins = Colors.Gold + "[";
+		
+		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
+		if (townyChat != null){
+			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			plugins++;
 		}
+		
+		Plugin townyF = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
+		if (townyF != null) {
+			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
+			plugins++;
+		}
+		
+		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
+		if (townyNU != null){
+			townyPlugins += Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
+			plugins++;
+		}
+
+		if (plugins > 0)
+			output.add(townyPlugins + Colors.Gold + "]");
 		return output;
 	}
 
