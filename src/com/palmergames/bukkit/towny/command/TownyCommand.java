@@ -444,25 +444,31 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
 		
+
 		// Other TownyAdvanced plugins to report versions
+		int plugins = 0;
 		String townyPlugins = Colors.Gold + "[";
 		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
-			townyPlugins = townyPlugins + Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			plugins++;
 		}
 		
 		Plugin townyF = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
 		if (townyF != null) {
-			townyPlugins = townyPlugins + Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
+			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
+			plugins++;
 		}
 		
 		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
 		if (townyNU != null){
-			townyPlugins = townyPlugins + Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
+			townyPlugins += Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
+			plugins++;
 		}
-		
-		output.add(townyPlugins + Colors.Gold + "]");
+
+		if (plugins > 0)
+			output.add(townyPlugins + Colors.Gold + "]");
 		return output;
 	}
 
