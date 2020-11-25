@@ -17,6 +17,9 @@
 # Javadoc
 /doc
 
+# RedHat Dependency Analytics LSP server
+/lsp
+
 # OS specific
 .DS_Store
 .DS_Store?
