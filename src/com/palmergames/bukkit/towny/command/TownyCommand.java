@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -436,34 +435,34 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		TownyDataSource townyDS = townyUniverse.getDataSource();
 		List<String> output = new ArrayList<>();
 		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + "\u00A76[\u00A7eTowny \u00A72" + plugin.getVersion() + "\u00A76]");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + "\u00A73By: \u00A7bChris H (Shade), ElgarL, LlmDl");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + " \u00A7bAnd contributors like you. <3");
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + "By: " + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + " And contributors like you. " + Colors.Rose + "<3");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyDS.getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyDS.getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyDS.getNations().size());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyDS.getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70-----   " + "\u00A7ahttps://TownyAdvanced.github.io/");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + "Residents: " + Colors.LightBlue + townyDS.getResidents().size() + Colors.Gray + " | " + Colors.Blue + "Towns: " + Colors.LightBlue + townyDS.getTowns().size() + Colors.Gray + " | " + Colors.Blue + "Nations: " + Colors.LightBlue + townyDS.getNations().size());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + "Worlds: " + Colors.LightBlue + townyDS.getWorlds().size() + Colors.Gray + " | " + Colors.Blue + "TownBlocks: " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
+		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
 		
 		// Other TownyAdvanced plugins to report versions
-		String townyPlugins = "\u00A76[";
+		String townyPlugins = Colors.Gold + "[";
 		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
-			townyPlugins = townyPlugins + "\u00A7eTownyChat \u00a72" + townyChat.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins + Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
 		}
 		
 		Plugin townyF = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
 		if (townyF != null) {
-			townyPlugins = townyPlugins + "\u00A7eTownyFlight \u00a72" + townyF.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins + Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
 		}
 		
 		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
 		if (townyNU != null){
-			townyPlugins = townyPlugins + "\u00A7eTownyNameUpdater \u00a72" + townyNU.getDescription().getVersion();
+			townyPlugins = townyPlugins + Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
 		}
 		
-		output.add(townyPlugins + "\u00A76]");
+		output.add(townyPlugins + Colors.Gold + "]");
 		return output;
 	}
 
