@@ -5345,3 +5345,5 @@ v0.92.0.11:
     - Closes #4467.
   - Small Clean-up, Sticky pistons cannot move immutable FlagWar blocks (e.g. a flag beacon), courtesy of TheFlagCourier with PR #4469.
   - Expand `/towny universe` output, courtesy of TheFlagCourier with PR #4470.
+0.96.4.0:
+  - Bump version for Release.
