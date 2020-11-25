@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -432,18 +433,37 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public List<String> getUniverseStats() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyDataSource townyDS = townyUniverse.getDataSource();
 		List<String> output = new ArrayList<>();
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
+		output.add(""); // Intentionally left blank
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + "\u00A76[\u00A7eTowny \u00A72" + plugin.getVersion() + "\u00A76]");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + "\u00A73By: \u00A7bChris H (Shade), ElgarL, LlmDl");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + " \u00A7bAnd contributors like you. <3");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDataSource().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDataSource().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDataSource().getNations().size());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70----- ");
-		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
-		if (test != null){
-			output.add("\u00A70-----------   \u00A76[\u00A7eTownyChat " + BukkitTools.getPluginManager().getPlugin("TownyChat").getDescription().getVersion() + "\u00A76]");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyDS.getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyDS.getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyDS.getNations().size());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyDS.getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getTownBlocks().size());
+		output.add("\u00A70-----\u00A74#\u00A70-----   " + "\u00A7ahttps://TownyAdvanced.github.io/");
+		output.add(""); // Intentionally left blank
+		
+		// Other TownyAdvanced plugins to report versions
+		String townyPlugins = "\u00A76[";
+		
+		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
+		if (townyChat != null){
+			townyPlugins = townyPlugins + "\u00A7eTownyChat \u00a72" + townyChat.getDescription().getVersion() + " ";
 		}
+		
+		Plugin townyF = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
+		if (townyF != null) {
+			townyPlugins = townyPlugins + "\u00A7eTownyFlight \u00a72" + townyF.getDescription().getVersion() + " ";
+		}
+		
+		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
+		if (townyNU != null){
+			townyPlugins = townyPlugins + "\u00A7eTownyNameUpdater \u00a72" + townyNU.getDescription().getVersion();
+		}
+		
+		output.add(townyPlugins + "\u00A76]");
 		return output;
 	}
 
