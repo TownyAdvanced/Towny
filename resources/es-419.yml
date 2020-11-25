@@ -1180,12 +1180,12 @@ msg_outlaw_town_notify: '&cUn bandido, %s, entró al territorio de la ciudad.'
 msg_your_town_payed_upkeep_with_debt: '&cTu ciudad pagó la mantención diaria, con un costo de %s usando su deuda.'
 msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales, con un costo de %s usando su deuda.'
 
-#Added in 0.90
-status_plot_clear_deletion: '&2PlotClearBlockDelete: '
-msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+# Añadido en la versión 0.90
+status_plot_clear_deletion: '&2LimpiarParcelas: '
+msg_err_plot_clear_disabled_in_this_world: 'El comando /plot clear está deshabilitado en este mundo.'
 
-#Added in 0.91
-msg_universe_attribution: 'Authors: '
-msg_universe_contributors: ' And contributors like you. '
+# Añadido en la versión 0.91
+msg_universe_attribution: 'Autores: '
+msg_universe_contributors: ' y colaboradores como tu.'
 msg_universe_heart: '<3'
-townblock_plu: 'TownBlocks'
+townblock_plu: 'Terrenos de Ciudades'
