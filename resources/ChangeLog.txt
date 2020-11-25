@@ -5340,7 +5340,7 @@ v0.92.0.11:
     - Move new town method to TownyUniverse.
     - Create a InvalidNameException that is a TownyException.
 	- Create register / unregister methods for towns.
-0.6.3.9:
+0.96.3.9:
   - Fix nation neutral messages, courtesy of silverwolfg11 with PR #4468.
     - Closes #4467.
   - Small Clean-up, Sticky pistons cannot move immutable FlagWar blocks (e.g. a flag beacon), courtesy of TheFlagCourier with PR #4469.
