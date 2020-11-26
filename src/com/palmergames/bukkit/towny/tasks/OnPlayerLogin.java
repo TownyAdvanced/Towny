@@ -130,24 +130,36 @@ public class OnPlayerLogin implements Runnable {
 		if (resident != null) {
 			TownyPerms.assignPermissions(resident, player);
 				
-			try {
-				if (TownySettings.getShowTownBoardOnLogin() && resident.hasTown() &&  !resident.getTown().getBoard().isEmpty())
-					TownyMessaging.sendTownBoard(player, resident.getTown());
+			if (resident.hasTown()) {
+				Town town = null;
+				Nation nation = null;
+				try {
+					town = resident.getTown();
+					if (town.hasNation())
+						nation = town.getNation();
+				} catch (NotRegisteredException ignored) {}
+				
+				if (TownySettings.getShowTownBoardOnLogin() &&  !town.getBoard().isEmpty())
+					TownyMessaging.sendTownBoard(player, town);
 
-				if (TownySettings.getShowNationBoardOnLogin() && resident.getTown().hasNation() && !resident.getTown().getNation().getBoard().isEmpty())
-					TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+				if (TownySettings.getShowNationBoardOnLogin() && nation != null && !nation.getBoard().isEmpty())
+					TownyMessaging.sendNationBoard(player, nation);
+				
+				// Send any warning messages at login.
+				if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily())
+					warningMessage(resident, town, nation);
+				
+				// Send a message warning of ruined status and time until deletion.
+				if (town.isRuined())
+					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+			}
 
-			} catch (NotRegisteredException ignored) {}
-		
 			if (TownyAPI.getInstance().isWarTime())
 				universe.getWarEvent().sendScores(player, 3);
 		
 			//Schedule to setup default modes when the player has finished loading
 			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
 				TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
-			
-			// Send any warning messages at login.
-			warningMessage(resident);
 		}
 	}
 	
@@ -178,59 +190,42 @@ public class OnPlayerLogin implements Runnable {
 	/**
 	 * Send a warning message if the town or nation is due to be deleted.
 	 * 
-	 * @param resident - Resident to send the warning to.
+	 * @param resident Resident to send the warning to.
+	 * @param town Town which the resident is part of.
+	 * @param nation Nation which the town is a part of or null.
 	 */
-	private void warningMessage(Resident resident) {
-
-		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			if (resident.hasTown()) {
-				try {
-					Town town = resident.getTown();
-					if (town.hasUpkeep() && !town.isRuined()) {
-						double upkeep = TownySettings.getTownUpkeepCost(town);
-						try {
-							if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
-								/*
-								 *  Warn that the town is due to be deleted/bankrupted.
-								 */
-								if(TownySettings.isTownBankruptcyEnabled()) {
-									if (!town.getAccount().isBankrupt()) //Is town already bankrupt?
-										TownyMessaging.sendMessage(resident, Translation.of("msg_warning_bankrupt", town.getName()));
-								} else {
-									TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
-								}
-							}
-						} catch (EconomyException ex) {
-							// Economy error, so ignore it and try to continue.
-						}
+	private void warningMessage(Resident resident, Town town, Nation nation) {
+		if (town.hasUpkeep()) {
+			double upkeep = TownySettings.getTownUpkeepCost(town);
+			try {
+				if (upkeep > 0 && !town.getAccount().canPayFromHoldings(upkeep)) {
+					/*
+					 *  Warn that the town is due to be deleted/bankrupted.
+					 */
+					if(TownySettings.isTownBankruptcyEnabled()) {
+						if (!town.isBankrupt()) //Is town already bankrupt?
+							TownyMessaging.sendMessage(resident, Translation.of("msg_warning_bankrupt", town.getName()));
+					} else {
+						TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
 					}
-						
-					if (town.hasNation()) {
-						Nation nation = town.getNation();
-						
-						double upkeep = TownySettings.getNationUpkeepCost(nation);
-						try {
-							if ((upkeep > 0) && (!nation.getAccount().canPayFromHoldings(upkeep))) {
-								/*
-								 *  Warn that the nation is due to be deleted.
-								 */
-								TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", nation.getName()));
-							}
-						} catch (EconomyException ex) {
-							// Economy error, so ignore it and try to continue.
-						}
-					}
-					
-				} catch (NotRegisteredException ex) {
-					// Should never reach here as we tested it beforehand.
 				}
+			} catch (EconomyException ex) {
+				// Economy error, so ignore it and try to continue.
 			}
 		}
-		
-		try {
-			if (resident.hasTown() && resident.getTown().isRuined()) {
-				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(resident.getTown())));
+			
+		if (nation != null) {
+			double upkeep = TownySettings.getNationUpkeepCost(nation);
+			try {
+				if (upkeep > 0 && !nation.getAccount().canPayFromHoldings(upkeep)) {
+					/*
+					 *  Warn that the nation is due to be deleted.
+					 */
+					TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", nation.getName()));
+				}
+			} catch (EconomyException ex) {
+				// Economy error, so ignore it and try to continue.
 			}
-		} catch (NotRegisteredException ignored) {}
+		}
 	}
 }
