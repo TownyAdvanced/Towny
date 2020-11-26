@@ -5349,3 +5349,4 @@ v0.92.0.11:
   - Bump version for Release.
 0.96.4.1:
   - es-419.yml updated by EuGNosii with PR #4471.
+  - API: Add NationPreTownLeaveEvent.

@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
@@ -1373,6 +1374,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (town.isConquered())
 				throw new TownyException(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 
+			NationPreTownLeaveEvent event = new NationPreTownLeaveEvent(town.getNation(), town);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if (event.isCancelled())
+				throw new TownyException(event.getCancelMessage());
+				
+			
 			if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 				throw new TownyException(Translation.of("msg_war_flag_deny_town_under_attack"));
 			}
