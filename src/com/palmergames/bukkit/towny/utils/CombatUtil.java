@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -19,6 +20,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -109,14 +111,8 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
-	@SuppressWarnings("unlikely-arg-type")
-	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
+	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
 
-		// World using Towny
-		if (!world.isUsingTowny())
-			return false;
-
-		Coord coord = Coord.parseCoord(defendingEntity);
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
@@ -124,25 +120,17 @@ public class CombatUtil {
 		 */
 		if (attackingPlayer != null) {
 
+			boolean cancelled = false;
+			
 			/*
+			 * If happening outside of an Arena plot and...
+			 * 
 			 * If another player is the target
 			 * or
 			 * The target is in a TownBlock and...
 			 * the target is a tame wolf and we are not it's owner
 			 */
-			if ((defendingPlayer != null) || ((defenderTB != null) && ((defendingEntity instanceof Wolf) && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals(attackingEntity)))) {
-
-				/*
-				 * Defending player is in a warzone
-				 */
-				if (world.isWarZone(coord) && !preventFriendlyFire(attackingPlayer, defendingPlayer, world))
-					return false;
-
-				/*
-				 * Check for special pvp plots (arena)
-				 */
-				if (isPvPPlot(attackingPlayer, defendingPlayer))
-					return false;
+			if (!isArenaPlot(attackingPlayer, defendingPlayer) && (defendingPlayer != null || isNotTheAttackersPetDogInTownLand(defenderTB, defendingEntity, attackingPlayer))) {
 
 				/*
 				 * Check if we are preventing friendly fire between allies
@@ -156,8 +144,15 @@ public class CombatUtil {
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
 
-					return !event.isCancelled();
+					cancelled = event.isCancelled();
 				}
+				
+				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, defendingPlayer.getLastDamageCause().getCause(), defenderTB, cancelled, attackingPlayer);
+				BukkitTools.getPluginManager().callEvent(event);
+				
+				if (event.isCancelled())
+					TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
+				return !event.isCancelled();
 
 			/*
 			 * Defender is not a player.
@@ -383,7 +378,7 @@ public class CombatUtil {
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
 	 */
-	public static boolean isPvPPlot(Player attacker, Player defender) {
+	public static boolean isArenaPlot(Player attacker, Player defender) {
 
 		if ((attacker != null) && (defender != null)) {
 			TownBlock attackerTB, defenderTB;
@@ -638,5 +633,16 @@ public class CombatUtil {
 				return CombatUtil.isEnemy(resident.getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException ignored) {}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param defenderTB TownBlock where entity is hit.
+	 * @param defendingEntity Entity being hit.
+	 * @param attackingPlayer Player hitting an entity.
+	 * @return true when a dog who is not owned by the attacker is injured inside of a town's plot.
+	 */
+	private static boolean isNotTheAttackersPetDogInTownLand(TownBlock defenderTB, Entity defendingEntity, Player attackingPlayer) {
+		return defenderTB != null && defendingEntity instanceof Wolf && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals(attackingPlayer);
 	}
 }

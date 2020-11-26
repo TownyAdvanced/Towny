@@ -10,22 +10,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -240,5 +246,105 @@ public class WarZoneListener implements Listener {
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
 		}
+
+	}
+	
+	@EventHandler
+	public void onPlayerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
+		try {
+			
+//			/*
+//			 * The following will determine that we're dealing with players,
+//			 * both of which have to be a part of nations involved in the War Event.
+//			 * If towns_are_neutral is false then non-nation towns and townless players
+//			 * can also fight in the war.
+//			 */
+//			
+//			//Check if attacker is an arrow, make attacker the shooter.				
+//			if (attacker instanceof Projectile) {
+//				ProjectileSource shooter = ((Projectile) attacker).getShooter();
+//				if (shooter instanceof Entity)
+//					attacker = (Entity) shooter;
+//				else {
+//					BlockProjectileSource bShooter = (BlockProjectileSource) ((Projectile) attacker).getShooter();
+//					if (TownyAPI.getInstance().getTownBlock(bShooter.getBlock().getLocation()) != null) {
+//						Town bTown = TownyAPI.getInstance().getTownBlock(bShooter.getBlock().getLocation()).getTown();
+//						if (!bTown.hasNation() && TownySettings.isWarTimeTownsNeutral()) {
+//							event.setCancelled(true);
+//							return;
+//						}
+//						if (bTown.getNation().isNeutral()) {
+//							event.setCancelled(true);
+//							return;
+//						}
+//						if (!War.isWarringTown(bTown)) {
+//							event.setCancelled(true);
+//							return;
+//						}							
+//					}
+//				}						
+//			}				
+//			
+//			// One of the attackers/defenders is not a player.
+//			if (!(attacker instanceof Player) || !(defender instanceof Player)) {
+//				if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
+//					// Remove the projectile here so no
+//					// other events can fire to cause damage
+//					if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
+//						attacker.remove();
+//
+//					event.setCancelled(true);
+//				}
+//				return;
+//			}
+			Player attacker = event.getAttackingPlayer();
+			Player defender = event.getVictimPlayer();
+			
+			TownyUniverse universe = TownyUniverse.getInstance();
+			TownyWorld world = universe.getDataSource().getWorld(event.getLocation().getWorld().getName());
+			//Cancel because one of two players has no town and should not be interfering during war.
+			if (event.getAttackerTown() == null || event.getVictimTown() == null){
+				TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_no_town"));
+				event.setCancelled(true);
+				return;
+			}
+			try {
+				Town attackerTown = event.getAttackerTown();
+				Town defenderTown = event.getVictimTown();
+
+				//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
+				if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
+					event.setMessage(Translation.of("msg_war_a_player_has_no_nation"));
+					event.setCancelled(true);
+					return;
+				}
+				
+				//Cancel because one of the two player's nations is neutral.
+				if (attackerTown.getNation().isNeutral() || defenderTown.getNation().isNeutral() ) {
+					event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
+					event.setCancelled(true);
+					return;
+				}
+				
+				//Cancel because one of the two players are no longer involved in the war.
+				if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
+					event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war"));
+					event.setCancelled(true);
+					return;
+				}
+				
+				//Cancel because one of the two players considers the other an ally.
+				if (CombatUtil.preventFriendlyFire(attacker, defender, world)){
+					event.setMessage(Translation.of("msg_war_a_player_is_an_ally"));
+					event.setCancelled(true);
+					return;
+				}
+			} catch (NotRegisteredException e) {
+				//One of the players has no nation.
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
