@@ -59,9 +59,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -79,7 +77,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -1407,43 +1404,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 			}
-			
-			if (TownySettings.getWarSiegeEnabled()) {
-
-				//If a peaceful town has no options, we don't let it revolt
-				if(TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
-					Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
-					if(validGuardianNations.size() == 0) {
-						throw new TownyException(
-							String.format(Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_zero"), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
-					} else if(validGuardianNations.size() == 1)
-						throw new TownyException(String.format(
-							Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_one"), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
-				}
-
-				if (TownySettings.getWarSiegeTownLeaveDisabled()) {
-
-					if (!TownySettings.getWarSiegeRevoltEnabled())
-						throw new TownyException(Translation.of("msg_err_siege_war_town_voluntary_leave_impossible"));
-					if (town.isRevoltImmunityActive())
-						throw new TownyException(Translation.of("msg_err_siege_war_revolt_immunity_active"));
-
-					//Activate revolt immunity
-					SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
-
-					TownyMessaging.sendGlobalMessage(
-						String.format(Translation.of("msg_siege_war_revolt"),
-							town.getFormattedName(),
-							town.getMayor().getFormattedName(),
-							town.getNation().getFormattedName()));
-				}
-			}
-
-			town.removeNation();
 
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
