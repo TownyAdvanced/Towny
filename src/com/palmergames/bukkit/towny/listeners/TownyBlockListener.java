@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -62,7 +61,6 @@ public class TownyBlockListener implements Listener {
 		}
 
 		Block block = event.getBlock();
-
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
@@ -178,12 +176,6 @@ public class TownyBlockListener implements Listener {
 		Location locTo = blockTo.getLocation();
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
-		if(TownySettings.getWarSiegeEnabled()) {
-			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block) || SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(blockTo)) {
-				return true;
-			}
-		}
-		
 		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
 		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
 

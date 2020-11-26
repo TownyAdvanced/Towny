@@ -6,9 +6,12 @@ import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -179,5 +182,76 @@ public class SiegeWarActionListener implements Listener {
 			TownyMessaging.sendMsg(event.getNation().getKing(), Translation.of("msg_err_siege_war_delete_nation_warning", TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 
+	}
+	
+	/*
+	 * Duplicates what exists in the TownyBlockListener but on a higher priority.
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (testBlockMove(event.getBlock(), event.isSticky() ? event.getDirection().getOppositeFace() : event.getDirection()))
+			event.setCancelled(true);
+
+		List<Block> blocks = event.getBlocks();
+		
+		if (!blocks.isEmpty()) {
+			//check each block to see if it's going to pass a plot boundary
+			for (Block block : blocks) {
+				if (testBlockMove(block, event.getDirection()))
+					event.setCancelled(true);
+			}
+		}
+	}
+
+	/*
+	 * Duplicates what exists in the TownyBlockListener but on a higher priority.
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (testBlockMove(event.getBlock(), event.getDirection()))
+			event.setCancelled(true);
+		
+		List<Block> blocks = event.getBlocks();
+
+		if (!blocks.isEmpty()) {
+			//check each block to see if it's going to pass a plot boundary
+			for (Block block : blocks) {
+				if (testBlockMove(block, event.getDirection()))
+					event.setCancelled(true);
+			}
+		}
+	}
+
+	/**
+	 * Decides whether blocks moved by pistons follow the rules.
+	 * 
+	 * @param block - block that is being moved.
+	 * @param direction - direction the piston is facing.
+	 * 
+	 * @return true if block is able to be moved according to siege war rules. 
+	 */
+	private boolean testBlockMove(Block block, BlockFace direction) {
+
+		Block blockTo = block.getRelative(direction);
+
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block) || SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(blockTo)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
