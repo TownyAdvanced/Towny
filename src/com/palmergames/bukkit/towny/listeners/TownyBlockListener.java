@@ -62,6 +62,7 @@ public class TownyBlockListener implements Listener {
 		}
 
 		Block block = event.getBlock();
+
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 

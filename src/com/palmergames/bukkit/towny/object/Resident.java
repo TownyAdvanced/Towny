@@ -947,6 +947,5 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setGUIInventory(TownyInventory inventory) {
 		this.guiInventory = inventory;
 	}
-
 }
 

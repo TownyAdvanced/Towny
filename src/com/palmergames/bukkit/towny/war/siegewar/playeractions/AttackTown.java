@@ -81,7 +81,7 @@ public class AttackTown {
             
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
                 throw new TownyException(Translation.of("msg_err_siege_war_nation_already_attacking_town"));
-			
+
             if (TownySettings.isUsingEconomy() && !nationOfAttackingPlayer.getAccount().canPayFromHoldings(defendingTown.getSiegeCost()))
 				throw new TownyException(Translation.of("msg_err_no_money"));
 
