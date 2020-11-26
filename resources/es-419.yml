@@ -1,5 +1,5 @@
 name: Towny
-version: 0.90
+version: 0.91
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -700,7 +700,7 @@ msg_err_over_outposts_limit: 'No puedes teletransportarte a tu outpost. Ya super
 
 # Elementos de la pantalla de estado (/res, /town, /nation, /tw, /plot perm)
 # Estos están traducidos ya que podriamos (o talvés no) estar manejando palabras grandes de una manera más inteligente.
-# Si estás traduciendo Towny, sientete libre de saltarte esta parte, ya que algunos mensajes no se verán bien 
+# Si estás traduciendo Towny, sientete libre de saltarte esta parte, ya que algunos mensajes no se verán bien
 # dentro de Minecraft. Si vas a hacer una PR en GitHub con estos mensajes, asegurate de probarlos antes.
 outlaws: '&2Bandidos: &f'                    # Usado en /t outlawlist
 online: '&a(Conectado/a)'
@@ -806,7 +806,7 @@ msg_err_nation_spawn_nation_forbidden_peace: '&cLas visitas a naciones aliadas e
 msg_err_public_nation_spawn_forbidden: '&cLas visitas a otras naciones públicas están deshabilitadas.'
 msg_err_public_nation_spawn_forbidden_war: '&cLas visitas a otras naciones públicas están permitidas exclusivamente durante la guerra.'
 msg_err_public_nation_spawn_forbidden_peace: '&cLas visitas a otras naciones públicas están prohibidas durante la guerra.'
-msg_spawn_cost_set_to: '&b%s ha establecido el precio del comando /%s spawn en %s' 
+msg_spawn_cost_set_to: '&b%s ha establecido el precio del comando /%s spawn en %s'
 msg_err_cannot_set_spawn_cost_more_than: '&cNo puedes subir el costo de las visitas a más de %s'
 msg_err_ally_isnt_public: '&cTu aliado, %s, no tiene habilitadas las visitas.'
 msg_nation_changed_public: '&cLas visitas a la nación ahora están %s.'
@@ -1183,3 +1183,9 @@ msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales, con
 #Added in 0.90
 status_plot_clear_deletion: '&2PlotClearBlockDelete: '
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+
+#Added in 0.91
+msg_universe_attribution: 'Authors: '
+msg_universe_contributors: ' And contributors like you. '
+msg_universe_heart: '<3'
+townblock_plu: 'TownBlocks'

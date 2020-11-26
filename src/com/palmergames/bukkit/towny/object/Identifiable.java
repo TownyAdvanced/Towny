@@ -12,6 +12,7 @@ public interface Identifiable {
 
 	/**
 	 * This should only be used by internal loading methods!
+	 * @param uuid the UUID to set.
 	 */
 	void setUUID(UUID uuid);
 	
