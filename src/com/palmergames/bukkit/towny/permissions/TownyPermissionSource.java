@@ -75,18 +75,14 @@ public abstract class TownyPermissionSource {
 
 		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
 		 * the player has the block permission and the data node isn't registered
+		 *  or
+		 * no node set but we are using permissions so check world settings
 		 */
-		if (hasBlock)
-			return true;
-
-		// No node set but we are using permissions so check world settings
-		return unclaimedZoneAction(world, material, action);
+		return has(player, blockPerm) || unclaimedZoneAction(world, material, action);
 
 	}
 
@@ -120,8 +116,6 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
@@ -129,11 +123,7 @@ public abstract class TownyPermissionSource {
 		 *  or
 		 * the player has an All town Override
 		 */
-		if (hasBlock || hasAllTownOverride(player, material, action))
-			return true;
-
-
-		return false;
+		return has(player, blockPerm) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
@@ -149,8 +139,6 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("townowned." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
@@ -160,10 +148,7 @@ public abstract class TownyPermissionSource {
 		 *  or
 		 * the player has an All town Override
 		 */
-		if (hasBlock || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action))
-			return true;
-
-		return false;
+		return has(player, blockPerm) || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
@@ -179,17 +164,12 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
 		 * the player has the block permission and the data node isn't registered
 		 */
-		if (hasBlock)
-			return true;
-
-		return false;
+		return has(player, blockPerm);
 	}	
 
 	public boolean isTownyAdmin(Player player) {
