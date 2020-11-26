@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -163,5 +164,13 @@ public class TownyCustomListener implements Listener {
                 finalWorld.removeBedExplosionAtBlock(event.getLocation2());
             }
         }, 20L);
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST) 
+	public void onTownLeaveNation(NationPreTownLeaveEvent event ) {
+		if (event.getTown().isConquered()) {
+			event.setCancelMessage(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
+			event.setCancelled(true);
+		}
 	}
 }

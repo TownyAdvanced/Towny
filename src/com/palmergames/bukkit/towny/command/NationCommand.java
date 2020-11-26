@@ -1370,24 +1370,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
-			
-			if (town.isConquered())
-				throw new TownyException(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 
 			NationPreTownLeaveEvent event = new NationPreTownLeaveEvent(town.getNation(), town);
 			Bukkit.getPluginManager().callEvent(event);
 			
 			if (event.isCancelled())
 				throw new TownyException(event.getCancelMessage());
-				
-			
-			if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
-				throw new TownyException(Translation.of("msg_war_flag_deny_town_under_attack"));
-			}
-
-			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
-				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-			}
 
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
