@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -13,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
@@ -253,6 +255,19 @@ public class FlagWarCustomListener implements Listener {
 			if (System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onNationWithdraw(NationPreTransactionEvent event) {
+		if (FlagWarConfig.isAllowingAttacks() && TownySettings.isFlaggedInteractionNation() && event.getTransaction().getType() == TransactionType.WITHDRAW) {
+			for (Town town : event.getNation().getTowns()) {
+				if (FlagWar.isUnderAttack(town) || System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+					event.setCancelMessage(Translation.of("msg_war_flag_deny_nation_under_attack"));
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 	}

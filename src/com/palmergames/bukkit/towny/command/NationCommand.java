@@ -59,7 +59,6 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1002,26 +1001,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
-
-			boolean underAttack = false;
-			for (Town town : nation.getTowns()) {
-				if (FlagWar.isUnderAttack(town) || System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
-					underAttack = true;
-					break;
-				}
-			}
-
-			if (underAttack && TownySettings.isFlaggedInteractionNation())
-				throw new TownyException(Translation.of("msg_war_flag_deny_nation_under_attack"));
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
 			BukkitTools.getPluginManager().callEvent(preEvent);
 			
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
+			if (preEvent.isCancelled())
+				throw new TownyException(preEvent.getCancelMessage());
 			
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
