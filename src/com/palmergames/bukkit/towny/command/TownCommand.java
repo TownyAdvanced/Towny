@@ -2927,7 +2927,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		boolean admin = false;
 		if (sender instanceof Player) {
 			name = ((Player) sender).getName();
-			if (TownyUniverse.getInstance().getPermissionSource().has((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
+			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin((Player) sender))
 				admin = true;				
 		} else {
 			name = "Console";
@@ -2951,7 +2951,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 																				// online
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_offline_no_join", newMember.getName()));
 					invited.remove(newMember);
-				} else if (!townyUniverse.getPermissionSource().has(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+				} else if (!townyUniverse.getPermissionSource().testPermission(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_not_allowed_join", newMember.getName()));
 					invited.remove(newMember);
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
@@ -3767,9 +3767,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
-
-			if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
-				throw new TownyException("You cannot do this! You were attacked too recently!");
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);

@@ -90,7 +90,7 @@ public enum TownSpawnLevel {
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Town town) {
 
-		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().has(player, this.permissionNode)) && (isAllowedTown(town));
+		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedTown(town));
 	}
 
 	private boolean isAllowedTown(Town town)

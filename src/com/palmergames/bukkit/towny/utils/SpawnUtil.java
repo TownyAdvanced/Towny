@@ -352,8 +352,8 @@ public class SpawnUtil {
 		String spawnPermission = null;
 		Account payee = null;
 		if (TownySettings.isUsingEconomy() && 
-				(!townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) 
-						&& !townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode()))) {
+				(!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) 
+						&& !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode()))) {
 			// Figure out costs, payee and spawnPermmission slug for money.csv log.
 			switch (spawnType) {
 			case RESIDENT:
@@ -469,7 +469,7 @@ public class SpawnUtil {
 	 */
 	private static void initiateSpawn(Player player, Location spawnLoc) {
 
-		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
+		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
@@ -478,7 +478,7 @@ public class SpawnUtil {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
+			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
 				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
 		}
 

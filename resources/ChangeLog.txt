@@ -5350,3 +5350,7 @@ v0.92.0.11:
 0.96.4.1:
   - es-419.yml updated by EuGNosii with PR #4471.
   - API: Add NationPreTownLeaveEvent.
+  - Have FlagWar and the Towny conquering feature use the NationPreTownLeaveEvent. 
+  - Remove FlagWar references from NationCommand using existing NationPreTransactionEvent.
+  - Remove FlagWar reference from TownCommand's withdraw method using existing TownPreTransactionEvent.
+  - Make TownyPermissionSource.has() private, replace calls to it with correct .testPermission() method.

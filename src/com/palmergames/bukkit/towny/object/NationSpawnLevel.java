@@ -78,7 +78,7 @@ public enum NationSpawnLevel {
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Nation nation) {
 
-		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().has(player, this.permissionNode)) && (isAllowedNation(nation));
+		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedNation(nation));
 	}
 	
 	private boolean isAllowedNation(Nation nation) {

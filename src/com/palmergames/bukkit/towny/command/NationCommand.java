@@ -61,8 +61,6 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1032,26 +1030,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
-
-			boolean underAttack = false;
-			for (Town town : nation.getTowns()) {
-				if (FlagWar.isUnderAttack(town) || System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
-					underAttack = true;
-					break;
-				}
-			}
-
-			if (underAttack && TownySettings.isFlaggedInteractionNation())
-				throw new TownyException(Translation.of("msg_war_flag_deny_nation_under_attack"));
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
 			BukkitTools.getPluginManager().callEvent(preEvent);
 			
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
+			if (preEvent.isCancelled())
+				throw new TownyException(preEvent.getCancelMessage());
 			
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
@@ -1407,61 +1392,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
-			
-			if (town.isConquered())
-				throw new TownyException(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 
 			NationPreTownLeaveEvent event = new NationPreTownLeaveEvent(town.getNation(), town);
 			Bukkit.getPluginManager().callEvent(event);
 			
 			if (event.isCancelled())
 				throw new TownyException(event.getCancelMessage());
-				
-			
-			if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
-				throw new TownyException(Translation.of("msg_war_flag_deny_town_under_attack"));
-			}
-
-			if (System.currentTimeMillis() - FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
-				throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-			}
-			
-			if (TownySettings.getWarSiegeEnabled()) {
-
-				//If a peaceful town has no options, we don't let it revolt
-				if(TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
-					Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
-					if(validGuardianNations.size() == 0) {
-						throw new TownyException(
-							String.format(Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_zero"), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
-					} else if(validGuardianNations.size() == 1)
-						throw new TownyException(String.format(
-							Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_one"), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-							TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
-				}
-
-				if (TownySettings.getWarSiegeTownLeaveDisabled()) {
-
-					if (!TownySettings.getWarSiegeRevoltEnabled())
-						throw new TownyException(Translation.of("msg_err_siege_war_town_voluntary_leave_impossible"));
-					if (town.isRevoltImmunityActive())
-						throw new TownyException(Translation.of("msg_err_siege_war_revolt_immunity_active"));
-
-					//Activate revolt immunity
-					SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
-
-					TownyMessaging.sendGlobalMessage(
-						String.format(Translation.of("msg_siege_war_revolt"),
-							town.getFormattedName(),
-							town.getMayor().getFormattedName(),
-							town.getNation().getFormattedName()));
-				}
-			}
-
-			town.removeNation();
 
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
