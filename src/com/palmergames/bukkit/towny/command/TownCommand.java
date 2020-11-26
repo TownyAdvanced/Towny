@@ -3620,9 +3620,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
-
-			if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
-				throw new TownyException("You cannot do this! You were attacked too recently!");
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
