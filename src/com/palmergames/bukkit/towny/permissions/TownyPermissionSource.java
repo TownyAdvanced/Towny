@@ -174,7 +174,7 @@ public abstract class TownyPermissionSource {
 
 	public boolean isTownyAdmin(Player player) {
 
-		return ((player == null) || player.isOp()) || has(player, PermissionNodes.TOWNY_ADMIN.getNode());
+		return (player == null) || player.isOp() || strictHas(player, PermissionNodes.TOWNY_ADMIN.getNode());
 
 	}
 
@@ -186,22 +186,34 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
 	public boolean testPermission(Player player, String perm) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
+		return isTownyAdmin(player) || strictHas(player, perm);
 	}
 
 	/**
 	 * All local permission checks should go through here.
 	 * 
-	 * Returns true if a player has a certain permission node.
+	 * Return true if a player has a certain permission node or is Op.
+	 *
+	 * If {@link Player#isOp()} has already been called, {@link #strictHas(Player, String)} should be used instead.
 	 * 
 	 * @param player Player to check
 	 * @param node Permission node to check for
 	 * @return true if the player has this permission node or is Op.
 	 */
 	private boolean has(Player player, String node) {
+		return player.isOp() || strictHas(player, node);
+	}
 
-		if (player.isOp())
-			return true;
+	/**
+	 * Return true if a player has a certain permission node.
+	 *
+	 * Should be used in place of {@link #has(Player, String)} if {@link Player#isOp()} has already been called.
+	 *
+	 * @param player Player to check
+	 * @param node Permission node to check for
+	 * @return true if the player has this permission node.
+	 */
+	private boolean strictHas(Player player, String node) {
 
 		/*
 		 * Node has been set or negated so return the actual value
