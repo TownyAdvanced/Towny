@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
@@ -76,7 +76,7 @@ public class SiegeWarDeathController {
 				if (deadResidentTown.hasSiege()
 					&& deadResidentTown.getSiege().getStatus().isActive()
 					&& deadResidentTown.getSiege() == candidateSiege
-					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
 						|| hasTownMilitaryRank(deadResident))
 				) {
 					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending own-town
@@ -84,7 +84,7 @@ public class SiegeWarDeathController {
 				} else if (deadResidentTown.hasNation()
 					&& candidateSiege.getDefendingTown().hasNation()
 					&& candidateSiege.getStatus().isActive()
-					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getDefendingTown().getNation()
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getDefendingTown().getNation()))) {
@@ -93,7 +93,7 @@ public class SiegeWarDeathController {
 
 				} else if (deadResidentTown.hasNation()
 					&& candidateSiege.getStatus().isActive()
-					&& (universe.getPermissionSource().testPermission(deadPlayer, PermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getAttackingNation() 
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getAttackingNation()))) {

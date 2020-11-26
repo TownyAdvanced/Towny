@@ -8,8 +8,8 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
@@ -126,7 +126,7 @@ public class SiegeWarPointsUtil {
 			//Resident town has nation
 			if(resident.getTown().hasNation()) {
 
-				if(universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)) {
+				if(universe.getPermissionSource().testPermission(resident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())) {
 					//Player is Leader. Apply points increase
 					double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderDeath() / 100);
 					return (int)(siegePoints * modifier);
@@ -152,7 +152,7 @@ public class SiegeWarPointsUtil {
 								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
 								if (otherResident.hasTown()
 									&& otherResident.hasNation()
-									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& universe.getPermissionSource().testPermission(otherResident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())
 									&& (otherResident.getTown().getNation() == resident.getTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(resident.getTown().getNation()))
 									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									friendlyLeaderNearby = true;
@@ -167,7 +167,7 @@ public class SiegeWarPointsUtil {
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
 									&& siege.getDefendingTown().hasNation()
-									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& universe.getPermissionSource().testPermission(otherResident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())
 									&& (otherResident.getTown().getNation() == siege.getDefendingTown().getNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getDefendingTown().getNation()))
 									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									hostileLeaderNearby = true;
@@ -181,7 +181,7 @@ public class SiegeWarPointsUtil {
 
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
-									&& universe.getPermissionSource().has(otherResident, PermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP)
+									&& universe.getPermissionSource().testPermission(otherResident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())
 									&& (otherResident.getTown().getNation() == siege.getAttackingNation() || otherResident.getTown().getNation().hasMutualAlly(siege.getAttackingNation()))
 									&& SiegeWarDistanceUtil.isCloseToLeader(player, otherPlayer)) {
 									hostileLeaderNearby = true;

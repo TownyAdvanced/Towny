@@ -1,10 +1,18 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.*;
+
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
@@ -89,7 +97,7 @@ public class TownPeacefulnessUtil {
 					continue;
 
 				//Dont apply if player has the immunity perm
-				if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA.getNode()))
+				if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA.getNode()))
 					continue;
 
 				//Don't apply to non-peaceful players
