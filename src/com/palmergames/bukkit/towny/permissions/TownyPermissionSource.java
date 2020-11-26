@@ -198,20 +198,27 @@ public abstract class TownyPermissionSource {
 
 	}
 
+	/**
+	 * Primary test for a permission node, used throughout Towny.
+	 * 
+	 * @param player Player to check.
+	 * @param perm Permission node to check for.
+	 * @return true if the player has the permission node or is considered an admin.
+	 */
 	public boolean testPermission(Player player, String perm) {
 		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
 	}
 
 	/**
-	 * All permission checks should go through here.
+	 * All local permission checks should go through here.
 	 * 
 	 * Returns true if a player has a certain permission node.
 	 * 
-	 * @param player - Player to check
-	 * @param node - Permission node to check for
-	 * @return true if the player has this permission node.
+	 * @param player Player to check
+	 * @param node Permission node to check for
+	 * @return true if the player has this permission node or is Op.
 	 */
-	public boolean has(Player player, String node) {
+	private boolean has(Player player, String node) {
 
 		if (player.isOp())
 			return true;

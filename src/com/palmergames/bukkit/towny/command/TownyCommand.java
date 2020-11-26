@@ -279,7 +279,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
-				if (townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					resident.toggleMode(split, true);
 				} else
@@ -312,7 +312,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
 				towny_war.add("No hud for console!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null) {
-				if (townyUniverse.getPermissionSource().has(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
+				if (townyUniverse.getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
 					plugin.getHUDManager().toggleWarHUD(p);
 				} else {
 					TownyMessaging.sendErrorMsg(p, Translation.of("msg_err_command_disable"));
