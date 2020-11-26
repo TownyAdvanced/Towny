@@ -83,12 +83,6 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN_INVITE_ACCEPT("towny.command.town.invite.accept"),
 	TOWNY_COMMAND_TOWN_INVITE_DENY("towny.command.town.invite.deny"),
 
-	TOWNY_NATION_SIEGE_POINTS("towny.nation.siege.points"),
-	TOWNY_NATION_SIEGE_LEADERSHIP("towny.nation.siege.leadership"),
-	TOWNY_NATION_SIEGE_ATTACK("towny.nation.siege.attack"),
-	TOWNY_NATION_SIEGE_ABANDON("towny.nation.siege.abandon"),
-	TOWNY_NATION_SIEGE_INVADE("towny.nation.siege.invade"),
-	TOWNY_NATION_SIEGE_PLUNDER("towny.nation.siege.plunder"),
 
 	
 	/*
@@ -168,9 +162,6 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 		TOWNY_COMMAND_TOWN_OUTLAWLIST("towny.command.town.outlawlist"),
 	
-		TOWNY_TOWN_SIEGE_POINTS("towny.town.siege.points"),
-		TOWNY_TOWN_SIEGE_SURRENDER("towny.town.siege.surrender"),
-
 	/*
 	 * Plot command permissions
 	 */
@@ -244,7 +235,6 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_SET_CAPITAL("towny.command.townyadmin.set.capital"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_TITLE("towny.command.townyadmin.set.title"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME("towny.command.townyadmin.set.surname"),
-		TOWNY_COMMAND_TOWNYADMIN_SET_SIEGEIMMUNITIES("towny.command.townyadmin.set.siegeimmunities"),
 		
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),
     	TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM("towny.command.townyadmin.plot.claim"),
@@ -396,11 +386,8 @@ public enum PermissionNodes {
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
 	TOWNY_MAX_PLOTS("towny_maxplots"),
 	TOWNY_EXTRA_PLOTS("towny_extraplots"),
-	TOWNY_MAX_OUTPOSTS("towny_maxoutposts"),
+	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
 	
-	// Siegewar related war sickness immunities
-	TOWNY_SIEGE_WAR_IMMUNE_TO_WAR_NAUSEA("towny.siege.war.immune.to.war.nausea"),
-	TOWNY_SIEGE_WAR_IMMUNE_TO_BATTLE_FATIGUE("towny.siege.war.immune.to.battle.fatigue");
 
 	private String value;
 

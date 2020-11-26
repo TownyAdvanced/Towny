@@ -1,12 +1,16 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BannerControlSession;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.util.TimeMgmt;
@@ -61,7 +65,7 @@ public class SiegeWarBannerControlUtil {
 
 				residentTown = resident.getTown();
 				if(residentTown == siege.getDefendingTown()
-					&& universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_TOWN_SIEGE_POINTS)) {
+					&& universe.getPermissionSource().testPermission(resident.getPlayer(), SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())) {
 					//Player is defending their own town
 
 					if(siege.getBannerControllingSide() == SiegeSide.DEFENDERS && siege.getBannerControllingResidents().contains(resident))
@@ -71,7 +75,7 @@ public class SiegeWarBannerControlUtil {
 					continue;
 
 				} else if (residentTown.hasNation()
-					&& universe.getPermissionSource().has(resident, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
+					&& universe.getPermissionSource().testPermission(resident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())) {
 
 					if (defendingTown.hasNation()
 						&& (defendingTown.getNation() == residentTown.getNation()

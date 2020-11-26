@@ -1,12 +1,20 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.*;
+
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
@@ -42,7 +50,7 @@ public class AttackTown {
             Resident attackingResident = universe.getDataSource().getResident(player.getName());
             Town townOfAttackingPlayer = attackingResident.getTown();
 
-			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))

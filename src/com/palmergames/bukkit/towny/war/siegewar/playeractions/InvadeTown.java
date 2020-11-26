@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -8,8 +11,8 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -40,7 +43,7 @@ public class InvadeTown {
 			Resident resident = universe.getDataSource().getResident(player.getName());
 			Town townOfInvadingResident = resident.getTown();
 
-			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if(townOfInvadingResident == townToBeInvaded)

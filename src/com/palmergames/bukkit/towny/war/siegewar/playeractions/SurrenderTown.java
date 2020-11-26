@@ -6,10 +6,10 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class SurrenderTown {
 			if(townOfAttackingResident != townWhereBlockWasPlaced)
                 throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_not_your_town"));
 			
-			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
                 throw new TownyException(Translation.of("msg_err_command_disable"));
 
             Siege siege = townWhereBlockWasPlaced.getSiege();

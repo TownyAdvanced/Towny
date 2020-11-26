@@ -60,7 +60,9 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -962,7 +964,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				//In Siegewar, if target town is peaceful, can't add military rank
 				if(TownySettings.getWarSiegeEnabled()
 					&& TownySettings.getWarCommonPeacefulTownsEnabled()
-					&& townyUniverse.getPermissionSource().doesNationRankAllowPermissionNode(rank, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)
+					&& SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(rank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)
 					&& targetTown.isPeaceful())
 				{
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_cannot_add_nation_military_rank_to_peaceful_resident"));

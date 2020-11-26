@@ -6,10 +6,10 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
@@ -45,7 +45,7 @@ public class AbandonAttack {
 				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
 
             //If player has no permission to abandon,send error
-            if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_NATION_SIEGE_ABANDON.getNode()))
+            if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(Translation.of("msg_err_command_disable"));
             
             //If the siege is not in progress, send error

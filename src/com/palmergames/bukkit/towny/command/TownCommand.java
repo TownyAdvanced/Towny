@@ -64,8 +64,10 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -1686,7 +1688,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						//Remove any military nation ranks of residents
 						for(Resident peacefulTownResident: town.getResidents()) {
 							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
-								if (townyUniverse.getPermissionSource().doesNationRankAllowPermissionNode(nationRank, PermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
+								if (SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(nationRank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
 									resident.removeNationRank(nationRank);
 								}
 							}

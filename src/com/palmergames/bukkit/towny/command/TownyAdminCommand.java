@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1527,7 +1528,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("siegeimmunities")) {
-			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SIEGEIMMUNITIES.getNode(split[0].toLowerCase())))
+			if (!townyUniverse.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SIEGEIMMUNITIES.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if (split.length == 4 && split[1].equalsIgnoreCase("town")) {
