@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -21,15 +20,12 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 
 public class WarZoneListener implements Listener {
@@ -202,26 +198,6 @@ public class WarZoneListener implements Listener {
 		 * Explosions must be allowed, so un-cancel the event.
 		 */
 		event.setCancelled(false);
-	}
-
-	@EventHandler (priority=EventPriority.HIGH)
-	public void onFlagWarFlagPlace(TownyBuildEvent event) {
-		if (event.getTownBlock() == null)
-			return;
-		
-		if (!(FlagWarConfig.isAllowingAttacks() && event.getMaterial() == FlagWarConfig.getFlagBaseMaterial()))
-			return;
-		Player player = event.getPlayer();
-		Block block = player.getWorld().getBlockAt(event.getLocation());
-		WorldCoord worldCoord = new WorldCoord(block.getWorld().getName(), Coord.parseCoord(block));
-		
-		if (plugin.getCache(player).getStatus() == TownBlockStatus.ENEMY) 
-			try {
-				if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
-					event.setCancelled(false);
-			} catch (TownyException e) {
-				event.setMessage(e.getMessage());
-			}
 	}
 	
 	@EventHandler

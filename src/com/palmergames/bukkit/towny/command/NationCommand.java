@@ -2686,34 +2686,37 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				boolean value = choice.orElse(!nation.isNeutral());
+				double cost = TownySettings.getNationNeutralityCost();
+				
+				if (nation.isNeutral() && value) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
+				else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
 				try {
-					boolean value = choice.orElse(!nation.isNeutral());
-					double cost = TownySettings.getNationNeutralityCost();
-					
-					if (nation.isNeutral() && value) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
-					else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
-
 					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
+				} catch (EconomyException e) {
+					// This can literally never happen. But if it does, print to console, and send message to player.
+					e.printStackTrace();
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+					return;
+				}
 
-					nation.toggleNeutral(value);
-
+				nation.toggleNeutral(value);
+				
+				// Only send status message if switching nation to peaceful.
+				if (value) {
 					// send message depending on if using an economy and charging
 					// for peaceful
 					if (TownySettings.isUsingEconomy() && cost > 0)
 						TownyMessaging.sendMsg(player, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 					else
-						TownyMessaging.sendMsg(player, Translation.of("msg_nation_set_peaceful"));
-
-					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
-							() ? Colors.Green : Colors.Red + " not") + " peaceful.");
-				} catch (TownyException e) {
-					nation.setNeutral(false);
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
+						TownyMessaging.sendMsg(player, Translation.of("msg_nation_set_peace"));
 				}
+
+				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
+						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 			} else if(split[0].equalsIgnoreCase("public")){
                 if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
                     throw new TownyException(Translation.of("msg_err_command_disable"));

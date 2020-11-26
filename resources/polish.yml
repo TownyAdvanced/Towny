@@ -1,5 +1,5 @@
 name: Towny
-version: 0.90
+version: 0.91
 language: polish
 authors: Continuator - Martinez, Helper - EmpressKedavra, First translation (0.19 version) - Serip
 website: 'http://townyadvanced.github.io/'
@@ -1187,3 +1187,9 @@ msg_payed_nation_tax_with_debt: '&cTwoja nacja zapłaciła podatek w wysokości 
 #Added in 0.90
 status_plot_clear_deletion: '&2ResetowanieDziałek: '
 msg_err_plot_clear_disabled_in_this_world: 'Komenda /plot clear jest wyłączona w tym świecie.'
+
+#Added in 0.91
+msg_universe_attribution: 'Authors: '
+msg_universe_contributors: ' And contributors like you. '
+msg_universe_heart: '<3'
+townblock_plu: 'TownBlocks'
