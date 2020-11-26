@@ -24,7 +24,7 @@ nomad:
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list
-    - towny.command.nation.townlist  
+    - towny.command.nation.townlist
     - towny.command.nation.allylist
     - towny.command.nation.enemylist
     - towny.town.resident
@@ -90,7 +90,7 @@ towns:
             - towny.town.siege.points
         guard:
             - towny.town.siege.points
-            
+
 # This section of permissions covers players who are members of any town in a nation.
 nations:
     default:
@@ -110,7 +110,7 @@ nations:
         - towny.command.nation.*
         - towny.command.nation.deposit.other
         - towny.nation.siege.*
-        
+
     ranks:
         assistant:
             - towny.command.nation.rank.helper
