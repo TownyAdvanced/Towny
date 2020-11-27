@@ -795,12 +795,22 @@ public class TownyUniverse {
     public void setWarEvent(War warEvent) {
         this.warEvent = warEvent;
     }
-    
-    @Deprecated
+
+	/**
+	 * @return {@link TownySettings#getSaveDatabase()}
+	 * 
+	 * @deprecated Use linked method instead.
+	 */
+	@Deprecated
 	public String getSaveDbType() {
 		return TownySettings.getSaveDatabase();
 	}
-	
+
+	/**
+	 * @return {@link TownySettings#getLoadDatabase()}
+	 * 
+	 * @deprecated Use linked method instead.
+	 */
 	@Deprecated
 	public String getLoadDbType() {
 		return TownySettings.getLoadDatabase();
