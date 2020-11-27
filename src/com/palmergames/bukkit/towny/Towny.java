@@ -609,9 +609,8 @@ public class Towny extends JavaPlugin {
 	public void updateCache(WorldCoord worldCoord) {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null)
-				if (Coord.parseCoord(player).equals(worldCoord))
-					getCache(player).resetAndUpdate(worldCoord); // Automatically resets permissions.
+			if (player != null && Coord.parseCoord(player).equals(worldCoord))
+				getCache(player).resetAndUpdate(worldCoord); // Automatically resets permissions.
 	}
 
 	/**
@@ -855,7 +854,7 @@ public class Towny extends JavaPlugin {
 		try {
 			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
-			bukkitCommandMap.setAccessible(true);
+			bukkitCommandMap.setAccessible(true); // Violation of SEI CERT SEC05-J: Uses reflection to break encapsulation.
 			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
 			commandMap.registerAll("towny", commands);
