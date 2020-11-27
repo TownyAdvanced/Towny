@@ -237,7 +237,7 @@ public class TownySettings {
 		return 0;
 	}
 
-	public static void loadConfig(String filepath, String version) throws IOException {
+	public static void loadConfig(String filepath, String version) {
 		if (FileMgmt.checkOrCreateFile(filepath)) {
 			File file = new File(filepath);
 
@@ -565,12 +565,9 @@ public class TownySettings {
 
 		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "# default Town levels.");
 		if (!config.contains(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) {
-			// List<Map<String, Object>> townLevels =
-			// config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
 
-			// if (townLevels == null || townLevels.isEmpty() ||
-			// townLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<>();
+			
 			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
 			level.put("namePrefix", "");
@@ -688,12 +685,9 @@ public class TownySettings {
 		addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "# default Nation levels.");
 
 		if (!config.contains(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
-			// List<Map<String, Object>> nationLevels =
-			// config.getMapList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
 
-			// if (nationLevels == null || nationLevels.isEmpty() ||
-			// nationLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<>();
+			
 			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
 			level.put("namePrefix", "Land of ");
@@ -1442,7 +1436,6 @@ public class TownySettings {
 	private static void setNewProperty(String root, Object value) {
 
 		if (value == null) {
-			// System.out.print("value is null for " + root.toLowerCase());
 			value = "";
 		}
 		newConfig.set(root.toLowerCase(), value.toString());
@@ -1490,7 +1483,6 @@ public class TownySettings {
 
 	public static long getDayInterval() {
 
-		// return TimeTools.secondsFromDhms("24h");
 		return getSeconds(ConfigNodes.PLUGIN_DAY_INTERVAL);
 	}
 
@@ -2439,11 +2431,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_LOGGING);
 	}
 
-	//public static boolean isUsingQuestioner() {
-	//
-	//	return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
-	//}
-
 	public static String getAcceptCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}
@@ -2459,10 +2446,6 @@ public class TownySettings {
 	public static String getCancelCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND);
 	}
-	//public static void setUsingQuestioner(boolean newSetting) {
-	//
-	//	setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
-	//}
 
 	public static boolean getOutsidersPreventPVPToggle() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
@@ -2471,16 +2454,6 @@ public class TownySettings {
 	public static boolean isForcePvpNotAffectingHomeblocks() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
-
-	//public static String questionerAccept() {
-	//
-	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
-	//}
-
-	//public static String questionerDeny() {
-	//
-	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
-	//}
 	
 	public static long getTownInviteCooldown() {
 
