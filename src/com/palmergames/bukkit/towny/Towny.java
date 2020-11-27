@@ -479,8 +479,10 @@ public class Towny extends JavaPlugin {
 	 * Fetch the TownyUniverse instance.
 	 * 
 	 * @return TownyUniverse
-	 * @deprecated use {@link com.palmergames.bukkit.towny.TownyUniverse#getInstance()}
+	 * 
+	 * @deprecated Use {@link com.palmergames.bukkit.towny.TownyUniverse#getInstance() instead.}
 	 */
+	@Deprecated
 	public com.palmergames.bukkit.towny.TownyUniverse getTownyUniverse() {
 
 		return townyUniverse;
@@ -703,7 +705,7 @@ public class Towny extends JavaPlugin {
 
 		} catch (NotRegisteredException e) {
 			// Resident doesn't exist
-			return null;
+			return Collections.emptyList();
 		}
 	}
 
