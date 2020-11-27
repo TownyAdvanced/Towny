@@ -459,12 +459,13 @@ public class Towny extends JavaPlugin {
 			System.out.println("------------------------------------");
 			System.out.println("[Towny] ChangeLog up until v" + getVersion());
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
-			for (String line : changeLog) { // TODO: crawl from the bottom, then
-											// past from that index.
+			for (String line : changeLog) {
+				// TODO: crawl from the bottom, then past from that index.
+				
 				if (line.startsWith(lastVersion)) {
 					display = true;
 				}
-				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+				if (display && line.replace(" ", "").replaceAll("\t", "").length() > 0) {
 					System.out.println(line);
 				}
 			}
