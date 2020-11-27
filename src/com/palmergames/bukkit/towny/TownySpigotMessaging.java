@@ -22,8 +22,13 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class TownySpigotMessaging {
+	
+	private TownySpigotMessaging(){
+		
+	}
+	
 	@SuppressWarnings("deprecation")
-	final static class HoverCompatibilityWrapper {
+	static final class HoverCompatibilityWrapper {
 		
 		final TextComponent base;
 		
