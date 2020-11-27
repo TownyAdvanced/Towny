@@ -45,6 +45,10 @@ public class PlayerKilledPlayerEvent extends Event {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
 	public Player getKiller() {
 		return killer;
