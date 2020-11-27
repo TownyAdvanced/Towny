@@ -14,6 +14,7 @@ import com.palmergames.bukkit.util.Colors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -30,6 +31,9 @@ import java.util.List;
 public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger(TownyMessaging.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
+
+	private TownyMessaging() {
+	}
 
 	/**
 	 * Sends an error message to the log
@@ -309,7 +313,8 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+					World world = player.getLocation().getWorld();
+					if (world != null && TownyUniverse.getInstance().getDataSource().getWorld(world.getName()).isUsingTowny())
 						player.sendMessage(Translation.of("default_towny_prefix") + line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
@@ -330,7 +335,8 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+					World world = player.getLocation().getWorld();
+					if (world != null && TownyUniverse.getInstance().getDataSource().getWorld(world.getName()).isUsingTowny())
 						player.sendMessage(line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
