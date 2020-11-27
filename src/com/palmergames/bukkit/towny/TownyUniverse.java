@@ -433,7 +433,7 @@ public class TownyUniverse {
 	}
 
 	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
-		String filteredName = NameValidation.checkAndFilterName(name);;
+		String filteredName = NameValidation.checkAndFilterName(name);
 
 		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
 		registerTown(town);
@@ -489,10 +489,8 @@ public class TownyUniverse {
 		
 		townsTrie.removeKey(town.getName());
 		
-		if (town.getUUID() != null) {
-			if (townUUIDMap.remove(town.getUUID()) == null) {
-				throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
-			}
+		if (town.getUUID() != null && townUUIDMap.remove(town.getUUID()) == null) {
+			throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
 		}
 	}
 	
@@ -511,7 +509,6 @@ public class TownyUniverse {
         if (towny != null) {
             out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
             out.add(getTreeDepth(depth + 2) + "Version: " + BukkitTools.getServer().getVersion());
-            //out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
             out.add(getTreeDepth(depth + 2) + "Worlds (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
         }
         out.add(getTreeDepth(depth + 1) + "Worlds (" + worlds.size() + "):");
