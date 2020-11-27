@@ -122,7 +122,7 @@ public class TownyUniverse {
         	return false;
 
         // Try migrating the config and world files if the version has changed.
-        if (!Version.fromString(TownySettings.getLastRunVersion()).toString().equals(towny.getVersion())) {
+        if (!TownySettings.getLastRunVersion().equals(towny.getVersion())) {
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}
