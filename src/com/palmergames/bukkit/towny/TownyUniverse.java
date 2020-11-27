@@ -54,7 +54,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Lukas Mansour (Articdive)
  */
-public class TownyUniverse {
+public class TownyUniverse extends Universe {
     private static TownyUniverse instance;
     private final Towny towny;
     
