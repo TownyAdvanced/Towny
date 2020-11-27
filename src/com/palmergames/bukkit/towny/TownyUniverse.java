@@ -224,20 +224,17 @@ public class TownyUniverse {
         
         switch (loadDbType.toLowerCase()) {
             case "ff":
-            case "flatfile": {
-                this.dataSource = new TownyFlatFileSource(towny, this);
-                break;
-            }
-            case "h2":
+            case "flatfile":
+				this.dataSource = new TownyFlatFileSource(towny, this);
+				break;
+			case "h2":
             case "sqlite":
-            case "mysql": {
-                this.dataSource = new TownySQLSource(towny, this, loadDbType.toLowerCase());
-                break;
-            }
-            default: {
-                return false;
-            }
-        }
+            case "mysql":
+				this.dataSource = new TownySQLSource(towny, this, loadDbType.toLowerCase());
+				break;
+			default:
+				return false;
+		}
         
         return dataSource.loadAll();
     }
@@ -253,17 +250,16 @@ public class TownyUniverse {
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
                 case "ff":
-                case "flatfile": {
-                    this.dataSource = new TownyFlatFileSource(towny, this);
-                    break;
-                }
-                case "h2":
+                case "flatfile":
+					this.dataSource = new TownyFlatFileSource(towny, this);
+					break;
+				case "h2":
                 case "sqlite":
-                case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
-                    break;
-                }
-                default: {}
+                case "mysql":
+					this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
+					break;
+				default:
+					break;
             }
 
             if (TownySettings.getLoadDatabase().equalsIgnoreCase(saveDbType)) {
