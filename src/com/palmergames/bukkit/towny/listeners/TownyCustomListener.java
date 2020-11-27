@@ -151,11 +151,15 @@ public class TownyCustomListener implements Listener {
 		TownyWorld world = null;
 		try {
 			world = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
+		} catch (NotRegisteredException ignored) {
+
+			// Return if world is still null. 
+			// This prevents possible NPE and need for null checks on addBedExplosionAtBlock().
+			return; 
+		}
 		
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
-		if (event.getLocation2() != null);
-			world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
+		world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
 		final TownyWorld finalWorld = world;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
