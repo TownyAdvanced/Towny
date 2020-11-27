@@ -17,9 +17,9 @@ import com.palmergames.bukkit.util.Compass;
 
 public class TownyAsciiMap {
 
-	public static final int lineWidth = 27;
-	public static final int halfLineWidth = lineWidth / 2;
-	public static final String[] help = {
+	public static final int LINE_WIDTH = 27;
+	public static final int HALF_LINE_WIDTH = LINE_WIDTH / 2;
+	static final String[] help = {
 			"  " + Colors.Gray + "-" + Colors.LightGray + " = " + Translation.of("towny_map_unclaimed"),
 			"  " + Colors.White + "+" + Colors.LightGray + " = " + Translation.of("towny_map_claimed"),
 			"  " + Colors.White + "$" + Colors.LightGray + " = " + Translation.of("towny_map_forsale"),
@@ -69,9 +69,10 @@ public class TownyAsciiMap {
 
 		// Generate Map 
 		int halfLineHeight = lineHeight / 2;
-		String[][] townyMap = new String[lineWidth][lineHeight];
-		int x, y = 0;
-		for (int tby = pos.getX() + (lineWidth - halfLineWidth - 1); tby >= pos.getX() - halfLineWidth; tby--) {
+		String[][] townyMap = new String[LINE_WIDTH][lineHeight];
+		int x = 0;
+		int y = 0;
+		for (int tby = pos.getX() + (LINE_WIDTH - HALF_LINE_WIDTH - 1); tby >= pos.getX() - HALF_LINE_WIDTH; tby--) {
 			x = 0;
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
@@ -79,7 +80,7 @@ public class TownyAsciiMap {
 					//TODO: possibly claim outside of towns
 					if (!townblock.hasTown())
 						throw new TownyException();
-					if (x == halfLineHeight && y == halfLineWidth)
+					if (x == halfLineHeight && y == HALF_LINE_WIDTH)
 						// location
 						townyMap[y][x] = Colors.Gold;
 					else if (hasTown) {
@@ -123,7 +124,7 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {
-					if (x == halfLineHeight && y == halfLineWidth)
+					if (x == halfLineHeight && y == HALF_LINE_WIDTH)
 						townyMap[y][x] = Colors.Gold;
 					else
 						townyMap[y][x] = Colors.Gray;
@@ -163,7 +164,6 @@ public class TownyAsciiMap {
 			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
 			TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : Translation.of("status_no_town"))));
 		} catch (TownyException e) {
-			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.
 			player.sendMessage("");
 		}
