@@ -355,6 +355,7 @@ public class TownyAPI {
      * @return {@link TownyPermissionSource} that is in use.
 	 * @deprecated use {@link TownyUniverse#getPermissionSource()}
      */
+    @Deprecated
     public TownyPermissionSource getPermissionSource() {
         return townyUniverse.getPermissionSource();
     }
@@ -404,15 +405,16 @@ public class TownyAPI {
      * @return the currently active {@link War}, null if none is active.
      * @deprecated use {@link TownyUniverse#getWarEvent()} 
      */
+    @Deprecated
     public War getWarEvent() {
         return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
     }
     
     public void clearWarEvent() {
-        TownyUniverse townyUniverse = TownyUniverse.getInstance();
         townyUniverse.getWarEvent().cancelTasks(BukkitTools.getScheduler());
         townyUniverse.setWarEvent(null);
     }
+    
     public void requestTeleport(Player player, Location spawnLoc) {
         
         try {
