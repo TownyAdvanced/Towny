@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.permissions;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
