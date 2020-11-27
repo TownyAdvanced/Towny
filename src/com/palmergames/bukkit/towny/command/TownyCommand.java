@@ -313,7 +313,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.add("No hud for console!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null) {
 				if (townyUniverse.getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
-					plugin.getHUDManager().toggleWarHUD(p);
+					plugin.getHudManager().toggleWarHUD(p);
 				} else {
 					TownyMessaging.sendErrorMsg(p, Translation.of("msg_err_command_disable"));
 				}

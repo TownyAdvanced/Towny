@@ -106,7 +106,7 @@ public class Towny extends JavaPlugin {
 	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
-	private final HUDManager HUDManager = new HUDManager(this);
+	private final HUDManager hudManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -430,7 +430,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(flagWarEntityListener, this);
 			
 			// Huds
-			pluginManager.registerEvents(HUDManager, this);
+			pluginManager.registerEvents(hudManager, this);
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -837,9 +837,9 @@ public class Towny extends JavaPlugin {
 	/**
 	 * @return the HUDManager
 	 */
-	public HUDManager getHUDManager() {
+	public HUDManager getHudManager() {
 		
-		return HUDManager;
+		return hudManager;
 	}
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/

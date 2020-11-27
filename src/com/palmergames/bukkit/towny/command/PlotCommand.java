@@ -564,7 +564,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						
-						plugin.getHUDManager().togglePermHUD(player);
+						plugin.getHudManager().togglePermHUD(player);
 						
 					} else {
 						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {

@@ -298,7 +298,7 @@ public class War {
 
 			@Override
 			public void run() {
-				plugin.getHUDManager().toggleAllWarHUD();
+				plugin.getHudManager().toggleAllWarHUD();
 			}
 			
 		}.runTask(plugin);
