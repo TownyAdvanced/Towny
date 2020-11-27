@@ -28,6 +28,9 @@ public class TownyAsciiMap {
 			"  " + Colors.Green + "+" + Colors.LightGray + " = " + Translation.of("towny_map_ally"),
 			"  " + Colors.Red + "+" + Colors.LightGray + " = " + Translation.of("towny_map_enemy")};
 
+	private TownyAsciiMap() {
+	}
+
 	public static String[] generateCompass(Player player) {
 
 		Compass.Point dir = Compass.getCompassPointForDirection(player.getLocation().getYaw());
@@ -141,20 +144,21 @@ public class TownyAsciiMap {
 
 		// Output
 		player.sendMessage(ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
-		String line;
+		StringBuilder bld = new StringBuilder();
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly
 		for (int my = 0; my < lineHeight; my++) {
-			line = compass[0];
+			bld.append(compass[0]);
 			if (lineCount < compass.length)
-				line = compass[lineCount];
+				bld.append(compass[lineCount]);
 
-			for (int mx = lineWidth - 1; mx >= 0; mx--)
-				line += townyMap[mx][my];
+			for (int mx = LINE_WIDTH - 1; mx >= 0; mx--)
+				bld.append(townyMap[mx][my]);
 
 			if (lineCount < help.length)
-				line += help[lineCount];
-
+				bld.append(help[lineCount]);
+			
+			String line = bld.toString();
 			player.sendMessage(line);
 			lineCount++;
 		}
