@@ -24,6 +24,10 @@ import java.util.TimeZone;
  */
 public class TownyTimerHandler{
 	
+	private TownyTimerHandler() {
+		
+	}
+	
 	private static Towny plugin;
 	
 	public static void initialize (Towny plugin) {
@@ -44,7 +48,6 @@ public class TownyTimerHandler{
 
 		if (!isDailyTimerRunning())
 			toggleDailyTimer(true);
-		//dailyTimer.schedule(new DailyTimerTask(this), 0);
 		if (TownySettings.isEconomyAsync()) {
 			if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
