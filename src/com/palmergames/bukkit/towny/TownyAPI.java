@@ -143,11 +143,8 @@ public class TownyAPI {
         ArrayList<Player> players = new ArrayList<>();
         
         for (Player player : BukkitTools.getOnlinePlayers()) {
-            if (player != null) {
-                if (owner.hasResident(player.getName())) {
-                    players.add(player);
-                }
-            }
+            if (player != null && owner.hasResident(player.getName())) 
+            	players.add(player);
         }
         return players;
     }
@@ -249,8 +246,7 @@ public class TownyAPI {
      */
     public TownyWorld getTownyWorld(String worldName) {
     	try {
-    		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(worldName);
-    		return townyWorld;
+    		return townyUniverse.getDataSource().getWorld(worldName);
     	} catch (NotRegisteredException e) {
 			return null;
 		}
@@ -445,11 +441,8 @@ public class TownyAPI {
     	if (!isWilderness(location))
     		return false;
     	TownBlockStatus status = hasNationZone(location);
-    	if (status.equals(TownBlockStatus.NATION_ZONE))
-    		return true;
-    	
-    	return false;
-    }
+		return status.equals(TownBlockStatus.NATION_ZONE);
+	}
     /**
      * Method to figure out if a location in the wilderness is normal wilderness of nation zone.
      * Recommended to use {@link TownyAPI#isWilderness(Location)} prior to using this, to confirm the location is not in a town.  
