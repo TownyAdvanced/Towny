@@ -135,9 +135,12 @@ public class BlockObject {
 
 	/**
 	 * Use {@link #BlockObject(String)} instead.
+	 * 
 	 * @param key String containing Block ID
 	 * @param data Block Data
 	 * @param loc Location
+	 *               
+	 * @deprecated Use {@link #BlockObject(String)} instead.   
 	 */
 	@Deprecated
 	public BlockObject(String key, byte data, Location loc) {
