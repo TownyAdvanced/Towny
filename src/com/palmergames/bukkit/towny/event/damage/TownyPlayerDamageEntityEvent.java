@@ -19,8 +19,7 @@ public class TownyPlayerDamageEntityEvent extends TownyDamageEvent {
 	private final Player player;
 
 	/**
-	 * Event thrown when a player damages an entity. 
-	 * Use ignorecancelled = true in order to filter out explosions Towny will already have stopped.
+	 * This event is not fired and this class is only a placeholder.
 	 * 
 	 * @param location Location of the entity being damaged.
 	 * @param harmedEntity Entity getting exploded.

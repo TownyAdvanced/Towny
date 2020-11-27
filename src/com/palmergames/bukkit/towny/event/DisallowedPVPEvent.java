@@ -6,6 +6,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Deprecated as of 0.96.4.2. Use {@link com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent} instead.
+ */
+@Deprecated
 public class DisallowedPVPEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 

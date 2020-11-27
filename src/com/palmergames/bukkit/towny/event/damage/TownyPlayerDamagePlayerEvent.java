@@ -61,18 +61,12 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 	
 	@Nullable
 	public Resident getAttackingResident() {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException ignored) {}
-		return null;
+		return TownyUniverse.getInstance().getResident(player.getUniqueId());
 	}
 	
 	@Nullable
 	public Resident getVictimResident() {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(getVictimPlayer().getName());
-		} catch (NotRegisteredException ignored) {}
-		return null;
+		return TownyUniverse.getInstance().getResident(getVictimPlayer().getUniqueId());
 	}
 	
 	@Nullable

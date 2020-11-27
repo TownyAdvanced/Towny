@@ -36,6 +36,7 @@ import java.util.List;
  * @author ElgarL,Shade
  * 
  */
+@SuppressWarnings("deprecation")
 public class CombatUtil {
 
 	/**
@@ -123,36 +124,39 @@ public class CombatUtil {
 			boolean cancelled = false;
 			
 			/*
-			 * If happening outside of an Arena plot and...
-			 * 
-			 * If another player is the target
-			 * or
-			 * The target is in a TownBlock and...
-			 * the target is a tame wolf and we are not it's owner
+			 * Defender is a player.
 			 */
-			if (!isArenaPlot(attackingPlayer, defendingPlayer) && (defendingPlayer != null || isNotTheAttackersPetDogInTownLand(defenderTB, defendingEntity, attackingPlayer))) {
+			if (defendingPlayer != null) {
+				
+				/*
+				 * Both townblocks are not Arena plots.
+				 */
+				if (!isArenaPlot(attackerTB, defenderTB)) {
+					/*
+					 * Check if we are preventing friendly fire between allies
+					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
+					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
+					 */
+					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
+				}
 
 				/*
-				 * Check if we are preventing friendly fire between allies
-				 * Check the attackers TownBlock and it's Town for their PvP
-				 * status, else the world.
-				 * Check the defenders TownBlock and it's Town for their PvP
-				 * status, else the world.
+				 * A player has attempted to damage a player. Throw a TownPlayerDamagePlayerEvent.
 				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
-
-					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
-					plugin.getServer().getPluginManager().callEvent(event);
-
-					cancelled = event.isCancelled();
-				}
-				
 				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, defendingPlayer.getLastDamageCause().getCause(), defenderTB, cancelled, attackingPlayer);
 				BukkitTools.getPluginManager().callEvent(event);
 				
-				if (event.isCancelled())
-					TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
-				return !event.isCancelled();
+				if (event.isCancelled()) {
+					// A cancelled event should contain a message.
+					if (event.getMessage() != null)
+						TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
+					
+					// Call the old event, don't let it make any decisions.
+					DisallowedPVPEvent deprecatedEvent = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
+					plugin.getServer().getPluginManager().callEvent(deprecatedEvent);					
+				}
+				
+				return event.isCancelled();
 
 			/*
 			 * Defender is not a player.
@@ -165,17 +169,22 @@ public class CombatUtil {
 				if (defenderTB != null) {
 					
 					/*
+					 * Protect tamed dogs in town land which are not owned by the attacking player.
+					 */
+					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
+						return true;
+					
+					/*
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
 					 */
-					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
-						return (!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT));
+					if (defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
+						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT);
 
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
 					if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) 						
 						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
-
 				}
 				
 				/*
@@ -229,13 +238,14 @@ public class CombatUtil {
 				 * 
 				 * Prevent pvp and remove Wolf targeting.
 				 */
-				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
+				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
 					((Wolf) attackingEntity).setTarget(null);
 					return true;
 				}
 				
 				/*
 				 * Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.
+				 * TODO: remove this entirely or move it to an event.
 				 */
 				if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && attackingEntity.getType() == EntityType.PRIMED_TNT)
 					return true;
@@ -371,6 +381,20 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Return true if both TownBlocks are Arena plots.
+	 * 
+	 * @param defenderTB TownBlock being tested.
+	 * @param attackerTB TownBlock being tested.
+	 * @return true if both TownBlocks are Arena plots.
+	 */
+	public static boolean isArenaPlot(TownBlock attackerTB, TownBlock defenderTB) {
+
+		if (defenderTB.getType() == TownBlockType.ARENA && attackerTB.getType() == TownBlockType.ARENA)
+			return true;
+		return false;
+	}
+	
 	/**
 	 * Return true if both attacker and defender are in Arena Plots.
 	 * 
@@ -637,12 +661,11 @@ public class CombatUtil {
 	
 	/**
 	 * 
-	 * @param defenderTB TownBlock where entity is hit.
-	 * @param defendingEntity Entity being hit.
-	 * @param attackingPlayer Player hitting an entity.
+	 * @param wolf Wolf being attacked by a player.
+	 * @param attackingPlayer Player attacking the wolf.
 	 * @return true when a dog who is not owned by the attacker is injured inside of a town's plot.
 	 */
-	private static boolean isNotTheAttackersPetDogInTownLand(TownBlock defenderTB, Entity defendingEntity, Player attackingPlayer) {
-		return defenderTB != null && defendingEntity instanceof Wolf && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals(attackingPlayer);
+	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
+		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
 	}
 }
