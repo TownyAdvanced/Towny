@@ -377,11 +377,12 @@ public class TownySettings {
 	}
 
 	/**
-	 * @deprecated As of 0.96.2.5+ use {@link Translation#of(String)} instead.
 	 * Gets the lang string from the key.
 	 * 
 	 * @param root The key for the language string.
 	 * @return The translated lang string.
+	 * 
+	 * @deprecated As of 0.96.2.5+ use {@link Translation#of(String)} instead.
 	 */
 	@Deprecated
 	public static String getLangString(String root) {

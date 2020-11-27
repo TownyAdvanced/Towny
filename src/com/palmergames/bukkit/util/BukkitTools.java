@@ -224,7 +224,10 @@ public class BukkitTools {
 	 * https://www.spigotmc.org/resources/id-converter.52099/
 	 * 
 	 * @param id - ID for a material ({@link Integer})
+	 *              
 	 * @return a Material parsed from {@link IdMappings}
+	 * 
+	 * @deprecated You should be using methods using Materials rather than integer-based IDs.
 	 */
 	@Deprecated
 	public static Material getMaterial(int id) {

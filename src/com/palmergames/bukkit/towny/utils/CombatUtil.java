@@ -327,11 +327,11 @@ public class CombatUtil {
 	/**
 	 * Should we be preventing friendly fire?
 	 * 
-	 * Deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
-	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
+	 * 
 	 * @return true if we should cancel damage.
+	 * @deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
 	 */
 	@Deprecated
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {

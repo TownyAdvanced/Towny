@@ -59,6 +59,7 @@ import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
@@ -267,11 +268,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getNationsMap().containsKey(name.toLowerCase());
 	}
 
-	/*
-	 * get keys 
-	 * No longer used by Towny.
+	/**
+	 * Gets the keys of TownyUniverse's Resident Map
+	 * 
+	 * @return Returns the {@link Map#keySet()} of {@link TownyUniverse#getResidentMap()}
+	 * 
+	 * @deprecated No longer used by Towny. Messing with the Resident map is ill advised.
 	 */
-	
 	@Override
 	@Deprecated
 	public Set<String> getResidentKeys() {
@@ -279,6 +282,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getResidentMap().keySet();
 	}
 
+	/**
+	 * Gets the keys of TownyUniverse's Towns Map.
+	 * 
+	 * @return Returns {@link Map#keySet()} of {@link TownyUniverse#getTownsMap()}
+	 * 
+	 * @deprecated No longer used by Towny. Messing with the Towns map is ill advised.
+	 */
 	@Override
 	@Deprecated
 	public Set<String> getTownsKeys() {
@@ -286,6 +296,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().keySet();
 	}
 
+	/**
+	 * Gets the keys of TownyUniverse's Nations Map
+	 * 
+	 * @return Returns {@link Map#keySet()} of {@link TownyUniverse#getNationsMap()}
+	 * 
+	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised.
+	 */
 	@Override
 	@Deprecated
 	public Set<String> getNationsKeys() {
@@ -416,8 +433,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	/**
 	 * Returns the associated town with the passed-in uuid.
+	 * 
 	 * @param uuid UUID of the town to fetch.
+	 *                
 	 * @return town associated with the uuid.
+	 * 
 	 * @throws NotRegisteredException Thrown if town doesn't exist.
 	 * 
 	 * @deprecated Use {@link TownyUniverse#getTown(UUID)} instead.

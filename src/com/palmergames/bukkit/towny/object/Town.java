@@ -223,6 +223,10 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(residents);
 	}
 
+	/**
+	 * @deprecated Use {@link #getRank(String)} instead.
+	 * @return Returns a list of residents with the assistant rank.
+	 */
 	@Deprecated
 	public List<Resident> getAssistants() {
 
