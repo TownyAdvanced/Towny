@@ -715,20 +715,25 @@ public class TownyFormatter {
 		
 		List<String> extraFields = new ArrayList<>();
 		
+		StringBuilder fieldBuilder = new StringBuilder();
 		String field = "";
 		
 		for (CustomDataField<?> cdf : to.getMetadata()) {
 			if (!cdf.hasLabel())
 				continue;
 			
-			if (extraFields.contains(field))
-				field = Colors.Green + cdf.getLabel() + ": ";
+			if (extraFields.contains(field)){
+				fieldBuilder = new StringBuilder();
+				fieldBuilder.append(Colors.Green + cdf.getLabel() + ": ");
+			}
 			else
-				field += Colors.Green + cdf.getLabel() + ": ";
+				fieldBuilder.append(Colors.Green + cdf.getLabel() + ": ");
 			
-			field += cdf.displayFormattedValue();
+			fieldBuilder.append(cdf.displayFormattedValue());
 			
-			field += "  ";
+			fieldBuilder.append("  ");
+			
+			field = fieldBuilder.toString();
 			
 			if (field.length() > 40)
 				extraFields.add(field);
