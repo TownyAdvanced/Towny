@@ -247,11 +247,12 @@ public class TownyMessaging {
 
 	/**
 	 * Send a message to all online residents of a town
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
+	 * Doesn't use a [Towny] or [TownName] prefix, which is preferred.
 	 *
 	 * @param town to receive message
 	 * @param lines String list to send as a message
+	 *                 
+	 * @deprecated Use {@link #sendPrefixedTownMessage(Town, List)} or {@link #sendTownMessagePrefixed(Town, String)} instead.
 	 */
 	@Deprecated
 	public static void sendTownMessage(Town town, List<String> lines) {
@@ -260,11 +261,12 @@ public class TownyMessaging {
 
 	/**
 	 * Send a message to all online residents of a nation
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
+	 * Doesn't use a [Towny] or [NationName] prefix, which is preferred.
 	 *
 	 * @param nation nation to receive message
 	 * @param lines String list to send as a message
+	 * 
+	 * @deprecated Use {@link #sendPrefixedNationMessage(Nation, List)} or {@link #sendNationMessagePrefixed(Nation, List)} instead.
 	 */
 	@Deprecated
 	public static void sendNationMessage(Nation nation, List<String> lines) {
@@ -364,11 +366,12 @@ public class TownyMessaging {
 
 	/**
 	 * Send a multi-line message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
+	 * Doesn't use a [Towny] or [TownName] prefix, which is preferred.
 	 * 
 	 * @param town the town to send a message to
 	 * @param lines array of Strings constituting the message.
+	 *
+	 * @deprecated Use {@link #sendPrefixedTownMessage(Town, String[])} instead.   
 	 */
 	@Deprecated
 	public static void sendTownMessage(Town town, String[] lines) {
@@ -385,11 +388,12 @@ public class TownyMessaging {
 
 	/**
 	 * Send a message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
+	 * Doesn't use a [Towny] or [TownName] prefix, which is preferred.
 	 *
 	 * @param town town to send message to
 	 * @param line the message to be sent
+	 * 
+	 * @deprecated Use {@link #sendPrefixedTownMessage(Town, String)} or {@link #sendTownMessagePrefixed(Town, String)} instead.   
 	 */
 	@Deprecated
 	public static void sendTownMessage(Town town, String line) {
@@ -458,11 +462,12 @@ public class TownyMessaging {
 	
 	/**
 	 * Send a multi-line message to All online residents of a nation and log
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
+	 * Doesn't use a [Towny] or [NationName] prefix, which is preferred.
 	 *
 	 * @param nation the nation to send to
 	 * @param lines array of Strings containing the message
+	 * 
+	 * @deprecated Use {@link #sendPrefixedNationMessage(Nation, String[])} instead.  
 	 */
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String[] lines) {
@@ -484,6 +489,8 @@ public class TownyMessaging {
 	 *
 	 * @param nation nation to send message to
 	 * @param line the message
+	 * 
+	 * @deprecated Use {@link #sendPrefixedNationMessage(Nation, String)} or {@link #sendNationMessagePrefixed(Nation, String)} instead.   
 	 */
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String line) {
@@ -738,10 +745,11 @@ public class TownyMessaging {
 	}
 	
 	/**
-	 * Deprecated as of 0.96.2.13 use {@link #sendMsg(CommandSender, String)} instead.
+	 * Send a message to a receiving object. (Preferably a player.)
 	 * 
 	 * @param object - One receiving the message.
 	 * @param message - Message being sent.
+	 * @deprecated Deprecated as of 0.96.2.13. Use {@link #sendMsg(CommandSender, String)} instead.   
 	 */
 	@Deprecated
 	public static void sendMsg(Object object, String message) {
