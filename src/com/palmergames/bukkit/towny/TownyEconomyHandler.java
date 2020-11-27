@@ -30,7 +30,7 @@ public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
 	private static EconomyAdapter economy = null;
-	private static EcoType Type = EcoType.NONE;
+	private static EcoType type = EcoType.NONE;
 	private static String version = "";
 	
 	public enum EcoType {
@@ -49,7 +49,7 @@ public class TownyEconomyHandler {
 	 * @return the economy type we have detected.
 	 */
 	public static EcoType getType() {
-		return Type;
+		return type;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class TownyEconomyHandler {
 	 * @return true if we found one.
 	 */
 	public static boolean isActive() {
-		return (Type != EcoType.NONE);
+		return (type != EcoType.NONE);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class TownyEconomyHandler {
 				 */
 				economy = new VaultEconomyAdapter(vaultEcoProvider.getProvider());
 				setVersion(String.format("%s %s", vaultEcoProvider.getProvider().getName(), "via Vault" ));
-				Type = EcoType.VAULT;
+				type = EcoType.VAULT;
 				return true;
 			}
 		} catch (NoClassDefFoundError ignored) {
@@ -113,7 +113,7 @@ public class TownyEconomyHandler {
 			 */
 			economy = new ReserveEconomyAdapter(((Reserve) economyProvider).economy());
 			setVersion(String.format("%s %s", ((Reserve) economyProvider).economy().name(), "via Reserve" ));
-			Type = EcoType.RESERVE;
+			type = EcoType.RESERVE;
 			return true;
 		}
 
