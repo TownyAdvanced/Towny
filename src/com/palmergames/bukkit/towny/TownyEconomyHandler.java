@@ -122,34 +122,6 @@ public class TownyEconomyHandler {
 		 */
 		return false;
 	}
-
-	
-	// This was removed because:
-	// 1.) Only we should handle concrete account classes
-	// 2.) This was unused anyways.
-//	/**
-//	 * Returns the relevant player's economy account
-//	 * 
-//	 * @param accountName - Name of the player's account (usually playername)
-//	 * @return - The relevant player's economy account
-//	 */
-//	@SuppressWarnings("unused")
-//	private static Object getEconomyAccount(String accountName) {
-//
-//		switch (Type) {
-//
-//		case RESERVE:
-//			if(reserveEconomy instanceof ExtendedEconomyAPI)
-//				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
-//			break;
-//		
-//		default:
-//			break;
-//
-//		}
-//
-//		return null;
-//	}
 	
 	// We don't even use UUID's right now?
 	/**
