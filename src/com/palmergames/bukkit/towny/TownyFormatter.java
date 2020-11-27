@@ -46,11 +46,9 @@ public class TownyFormatter {
 	 * Colours: 3 = Description and : 4 = Count 5 = Colour for the start of the
 	 * list
 	 */
-	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
-    public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
-
-	public static void initialize() {}
-
+	public static final String RESIDENT_LIST_PREFIX_FORMAT = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
+    public static final String EMBASSY_TOWN_LIST_PREFIX_FORMAT = "%3$s%1$s:%5$s ";
+    
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
@@ -73,14 +71,14 @@ public class TownyFormatter {
 	
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
-		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
+		return ChatTools.listArr(getFormattedNames(residentList), String.format(RESIDENT_LIST_PREFIX_FORMAT, prefix, residentList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
 	}
 	
 	public static List<String> getFormattedTowns(String prefix, List<Town> townList) {
 		
 		Town[] arrayTowns = townList.toArray(new Town[0]);
 
-		return ChatTools.listArr(getFormattedNames(arrayTowns), String.format(embassyTownListPrefixFormat, prefix, townList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
+		return ChatTools.listArr(getFormattedNames(arrayTowns), String.format(EMBASSY_TOWN_LIST_PREFIX_FORMAT, prefix, townList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
 	}
 
 	public static String[] getFormattedNames(List<Resident> residentList) {
