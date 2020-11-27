@@ -280,7 +280,7 @@ public class PlayerCache {
 	 * 
 	 * @throws NullPointerException if passed an inappropriate ActionType.
 	 * 
-	 * @deprecated Should not be used. Use {@link #getCachePermission(Material, ActionType)} instead.
+	 * @deprecated Should not be used. Use PlayerCache#getCachePermission(Material, ActionType) instead.
 	 */
 	@Deprecated
 	public boolean getCachePermission(Integer id, byte data, ActionType action) throws NullPointerException {

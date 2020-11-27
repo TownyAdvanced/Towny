@@ -155,7 +155,7 @@ public class BlockObject {
 
 	/**
 	 * @deprecated No longer used.
-	 * @return If the Block ID > -1.
+	 * @return If the Block ID &gt; -1.
 	 */
 	@Deprecated
 	public boolean usesID() {
@@ -174,7 +174,7 @@ public class BlockObject {
 	/**
 	 * Sets the {@link #key}
 	 * @deprecated No longer used.
-	 * @param key 
+	 * @param key The key string
 	 */
 	@Deprecated
 	public void setKey(String key) {
