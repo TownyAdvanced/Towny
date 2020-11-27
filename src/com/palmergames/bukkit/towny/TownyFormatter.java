@@ -48,7 +48,10 @@ public class TownyFormatter {
 	 */
 	public static final String RESIDENT_LIST_PREFIX_FORMAT = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
     public static final String EMBASSY_TOWN_LIST_PREFIX_FORMAT = "%3$s%1$s:%5$s ";
-    
+
+	private TownyFormatter() {
+	}
+
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
