@@ -659,7 +659,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 									iMax = outposts.size();
 								}
 								
-								if (Towny.isSpigot) {
+								if (Towny.IS_SPIGOT) {
 									TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
 									return;
 								}
@@ -1340,7 +1340,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	
 	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
 		
-		if (Towny.isSpigot && sender instanceof Player) {
+		if (Towny.IS_SPIGOT && sender instanceof Player) {
 			TownySpigotMessaging.sendSpigotTownList(sender, towns, page, total);
 			return;
 		}

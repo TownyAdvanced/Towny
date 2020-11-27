@@ -114,7 +114,10 @@ public class Towny extends JavaPlugin {
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
-	public static boolean isSpigot = false;
+	public static final boolean IS_SPIGOT = BukkitTools.isSpigot();
+	private static final String STRING_DIVIDER = "=============================================================";
+	private static final String VER_FORMAT = "%s v%s";
+
 
 	private boolean error = false;
 	
@@ -132,8 +135,6 @@ public class Towny extends JavaPlugin {
 
 		townyUniverse = TownyUniverse.getInstance();
 		
-		isSpigot = BukkitTools.isSpigot();
-
 		// Setup classes
 		BukkitTools.initialize(this);
 		TownyTimerHandler.initialize(this);
@@ -173,13 +174,13 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
-		System.out.println("=============================================================");
+		System.out.println(STRING_DIVIDER);
 		if (isError()) {
 			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
 			System.out.println("[Towny] Version: " + version + " - Plugin Enabled");
 		}
-		System.out.println("=============================================================");
+		System.out.println(STRING_DIVIDER);
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -203,8 +204,7 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		System.out.println("==============================================================");
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		System.out.println(STRING_DIVIDER);
 		if (townyUniverse.getDataSource() != null && !error) {
 			townyUniverse.getDataSource().saveQueues();
 		}
@@ -236,7 +236,7 @@ public class Towny extends JavaPlugin {
 		this.townyUniverse = null;
 
 		System.out.println("[Towny] Version: " + version + " - Plugin Disabled");
-		System.out.println("=============================================================");
+		System.out.println(STRING_DIVIDER);
 	}
 
 	/**
@@ -308,12 +308,12 @@ public class Towny extends JavaPlugin {
 		 */
 		test = getServer().getPluginManager().getPlugin("TownyChat");
 		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyChat", test.getDescription().getVersion()));			
+			addons.add(String.format(VER_FORMAT, "TownyChat", test.getDescription().getVersion()));			
 		}
 
 		test = getServer().getPluginManager().getPlugin("TownyFlight");
 		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyFlight", test.getDescription().getVersion()));			
+			addons.add(String.format(VER_FORMAT, "TownyFlight", test.getDescription().getVersion()));			
 		}
 		
 		test = getServer().getPluginManager().getPlugin("Essentials");
@@ -321,13 +321,13 @@ public class Towny extends JavaPlugin {
 			TownySettings.setUsingEssentials(false);
 		} else if (TownySettings.isUsingEssentials()) {
 			this.essentials = (Essentials) test;
-			addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
+			addons.add(String.format(VER_FORMAT, "Essentials", test.getDescription().getVersion()));
 		}
 
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
 		if (test != null) {
             new TownyPlaceholderExpansion(this).register();
-            addons.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
+            addons.add(String.format(VER_FORMAT, "PlaceholderAPI", test.getDescription().getVersion()));
 		}
 
 		//Add our chat handler to TheNewChat via the API.
@@ -365,7 +365,7 @@ public class Towny extends JavaPlugin {
 		Plugin test = getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
-			output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
+			output += String.format(VER_FORMAT, "GroupManager", test.getDescription().getVersion());
 		// Else test for vault being present.
 		} else {
 			// Try Vault
@@ -382,7 +382,7 @@ public class Towny extends JavaPlugin {
 					if (vaultPermProvider != null) {
 						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
 					} else {
-						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
+						output += String.format(VER_FORMAT, "Vault", test.getDescription().getVersion());
 					}
 				}
 			}
@@ -890,7 +890,7 @@ public class Towny extends JavaPlugin {
 			if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
 				return "Paper";
 			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-				if (isSpigot)
+				if (IS_SPIGOT)
 					return "Spigot";
 				else 
 					return "CraftBukkit";

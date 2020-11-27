@@ -85,7 +85,7 @@ public class TownyCustomListener implements Listener {
 				if (msg != null) {
 					msg = Colors.translateColorCodes(msg);
 					
-					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
+					if (Towny.IS_SPIGOT && TownySettings.isNotificationsAppearingInActionBar()) {
 						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
 						if (seconds > 3) {
 							// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.

@@ -657,7 +657,7 @@ public class TownyMessaging {
 
 	public static void sendConfirmationMessage(CommandSender sender, String firstline, String confirmline, String cancelline, String lastline) {
 		
-		if (Towny.isSpigot && sender instanceof Player) {
+		if (Towny.IS_SPIGOT && sender instanceof Player) {
 			TownySpigotMessaging.sendSpigotConfirmMessage(sender, firstline, confirmline, cancelline, lastline);
 			return;
 		}
@@ -687,7 +687,7 @@ public class TownyMessaging {
 
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		
-		if (Towny.isSpigot) {
+		if (Towny.IS_SPIGOT) {
 			TownySpigotMessaging.sendSpigotRequestMessage(player, invite);
 			return;
 		}

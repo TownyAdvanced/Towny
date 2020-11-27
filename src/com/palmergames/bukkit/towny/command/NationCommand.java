@@ -1180,7 +1180,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	
 	public void sendList(CommandSender sender, List<Nation> nations, int page, int total) {
 		
-		if (Towny.isSpigot  && sender instanceof Player) {
+		if (Towny.IS_SPIGOT && sender instanceof Player) {
 			TownySpigotMessaging.sendSpigotNationList(sender, nations, page, total);
 			return;
 		}
