@@ -2657,7 +2657,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (resident.isJailed()) {
 				try {
 					if (resident.getJailTown().equals(resident.getTown().getName())) {
-						if (TownySettings.JailDeniesTownLeave()) {
+						if (TownySettings.jailDeniesTownLeave()) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_cannot_abandon_town_while_jailed"));
 							return;
 						}

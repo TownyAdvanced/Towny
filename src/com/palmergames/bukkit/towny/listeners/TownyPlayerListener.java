@@ -654,7 +654,7 @@ public class TownyPlayerListener implements Listener {
 				}
 				if (event.getCause() == TeleportCause.PLUGIN) 
 					return;
-				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
+				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.jailAllowsEnderPearls())) {
 					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 					event.setCancelled(true);
 				}

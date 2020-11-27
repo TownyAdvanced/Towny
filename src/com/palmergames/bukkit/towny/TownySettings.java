@@ -55,8 +55,9 @@ public class TownySettings {
 		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER, NATIONZONES_SIZE, NATION_BONUS_OUTPOST_LIMIT
 	}
 
-	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, playermap;
+	private static CommentedConfiguration config;
+	private static CommentedConfiguration newConfig;
+	private static CommentedConfiguration playermap;
 	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
@@ -1677,12 +1678,12 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
 
-	public static boolean JailAllowsEnderPearls() {
+	public static boolean jailAllowsEnderPearls() {
 		
 		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_ENDER_PEARLS);
 	}
 	
-	public static boolean JailDeniesTownLeave() {
+	public static boolean jailDeniesTownLeave() {
 		
 		return getBoolean(ConfigNodes.JAIL_JAIL_DENIES_TOWN_LEAVE);
 	}
