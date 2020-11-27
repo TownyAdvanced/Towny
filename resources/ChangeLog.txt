@@ -5356,3 +5356,4 @@ v0.92.0.11:
   - Make TownyPermissionSource.has() private, replace calls to it with correct .testPermission() method.
   - Added an missing string in es-419.yml, courtesy of EuGNosii with PR #4475.
   - Add missing getHandlerList() to PlayerKilledPlayerEvent.
+  - Undo making TownyPermissionSource.has() private. TownyChat uses it.
