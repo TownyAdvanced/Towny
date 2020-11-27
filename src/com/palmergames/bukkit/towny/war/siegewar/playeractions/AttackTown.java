@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -92,7 +93,7 @@ public class AttackTown {
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_place_banner_far_above_town"));
 			}
 
-            if(nationOfAttackingPlayer.getNumActiveAttackSieges() >= TownySettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
+            if(nationOfAttackingPlayer.getNumActiveAttackSieges() >= SiegeWarSettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
 				throw new TownyException(Translation.of("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
 
 			if (TownySettings.getNationRequiresProximity() > 0) {
@@ -138,7 +139,7 @@ public class AttackTown {
 		siege.setStartTime(System.currentTimeMillis());
 		siege.setScheduledEndTime(
 			(System.currentTimeMillis() +
-				((long) (TownySettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
+				((long) (SiegeWarSettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
 		siege.setActualEndTime(0);
 		siege.setFlagLocation(block.getLocation());
 		siege.setWarChestAmount(defendingTown.getSiegeCost());

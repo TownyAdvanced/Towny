@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,7 +45,7 @@ public class SiegeWarDistanceUtil {
 	 * @return true if the difference in elevation is acceptable
 	 */
 	public static boolean isBannerToTownElevationDifferenceOk(Block block, TownBlock townBlock) {
-		int allowedDownwardElevationDifference = TownySettings.getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference();
+		int allowedDownwardElevationDifference = SiegeWarSettings.getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference();
 		int averageDownwardElevationDifference = getAverageBlockToTownDownwardElevationDistance(block, townBlock);
 		return averageDownwardElevationDifference <= allowedDownwardElevationDifference;
 	}
@@ -149,7 +150,7 @@ public class SiegeWarDistanceUtil {
 		try {
 			if (worldsWithSiegeWarEnabled == null) {
 				worldsWithSiegeWarEnabled = new ArrayList<>();
-				String[] worldNamesAsArray = TownySettings.getWarSiegeWorlds().split(",");
+				String[] worldNamesAsArray = SiegeWarSettings.getWarSiegeWorlds().split(",");
 				for (String worldName : worldNamesAsArray) {
 					worldsWithSiegeWarEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
 				}
@@ -171,7 +172,7 @@ public class SiegeWarDistanceUtil {
 		try {
 			if (worldsWithUndergroundBannerControlEnabled == null) {
 				worldsWithUndergroundBannerControlEnabled = new ArrayList<>();
-				String[] worldNamesAsArray = TownySettings.getWarWorldsWithUndergroundBannerControl().split(",");
+				String[] worldNamesAsArray = SiegeWarSettings.getWarWorldsWithUndergroundBannerControl().split(",");
 				for (String worldName : worldNamesAsArray) {
 					worldsWithUndergroundBannerControlEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
 				}
@@ -184,19 +185,19 @@ public class SiegeWarDistanceUtil {
 	}
 
 	public static boolean isInSiegeZone(Location location, Siege siege) {
-		return areLocationsClose(location, siege.getFlagLocation(), TownySettings.getWarSiegeZoneRadiusBlocks());
+		return areLocationsClose(location, siege.getFlagLocation(), SiegeWarSettings.getWarSiegeZoneRadiusBlocks());
 	}
 
 	public static boolean isInSiegeZone(Entity entity, Siege siege) {
-		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getWarSiegeZoneRadiusBlocks());
+		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), SiegeWarSettings.getWarSiegeZoneRadiusBlocks());
 	}
 
 	public static boolean isCloseToLeader(Player player1, Player player2) {
-		return areLocationsClose(player1.getLocation(), player2.getLocation(), TownySettings.getWarSiegeLeadershipAuraRadiusBlocks());
+		return areLocationsClose(player1.getLocation(), player2.getLocation(), SiegeWarSettings.getWarSiegeLeadershipAuraRadiusBlocks());
 	}
 
 	public static boolean isInTimedPointZone(Entity entity, Siege siege) {
-		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), TownySettings.getBannerControlHorizontalDistanceBlocks(), TownySettings.getBannerControlVerticalDistanceBlocks());
+		return areLocationsClose(entity.getLocation(), siege.getFlagLocation(), SiegeWarSettings.getBannerControlHorizontalDistanceBlocks(), SiegeWarSettings.getBannerControlVerticalDistanceBlocks());
 	}
 
 	public static boolean areTownsClose(Town town1, Town town2, int radiusTownblocks) {

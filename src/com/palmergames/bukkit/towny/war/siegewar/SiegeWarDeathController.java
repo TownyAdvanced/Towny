@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -153,13 +152,13 @@ public class SiegeWarDeathController {
 		int currentDurability;
 		int damageToInflict;
 		int newDurability;
-		if(TownySettings.getWarSiegeDeathPenaltyDegradeInventoryEnabled()) {
+		if(SiegeWarSettings.getWarSiegeDeathPenaltyDegradeInventoryEnabled()) {
 			for(ItemStack itemStack: playerDeathEvent.getEntity().getInventory().getContents()) {
 				if (itemStack != null && itemStack.getItemMeta() instanceof Damageable) {
 					damageable = ((Damageable) itemStack.getItemMeta());
 					maxDurability = itemStack.getType().getMaxDurability();
 					currentDurability = damageable.getDamage();
-					damageToInflict = (int)(maxDurability / 100 * TownySettings.getWarSiegeDeathPenaltyDegradeInventoryPercentage());
+					damageToInflict = (int)(maxDurability / 100 * SiegeWarSettings.getWarSiegeDeathPenaltyDegradeInventoryPercentage());
 					newDurability = currentDurability + damageToInflict;
 					damageable.setDamage(newDurability);
 					itemStack.setItemMeta((ItemMeta)damageable);
@@ -169,7 +168,7 @@ public class SiegeWarDeathController {
 	}
 
 	private static void keepInventory(PlayerDeathEvent playerDeathEvent) {
-		if(TownySettings.getWarSiegeDeathPenaltyKeepInventoryEnabled() && !playerDeathEvent.getKeepInventory()) {
+		if(SiegeWarSettings.getWarSiegeDeathPenaltyKeepInventoryEnabled() && !playerDeathEvent.getKeepInventory()) {
 			playerDeathEvent.setKeepInventory(true);
 			playerDeathEvent.getDrops().clear();
 		}
