@@ -75,18 +75,14 @@ public abstract class TownyPermissionSource {
 
 		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
 		 * the player has the block permission and the data node isn't registered
+		 *  or
+		 * no node set but we are using permissions so check world settings
 		 */
-		if (hasBlock)
-			return true;
-
-		// No node set but we are using permissions so check world settings
-		return unclaimedZoneAction(world, material, action);
+		return has(player, blockPerm) || unclaimedZoneAction(world, material, action);
 
 	}
 
@@ -120,8 +116,6 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
@@ -129,11 +123,7 @@ public abstract class TownyPermissionSource {
 		 *  or
 		 * the player has an All town Override
 		 */
-		if (hasBlock || hasAllTownOverride(player, material, action))
-			return true;
-
-
-		return false;
+		return has(player, blockPerm) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
@@ -149,8 +139,6 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("townowned." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
@@ -160,10 +148,7 @@ public abstract class TownyPermissionSource {
 		 *  or
 		 * the player has an All town Override
 		 */
-		if (hasBlock || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action))
-			return true;
-
-		return false;
+		return has(player, blockPerm) || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
@@ -179,22 +164,17 @@ public abstract class TownyPermissionSource {
 		//check for permissions
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + material);
 
-		boolean hasBlock = has(player, blockPerm);
-
 		/*
 		 * If the player has the data node permission registered directly
 		 *  or
 		 * the player has the block permission and the data node isn't registered
 		 */
-		if (hasBlock)
-			return true;
-
-		return false;
+		return has(player, blockPerm);
 	}	
 
 	public boolean isTownyAdmin(Player player) {
 
-		return ((player == null) || player.isOp()) || has(player, PermissionNodes.TOWNY_ADMIN.getNode());
+		return (player == null) || player.isOp() || strictHas(player, PermissionNodes.TOWNY_ADMIN.getNode());
 
 	}
 
@@ -206,22 +186,34 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
 	public boolean testPermission(Player player, String perm) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
+		return isTownyAdmin(player) || strictHas(player, perm);
 	}
 
 	/**
 	 * All local permission checks should go through here.
 	 * 
-	 * Returns true if a player has a certain permission node.
+	 * Return true if a player has a certain permission node or is Op.
+	 *
+	 * If {@link Player#isOp()} has already been called, {@link #strictHas(Player, String)} should be used instead.
 	 * 
 	 * @param player Player to check
 	 * @param node Permission node to check for
 	 * @return true if the player has this permission node or is Op.
 	 */
 	public boolean has(Player player, String node) {
+		return player.isOp() || strictHas(player, node);
+	}
 
-		if (player.isOp())
-			return true;
+	/**
+	 * Return true if a player has a certain permission node.
+	 *
+	 * Should be used in place of {@link #has(Player, String)} if {@link Player#isOp()} has already been called.
+	 *
+	 * @param player Player to check
+	 * @param node Permission node to check for
+	 * @return true if the player has this permission node.
+	 */
+	private boolean strictHas(Player player, String node) {
 
 		/*
 		 * Node has been set or negated so return the actual value
