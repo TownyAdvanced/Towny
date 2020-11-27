@@ -161,13 +161,10 @@ public class TownyCustomListener implements Listener {
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
 		world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
 		final TownyWorld finalWorld = world;
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                finalWorld.removeBedExplosionAtBlock(event.getLocation());
-                finalWorld.removeBedExplosionAtBlock(event.getLocation2());
-            }
-        }, 20L);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			finalWorld.removeBedExplosionAtBlock(event.getLocation());
+			finalWorld.removeBedExplosionAtBlock(event.getLocation2());
+		}, 20L);
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST) 
