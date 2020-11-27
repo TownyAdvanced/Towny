@@ -1,7 +1,6 @@
 package com.palmergames.util;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
@@ -37,20 +36,17 @@ public class StringMgmt {
 
 		while (hexMatcher.find()) {
 			String hex = hexMatcher.group();
-			TownyMessaging.sendErrorMsg("Found hex " + hex);
 			str = str.replace(hex, ChatColor.of(hex).toString());
 		}
 
 		while (ampMatcher.find()) {
 			String hex = ampMatcher.group().replace("&", "");
-			TownyMessaging.sendErrorMsg("Found hex " + hex);
 			str = str.replace(hex, ChatColor.of(hex).toString());
 			str = str.replace("&", "");
 		}
 
 		while (bracketMatcher.find()) {
 			String hex = bracketMatcher.group().replace("{", "").replace("}", "");
-			TownyMessaging.sendErrorMsg("Found hex " + hex);
 			str = str.replace(hex, ChatColor.of(hex).toString());
 			str = str.replace("{", "").replace("}", "");
 		}
