@@ -140,20 +140,21 @@ public class TownyLogger {
 			receiver = b.getName();
 		}
 		
-		String msg = String.format("%s,%s,%s,%s", reason, sender, amount, receiver);
 
 		if (reason == null)
 			reason = "Unknown Reason";
+		String msg = String.format("%s,%s,%s,%s", reason, sender, amount, receiver);
+		
 		LOGGER_MONEY.info(msg);
 		
 	}
 	
 	public void logMoneyTransaction(String a, double amount, String b, String reason) {
 		
-		String msg = String.format("%s,%s,%s,%s", reason, a, amount, b);
-		
 		if (reason == null) 
 			reason = "Unknown Reason";
+		String msg = String.format("%s,%s,%s,%s", reason, a, amount, b);
+
 		LOGGER_MONEY.info(msg);
 		
 	}
