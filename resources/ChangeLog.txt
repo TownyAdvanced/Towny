@@ -5357,3 +5357,5 @@ v0.92.0.11:
   - Added an missing string in es-419.yml, courtesy of EuGNosii with PR #4475.
   - Add missing getHandlerList() to PlayerKilledPlayerEvent.
   - Undo making TownyPermissionSource.has() private. TownyChat uses it.
+  - Remove the TownyWeatherListener, courtesy of TheFlagCourier with PR #4482.
+  - Addition of strictHas(), courtesy of docwhomc with PR #4477.
