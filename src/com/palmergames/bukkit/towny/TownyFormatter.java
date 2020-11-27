@@ -30,12 +30,11 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class TownyFormatter {
-
-	// private static Towny plugin = null;
-
+	
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
 	public static final SimpleDateFormat lastOnlineFormatIncludeYear = new SimpleDateFormat("MMMMM dd yyyy");
 	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
@@ -167,7 +166,6 @@ public class TownyFormatter {
 
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
-		// if (resident.getTownBlocks().size() > 0) {
 		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
@@ -175,11 +173,9 @@ public class TownyFormatter {
 				Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
-		// }
 
 		// Bank: 534 coins
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.isActive())
+		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())
 				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
 
 		// Town: Camelot
@@ -210,21 +206,17 @@ public class TownyFormatter {
 			}
 		} catch (NotRegisteredException ignored) {}
 		
-		if (townEmbassies.size() > 0) {
+		if (!townEmbassies.isEmpty()) {
 			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
 		}
 			
 		// Town ranks
-		if (resident.hasTown()) {
-			if (!resident.getTownRanks().isEmpty())
+		if (resident.hasTown() && !resident.getTownRanks().isEmpty())
 				out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
-		}
 		
 		//Nation ranks
-		if (resident.hasNation()) {
-			if (!resident.getNationRanks().isEmpty())
+		if (resident.hasNation() && !resident.getNationRanks().isEmpty())
 				out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
-		}
 		
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
@@ -287,10 +279,10 @@ public class TownyFormatter {
 		List<String> formattedOut = new ArrayList<>();
 		for (String line: out) {
 			for (String string : ChatPaginator.wordWrap(line, ChatPaginator.UNBOUNDED_PAGE_WIDTH))
-				formattedOut.add(string);
+				Collections.addAll(formattedOut, string);
 		}
 		return formattedOut;
-	}	
+	}
 	
 	/**
 	 * Gets the status screen of a Town
@@ -315,7 +307,7 @@ public class TownyFormatter {
 
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = town.getFormattedName();
-		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
+		title += ((!town.isAdminDisabledPVP()) && (town.isPVP() || town.getHomeblockWorld().isForcePVP()) ? Translation.of("status_title_pvp") : "");
 		title += (town.isOpen() ? Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
@@ -348,21 +340,23 @@ public class TownyFormatter {
 
 		if (TownySettings.isAllowingOutposts()) {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
-				if (town.hasOutpostSpawn())
+				if (town.hasOutpostSpawn()) {
 					if (!town.hasNation())
 						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
 						try {
-							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-						} catch (NotRegisteredException ignored) {}
-						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
-								(nationBonus > 0 ? Translation.of("status_town_outposts2", nationBonus) : "")
-							   );
+							nationBonus = (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+						} catch (NotRegisteredException ignored) {
 						}
-					
-				else 
+						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) +
+							(nationBonus > 0 ? Translation.of("status_town_outposts2", nationBonus) : "")
+						);
+					}
+
+				} else {
 					out.add(Translation.of("status_town_outposts3", town.getOutpostLimit()));
+				}
 			} else if (town.hasOutpostSpawn()) {
 				out.add(Translation.of("status_town_outposts4", town.getMaxOutpostSpawn()));
 			}
@@ -455,14 +449,12 @@ public class TownyFormatter {
 		}
 		// Bank: 534 coins
 		String line = "";
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.isActive()) {
-				line = Translation.of("status_bank", nation.getAccount().getHoldingFormattedBalance());
+		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
+			line = Translation.of("status_bank", nation.getAccount().getHoldingFormattedBalance());
 
-				if (TownySettings.getNationUpkeepCost(nation) > 0)
-					line += Translation.of("status_bank_town2", TownySettings.getNationUpkeepCost(nation));
-
-			}
+			if (TownySettings.getNationUpkeepCost(nation) > 0)
+				line += Translation.of("status_bank_town2", TownySettings.getNationUpkeepCost(nation));
+		}
 
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
@@ -474,7 +466,8 @@ public class TownyFormatter {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
 			try {
-				line += (nation.isPublic() ? Translation.of("status_town_size_part_5") + (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawn()).toString() : Translation.of("status_no_town")) + "]" : "");
+				String spawnCoords = nation.hasSpawn() ? Coord.parseCoord(nation.getSpawn()).toString() : Translation.of("status_no_town");
+				line += (nation.isPublic() ? Translation.of("status_town_size_part_5") + (spawnCoords) + "]" : "");
 			} catch (TownyException ignored) {
 			}
 		}		
@@ -630,7 +623,7 @@ public class TownyFormatter {
 					} else {
 						out.add(Translation.of("status_res_tax", town.getTaxes()));
 
-						if ((resident.getTownBlocks().size() > 0)) {
+						if ((!resident.getTownBlocks().isEmpty())) {
 
 							for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
