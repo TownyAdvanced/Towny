@@ -205,9 +205,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				if (resident.hasTown()) {
 					if (resident.getTown().hasTag())
 						town = resident.getTown().getTag();
-					if (resident.getTown().hasNation())
-						if (resident.getTown().getNation().hasTag())
-							nation = resident.getTown().getNation().getTag();
+					if (resident.getTown().hasNation() && resident.getTown().getNation().hasTag()) 
+						nation = resident.getTown().getNation().getTag();
 				}
 				if (!nation.isEmpty())
 					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
@@ -263,8 +262,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 					if (resident.getTown().hasNation()) {
 						if (resident.getTown().getNation().hasTag())
 							nation = resident.getTown().getNation().getTag();
-						else
-							StringMgmt.remUnderscore(nation = resident.getTown().getNation().getName());
+						else {
+							nation = resident.getTown().getNation().getName();
+							nation = StringMgmt.remUnderscore(nation);
+						}
 					}
 				}
 				if (!nation.isEmpty())
