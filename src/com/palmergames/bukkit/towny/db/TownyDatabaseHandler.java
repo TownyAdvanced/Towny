@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUniverse;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
@@ -76,6 +77,7 @@ import java.util.zip.ZipFile;
  * 
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
+	protected final SiegeWarUniverse siegeWarUniverse;
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;
@@ -87,6 +89,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	public TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
+		siegeWarUniverse = SiegeWarUniverse.getInstance();
 		this.rootFolderPath = universe.getRootFolder();
 		this.dataFolderPath = rootFolderPath + File.separator + "data";
 		this.settingsFolderPath = rootFolderPath + File.separator + "settings";
@@ -894,8 +897,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//Update siege
 				siege.setName(newSiegeName);
 				//Update universe
-				universe.getSiegesMap().remove(oldSiegeName.toLowerCase());
-				universe.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
+				siegeWarUniverse.getSiegesMap().remove(oldSiegeName.toLowerCase());
+				siegeWarUniverse.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
 			}
 
 			// If this was a nation capitol
@@ -1029,8 +1032,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//Update siege
 				siege.setName(newSiegeName);
 				//Update universe
-				universe.getSiegesMap().remove(oldSiegeName.toLowerCase());
-				universe.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
+				siegeWarUniverse.getSiegesMap().remove(oldSiegeName.toLowerCase());
+				siegeWarUniverse.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
 			}
 
 			if (TownyEconomyHandler.isActive()) {
@@ -1597,7 +1600,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<Siege> getSieges() {
-		return new ArrayList<>(universe.getSiegesMap().values());
+		return new ArrayList<>(siegeWarUniverse.getSiegesMap().values());
 	}
 
 	@Override
@@ -1606,12 +1609,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		lock.lock();
 
 		try {
-			if(universe.getSiegesMap().containsKey(siegeName.toLowerCase()))
+			if(siegeWarUniverse.getSiegesMap().containsKey(siegeName.toLowerCase()))
 				throw new AlreadyRegisteredException("Siege is already registered");
 
 			Siege siege = new Siege(siegeName);
 
-			universe.getSiegesMap().put(siegeName.toLowerCase(), siege);
+			siegeWarUniverse.getSiegesMap().put(siegeName.toLowerCase(), siege);
 
 		} finally {
 			lock.unlock();
@@ -1620,10 +1623,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Siege getSiege(String siegeName) throws NotRegisteredException {
-		if(!universe.getSiegesMap().containsKey(siegeName.toLowerCase())) {
+		if(!siegeWarUniverse.getSiegesMap().containsKey(siegeName.toLowerCase())) {
 			throw new NotRegisteredException("Siege not found");
 		}
-		return universe.getSiegesMap().get(siegeName.toLowerCase());
+		return siegeWarUniverse.getSiegesMap().get(siegeName.toLowerCase());
 	}
 
 	//Remove a particular siege, and all associated data
@@ -1645,7 +1648,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//Remove siege from nation
 		siege.getAttackingNation().removeSiege(siege);
 		//Remove siege from universe
-		universe.getSiegesMap().remove(siege.getName().toLowerCase());
+		siegeWarUniverse.getSiegesMap().remove(siege.getName().toLowerCase());
 
 		//Save town
 		saveTown(siege.getDefendingTown());
@@ -1660,7 +1663,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public Set<String> getSiegeKeys() {
 
-		return universe.getSiegesMap().keySet();
+		return siegeWarUniverse.getSiegesMap().keySet();
 	}
 
 	// TODO: See if this is actually needed - LlmDl
