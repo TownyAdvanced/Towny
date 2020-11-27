@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -650,17 +649,8 @@ public class TownyEntityListener implements Listener {
 			default:
 		}
 	}
-/*
- * TODO: Get this back into an explosion test.
- */
-//	if(TownySettings.getWarSiegeEnabled()) {
-//		if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
-//			return false;
-//		}
-//	}
+
 	/**
-	 * Handles explosion regeneration in War (inside towns,)
-	 * and from regular non-war causes (outside towns.)  
 	 * Decides how explosions made by entities will be handled ie: TNT, Creepers, etc.
 	 * 
 	 * Handles wilderness entity explosion regeneration.
@@ -697,18 +687,6 @@ public class TownyEntityListener implements Listener {
 		if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 			int count = 0;
 			for (Block block : blocks) {
-				
-				/*
-				 * TODO: Get this working off of the explosion event.
-				 */
-				if(TownySettings.getWarSiegeEnabled()) {
-					if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
-						TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding near siege banner");
-						event.setCancelled(true);
-						return;
-					}
-				}
-				
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					return;

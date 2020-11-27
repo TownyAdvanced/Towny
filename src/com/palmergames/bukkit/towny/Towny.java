@@ -47,6 +47,8 @@ import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
+import com.palmergames.bukkit.towny.war.siegewar.listeners.SiegeWarActionListener;
+import com.palmergames.bukkit.towny.war.siegewar.listeners.SiegeWarEventListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
@@ -105,6 +107,8 @@ public class Towny extends JavaPlugin {
 	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
 	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
+	private final SiegeWarActionListener siegeWarActionListener = new SiegeWarActionListener(this);
+	private final SiegeWarEventListener siegeWarEventListener = new SiegeWarEventListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -445,6 +449,8 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
 			pluginManager.registerEvents(warzoneListener, this);
+			pluginManager.registerEvents(siegeWarActionListener, this);
+			pluginManager.registerEvents(siegeWarEventListener, this);
 		}
 
 		// Always register these events.

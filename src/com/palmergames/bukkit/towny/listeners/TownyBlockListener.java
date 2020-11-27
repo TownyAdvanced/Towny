@@ -9,9 +9,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarBreakBlockController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -50,17 +48,6 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
-		/*
-		 * TODO: Get this using the Action event.
-		 */
-		//Siege War
-		if (TownySettings.getWarSiegeEnabled()) {
-			boolean skipPermChecks = SiegeWarBreakBlockController.evaluateSiegeWarBreakBlockRequest(event.getPlayer(), block, event);
-			if (skipPermChecks) {
-				return;
-			}
-		}
-	
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
@@ -74,7 +61,6 @@ public class TownyBlockListener implements Listener {
 		}
 
 		Block block = event.getBlock();
-
 		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
 			return;
 
@@ -190,12 +176,6 @@ public class TownyBlockListener implements Listener {
 		Location locTo = blockTo.getLocation();
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
-		if(TownySettings.getWarSiegeEnabled()) {
-			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block) || SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(blockTo)) {
-				return true;
-			}
-		}
-		
 		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
 		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
 
@@ -269,14 +249,4 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 	}
-	
-	/*
-	 * TODO: Put this back into an explosion test.
-	 */
-	
-//	if(TownySettings.getWarSiegeEnabled()) {
-//		if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
-//			return false;
-//		}
-//	}
 }

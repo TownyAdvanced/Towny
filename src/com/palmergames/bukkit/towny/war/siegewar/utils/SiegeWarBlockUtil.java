@@ -1,13 +1,13 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -31,8 +31,8 @@ public class SiegeWarBlockUtil {
 	 * @return list of adjacent cardinal townblocks
 	 */
 	public static List<TownBlock> getCardinalAdjacentTownBlocks(Player player, Block block) {
-		List<Coord> coOrdinates = new ArrayList<>();
-		Coord startingCoOrdinate = Coord.parseCoord(block);
+		List<WorldCoord> coOrdinates = new ArrayList<>();
+		WorldCoord startingCoOrdinate = WorldCoord.parseWorldCoord(block);
 		coOrdinates.add(startingCoOrdinate.add(0,-1));
 		coOrdinates.add(startingCoOrdinate.add(0,1));
 		coOrdinates.add(startingCoOrdinate.add(1,0));
@@ -48,8 +48,8 @@ public class SiegeWarBlockUtil {
 	 * @return list of adjacent noncardinal townblocks
 	 */
 	public static List<TownBlock> getNonCardinalAdjacentTownBlocks(Player player, Block block) {
-		List<Coord> coOrdinates = new ArrayList<>();
-		Coord startingCoOrdinate = Coord.parseCoord(block);
+		List<WorldCoord> coOrdinates = new ArrayList<>();
+		WorldCoord startingCoOrdinate = WorldCoord.parseWorldCoord(block);
 		coOrdinates.add(startingCoOrdinate.add(-1,1));
 		coOrdinates.add(startingCoOrdinate.add(1,1));
 		coOrdinates.add(startingCoOrdinate.add(1,-1));
@@ -57,28 +57,14 @@ public class SiegeWarBlockUtil {
 		return getTownBlocks(player, coOrdinates);
 	}
 
-	private static List<TownBlock> getTownBlocks(Player player, List<Coord> coOrdinatesToSearch) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld townyWorld;
+	private static List<TownBlock> getTownBlocks(Player player, List<WorldCoord> coOrdinatesToSearch) {
 		List<TownBlock> townBlocks = new ArrayList<>();
 
-		try {
-			townyWorld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-		} catch (NotRegisteredException e) {
-			return townBlocks;
-		}
-
-		TownBlock townBlock = null;
-		for(Coord nearbyCoord: coOrdinatesToSearch){
-			if(townyWorld.hasTownBlock(nearbyCoord)) {
-
-				try {townBlock = townyWorld.getTownBlock(nearbyCoord);
-				} catch (NotRegisteredException e) {}
-
-				if (townBlock.hasTown()) {
-					townBlocks.add(townBlock);
-				}
-			}
+		for(WorldCoord nearbyCoord: coOrdinatesToSearch){
+			if(!TownyAPI.getInstance().isWilderness(nearbyCoord))
+				try {
+					townBlocks.add(TownyUniverse.getInstance().getTownBlock(nearbyCoord));
+				} catch (NotRegisteredException ignored) {}
 		}
 
 		return townBlocks;
@@ -127,19 +113,7 @@ public class SiegeWarBlockUtil {
 	}
 
 	static Location getSurfaceLocation(Location topLocation) {
-		topLocation.add(0,-1,0);
-
-		while(topLocation.getY() < 256)
-		{
-			if(topLocation.getBlock().getType() != Material.AIR)
-			{
-				return topLocation;
-			}
-			topLocation.add(0,-1,0);
-		}
-		
-		topLocation.setY(255); //This would only occur if it was air all the way down.....unlikely but ok, just in case
-		return topLocation;
+		return topLocation.getWorld().getHighestBlockAt(topLocation).getLocation();
 	}
 	
 	private static boolean isStandingColouredBanner(Block block) {

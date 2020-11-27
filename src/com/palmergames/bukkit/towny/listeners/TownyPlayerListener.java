@@ -29,8 +29,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarItemUseController;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -76,7 +74,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -218,20 +215,6 @@ public class TownyPlayerListener implements Listener {
 			// Town has not set respawn location. Using default.
 		}
 	}
-
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerConsume(PlayerItemConsumeEvent event) {
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		if(TownySettings.getWarSiegeEnabled()) {
-			if(SiegeWarItemUseController.evaluatePlayerConsumeEvent(event)) {
-				return;
-			}
-		}
-	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
@@ -241,17 +224,8 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		/*
-		 * TODO: Use an action event.
-		 */
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-
-		if(TownySettings.getWarSiegeEnabled()) {
-			if(SiegeWarItemUseController.evaluatePlayerBucketEmptyEvent(event)) {
-				return;
-			}
-		}
 		
 		// Test whether we can build in the place they are pouring their liquid.
 		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()).getLocation(), event.getBucket()));
@@ -873,12 +847,6 @@ public class TownyPlayerListener implements Listener {
 		try {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (NotRegisteredException ignored) {}
-		
-		//Check for siege-war related death effects
-		if(TownySettings.getWarSiegeEnabled()) {
-			SiegeWarDeathController.evaluateSiegePlayerDeath(player, event);
-		}
-		
 		Location deathloc = player.getLocation();
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
 		if (tb != null && tb.hasTown()) {

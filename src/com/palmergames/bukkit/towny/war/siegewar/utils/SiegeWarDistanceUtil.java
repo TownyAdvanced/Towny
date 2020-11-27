@@ -7,8 +7,8 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 public class SiegeWarDistanceUtil {
 
+	private static final int TOWNBLOCKSIZE= TownySettings.getTownBlockSize();
 	public static List<String> worldsWithSiegeWarEnabled = null;
 	public static List<String> worldsWithUndergroundBannerControlEnabled = null;
 
@@ -50,13 +52,12 @@ public class SiegeWarDistanceUtil {
 	private static int getAverageBlockToTownDownwardElevationDistance(Block block, TownBlock townBlock) {
 		int blockElevation = block.getY();
 		
-		Location topNorthWestCornerLocation = townBlock.getCoord().getTopNorthWestCornerLocation(block.getWorld());
-		int townBlockSize = TownySettings.getTownBlockSize();
+		Location topNorthWestCornerLocation = getTopNorthWestCornerLocation(townBlock.getWorldCoord());
 		Location[] surfaceCornerLocations = new Location[4];
 		surfaceCornerLocations[0] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation);
-		surfaceCornerLocations[1] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,0));
-		surfaceCornerLocations[2] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(0,0,townBlockSize));
-		surfaceCornerLocations[3] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,townBlockSize));
+		surfaceCornerLocations[1] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(TOWNBLOCKSIZE,0,0));
+		surfaceCornerLocations[2] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(0,0,TOWNBLOCKSIZE));
+		surfaceCornerLocations[3] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(TOWNBLOCKSIZE,0,TOWNBLOCKSIZE));
 		
 		int totalElevation = 0;
 		for(Location surfaceCornerLocation: surfaceCornerLocations) {
@@ -73,8 +74,9 @@ public class SiegeWarDistanceUtil {
 	 * @param block the given block
 	 * @return a SiegeZoneDistance object containing both the siege and distance. Null if not found.
 	 */
-	public static SiegeDistance findNearestSiegeDistance(Block block) {
-		//Find the nearest siege zone to the given block
+	@Nullable
+	public static Siege findNearestSiege(Block block) {
+		//Find the nearest siege zone to the given block within the given radius.
 		Siege nearestSiege = null;
 		double distanceToNearestSiegeZone = -1;
 		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
@@ -82,6 +84,9 @@ public class SiegeWarDistanceUtil {
 			if(!block.getLocation().getWorld().getName().equalsIgnoreCase(siege.getFlagLocation().getWorld().getName())) {
 				continue;
 			}
+			
+			if(block.getLocation().distance(siege.getFlagLocation()) > TOWNBLOCKSIZE)
+				continue;
 
 			if (nearestSiege == null) {
 				nearestSiege = siege;
@@ -95,11 +100,7 @@ public class SiegeWarDistanceUtil {
 			}
 		}
 	
-		if(nearestSiege == null) {
-			return null;
-		} else {
-			return new SiegeDistance(nearestSiege, distanceToNearestSiegeZone);
-		}
+		return nearestSiege;
 	}
 
 	/**
@@ -247,5 +248,11 @@ public class SiegeWarDistanceUtil {
 			return false;
 
 		return true;
+	}
+	
+	private static Location getTopNorthWestCornerLocation(WorldCoord worldCoord) {
+		int locX = worldCoord.getX() * TOWNBLOCKSIZE;
+		int locZ = worldCoord.getZ() * TOWNBLOCKSIZE;
+		return new Location(worldCoord.getBukkitWorld(), locX, 255, locZ);
 	}
 }

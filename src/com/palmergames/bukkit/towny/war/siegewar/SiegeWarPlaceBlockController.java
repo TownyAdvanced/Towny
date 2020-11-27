@@ -1,20 +1,23 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.war.siegewar.objects.SiegeDistance;
+import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -52,61 +55,30 @@ public class SiegeWarPlaceBlockController {
 	 * @param plugin The Towny object
 	 * @return true if subsequent perm checks for the event should be skipped
 	 */
-	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player,
-													 Block block,
-													 BlockPlaceEvent event,
-													 Towny plugin)
-	{
-		try {
-			//Banner placement
-			switch(block.getType()) {
-				case BLACK_BANNER:
-				case BLUE_BANNER:
-				case BROWN_BANNER:
-				case CYAN_BANNER:
-				case GRAY_BANNER:
-				case GREEN_BANNER:
-				case LIGHT_BLUE_BANNER:
-				case LIGHT_GRAY_BANNER:
-				case LIME_BANNER:
-				case MAGENTA_BANNER:
-				case ORANGE_BANNER:
-				case PINK_BANNER:
-				case PURPLE_BANNER:
-				case RED_BANNER:
-				case YELLOW_BANNER:
-				case WHITE_BANNER:
-					return evaluatePlaceBanner(player, block, event, plugin);
-				case CHEST:
-				case TRAPPED_CHEST:
-					return evaluatePlaceChest(player, block, event);
+	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
+		
+		Material mat = block.getType();
+		//Banner placement
+		if (Tag.BANNERS.isTagged(mat))
+			return evaluatePlaceBanner(player, block, event, plugin);
+
+		//Chest placement
+		if (mat == Material.CHEST || mat == Material.TRAPPED_CHEST)
+			return evaluatePlaceChest(player, block, event);
+
+		//Check for forbidden block placement
+		if(TownySettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) {
+			if(TownySettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat)) {
+				event.setCancelled(true);
+				event.setBuild(false);
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
+				return true;
 			}
-
-			//Check for forbidden block placement
-			if(TownySettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled()) {
-				for(Material forbiddenMaterial: TownySettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials()) {
-					if(block.getType() == forbiddenMaterial) {
-						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());
-						if(townBlock == null && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) 
-						{
-							event.setCancelled(true);
-							event.setBuild(false);
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
-							return true;
-						}
-						break; //A forbidden material was found, but other conditions were not met.
-					}
-				}
-			}
-
-			//Block placement unaffected
-			return false;
-
-		} catch (NotRegisteredException e) {
-			System.out.println("Problem evaluating siege block placement request");
-			e.printStackTrace();
-			return false;
 		}
+
+		//Block placement unaffected
+		return false;
+
 	}
 
 	/**
@@ -114,26 +86,20 @@ public class SiegeWarPlaceBlockController {
      * Determines which type of banner this is, and where it is being placed.
 	 * Then calls an appropriate private method.
  	*/
-	private static boolean evaluatePlaceBanner(Player player,
-											   Block block,
-											   BlockPlaceEvent event,
-											   Towny plugin) throws NotRegisteredException
-	{
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-		Coord blockCoord = Coord.parseCoord(block);
+	private static boolean evaluatePlaceBanner(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
 
-		if(!townyWorld.hasTownBlock(blockCoord)) {
+		if(TownyAPI.getInstance().isWilderness(block)) {
 			//Wilderness found
-			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
+			if (isSurrenderBanner(block)) {
 				return evaluatePlaceWhiteBannerInWilderness(block, player, event);
 			} else {
 				return evaluatePlaceColouredBannerInWilderness(block, player, event, plugin);
 			}
 		} else {
+			Town town = TownyAPI.getInstance().getTown(block.getLocation());
 			//Town block found 
-			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
-				return evaluatePlaceWhiteBannerInTown(player, blockCoord, event, townyWorld);
+			if (town.hasSiege() && isSurrenderBanner(block)) {
+				return evaluatePlaceWhiteBannerInTown(player, town, event);
 			} else {
 				return false;
 			}
@@ -149,14 +115,14 @@ public class SiegeWarPlaceBlockController {
 			return false;
 
 		//Find the nearest siege zone to the player
-		SiegeDistance nearestSiegeZoneDistance = SiegeWarDistanceUtil.findNearestSiegeDistance(block);
+		Siege nearestSiege = SiegeWarDistanceUtil.findNearestSiege(block);
 		
 		//If there are no nearby siege zones,then regular block request
-		if(nearestSiegeZoneDistance == null || nearestSiegeZoneDistance.getDistance() > TownySettings.getTownBlockSize())
+		if(nearestSiege == null)
 			return false;
 		
 		AbandonAttack.processAbandonSiegeRequest(player,
-			nearestSiegeZoneDistance.getSiege(),
+			nearestSiege,
 			event);
 
 		return true;
@@ -167,61 +133,64 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as an attack or invade request.
 	 */
 	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
-
-		List<TownBlock> nearbyCardinalTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
-
-		//If no townblocks are nearby, do normal block placement
-		if (nearbyCardinalTownBlocks.size() == 0)
-			return false;
-
-		//Ensure that only one of the cardinal points has a townblock
-		if(nearbyCardinalTownBlocks.size() > 1) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_cardinal_town_blocks"));
-			event.setBuild(false);
-			event.setCancelled(true);
-			return true;
-		}
-
-		//Get nearby town
-		Town town;
-		if(nearbyCardinalTownBlocks.get(0).hasTown()) {
+		try {
+			// Fail early if this is not a siege-enabled world.
+			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))
+				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
+			
+			Resident resident = null;
+			try {
+				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			} catch (NotRegisteredException ignored) {}
+			
+			// Fail early if this Resident has no Town.
+			if(!resident.hasTown())
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
+	
+			// Fail early if this Resident's Town has no Nation.
+			if(!resident.getTown().hasNation())
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
+			
+			List<TownBlock> nearbyCardinalTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
+	
+			//If no townblocks are nearby, do normal block placement
+			if (nearbyCardinalTownBlocks.size() == 0)
+				return false;
+	
+			//Ensure that only one of the cardinal points has a townblock
+			if(nearbyCardinalTownBlocks.size() > 1) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_cardinal_town_blocks"));
+				event.setBuild(false);
+				event.setCancelled(true);
+				return true;
+			}
+	
+			//Get nearby town
+			Town town;
 			try {
 				town = nearbyCardinalTownBlocks.get(0).getTown();
 			} catch (NotRegisteredException e) {
 				return false;
 			}
-		} else {
-			return false;
-		}
+	
+			//Ensure that there is only one town adjacent
+			List<TownBlock> adjacentTownBlocks = new ArrayList<>();
+			adjacentTownBlocks.addAll(nearbyCardinalTownBlocks);
+			adjacentTownBlocks.addAll(SiegeWarBlockUtil.getNonCardinalAdjacentTownBlocks(player, block));
+			for(TownBlock adjacentTownBlock: adjacentTownBlocks) {
+				try {
+					if (adjacentTownBlock.getTown() != town) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_towns"));
+						event.setBuild(false);
+						event.setCancelled(true);
+						return true;
+					}
+				} catch (NotRegisteredException nre) {}
+			}
 
-		//Ensure that there is only one town adjacent
-		List<TownBlock> adjacentTownBlocks = new ArrayList<>();
-		adjacentTownBlocks.addAll(nearbyCardinalTownBlocks);
-		adjacentTownBlocks.addAll(SiegeWarBlockUtil.getNonCardinalAdjacentTownBlocks(player, block));
-		for(TownBlock adjacentTownBlock: adjacentTownBlocks) {
-			try {
-				if (adjacentTownBlock.hasTown() && adjacentTownBlock.getTown() != town) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_adjacent_towns"));
-					event.setBuild(false);
-					event.setCancelled(true);
-					return true;
-				}
-			} catch (NotRegisteredException nre) {}
-		}
-
-		//If the town has a siege where the player's nation is already attacking, 
-		//attempt invasion, otherwise attempt attack
-		TownyUniverse universe = TownyUniverse.getInstance();
-		try {
-			Resident resident = universe.getDataSource().getResident(player.getName());
-			if(!resident.hasTown())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
-
-			Town townOfResident = resident.getTown();
-			if(!townOfResident.hasNation())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
-
-			Nation nationOfResident = townOfResident.getNation();
+			//If the town has a siege where the player's nation is already attacking, 
+			//attempt invasion, otherwise attempt attack
+			Nation nationOfResident = resident.getTown().getNation();
 			if(town.hasSiege() && town.getSiege().getAttackingNation() == nationOfResident) {
 
 				if (!TownySettings.getWarSiegeInvadeEnabled())
@@ -267,25 +236,9 @@ public class SiegeWarPlaceBlockController {
 	 * Evaluates placing a white banner inside a town.
 	 * Determines if the event will be considered as a surrender request.
 	 */
-    private static boolean evaluatePlaceWhiteBannerInTown(Player player, Coord blockCoord, BlockPlaceEvent event, TownyWorld townyWorld) throws NotRegisteredException {
+    private static boolean evaluatePlaceWhiteBannerInTown(Player player, Town town, BlockPlaceEvent event) {
 		if (!TownySettings.getWarSiegeSurrenderEnabled())
 			return false;
-		
-		TownBlock townBlock = null;
-		if(townyWorld.hasTownBlock(blockCoord)) {
-			townBlock = townyWorld.getTownBlock(blockCoord);
-		}
-
-		if (townBlock == null) {
-			return false;
-		}
-
-		Town town;
-		if(townBlock.hasTown()) {
-			town = townBlock.getTown();
-		} else {
-			return false;
-		}
 
 		//If there is no siege, do normal block placement
 		if (!town.hasSiege())
@@ -302,23 +255,15 @@ public class SiegeWarPlaceBlockController {
 	 * Evaluates placing a chest.
 	 * Determines if the event will be considered as a plunder request.
 	 */
-	private static boolean evaluatePlaceChest(Player player,
-											  Block block,
-											  BlockPlaceEvent event) throws NotRegisteredException {
-		if (!TownySettings.getWarSiegePlunderEnabled())
+	private static boolean evaluatePlaceChest(Player player, Block block, BlockPlaceEvent event) {
+		if (!TownySettings.getWarSiegePlunderEnabled() || !TownyAPI.getInstance().isWilderness(block))
 			return false;
-
-		TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(block.getWorld().getName());
-		Coord blockCoord = Coord.parseCoord(block);
-
-		if(townyWorld.hasTownBlock(blockCoord))
-			return false;   //The chest is being placed in a town. Normal block placement
 
 		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 		if (nearbyTownBlocks.size() == 0)
 			return false;   //No town blocks are nearby. Normal block placement
 
-		if(nearbyTownBlocks.size() > 1) {
+		if (nearbyTownBlocks.size() > 1) {
 			//More than one town block nearby. Error
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_too_many_town_blocks_nearby"));
 			event.setBuild(false);
@@ -328,29 +273,22 @@ public class SiegeWarPlaceBlockController {
 
 		//Get nearby town
 		Town town = null;
-		if(nearbyTownBlocks.get(0).hasTown()) {
+		try {
+			town = nearbyTownBlocks.get(0).getTown();
+		} catch (NotRegisteredException ignored) {}
 
-			try {
-				town = nearbyTownBlocks.get(0).getTown();
-			} catch (NotRegisteredException e) {
-				return false;
-			}
-		} else {
+		//If there is no siege, do normal block placement
+		if(!town.hasSiege())
 			return false;
-		}
 
-		//If the town has a siege, attempt plunder, otherwise return false
-		if(town.hasSiege()) {
-			PlunderTown.processPlunderTownRequest(
-				player,
-				town,
-				event);
-		} else {
-			return false;
-		}
-
+		//Attempt plunder.
+		PlunderTown.processPlunderTownRequest(player, town, event);
 		return true;
 
+	}
+	
+	private static boolean isSurrenderBanner(Block block) {
+		return block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0;
 	}
 }
 
