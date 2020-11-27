@@ -50,6 +50,10 @@ public class TownyFormatter {
 
 	private TownyFormatter() {
 	}
+	
+	public static void initialize(){
+		
+	}
 
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, residentList);
