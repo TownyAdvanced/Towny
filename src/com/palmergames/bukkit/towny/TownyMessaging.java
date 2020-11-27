@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 public class TownyMessaging {
-	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
+	private static final Logger LOGGER = LogManager.getLogger(TownyMessaging.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
 	/**
@@ -37,7 +37,8 @@ public class TownyMessaging {
 	 * @param msg message to send
 	 */
 	public static void sendErrorMsg(String msg) {
-		LOGGER.warn(ChatTools.stripColour("[Towny] Error: " + msg));
+		String townyError = ChatTools.stripColour("[Towny] Error: " + msg);
+		LOGGER.warn(townyError);
 	}
 
 	/**
@@ -84,8 +85,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendMsg(String msg) {
-		
-		LOGGER.info("[Towny] " + ChatTools.stripColour(msg));
+		String sendMsg = "[Towny] " + ChatTools.stripColour(msg);
+		LOGGER.info(sendMsg);
 	}
 
 	/**
@@ -191,7 +192,8 @@ public class TownyMessaging {
 	 */
 	public static void sendDebugMsg(String msg) {
 		if (TownySettings.getDebug()) {
-			LOGGER_DEBUG.info(ChatTools.stripColour("[Towny] Debug: " + msg));
+			String debugMsg = ChatTools.stripColour("[Towny] Debug: " + msg);
+			LOGGER_DEBUG.info(debugMsg);
 		}
 		sendDevMsg(msg);
 	}
@@ -283,7 +285,8 @@ public class TownyMessaging {
 	 */
 	public static void sendGlobalMessage(String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Global Msg] " + line));
+			String globalMsg = ChatTools.stripColour("[Global Msg] " + line);
+			LOGGER.info(globalMsg);
 		}
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
@@ -301,7 +304,8 @@ public class TownyMessaging {
 	 * @param line the message to send
 	 */
 	public static void sendGlobalMessage(String line) {
-		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
+		String globalMsg = ChatTools.stripColour("[Global Message] " + line);
+		LOGGER.info(globalMsg);
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
@@ -321,7 +325,8 @@ public class TownyMessaging {
 	 * @param line the message to send.
 	 */
 	public static void sendPlainGlobalMessage(String line) {
-		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
+		String globalMsg = ChatTools.stripColour("[Global Message] " + line);
+		LOGGER.info(globalMsg);
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
@@ -342,7 +347,8 @@ public class TownyMessaging {
 	 * @throws TownyException if the player is null
 	 */
 	public static void sendResidentMessage(Resident resident, String line) throws TownyException {
-		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
+		String resMsg = ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line);
+		LOGGER.info(resMsg);
 		Player player = TownyAPI.getInstance().getPlayer(resident);
 		if (player == null) {
 			throw new TownyException("Player could not be found!");
@@ -361,7 +367,8 @@ public class TownyMessaging {
 	@Deprecated
 	public static void sendTownMessage(Town town, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+			String townMsg = ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line);
+			LOGGER.info(townMsg);
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town)) {
 			for (String line : lines) {
@@ -380,7 +387,8 @@ public class TownyMessaging {
 	 */
 	@Deprecated
 	public static void sendTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		String townMsg = ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line);
+		LOGGER.info(townMsg);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			player.sendMessage(line);
 	}
@@ -393,7 +401,8 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendTownMessagePrefixed(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour(line));
+		String colorStripped = ChatTools.stripColour(line);
+		LOGGER.info(colorStripped);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
@@ -406,7 +415,8 @@ public class TownyMessaging {
 	 * @param line the actual message
 	 */
 	public static void sendPrefixedTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		String townMsg = ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line);
+		LOGGER.info(townMsg);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			player.sendMessage(Translation.of("default_town_prefix", town.getName()) + line);
 	}
@@ -420,7 +430,8 @@ public class TownyMessaging {
 	 */
 	public static void sendPrefixedTownMessage(Town town, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour(line));
+			String colorStripped = ChatTools.stripColour(line);
+			LOGGER.info(colorStripped);
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			for (String line : lines) {
@@ -450,7 +461,8 @@ public class TownyMessaging {
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+			LOGGER.info(natMsg);
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
@@ -469,7 +481,8 @@ public class TownyMessaging {
 	 */
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+		LOGGER.info(natMsg);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(line);
 	}
@@ -482,7 +495,8 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+		LOGGER.info(natMsg);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(Translation.of("default_nation_prefix", nation.getName()) + line);
 	}
@@ -507,7 +521,8 @@ public class TownyMessaging {
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+			LOGGER.info(natMsg);
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
@@ -524,7 +539,8 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+		LOGGER.info(natMsg);
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
@@ -538,7 +554,8 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			String natMsg = ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line);
+			LOGGER.info(natMsg);
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			for (String line : lines) {
