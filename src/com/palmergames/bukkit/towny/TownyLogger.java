@@ -140,18 +140,25 @@ public class TownyLogger {
 			receiver = b.getName();
 		}
 		
+		String unknownReason = String.format("%s,%s,%s,%s", "Unknown Reason", sender, amount, receiver);
+		String knownReason = String.format("%s,%s,%s,%s", reason, sender, amount, receiver);
+
 		if (reason == null) {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", sender, amount, receiver));
+			LOGGER_MONEY.info(unknownReason);
 		} else {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, sender, amount, receiver));
+			LOGGER_MONEY.info(knownReason);
 		}
 	}
 	
 	public void logMoneyTransaction(String a, double amount, String b, String reason) {
+		
+		String unknownReason = String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b);
+		String knownReason = String.format("%s,%s,%s,%s", reason, a, amount, b);
+		
 		if (reason == null) {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", "Unknown Reason", a, amount, b));
+			LOGGER_MONEY.info(unknownReason);
 		} else {
-			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
+			LOGGER_MONEY.info(knownReason);
 		}
 	}
 
