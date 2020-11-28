@@ -2337,8 +2337,8 @@ public enum ConfigNodes {
 			"# |  because town ruin is critical to many war systems   | #",
 			"# |  												      | #",
 			"# +------------------------------------------------------+ #",
-			"############################################################", ""),
-
+			"############################################################",
+			""),
 	// Town Ruins
 	WAR_COMMON_TOWN_RUINS_ENABLED(
 			"war.common.town_ruins.enabled", 

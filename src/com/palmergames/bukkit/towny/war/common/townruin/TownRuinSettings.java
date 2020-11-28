@@ -25,5 +25,4 @@ public class TownRuinSettings {
 		return TownySettings.getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
 	}
 
-
 }

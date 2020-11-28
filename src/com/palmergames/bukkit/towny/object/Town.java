@@ -61,14 +61,12 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private boolean ruined;
-	private int ruinDurationRemainingHours;
+	private boolean ruined = false;
+	private int ruinDurationRemainingHours = 0;
 
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-		ruined = false;
-		ruinDurationRemainingHours = 0;
 		
 		// Set defaults.
 		setTaxes(TownySettings.getTownDefaultTax());
@@ -1320,7 +1318,6 @@ public class Town extends Government implements TownBlockOwner {
 
 		return false;
 	}
-
 
 	public boolean isRuined() {
 		if(!ruined && residents.size() == 0) {

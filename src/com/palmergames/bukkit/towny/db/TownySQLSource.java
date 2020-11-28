@@ -1885,7 +1885,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("registered", town.getRegistered());
 
 			twn_hm.put("ruined", town.isRuined());
-			twn_hm.put("ruinDurationRemainingHours", Long.toString(town.getRuinDurationRemainingHours()));
+			twn_hm.put("ruinDurationRemainingHours", town.getRuinDurationRemainingHours());
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
