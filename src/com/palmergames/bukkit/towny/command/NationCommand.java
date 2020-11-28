@@ -1474,7 +1474,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationRevokeInviteTown(Object sender,Nation nation, List<Town> towns) {
+	private static void nationRevokeInviteTown(CommandSender sender, Nation nation, List<Town> towns) {
 
 		for (Town town : towns) {
 			if (InviteHandler.inviteIsActive(nation, town)) {
@@ -1482,7 +1482,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_invite_successful", sender, town));
+							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_invite", town));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_invite_successful", sender.getName(), town));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1909,7 +1910,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 						InviteHandler.declineInvite(toDecline, false);
-						TownyMessaging.sendMessage(player, Translation.of("successful_deny_request"));
+						TownyMessaging.sendMsg(player, Translation.of("successful_deny_request"));
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
@@ -1922,15 +1923,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void nationRemoveAllyRequest(Object sender,Nation nation, ArrayList<Nation> remlist) {
+	private void nationRemoveAllyRequest(CommandSender sender, Nation nation, ArrayList<Nation> remlist) {
 		for (Nation invited : remlist) {
 			if (InviteHandler.inviteIsActive(nation, invited)) {
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translation.of("town_revoke_invite_successful"));
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_ally_successful", sender, invited));
+							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_ally", invited));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_ally_successful", sender.getName(), invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -2052,7 +2053,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 						nation.removeAlly(targetNation);
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translation.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMessage(player, Translation.of("msg_ally_removed_successfully"));
+						TownyMessaging.sendMsg(player, Translation.of("msg_ally_removed_successfully"));
 					} catch (NotRegisteredException e) {
 						remove.add(targetNation);
 					}

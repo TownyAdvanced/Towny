@@ -2936,7 +2936,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 	}
 
-	private static void townRevokeInviteResident(Object sender, Town town, List<Resident> residents) {
+	private static void townRevokeInviteResident(CommandSender sender, Town town, List<Resident> residents) {
 
 		for (Resident invited : residents) {
 			if (InviteHandler.inviteIsActive(town, invited)) {
@@ -2944,7 +2944,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (invite.getSender().equals(town)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("town_revoke_invite_successful", sender, invited));
+							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_invite", invited));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("town_revoke_invite_successful", sender.getName(), invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -3221,7 +3222,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (namestoremove.length != 0) {
 			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namestoremove, town);
 			if (!toRevoke.isEmpty())
-				townRevokeInviteResident(sender,town, toRevoke);
+				townRevokeInviteResident(sender, town, toRevoke);
 		}
 
 		if (names.length != 0) {
