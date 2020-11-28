@@ -6,6 +6,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
+ * Legacy event for when a Nation's Tag would be changed.
+ * 
  * @deprecated as of 0.96.2.10 use {@link GovernmentTagChangeEvent} instead.
  */
 @Deprecated

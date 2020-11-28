@@ -27,6 +27,7 @@ public class CellUnderAttack extends Cell {
 	 * @param plugin Instance of {@link Towny}
 	 * @param nameOfFlagOwner Name of the Resident that placed the flag
 	 * @param flagBaseBlock Flag representing the "flag pole" of the block
+	 * 
 	 * @deprecated To be removed in a future release of Towny. Please transition to using {@link #CellUnderAttack(Towny, String, Block, long)}.   
 	 */
 	@Deprecated

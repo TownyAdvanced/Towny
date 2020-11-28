@@ -267,8 +267,21 @@ public class PlayerCache {
 	 * All pre-1.13 playercache checks below here now. * 
 	 * 
 	 */
-	
-	
+
+
+	/**
+	 * Legacy method to check for block permissions, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * @param action The permissible action, such as {@link ActionType#BUILD}
+	 * 
+	 * @return Returns the given action's permission for a block.
+	 * 
+	 * @throws NullPointerException if passed an inappropriate ActionType.
+	 * 
+	 * @deprecated Should not be used. Use PlayerCache#getCachePermission(Material, ActionType) instead.
+	 */
 	@Deprecated
 	public boolean getCachePermission(Integer id, byte data, ActionType action) throws NullPointerException {
 		switch (action) {
@@ -284,41 +297,141 @@ public class PlayerCache {
 				throw new NullPointerException();
 		}
 	}
-	
+
+	/**
+	 * Legacy method to set the build permission for a given block, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * @param value Sets a block's permission for if it should be placeable or not.
+	 *                 
+	 * @deprecated Should not be used. Use {@link #setBuildPermission(Material, Boolean)} instead.
+	 */
 	@Deprecated
 	public void setBuildPermission(Integer id, byte data, Boolean value) {
 		updateMaps(buildPermission, id, data, value);
-	}	
+	}
+
+	/**
+	 * Legacy method to set the destroy permission for a given block, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * @param value Sets a block's permission for if it should be destructible or not.
+	 * 
+	 * @deprecated Should not be used. Use {@link #setDestroyPermission(Material, Boolean)} instead.
+	 */
 	@Deprecated
 	public void setDestroyPermission(Integer id, byte data, Boolean value) {
 		updateMaps(destroyPermission, id, data, value);
 	}
+
+	/**
+	 * Legacy method to set the switch permission for a given block, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * @param value Sets a block's permission for if it should be interactable or not.
+	 *                 
+	 * @deprecated Should not be used. Use {@link #setSwitchPermission(Material, Boolean)} instead.   
+	 */
 	@Deprecated
 	public void setSwitchPermission(Integer id, byte data, Boolean value) {
 		updateMaps(switchPermission, id, data, value);
 	}
+
+	/**
+	 * Legacy method to set the item-use permission for a given block, pre-1.13
+	 * 
+	 * @param id Item's Block ID
+	 * @param data Block Variant ID
+	 * @param value Sets a item's permission for if it should be usable or not.
+	 *                 
+	 * @deprecated Should not be used. Use {@link #setItemUsePermission(Material, Boolean)} instead.   
+	 */
 	@Deprecated
 	public void setItemUsePermission(Integer id, byte data, Boolean value) {
 		updateMaps(itemUsePermission, id, data, value);		
 	}
-	
+
+	/**
+	 * Legacy method to get the build permission for a block, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 *                
+	 * @return Gets if the block is placeable.
+	 * 
+	 * @throws NullPointerException if the block is invalid or null.
+	 * 
+	 * @deprecated Please use {@link #getBuildPermission(Material)}.
+	 */
 	@Deprecated
 	public boolean getBuildPermission(Integer id, byte data) throws NullPointerException {
 		return getBlockPermission(buildPermission, id, data);
 	}
+
+	/**
+	 * Legacy method to get the destroy permission for a block, pre-1.13
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * 
+	 * @return Gets if the block is able to be destroyed.
+	 * 
+	 * @throws NullPointerException if the block is invalid or null.
+	 * 
+	 * @deprecated Please use {@link #getDestroyPermission(Material)}.
+	 */
 	@Deprecated
 	public boolean getDestroyPermission(Integer id, byte data) throws NullPointerException {
 		return getBlockPermission(destroyPermission, id, data);		
 	}
+
+	/**
+	 * Legacy method to get the switch permission for a block, pre-1.13.
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * 
+	 * @return Gets if the block is able to be interacted with as a switch.
+	 * 
+	 * @throws NullPointerException if the block is invalid or null.
+	 * 
+	 * @deprecated Please use {@link #getSwitchPermission(Material)}.
+	 */
 	@Deprecated
 	public boolean getSwitchPermission(Integer id, byte data) throws NullPointerException {
 		return getBlockPermission(switchPermission, id, data);		
 	}
+
+	/**
+	 * Legacy method to get the item-use permission for a block, pre-1.13.
+	 * 
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * 
+	 * @return Gets if the block is able to be used as an item.
+	 * 
+	 * @throws NullPointerException if the block is invalid or null.
+	 * 
+	 * @deprecated Please use {@link #getBlockPermission(HashMap, Material)}. 
+	 */
 	@Deprecated
 	public Boolean getItemUsePermission(Integer id, byte data) throws NullPointerException {
 		return getBlockPermission(itemUsePermission, id, data);		
 	}
-	
+
+	/**
+	 * Legacy method to update the PlayerCache maps.
+	 * 
+	 * @param blockMap Map of blocks and their data.
+	 * @param id Block ID
+	 * @param data Block Variant ID
+	 * @param value True/False
+	 * 
+	 * @deprecated Please use {@link #updateMaps(HashMap, Material, Boolean)}.     
+	 */
 	@Deprecated
 	private void updateMaps(HashMap<Integer, HashMap<Byte, Boolean>> blockMap, Integer id, byte data, Boolean value) {
 		
@@ -336,6 +449,20 @@ public class PlayerCache {
 			blockMap.get(id).put(data, value);
 		}
 	}
+
+	/**
+	 * Legacy method to get the PlayerCache maps.
+	 * 
+	 * @param blockMap Map of Blocks
+	 * @param id ID
+	 * @param data 
+	 * 
+	 * @return Returns the {@link HashMap} data.
+	 * 
+	 * @throws NullPointerException if the blockMap does not contain either the id or data.
+	 * 
+	 * @deprecated Please use {@link #getBlockPermission(HashMap, Material)}.
+	 */
 	@Deprecated
 	private boolean getBlockPermission(HashMap<Integer, HashMap<Byte, Boolean>> blockMap, Integer id, byte data) throws NullPointerException {
 		
