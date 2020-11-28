@@ -5380,3 +5380,5 @@ v0.92.0.11:
     - Closes #4495.
 0.96.5.0:
   - Bump version for Release.
+0.96.5.1:
+  - Fix translation issue in german.yml, courtesy of Wolf2323 with PR #4497.
