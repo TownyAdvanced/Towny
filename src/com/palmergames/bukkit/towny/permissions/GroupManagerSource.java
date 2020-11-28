@@ -56,22 +56,22 @@ public class GroupManagerSource extends TownyPermissionSource {
 		//sendDebugMsg("    GroupManager installed.");
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 
-		if (node == "prefix") {
+		if (node.equals("prefix")) {
 			group = handler.getGroupPrefix(handler.getPrimaryGroup(player.getName()));
 			user = handler.getUserPrefix(player.getName());
-		} else if (node == "suffix") {
+		} else if (node.equals("suffix")) {
 			group = handler.getGroupSuffix(handler.getPrimaryGroup(player.getName()));
 			user = handler.getUserSuffix(player.getName());
-		} else if (node == "userprefix") {
+		} else if (node.equals("userprefix")) {
 			group = "";
 			user = handler.getUserPrefix(player.getName());					
-		} else if (node == "usersuffix") {
+		} else if (node.equals("usersuffix")) {
 			group = "";
 			user = handler.getUserSuffix(player.getName());					
-		} else if (node == "groupprefix") {
+		} else if (node.equals("groupprefix")) {
 			group = handler.getGroupPrefix(handler.getPrimaryGroup(player.getName()));
 			user = "";
-		} else if (node == "groupsuffix") {
+		} else if (node.equals("groupsuffix")) {
 			group = handler.getGroupSuffix(handler.getPrimaryGroup(player.getName()));
 			user = "";
 		}
@@ -202,7 +202,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 					// Update all players who are in this group.
 					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
 						if (toUpdate != null) {
-							if (group.equals(getPlayerGroup(toUpdate))) {
+							if (group.toString().equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
 								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 								plugin.setPlayerMode(toUpdate, modes, false);

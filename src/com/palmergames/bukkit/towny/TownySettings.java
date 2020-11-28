@@ -489,18 +489,19 @@ public class TownySettings {
 			if (root.getComments().length > 0)
 				addComment(root.getRoot(), root.getComments());
 
-			if (root.getRoot() == ConfigNodes.LEVELS.getRoot()) {
+			if (root.getRoot().equals(ConfigNodes.LEVELS.getRoot())) {
 				
 				setDefaultLevels();
 				
-			} else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+			} else if ( (root.getRoot().equals(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()))
+				|| (root.getRoot().equals(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) ){
 				
 				// Do nothing here as setDefaultLevels configured town and
 				// nation levels.
 				
-			} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()) {
+			} else if (root.getRoot().equals(ConfigNodes.VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), version);
-			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
+			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			} else
 				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
