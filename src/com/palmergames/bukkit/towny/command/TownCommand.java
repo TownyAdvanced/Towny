@@ -2855,9 +2855,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				invited.remove(newMember);
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
-			if (town.hasOutlaw(newMember)) {
-				town.removeOutlaw(newMember);
-			}
 		}
 
 		if (invited.size() > 0) {
@@ -2876,6 +2873,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {
+		// If player is outlawed in target town, remove them from outlaw list.
+		if (town.hasOutlaw(resident))
+			town.removeOutlaw(resident);
 
 		resident.setTown(town);
 		plugin.deleteCache(resident.getName());

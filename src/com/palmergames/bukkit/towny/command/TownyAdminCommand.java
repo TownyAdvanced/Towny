@@ -924,11 +924,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, Translation.of("msg_error_no_player_with_that_name", split[2]));
 					return;
 				}
-				
-				// If player is outlawed in target town, remove them from outlaw list.
-				if (town.hasOutlaw(resident))
-					town.removeOutlaw(resident);
-				
 				TownCommand.townAddResident(town, resident);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
 				TownyMessaging.sendMessage(sender, Translation.of("msg_join_town", resident.getName()));
