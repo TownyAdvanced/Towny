@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.listeners.TownyInventoryListener;
 import com.palmergames.bukkit.towny.listeners.TownyLoginListener;
 import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
-import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -99,7 +98,6 @@ public class Towny extends JavaPlugin {
 	private final TownyBlockListener blockListener = new TownyBlockListener(this);
 	private final TownyCustomListener customListener = new TownyCustomListener(this);
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
-	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
@@ -443,7 +441,6 @@ public class Towny extends JavaPlugin {
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(vehicleListener, this);
-			pluginManager.registerEvents(weatherListener, this);
 			pluginManager.registerEvents(flagWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
@@ -789,16 +786,6 @@ public class Towny extends JavaPlugin {
 	
 		return entityListener;
 	}
-
-	
-	/**
-	 * @return the weatherListener
-	 */
-	public TownyWeatherListener getWeatherListener() {
-	
-		return weatherListener;
-	}
-
 	
 	/**
 	 * @return the entityMonitorListener
