@@ -1010,7 +1010,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(preEvent.getCancelMessage());
 			
 			nation.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), TownyEconomyHandler.getFormattedBalance(amount), Translation.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -1047,7 +1047,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// Deposit into bank.
 			nation.depositToBank(resident, amount);
 
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), TownyEconomyHandler.getFormattedBalance(amount), Translation.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -1482,7 +1482,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translation.of("nation_revoke_invite_successful"));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_invite_successful", sender, town));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1930,6 +1930,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						try {
 							InviteHandler.declineInvite(invite, true);
 							TownyMessaging.sendMessage(sender, Translation.of("town_revoke_invite_successful"));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_ally_successful", sender, invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();

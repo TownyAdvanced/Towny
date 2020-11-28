@@ -2914,7 +2914,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (invite.getSender().equals(town)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translation.of("town_revoke_invite_successful"));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("town_revoke_invite_successful", sender, invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -3631,7 +3631,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			
 			town.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("town_sing")));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_withdrew_xx", resident.getName(), TownyEconomyHandler.getFormattedBalance(amount), Translation.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -3668,7 +3668,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			// Deposit into town.
 			town.depositToBank(resident, amount);
 			
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), TownyEconomyHandler.getFormattedBalance(amount), Translation.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -3708,7 +3708,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!resident.getAccount().payTo(amount, town, "Town Deposit from Nation member"))
 				throw new TownyException(Translation.of("msg_insuf_funds"));
 
-			TownyMessaging.sendPrefixedNationMessage(resident.getTown().getNation(), Translation.of("msg_xx_deposited_xx", resident.getName(), amount, town + " town"));
+			TownyMessaging.sendPrefixedNationMessage(resident.getTown().getNation(), Translation.of("msg_xx_deposited_xx", resident.getName(), TownyEconomyHandler.getFormattedBalance(amount), town + " town"));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (EconomyException | TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
