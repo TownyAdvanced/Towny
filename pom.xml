@@ -94,6 +94,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
             <version>0.1.5.0</version>
@@ -199,13 +205,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.4</version>
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
                             <shadedPattern>com.palmergames.paperlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
