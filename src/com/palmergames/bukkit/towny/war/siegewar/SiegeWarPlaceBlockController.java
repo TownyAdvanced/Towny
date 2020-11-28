@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.siegewar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -67,8 +66,8 @@ public class SiegeWarPlaceBlockController {
 			return evaluatePlaceChest(player, block, event);
 
 		//Check for forbidden block placement
-		if(TownySettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) {
-			if(TownySettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat)) {
+		if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) {
+			if(SiegeWarSettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat)) {
 				event.setCancelled(true);
 				event.setBuild(false);
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
@@ -111,7 +110,7 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as an abandon request.
 	 */
 	private static boolean evaluatePlaceWhiteBannerInWilderness(Block block, Player player, BlockPlaceEvent event) {
-		if (!TownySettings.getWarSiegeAbandonEnabled())
+		if (!SiegeWarSettings.getWarSiegeAbandonEnabled())
 			return false;
 
 		//Find the nearest siege zone to the player
@@ -193,7 +192,7 @@ public class SiegeWarPlaceBlockController {
 			Nation nationOfResident = resident.getTown().getNation();
 			if(town.hasSiege() && town.getSiege().getAttackingNation() == nationOfResident) {
 
-				if (!TownySettings.getWarSiegeInvadeEnabled())
+				if (!SiegeWarSettings.getWarSiegeInvadeEnabled())
 					return false;
 
 				InvadeTown.processInvadeTownRequest(
@@ -204,7 +203,7 @@ public class SiegeWarPlaceBlockController {
 
 			} else {
 
-				if (!TownySettings.getWarSiegeAttackEnabled())
+				if (!SiegeWarSettings.getWarSiegeAttackEnabled())
 					return false;
 
 				if(SiegeWarBlockUtil.isSupportBlockUnstable(block)) {
@@ -237,7 +236,7 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as a surrender request.
 	 */
     private static boolean evaluatePlaceWhiteBannerInTown(Player player, Town town, BlockPlaceEvent event) {
-		if (!TownySettings.getWarSiegeSurrenderEnabled())
+		if (!SiegeWarSettings.getWarSiegeSurrenderEnabled())
 			return false;
 
 		//If there is no siege, do normal block placement
@@ -256,7 +255,7 @@ public class SiegeWarPlaceBlockController {
 	 * Determines if the event will be considered as a plunder request.
 	 */
 	private static boolean evaluatePlaceChest(Player player, Block block, BlockPlaceEvent event) {
-		if (!TownySettings.getWarSiegePlunderEnabled() || !TownyAPI.getInstance().isWilderness(block))
+		if (!SiegeWarSettings.getWarSiegePlunderEnabled() || !TownyAPI.getInstance().isWilderness(block))
 			return false;
 
 		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -57,7 +58,7 @@ public class TownPeacefulnessUtil {
 			if(town.getPeacefulnessChangeConfirmationCounterDays() < 1) {
 				town.flipPeaceful();
 
-				if(TownySettings.getWarSiegeEnabled()) {
+				if(SiegeWarSettings.getWarSiegeEnabled()) {
 					if (town.isPeaceful()) {
 						message = Translation.of("msg_war_siege_town_became_peaceful", town.getFormattedName());
 					} else {
@@ -246,8 +247,8 @@ public class TownPeacefulnessUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			int guardianTownPlotsRequirement = TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement();
-			int guardianTownMaxDistanceRequirementTownblocks = TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement();
+			int guardianTownPlotsRequirement = SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement();
+			int guardianTownMaxDistanceRequirementTownblocks = SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement();
 	
 			//Find valid guardian towns
 			List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());

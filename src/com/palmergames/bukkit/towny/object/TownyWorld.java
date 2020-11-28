@@ -399,7 +399,17 @@ public class TownyWorld extends TownyObject {
 	public boolean isPlotManagementIgnoreIds(Material mat) {
 		return getPlotManagementIgnoreIds().contains(mat.toString());
 	}
-	
+
+	/**
+	 * Checks if a block is ignored by plot management.
+	 * 
+	 * @param id Block ID
+	 * @param data Block Data
+	 * 
+	 * @return If the block should be ignored.
+	 * 
+	 * @deprecated Use {@link #isPlotManagementIgnoreIds(Material)} instead.
+	 */
 	@Deprecated
 	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 

@@ -6,8 +6,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import de.themoep.idconverter.IdMappings;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -88,7 +86,6 @@ public class PlotBlockData {
 	 * 
 	 * @return true if there are more blocks to check.
 	 */
-	@SuppressWarnings("deprecation")
 	public boolean restoreNextBlock() {
 
 		Block block = null;
@@ -139,48 +136,6 @@ public class PlotBlockData {
 				case 1:
 				case 2:				
 				case 3:
-					if(storedData.usesID()) {
-						if (storedData.getData() == 0) {
-							mat = BukkitTools.getMaterial(storedData.getTypeId());
-						} else {
-							try {
-								mat = Material.getMaterial(IdMappings.getById(storedData.getTypeId() + ":" + storedData.getData()).getFlatteningType());					
-							} catch (NullPointerException e) {
-								// Sometimes blocks facing causes null lookups, we fall back to the base material.
-								mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
-							}
-						}
-					} else {
-						mat = Material.matchMaterial(storedData.getKey());
-					}
-					// Increment based upon number of elements
-					blockListRestored += scale;
-						
-			
-					// If this block isn't correct, replace
-					// and return as done.
-					if (mat == null) {
-						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
-					} else if (blockMat != mat) {
-						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
-			
-							try {
-			
-									block.setType(mat, false);		
-									return true;
-							} catch (Exception e) {
-								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java - BlockID found in legacy plotsnapshot which could not be resolved to a Material. ");
-							}
-			
-						} else {					
-							block.setType(Material.AIR);
-							return true;
-						}
-			
-						return true;
-					}
-					break;
-				
 				case 4:
 					blockListRestored += scale;
 					
@@ -218,7 +173,6 @@ public class PlotBlockData {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	private BlockObject getStoredBlockData(int index) {
 
 		//return based upon version
@@ -227,7 +181,6 @@ public class PlotBlockData {
 		case 1:
 		case 2:
 		case 3:
-			return new BlockObject(blockList.get(index - 1), (byte) (Integer.valueOf(blockList.get(index)) & 0xff));
 		case 4:
 			return new BlockObject(blockList.get(index));
 		default:

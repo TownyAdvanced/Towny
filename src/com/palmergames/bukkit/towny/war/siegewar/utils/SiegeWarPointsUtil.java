@@ -2,12 +2,12 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -77,13 +77,13 @@ public class SiegeWarPointsUtil {
 		//Give siege points to opposing side
 		int siegePoints;
 		if (residentIsAttacker) {
-			siegePoints = -TownySettings.getWarSiegePointsForAttackerDeath();
+			siegePoints = -SiegeWarSettings.getWarSiegePointsForAttackerDeath();
 			siegePoints = adjustSiegePointPenaltyForBannerControl(true, siegePoints, siege);
 			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(true, siegePoints, player, resident, siege);
 			siegePoints = adjustSiegePointsForPopulationQuotient(false, siegePoints, siege);
 			siege.adjustSiegePoints(siegePoints);
 		} else {
-			siegePoints = TownySettings.getWarSiegePointsForDefenderDeath();
+			siegePoints = SiegeWarSettings.getWarSiegePointsForDefenderDeath();
 			siegePoints = adjustSiegePointPenaltyForBannerControl(false, siegePoints, siege);
 			siegePoints = adjustSiegePenaltyPointsForMilitaryLeadership(false, siegePoints, player, resident, siege);
 			siegePoints = adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
@@ -128,14 +128,14 @@ public class SiegeWarPointsUtil {
 
 				if(universe.getPermissionSource().testPermission(resident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())) {
 					//Player is Leader. Apply points increase
-					double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderDeath() / 100);
+					double modifier = 1 + (SiegeWarSettings.getWarSiegePointsPercentageAdjustmentForLeaderDeath() / 100);
 					return (int)(siegePoints * modifier);
 
 				} else {
 					//Player is not leader
 					if(player == null) {
 						//Player is null. Apply points increase regardless of player location/online/offline, to avoid exploits
-						double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+						double modifier = 1 + (SiegeWarSettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
 						return (int)(siegePoints * modifier);
 					} else {
 						//Player is online. Look for nearby friendly/hostile leaders
@@ -192,11 +192,11 @@ public class SiegeWarPointsUtil {
 
 						if (friendlyLeaderNearby && !hostileLeaderNearby) {
 							//Friendly leader nearby. Apply points decrease
-							double modifier = 1 - (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+							double modifier = 1 - (SiegeWarSettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
 							return (int) (siegePoints * modifier);
 						} else if (hostileLeaderNearby && !friendlyLeaderNearby) {
 							//Enemy leader nearby. Apply points increase
-							double modifier = 1 + (TownySettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
+							double modifier = 1 + (SiegeWarSettings.getWarSiegePointsPercentageAdjustmentForLeaderProximity() / 100);
 							return (int) (siegePoints * modifier);
 						}
 					}
@@ -264,7 +264,7 @@ public class SiegeWarPointsUtil {
 		 * Terminology: 
 		 * The 'quotient' is the number of times the smaller population is contained in the larger one
 		 */
-		double maxPopulationQuotient = TownySettings.getWarSiegePopulationQuotientForMaxPointsBoost();
+		double maxPopulationQuotient = SiegeWarSettings.getWarSiegePopulationQuotientForMaxPointsBoost();
 		double actualPopulationQuotient;
 			if(siege.isAttackerHasLowestPopulation()) {
 				actualPopulationQuotient = (double) defenderPopulation / attackerPopulation;
@@ -286,13 +286,13 @@ public class SiegeWarPointsUtil {
 		//Siege Point modifier
 		//Lowest possible value should be 1.
 		//Highest possible value should be the max boost value in the config
-		double siegePointModifier = 1 + (normalizedPointBoost * (TownySettings.getWarSiegeMaxPopulationBasedPointBoost() -1));
+		double siegePointModifier = 1 + (normalizedPointBoost * (SiegeWarSettings.getWarSiegeMaxPopulationBasedPointBoost() -1));
 		
 		siege.setSiegePointModifierForSideWithLowestPopulation(siegePointModifier);
 	}
 
 	public static int adjustSiegePointsForPopulationQuotient(boolean attackerGain, int siegePoints, Siege siege) {
-		if(!TownySettings.getWarSiegePopulationBasedPointBoostsEnabled()) {
+		if(!SiegeWarSettings.getWarSiegePopulationBasedPointBoostsEnabled()) {
 			return siegePoints;
 		}
 
@@ -310,7 +310,7 @@ public class SiegeWarPointsUtil {
 	}
 
 	public static int adjustSiegePointPenaltyForBannerControl(boolean residentIsAttacker, int siegePoints, Siege siege) {
-		if(!TownySettings.isWarSiegeCounterattackBoosterEnabled())
+		if(!SiegeWarSettings.isWarSiegeCounterattackBoosterEnabled())
 			return siegePoints;
 
 		if(
@@ -318,7 +318,7 @@ public class SiegeWarPointsUtil {
 			||
 			(!residentIsAttacker && siege.getBannerControllingSide() == SiegeSide.DEFENDERS)
 		) {
-			return siegePoints + (int)(siegePoints * siege.getBannerControllingResidents().size() /100 * TownySettings.getWarSiegeCounterattackBoosterExtraDeathPointsPerPlayerPercent());
+			return siegePoints + (int)(siegePoints * siege.getBannerControllingResidents().size() /100 * SiegeWarSettings.getWarSiegeCounterattackBoosterExtraDeathPointsPerPlayerPercent());
 		} else {
 			return siegePoints;
 		}

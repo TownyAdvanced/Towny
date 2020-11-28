@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Town;
 
 /**
+ * Legacy event for when a Town's Tag would change.
  * @deprecated as of 0.96.3.0 use {@link GovernmentTagChangeEvent} instead.
  */
 @Deprecated

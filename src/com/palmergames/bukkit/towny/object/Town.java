@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -247,6 +248,10 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(residents);
 	}
 
+	/**
+	 * @deprecated Use {@link #getRank(String)} instead.
+	 * @return Returns a list of residents with the assistant rank.
+	 */
 	@Deprecated
 	public List<Resident> getAssistants() {
 
@@ -285,6 +290,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead.
 	 * @return A true if the resident is an assistant, false otherwise.
 	 */
+	@Deprecated
 	public boolean hasAssistant(Resident resident) {
 
 		return resident.hasTownRank("assistant");
@@ -379,8 +385,8 @@ public class Town extends Government implements TownBlockOwner {
 			return false;
 		
 		//Under siege
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+		if(SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 			&& siege != null
 			&& siege.getStatus().isActive()) {
 			return true;
@@ -408,8 +414,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean isBANG() {
 
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+		if(SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
 			&& siege != null
 			&& siege.getStatus().isActive()) {
 			return true;
@@ -1273,7 +1279,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public double getSiegeCost() {
 		double cost = 
-			TownySettings.getWarSiegeAttackerCostUpFrontPerPlot() 
+				SiegeWarSettings.getWarSiegeAttackerCostUpFrontPerPlot() 
 				* townBlocks.size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
 		return cost;

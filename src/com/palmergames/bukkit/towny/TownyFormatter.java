@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -318,7 +319,7 @@ public class TownyFormatter {
 		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
 		title += (town.isOpen() ? Translation.of("status_title_open") : "");
-		title += (TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful() ? Translation.of("status_town_title_peaceful") : "");
+		title += (SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful() ? Translation.of("status_town_title_peaceful") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby
@@ -425,17 +426,17 @@ public class TownyFormatter {
 			out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));
 
 			//Countdown To Peacefulness Status Change: 3 days
-			if (TownySettings.getWarCommonPeacefulTownsEnabled()
+			if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
 				&& town.isPeaceful() != town.getDesiredPeacefulnessValue()) {
 				out.add(String.format(Translation.of("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
 			}
 
 			//Siege  Info
-			if (TownySettings.getWarSiegeEnabled()) {
+			if (SiegeWarSettings.getWarSiegeEnabled()) {
 
 				//Revolt Immunity Timer: 71.8 hours
-				if (TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
+				if (SiegeWarSettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
 					out.add(String.format(Translation.of("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 				}
 
@@ -508,7 +509,7 @@ public class TownyFormatter {
 							break;
 					}
 				} else {
-					if (TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
+					if (SiegeWarSettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
 						//Siege:
 						// > Immunity Timer: 40.8 hours
 						out.add(String.format(Translation.of("status_town_siege_status"), ""));
@@ -783,10 +784,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
-	 * 
 	 * @param obj The {@link TownyObject} to get the formatted name from.
+	 * 
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedName(TownyObject obj) {
@@ -794,10 +796,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the formatted name from.
+	 *                    
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedResidentName(Resident resident) {
@@ -805,10 +808,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
-	 *
 	 * @param town The {@link Town} to get the formatted name from.
+	 *                
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedTownName(Town town) {
@@ -816,10 +820,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
-	 *
 	 * @param nation The {@link Nation} to get the formatted name from.
+	 * 
 	 * @return The formatted name of the object.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedNationName(Nation nation) {
@@ -827,10 +832,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the formatted title name from.
+	 *                    
 	 * @return The formatted title name of the resident.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedResidentTitleName(Resident resident) {
@@ -878,10 +884,11 @@ public class TownyFormatter {
 	}
 	
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePrefix()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the king or mayor prefix from.
+	 *                    
 	 * @return The king or mayor prefix of the resident.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePrefix()} instead.
 	 */
 	@Deprecated	
 	public static String getNamePrefix(Resident resident) {
@@ -889,10 +896,11 @@ public class TownyFormatter {
 	}	
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePostfix()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the king or mayor postfix from.
+	 *                    
 	 * @return The king or mayor postfix of the resident.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePostfix()} instead.
 	 */
 	@Deprecated	
 	public static String getNamePostfix(Resident resident) {

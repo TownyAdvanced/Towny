@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
@@ -162,8 +163,8 @@ public class SpawnUtil {
 				spawnLoc = town.getSpawn();
 
 			//If town is peaceful and public, skip further t spawn checks
-			if(TownySettings.getWarCommonPeacefulTownsEnabled()
-				&& TownySettings.getWarCommonPeacefulTownsVisitorTSpawnOverride()
+			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
+				&& SiegeWarSettings.getWarCommonPeacefulTownsVisitorTSpawnOverride()
 				&& town.isPeaceful()
 				&& town.isPublic()) {
 				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
@@ -226,8 +227,8 @@ public class SpawnUtil {
 			spawnLoc = nation.getSpawn();
 
 			//If resident is from a peaceful town, and nation is public, skip further n spawn checks
-			if(TownySettings.getWarCommonPeacefulTownsEnabled()
-				&& TownySettings.getWarCommonPeacefulTownsTravellerNSpawnOverride()
+			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
+				&& SiegeWarSettings.getWarCommonPeacefulTownsTravellerNSpawnOverride()
 				&& resident.hasTown()
 				&& resident.getTown().isPeaceful()
 				&& nation.isPublic()) {
@@ -273,8 +274,8 @@ public class SpawnUtil {
 
 		// Prevent spawn travel while in disallowed zones (if configured.)
 		if (!isTownyAdmin
-			&& !(TownySettings.getWarCommonPeacefulTownsEnabled()
-				 && TownySettings.getWarCommonPeacefulTownsDisallowedZonesOverride()
+			&& !(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
+				 && SiegeWarSettings.getWarCommonPeacefulTownsDisallowedZonesOverride()
 			     && resident.hasTown()
 			     && resident.getTown().isPeaceful())) {
 
@@ -313,8 +314,8 @@ public class SpawnUtil {
 		 2. It is a player spawning into a peaceful town
 		 */
 		if (!isTownyAdmin 
-			&& TownySettings.getWarSiegeEnabled() 
-			&& TownySettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
+			&& SiegeWarSettings.getWarSiegeEnabled() 
+			&& SiegeWarSettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
 
 			try {
 				String townNameAtSpawnLocation = TownyAPI.getInstance().getTownName(spawnLoc);

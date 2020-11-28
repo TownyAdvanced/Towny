@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import org.bukkit.Bukkit;
@@ -359,6 +360,7 @@ public class TownyAPI {
      * @return {@link TownyPermissionSource} that is in use.
 	 * @deprecated use {@link TownyUniverse#getPermissionSource()}
      */
+    @Deprecated
     public TownyPermissionSource getPermissionSource() {
         return townyUniverse.getPermissionSource();
     }
@@ -405,9 +407,10 @@ public class TownyAPI {
     /**
      * Gets the {@link War} that is currently active
      
-     * @return the currently active {@link War}, null if none is active.
-     * @deprecated use {@link TownyUniverse#getWarEvent()} 
+     * @return Returns the currently active {@link War}, null if none is active.
+     * @deprecated Use {@link TownyUniverse#getWarEvent()} instead. 
      */
+    @Deprecated
     public War getWarEvent() {
         return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
     }
@@ -483,7 +486,7 @@ public class TownyAPI {
 			nearestTown = nearestTownblock.getTown();
 			
 			//If nearest town has an in-progress siege, and war disables config is true, nationzone is disabled.
-			if(TownySettings.getWarSiegeEnabled()
+			if(SiegeWarSettings.getWarSiegeEnabled()
 				&& TownySettings.getNationZonesWarDisables()
 				&& nearestTown.hasSiege()
 				&& nearestTown.getSiege().getStatus().isActive())	{

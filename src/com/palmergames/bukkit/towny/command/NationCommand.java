@@ -59,6 +59,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
@@ -949,8 +950,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 
 				//In Siegewar, if target town is peaceful, can't add military rank
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarCommonPeacefulTownsEnabled()
+				if(SiegeWarSettings.getWarSiegeEnabled()
+					&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 					&& SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(rank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)
 					&& targetTown.isPeaceful())
 				{

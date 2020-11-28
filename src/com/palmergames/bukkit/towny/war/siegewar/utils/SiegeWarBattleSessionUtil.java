@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BattleSession;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -50,7 +51,7 @@ public class SiegeWarBattleSessionUtil {
 					//Warn if first warning time has been reached
 					if (!battleSession.isFirstWarningGiven()) {
 						if (System.currentTimeMillis() >= battleSession.getFirstWarningTime()) {
-							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(SiegeWarSettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 							TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_warning", timeUntilExpiry));
 							battleSession.setFirstWarningGiven(true);
 						} else {
@@ -62,7 +63,7 @@ public class SiegeWarBattleSessionUtil {
 					if (!battleSession.isSecondWarningGiven()) {
 						//phase 2
 						if (System.currentTimeMillis() >= battleSession.getSecondWarningTime()) {
-							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+							String timeUntilExpiry = TimeMgmt.getFormattedTimeValue(SiegeWarSettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 							TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_warning", timeUntilExpiry));
 							battleSession.setSecondWarningGiven(true);
 						} else {
@@ -139,12 +140,12 @@ public class SiegeWarBattleSessionUtil {
 
 					//Create new battle session
 					BattleSession battleSession = new BattleSession();
-					int activePhaseDurationMillis = (int) (TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-					int expiredPhaseDurationMillis = (int) (TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					int activePhaseDurationMillis = (int) (SiegeWarSettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					int expiredPhaseDurationMillis = (int) (SiegeWarSettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 					long expiryTime = System.currentTimeMillis() + activePhaseDurationMillis;
 					long deleteTime = expiryTime + expiredPhaseDurationMillis;
-					long firstWarningTime = expiryTime - (int) (TownySettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-					long secondWarningTime = expiryTime - (int) (TownySettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					long firstWarningTime = expiryTime - (int) (SiegeWarSettings.getWarSiegeBattleSessionsFirstWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					long secondWarningTime = expiryTime - (int) (SiegeWarSettings.getWarSiegeBattleSessionsSecondWarningMinutesToExpiry() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 
 					battleSession.setExpiryTime(expiryTime);
 					battleSession.setDeletionTime(deleteTime);
@@ -153,8 +154,8 @@ public class SiegeWarBattleSessionUtil {
 
 					player.setMetadata(METADATA_TAG_NAME, new FixedMetadataValue(Towny.getPlugin(), battleSession));
 
-					String totalActiveTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
-					String restTimeString = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					String totalActiveTimeString = TimeMgmt.getFormattedTimeValue(SiegeWarSettings.getWarSiegeBattleSessionsActivePhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+					String restTimeString = TimeMgmt.getFormattedTimeValue(SiegeWarSettings.getWarSiegeBattleSessionsExpiredPhaseDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 					TownyMessaging.sendMsg(player, Translation.of("msg_war_siege_battle_session_started", totalActiveTimeString, restTimeString));
 				}
 			} catch (Exception e) {

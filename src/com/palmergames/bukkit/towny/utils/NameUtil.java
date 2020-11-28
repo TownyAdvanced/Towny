@@ -57,6 +57,7 @@ public class NameUtil {
 	 * @return Passes the string to the new method in deprecation note.   
 	 * @deprecated as of 0.96.2.20. Use {@link Colors#translateColorCodes(String)} instead
 	 */
+	@Deprecated
 	public static String translateColorCodes(String str) {
 		return Colors.translateColorCodes(str);
 	}

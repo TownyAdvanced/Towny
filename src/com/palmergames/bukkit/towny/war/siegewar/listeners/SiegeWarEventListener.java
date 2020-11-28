@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
@@ -49,7 +50,7 @@ public class SiegeWarEventListener implements Listener {
 			return;
 		}
 
-		if(TownySettings.getWarSiegeEnabled()) {
+		if(SiegeWarSettings.getWarSiegeEnabled()) {
 			try {
 				//Prevent milk bucket usage while attempting to gain banner control
 				if(event.getItem().getType() == Material.MILK_BUCKET) {
@@ -74,14 +75,14 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onNationAddTownEvent(NationPreAddTownEvent event) {
-		if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled() && event.getTown().isPeaceful()) {
+		if(SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && event.getTown().isPeaceful()) {
 			Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(event.getTown());
 			if(!validGuardianNations.contains(event.getNation())) {
 				event.setCancelMessage(Translation.of("msg_war_siege_peaceful_town_cannot_join_nation", 
 						event.getTown().getName(),
 						event.getNation().getName(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
-						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(),
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
 				event.setCancelled(true);
 			}
 		}
@@ -92,7 +93,7 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onNewNationEvent(PreNewNationEvent event) {
-		if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarCommonPeacefulTownsEnabled()
+		if (SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& event.getTown().isPeaceful()) {
 			TownyMessaging.sendMsg(event.getTown().getMayor(),
 					Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
@@ -105,9 +106,9 @@ public class SiegeWarEventListener implements Listener {
 	@EventHandler
 	public void onNationDeleteEvent(PreDeleteNationEvent event) {
 		//If nation refund is enabled, warn the player that they will get a refund (and indicate how to claim it).
-		if (TownySettings.getWarSiegeEnabled() && TownySettings.isUsingEconomy()
-				&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
-			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+		if (SiegeWarSettings.getWarSiegeEnabled() && TownySettings.isUsingEconomy()
+				&& SiegeWarSettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * SiegeWarSettings.getWarSiegeNationCostRefundPercentageOnDelete());
 			TownyMessaging.sendMsg(event.getNation().getKing(), Translation.of("msg_err_siege_war_delete_nation_warning", TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 
@@ -175,7 +176,7 @@ public class SiegeWarEventListener implements Listener {
 
 		Block blockTo = block.getRelative(direction);
 
-		if(TownySettings.getWarSiegeEnabled()) {
+		if(SiegeWarSettings.getWarSiegeEnabled()) {
 			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block) || SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(blockTo)) {
 				return true;
 			}
@@ -189,28 +190,28 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onTownLeaveNation(NationPreTownLeaveEvent event) {
-		if (TownySettings.getWarSiegeEnabled()) {
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
 
 			Town town = event.getTown();
 			//If a peaceful town has no options, we don't let it revolt
-			if(TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
+			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()) {
 				Set<Nation> validGuardianNations = TownPeacefulnessUtil.getValidGuardianNations(town);
 				if(validGuardianNations.size() == 0) {
 					event.setCancelMessage(Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_zero", 
-						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
 					event.setCancelled(true);
 				} else if(validGuardianNations.size() == 1) {
 					event.setCancelMessage(Translation.of("msg_war_siege_peaceful_town_cannot_revolt_nearby_guardian_towns_one", 
-						TownySettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
-						TownySettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownMinDistanceRequirement(), 
+						SiegeWarSettings.getWarSiegePeacefulTownsGuardianTownPlotsRequirement()));
 					event.setCancelled(true);
 				}
 			}
 
-			if (TownySettings.getWarSiegeTownLeaveDisabled()) {
+			if (SiegeWarSettings.getWarSiegeTownLeaveDisabled()) {
 
-				if (!TownySettings.getWarSiegeRevoltEnabled()) {
+				if (!SiegeWarSettings.getWarSiegeRevoltEnabled()) {
 					event.setCancelMessage(Translation.of("msg_err_siege_war_town_voluntary_leave_impossible"));
 					event.setCancelled(true);
 				}

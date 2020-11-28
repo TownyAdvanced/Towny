@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -57,14 +56,14 @@ public class SiegeWarTimerTaskController {
 				break;
 
 			case PENDING_DEFENDER_SURRENDER:
-				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
+				if(siege.getDurationMillis() > (SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
 					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_SURRENDER);
 					SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
 				}
 				break;
 
 			case PENDING_ATTACKER_ABANDON:
-				if(siege.getDurationMillis() > (TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
+				if(siege.getDurationMillis() > (SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * TimeMgmt.ONE_HOUR_IN_MILLIS )) {
 					SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_ABANDON);
 					SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
 				}
@@ -84,7 +83,7 @@ public class SiegeWarTimerTaskController {
 	 * when using the 'tactical visibility' feature
 	 */
 	public static void evaluateTacticalVisibility() {
-		if (TownySettings.getWarSiegeTacticalVisibilityEnabled()) {
+		if (SiegeWarSettings.getWarSiegeTacticalVisibilityEnabled()) {
 			SiegeWarDynmapUtil.evaluatePlayerTacticalInvisibility();
 		}
 	}
@@ -99,19 +98,19 @@ public class SiegeWarTimerTaskController {
 	}
 
 	public static void updatePopulationBasedSiegePointModifiers() {
-		if(TownySettings.getWarSiegePopulationBasedPointBoostsEnabled()) {
+		if(SiegeWarSettings.getWarSiegePopulationBasedPointBoostsEnabled()) {
 			SiegeWarPointsUtil.updatePopulationBasedSiegePointModifiers();
 		}
 	}
 
 	public static void evaluateBattleSessions() {
-		if (TownySettings.isWarSiegeBattleSessionsEnabled()) {
+		if (SiegeWarSettings.isWarSiegeBattleSessionsEnabled()) {
 			SiegeWarBattleSessionUtil.evaluateBattleSessions();
 		}
 	}
 
 	public static void punishPeacefulPlayersInActiveSiegeZones() {
-		if(TownySettings.getWarCommonPeacefulTownsEnabled()) {
+		if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
 			TownPeacefulnessUtil.punishPeacefulPlayersInActiveSiegeZones();
 		}
 	}
