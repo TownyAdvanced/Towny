@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.war.siegewar.objects;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.util.TimeMgmt;
@@ -147,11 +147,11 @@ public class Siege {
 	}
 
 	public long getTimeUntilSurrenderConfirmationMillis() {
-		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
+		return (long)((SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
 
 	public long getTimeUntilAbandonConfirmationMillis() {
-		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
+		return (long)((SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
 	}
 
 	public String getName() {
@@ -258,12 +258,12 @@ public class Siege {
 	}
 
 	public String getFormattedTimeUntilDefenderSurrender() {
-		double timeMillis = (TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
+		double timeMillis = (SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
 		return TimeMgmt.getFormattedTimeValue(timeMillis);
 	}
 
 	public String getFormattedTimeUntilAttackerAbandon() {
-		double timeMillis = (TownySettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
+		double timeMillis = (SiegeWarSettings.getWarSiegeMinSiegeDurationBeforeAbandonHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis();
 		return TimeMgmt.getFormattedTimeValue(timeMillis);
 	}
 

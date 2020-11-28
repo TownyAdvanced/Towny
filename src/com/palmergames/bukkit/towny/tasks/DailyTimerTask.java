@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import java.util.ArrayList;
@@ -146,9 +147,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		/*
 		 * Update town peacefulness counters.
 		 */
-		if (TownySettings.getWarCommonPeacefulTownsEnabled()) {
+		if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
 			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
-			if(TownySettings.getWarSiegeEnabled())
+			if(SiegeWarSettings.getWarSiegeEnabled())
 				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
 		}
 
@@ -226,8 +227,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (universe.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (TownySettings.getWarSiegeEnabled()
-							&& TownySettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
+					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (SiegeWarSettings.getWarSiegeEnabled()
+							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
 						continue;
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
@@ -241,7 +242,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							 * TODO: RECHECK THIS IS WORKING. 
 							 */
 							//If town is occupied, destroy it, otherwise remove from nation
-							if (TownySettings.getWarSiegeEnabled() && town.isOccupied()) {
+							if (SiegeWarSettings.getWarSiegeEnabled() && town.isOccupied()) {
 								universe.getDataSource().removeTown(town);
 								localTownsDestroyed.add(town.getName());
 							}
@@ -306,7 +307,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			else
 				TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.list(localNewlyDelinquentTowns, msg2));
 			
-			if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarSettings.getWarSiegeEnabled()) {
 				if (localTownsDestroyed.size() > 0) {
 					if (localTownsDestroyed.size() == 1)
 						TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_destroyed_by_nation_tax", ChatTools.list(localTownsDestroyed)));

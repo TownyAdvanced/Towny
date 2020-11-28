@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -10,6 +9,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -74,7 +75,7 @@ public class TownyBlockListener implements Listener {
 		 * TODO: Get this using the Action event.
 		 */
 		//Siege War
-		if (TownySettings.getWarSiegeEnabled()) {
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
 			boolean skipPermChecks = SiegeWarPlaceBlockController.evaluateSiegeWarPlaceBlockRequest(event.getPlayer(), block,event, plugin);
 			if(skipPermChecks) {
 				return;

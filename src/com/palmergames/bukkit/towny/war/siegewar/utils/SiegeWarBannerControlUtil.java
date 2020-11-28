@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
@@ -109,7 +110,7 @@ public class SiegeWarBannerControlUtil {
 
 	private static void addNewBannerControlSession(Siege siege, Player player, Resident resident, SiegeSide siegeSide) {
 		//Add session
-		int sessionDurationMillis = (int)(TownySettings.getWarSiegeBannerControlSessionDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
+		int sessionDurationMillis = (int)(SiegeWarSettings.getWarSiegeBannerControlSessionDurationMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 		long sessionEndTime = System.currentTimeMillis() + sessionDurationMillis;
 		BannerControlSession bannerControlSession =
 			new BannerControlSession(resident, player, siegeSide, sessionEndTime);
@@ -118,12 +119,12 @@ public class SiegeWarBannerControlUtil {
 		//Notify Player
 		TownyMessaging.sendMsg(player, String.format(
 			Translation.of("msg_siege_war_banner_control_session_started"), 
-			TownySettings.getBannerControlHorizontalDistanceBlocks(),
-			TownySettings.getBannerControlVerticalDistanceBlocks(),
+			SiegeWarSettings.getBannerControlHorizontalDistanceBlocks(),
+			SiegeWarSettings.getBannerControlVerticalDistanceBlocks(),
 			TimeMgmt.getFormattedTimeValue(sessionDurationMillis)));
 
 		//Make player glow (which also shows them a timer)
-		int effectDurationSeconds = (TownySettings.getWarSiegeBannerControlSessionDurationMinutes() * 60) + (int)TownySettings.getShortInterval(); 
+		int effectDurationSeconds = (SiegeWarSettings.getWarSiegeBannerControlSessionDurationMinutes() * 60) + (int)TownySettings.getShortInterval(); 
 		int effectDurationTicks = (int)(TimeTools.convertToTicks(effectDurationSeconds));
 		Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), new Runnable() {
 			public void run() {
@@ -239,7 +240,7 @@ public class SiegeWarBannerControlUtil {
 		switch(siege.getBannerControllingSide()) {
 			case ATTACKERS:
 				//Adjust siege points
-				siegePoints = siege.getBannerControllingResidents().size() * TownySettings.getWarSiegePointsForAttackerOccupation();
+				siegePoints = siege.getBannerControllingResidents().size() * SiegeWarSettings.getWarSiegePointsForAttackerOccupation();
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
 				//Save siege zone
@@ -247,7 +248,7 @@ public class SiegeWarBannerControlUtil {
 			break;
 			case DEFENDERS:
 				//Adjust siege points
-				siegePoints = -(siege.getBannerControllingResidents().size() * TownySettings.getWarSiegePointsForDefenderOccupation());
+				siegePoints = -(siege.getBannerControllingResidents().size() * SiegeWarSettings.getWarSiegePointsForDefenderOccupation());
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(false, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
 				//Save siege zone

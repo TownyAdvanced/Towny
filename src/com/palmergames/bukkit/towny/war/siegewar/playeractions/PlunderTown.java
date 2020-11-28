@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -39,7 +40,7 @@ public class PlunderTown {
 			if(!TownySettings.isUsingEconomy())
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_economy"));
 
-			if(TownySettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isPeaceful())
+			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isPeaceful())
 				throw new TownyException(Translation.of("msg_war_siege_err_cannot_plunder_peaceful_town"));
 			
 			TownyUniverse universe = TownyUniverse.getInstance();
@@ -88,7 +89,7 @@ public class PlunderTown {
 		boolean townDestroyed = false;
 
 		double fullPlunderAmount =
-			TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
+				SiegeWarSettings.getWarSiegeAttackerPlunderAmountPerPlot()
 				* town.getTownBlocks().size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(town);
 

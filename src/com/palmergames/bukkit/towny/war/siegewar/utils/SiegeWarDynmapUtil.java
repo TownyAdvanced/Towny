@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.HeldItemsCombination;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
@@ -40,7 +40,7 @@ public class SiegeWarDynmapUtil {
 				if (!universe.getPlayersInBannerControlSessions().contains(player)) {
 
 					//Check item combinations
-					for(HeldItemsCombination heldItemsCombination: TownySettings.getWarSiegeTacticalVisibilityItems()) {
+					for(HeldItemsCombination heldItemsCombination: SiegeWarSettings.getWarSiegeTacticalVisibilityItems()) {
 
 						//Off Hand
 						if(!heldItemsCombination.isIgnoreOffHand() && player.getInventory().getItemInOffHand().getType() != heldItemsCombination.getOffHandItemType())

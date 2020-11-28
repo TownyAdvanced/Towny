@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -379,8 +380,8 @@ public class Town extends Government implements TownBlockOwner {
 			return false;
 		
 		//Under siege
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+		if(SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 			&& siege != null
 			&& siege.getStatus().isActive()) {
 			return true;
@@ -408,8 +409,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean isBANG() {
 
-		if(TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+		if(SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
 			&& siege != null
 			&& siege.getStatus().isActive()) {
 			return true;
@@ -1273,7 +1274,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public double getSiegeCost() {
 		double cost = 
-			TownySettings.getWarSiegeAttackerCostUpFrontPerPlot() 
+				SiegeWarSettings.getWarSiegeAttackerCostUpFrontPerPlot() 
 				* townBlocks.size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
 		return cost;
