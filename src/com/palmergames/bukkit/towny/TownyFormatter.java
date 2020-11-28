@@ -784,10 +784,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
-	 * 
 	 * @param obj The {@link TownyObject} to get the formatted name from.
+	 * 
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link TownyObject#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedName(TownyObject obj) {
@@ -795,10 +796,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the formatted name from.
+	 *                    
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedResidentName(Resident resident) {
@@ -806,10 +808,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
-	 *
 	 * @param town The {@link Town} to get the formatted name from.
+	 *                
 	 * @return The formatted name of the object.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Town#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedTownName(Town town) {
@@ -817,10 +820,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
-	 *
 	 * @param nation The {@link Nation} to get the formatted name from.
+	 * 
 	 * @return The formatted name of the object.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Nation#getFormattedName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedNationName(Nation nation) {
@@ -828,10 +832,11 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the formatted title name from.
+	 *                    
 	 * @return The formatted title name of the resident.
+	 * 
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getFormattedTitleName()} instead.
 	 */
 	@Deprecated
 	public static String getFormattedResidentTitleName(Resident resident) {
@@ -879,10 +884,11 @@ public class TownyFormatter {
 	}
 	
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePrefix()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the king or mayor prefix from.
+	 *                    
 	 * @return The king or mayor prefix of the resident.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePrefix()} instead.
 	 */
 	@Deprecated	
 	public static String getNamePrefix(Resident resident) {
@@ -890,10 +896,11 @@ public class TownyFormatter {
 	}	
 
 	/**
-	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePostfix()} instead.
-	 *
 	 * @param resident The {@link Resident} to get the king or mayor postfix from.
+	 *                    
 	 * @return The king or mayor postfix of the resident.
+	 *
+	 * @deprecated Since 0.96.0.0 use {@link Resident#getNamePostfix()} instead.
 	 */
 	@Deprecated	
 	public static String getNamePostfix(Resident resident) {

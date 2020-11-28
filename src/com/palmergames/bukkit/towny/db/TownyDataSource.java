@@ -331,6 +331,15 @@ public abstract class TownyDataSource {
 
 	abstract public List<TownyWorld> getWorlds();
 
+	/**
+	 * Legacy method to get a world associated with a town.
+	 * 
+	 * @param townName The name of a town.
+	 * 
+	 * @return Returns a {@link TownyWorld} associated with the town.
+	 * 
+	 * @deprecated Use {@link Town#getHomeblockWorld()} instead.
+	 */
 	@Deprecated // TODO: Scrap worlds holding Towns. Towns' homeblocks should be reliable enough to return a world when needed (if we need it at all anymore.)
 	public TownyWorld getTownWorld(String townName) {
 
@@ -369,12 +378,27 @@ public abstract class TownyDataSource {
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
+	/**
+	 * @return Returns a {@link Set} of the Residents Map
+	 * 
+	 * @deprecated We do not advise messing with the Residents Map.
+	 */
 	@Deprecated
 	abstract public Set<String> getResidentKeys();
 
+	/**
+	 * @return Returns a {@link Set} of the Towns Map
+	 * 
+	 * @deprecated We do not advise messing with the Towns Map.
+	 */
 	@Deprecated
 	abstract public Set<String> getTownsKeys();
 
+	/**
+	 * @return Returns a {@link Set} of the Nations Map
+	 * 
+	 * @deprecated We do not advise messing with the Nations Map.
+	 */
 	@Deprecated
 	abstract public Set<String> getNationsKeys();
 

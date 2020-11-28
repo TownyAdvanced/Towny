@@ -37,17 +37,41 @@ public class WorldCoord extends Coord {
 		return new Coord(getX(), getZ());
 	}
 
+	/**
+	 * @return Runs {@link #getTownyWorld()}.
+	 * 
+	 * @throws NotRegisteredException if the TownyWorld is not registered.
+	 * 
+	 * @deprecated Use {@link #getTownyWorld()} instead.
+	 */
 	@Deprecated
 	public TownyWorld getWorld() throws NotRegisteredException {
 		return getTownyWorld();
 	}
 
+	/**
+	 * Sets the X and Z coordinates by integer, and worldName variable for the WorldCoord.
+	 * 
+	 * @param world A TownyWorld Object
+	 * @param x An integer representing the x-coordinate.
+	 * @param z An integer representing the z-coordinate.
+	 * 
+	 * @deprecated Use {@link #WorldCoord(String, Coord)}, {@link #WorldCoord(String, int, int)}, or {@link #WorldCoord(WorldCoord)} instead.
+	 */
 	@Deprecated
 	public WorldCoord(TownyWorld world, int x, int z) {
 		super(x, z);
 		this.worldName = world.getName();
 	}
 
+	/**
+	 * Sets the xyz coordinates (as coord), and worldName variable for the WorldCoord. 
+	 * 
+	 * @param world A TownyWorld object
+	 * @param coord A Coord object
+	 * 
+	 * @deprecated Use {@link #WorldCoord(String, Coord)}, {@link #WorldCoord(String, int, int)}, or {@link #WorldCoord(WorldCoord)} instead.
+	 */
 	@Deprecated
 	public WorldCoord(TownyWorld world, Coord coord) {
 		super(coord);

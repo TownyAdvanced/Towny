@@ -824,12 +824,26 @@ public class TownyUniverse {
     public void setWarEvent(War warEvent) {
         this.warEvent = warEvent;
     }
-    
-    @Deprecated
+
+	/**
+	 * Retrieves the configuration's output database type.
+	 * 
+	 * @return Returns the output of {@link TownySettings#getSaveDatabase()}
+	 * 
+	 * @deprecated Use {@link TownySettings#getSaveDatabase()} instead.
+	 */
+	@Deprecated
 	public String getSaveDbType() {
 		return TownySettings.getSaveDatabase();
 	}
-	
+
+	/**
+	 * Retrieves the configuration's input database type.
+	 * 
+	 * @return Returns the output of {@link TownySettings#getLoadDatabase()}
+	 * 
+	 * @deprecated Use {@link TownySettings#getLoadDatabase()} instead.
+	 */
 	@Deprecated
 	public String getLoadDbType() {
 		return TownySettings.getLoadDatabase();

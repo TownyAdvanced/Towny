@@ -601,7 +601,12 @@ public final class FileMgmt {
 			writeLock.unlock();
 		}
 	}
-	
+
+	/**
+	 * @return Returns a file separator System Property.
+	 * 
+	 * @deprecated No longer used. You can get this yourself with {@link System#getProperty(String)}.
+	 */
 	@Deprecated
 	public static String fileSeparator() {
 

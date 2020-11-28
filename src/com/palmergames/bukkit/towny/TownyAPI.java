@@ -360,6 +360,7 @@ public class TownyAPI {
      * @return {@link TownyPermissionSource} that is in use.
 	 * @deprecated use {@link TownyUniverse#getPermissionSource()}
      */
+    @Deprecated
     public TownyPermissionSource getPermissionSource() {
         return townyUniverse.getPermissionSource();
     }
@@ -406,9 +407,10 @@ public class TownyAPI {
     /**
      * Gets the {@link War} that is currently active
      
-     * @return the currently active {@link War}, null if none is active.
-     * @deprecated use {@link TownyUniverse#getWarEvent()} 
+     * @return Returns the currently active {@link War}, null if none is active.
+     * @deprecated Use {@link TownyUniverse#getWarEvent()} instead. 
      */
+    @Deprecated
     public War getWarEvent() {
         return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
     }

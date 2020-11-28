@@ -5373,3 +5373,10 @@ v0.92.0.11:
     - Default is 20s.
   - TownySettings#calcTownLevelId(Town town)
     - Method used to determine which town_level a town is, based on the numeric order of the town_levels.
+  - Add missing @deprecated Javadoc tags and @Deprecated annotations, courtesy of TheFlagCourier with PR #4488.
+  - Remove some long-deprecated methods.
+  - Prevent admins from Soft-Locking Towny by force-joining outlaws, courtesy of TheFlagCourier with PR #4493.
+  - Fix towns being able to claim past their limits.
+    - Closes #4495.
+0.96.5.0:
+  - Bump version for Release.

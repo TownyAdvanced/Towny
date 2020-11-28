@@ -19,9 +19,9 @@ ___
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
-| MC 1.16.* | Use [0.96.4.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.4.0) or the above Latest Pre-Release. |
-| MC 1.15.* | Use [0.96.4.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.4.0) or the above Latest Pre-Release. |
-| MC 1.14.* | Use [0.96.4.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.4.0) or the above Latest Pre-Release. |
+| MC 1.16.* | Use [0.96.5.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.5.0) or the above Latest Pre-Release. |
+| MC 1.15.* | Use [0.96.5.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.5.0) or the above Latest Pre-Release. |
+| MC 1.14.* | Use [0.96.5.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.5.0) or the above Latest Pre-Release. |
 | MC 1.13.2 | [0.96.2.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2) |
 | MC 1.12.2 | [0.96.2.0 for 1.12.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.12.2) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
