@@ -5378,3 +5378,5 @@ v0.92.0.11:
   - Prevent admins from Soft-Locking Towny by force-joining outlaws, courtesy of TheFlagCourier with PR #4493.
   - Fix towns being able to claim past their limits.
     - Closes #4495.
+0.96.5.0:
+  - Bump version for Release.
