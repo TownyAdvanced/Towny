@@ -1194,3 +1194,6 @@ msg_universe_attribution: 'Authors: '
 msg_universe_contributors: ' And contributors like you. '
 msg_universe_heart: '<3'
 townblock_plu: 'TownBlocks'
+
+msg_revoked_invite: '&bYou revoked %s''s invite.'
+msg_revoked_ally: '&bYou revoked %s''s ally request.'
