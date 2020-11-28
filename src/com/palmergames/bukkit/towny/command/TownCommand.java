@@ -3018,7 +3018,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (TownySettings.isUsingEconomy() && TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
-					town.getAccount().withdraw(TownySettings.getNewNationPrice(), "nation refund");
+					town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -3501,8 +3501,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							blockCost = town.getTownBlockCostN(selection.size());
 	
 						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-						if (!town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
+						if (!town.getAccount().canPayFromHoldings(blockCost))
 							throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size()));
 					} catch (EconomyException e1) {
 						throw new TownyException("Economy Error");
 					} catch (NullPointerException e2) {

@@ -5382,3 +5382,4 @@ v0.92.0.11:
   - Bump version for Release.
 0.96.5.1:
   - Fix translation issue in german.yml, courtesy of Wolf2323 with PR #4497.
+  - Fix claiming cost issue when closed-economy is enabled.

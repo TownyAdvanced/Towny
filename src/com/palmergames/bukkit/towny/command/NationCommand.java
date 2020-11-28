@@ -2580,8 +2580,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
 				try {
-					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
+					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(cost))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
+					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 				} catch (EconomyException e) {
 					// This can literally never happen. But if it does, print to console, and send message to player.
 					e.printStackTrace();
