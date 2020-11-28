@@ -803,6 +803,22 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setNation(nation);
 				}
 					
+				line = keys.get("ruined");
+				if (line != null)
+					try {
+						town.setRuined(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+						town.setRuined(false);
+					}
+				
+				line = keys.get("ruinDurationRemainingHours");
+				if (line != null) {
+					try {
+						town.setRuinDurationRemainingHours(Integer.parseInt(line));
+					} catch (Exception e) {
+						town.setRuinDurationRemainingHours(0);
+					}
+				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1672,6 +1688,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		list.add("metadata=" + serializeMetadata(town));
 		
+		list.add("ruined=" + town.isRuined());
+		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
+
 		/*
 		 *  Make sure we only save in async
 		 */

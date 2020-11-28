@@ -61,10 +61,14 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
+	private boolean ruined;
+	private int ruinDurationRemainingHours;
 
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
+		ruined = false;
+		ruinDurationRemainingHours = 0;
 		
 		// Set defaults.
 		setTaxes(TownySettings.getTownDefaultTax());
@@ -1317,6 +1321,30 @@ public class Town extends Government implements TownBlockOwner {
 		return false;
 	}
 
+
+	public boolean isRuined() {
+		if(!ruined && residents.size() == 0) {
+			ruined = true;  //If all residents have been deleted, flag town as ruined.
+		}
+		return ruined;
+	}
+	
+	public void setRuined(boolean b) {
+		ruined = b;
+	}
+
+	public int getRuinDurationRemainingHours() {
+		return ruinDurationRemainingHours;
+	}
+
+	public void decrementRemainingRuinTimeHours() {
+		ruinDurationRemainingHours--;
+	}
+
+	public void setRuinDurationRemainingHours(int i) {
+		ruinDurationRemainingHours = i;
+	}
+	
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 

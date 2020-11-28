@@ -1615,6 +1615,11 @@ public enum ConfigNodes {
 			"250.0",
 			"",
 			"# How much it costs to start a town."),
+	ECO_PRICE_RECLAIM_RUINED_TOWN(
+			"economy.new_expand.price_reclaim_ruined_town",
+			"200.0",
+			"# How much it costs to reclaim a ruined town.",
+			"# This is only applicable if the town-ruins & town-reclaim features are enabled."),
 	ECO_PRICE_OUTPOST(
 			"economy.new_expand.price_outpost",
 			"500.0",
@@ -2319,8 +2324,48 @@ public enum ConfigNodes {
 			"",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true.");
+			"# Only under affect when explosions_break_blocks is true."),
 
+	WAR_COMMON("war.common", "", "", "",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                 Common War settings                  | #",
+			"# |                                                      | #",
+			"# |  These configs are common to multiple war systems.   | #",
+			"# |                                                      | #",
+			"# |  Note: The town ruins settings are here,             | #",
+			"# |  because town ruin is critical to many war systems   | #",
+			"# |  												      | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################", ""),
+
+	// Town Ruins
+	WAR_COMMON_TOWN_RUINS_ENABLED(
+			"war.common.town_ruins.enabled", 
+			"true",
+			"",
+			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
+			"# In this state, the town cannot be claimed, but can be looted.",
+			"# The feature prevents mayors from escaping attack/occupation, ",
+			"# by deleting then quickly recreating their town."),
+	WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS(
+			"war.common.town_ruins.max_duration_hours", 
+			"72",
+			"",
+			"# This value determines the maximum duration in which a town can lie in ruins",
+			"# After this time is reached, the town will be completely deleted."),
+	WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS(
+			"war.common.town_ruins.min_duration_hours", 
+			"24",
+			"",
+			"# This value determines the minimum duration in which a town must lie in ruins,",
+			"# before it can be reclaimed by a resident."),
+	WAR_COMMON_TOWN_RUINS_RECLAIM_ENABLED(
+			"war.common.town_ruins.reclaim_enabled", 
+			"true",
+			"",
+			"# If this is true, then after a town has been ruined for the minimum configured time,",
+			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)");
 
 	private final String Root;
 	private final String Default;

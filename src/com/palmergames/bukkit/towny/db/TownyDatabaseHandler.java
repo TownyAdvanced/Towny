@@ -34,6 +34,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -676,6 +678,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town) {
 		
+		boolean delayFullRemoval = TownRuinSettings.getWarCommonTownRuinsEnabled();
+		removeTown(town, delayFullRemoval);
+	}
+
+	@Override
+	public void removeTown(Town town, boolean delayFullRemoval) {
+		if (delayFullRemoval) {
+			TownRuinUtil.putTownIntoRuinedState(town, plugin);
+			return;
+		}
+
 		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
 		BukkitTools.getPluginManager().callEvent(preEvent);
 		

@@ -92,6 +92,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"backup",
 		"checkperm",
 		"newday",
+		"newhour",
 		"unclaim",
 		"purge",
 		"mysqldump",
@@ -530,6 +531,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("newday")) {
 
 				TownyTimerHandler.newDay();
+
+			} else if (split[0].equalsIgnoreCase("newhour")) {
+
+				TownyTimerHandler.newHour();
+				TownyMessaging.sendMsg(getSender(), Translation.of("msg_newhour_success"));
 
 			} else if (split[0].equalsIgnoreCase("purge")) {
 

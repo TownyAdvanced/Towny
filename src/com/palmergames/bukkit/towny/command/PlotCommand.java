@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -235,6 +236,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			try {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+				}
+
 				if (split[0].equalsIgnoreCase("claim")) {
 
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))

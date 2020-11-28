@@ -1076,6 +1076,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 
+			town.setRuined(rs.getBoolean("ruined"));
+			town.setRuinDurationRemainingHours(rs.getInt("ruinDurationRemainingHours"));
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -1881,6 +1884,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 			twn_hm.put("registered", town.getRegistered());
 
+			twn_hm.put("ruined", town.isRuined());
+			twn_hm.put("ruinDurationRemainingHours", Long.toString(town.getRuinDurationRemainingHours()));
+			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 

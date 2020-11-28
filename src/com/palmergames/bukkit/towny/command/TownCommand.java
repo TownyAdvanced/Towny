@@ -62,6 +62,8 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -116,6 +118,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"outpost",
 		"ranklist",
 		"rank",
+		"reclaim",
 		"reslist",
 		"say",
 		"set",
@@ -463,6 +466,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					newTown(player, townName, player.getName(), noCharge);
 				}
 
+			} else if (split[0].equalsIgnoreCase("reclaim")) {
+
+				if(TownRuinSettings.getWarCommonTownRuinsReclaimEnabled()) {
+					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
+				} else {
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				}
+
 			} else if (split[0].equalsIgnoreCase("leave")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LEAVE.getNode()))
@@ -474,6 +485,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
+
+				// TODO: use transaction event.
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -510,6 +526,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_must_specify_amnt", "/town withdraw"));
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
+
+				// TODO: use transaction event.
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+				}
 
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
@@ -551,6 +572,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_must_specify_amnt", "/town deposit"));
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+				}
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTS.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
@@ -573,6 +598,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townPlots(player, town);
 
 			} else {
+				if (TownRuinUtil.isPlayersTownRuined(player)) {
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+				}
+
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
 				if (split[0].equalsIgnoreCase("rank")) {
@@ -2751,6 +2780,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+
+				if(TownRuinSettings.getWarCommonTownRuinsEnabled()) {
+					int durationHours = TownRuinSettings.getWarCommonTownRuinsMaxDurationHours();
+					TownyMessaging.sendErrorMsg(player, String.format(
+						Translation.of("msg_warning_town_ruined_if_deleted"),
+						durationHours));
+				}
+
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {
 					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
