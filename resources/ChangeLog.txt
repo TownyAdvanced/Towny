@@ -5359,3 +5359,17 @@ v0.92.0.11:
   - Undo making TownyPermissionSource.has() private. TownyChat uses it.
   - Remove the TownyWeatherListener, courtesy of TheFlagCourier with PR #4482.
   - Addition of strictHas(), courtesy of docwhomc with PR #4477.
+  - New Config Option: plugin.hour_timer.hour_interval
+  	- Default 60m
+    - The number of minutes in each "hour".
+    - Default is 60m.
+  - New Config Option: plugin.hour_timer.new_hour_time
+    - Default: 30m
+    - The time each "hour", when the hourly timer ticks.
+    - MUST be less than hour_interval. Default is 30m.
+  - New Config Option: plugin.hour_timer.short_interval
+    - Default: 20s
+    - The interval of each "short" timer tick.
+    - Default is 20s.
+  - TownySettings#calcTownLevelId(Town town)
+    - Method used to determine which town_level a town is, based on the numeric order of the town_levels.
