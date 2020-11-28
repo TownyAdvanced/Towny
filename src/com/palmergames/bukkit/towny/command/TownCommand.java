@@ -69,6 +69,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -476,7 +477,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
-				if(SiegeWarSettings.getWarCommonTownRuinsReclaimEnabled()) {
+				if(TownRuinSettings.getWarCommonTownRuinsReclaimEnabled()) {
 					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
 				} else {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -2863,8 +2864,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if(SiegeWarSettings.getWarCommonTownRuinsEnabled()) {
-					int durationHours =SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours();
+				if(TownRuinSettings.getWarCommonTownRuinsEnabled()) {
+					int durationHours = TownRuinSettings.getWarCommonTownRuinsMaxDurationHours();
 					TownyMessaging.sendErrorMsg(player, String.format(
 						Translation.of("msg_warning_town_ruined_if_deleted"),
 						durationHours));

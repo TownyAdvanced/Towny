@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTaskController;
@@ -20,7 +21,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		if (SiegeWarSettings.getWarCommonTownRuinsEnabled()) {
+		if (TownRuinSettings.getWarCommonTownRuinsEnabled()) {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
 

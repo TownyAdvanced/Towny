@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import org.bukkit.entity.Player;
 
@@ -87,7 +86,7 @@ public class TownRuinUtil {
 			townyUniverse.getDataSource().removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
 		town.setRuined(true);
-		town.setRuinDurationRemainingHours(SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours());
+		town.setRuinDurationRemainingHours(TownRuinSettings.getWarCommonTownRuinsMaxDurationHours());
 		town.setPublic(false);
 		town.setOpen(false);
 
@@ -149,14 +148,14 @@ public class TownRuinUtil {
 				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
-			double townReclaimCost = SiegeWarSettings.getEcoPriceReclaimTown();
+			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
 			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(Translation.of("msg_err_no_money"));
 
 			//Validate if player can remove at this time
-			int currentRuinDurationHours = SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
-			if (currentRuinDurationHours < SiegeWarSettings.getWarCommonTownRuinsMinDurationHours()) {
-				int timeUntilReclaimAllowedHours =  SiegeWarSettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
+			int currentRuinDurationHours = TownRuinSettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
+			if (currentRuinDurationHours < TownRuinSettings.getWarCommonTownRuinsMinDurationHours()) {
+				int timeUntilReclaimAllowedHours =  TownRuinSettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
 				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", timeUntilReclaimAllowedHours));
 			}
 
