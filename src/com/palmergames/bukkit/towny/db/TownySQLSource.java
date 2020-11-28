@@ -80,15 +80,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		String hostname = TownySettings.getSQLHostName();
-		String port = TownySettings.getSQLPort();
-		String flags = TownySettings.getSQLFlags();
 		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
-
-		this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + flags);
 		
+		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + db_name + TownySettings.getSQLFlags());
 		this.config = new HikariConfig();
+		
 		config.setPoolName("Towny MySQL");
 		config.setJdbcUrl(this.dsn);
 
