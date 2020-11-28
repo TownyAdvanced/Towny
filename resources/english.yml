@@ -1197,3 +1197,6 @@ townblock_plu: 'TownBlocks'
 
 msg_revoked_invite: '&bYou revoked %s''s invite.'
 msg_revoked_ally: '&bYou revoked %s''s ally request.'
+msg_received_bonus_townblocks: 'You have been given %s bonus townblocks.'
+msg_status_npc: '&cThis resident is not an real player and is limited to Towny only.'
+msg_status_npc_created: '&2Created at: &a%s'

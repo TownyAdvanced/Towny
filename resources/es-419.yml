@@ -1193,3 +1193,6 @@ townblock_plu: 'Terrenos de Ciudades'
 
 msg_revoked_invite: '&bAnulaste la invitación de %s.'
 msg_revoked_ally: '&bAnulaste la solicitud de alianza con %s.'
+msg_received_bonus_townblocks: '&bRecibiste %s terrenos bonus.'
+msg_status_npc: '&cEste residente no es un jugador real y está limitado solo a Towny.'
+msg_status_npc_created: '&2Creado el: &a%s'
