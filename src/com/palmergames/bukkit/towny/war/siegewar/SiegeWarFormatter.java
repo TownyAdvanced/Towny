@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -19,7 +18,7 @@ public class SiegeWarFormatter {
         List<String> out = new ArrayList<>();
 
         //Revolt Immunity Timer: 71.8 hours
-        if (TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
+        if (SiegeWarSettings.getWarSiegeRevoltEnabled() && town.isRevoltImmunityActive()) {
             out.add(String.format(Translation.of("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
         }
 
@@ -92,7 +91,7 @@ public class SiegeWarFormatter {
                     break;
             }
         } else {
-            if (TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
+            if (SiegeWarSettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
                 //Siege:
                 // > Immunity Timer: 40.8 hours
                 out.add(String.format(Translation.of("status_town_siege_status"), ""));

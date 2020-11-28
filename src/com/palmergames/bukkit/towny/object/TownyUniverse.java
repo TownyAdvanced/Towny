@@ -160,12 +160,20 @@ public class TownyUniverse {
 	public static void jailTeleport(final Player player, final Location location) {
 		TownyAPI.getInstance().jailTeleport(player, location);
 	}
-	
+
+	/**
+	 * @deprecated Use {@link TownyWorld#addWarZone(Coord)} instead.
+	 * @param worldCoord Coordinates of WarZone
+	 */
 	@Deprecated
 	public void addWarZone(WorldCoord worldCoord) {
 		com.palmergames.bukkit.towny.TownyUniverse.getInstance().addWarZone(worldCoord);
 	}
 
+	/**
+	 * @deprecated Use {@link TownyWorld#removeWarZone(Coord)} instead
+	 * @param worldCoord Cordinates of WarZone
+	 */
 	@Deprecated
 	public void removeWarZone(WorldCoord worldCoord) {
 		com.palmergames.bukkit.towny.TownyUniverse.getInstance().removeWarZone(worldCoord);

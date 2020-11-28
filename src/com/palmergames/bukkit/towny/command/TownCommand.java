@@ -63,6 +63,7 @@ import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
@@ -475,7 +476,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
-				if(TownySettings.getWarCommonTownRuinsReclaimEnabled()) {
+				if(SiegeWarSettings.getWarCommonTownRuinsReclaimEnabled()) {
 					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
 				} else {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -1554,8 +1555,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (split[0].equalsIgnoreCase("open")) {
 
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+				if(SiegeWarSettings.getWarSiegeEnabled()
+					&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 					&& town.hasSiege()
 					&& town.getSiege().getStatus().isActive())
 				{
@@ -1655,7 +1656,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("peaceful")) {
 				
-				if(!TownySettings.getWarCommonPeacefulTownsEnabled())
+				if(!SiegeWarSettings.getWarCommonPeacefulTownsEnabled())
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
@@ -1673,9 +1674,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						
 						int counterValue;
 						if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
-							counterValue = TownySettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
+							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
 						} else {
-							counterValue = TownySettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
 						}
 						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
 						
@@ -1743,8 +1744,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (town.getHomeblockWorld().isForceExpl())
 				throw new TownyException(Translation.of("msg_world_expl"));
 			
-			if(TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+			if(SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
 				&& town.hasSiege()
 				&& town.getSiege().getStatus().isActive())  {
 				throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_toggle_explosions"));
@@ -1755,8 +1756,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (town.getHomeblockWorld().isForcePVP())
 				throw new TownyException(Translation.of("msg_world_pvp"));
 
-			if(TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+			if(SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 				&& town.hasSiege()
 				&& town.getSiege().getStatus().isActive())  {
 				throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_toggle_pvp"));
@@ -2688,9 +2689,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 
-		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS));
-		town.setPeaceful(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
-		town.setDesiredPeacefulnessValue(TownySettings.getWarCommonNewTownPeacefulnessEnabled());
+		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS));
+		town.setPeaceful(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
+		town.setDesiredPeacefulnessValue(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
 		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
@@ -2862,8 +2863,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if(TownySettings.getWarCommonTownRuinsEnabled()) {
-					int durationHours =TownySettings.getWarCommonTownRuinsMaxDurationHours();
+				if(SiegeWarSettings.getWarCommonTownRuinsEnabled()) {
+					int durationHours =SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours();
 					TownyMessaging.sendErrorMsg(player, String.format(
 						Translation.of("msg_warning_town_ruined_if_deleted"),
 						durationHours));
@@ -2973,9 +2974,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				invited.remove(newMember);
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
-			if (town.hasOutlaw(newMember)) {
-				town.removeOutlaw(newMember);
-			}
 		}
 
 		if (invited.size() > 0) {
@@ -2994,6 +2992,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {
+		// If player is outlawed in target town, remove them from outlaw list.
+		if (town.hasOutlaw(resident))
+			town.removeOutlaw(resident);
 
 		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
@@ -3268,8 +3269,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		//If town is under siege, town cannot recruit new members
 		if(sender instanceof Player
 			&& !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin((Player)sender)
-			&& TownySettings.getWarSiegeEnabled()
-			&& TownySettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+			&& SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
 			&& town.hasSiege()
 			&& town.getSiege().getStatus().isActive())
 		{
@@ -3515,7 +3516,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
-				if(TownySettings.getWarSiegeEnabled())
+				if(SiegeWarSettings.getWarSiegeEnabled())
 					SiegeWarClaimUtil.verifySiegeEffectsOnClaiming(player, town);
 
 				if (town.isBankrupt())
@@ -3565,13 +3566,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// Select the area, can be one or many.
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					
-					// Initial has returned 0, because they cannot claim any more.
-					if (selection.size() == 0)
-						throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
-					
 					if ((selection.size() > 1) && (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 				}
+
+				// Not enough available claims.
+				if (selection.size() > TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size())
+					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 				
 				/*
 				 * Filter out any unallowed claims.
@@ -3680,11 +3681,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 					throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 				
-				if (TownySettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
+				if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
 					throw new TownyException(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
 
-				if(TownySettings.getWarSiegeEnabled()
-					&& TownySettings.getWarSiegeBesiegedTownUnClaimingDisabled()
+				if(SiegeWarSettings.getWarSiegeEnabled()
+					&& SiegeWarSettings.getWarSiegeBesiegedTownUnClaimingDisabled()
 					&& town.hasSiege()
 					&& (
 						town.getSiege().getStatus().isActive()

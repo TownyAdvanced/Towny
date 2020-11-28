@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
@@ -77,7 +78,7 @@ public class SiegeWarMoneyUtil {
 	 * @return the multiplier
 	 */
 	public static double getMoneyMultiplier(Town town) {
-		double extraMoneyPercentage = TownySettings.getWarSiegeExtraMoneyPercentagePerTownLevel();
+		double extraMoneyPercentage = SiegeWarSettings.getWarSiegeExtraMoneyPercentagePerTownLevel();
 
 		if(extraMoneyPercentage == 0) {
 			return 1;
@@ -92,7 +93,7 @@ public class SiegeWarMoneyUtil {
 	 * @param player
 	 */
 	public static void claimNationRefund(Player player) throws Exception {
-		if(!(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeRefundInitialNationCostOnDelete())) {
+		if(!(SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarSiegeRefundInitialNationCostOnDelete())) {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 		}
 
@@ -112,13 +113,13 @@ public class SiegeWarMoneyUtil {
 
 	public static void makeNationRefundAvailable(Resident king) {
 		//Refund some of the initial setup cost to the king
-		if (TownySettings.getWarSiegeEnabled()
+		if (SiegeWarSettings.getWarSiegeEnabled()
 			&& TownySettings.isUsingEconomy()
-			&& TownySettings.getWarSiegeRefundInitialNationCostOnDelete()) {
+			&& SiegeWarSettings.getWarSiegeRefundInitialNationCostOnDelete()) {
 
 			//Make the nation refund available
 			//The player can later do "/n claim refund" to receive the money
-			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * TownySettings.getWarSiegeNationCostRefundPercentageOnDelete());
+			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * SiegeWarSettings.getWarSiegeNationCostRefundPercentageOnDelete());
 			king.addToNationRefundAmount(amountToRefund);
 			TownyUniverse.getInstance().getDataSource().saveResident(king);
 

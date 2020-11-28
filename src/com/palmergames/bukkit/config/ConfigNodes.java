@@ -909,6 +909,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Whether towns with no claimed townblocks should be deleted when the new day is run."),
+
 	PLUGIN_HOUR_INTERVAL(
 			"plugin.hour_timer.hour_interval",
 			"60m",

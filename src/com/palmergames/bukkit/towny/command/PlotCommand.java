@@ -256,6 +256,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					selection = AreaSelectionUtil.filterUnownedBlocks(resident, selection);
 
 					if (selection.size() > 0) {
+						
+						if (selection.size() > TownySettings.getMaxResidentPlots(resident))
+							throw new TownyException(Translation.of("msg_max_plot_own", TownySettings.getMaxResidentPlots(resident)));
 
 						double cost = 0;
 
