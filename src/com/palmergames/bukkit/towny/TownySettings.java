@@ -223,6 +223,30 @@ public class TownySettings {
 		return 0;
 	}
 
+	/**
+	 * This method returns the id of the town level
+	 *
+	 * e.g.
+	 * ruins = 0
+	 * hamlet = 1
+	 * village = 2
+	 *
+	 * @param town
+	 * @return id
+	 */
+	public static int calcTownLevelId(Town town) {
+//		if(town.isRuined())  TODO: Potentially merge in Ruined Towns feature.
+//			return 0;
+
+		int townLevelId = -1;
+		int numResidents = town.getNumResidents();
+		for (Integer level : configTownLevel.keySet()) {
+			if (level <= numResidents)
+				townLevelId ++;
+		}
+		return townLevelId;
+	}
+
 	public static int calcNationLevel(Nation nation) {
 //Creatorfromhell's PR for replacing SortedMap town and nation levels.
 //		Integer level = configNationLevel.floorKey(nation.getNumResidents());
@@ -1506,6 +1530,24 @@ public class TownySettings {
 	
 	public static boolean isNewDayDeleting0PlotTowns() {
 		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS);
+	}
+
+	public static long getHourInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_HOUR_INTERVAL);
+	}
+
+	public static long getShortInterval() {
+		return getSeconds(ConfigNodes.PLUGIN_SHORT_INTERVAL);
+	}
+
+	public static long getNewHourTime() {
+		long time = getSeconds(ConfigNodes.PLUGIN_NEWHOUR_TIME);
+		long hour = getHourInterval();
+		if (time > hour) {
+			setProperty(ConfigNodes.PLUGIN_NEWHOUR_TIME.getRoot(), hour);
+			return hour;
+		}
+		return time;
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {

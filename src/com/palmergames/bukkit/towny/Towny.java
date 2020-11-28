@@ -398,6 +398,8 @@ public class Towny extends JavaPlugin {
 		toggleTimersOff();
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
 		TownyTimerHandler.toggleDailyTimer(true);
+		TownyTimerHandler.toggleHourlyTimer(true);
+		TownyTimerHandler.toggleShortTimer(true);
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
@@ -411,6 +413,8 @@ public class Towny extends JavaPlugin {
 
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleHourlyTimer(false);
+		TownyTimerHandler.toggleShortTimer(false);
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
