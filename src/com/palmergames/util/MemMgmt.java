@@ -5,7 +5,7 @@ public class MemMgmt {
 	public static String getMemoryBar(int size, Runtime run) {
 
 		StringBuilder line = new StringBuilder();
-		double percentUsed = (run.totalMemory() - run.freeMemory()) / run.maxMemory();
+		double percentUsed = (run.totalMemory() - run.freeMemory()) / (double)run.maxMemory();
 		int pivot = (int) Math.floor(size * percentUsed);
 		for (int i = 0; i < pivot - 1; i++)
 			line.append("=");

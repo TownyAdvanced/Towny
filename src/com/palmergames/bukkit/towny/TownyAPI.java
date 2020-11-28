@@ -400,7 +400,7 @@ public class TownyAPI {
      */
     public void jailTeleport(final Player player, final Location location) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN),
-                TownySettings.getTeleportWarmupTime() * 20);
+			(long) TownySettings.getTeleportWarmupTime() * 20);
     }
     
     /**
