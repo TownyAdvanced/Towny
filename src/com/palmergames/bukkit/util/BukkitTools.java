@@ -5,11 +5,9 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 
-import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -212,26 +210,6 @@ public class BukkitTools {
 		for (Player player :  getServer().getOnlinePlayers())
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
-	}
-
-	/*
-	 * Material handling Methods.
-	 */
-	
-	/**
-	 * Find a Material from an Id.
-	 * Helpfully using Phoenix616's useful IdConverter.jar
-	 * https://www.spigotmc.org/resources/id-converter.52099/
-	 * 
-	 * @param id - ID for a material ({@link Integer})
-	 *              
-	 * @return a Material parsed from {@link IdMappings}
-	 * 
-	 * @deprecated You should be using methods using Materials rather than integer-based IDs.
-	 */
-	@Deprecated
-	public static Material getMaterial(int id) {
-		return Material.getMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
 	}
 
 	/**

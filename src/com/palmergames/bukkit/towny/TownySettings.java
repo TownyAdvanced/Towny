@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
@@ -503,41 +502,6 @@ public class TownySettings {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
-			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()) {
-				
-				/*
-				 * Update any Id's to Material names (where required).
-				 */
-				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
-				
-			} else if (root.getRoot() == ConfigNodes.PROT_SWITCH_MAT.getRoot()) {
-				
-				/*
-				 * Update any Id's to Material names (where required).
-				 */
-				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_SWITCH_MAT)));
-				
-			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE.getRoot()) {
-				
-				/*
-				 * Update any Id's to Material names (where required).
-				 */
-				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE)));
-				
-			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE.getRoot()) {
-				
-				/*
-				 * Update any Id's to Material names (where required).
-				 */
-				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE)));
-				
-			} else if (root.getRoot() == ConfigNodes.UNCLAIMED_ZONE_IGNORE.getRoot()) {
-				
-				/*
-				 * Update any Id's to Material names (where required).
-				 */
-				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE)));
-				
 			} else
 				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
 
@@ -545,44 +509,6 @@ public class TownySettings {
 
 		config = newConfig;
 		newConfig = null;
-	}
-	
-	@SuppressWarnings("deprecation")
-	private static String convertIds(List<String> list) {
-		
-		int value;
-		List<String> newValues = new ArrayList<>();
-		
-		for (String id : list) {
-			
-			try {
-				
-				// Try to read a value
-				value = Integer.parseInt(id);
-				newValues.add(BukkitTools.getMaterial(value).name());
-				
-			} catch (NumberFormatException e) {
-				
-				// Is already a string.
-				newValues.add(id);
-				
-			} catch (NullPointerException e) {
-				
-				// Assume modded item.
-				if (!id.startsWith("X")) {
-					
-					// Prepend an X
-					newValues.add("X" + id);
-				} else {
-					
-					// Already has an X
-					newValues.add(id);
-				}
-			}
-			
-		}
-		
-		return StringMgmt.join(newValues, ",");
 	}
 
 	private static void setDefaultLevels() {
