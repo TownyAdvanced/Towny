@@ -5376,3 +5376,5 @@ v0.92.0.11:
   - Add missing @deprecated Javadoc tags and @Deprecated annotations, courtesy of TheFlagCourier with PR #4488.
   - Remove some long-deprecated methods.
   - Prevent admins from Soft-Locking Towny by force-joining outlaws, courtesy of TheFlagCourier with PR #4493.
+  - Fix towns being able to claim past their limits.
+    - Closes #4495.

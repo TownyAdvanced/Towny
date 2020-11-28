@@ -3432,13 +3432,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					// Select the area, can be one or many.
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					
-					// Initial has returned 0, because they cannot claim any more.
-					if (selection.size() == 0)
-						throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
-					
 					if ((selection.size() > 1) && (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 				}
+
+				// Not enough available claims.
+				if (selection.size() > TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size())
+					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 				
 				/*
 				 * Filter out any unallowed claims.
