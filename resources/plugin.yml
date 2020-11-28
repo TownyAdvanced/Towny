@@ -314,6 +314,7 @@ permissions:
             towny.command.town.plots: true
             towny.command.town.rank.*: true
             towny.command.town.ranklist: true
+            towny.command.town.reclaim: true
             towny.command.town.reslist: true
             towny.command.town.say: true
             towny.command.town.set.*: true

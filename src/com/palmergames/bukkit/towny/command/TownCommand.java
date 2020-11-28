@@ -468,11 +468,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
-				if(TownRuinSettings.getWarCommonTownRuinsReclaimEnabled()) {
-					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
-				} else {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RECLAIM.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				}
+				
+				if(!TownRuinSettings.getWarCommonTownRuinsReclaimEnabled())
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
 
 			} else if (split[0].equalsIgnoreCase("leave")) {
 
@@ -488,7 +490,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (TownRuinUtil.isPlayersTownRuined(player))
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
@@ -525,14 +527,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
-				// TODO: use transaction event.
-				if (TownRuinUtil.isPlayersTownRuined(player)) {
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				}
-
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
-				
+
+				if (TownRuinUtil.isPlayersTownRuined(player)) 
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
@@ -2777,11 +2777,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if (TownRuinSettings.getWarCommonTownRuinsEnabled()) {
-					int durationHours = TownRuinSettings.getWarCommonTownRuinsMaxDurationHours();
-					TownyMessaging.sendErrorMsg(player,
-							String.format(Translation.of("msg_warning_town_ruined_if_deleted"), durationHours));
-				}
+				if (TownRuinSettings.getWarCommonTownRuinsEnabled())
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted", TownRuinSettings.getWarCommonTownRuinsMaxDurationHours()));
 
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {

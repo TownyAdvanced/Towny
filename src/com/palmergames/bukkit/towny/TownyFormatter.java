@@ -385,18 +385,13 @@ public class TownyFormatter {
 				if (town.isBankrupt()) {
 					if (town.getAccount().getDebtCap() == 0)
 						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-					bankString += " " + Translation.of("status_debtcap",
-							"-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
+					bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
 				}
 				if (town.hasUpkeep())
-					bankString += Translation.of("status_bank_town2",
-							BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP)
-									.doubleValue());
+					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-					bankString += Translation.of("status_bank_town_penalty_upkeep",
-							TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += Translation.of("status_bank_town3", town.getTaxes())
-						+ (town.isTaxPercentage() ? "%" : "");
+					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
+				bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 
 				out.add(bankString);
 			}
@@ -412,8 +407,7 @@ public class TownyFormatter {
 
 			// Nation: Azur Empire
 			try {
-				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName())
-						+ (town.isConquered() ? Translation.of("msg_conquered") : ""));
+				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : ""));
 			} catch (TownyException ignored) {
 			}
 
