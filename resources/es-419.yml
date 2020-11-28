@@ -644,7 +644,7 @@ nation_deleted_by_admin: '&bLa nación de %s fue eliminada correctamente.'
 are_you_sure_you_want_to_continue: '¿Estás seguro de que quieres continuar?'
 you_have_been_invited_to_join: 'Has sido invitado a '
 you_have_been_requested_to_ally: 'Recibiste una solicitud de alianza de '
-this_message_will_expire: 'Esto expirará automáticamente en 20 segundos.'
+this_message_will_expire: 'Este mensaje expirará automáticamente en 20 segundos.'
 player_sing: 'Jugador'
 nation_zone_this_area_under_protection_of: 'Esta área del %s está protegida por %s'
 
