@@ -69,4 +69,8 @@ public class TimeTools {
 
 		return t * 20;
 	}
+	
+	public static int getHours(long milliSeconds) {
+		return (int) ((milliSeconds /1000) / 60) /60;
+	}
 }

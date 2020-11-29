@@ -92,6 +92,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"backup",
 		"checkperm",
 		"newday",
+		"newhour",
 		"unclaim",
 		"purge",
 		"mysqldump",
@@ -531,6 +532,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				TownyTimerHandler.newDay();
 
+			} else if (split[0].equalsIgnoreCase("newhour")) {
+
+				TownyTimerHandler.newHour();
+				TownyMessaging.sendMsg(getSender(), Translation.of("msg_newhour_success"));
+
 			} else if (split[0].equalsIgnoreCase("purge")) {
 
 				purge(StringMgmt.remFirstArg(split));
@@ -935,11 +941,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {
 					TownyMessaging.sendMessage(sender, Translation.of("town_deleted_by_admin", town.getName()));
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town", town.getName()));
 					townyUniverse.getDataSource().removeTown(town);
 				} else { //isConsole
 					Confirmation.runOnAccept(() -> {
-						TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 						TownyUniverse.getInstance().getDataSource().removeTown(town);
 					})
 						.sendTo(sender);

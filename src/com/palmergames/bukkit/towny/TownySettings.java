@@ -215,6 +215,8 @@ public class TownySettings {
 //
 //		if (level != null) return level;
 //		return 0;
+		if(town.isRuined())
+			return 0;
 		int n = town.getNumResidents();
 		for (Integer level : configTownLevel.keySet())
 			if (n >= level)
@@ -234,8 +236,8 @@ public class TownySettings {
 	 * @return id
 	 */
 	public static int calcTownLevelId(Town town) {
-//		if(town.isRuined())  TODO: Potentially merge in Ruined Towns feature.
-//			return 0;
+		if(town.isRuined())
+			return 0;
 
 		int townLevelId = -1;
 		int numResidents = town.getNumResidents();
@@ -2812,7 +2814,7 @@ public class TownySettings {
 		Map<String,String> nationColorsMap = new HashMap<>();
 		String[] keyValuePair;
 		for(String nationColor: nationColorsList) {
-			keyValuePair = nationColor.split(":");
+			keyValuePair = nationColor.trim().split(":");
 			nationColorsMap.put(keyValuePair[0], keyValuePair[1]);
 		}
 		return nationColorsMap;
