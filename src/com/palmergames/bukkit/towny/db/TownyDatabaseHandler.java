@@ -678,13 +678,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town) {
 		
-		boolean delayFullRemoval = TownRuinSettings.getWarCommonTownRuinsEnabled();
-		removeTown(town, delayFullRemoval);
+		/*
+		 * If Town Ruining is enabled set the town into a ruined state
+		 * rather than deleting.
+		 */
+		removeTown(town, TownRuinSettings.getWarCommonTownRuinsEnabled());
 	}
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
+		
 		if (delayFullRemoval) {
+			/*
+			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
+			 */
 			TownRuinUtil.putTownIntoRuinedState(town, plugin);
 			return;
 		}

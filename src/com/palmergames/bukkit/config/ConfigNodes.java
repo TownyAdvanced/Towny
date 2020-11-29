@@ -2353,7 +2353,8 @@ public enum ConfigNodes {
 			"72",
 			"",
 			"# This value determines the maximum duration in which a town can lie in ruins",
-			"# After this time is reached, the town will be completely deleted."),
+			"# After this time is reached, the town will be completely deleted.",
+			"# Does not accept values greater than 1000."),
 	WAR_COMMON_TOWN_RUINS_MIN_DURATION_HOURS(
 			"war.common.town_ruins.min_duration_hours", 
 			"24",

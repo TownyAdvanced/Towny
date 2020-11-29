@@ -10,7 +10,7 @@ public class TownRuinSettings {
 	}
 
 	public static int getWarCommonTownRuinsMaxDurationHours() {
-		return TownySettings.getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS);
+		return Math.min(TownySettings.getInt(ConfigNodes.WAR_COMMON_TOWN_RUINS_MAX_DURATION_HOURS), 1000);
 	}
 
 	public static int getWarCommonTownRuinsMinDurationHours() {
