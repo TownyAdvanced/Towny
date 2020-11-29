@@ -126,7 +126,6 @@ public class TownyFormatter {
 					Translation.of("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
 					Translation.of("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
 					Translation.of("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off")));
-			
 			if (townBlock.hasPlotObjectGroup())
 				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			out.addAll(getExtraFields(townBlock));
@@ -150,51 +149,9 @@ public class TownyFormatter {
 
 		// ___[ King Harlus ]___
 		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? Translation.of("online2") : "")));
+		if (resident.isNPC()) out.add(Translation.of("msg_status_npc_created", registeredFormat.format(resident.getRegistered())));
 		
-		// Format status screens in a different way betweeen NPC's and real players
-		if (resident.isNPC()) {
-			
-			// Add the creation date of the NPC
-			out.add(Translation.of("msg_status_npc_created", registeredFormat.format(resident.getRegistered())));
-			
-			// Bank: 534 coins
-			if (TownySettings.isUsingEconomy())
-				if (TownyEconomyHandler.isActive())
-					out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
-
-			// Town: Camelot
-			String line = Translation.of("status_town");
-			if (!resident.hasTown())
-				line += Translation.of("status_no_town");
-			else
-				try {
-					line += resident.getTown().getFormattedName();
-				} catch (TownyException e) {
-					line += "Error: " + e.getMessage();
-				}
-			out.add(line);
-				
-			//Nation ranks
-			if (resident.hasNation()) {
-				if (!resident.getNationRanks().isEmpty())
-					out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
-			}
-			
-			// Town ranks
-			if (resident.hasTown()) {
-				if (!resident.getTownRanks().isEmpty())
-					out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
-			}
-			
-			// Somehow NPCs can have friends, so yeah, let's add them to their status screen as well
-			List<Resident> friends = resident.getFriends();
-			out.addAll(getFormattedResidents(Translation.of("status_friends"), friends));
-			
-			// NPC Resident message
-			out.add(Translation.of("msg_status_npc"));
-			
-		} else {
-
+		if (!resident.isNPC()) {
 			// First used if last online is this year, 2nd used if last online is early than this year.
 			// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 			// Registered: Sept 3 2009 | Last Online: March 7 2009
@@ -207,81 +164,83 @@ public class TownyFormatter {
 				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
 			else
 				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
-
+		}
+		// Bank: 534 coins
+		if (TownySettings.isUsingEconomy())
+			if (TownyEconomyHandler.isActive())
+				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
+			
+		// Town 
+		String townLine = Translation.of("status_town");
+		if (!resident.hasTown())
+			townLine += Translation.of("status_no_town");
+		else
+			try {
+				townLine += resident.getTown().getFormattedName();
+			} catch (TownyException e) {
+				townLine += "Error: " + e.getMessage();
+			}
+			out.add(townLine);
+			
+			
+		if (!resident.isNPC()) {
 			// Owner of: 4 plots
 			// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 			// if (resident.getTownBlocks().size() > 0) {
-			out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
-			out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
-			out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
-			out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on") : Translation.of("status_off")) +
-				Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on") : Translation.of("status_off")) +
-				Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on") : Translation.of("status_off")) +
+			    out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
+			    out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
+			    out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
+			    out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on") : Translation.of("status_off")) + Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on") : Translation.of("status_off")) + 
+					Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on") : Translation.of("status_off")) +
 				Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on") : Translation.of("status_off")));
 			// }
+		}
+		
+		// Embassies in: Camelot, London, Tokyo
+		List<Town> townEmbassies = new ArrayList<>();
+		try {
 
-			// Bank: 534 coins
-			if (TownySettings.isUsingEconomy())
-				if (TownyEconomyHandler.isActive())
-					out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
+					String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
 
-			// Town: Camelot
-			String line = Translation.of("status_town");
-			if (!resident.hasTown())
-				line += Translation.of("status_no_town");
-			else
-				try {
-					line += resident.getTown().getFormattedName();
-				} catch (TownyException e) {
-					line += "Error: " + e.getMessage();
-				}
-			out.add(line);
+					for (TownBlock tB : resident.getTownBlocks()) {
+						if (!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
 
-			// Embassies in: Camelot, London, Tokyo
-			List<Town> townEmbassies = new ArrayList<>();
-			try {
+							townEmbassies.add(tB.getTown());
 
-				String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
-
-				for (TownBlock tB : resident.getTownBlocks()) {
-					if (!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
-
-						townEmbassies.add(tB.getTown());
+						}
 
 					}
-
-				}
-			} catch (NotRegisteredException ignored) {
-			}
-
-			if (townEmbassies.size() > 0) {
-				out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
-			}
-
-			// Town ranks
-			if (resident.hasTown()) {
-				if (!resident.getTownRanks().isEmpty())
-					out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
-			}
-
-			//Nation ranks
-			if (resident.hasNation()) {
-				if (!resident.getNationRanks().isEmpty())
-					out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
-			}
-
-			// Jailed: yes if they are jailed.
-			if (resident.isJailed()) {
-				out.add(Translation.of("jailed_in_town", resident.getJailTown()) + (resident.hasJailDays() ? Translation.of("msg_jailed_for_x_days", resident.getJailDays()) : ""));
-			}
-
-			// Friends [12]: James, Carry, Mason
-			List<Resident> friends = resident.getFriends();
-			out.addAll(getFormattedResidents(Translation.of("status_friends"), friends));
-
-			out.addAll(getExtraFields(resident));
-
+				} catch (NotRegisteredException ignored) {
 		}
+
+		if (townEmbassies.size() > 0) {
+			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
+		}
+
+		// Town ranks
+		if (resident.hasTown()) {
+			if (!resident.getTownRanks().isEmpty())
+				out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
+		}
+
+		//Nation ranks
+		if (resident.hasNation()) {
+			if (!resident.getNationRanks().isEmpty())
+				out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
+		}
+
+		// Somehow NPCs can have friends, so yeah, let's add them to their status screen as well
+		List<Resident> friends = resident.getFriends();
+		out.addAll(getFormattedResidents(Translation.of("status_friends"), friends));
+
+		// Jailed: yes if they are jailed.
+		if (resident.isJailed()) {
+			out.add(Translation.of("jailed_in_town", resident.getJailTown()) + (resident.hasJailDays() ? Translation.of("msg_jailed_for_x_days", resident.getJailDays()) : ""));
+		}
+		
+		if (resident.isNPC()) out.add(Translation.of("msg_status_npc"));
+		
+		out.addAll(getExtraFields(resident));
 		out = formatStatusScreens(out);
 		return out;
 	}

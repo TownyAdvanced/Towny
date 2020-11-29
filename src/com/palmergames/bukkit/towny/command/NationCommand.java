@@ -1483,7 +1483,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						try {
 							InviteHandler.declineInvite(invite, true);
 							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_invite", town));
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_invite_successful", sender.getName(), town));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_invite_successful_2", sender.getName(), town));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1931,7 +1931,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						try {
 							InviteHandler.declineInvite(invite, true);
 							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_ally", invited));
-							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_ally_successful", sender.getName(), invited));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("nation_revoke_ally_successful_2", sender.getName(), invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
