@@ -378,10 +378,12 @@ public class TownyFormatter {
 
 		if (town.isRuined()) {
 			out.add(Translation.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
-			if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
-				out.add(Translation.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
-			else 
-				out.add(Translation.of("msg_reclaim_available"));
+			if (TownRuinSettings.getTownRuinsReclaimEnabled()) {
+				if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
+					out.add(Translation.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+				else 
+					out.add(Translation.of("msg_reclaim_available"));
+			}
 			// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
