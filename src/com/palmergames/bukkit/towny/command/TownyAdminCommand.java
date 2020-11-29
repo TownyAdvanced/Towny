@@ -789,7 +789,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = townyUniverse.getDataSource().getResident(split[0]);
 
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
+				TownyMessaging.sendMessage(getSender().getServer().getPlayer(getSender().getName()), TownyFormatter.getStatus(resident, player));
 				return;
 			}
 						
