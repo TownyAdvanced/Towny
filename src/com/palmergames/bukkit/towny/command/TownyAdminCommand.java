@@ -789,7 +789,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = townyUniverse.getDataSource().getResident(split[0]);
 
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender().getServer().getPlayer(getSender().getName()), TownyFormatter.getStatus(resident, player));
+				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
 				return;
 			}
 						
@@ -904,7 +904,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender().getServer().getPlayer(getSender().getName()), TownyFormatter.getStatus(town));
+				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(town));
 				return;
 			}
 
@@ -1226,7 +1226,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			Nation nation = townyUniverse.getDataSource().getNation(split[0]);
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender().getServer().getPlayer(getSender().getName()), TownyFormatter.getStatus(nation));
+				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(nation));
 				return;
 			}
 

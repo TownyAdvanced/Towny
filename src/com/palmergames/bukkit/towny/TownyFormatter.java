@@ -151,8 +151,8 @@ public class TownyFormatter {
 
 		// ___[ King Harlus ]___
 		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? Translation.of("online2") : "")));
-		if (resident.isNPC()) out.add(Translation.of("msg_status_npc_created", registeredFormat.format(resident.getRegistered())));
 		
+		if (resident.isNPC()) out.add(Translation.of("msg_status_npc_created", registeredFormat.format(resident.getRegistered())));
 		if (!resident.isNPC()) {
 			// First used if last online is this year, 2nd used if last online is early than this year.
 			// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
@@ -171,20 +171,19 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
 				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
-			
 		// Town 
 		String townLine = Translation.of("status_town");
 		if (!resident.hasTown())
 			townLine += Translation.of("status_no_town");
-		else
+		else {
 			try {
 				townLine += resident.getTown().getFormattedName();
 			} catch (TownyException e) {
 				townLine += "Error: " + e.getMessage();
 			}
 			out.add(townLine);
-			
-			
+		}
+		
 		if (!resident.isNPC()) {
 			// Owner of: 4 plots
 			// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
@@ -201,16 +200,11 @@ public class TownyFormatter {
 		// Embassies in: Camelot, London, Tokyo
 		List<Town> townEmbassies = new ArrayList<>();
 		try {
-
 					String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
-
 					for (TownBlock tB : resident.getTownBlocks()) {
 						if (!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
-
 							townEmbassies.add(tB.getTown());
-
 						}
-
 					}
 				} catch (NotRegisteredException ignored) {
 		}
@@ -218,13 +212,11 @@ public class TownyFormatter {
 		if (townEmbassies.size() > 0) {
 			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
 		}
-
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
 				out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
 		}
-
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
