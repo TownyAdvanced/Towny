@@ -2945,7 +2945,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						try {
 							InviteHandler.declineInvite(invite, true);
 							TownyMessaging.sendMsg(sender, Translation.of("msg_revoked_invite", invited));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("town_revoke_invite_successful", sender.getName(), invited));
+							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("town_revoke_invite_successful_2", sender.getName(), invited));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();

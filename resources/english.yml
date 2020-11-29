@@ -629,13 +629,13 @@ msg_err_nation_sent_too_many_requests: '&bNation has sent too many requests, rev
 msg_err_nation_has_too_many_requests: '&bNation %s has too many requests, ask them to decline some, before requesting again.'
 player_received_invites: '&bYou have received %a/%m invites.'
 town_revoke_invite: '&bTown %s, revoked your invite to join them.'
-town_revoke_invite_successful: '&b%s has revoked %s''s invite to join the town.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town.'
 town_received_invites: '&bTown has received %a/%m invites.'
 town_sent_invites: '&bTown has sent %a/%m invites.'
 nation_revoke_invite: '&bNation %s, revoked your invite to join them.'
-nation_revoke_invite_successful: '&b%s has revoked %s''s invite to join the nation.'
+nation_revoke_invite_successful: '&bYou have successfully revoked an invite to join your nation.'
 nation_revoke_ally: '&bNation %s, revoked their ally request.'
-nation_revoke_ally_successful: '&b%s revoked %s''s ally request.'
+nation_revoke_ally_successful: '&bYou have successfully revoked an ally request.'
 nation_received_requests: '&bNation has received %a/%m ally requests.'
 nation_sent_invites: '&bNation has sent %a/%m invites.'
 nation_sent_ally_requests: '&bNation has sent %a/%m ally requests.'
@@ -854,8 +854,8 @@ msg_total_townblocks: 'Total TownBlocks: '
 
 # Added in 0.50
 friend_list: 'Friends List'
-                         # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-                         # nationranks lists on the /nation screen; and probably more lists of residents.
+  # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+# nationranks lists on the /nation screen; and probably more lists of residents.
 res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
 res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
 res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
@@ -1211,3 +1211,12 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined 
 msg_time_remaining_before_full_removal: '&cTime remaining before full removal: &d hours.'
 msg_time_until_reclaim_available: '&cTime until reclaim available: &d hours.'
 msg_reclaim_available: '&aReclaim available.'
+
+#Invite upgrade
+town_revoke_invite_successful_2: '&b%s has revoked %s''s invite to join the town.'
+nation_revoke_invite_successful_2: '&b%s has revoked %s''s invite to join the nation.'
+nation_revoke_ally_successful_2: '&b%s revoked %s''s ally request.'
+
+#NPC status
+msg_status_npc_created: '&2Created at: &a%s'
+msg_status_npc: '&cThis resident is not an real player and it''s limited to Towny only.'
