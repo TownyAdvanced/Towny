@@ -380,7 +380,6 @@ public class TownyFormatter {
 				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
-
 		if (town.isRuined()) {
 			out.add(Translation.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			if (TownRuinSettings.getTownRuinsReclaimEnabled()) {
@@ -394,6 +393,7 @@ public class TownyFormatter {
 			// | Bank: 534 coins
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 				String bankString = "";
+
 				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank",
 						town.getAccount().getHoldingFormattedBalance());
 				if (town.isBankrupt()) {
@@ -410,9 +410,8 @@ public class TownyFormatter {
 				out.add(bankString);
 			}
 
-				
 			// Mayor: MrSand | Bank: 534 coins
-			out.add(String.format(Translation.of("rank_list_mayor"), town.getMayor().getFormattedName()));
+			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
 
 			// Assistants [2]: Sammy, Ginger
 			List<String> ranklist = new ArrayList<>();
@@ -426,6 +425,7 @@ public class TownyFormatter {
 			}
 
 			// Residents [12]: James, Carry, Mason
+
 			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 			if (residents.length > 34) {
 				String[] entire = residents;

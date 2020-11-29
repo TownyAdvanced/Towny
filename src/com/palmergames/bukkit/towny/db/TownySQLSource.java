@@ -1114,7 +1114,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			} catch (SQLException ignored) {
 			}
-			
+
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			
@@ -2026,7 +2026,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("uuid", UUID.randomUUID());
 			}
 			twn_hm.put("registered", town.getRegistered());
-			
+
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			

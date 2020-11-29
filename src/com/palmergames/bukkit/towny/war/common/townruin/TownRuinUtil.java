@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.common.townruin;
 
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -77,10 +78,6 @@ public class TownRuinUtil {
 			e.printStackTrace();
 		}
 
-		
-		/*
-		 * TODO: Make use of this event to remove a siege from the ruined town.
-		 */ 
 		// Call the TownRuinEvent.
 		TownRuinedEvent event = new TownRuinedEvent(town);
 		Bukkit.getPluginManager().callEvent(event);

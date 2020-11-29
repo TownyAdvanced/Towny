@@ -22,11 +22,13 @@ import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
+import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
@@ -230,5 +232,11 @@ public class SiegeWarEventListener implements Listener {
 						event.getNation().getFormattedName()));
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onTownGoesToRuin(TownRuinedEvent event) {
+		if (event.getTown().hasSiege())
+			TownyUniverse.getInstance().getDataSource().removeSiege(event.getTown().getSiege(), SiegeSide.ATTACKERS);
 	}
 }

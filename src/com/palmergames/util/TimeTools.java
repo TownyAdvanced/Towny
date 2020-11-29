@@ -71,7 +71,7 @@ public class TimeTools {
 
 		return t * 20;
 	}
-
+	
 	/**
 	 * Converts Seconds to 'Short' Ticks
 	 *
@@ -84,7 +84,7 @@ public class TimeTools {
 	public static int convertToShortTicks(double timeSeconds) {
 		return (int)((timeSeconds / TownySettings.getShortInterval()) + 0.5);
 	}
-
+    
 	public static int getHours(long milliSeconds) {
 		return (int) ((milliSeconds /1000) / 60) /60;
 	}

@@ -537,10 +537,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
-				if (TownRuinUtil.isPlayersTownRuined(player)) {
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				}
-
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 
