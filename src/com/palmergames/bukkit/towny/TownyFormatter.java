@@ -565,8 +565,10 @@ public class TownyFormatter {
 			System.arraycopy(entire, 0, enemies, 0, 11);
 			enemies[11] = Translation.of("status_town_reslist_overlength");
 		}
-        out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
-		out.addAll(SiegeWarFormatter.getStatus(nation));
+		out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
+		
+		if (SiegeWarSettings.getWarSiegeEnabled())
+			out.addAll(SiegeWarFormatter.getStatus(nation));
 		
 		out.addAll(getExtraFields(nation));
 		
