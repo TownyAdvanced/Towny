@@ -234,7 +234,7 @@
 
     <profiles>
         <profile>
-            <id>github-action</id>
+            <id>github-actions</id>
             <build>
                 <plugins>
                     <plugin>
