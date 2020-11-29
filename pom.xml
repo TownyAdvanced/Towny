@@ -38,6 +38,7 @@
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
     </distributionManagement>
+
     <scm>
         <connection>scm:git:https://github.com/TownyAdvanced/Towny.git</connection>
         <developerConnection>scm:git:https://github.com/TownyAdvanced/Towny.git</developerConnection>
@@ -244,6 +245,11 @@
                             <source>${java.version}</source>
                             <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
