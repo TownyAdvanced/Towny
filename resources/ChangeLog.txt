@@ -5383,3 +5383,4 @@ v0.92.0.11:
 0.96.5.1:
   - Fix translation issue in german.yml, courtesy of Wolf2323 with PR #4497.
   - Fix claiming cost issue when closed-economy is enabled.
+  - Update POM: Bump Dependencies and Update Essentials Repo and GithubActions, courtesy of TheFlagCourier with PR #4501.
