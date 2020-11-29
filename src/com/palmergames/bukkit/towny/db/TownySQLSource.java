@@ -1077,7 +1077,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 
 			town.setRuined(rs.getBoolean("ruined"));
-			town.setRuinDurationRemainingHours(rs.getInt("ruinDurationRemainingHours"));
+			town.setRuinedTime(rs.getLong("ruinedTime"));
 
 			return true;
 		} catch (SQLException e) {
@@ -1885,7 +1885,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("registered", town.getRegistered());
 
 			twn_hm.put("ruined", town.isRuined());
-			twn_hm.put("ruinDurationRemainingHours", town.getRuinDurationRemainingHours());
+			twn_hm.put("ruinedTime", town.getRuinedTime());
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;

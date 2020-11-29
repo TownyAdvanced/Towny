@@ -18,6 +18,8 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -374,10 +376,14 @@ public class TownyFormatter {
 				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
-		if (town.isRuined())
-			out.add(Translation.of("msg_remaining_ruins_time", town.getRuinDurationRemainingHours()));
+		if (town.isRuined()) {
+			out.add(Translation.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+			if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
+				out.add(Translation.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+			else 
+				out.add(Translation.of("msg_reclaim_available"));
 			// Only display the remaining fields if town is not ruined
-		else {
+		} else {
 			// | Bank: 534 coins
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 				String bankString = "";

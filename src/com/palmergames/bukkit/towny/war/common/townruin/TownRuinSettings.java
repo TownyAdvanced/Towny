@@ -5,19 +5,19 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public class TownRuinSettings {
 
-	public static boolean getWarCommonTownRuinsEnabled() {
+	public static boolean getTownRuinsEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_ENABLED);
 	}
 
-	public static int getWarCommonTownRuinsMaxDurationHours() {
+	public static int getTownRuinsMaxDurationHours() {
 		return Math.min(TownySettings.getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MAX_DURATION_HOURS), 1000);
 	}
 
-	public static int getWarCommonTownRuinsMinDurationHours() {
+	public static int getTownRuinsMinDurationHours() {
 		return TownySettings.getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MIN_DURATION_HOURS);
 	}
 
-	public static boolean getWarCommonTownRuinsReclaimEnabled() {
+	public static boolean getTownRuinsReclaimEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_RECLAIM_ENABLED);
 	}
 

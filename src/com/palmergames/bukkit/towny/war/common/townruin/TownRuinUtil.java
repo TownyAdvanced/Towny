@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -83,7 +84,7 @@ public class TownRuinUtil {
 		
 		// Set Town settings.
 		town.setRuined(true);
-		town.setRuinDurationRemainingHours(TownRuinSettings.getWarCommonTownRuinsMaxDurationHours());
+		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(false);
 		town.setOpen(false);
 		town.getPermissions().setAll(true);
@@ -127,16 +128,13 @@ public class TownRuinUtil {
 				throw new TownyException(Translation.of("msg_err_no_money"));
 
 			//Validate if player can remove at this time
-			int currentRuinDurationHours = TownRuinSettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
-			if (currentRuinDurationHours < TownRuinSettings.getWarCommonTownRuinsMinDurationHours()) {
-				int timeUntilReclaimAllowedHours =  TownRuinSettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
-				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", timeUntilReclaimAllowedHours));
-			}
+			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
+				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
 			//Recover Town now
 			resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 			town.setRuined(false);
-			town.setRuinDurationRemainingHours(0);
+			town.setRuinedTime(0);
 
 			//Set player as mayor (and remove npc)
 			//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
@@ -188,15 +186,15 @@ public class TownRuinUtil {
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()) {
-				if(town.getRuinDurationRemainingHours() == 1) {
+				if(getTimeSinceRuining(town) > TownRuinSettings.getTownRuinsMaxDurationHours()) {
 					//Ruin found & recently ruined end time reached. Delete town now.
 					townyUniverse.getDataSource().removeTown(town, false);
-				} else {
-					// Drop the remaining hours by one and save the Town.
-					town.decrementRemainingRuinTimeHours();
-					townyUniverse.getDataSource().saveTown(town);
 				}
 			}
 		}
     }
+    
+	public static int getTimeSinceRuining(Town town) {
+		return TimeTools.getHours(System.currentTimeMillis() - town.getRuinedTime());
+	}
 }

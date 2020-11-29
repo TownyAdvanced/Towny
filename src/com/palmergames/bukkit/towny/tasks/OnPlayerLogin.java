@@ -16,6 +16,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -197,8 +199,8 @@ public class OnPlayerLogin implements Runnable {
 		
 		try {
 			if (resident.hasTown() && resident.getTown().isRuined()) {
-				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", resident.getTown().getRuinDurationRemainingHours()));
+				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(resident.getTown())));
 			}
-		} catch (NotRegisteredException e) {}
+		} catch (NotRegisteredException ignored) {}
 	}
 }

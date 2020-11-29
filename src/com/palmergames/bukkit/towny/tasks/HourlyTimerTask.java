@@ -19,7 +19,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		if (TownRuinSettings.getWarCommonTownRuinsEnabled()) {
+		if (TownRuinSettings.getTownRuinsEnabled()) {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
 	}

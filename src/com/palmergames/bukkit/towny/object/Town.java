@@ -62,7 +62,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
-	private int ruinDurationRemainingHours = 0;
+	private long ruinedTime;
 
 	public Town(String name) {
 		super(name);
@@ -1329,19 +1329,15 @@ public class Town extends Government implements TownBlockOwner {
 	public void setRuined(boolean b) {
 		ruined = b;
 	}
-
-	public int getRuinDurationRemainingHours() {
-		return ruinDurationRemainingHours;
-	}
-
-	public void decrementRemainingRuinTimeHours() {
-		ruinDurationRemainingHours--;
-	}
-
-	public void setRuinDurationRemainingHours(int i) {
-		ruinDurationRemainingHours = i;
+	
+	public void setRuinedTime(long time) {
+		this.ruinedTime = time;
 	}
 	
+	public long getRuinedTime() {
+		return ruinedTime;
+	}
+
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 

@@ -471,7 +471,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RECLAIM.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
-				if(!TownRuinSettings.getWarCommonTownRuinsReclaimEnabled())
+				if(!TownRuinSettings.getTownRuinsReclaimEnabled())
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
@@ -2777,9 +2777,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if (TownRuinSettings.getWarCommonTownRuinsEnabled())
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted", TownRuinSettings.getWarCommonTownRuinsMaxDurationHours()));
-
+				if (TownRuinSettings.getTownRuinsEnabled()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted", TownRuinSettings.getTownRuinsMaxDurationHours()));
+					if (TownRuinSettings.getTownRuinsReclaimEnabled())
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted2", TownRuinSettings.getTownRuinsMinDurationHours()));
+				}
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
