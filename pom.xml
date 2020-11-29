@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.5.0</version>
+    <version>0.96.5.1</version>
 
     <licenses>
         <license>
@@ -38,6 +38,7 @@
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
     </distributionManagement>
+
     <scm>
         <connection>scm:git:https://github.com/TownyAdvanced/Towny.git</connection>
         <developerConnection>scm:git:https://github.com/TownyAdvanced/Towny.git</developerConnection>
@@ -63,12 +64,7 @@
         </repository>
         <repository>
             <id>ess-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
-        </repository>
-        <repository>
-            <id>groupmanager-repo</id>
-            <url>https://raw.githubusercontent.com/GroupManager/GroupManager/maven/</url>
-            <!-- Not browsable from this URL (HTTP 400) - Works fine as Repo, though. For Ver. # - see https://github.com/GroupManager/GroupManager/ -->
+            <url>https://repo.essentialsx.net/releases/</url>
         </repository>
         <repository>
             <id>citizens-repo</id>
@@ -90,7 +86,7 @@
         <dependency>
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -114,19 +110,19 @@
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.16.1</version>
+            <version>2.18.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
-            <version>2.5</version>
+            <version>2.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.25-SNAPSHOT</version>
+            <version>2.0.27-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Included in vanilla minecraft's JAR -->
@@ -139,7 +135,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.4</version>
+            <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
@@ -151,7 +147,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>16.0.1</version>
+            <version>16.0.2</version>
         </dependency>
     </dependencies>
 
@@ -174,7 +170,7 @@
                 <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <phase>clean</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -262,7 +258,7 @@
 
     <profiles>
         <profile>
-            <id>github-action</id>
+            <id>github-actions</id>
             <build>
                 <plugins>
                     <plugin>
@@ -273,6 +269,11 @@
                             <source>${java.version}</source>
                             <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

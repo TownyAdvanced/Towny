@@ -66,8 +66,8 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private boolean ruined;
-	private int ruinDurationRemainingHours;
+	private boolean ruined = false;
+	private long ruinedTime;
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
 	private Siege siege;
@@ -79,8 +79,6 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-		ruined = false;
-		ruinDurationRemainingHours = 0;
 		revoltImmunityEndTime = 0;
 		siegeImmunityEndTime = 0;
 		siege = null;
@@ -1290,13 +1288,6 @@ public class Town extends Government implements TownBlockOwner {
 		return TimeMgmt.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 
-	public boolean isRuined() {
-		if(!ruined && residents.size() == 0) {
-			ruined = true;  //If all residents have been deleted, flag town as ruined.
-		}
-		return ruined;
-	}
-
 	public void setOccupied(boolean occupied) {
 		this.occupied = occupied;
 	}
@@ -1433,6 +1424,25 @@ public class Town extends Government implements TownBlockOwner {
 		return false;
 	}
 
+	public boolean isRuined() {
+		if(!ruined && residents.size() == 0) {
+			ruined = true;  //If all residents have been deleted, flag town as ruined.
+		}
+		return ruined;
+	}
+	
+	public void setRuined(boolean b) {
+		ruined = b;
+	}
+	
+	public void setRuinedTime(long time) {
+		this.ruinedTime = time;
+	}
+	
+	public long getRuinedTime() {
+		return ruinedTime;
+	}
+
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
@@ -1547,22 +1557,6 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
-	}
-
-	public void setRuined(boolean b) {
-		ruined = b;
-	}
-
-	public int getRuinDurationRemainingHours() {
-		return ruinDurationRemainingHours;
-	}
-
-	public void decrementRemainingRuinTimeHours() {
-		ruinDurationRemainingHours--;
-	}
-
-	public void setRuinDurationRemainingHours(int i) {
-		ruinDurationRemainingHours = i;
 	}
 
 	/**

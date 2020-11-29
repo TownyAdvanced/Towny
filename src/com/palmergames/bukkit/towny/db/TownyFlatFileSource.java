@@ -860,7 +860,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setNation(nation);
 				}
 					
-
 				line = keys.get("ruined");
 				if (line != null)
 					try {
@@ -868,15 +867,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setRuined(false);
 					}
-
-				line = keys.get("ruinDurationRemainingHours");
-				if (line != null) {
+				
+				line = keys.get("ruinedTime");
+				if (line != null)
 					try {
-						town.setRuinDurationRemainingHours(Integer.parseInt(line));
-					} catch (Exception e) {
-						town.setRuinDurationRemainingHours(0);
+						town.setRuinedTime(Long.valueOf(line));
+					} catch (Exception ee) {
+						town.setRuinedTime(0);
 					}
-				}
 
 				//Siege War related
 				line = keys.get("revoltImmunityEndTime");
@@ -1899,7 +1897,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + serializeMetadata(town));
 		
 		list.add("ruined=" + town.isRuined());
-		list.add("ruinDurationRemainingHours=" + town.getRuinDurationRemainingHours());
+		list.add("ruinedTime=" + town.getRuinedTime());
 
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());

@@ -21,6 +21,8 @@ import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -378,20 +380,27 @@ public class TownyFormatter {
 				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
-		//Only display the remaining fields if town is not ruined
-		if(!town.isRuined()) {
 
+		if (town.isRuined()) {
+			out.add(Translation.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+			if (TownRuinSettings.getTownRuinsReclaimEnabled()) {
+				if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
+					out.add(Translation.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+				else 
+					out.add(Translation.of("msg_reclaim_available"));
+			}
+			// Only display the remaining fields if town is not ruined
+		} else {
 			// | Bank: 534 coins
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 				String bankString = "";
-
-				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank" , town.getAccount().getHoldingFormattedBalance());
+				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank",
+						town.getAccount().getHoldingFormattedBalance());
 				if (town.isBankrupt()) {
 					if (town.getAccount().getDebtCap() == 0)
 						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
 					bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
 				}
-				
 				if (town.hasUpkeep())
 					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
@@ -401,6 +410,7 @@ public class TownyFormatter {
 				out.add(bankString);
 			}
 
+				
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(String.format(Translation.of("rank_list_mayor"), town.getMayor().getFormattedName()));
 

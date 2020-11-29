@@ -30,15 +30,16 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -682,13 +683,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town) {
 		
-		boolean delayFullRemoval = SiegeWarSettings.getWarCommonTownRuinsEnabled();
-		removeTown(town, delayFullRemoval);
+		/*
+		 * If Town Ruining is enabled set the town into a ruined state
+		 * rather than deleting.
+		 */
+		removeTown(town, TownRuinSettings.getTownRuinsEnabled());
 	}
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
+		
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town", town.getName()));
+		
 		if (delayFullRemoval) {
+			/*
+			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
+			 */
 			TownRuinUtil.putTownIntoRuinedState(town, plugin);
 			return;
 		}

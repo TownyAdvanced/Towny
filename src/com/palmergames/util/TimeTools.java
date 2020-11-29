@@ -84,4 +84,8 @@ public class TimeTools {
 	public static int convertToShortTicks(double timeSeconds) {
 		return (int)((timeSeconds / TownySettings.getShortInterval()) + 0.5);
 	}
+
+	public static int getHours(long milliSeconds) {
+		return (int) ((milliSeconds /1000) / 60) /60;
+	}
 }

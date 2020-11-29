@@ -66,10 +66,11 @@ import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -126,6 +127,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"outpost",
 		"ranklist",
 		"rank",
+		"reclaim",
 		"reslist",
 		"say",
 		"set",
@@ -476,11 +478,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("reclaim")) {
 
-				if(SiegeWarSettings.getWarCommonTownRuinsReclaimEnabled()) {
-					TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
-				} else {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RECLAIM.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				}
+				
+				if(!TownRuinSettings.getTownRuinsReclaimEnabled())
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
 
 			} else if (split[0].equalsIgnoreCase("leave")) {
 
@@ -494,9 +498,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 
-				if (TownRuinUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player))
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -540,7 +543,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				if (!TownySettings.isUsingEconomy())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
-				
+
+				if (TownRuinUtil.isPlayersTownRuined(player)) 
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
@@ -578,9 +584,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_must_specify_amnt", "/town deposit"));
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
-				if (TownRuinUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player))
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				}
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTS.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -604,9 +609,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townPlots(player, town);
 
 			} else {
-				if (TownRuinUtil.isPlayersTownRuined(player)) {
+				if (TownRuinUtil.isPlayersTownRuined(player))
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				}
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
@@ -2863,16 +2867,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
-				if(SiegeWarSettings.getWarCommonTownRuinsEnabled()) {
-					int durationHours =SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours();
-					TownyMessaging.sendErrorMsg(player, String.format(
-						Translation.of("msg_warning_town_ruined_if_deleted"),
-						durationHours));
+				if (TownRuinSettings.getTownRuinsEnabled()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted", TownRuinSettings.getTownRuinsMaxDurationHours()));
+					if (TownRuinSettings.getTownRuinsReclaimEnabled())
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_warning_town_ruined_if_deleted2", TownRuinSettings.getTownRuinsMinDurationHours()));
 				}
-
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
 				})
 					.sendTo(player);
@@ -3137,7 +3138,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (TownySettings.isUsingEconomy() && TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
-					town.getAccount().withdraw(TownySettings.getNewNationPrice(), "nation refund");
+					town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -3635,8 +3636,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							blockCost = town.getTownBlockCostN(selection.size());
 	
 						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-						if (!town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size())))
+						if (!town.getAccount().canPayFromHoldings(blockCost))
 							throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size()));
 					} catch (EconomyException e1) {
 						throw new TownyException("Economy Error");
 					} catch (NullPointerException e2) {

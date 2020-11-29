@@ -101,6 +101,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_OUTPOST_LIST("towny.command.town.outpost.list"),
 		TOWNY_COMMAND_TOWN_NEW("towny.command.town.new"),
 		TOWNY_COMMAND_TOWN_LEAVE("towny.command.town.leave"),
+		TOWNY_COMMAND_TOWN_RECLAIM("towny.command.town.reclaim"),
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),

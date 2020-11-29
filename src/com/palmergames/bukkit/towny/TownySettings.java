@@ -232,7 +232,7 @@ public class TownySettings {
 	 * hamlet = 1
 	 * village = 2
 	 *
-	 * @param town
+	 * @param town Town to test for.
 	 * @return id
 	 */
 	public static int calcTownLevelId(Town town) {

@@ -1,18 +1,24 @@
 package com.palmergames.bukkit.towny.war.common.townruin;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
+import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.util.TimeTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -35,17 +41,14 @@ public class TownRuinUtil {
 	 */
 	public static boolean isPlayersTownRuined(Player player) {
 		try {
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 
-			if(resident.hasTown()) {
-				return resident.getTown().isRuined();
-			} else {
-				return false;
-			}
-		} catch (NotRegisteredException x) {
-			return false;
-		}
+			if(resident.hasTown() && resident.getTown().isRuined())
+				return true;
+			
+		} catch (NotRegisteredException ignored) {}
+		
+		return false;
 	}
 
 	/**
@@ -57,75 +60,49 @@ public class TownRuinUtil {
 	 * 5. Town will later be deleted full, unless it is reclaimed
 	 */
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
+		//Town already ruined.
 		if (town.isRuined())
-			return; //Town already ruined. Do not run code as it would reset ruin status to 888 (ie phase 1)
+			return;
 
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
-		try {
-			if (town.hasNation()) {
-				Nation nation = town.getNation();
-				townyUniverse.getDataSource().removeTownFromNation(plugin, town, nation);
-				if (nation.getTowns().size() == 0) {
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", nation));
-				}
-			}
-		} catch (NotRegisteredException e) {
-		}
+		if (town.hasNation())
+			town.removeNation();
 
-		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
-		try {
+		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion 
+		try { // TODO: Make this into a method somewhere instead of this hacky nonsense.
 			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
 			adminCommand.adminSet(new String[]{"mayor", town.getName(), "npc"});
 		} catch (TownyException e) {
 			e.printStackTrace();
 		}
 
-		//Remove siege if any
-		if (town.hasSiege())
-			townyUniverse.getDataSource().removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
-
+		
+		/*
+		 * TODO: Make use of this event to remove a siege from the ruined town.
+		 */ 
+		// Call the TownRuinEvent.
+		TownRuinedEvent event = new TownRuinedEvent(town);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		// Set Town settings.
 		town.setRuined(true);
-		town.setRuinDurationRemainingHours(SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours());
+		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(false);
 		town.setOpen(false);
+		town.getPermissions().setAll(true);
 
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
+			townBlock.getPermissions().setAll(true);
 			townBlock.setType(0);
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(null);
 			townBlock.removePlotObjectGroup();
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 		}
-
-		//Set town level perms
-		try {
-			for (String element : new String[]{"residentBuild",
-				"residentDestroy", "residentSwitch",
-				"residentItemUse", "outsiderBuild",
-				"outsiderDestroy", "outsiderSwitch",
-				"outsiderItemUse", "allyBuild", "allyDestroy",
-				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
-				"nationSwitch", "nationItemUse",
-				"pvp", "fire", "explosion", "mobs"}) {
-				town.getPermissions().set(element, true);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		//Propogate perm changes to individual plots
-		try {
-			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
-			adminCommand.parseAdminTownCommand(new String[]{town.getName(),"set", "perm", "reset"});
-		} catch (Exception e) {
-			System.out.println("Problem propogating perm changes to individual plots");
-			e.printStackTrace();
-		}
-
-		townyUniverse.getDataSource().saveTown(town);
+		
+		TownyUniverse.getInstance().getDataSource().saveTown(town);
 		plugin.resetCache();
 	}
 
@@ -137,8 +114,8 @@ public class TownRuinUtil {
 	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
 		Town town;
 		try {
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+			TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
+			Resident resident = tds.getResident(player.getName());
 
 			if (!resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
@@ -149,21 +126,18 @@ public class TownRuinUtil {
 				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
-			double townReclaimCost = SiegeWarSettings.getEcoPriceReclaimTown();
+			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
 			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(Translation.of("msg_err_no_money"));
 
 			//Validate if player can remove at this time
-			int currentRuinDurationHours = SiegeWarSettings.getWarCommonTownRuinsMaxDurationHours() - town.getRuinDurationRemainingHours();
-			if (currentRuinDurationHours < SiegeWarSettings.getWarCommonTownRuinsMinDurationHours()) {
-				int timeUntilReclaimAllowedHours =  SiegeWarSettings.getWarCommonTownRuinsMinDurationHours() - currentRuinDurationHours;
-				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", timeUntilReclaimAllowedHours));
-			}
+			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
+				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
 			//Recover Town now
 			resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 			town.setRuined(false);
-			town.setRuinDurationRemainingHours(0);
+			town.setRuinedTime(0);
 
 			//Set player as mayor (and remove npc)
 			//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
@@ -174,32 +148,19 @@ public class TownRuinUtil {
 				e.printStackTrace();
 			}
 
-			//Set town level perms
-			try {
-				for (String element : new String[]{"residentBuild",
-					"residentDestroy", "residentSwitch",
-					"residentItemUse", "outsiderBuild",
-					"outsiderDestroy", "outsiderSwitch",
-					"outsiderItemUse", "allyBuild", "allyDestroy",
-					"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
-					"nationSwitch", "nationItemUse",
-					"pvp", "fire", "explosion", "mobs"}) {
-					town.getPermissions().set(element, false);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Set permission line to the config's default settings.
+			town.getPermissions().loadDefault(town);
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				townBlock.getPermissions().loadDefault(town);
+				townBlock.setChanged(false);
+				tds.saveTownBlock(townBlock);
 			}
-
-			//Propogate perm changes to individual plots
-			try {
-				TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
-				adminCommand.parseAdminTownCommand(new String[]{town.getName(),"set", "perm", "reset"});
-			} catch (TownyException e) {
-				e.printStackTrace();
-			}
-
-			townyUniverse.getDataSource().saveTown(town);
+			
+			tds.saveTown(town);
 			plugin.resetCache();
+			
+			TownReclaimedEvent event = new TownReclaimedEvent(town, resident);
+			Bukkit.getPluginManager().callEvent(event);
 
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
 		} catch (TownyException e) {
@@ -227,19 +188,16 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName())) {
-
-				if (town.isRuined()) {
-					town.decrementRemainingRuinTimeHours();
-
-					if(town.getRuinDurationRemainingHours() < 1) {
-						//Ruin found & recently ruined end time reached. Delete town now.
-						townyUniverse.getDataSource().removeTown(town, false);
-					} else {
-						townyUniverse.getDataSource().saveTown(town);
-					}
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()) {
+				if(getTimeSinceRuining(town) > TownRuinSettings.getTownRuinsMaxDurationHours()) {
+					//Ruin found & recently ruined end time reached. Delete town now.
+					townyUniverse.getDataSource().removeTown(town, false);
 				}
-			} 
+			}
 		}
     }
+    
+	public static int getTimeSinceRuining(Town town) {
+		return TimeTools.getHours(System.currentTimeMillis() - town.getRuinedTime());
+	}
 }
