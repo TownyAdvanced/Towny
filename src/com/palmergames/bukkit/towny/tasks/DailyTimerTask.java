@@ -211,7 +211,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (universe.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital() || !town.hasUpkeep() || town.isRuined())
+					if (town.isCapital() || !town.hasUpkeep())
 						continue;
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
@@ -450,7 +450,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 */
 			if (universe.getDataSource().hasTown(town.getName())) {
 
-				if (town.hasUpkeep() && !town.isRuined()) {
+				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
 					double upkeepPenalty = TownySettings.getTownPenaltyUpkeepCost(town);
 					if (upkeepPenalty > 0 && upkeep > 0)
