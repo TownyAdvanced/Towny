@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;

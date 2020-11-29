@@ -191,7 +191,6 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		}
 
-		@SuppressWarnings("unlikely-arg-type")
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMGroupEvent(GMGroupEvent event) {
 
