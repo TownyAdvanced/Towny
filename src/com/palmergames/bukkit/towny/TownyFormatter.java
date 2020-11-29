@@ -374,8 +374,10 @@ public class TownyFormatter {
 				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
-		// Only display the remaining fields if town is not ruined
-		if (!town.isRuined()) {
+		if (town.isRuined())
+			out.add(Translation.of("msg_remaining_ruins_time", town.getRuinDurationRemainingHours()));
+			// Only display the remaining fields if town is not ruined
+		else {
 			// | Bank: 534 coins
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 				String bankString = "";

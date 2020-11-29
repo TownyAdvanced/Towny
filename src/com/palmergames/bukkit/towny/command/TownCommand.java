@@ -2782,7 +2782,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 					TownyUniverse.getInstance().getDataSource().removeTown(town);
 				})
 					.sendTo(player);

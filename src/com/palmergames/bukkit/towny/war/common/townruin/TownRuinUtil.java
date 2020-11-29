@@ -80,7 +80,7 @@ public class TownRuinUtil {
 		// Call the TownRuinEvent.
 		TownRuinedEvent event = new TownRuinedEvent(town);
 		Bukkit.getPluginManager().callEvent(event);
-
+		
 		// Set Town settings.
 		town.setRuined(true);
 		town.setRuinDurationRemainingHours(TownRuinSettings.getWarCommonTownRuinsMaxDurationHours());

@@ -154,7 +154,7 @@ public class OnPlayerLogin implements Runnable {
 			if (resident.hasTown()) {
 				try {
 					Town town = resident.getTown();
-					if (town.hasUpkeep()) {
+					if (town.hasUpkeep() && !town.isRuined()) {
 						double upkeep = TownySettings.getTownUpkeepCost(town);
 						try {
 							if ((upkeep > 0) && (!town.getAccount().canPayFromHoldings(upkeep))) {
@@ -195,5 +195,10 @@ public class OnPlayerLogin implements Runnable {
 			}
 		}
 		
+		try {
+			if (resident.hasTown() && resident.getTown().isRuined()) {
+				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", resident.getTown().getRuinDurationRemainingHours()));
+			}
+		} catch (NotRegisteredException e) {}
 	}
 }

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -13,6 +14,7 @@ public class TownReclaimedEvent extends Event {
 	private final Resident resident;
 	
 	public TownReclaimedEvent(Town town, Resident resident) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.resident = resident;
 	}

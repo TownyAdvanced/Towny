@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,6 +12,7 @@ public class TownRuinedEvent extends Event {
 	private final Town town;
 	
 	public TownRuinedEvent(Town town) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 	}
 

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.91
+version: 0.92
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1195,6 +1195,7 @@ msg_universe_contributors: ' And contributors like you. '
 msg_universe_heart: '<3'
 townblock_plu: 'TownBlocks'
 
+#Added in 0.92
 #Town Ruins
 admin_panel_4: 'Run the new hour code'
 msg_newhour_success: 'newhour command executed successfully'
@@ -1205,3 +1206,5 @@ msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d 
 msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
 msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
+msg_remaining_ruins_time: '&cRemaining ruins time: %s hours.'
+msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
