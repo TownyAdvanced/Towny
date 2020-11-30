@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
@@ -372,7 +374,7 @@ public class TownyMessaging {
 	@Deprecated
 	public static void sendTownMessage(Town town, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town)) {
 			for (String line : lines) {
@@ -395,7 +397,7 @@ public class TownyMessaging {
 	 */
 	@Deprecated
 	public static void sendTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			player.sendMessage(line);
 	}
@@ -421,9 +423,9 @@ public class TownyMessaging {
 	 * @param line the actual message
 	 */
 	public static void sendPrefixedTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(Translation.of("default_town_prefix", town.getName()) + line);
+			player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 	}
 
 	/**
@@ -439,7 +441,7 @@ public class TownyMessaging {
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			for (String line : lines) {
-				player.sendMessage(Translation.of("default_town_prefix", town.getName()) + line);
+				player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 			}
 	}
 	
@@ -469,7 +471,7 @@ public class TownyMessaging {
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
@@ -492,7 +494,7 @@ public class TownyMessaging {
 	 */
 	@Deprecated
 	public static void sendNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(line);
 	}
@@ -505,9 +507,9 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.of("default_nation_prefix", nation.getName()) + line);
+			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName()) + line));
 	}
 
 	/**
@@ -530,11 +532,11 @@ public class TownyMessaging {
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
-				player.sendMessage(Translation.of("default_nation_prefix", nation.getName()) + line);
+				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName()) + line));
 			}
 		}
 	}
@@ -547,7 +549,7 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
@@ -561,7 +563,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			for (String line : lines) {
@@ -579,7 +581,7 @@ public class TownyMessaging {
 		String tbColor1 = Translation.of("townboard_message_colour_1");
 		String tbColor2 = Translation.of("townboard_message_colour_2");
 		
-		player.sendMessage(tbColor1 + "[" + town.getName() + "] " + tbColor2 + town.getBoard());
+		player.sendMessage(tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**
@@ -592,7 +594,7 @@ public class TownyMessaging {
 		String nbColor1 = Translation.of("nationboard_message_colour_1");
 		String nbColor2 = Translation.of("nationboard_message_colour_2");
 
-		player.sendMessage(nbColor1 + "[" + nation.getName() + "] " + nbColor2 + nation.getBoard());
+		player.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/**
