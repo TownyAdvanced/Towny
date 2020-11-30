@@ -5420,3 +5420,5 @@ v0.92.0.11:
       - If this is true, then after a town has been ruined for the minimum configured time,",
       - it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)
   - Bump language files to 0.92.
+0.96.5.2:
+  - Make TownRuin ruin-deletion recognize an improperly set ruinTime. 
