@@ -5422,3 +5422,6 @@ v0.92.0.11:
   - Bump language files to 0.92.
 0.96.5.2:
   - Make TownRuin ruin-deletion recognize an improperly set ruinTime. 
+  - Fix for console TownyWorld discretes, courtesy of FrankHeijden with PR #4484.
+  - Ensure Objects are properly assigned, closed, and compared to improve safety and accuracy, courtesy of TheFlagCourier with PR #4496.
+  - Fix TARGET spam for servers not running MC 1.16+.
