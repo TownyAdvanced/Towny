@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 
 /**
  * This class represents the hourly timer task
@@ -17,5 +19,8 @@ public class HourlyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
+		if (TownRuinSettings.getTownRuinsEnabled()) {
+			TownRuinUtil.evaluateRuinedTownRemovals();
+		}
 	}
 }

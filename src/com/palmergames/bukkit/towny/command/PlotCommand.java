@@ -235,6 +235,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			try {
+				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().isRuined())
+					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+
 				if (split[0].equalsIgnoreCase("claim")) {
 
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))

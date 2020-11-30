@@ -515,7 +515,7 @@ public class TownyEntityMonitorListener implements Listener {
 						return;
 
 					try {
-						if (TownyAPI.getInstance().getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName())
+						if (!TownyAPI.getInstance().getTownBlock(loc).getTown().getName().equals(attackerResident.getTown().getName()))
 							return;
 					} catch (NotRegisteredException e1) {
 						e1.printStackTrace();
@@ -562,7 +562,7 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 				
 			try {
-				if (TownyAPI.getInstance().getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName())
+				if (!TownyAPI.getInstance().getTownBlock(loc).getTown().getName().equals(attackerResident.getTown().getName()))
 					return;
 			} catch (NotRegisteredException e1) {
 				e1.printStackTrace();

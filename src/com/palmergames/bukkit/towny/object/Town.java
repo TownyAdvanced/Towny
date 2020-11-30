@@ -61,6 +61,8 @@ public class Town extends Government implements TownBlockOwner {
 	private int conqueredDays;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
+	private boolean ruined = false;
+	private long ruinedTime;
 
 	public Town(String name) {
 		super(name);
@@ -448,7 +450,7 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getMaxClaimPrice() != -1;
 		double maxprice = TownySettings.getMaxClaimPrice();
 		while (i < inputN){
-			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());
+			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size() + (double)i) * TownySettings.getClaimPrice());
 			
 			if(hasmaxprice && nextprice > maxprice) {
 				cost += maxprice * ( inputN - i);
@@ -484,7 +486,7 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
 		while (i < n){
-			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+i) * TownySettings.getPurchasedBonusBlocksCost());			
+			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+(double)i) * TownySettings.getPurchasedBonusBlocksCost());			
 			
 			if (hasmaxprice && nextprice > maxprice) {
 				cost += maxprice * (inputN - i);
@@ -562,7 +564,7 @@ public class Town extends Government implements TownBlockOwner {
 					removeNation();
 				}
 				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					removeNation();
@@ -1315,6 +1317,25 @@ public class Town extends Government implements TownBlockOwner {
 		} catch (EconomyException ignored) {}
 
 		return false;
+	}
+
+	public boolean isRuined() {
+		if(!ruined && residents.size() == 0) {
+			ruined = true;  //If all residents have been deleted, flag town as ruined.
+		}
+		return ruined;
+	}
+	
+	public void setRuined(boolean b) {
+		ruined = b;
+	}
+	
+	public void setRuinedTime(long time) {
+		this.ruinedTime = time;
+	}
+	
+	public long getRuinedTime() {
+		return ruinedTime;
 	}
 
 	/**

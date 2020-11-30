@@ -783,7 +783,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(Translation.of("msg_err_nation_homeblock_in_another_world"));
 				}
 				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					throw new Exception(Translation.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 				}
@@ -1529,7 +1529,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					
 					double distance;
-					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 						remove.add(town);
@@ -2580,8 +2580,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
 				try {
-					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().withdraw(cost, "Peaceful Nation Cost"))
+					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(cost))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
+					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 				} catch (EconomyException e) {
 					// This can literally never happen. But if it does, print to console, and send message to player.
 					e.printStackTrace();

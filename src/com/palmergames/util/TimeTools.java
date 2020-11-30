@@ -38,7 +38,7 @@ public class TimeTools {
 		if (dhms.contains("s")) {
 			seconds = Integer.parseInt(dhms.split("s")[0].replaceAll(" ", ""));
 		}
-		return (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+		return (days * 86400) + (hours * 3600) + (minutes * 60) + (long)seconds;
 	}
 
 	public static long getMillis(String dhms) {
@@ -68,5 +68,9 @@ public class TimeTools {
 	public static long convertToTicks(long t) {
 
 		return t * 20;
+	}
+	
+	public static int getHours(long milliSeconds) {
+		return (int) ((milliSeconds /1000) / 60) /60;
 	}
 }

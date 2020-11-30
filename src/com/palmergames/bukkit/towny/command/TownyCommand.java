@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -460,12 +461,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
 			plugins++;
 		}
-		
-		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
-		if (townyNU != null){
-			townyPlugins += Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
-			plugins++;
-		}
 
 		if (plugins > 0)
 			output.add(townyPlugins + Colors.Gold + "]");
@@ -503,6 +498,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		output.add(ChatTools.formatTitle("Prices"));
 		output.add(Colors.Yellow + "[New] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
+		output.add(Colors.Yellow + "[Reclaim] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownRuinSettings.getEcoPriceReclaimTown()));
 		if (town != null) {
 			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)

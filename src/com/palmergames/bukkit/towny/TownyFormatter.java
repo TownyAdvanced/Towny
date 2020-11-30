@@ -18,6 +18,8 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -374,49 +376,63 @@ public class TownyFormatter {
 				Translation.of("firespread") + ((town.isFire() || world.isForceFire()) ? Translation.of("status_on"): Translation.of("status_off")) + 
 				Translation.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? Translation.of("status_on"): Translation.of("status_off")));
 
-		// | Bank: 534 coins
-		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
-			String bankString = "";
-
-			bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank" , town.getAccount().getHoldingFormattedBalance());
-			if (town.isBankrupt()) {
-				if (town.getAccount().getDebtCap() == 0)
-					town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-				bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
+		if (town.isRuined()) {
+			out.add(Translation.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+			if (TownRuinSettings.getTownRuinsReclaimEnabled()) {
+				if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
+					out.add(Translation.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+				else 
+					out.add(Translation.of("msg_reclaim_available"));
 			}
-			if (town.hasUpkeep())
-				bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-				bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
-			bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+			// Only display the remaining fields if town is not ruined
+		} else {
+			// | Bank: 534 coins
+			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
+				String bankString = "";
 
-			out.add(bankString);
+				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank",
+						town.getAccount().getHoldingFormattedBalance());
+				if (town.isBankrupt()) {
+					if (town.getAccount().getDebtCap() == 0)
+						town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+					bankString += " " + Translation.of("status_debtcap", "-" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getDebtCap()));
+				}
+				if (town.hasUpkeep())
+					bankString += Translation.of("status_bank_town2", BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+					bankString += Translation.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
+				bankString += Translation.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+
+				out.add(bankString);
+			}
+
+			// Mayor: MrSand | Bank: 534 coins
+			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
+
+			// Assistants [2]: Sammy, Ginger
+			List<String> ranklist = new ArrayList<>();
+			getRanks(town, ranklist);
+
+			out.addAll(ranklist);
+
+			// Nation: Azur Empire
+			try {
+				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : ""));
+			} catch (TownyException ignored) {
+			}
+
+			// Residents [12]: James, Carry, Mason
+
+			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
+			if (residents.length > 34) {
+				String[] entire = residents;
+				residents = new String[36];
+				System.arraycopy(entire, 0, residents, 0, 35);
+				residents[35] = Translation.of("status_town_reslist_overlength");
+			}
+			out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));
+
 		}
-
-		// Mayor: MrSand | Bank: 534 coins
-		out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
-
-		// Assistants [2]: Sammy, Ginger
-		List<String> ranklist = new ArrayList<>();
-		getRanks(town, ranklist);
-
-		out.addAll(ranklist);
-
-		// Nation: Azur Empire
-		try {
-			out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : "" ));
-		} catch (TownyException ignored) {}
-
-		// Residents [12]: James, Carry, Mason
-
-		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
-		if (residents.length > 34) {
-			String[] entire = residents;
-			residents = new String[36];
-			System.arraycopy(entire, 0, residents, 0, 35);
-			residents[35] = Translation.of("status_town_reslist_overlength");
-		}
-		out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));		
 
 		out.addAll(getExtraFields(town));
 		
