@@ -5428,3 +5428,4 @@ v0.92.0.11:
   - Internal player name change handling.
     - Players who have their names changed will have their Resident updated by Towny directly.
     - TownyNameUpdater will no longer be required, will disable itself if present.
+  - Fix '/ta reload config' not also reloading the town and nation levels in the config.  
