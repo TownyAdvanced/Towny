@@ -5425,3 +5425,6 @@ v0.92.0.11:
   - Fix for console TownyWorld discretes, courtesy of FrankHeijden with PR #4484.
   - Ensure Objects are properly assigned, closed, and compared to improve safety and accuracy, courtesy of TheFlagCourier with PR #4496.
   - Fix TARGET spam for servers not running MC 1.16+.
+  - Internal player name change handling.
+    - Players who have their names changed will have their Resident updated by Towny directly.
+    - TownyNameUpdater will no longer be required, will disable itself if present.
