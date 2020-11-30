@@ -8,7 +8,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -25,11 +24,10 @@ public class FlagWarEntityListener implements Listener {
 	@EventHandler
 	public void onPlayerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
 		if (FlagWarConfig.isAllowingAttacks() && event.hasTownBlock()) {
-			TownyWorld world = event.getTownBlock().getWorld();
 			/*
-			 * Defending player is in a warzone
+			 * Defending player is in a warzone, not an ally, allow the damage.
 			 */
-			if (world.isWarZone(Coord.parseCoord(event.getEntity())) && !CombatUtil.preventFriendlyFire(event.getAttackingPlayer(), event.getVictimPlayer(), world))
+			if (event.getTownBlock().getWorld().isWarZone(Coord.parseCoord(event.getEntity())) && !CombatUtil.isAlly(event.getAttackingPlayer().getName(), event.getVictimPlayer().getName()))
 				event.setCancelled(false);
 		}
 	}

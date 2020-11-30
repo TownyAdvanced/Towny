@@ -402,7 +402,7 @@ public class CombatUtil {
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
 	 */
-	public static boolean isArenaPlot(Player attacker, Player defender) {
+	public static boolean isPvPPlot(Player attacker, Player defender) {
 
 		if ((attacker != null) && (defender != null)) {
 			TownBlock attackerTB, defenderTB;
