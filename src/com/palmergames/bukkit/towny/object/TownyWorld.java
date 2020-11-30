@@ -676,7 +676,7 @@ public class TownyWorld extends TownyObject {
 				
 				if (!town.getHomeblockWorld().equals(this)) continue;
 				
-				final double distSqr = MathUtil.distanceSquared(townCoord.getX() - keyX, townCoord.getZ() - keyZ);
+				final double distSqr = MathUtil.distanceSquared((double) townCoord.getX() - keyX, (double) townCoord.getZ() - keyZ);
 				if (minSqr == -1 || distSqr < minSqr)
 					minSqr = distSqr;
 			} catch (TownyException e) {
@@ -724,7 +724,7 @@ public class TownyWorld extends TownyObject {
 					if (keyX == tbX && keyZ == tbZ)
 						continue;
 					
-					final double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+					final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
 					if (minSqr == -1 || distSqr < minSqr)
 						minSqr = distSqr;
 				}
@@ -754,7 +754,7 @@ public class TownyWorld extends TownyObject {
 				final int tbX = b.getX();
 				final int tbZ = b.getZ();
 				
-				double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+				double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
 				if (minSqr == -1 || distSqr < minSqr) {
 					minSqr = distSqr;
 					nearestTown = town;
@@ -790,7 +790,7 @@ public class TownyWorld extends TownyObject {
 				final int tbX = b.getX();
 				final int tbZ = b.getZ();
 				
-				double distSqr = MathUtil.distanceSquared(tbX - keyX, tbZ - keyZ);
+				double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
 				if (minSqr == -1 || distSqr < minSqr) {
 					minSqr = distSqr;
 					tb = b;

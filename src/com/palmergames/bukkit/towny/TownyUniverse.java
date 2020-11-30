@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
@@ -122,7 +121,7 @@ public class TownyUniverse {
         	return false;
 
         // Try migrating the config and world files if the version has changed.
-        if (!Version.fromString(TownySettings.getLastRunVersion()).equals(towny.getVersion())) {
+        if (!TownySettings.getLastRunVersion().equals(towny.getVersion())) {
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}
