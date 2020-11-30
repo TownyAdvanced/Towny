@@ -904,10 +904,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE);
 	}
 
-	public static int getMinIdleTime() {
-		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MIN_IDLE_TIME);
-	}
-
 	public static int getMaxLifetime() {
 		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_LIFETIME);
 	}

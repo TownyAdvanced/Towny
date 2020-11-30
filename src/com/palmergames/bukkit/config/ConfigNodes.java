@@ -862,7 +862,6 @@ public enum ConfigNodes {
 		"# Modifiable settings to control the connection pooling."
 	),
 	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "10"),
-	PLUGIN_DATABASE_POOLING_MIN_IDLE_TIME("plugin.database.sql.pooling.min_idle_time", "10"),
 	PLUGIN_DATABASE_POOLING_MAX_LIFETIME("plugin.database.sql.pooling.max_lifetime", "180000"),
 	PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT("plugin.database.sql.pooling.connection_timeout", "5000"),
 

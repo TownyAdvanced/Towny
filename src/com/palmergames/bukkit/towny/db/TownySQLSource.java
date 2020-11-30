@@ -105,11 +105,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		config.addDataSourceProperty("cacheServerConfiguration", "true");
 		config.addDataSourceProperty("elideSetAutoCommits", "true");
 		config.addDataSourceProperty("maintainTimeStats", "false");
-		config.addDataSourceProperty("alwaysSendSetIsolation", "false");
 		config.addDataSourceProperty("cacheCallableStmts", "true");
 
 		config.setMaximumPoolSize(TownySettings.getMaxPoolSize());
-		config.setMinimumIdle(TownySettings.getMinIdleTime());
 		config.setMaxLifetime(TownySettings.getMaxLifetime());
 		config.setConnectionTimeout(TownySettings.getConnectionTimeout());
 
