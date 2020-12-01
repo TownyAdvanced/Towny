@@ -1395,14 +1395,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 					if (split[2].equalsIgnoreCase("npc")) {
 						String name = nextNpcName();
-						townyUniverse.getDataSource().newResident(name);
+						final UUID npcUUID = UUID.randomUUID();
+						townyUniverse.getDataSource().newResident(name, npcUUID);
 
-						newMayor = townyUniverse.getDataSource().getResident(name);
+						newMayor = townyUniverse.getResident(npcUUID);
 
 						newMayor.setRegistered(System.currentTimeMillis());
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
-						newMayor.setUUID(UUID.randomUUID());
 
 						townyUniverse.getDataSource().saveResident(newMayor);
 

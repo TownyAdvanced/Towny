@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -173,19 +174,27 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		newResident(name, null);
+	}
 
+	@Override
+	public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterPlayerName(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
-
-		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
+		
+		if (universe.hasResident(name))
 			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
-
-		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
-		universe.getResidentsTrie().addKey(filteredName);
+		
+		Resident resident = new Resident(filteredName);
+		
+		if (uuid != null)
+			resident.setUUID(uuid);
+		
+		universe.registerResident(resident);
 	}
 
 	/**
@@ -241,12 +250,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	
 	@Override
+	@Deprecated
 	public boolean hasResident(String name) {
-		try {
-			return TownySettings.isFakeResident(name) || universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
-		} catch (InvalidNameException e) {
-			return false;
-		}
+		return universe.hasResident(name);
 	}
 
 	/**
@@ -270,9 +276,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
-	 * Gets the keys of TownyUniverse's Resident Map
+	 * Gets the names of all residents.
 	 * 
-	 * @return Returns the {@link Map#keySet()} of {@link TownyUniverse#getResidentMap()}
+	 * @return Returns a set of all resident names.
 	 * 
 	 * @deprecated No longer used by Towny. Messing with the Resident map is ill advised.
 	 */
@@ -280,7 +286,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Deprecated
 	public Set<String> getResidentKeys() {
 
-		return universe.getResidentMap().keySet();
+		return universe.getResidents().stream().map(TownyObject::getName).collect(Collectors.toSet());
 	}
 
 	/**
@@ -342,41 +348,27 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	@Deprecated
 	public List<Resident> getResidents() {
-
-		return new ArrayList<>(universe.getResidentMap().values());
+		return new ArrayList<>(universe.getResidents());
 	}
 
 	@Override
+	@Deprecated
 	public Resident getResident(String name) throws NotRegisteredException {
-
-		try {
-			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		if (!hasResident(name)) {
-
+		Resident res = universe.getResident(name);
+		
+		if (res == null)
 			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-
-		} else if (TownySettings.isFakeResident(name)) {
-
-			Resident resident = new Resident(name);
-			resident.setNPC(true);
-
-			return resident;
-
-		}
-
-		return universe.getResidentMap().get(name);
-
+		
+		return res;
 	}
 
 	@Override
 	public List<Resident> getResidentsWithoutTown() {
 
 		List<Resident> residentFilter = new ArrayList<>();
-		for (Resident resident : universe.getResidentMap().values())
+		for (Resident resident : universe.getResidents())
 			if (!resident.hasTown())
 				residentFilter.add(resident);
 		return residentFilter;
@@ -580,7 +572,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Remove resident from residents' friendslists.
 		List<Resident> toSave = new ArrayList<>();
-		for (Resident toCheck : universe.getResidentMap().values()) {		
+		for (Resident toCheck : universe.getResidents()) {		
 			TownyMessaging.sendDebugMsg("Checking friends of: " + toCheck.getName());
 			if (toCheck.hasFriend(resident)) {
 				TownyMessaging.sendDebugMsg("       - Removing Friend: " + resident.getName());
@@ -612,8 +604,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Delete the residents file.
 		deleteResident(resident);
 		// Remove the residents record from memory.
-		universe.getResidentMap().remove(resident.getName().toLowerCase());
-		universe.getResidentsTrie().removeKey(resident.getName());
+		try {
+			universe.unregisterResident(resident);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 
 		// Clear accounts
 		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
@@ -1092,14 +1087,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownySettings.isUsingEconomy())
 				resident.getAccount().setName(newName);
 			
-			//remove old resident from residentsMap and residentsTrie
-			universe.getResidentMap().remove(oldName.toLowerCase());
-			universe.getResidentsTrie().removeKey(oldName);
+			// Remove the resident from the universe name storage.
+			universe.unregisterResident(resident);
 			//rename the resident
 			resident.setName(newName);
-			// add new resident to residentsMap and residentsTrie
-			universe.getResidentMap().put(newName.toLowerCase(), resident);
-			universe.getResidentsTrie().addKey(newName);
+			// Re-register the resident with the new name.
+			universe.registerResident(resident);
 			// remove and readd resident to jailedResidentsMap if jailed.
 			if (resident.isJailed()) {
 				try {

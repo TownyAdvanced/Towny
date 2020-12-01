@@ -398,8 +398,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
 				
 				line = keys.get("uuid");
-				if (line != null)
+				if (line != null) {
 					resident.setUUID(UUID.fromString(line));
+					universe.registerResidentUUID(resident);
+				}
 				
 				line = keys.get("registered");
 				if (line != null)

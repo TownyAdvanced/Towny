@@ -328,6 +328,8 @@ public abstract class TownyDataSource {
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
+	
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;

@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -91,14 +91,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return isNPC;
 	}
 	
+	@Override
 	public UUID getUUID() {
 		return uuid;		
 	}
 	
+	@Override
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
-		if (!TownyUniverse.getInstance().getResidentUUIDNameMap().containsKey(uuid)) 
-			TownyUniverse.getInstance().getResidentUUIDNameMap().put(uuid, this.getName());
 	}
 	
 	public boolean hasUUID() {
