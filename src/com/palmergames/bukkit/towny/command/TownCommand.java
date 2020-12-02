@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
+import com.palmergames.bukkit.towny.event.town.TownGenericToggleEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1463,6 +1464,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (!admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			if (!admin && sender instanceof Player) {
+				TownGenericToggleEvent preEvent = new TownGenericToggleEvent((Player) sender, town, split);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancellationMsg());
+			}
 			
 			Optional<Boolean> choice = Optional.empty();
 			if (split.length == 2 && !split[0].equalsIgnoreCase("jail")) { // Exclude jail command from on/off

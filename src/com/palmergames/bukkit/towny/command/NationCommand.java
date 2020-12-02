@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationGenericToggleEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -2581,6 +2582,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
+			}
+			
+			if (!admin) {
+				System.out.println("test");
+				NationGenericToggleEvent preEvent = new NationGenericToggleEvent(player, nation, split);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancellationMsg());
 			}
 			
 			Optional<Boolean> choice = Optional.empty();

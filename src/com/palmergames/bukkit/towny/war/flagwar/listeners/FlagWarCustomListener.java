@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.nation.NationGenericToggleEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -298,5 +299,20 @@ public class FlagWarCustomListener implements Listener {
 			}
 
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onNationToggle(NationGenericToggleEvent event) {
+//		if (FlagWarConfig.isAllowingAttacks()) {
+//			String arg = event.getArg();
+//			
+//			if (arg != null) {
+//				System.out.println("arg " + arg);
+//				if (event.getArg().equalsIgnoreCase("peaceful")) {
+//					event.setCancelled(true);
+//					event.setCancellationMsg(Translation.of("msg_err_fight_like_king"));
+//				}	
+//			}
+//		}
 	}
 }
