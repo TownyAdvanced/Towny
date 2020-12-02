@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -381,11 +382,21 @@ public class TownyUniverse {
 		return res;
 	}
 	
+	@NotNull
+	public Optional<Resident> getResidentOpt(@NotNull String residentName) {
+		return Optional.ofNullable(getResident(residentName));
+	}
+	
 	@Nullable
 	public Resident getResident(@NotNull UUID residentUUID) {
 		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
 		
 		return residentUUIDMap.get(residentUUID);
+	}
+	
+	@NotNull
+	public Optional<Resident> getResidentOpt(@NotNull UUID residentUUID) {
+		return Optional.ofNullable(getResident(residentUUID));
 	}
 	
 	// Internal Use Only

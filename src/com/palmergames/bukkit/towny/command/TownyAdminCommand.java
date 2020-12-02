@@ -897,7 +897,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				TownCommand.newTown(player, split[1], split[2], true);
+				Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(split[2]);
+				
+				if (!resOpt.isPresent()) {
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_not_registered_1", split[2]));
+					return;
+				}
+				
+				TownCommand.newTown(player, split[1], resOpt.get(), true);
 				return;
 			}
 			

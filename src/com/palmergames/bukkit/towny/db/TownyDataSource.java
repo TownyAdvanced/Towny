@@ -267,10 +267,12 @@ public abstract class TownyDataSource {
 
 	abstract public List<Resident> getResidents(String[] names);
 
+	@Deprecated
 	abstract public Resident getResident(String name) throws NotRegisteredException;
 
 	abstract public void removeNation(Nation nation);
 
+	@Deprecated
 	abstract public boolean hasResident(String name);
 
 	abstract public boolean hasTown(String name);

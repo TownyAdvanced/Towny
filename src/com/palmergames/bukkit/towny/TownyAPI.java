@@ -52,8 +52,12 @@ public class TownyAPI {
      * @return {@link Location} of the town spawn or if it is not obtainable null.
      */
     public Location getTownSpawnLocation(Player player) {
+    	Resident resident = townyUniverse.getResident(player.getUniqueId());
+    	
+    	if (resident == null)
+    		return null;
+    	
         try {
-            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             if (resident.hasTown()) {
 				Town town = resident.getTown();
 				return town.getSpawn();
@@ -71,8 +75,12 @@ public class TownyAPI {
      * @return {@link Location} of the nation spawn or if it is not obtainable null.
      */
     public Location getNationSpawnLocation(Player player) {
+		Resident resident = townyUniverse.getResident(player.getUniqueId());
+		
+		if (resident == null)
+			return null;
+		
         try {
-            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             if (resident.hasTown()) {
             	Town t = resident.getTown();
             	if (t.hasNation()) {
@@ -420,12 +428,11 @@ public class TownyAPI {
         townyUniverse.setWarEvent(null);
     }
     public void requestTeleport(Player player, Location spawnLoc) {
-        
-        try {
-            TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
-        } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
+    	Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+    	
+    	if (resident != null) {
+			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc);
+		}
     }
     
     public void abortTeleportRequest(Resident resident) {
