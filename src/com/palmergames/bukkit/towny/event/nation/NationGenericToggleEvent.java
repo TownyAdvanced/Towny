@@ -54,7 +54,7 @@ public class NationGenericToggleEvent extends Event implements Cancellable {
 		return player;
 	}
 
-	public Nation getnation() {
+	public Nation getNation() {
 		return nation;
 	}
 
