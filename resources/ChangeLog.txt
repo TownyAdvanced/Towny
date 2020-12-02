@@ -5431,3 +5431,5 @@ v0.92.0.11:
   - Fix '/ta reload config' not also reloading the town and nation levels in the config.  
   - Fix cases where we weren't removing the underscores out of town and nation names.
     - Works towards completing #4489.
+0.96.5.3:
+  - Replace name in resident UUID map when renaming the player.

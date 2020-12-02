@@ -1098,8 +1098,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//rename the resident
 			resident.setName(newName);
 			// add new resident to residentsMap and residentsTrie
-			universe.getResidentMap().put(newName.toLowerCase(), resident);
+			universe.getResidentMap().put(newName.toLowerCase(), resident);			
 			universe.getResidentsTrie().addKey(newName);
+			// replace previous name in the UUID map.
+			universe.getResidentUUIDNameMap().put(resident.getUUID(), newName);
 			// remove and readd resident to jailedResidentsMap if jailed.
 			if (resident.isJailed()) {
 				try {
