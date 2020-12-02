@@ -5433,3 +5433,4 @@ v0.92.0.11:
     - Works towards completing #4489.
 0.96.5.3:
   - Replace name in resident UUID map when renaming the player.
+  - Fix nation message formatting. 
