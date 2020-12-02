@@ -1686,6 +1686,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			String rootFolder = TownyUniverse.getInstance().getRootFolder();
 			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
+			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
 			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_reload_error"));

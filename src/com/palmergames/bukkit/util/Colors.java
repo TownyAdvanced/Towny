@@ -24,7 +24,7 @@ public class Colors {
 	public static String strip(String line) {
 
 		for (ChatColor cc : ChatColor.values())
-			line.replaceAll(cc.toString(), "");
+			line = line.replaceAll(cc.toString(), "");
 		return line;
 	}
 

@@ -427,9 +427,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				wherecode.append(i.hasNext() ? " AND " : "");
 			}
-			Statement s = cntx.createStatement();
-			int rs = s.executeUpdate(wherecode.toString());
-			s.close();
+			int rs;
+			try (Statement statement = cntx.createStatement()) {
+				rs = statement.executeUpdate(wherecode.toString());
+			}
 			if (rs == 0) {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
 			}
@@ -464,25 +465,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs;
+				int total = 0;
+				rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
+				while (rs.next()) {
 
-			int total = 0;
-			while (rs.next()) {
+					TownyWorld world = getWorld(rs.getString("world"));
+					int x = Integer.parseInt(rs.getString("x"));
+					int z = Integer.parseInt(rs.getString("z"));
 
-				TownyWorld world = getWorld(rs.getString("world"));
-				int x = Integer.parseInt(rs.getString("x"));
-				int z = Integer.parseInt(rs.getString("z"));
+					TownBlock townBlock = new TownBlock(x, z, world);
+					TownyUniverse.getInstance().addTownBlock(townBlock);
+					total++;
 
-				TownBlock townBlock = new TownBlock(x, z, world);
-				TownyUniverse.getInstance().addTownBlock(townBlock);
-				total++;
+				}
+				TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
 
 			}
-			TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
-
-			s.close();
-
+			
 			return true;
 
 		} catch (Exception e) {
@@ -499,16 +500,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
 
-			while (rs.next()) {
-				try {
-					newResident(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+				while (rs.next()) {
+					try {
+						newResident(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -523,16 +524,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
 
-			while (rs.next()) {
-				try {
-					TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+				while (rs.next()) {
+					try {
+						TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: town list sql error : " + e.getMessage());
@@ -550,15 +551,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
-			while (rs.next()) {
-				try {
-					newNation(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
+				while (rs.next()) {
+					try {
+						newNation(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: nation list sql error : " + e.getMessage());
@@ -608,15 +609,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
-			while (rs.next()) {
-				try {
-					newWorld(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
+				while (rs.next()) {
+					try {
+						newWorld(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: world list sql error : " + e.getMessage());
 		} catch (Exception e) {
@@ -640,27 +641,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT groupID,town,groupName FROM " + tb_prefix + "PLOTGROUPS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT groupID,town,groupName FROM " + tb_prefix + "PLOTGROUPS");
 
-			while (rs.next()) {
+				while (rs.next()) {
 
-				UUID id = UUID.fromString(rs.getString("groupID"));
-				String groupName = rs.getString("groupName");
-				Town town = universe.getTown(rs.getString("town"));;
-				
-				if (town == null)
-					continue;
+					UUID id = UUID.fromString(rs.getString("groupID"));
+					String groupName = rs.getString("groupName");
+					Town town = universe.getTown(rs.getString("town"));
 
-				try {
-					TownyUniverse.getInstance().newGroup(town, groupName, id);
-				} catch (AlreadyRegisteredException ignored) {
+					if (town == null)
+						continue;
+
+					try {
+						TownyUniverse.getInstance().newGroup(town, groupName, id);
+					} catch (AlreadyRegisteredException ignored) {
+					}
+
 				}
-
 			}
-
-			s.close();
-
+			
 			return true;
 
 		} catch (Exception e) {
@@ -1864,44 +1864,43 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		for (PlotGroup plotGroup : getAllPlotGroups()) {
 			try {
-				Statement s = cntx.createStatement();
-				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='"
-						+ plotGroup.getID().toString() + "'");
+				try (Statement s = cntx.createStatement()) {
+					rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='"
+							+ plotGroup.getID().toString() + "'");
 
-				while (rs.next()) {
-					line = rs.getString("groupName");
-					if (line != null)
-						try {
-							plotGroup.setName(line.trim());
-						} catch (Exception ignored) {
+					while (rs.next()) {
+						line = rs.getString("groupName");
+						if (line != null)
+							try {
+								plotGroup.setName(line.trim());
+							} catch (Exception ignored) {
+							}
+
+						line = rs.getString("groupID");
+						if (line != null) {
+							try {
+								plotGroup.setID(UUID.fromString(line.trim()));
+							} catch (Exception ignored) {
+							}
 						}
 
-					line = rs.getString("groupID");
-					if (line != null) {
-						try {
-							plotGroup.setID(UUID.fromString(line.trim()));
-						} catch (Exception ignored) {
+						line = rs.getString("town");
+						if (line != null) {
+							Town town = universe.getTown(line.trim());
+							if (town != null) {
+								plotGroup.setTown(town);
+							}
 						}
-					}
 
-					line = rs.getString("town");
-					if (line != null) {
-						Town town = universe.getTown(line.trim());
-						if (town != null) {
-							plotGroup.setTown(town);
-						}
-					}
-
-					line = rs.getString("groupPrice");
-					if (line != null) {
-						try {
-							plotGroup.setPrice(Float.parseFloat(line.trim()));
-						} catch (Exception ignored) {
+						line = rs.getString("groupPrice");
+						if (line != null) {
+							try {
+								plotGroup.setPrice(Float.parseFloat(line.trim()));
+							} catch (Exception ignored) {
+							}
 						}
 					}
 				}
-
-				s.close();
 			} catch (SQLException e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + plotGroup.getName()
 						+ " at line: " + line + " in the sql database");

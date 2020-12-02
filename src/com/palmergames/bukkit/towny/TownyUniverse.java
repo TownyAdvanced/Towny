@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
@@ -62,6 +61,7 @@ public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
     
+    private final Map<UUID, String> residentUUIDNameMap = new ConcurrentHashMap<>();
     private final Map<String, Resident> residents = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
     
@@ -127,7 +127,7 @@ public class TownyUniverse {
         	return false;
 
         // Try migrating the config and world files if the version has changed.
-        if (!Version.fromString(TownySettings.getLastRunVersion()).equals(towny.getVersion())) {
+        if (!TownySettings.getLastRunVersion().equals(towny.getVersion())) {
 			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
 			migrator.migrate();
 		}
@@ -188,6 +188,7 @@ public class TownyUniverse {
         townNameMap.clear();
         townUUIDMap.clear();
         residents.clear();
+        residentUUIDNameMap.clear();
         townBlocks.clear();
         sieges.clear();
     }
@@ -347,6 +348,10 @@ public class TownyUniverse {
     	return nationsTrie;
 	}
 	
+    public Map<UUID, String> getResidentUUIDNameMap() {
+    	return residentUUIDNameMap;
+    }
+    
     public Map<String, Resident> getResidentMap() {
         return residents;
     }

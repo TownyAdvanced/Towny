@@ -98,6 +98,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
+		if (!TownyUniverse.getInstance().getResidentUUIDNameMap().containsKey(uuid)) 
+			TownyUniverse.getInstance().getResidentUUIDNameMap().put(uuid, this.getName());
 	}
 	
 	public boolean hasUUID() {

@@ -349,10 +349,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			String msg;
 			Optional<Boolean> choice = Optional.empty();
-			if (!isConsole && split.length == 2) {
+			if (split.length == 2) {
 				choice = BaseCommand.parseToggleChoice(split[1]);
-			} else if (isConsole && split.length == 3) {
-				choice = BaseCommand.parseToggleChoice(split[2]);
 			}
 
 			if (split[0].equalsIgnoreCase("claimable")) {

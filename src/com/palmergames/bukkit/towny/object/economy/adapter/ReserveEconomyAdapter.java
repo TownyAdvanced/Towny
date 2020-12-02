@@ -15,12 +15,14 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 
 	@Override
 	public boolean add(String accountName, double amount, World world) {
-		return economy.addHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+		BigDecimal bd = BigDecimal.valueOf(amount);
+		return economy.addHoldingsDetail(accountName, bd, world.getName()).success();
 	}
 
 	@Override
 	public boolean subtract(String accountName, double amount, World world) {
-		return economy.removeHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+		BigDecimal bd = BigDecimal.valueOf(amount);
+		return economy.removeHoldingsDetail(accountName, bd, world.getName()).success();
 	}
 
 	@Override
@@ -45,11 +47,13 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 
 	@Override
 	public boolean setBalance(String accountName, double amount, World world) {
-		return economy.setHoldingsDetail(accountName, new BigDecimal(amount), world.getName()).success();
+		BigDecimal bd = BigDecimal.valueOf(amount);
+		return economy.setHoldingsDetail(accountName, bd, world.getName()).success();
 	}
 
 	@Override
 	public String getFormattedBalance(double balance) {
-		return economy.format(new BigDecimal(balance));
+		BigDecimal bd = BigDecimal.valueOf(balance);
+		return economy.format(bd);
 	}
 }

@@ -791,7 +791,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(Translation.of("msg_err_nation_homeblock_in_another_world"));
 				}
 				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					throw new Exception(Translation.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 				}
@@ -1548,7 +1548,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					
 					double distance;
-					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 						remove.add(town);
