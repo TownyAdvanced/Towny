@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 
 public class WarZoneListener implements Listener {
 	
@@ -52,8 +51,8 @@ public class WarZoneListener implements Listener {
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
-		// Allow destroy for Event War if material is an EditableMaterial, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
+		// Allow destroy for Event War if material is an EditableMaterial
+		if ((status == TownBlockStatus.WARZONE )
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
@@ -73,8 +72,8 @@ public class WarZoneListener implements Listener {
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 		
-		// Allow build for Event War if material is an EditableMaterial, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
+		// Allow build for Event War if material is an EditableMaterial
+		if ((status == TownBlockStatus.WARZONE )
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
@@ -93,8 +92,8 @@ public class WarZoneListener implements Listener {
 		Player player = event.getPlayer();
 		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
 		
-		// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
+		// Allow item_use for Event War if isAllowingItemUseInWarZone is true
+		if ((status == TownBlockStatus.WARZONE )
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isAllowingItemUseInWarZone()) {				
 				event.setCancelled(true);
@@ -113,8 +112,8 @@ public class WarZoneListener implements Listener {
 		Player player = event.getPlayer();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
-		// Allow switch for Event War if isAllowingSwitchesInWarZone is true, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
+		// Allow switch for Event War if isAllowingSwitchesInWarZone is true
+		if ((status == TownBlockStatus.WARZONE )
 				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
@@ -214,10 +213,12 @@ public class WarZoneListener implements Listener {
 		if (event.isInWilderness())
 			return;
 
+		//TODO - Get ifWar (boolean) and warType(String) and cancelReason from event.
+
 		/*
-		 * Is this a Town with a flag war WarZone?
+		 * Is this a Town with a WarZone?
 		 */
-		boolean inFlagWarTown = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName()).isWarZone(Coord.parseCoord(event.getLocation()));
+		boolean inWarZoneTown = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName()).isWarZone(Coord.parseCoord(event.getLocation()));
 
 		/*
 		 * Is this in a Town with an Event War?
@@ -225,9 +226,9 @@ public class WarZoneListener implements Listener {
 		boolean inEventWarTown = TownyAPI.getInstance().isWarTime() && War.isWarringTown(TownyAPI.getInstance().getTown(event.getLocation()));
 
 		/*
-		 * Event War (inWarringTown) & Flag War (isWarZone(coord)) fire control settings.
+		 * Event War (inWarringTown) & common WarZone (isWarZone(coord)) fire control settings.
 		 */
-		if (inFlagWarTown || inEventWarTown) {
+		if (inWarZoneTown || inEventWarTown) {
 			if (WarZoneConfig.isAllowingFireInWarZone()) {                         // Allow ignition using normal fire-during-war rule.
 				event.setCancelled(false);
 			} else if (inEventWarTown && TownySettings.isAllowWarBlockGriefing()) { // Allow ignition using exceptionally-griefy-war rule for Event War.

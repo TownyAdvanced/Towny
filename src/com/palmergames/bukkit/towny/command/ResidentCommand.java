@@ -574,12 +574,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Mode", "constantplotborder", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Mode", "plotborder", "", ""));
-			// String warFlagMaterial = (FlagWarConfig.getFlagBaseMaterial() ==
-			// null ? "flag" :
-			// FlagWarConfig.getFlagBaseMaterial().name().toLowerCase());
-			// player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "",
-			// String.format(Translation.of("mode_6"),
-			// warFlagMaterial)));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim town nation general", ""));
 
 			return;
