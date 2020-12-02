@@ -2583,13 +2583,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-			
+
+			/*
+			 * Throw up a cancellable /nation toggle {args} event.
+			 */
 			if (!admin) {
-				System.out.println("test");
 				NationGenericToggleEvent preEvent = new NationGenericToggleEvent(player, nation, split);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+					throw new TownyException(preEvent.getCancelMessage());
 			}
 			
 			Optional<Boolean> choice = Optional.empty();

@@ -13,9 +13,9 @@ public class NationGenericToggleEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private final Player player;
 	private final Nation nation;
-	private String[] args;
+	private final String[] args;
 	private boolean isCancelled = false;
-	private String cancellationMsg = "You are unable to use this command.";
+	private String cancelMessage = "You are unable to use this command.";
 	
 	/**
 	 * A generic cancellable event thrown when a player uses the /nation toggle {args} command.
@@ -36,7 +36,7 @@ public class NationGenericToggleEvent extends Event implements Cancellable {
 		return handlers;
 	}
 
-	public HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 
@@ -62,11 +62,11 @@ public class NationGenericToggleEvent extends Event implements Cancellable {
 		return args;
 	}
 
-	public String getCancellationMsg() {
-		return cancellationMsg;
+	public String getCancelMessage() {
+		return this.cancelMessage;
 	}
 
-	public void setCancellationMsg(String cancellationMsg) {
-		this.cancellationMsg = cancellationMsg;
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
 	}
 }

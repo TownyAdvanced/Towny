@@ -1465,6 +1465,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
+			/*
+			 * Throw up a cancellable /t toggle {args} event.
+			 */
 			if (!admin && sender instanceof Player) {
 				TownGenericToggleEvent preEvent = new TownGenericToggleEvent((Player) sender, town, split);
 				Bukkit.getPluginManager().callEvent(preEvent);
