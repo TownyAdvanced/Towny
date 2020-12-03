@@ -33,6 +33,9 @@ import java.util.ListIterator;
  * @author Goosius
  */
 public class TownRuinUtil {
+	private TownRuinUtil() {
+		// Privatize implied public constructor.
+	}
 
 	/**
 	 * This method returns true if the given player's town is ruined
@@ -46,8 +49,10 @@ public class TownRuinUtil {
 
 			if(resident.hasTown() && resident.getTown().isRuined())
 				return true;
-			
-		} catch (NotRegisteredException ignored) {}
+
+		} catch (NotRegisteredException ignored) {
+			// Ignored - Maybe add to a debug logger later?
+		}
 		
 		return false;
 	}
@@ -59,6 +64,8 @@ public class TownRuinUtil {
 	 * 3. Enable all perms
 	 * 4. Now, the residents cannot run /plot commands, and some /t commands
 	 * 5. Town will later be deleted full, unless it is reclaimed
+	 * @param plugin Instance of {@link Towny}
+	 * @param town The town to put into a "ruined" state.
 	 */
 	public static void putTownIntoRuinedState(Town town, Towny plugin) {
 
@@ -71,12 +78,7 @@ public class TownRuinUtil {
 			town.removeNation();
 
 		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion 
-		try { // TODO: Make this into a method somewhere instead of this hacky nonsense.
-			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
-			adminCommand.adminSet(new String[]{"mayor", town.getName(), "npc"});
-		} catch (TownyException e) {
-			e.printStackTrace();
-		}
+		setMayor(plugin, town, "npc");
 
 		// Call the TownRuinEvent.
 		TownRuinedEvent event = new TownRuinedEvent(town);
@@ -106,7 +108,8 @@ public class TownRuinUtil {
 	/**
 	 * Processes a player request to reclaim a ruined town
 	 *
-	 * @param player the player
+	 * @param player The player reclaiming a ruined town.
+	 * @param plugin Instance of {@link Towny}
 	 */
 	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
 		Town town;
@@ -137,13 +140,7 @@ public class TownRuinUtil {
 			town.setRuinedTime(0);
 
 			//Set player as mayor (and remove npc)
-			//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion
-			try {
-				TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
-				adminCommand.adminSet(new String[]{"mayor", town.getName(), resident.getName()});
-			} catch (TownyException e) {
-				e.printStackTrace();
-			}
+			setMayor(plugin, town, resident.getName());
 
 			// Set permission line to the config's default settings.
 			town.getPermissions().loadDefault(town);
@@ -160,10 +157,18 @@ public class TownRuinUtil {
 			Bukkit.getPluginManager().callEvent(event);
 
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
-		} catch (TownyException e) {
+		} catch (TownyException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(player,e.getMessage());
-		} catch (EconomyException ex) {
-			TownyMessaging.sendErrorMsg(player,ex.getMessage());
+		}
+	}
+
+	// TODO: Make this into a method somewhere else, instead of this.
+	private static void setMayor(Towny plugin, Town town, String name) {
+		try {
+			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
+			adminCommand.adminSet(new String[]{"mayor", town.getName(), name});
+		} catch (TownyException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -185,11 +190,11 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined() && town.getRuinedTime() != 0) {
-				if(getTimeSinceRuining(town) > TownRuinSettings.getTownRuinsMaxDurationHours()) {
-					//Ruin found & recently ruined end time reached. Delete town now.
-					townyUniverse.getDataSource().removeTown(town, false);
-				}
+			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()
+					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownRuinSettings
+					.getTownRuinsMaxDurationHours()) {
+				//Ruin found & recently ruined end time reached. Delete town now.
+				townyUniverse.getDataSource().removeTown(town, false);
 			}
 		}
     }
