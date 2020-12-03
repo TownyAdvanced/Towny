@@ -1648,7 +1648,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 */
 	public void reloadDatabase() {
-		TownyUniverse.getInstance().getDataSource().finishTasks();`
+		TownyUniverse.getInstance().getDataSource().finishTasks();
 		if (plugin.load()) {
 
 			// Register all child permissions for ranks
