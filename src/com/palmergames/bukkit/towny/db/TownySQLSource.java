@@ -26,6 +26,8 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -62,11 +64,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private final String tb_prefix;
 
 	private Connection cntx = null;
-	private final String type;
 
-	public TownySQLSource(Towny plugin, TownyUniverse universe, String type) {
+	private final HikariConfig config;
+	private final HikariDataSource hikariDataSource;
+
+	public TownySQLSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
-		this.type = type;
 		if (!FileMgmt.checkOrCreateFolders(rootFolderPath, dataFolderPath,
 				dataFolderPath + File.separator + "plot-block-data")
 				|| !FileMgmt.checkOrCreateFiles(dataFolderPath + File.separator + "regen.txt",
@@ -77,41 +80,44 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		String hostname = TownySettings.getSQLHostName();
-		String port = TownySettings.getSQLPort();
-		String flags = TownySettings.getSQLFlags();
 		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 		
-		String driver1;
-		if (this.type.equals("h2")) {
+		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + db_name + TownySettings.getSQLFlags());
+		this.config = new HikariConfig();
+		
+		config.setPoolName("Towny MySQL");
+		config.setJdbcUrl(this.dsn);
 
-			driver1 = "org.h2.Driver";
-			this.dsn = ("jdbc:h2:" + dataFolderPath + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
-			username = "sa";
-			password = "sa";
+		username = TownySettings.getSQLUsername();
+		password = TownySettings.getSQLPassword();
 
-		} else if (this.type.equals("mysql")) {
+		config.setUsername(username);
+		config.setPassword(password);
 
-			driver1 = "com.mysql.jdbc.Driver";
-			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + flags);
-			username = TownySettings.getSQLUsername();
-			password = TownySettings.getSQLPassword();
+		config.addDataSourceProperty("cachePrepStmts", "true");
+		config.addDataSourceProperty("prepStmtCacheSize", "250");
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		config.addDataSourceProperty("useServerPrepStmts", "true");
+		config.addDataSourceProperty("useLocalSessionState", "true");
+		config.addDataSourceProperty("rewriteBatchedStatements", "true");
+		config.addDataSourceProperty("cacheResultSetMetadata", "true");
+		config.addDataSourceProperty("cacheServerConfiguration", "true");
+		config.addDataSourceProperty("elideSetAutoCommits", "true");
+		config.addDataSourceProperty("maintainTimeStats", "false");
+		config.addDataSourceProperty("cacheCallableStmts", "true");
 
-		} else {
+		config.setMaximumPoolSize(TownySettings.getMaxPoolSize());
+		config.setMaxLifetime(TownySettings.getMaxLifetime());
+		config.setConnectionTimeout(TownySettings.getConnectionTimeout());
 
-			driver1 = "org.sqlite.JDBC";
-			this.dsn = ("jdbc:sqlite:" + dataFolderPath + File.separator + db_name + ".sqldb");
-			username = "";
-			password = "";
-
-		}
+		this.hikariDataSource = new HikariDataSource(config);
 
 		/*
 		 * Register the driver (if possible)
 		 */
 		try {
-			Driver driver = (Driver) Class.forName(driver1).newInstance();
+			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
 			System.out.println("[Towny] Driver error: " + e);
@@ -171,6 +177,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
 			}
 		}
+		// Close the database sources on shutdown to get GC
+		hikariDataSource.close();
 	}
 
 	/**
@@ -181,7 +189,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean getContext() {
 
 		try {
-			if (cntx == null || cntx.isClosed() || (!this.type.equals("sqlite") && !cntx.isValid(1))) {
+			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
 
 				if (cntx != null && !cntx.isClosed()) {
 
@@ -198,14 +206,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					cntx = null;
 				}
 
-				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
-
-					cntx = DriverManager.getConnection(this.dsn);
-
-				} else {
-
-					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
-				}
+				cntx = hikariDataSource.getConnection();
 
 				return cntx != null && !cntx.isClosed();
 			}
@@ -2174,4 +2175,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
+	public HikariDataSource getHikariDataSource() {
+		return hikariDataSource;
+	}
 }
