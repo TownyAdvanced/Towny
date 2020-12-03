@@ -859,8 +859,9 @@ public enum ConfigNodes {
 		"plugin.database.sql.pooling",
 		"",
 		"",
-		"# Modifiable settings to control the connection pooling."
-	),
+		"# Modifiable settings to control the connection pooling.",
+		"# Unless you actually know what you're doing and how Towny uses its mysql connection,",
+		"# it is strongly recommended you do not change these settings."),
 	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "10"),
 	PLUGIN_DATABASE_POOLING_MAX_LIFETIME("plugin.database.sql.pooling.max_lifetime", "180000"),
 	PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT("plugin.database.sql.pooling.connection_timeout", "5000"),

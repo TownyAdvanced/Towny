@@ -5435,3 +5435,19 @@ v0.92.0.11:
   - Replace name in resident UUID map when renaming the player.
   - Fix nation message formatting. 
   - Fix some of the spawn cost settings leaking in while a server has using_economy: false.
+  - Implemented MySQL Connection Pooling, courtesy of Glare with PR #4499 (First-Time Contributor!)
+    - Mysql servers will probably see a fairly good increase in initial database speeds.
+    - Since Towny doesn't operate directly off of the database (only writing when told to save,) the only other nice benefit will be caching of mysql statements (which is probably nothing to scoff at!)
+  - New Config Options:
+    - plugin.database.sql.pooling.max_pool_size
+      - default: "10"
+      - This property controls the maximum size that the pool is allowed to reach, including both idle and in-use connections. 
+      - Basically this value will determine the maximum number of actual connections to the database backend.
+    - plugin.database.sql.pooling.max_lifetime
+      - "180000"
+      - This property controls the maximum lifetime of a connection in the pool. 
+      - An in-use connection will never be retired, only when it is closed will it then be removed. 
+      - On a connection-by-connection basis, minor negative attenuation is applied to avoid mass-extinction in the pool.
+    - plugin.database.sql.pooling.connection_timeout
+      - "5000"
+      - This property controls the maximum number of milliseconds the client will wait for a connection from the pool.
