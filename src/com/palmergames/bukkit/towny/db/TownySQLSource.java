@@ -177,6 +177,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
 			}
 		}
+		// Close the database sources on shutdown to get GC
+		hikariDataSource.close();
 	}
 
 	/**
