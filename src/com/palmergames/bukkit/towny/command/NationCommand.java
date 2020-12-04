@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRankAddEvent;
+import com.palmergames.bukkit.towny.event.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
@@ -940,8 +942,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("add")) {
+
+				NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(town.getNation(), rank, target);
+				BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
+				
 				try {
-					if (target.addNationRank(rank)) {
+					if (target.addNationRank(rank) && !nationRankAddEvent.isCancelled()) {
 						if (BukkitTools.isOnline(target.getName())) {
 							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
 							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
@@ -954,11 +960,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				} catch (AlreadyRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, Translation.of("msg_resident_already_has_rank", target.getName(), "Nation"));
+					TownyMessaging.sendMsg(player, nationRankAddEvent.getCancelMessage());
 					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
+
+				NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(town.getNation(), rank, target);
+				BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
+
+				if (nationRankRemoveEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
+					return;
+				}
+				
 				try {
 					if (target.removeNationRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
