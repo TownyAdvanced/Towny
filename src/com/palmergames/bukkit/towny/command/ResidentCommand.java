@@ -204,15 +204,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		return Collections.emptyList();
 	}
-	
-	// Returns a resident if registered or throws a towny exception saying not registered.
-	private Resident getResidentOrThrow(UUID playerUUID) throws TownyException {
-		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
-		if (res == null)
-			throw new TownyException(Translation.of("msg_err_not_registered"));
-		
-		return res;
-	}
 
 	@SuppressWarnings("static-access")
 	private void parseResidentCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
