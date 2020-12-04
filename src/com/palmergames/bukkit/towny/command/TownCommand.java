@@ -434,26 +434,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 
 	}
-	
-	private static Resident getResidentOrThrow(UUID playerUUID) throws NotRegisteredException {
-		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
-		
-		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered"));
-		}
-		
-		return res;
-	}
-
-	private static Resident getResidentOrThrow(String residentName) throws NotRegisteredException {
-		Resident res = TownyUniverse.getInstance().getResident(residentName);
-
-		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", residentName));
-		}
-
-		return res;
-	}
 
 	@SuppressWarnings("static-access")
 	private void parseTownCommand(final Player player, String[] split) {

@@ -222,17 +222,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_HELP.send(player);
 		} else {
 
-			Resident resident;
-			String world;
-
-			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-				world = player.getWorld().getName();
-				//resident.getTown();
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+			Resident resident = townyUniverse.getResident(player.getUniqueId());
+			
+			if (resident == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
 				return true;
 			}
+			
+			String world = player.getWorld().getName();
 
 			try {
 				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().isRuined())
@@ -1350,7 +1347,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		resident = townyUniverse.getDataSource().getResident(player.getName());
+		resident = getResidentOrThrow(player.getUniqueId());
 		world = player.getWorld().getName();
 		
 		TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();

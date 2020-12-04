@@ -324,10 +324,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									switch (args[3].toLowerCase()) {
 										case "add":
 											return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[5]);
-										case "remove":
-											try {
-												return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(args[4]).getTownRanks(), args[5]);
-											} catch (NotRegisteredException ignored) {}
+										case "remove": {
+											Resident res = TownyUniverse.getInstance().getResident(args[4]);
+											if (res != null)
+												return NameUtil.filterByStart(res.getTownRanks(), args[5]);
+											break;
+										}
 									}
 							}
 							break;
@@ -626,21 +628,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_ta_plot_claim"));
 				return;
 			}			
-			Resident resident = null;
-			try {
-				resident = townyUniverse.getDataSource().getResident(split[1]);
-			} catch (NotRegisteredException e) {
+			Optional<Resident> resOpt = townyUniverse.getResidentOpt(split[1]);
+			
+			if (!resOpt.isPresent()) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_no_player_with_that_name", split[1]));
+				return;
 			}
 
 			Player player = BukkitTools.getPlayer(sender.getName());
 			String world = player.getWorld().getName();
 			List<WorldCoord> selection = new ArrayList<>();
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
-
-			if (resident != null) {
-				new PlotClaim(plugin, player, resident, selection, true, true, false).start();
-			}
+			new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
 		}
 		
 		
@@ -651,7 +650,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length !=2 ) {
 			throw new TownyException(Translation.of("msg_err_invalid_input", "Eg: /ta checkperm {name} {node}"));
 		}
-		Player player = TownyAPI.getInstance().getPlayer(TownyUniverse.getInstance().getDataSource().getResident(split[0]));
+		Player player = BukkitTools.getPlayer(split[0]);
 		if (player == null) {
 			throw new TownyException("Player couldn't be found");
 		}
@@ -691,34 +690,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Town town;
 		boolean isTown = false;
 
-		try {
-			if (split.length != 2)
-				throw new TownyException(Translation.of("msg_err_invalid_input", "Eg: givebonus [town/player] [n]"));
-			
-			if ((town = townyUniverse.getTown(split[0])) != null) {
-				isTown = true;
-			}
-			else { 
-				town = townyUniverse.getDataSource().getResident(split[0]).getTown();
-			}
-			
-			try {
-				town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[1].trim()));
-				TownyMessaging.sendMsg(getSender(), Translation.of("msg_give_total", town.getName(), split[1], town.getBonusBlocks()));
-				if (!isConsole || isTown)
-					TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
-				if (isConsole && !isTown) {
-					TownyMessaging.sendMessage(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
-					TownyMessaging.sendMessage(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which the developers did not intend to be sold.");
-					TownyMessaging.sendMessage(town, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
-				}
-			} catch (NumberFormatException nfe) {
-				throw new TownyException(Translation.of("msg_error_must_be_int"));
-			}
-			townyUniverse.getDataSource().saveTown(town);
-		} catch (TownyException e) {
-			throw new TownyException(e.getMessage());
+		if (split.length != 2)
+			throw new TownyException(Translation.of("msg_err_invalid_input", "Eg: givebonus [town/player] [n]"));
+
+		if ((town = townyUniverse.getTown(split[0])) != null) {
+			isTown = true;
 		}
+		else {
+			Resident target = getResidentOrThrow(split[0]);
+
+			if (!target.hasTown()) {
+				throw new TownyException(Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
+			}
+
+			try {
+				town = target.getTown();
+			} catch (NotRegisteredException ignore) {
+			}
+		}
+		
+		int extraBlocks;
+		
+		try {
+			extraBlocks = Integer.parseInt(split[1].trim());
+		} catch (NumberFormatException ex) {
+			throw new TownyException(Translation.of("msg_error_must_be_int"));
+		}
+
+		town.setBonusBlocks(town.getBonusBlocks() + extraBlocks);
+		TownyMessaging.sendMsg(getSender(), Translation.of("msg_give_total", town.getName(), split[1], town.getBonusBlocks()));
+		if (!isConsole || isTown)
+			TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + extraBlocks + " bonus townblocks.");
+		if (isConsole && !isTown) {
+			TownyMessaging.sendMessage(town, "You have been given " + extraBlocks + " bonus townblocks.");
+			TownyMessaging.sendMessage(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which the developers did not intend to be sold.");
+			TownyMessaging.sendMessage(town, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
+		}
+		townyUniverse.getDataSource().saveTown(town);
 
 	}
 
@@ -792,7 +800,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try	{
-			Resident resident = townyUniverse.getDataSource().getResident(split[0]);
+			Resident resident = getResidentOrThrow(split[0]);
 
 			if (split.length == 1) {
 				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
@@ -930,13 +938,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[1].equalsIgnoreCase("add")) {
 				// Force-join command for admins to use to bypass invites system.
-				Resident resident;
-				try {
-					resident = townyUniverse.getDataSource().getResident(split[2]);
-				} catch (NotRegisteredException e) {
+				Resident resident = townyUniverse.getResident(split[2]);
+				
+				if (resident == null) {
 					TownyMessaging.sendMessage(sender, Translation.of("msg_error_no_player_with_that_name", split[2]));
 					return;
 				}
+				
 				TownCommand.townAddResident(town, resident);
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
 				TownyMessaging.sendMessage(sender, Translation.of("msg_join_town", resident.getName()));
@@ -1124,20 +1132,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /townyadmin town [townname] rank add/remove [resident] [rank]");
 		}
 
-		Resident target;
-		
-		try {
+		Resident target = getResidentOrThrow(split[1]);
 
-			target = townyUniverse.getDataSource().getResident(split[1]);
-			if (!target.hasTown()) {
-				throw new TownyException(Translation.of("msg_resident_not_your_town"));
-			}
-			if (target.getTown() != town) {
-				throw new TownyException(Translation.of("msg_err_townadmintownrank_wrong_town"));
-			}
-			
-		} catch (TownyException x) {
-			throw new TownyException(x.getMessage());
+		if (!target.hasTown()) {
+			throw new TownyException(Translation.of("msg_resident_not_your_town"));
+		}
+		if (target.getTown() != town) {
+			throw new TownyException(Translation.of("msg_err_townadmintownrank_wrong_town"));
 		}
 
 		String rank = split[2];
@@ -1417,7 +1418,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						town.setHasUpkeep(false);
 
 					} else {
-						newMayor = townyUniverse.getDataSource().getResident(split[2]);
+						newMayor = getResidentOrThrow(split[2]);
 					}
 
 					if (!town.hasResident(newMayor)) {
@@ -1474,7 +1475,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length < 2)
 				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set title bilbo Jester");
 			else
-				resident = townyUniverse.getDataSource().getResident(split[1]);
+				resident = getResidentOrThrow(split[1]);
 
 			split = StringMgmt.remArgs(split, 2);
 			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
@@ -1503,7 +1504,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length < 2)
 				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set surname bilbo Jester");
 			else
-				resident = townyUniverse.getDataSource().getResident(split[1]);
+				resident = getResidentOrThrow(split[1]);
 
 			split = StringMgmt.remArgs(split, 2);
 			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
@@ -1772,15 +1773,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_admin_only_delete"));
 
 				for (String name : split) {
-					try {
-						Resident resident = townyUniverse.getDataSource().getResident(name);
+					Resident resident = townyUniverse.getResident(name);
+					if (resident != null) {
 						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							townyUniverse.getDataSource().removeResident(resident);
 							TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_RESIDENT", resident.getName()));
 						} else
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_online_or_npc", name));
-					} catch (NotRegisteredException x) {
-						// This name isn't registered as a resident
+					}
+					else {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", name));
 					}
 				}
@@ -1869,18 +1870,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length != 2)
 				throw new TownyException(Translation.of("msg_err_invalid_input", "Eg: toggle npc [resident]"));
 			
-			try {
-				Resident resident = townyUniverse.getDataSource().getResident(split[1]);
-				resident.setNPC(!resident.isNPC());
-				
-				townyUniverse.getDataSource().saveResident(resident);
-				
-				TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
-				
-			} catch (NotRegisteredException x) {
+			Resident resident = townyUniverse.getResident(split[1]);
+			
+			if (resident == null) {
 				throw new TownyException(Translation.of("msg_err_not_registered_1", split[1]));
 			}
-			
+
+			resident.setNPC(!resident.isNPC());
+
+			townyUniverse.getDataSource().saveResident(resident);
+
+			TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
 		} else {
 			// parameter error message
 			// peaceful/war/townmobs/worldmobs

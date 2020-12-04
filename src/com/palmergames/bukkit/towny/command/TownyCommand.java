@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
@@ -223,29 +224,33 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
 						return;
 					}
-				} else if (split.length == 1)
-					try {
-						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-						town = resident.getTown();
-					} catch (NotRegisteredException e) {
+				} else {
+					Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(player.getUniqueId());
+					
+					if (resOpt.isPresent() && resOpt.get().hasTown()) {
+						try {
+							town = resOpt.get().getTown();
+						} catch (NotRegisteredException ignore) {
+						}
 					}
+				}
 
 				for (String line : getTownyPrices(town))
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), "Towny Switch List");
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), "Towny ItemUse List");
 			} else if (split[0].equalsIgnoreCase("farmblocks")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), "Towny FarmBlocks List");
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), "Towny WildsBlocks List");
 			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), "Towny Plot Clear Delete List");
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
@@ -281,7 +286,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
 				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+					Resident resident = getResidentOrThrow(player.getUniqueId());
 					resident.toggleMode(split, true);
 				} else
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
@@ -326,6 +331,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident resident = getResidentOrThrow(player.getUniqueId());
 		List<Town> townsToSort = War.warringTowns;
 		List<Nation> nationsToSort = War.warringNations;
 		int page = 1;
@@ -334,10 +340,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		String townLine;
 		for (Nation nations : nationsToSort) {
 			nationLine = Colors.Gold + "-" + nations.getName();
-			if (townyUniverse.getDataSource().getResident(player.getName()).hasNation())
-				if (townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasEnemy(nations))
+			if (resident.hasNation())
+				if (resident.getTown().getNation().hasEnemy(nations))
 					nationLine += Colors.Red + " (Enemy)";
-				else if (townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasAlly(nations))
+				else if (resident.getTown().getNation().hasAlly(nations))
 					nationLine += Colors.Green + " (Ally)";
 			output.add(nationLine);
 			for (Town towns : townsToSort) {
