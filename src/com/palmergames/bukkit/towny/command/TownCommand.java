@@ -3263,18 +3263,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			return;
 		}
 
-		//If town is under siege, town cannot recruit new members
-		if(sender instanceof Player
-			&& !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin((Player)sender)
-			&& SiegeWarSettings.getWarSiegeEnabled()
-			&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
-			&& town.hasSiege()
-			&& town.getSiege().getStatus().isActive())
-		{
-			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_siege_besieged_town_cannot_recruit"));
-			return;
-		}
-
 		if (town.isBankrupt())
 			throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_invite"));
 

@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
+import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
@@ -256,4 +257,19 @@ public class SiegeWarEventListener implements Listener {
 		}
 		
 	}
+
+	/*
+	 * If town is under siege, town cannot recruit new members
+	 */
+	@EventHandler
+	public void onTownAddResident(TownPreAddResidentEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+				&& event.getTown().hasSiege()
+				&& event.getTown().getSiege().getStatus().isActive()) {
+			event.setCancelled(true);
+			event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_recruit"));
+		}
+	}
+		
 }
