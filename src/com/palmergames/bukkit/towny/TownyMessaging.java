@@ -509,7 +509,7 @@ public class TownyMessaging {
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName()) + line));
+			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 	}
 
 	/**
@@ -536,7 +536,7 @@ public class TownyMessaging {
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
-				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName()) + line));
+				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 			}
 		}
 	}

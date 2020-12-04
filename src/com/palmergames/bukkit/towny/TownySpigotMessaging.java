@@ -148,9 +148,9 @@ public class TownySpigotMessaging {
 				townName.addExtra(nextComponent);
 			}
 			
-			String spawnCost = "0.00";
+			String spawnCost = "Free";
 
-			if (TownySettings.isUsingEconomy())
+			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 			
 			String hoverText = Translation.of("msg_click_spawn", town) + "\n" + spawnCost;
@@ -255,9 +255,9 @@ public class TownySpigotMessaging {
 				nationName.addExtra(nextComponent);
 			}
 
-			String spawnCost;
-
-			spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+			String spawnCost = "Free";
+			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
 			String hoverText = Translation.of("msg_click_spawn", nation) + "\n" + spawnCost;
 
@@ -320,9 +320,9 @@ public class TownySpigotMessaging {
 			line.addExtra(dash);
 			line.addExtra(coords);
 			
-			String spawnCost = "0.00";
+			String spawnCost = "Free";
 
-			if (TownySettings.isUsingEconomy())
+			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
 			String hoverText = Translation.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name) + "\n" + spawnCost;

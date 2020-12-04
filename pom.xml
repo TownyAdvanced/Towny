@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.5.2</version>
+    <version>0.96.5.4</version>
 
     <licenses>
         <license>
@@ -87,6 +87,12 @@
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
             <version>1.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -196,13 +202,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.4</version>
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
                             <shadedPattern>com.palmergames.paperlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
@@ -213,6 +223,14 @@
                             <shadedPattern>com.palmergames.annotations</shadedPattern>
                         </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>

@@ -235,10 +235,8 @@ public class TownyUniverse {
                 this.dataSource = new TownyFlatFileSource(towny, this);
                 break;
             }
-            case "h2":
-            case "sqlite":
             case "mysql": {
-                this.dataSource = new TownySQLSource(towny, this, loadDbType.toLowerCase());
+                this.dataSource = new TownySQLSource(towny, this);
                 break;
             }
             default: {
@@ -264,10 +262,8 @@ public class TownyUniverse {
                     this.dataSource = new TownyFlatFileSource(towny, this);
                     break;
                 }
-                case "h2":
-                case "sqlite":
                 case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
+                    this.dataSource = new TownySQLSource(towny, this);
                     break;
                 }
                 default: {}

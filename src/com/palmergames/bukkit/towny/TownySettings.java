@@ -903,6 +903,18 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_FLAGS);
 	}
 
+	public static int getMaxPoolSize() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE);
+	}
+
+	public static int getMaxLifetime() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_LIFETIME);
+	}
+
+	public static int getConnectionTimeout() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT);
+	}
+
 	public static int getMaxTownBlocks(Town town) {
 
 		int ratio = getTownBlockRatio();
