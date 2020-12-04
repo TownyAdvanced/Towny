@@ -955,7 +955,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
 					} else {
 						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_part_of_any_town"));
+						TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
 						return;
 					}
 				} catch (AlreadyRegisteredException e) {
