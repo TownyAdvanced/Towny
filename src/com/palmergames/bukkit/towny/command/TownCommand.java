@@ -2216,14 +2216,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyWorld world;
 					try {
 
-						if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
-							throw new TownyException(Translation.of("msg_war_flag_deny_town_under_attack"));
-						}
-
-						if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
-							throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
-						}
-
 						if (townBlock == null || townBlock.getTown() != town)
 							throw new TownyException(Translation.of("msg_area_not_own"));
 
