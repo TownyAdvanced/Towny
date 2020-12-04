@@ -15,13 +15,12 @@ public class NationRankAddEvent extends Event implements Cancellable {
 	private final Resident res;
 	private final String rank;
 	private boolean isCancelled = false;
-	private String cancelMessage;
+	private String cancelMessage = Translation.of("msg_resident_not_part_of_any_town");
 
 	public NationRankAddEvent(Nation nation, String rank, Resident res) {
 		this.nation = nation;
 		this.rank = rank;
 		this.res = res;
-		this.cancelMessage = Translation.of("msg_resident_not_part_of_any_town", res.getName(), "Nation");
 	}
 
 	public Nation getNation() {
