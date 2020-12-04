@@ -5453,3 +5453,7 @@ v0.92.0.11:
       - This property controls the maximum number of milliseconds the client will wait for a connection from the pool.
 0.96.5.4:
   - API: NationRankRemoveEvent and NationRankAddEvent, courtesy of ceeedric with PR #4519.
+  - API: added TownPreSetHomeBlockEvent.
+    - Closes #4512.
+  - Fix being able to remove the homeblock.
+    - Closes #4521.

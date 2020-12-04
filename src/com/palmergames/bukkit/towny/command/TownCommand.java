@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -2211,7 +2212,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
 
 					Coord coord = Coord.parseCoord(player);
-					TownBlock townBlock;
+					TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					TownyWorld world;
 					try {
 
@@ -2222,7 +2223,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 							throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
 						}
-						
+
+						if (townBlock == null || townBlock.getTown() != town)
+							throw new TownyException(Translation.of("msg_area_not_own"));
+
 						if (TownyAPI.getInstance().isWarTime())
 							throw new TownyException(Translation.of("msg_war_cannot_do"));
 
@@ -2235,6 +2239,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(Translation.of("msg_too_far"));
 
+						TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
+						Bukkit.getPluginManager().callEvent(preEvent);
+						if (preEvent.isCancelled()) 
+							throw new TownyException(preEvent.getCancelMessage());
+						
 						// Test whether towns will be removed from the nation
 						if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
 							// Do a dry-run of the proximity test.
@@ -2243,7 +2252,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							// Oh no, some the nation will lose at least one town, better make a confirmation.
 							if (!removedTowns.isEmpty()) {
 								final Town finalTown = town;
-								final TownBlock finalTB = TownyAPI.getInstance().getTownBlock(player.getLocation());
+								final TownBlock finalTB = townBlock;
 								final Nation finalNation = nation;
 								oldWorld = town.getHomeblockWorld();
 								Confirmation confirmation = Confirmation.runOnAccept(() -> {
@@ -2264,7 +2273,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 							// Phew, the nation won't lose any towns, let's do this.
 							} else {
-								townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 								oldWorld = town.getHomeblockWorld();
 								town.setHomeBlock(townBlock);
 								town.setSpawn(player.getLocation());		
@@ -2272,7 +2280,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							}
 						// No nation to check proximity for/proximity isn't tested anyways.
 						} else {
-							townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 							oldWorld = town.getHomeblockWorld();
 							town.setHomeBlock(townBlock);
 							town.setSpawn(player.getLocation());
