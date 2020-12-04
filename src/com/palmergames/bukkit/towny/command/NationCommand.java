@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
+import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
@@ -940,6 +942,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("add")) {
+
+				NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(town.getNation(), rank, target);
+				BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
+				
+				if (nationRankAddEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
+					return;
+				}
+				
 				try {
 					if (target.addNationRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
@@ -959,6 +970,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
+
+				NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(town.getNation(), rank, target);
+				BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
+
+				if (nationRankRemoveEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
+					return;
+				}
+				
 				try {
 					if (target.removeNationRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
