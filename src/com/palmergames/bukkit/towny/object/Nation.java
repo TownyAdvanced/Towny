@@ -39,7 +39,6 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
-	private boolean neutral = false;
 	private String mapColorHexCode = "";
 	public UUID uuid;
 	private Location nationSpawn;
@@ -463,29 +462,6 @@ public class Nation extends Government {
 		return removedTowns;
 	}	
 
-	public void toggleNeutral(boolean neutral) throws TownyException {
-
-		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(Translation.of("msg_err_fight_like_king"));
-		else {
-			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
-				for (Resident resident : getResidents())
-					FlagWar.removeAttackerFlags(resident.getName());
-			
-			setNeutral(neutral);
-		}
-	}
-	
-	public void setNeutral(boolean neutral) {
-
-		this.neutral = neutral;
-	}
-
-	public boolean isNeutral() {
-
-		return neutral;
-	}
-
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
@@ -750,5 +726,25 @@ public class Nation extends Government {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
+	}
+
+	/**
+	 * @deprecated As of 0.96.5.0, please use {@link #setNeutral()} instead.
+	 * 
+	 * @param neutral
+	 * @throws TownyException
+	 */
+	@Deprecated
+	public void toggleNeutral(boolean neutral) throws TownyException {
+
+		if (!TownySettings.isDeclaringNeutral() && neutral)
+			throw new TownyException(Translation.of("msg_err_fight_like_king"));
+		else {
+			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
+				for (Resident resident : getResidents())
+					FlagWar.removeAttackerFlags(resident.getName());
+			
+			setNeutral(neutral);
+		}
 	}
 }
