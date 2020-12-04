@@ -248,7 +248,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	/*
 	 * Are these objects in the TownyUniverse maps?
 	 */
-	
+
+	/**
+	 * @param name Name to check for.
+	 * @return whether Towny has a resident by the name.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#hasResident(String)} instead.
+	 */
 	@Override
 	@Deprecated
 	public boolean hasResident(String name) {
@@ -350,12 +356,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return matches;
 	}
 
+	/**
+	 * Gets a list of all Towny residents.
+	 * @return list of all towny residents
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getResidents()} instead.
+	 */
 	@Override
 	@Deprecated
 	public List<Resident> getResidents() {
 		return new ArrayList<>(universe.getResidents());
 	}
 
+	/**
+	 * Get a resident matching a specific name.
+	 * @param name Name of the resident to find.
+	 * @return the resident matching the name.
+	 * @throws NotRegisteredException if no resident matching the name is found.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getResident(String)} instead.
+	 */
 	@Override
 	@Deprecated
 	public Resident getResident(String name) throws NotRegisteredException {

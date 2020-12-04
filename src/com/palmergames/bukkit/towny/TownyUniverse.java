@@ -332,7 +332,14 @@ public class TownyUniverse {
      */
 
 	// =========== Resident Methods ===========
-	
+
+	/**
+	 * Check if a resident exists with the passed in name.
+	 * Will return true for fake residents and registered NPCs.
+	 * 
+	 * @param residentName Resident name to check for.
+	 * @return whether Towny has a resident matching that name.
+	 */
 	public boolean hasResident(@NotNull String residentName) {
 		Validate.notNull(residentName, "Resident name cannot be null!");
 		
@@ -351,13 +358,27 @@ public class TownyUniverse {
 		
 		return residentNameMap.containsKey(filteredName);
 	}
-	
+
+	/**
+	 * Check if a resident exists matching the passed in UUID.
+	 * 
+	 * @param residentUUID UUID of the resident to check.
+	 * @return whether the resident matching the UUID exists.
+	 */
 	public boolean hasResident(@NotNull UUID residentUUID) {
 		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
 		
 		return residentUUIDMap.containsKey(residentUUID);
 	}
-	
+
+	/**
+	 * Get the resident matching the passed in name.
+	 * 
+	 * Any fake residents (not registered NPCs) will return a new instance of a resident on method call.
+	 * 
+	 * @param residentName Name of the resident to fetch.
+	 * @return the resident matching the given name or {@code null} if no resident is found.
+	 */
 	@Nullable
 	public Resident getResident(@NotNull String residentName) {
 		Validate.notNull(residentName, "Resident name cannot be null!");
@@ -381,12 +402,24 @@ public class TownyUniverse {
 		
 		return res;
 	}
-	
+
+	/**
+	 * Get an optional instance of the resident matching the passed in name.
+	 * 
+	 * @param residentName Name of the resident to fetch.
+	 * @return Optional object that may contain the resident matching the given name.
+	 */
 	@NotNull
 	public Optional<Resident> getResidentOpt(@NotNull String residentName) {
 		return Optional.ofNullable(getResident(residentName));
 	}
-	
+
+	/**
+	 * Get the resident with the passed-in UUID.
+	 *
+	 * @param residentUUID UUID of the resident to get.
+	 * @return the resident with the passed-in UUID or {@code null} if no resident is found.
+	 */
 	@Nullable
 	public Resident getResident(@NotNull UUID residentUUID) {
 		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
@@ -394,6 +427,12 @@ public class TownyUniverse {
 		return residentUUIDMap.get(residentUUID);
 	}
 	
+	/**
+	 * Get an optional object that may contain the resident with the passed-in UUID.
+	 *
+	 * @param residentUUID UUID of the resident to get.
+	 * @return an optional object that may contain the resident with the passed-in UUID. 
+	 */
 	@NotNull
 	public Optional<Resident> getResidentOpt(@NotNull UUID residentUUID) {
 		return Optional.ofNullable(getResident(residentUUID));
@@ -411,7 +450,18 @@ public class TownyUniverse {
 			}
 		}
 	}
-	
+
+	/**
+	 * Register a resident into the internal structures.
+	 * This will allow the resident to be fetched by name and UUID, as well as autocomplete the resident name.
+	 * 
+	 * If a resident's name or UUID change, the resident must be re-registered into the maps. 
+	 * 
+	 * This does not modify the resident internally, nor saves the resident in the database.
+	 * 
+	 * @param resident Resident to register.
+	 * @throws AlreadyRegisteredException if another resident has been registered with the same name or UUID.
+	 */
 	public void registerResident(@NotNull Resident resident) throws AlreadyRegisteredException {
 		Validate.notNull(resident, "Resident cannot be null!");
 
@@ -423,6 +473,13 @@ public class TownyUniverse {
 		registerResidentUUID(resident);
 	}
 
+	/**
+	 * Unregister a resident from the internal structures.
+	 * This does not modify the resident internally, nor performs any database operations using the resident.
+	 * 
+	 * @param resident Resident to unregister
+	 * @throws NotRegisteredException if the resident's name or UUID was not registered.
+	 */
 	public void unregisterResident(@NotNull Resident resident) throws NotRegisteredException {
 		Validate.notNull(resident, "Resident cannot be null!");
 
@@ -438,7 +495,13 @@ public class TownyUniverse {
 			}
 		}
 	}
-    
+
+	/**
+	 *
+	 * @return map of string -> resident.
+	 * 
+	 * @deprecated Towny does not recommend directly accessing internal structures.
+	 */
 	@Deprecated
     public Map<String, Resident> getResidentMap() {
         return residentNameMap;
