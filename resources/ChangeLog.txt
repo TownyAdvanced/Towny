@@ -5457,4 +5457,4 @@ v0.92.0.11:
     - Closes #4512.
   - Fix being able to remove the homeblock.
     - Closes #4521.
-  - Add onTownSetHomeBlock() to FlagWarCustomerListener.
+  - Add onTownSetHomeBlock() to FlagWarCustomListener.
