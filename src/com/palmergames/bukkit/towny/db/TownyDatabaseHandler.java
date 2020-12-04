@@ -325,13 +325,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(Player player, String[] names) {
 
 		List<Resident> invited = new ArrayList<>();
-		for (String name : names)
-			try {
-				Resident target = getResident(name);
-				invited.add(target);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+		for (String name : names) {
+			Resident target = universe.getResident(name);
+			if (target == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", name));
 			}
+			else {
+				invited.add(target);
+			}
+		}
 		return invited;
 	}
 
@@ -339,11 +341,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getResident(name));
-			} catch (NotRegisteredException ignored) {
-			}
+		for (String name : names) {
+			Resident matchRes = universe.getResident(name);
+			
+			if (matchRes != null)
+				matches.add(matchRes);
+		}
 		return matches;
 	}
 
@@ -1093,14 +1096,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setName(newName);
 			// Re-register the resident with the new name.
 			universe.registerResident(resident);
-			// remove and readd resident to jailedResidentsMap if jailed.
-			if (resident.isJailed()) {
-				try {
-					universe.getJailedResidentMap().remove(universe.getDataSource().getResident(oldName));
-					universe.getJailedResidentMap().add(universe.getDataSource().getResident(newName));
-				} catch (Exception ignored) {
-				}
-			}
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
 			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {

@@ -653,12 +653,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
 
 			while (rs.next()) {
-				Resident resident;
+				String residentName;
 				try {
-					resident = getResident(rs.getString("name"));
-				} catch (Exception e) {
-					System.out.println("[Towny] Loading Error: Could not fetch a resident by name.");
-					e.printStackTrace();
+					residentName = rs.getString("name");
+				} catch (SQLException ex) {
+					System.out.println("[Towny] Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
+					ex.printStackTrace();
+					continue;
+				}
+				
+				Resident resident = universe.getResident(residentName);
+				
+				if (residentName == null) {
+					System.out.println(String.format("[Towny] Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
 					continue;
 				}
 
@@ -886,7 +893,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading town " + name);
 
 			try {
-				town.forceSetMayor(getResident(rs.getString("mayor")));
+				Resident res = universe.getResident(rs.getString("mayor"));
+				
+				if (res == null)
+					throw new TownyException();
+					
+				town.forceSetMayor(res);
 			} catch (TownyException e1) {
 				e1.getMessage();
 				if (town.getResidents().size() == 0) {
@@ -1029,9 +1041,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split(search);
 				for (String token : tokens) {
 					if (!token.isEmpty()) {
-						Resident resident = getResident(token);
+						Resident resident = universe.getResident(token);
 						if (resident != null)
 							town.addOutlaw(resident);
+						else {
+							System.out.println(String.format(
+								"[Towny] Loading Error: Cannot load outlaw with name '%s' for town '%s'! Skipping adding outlaw to town...",
+								token, town.getName()
+							));
+						}
 					}
 				}
 			}
@@ -1635,12 +1653,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 				line = rs.getString("resident");
-				if (line != null && !line.isEmpty())
-					try {
-						Resident res = getResident(line.trim());
+				if (line != null && !line.isEmpty()) {
+					Resident res = universe.getResident(line.trim());
+					if (res != null)
 						townBlock.setResident(res);
-					} catch (Exception ignored) {
+					else {
+						TownyMessaging.sendErrorMsg(String.format(
+							"Error fetching resident '%s' for townblock '%s'!",
+							line.trim(), townBlock.toString()
+						));
 					}
+				}
 
 				line = rs.getString("type");
 				if (line != null)

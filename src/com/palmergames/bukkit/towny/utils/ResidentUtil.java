@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,22 +67,14 @@ public class ResidentUtil {
 				for (Player p : matches)
 					line.append(", ").append(p.getName());
 				TownyMessaging.sendErrorMsg(sender, line.toString());
-			} else if (matches.size() == 1) {
-				// Match found online
-				try {
-					Resident target = townyUniverse.getDataSource().getResident(matches.get(0).getName());
-					residents.add(target);
-				} catch (TownyException x) {
-					TownyMessaging.sendErrorMsg(sender, x.getMessage());
-				}
 			} else {
-				// No online matches so test for offline.
-				Resident target;
-				try {
-					target = townyUniverse.getDataSource().getResident(name);
+				String targetName = !matches.isEmpty() ? matches.get(0).getName() : name;
+				Resident target = townyUniverse.getResident(targetName);
+				if (target != null) {
 					residents.add(target);
-				} catch (NotRegisteredException x) {
-					TownyMessaging.sendErrorMsg(sender, x.getMessage());
+				}
+				else {
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_not_registered_1", targetName));
 				}
 			}
 		}

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -35,11 +36,10 @@ public class SetDefaultModes extends TimerTask {
 			String modeString = townyUniverse.getPermissionSource().getPlayerPermissionStringNode(name, PermissionNodes.TOWNY_DEFAULT_MODES.getNode());
 			if (modeString.isEmpty()) { return; }
 			String[] modes = modeString.split(",");
-			try {
-				townyUniverse.getDataSource().getResident(name).resetModes(modes, notify);
-			} catch (NotRegisteredException e) {
-				// No resident by this name.
-			}
+			Resident resident = townyUniverse.getResident(name);
+			
+			if (resident != null)
+				resident.setModes(modes, notify);
 		} catch (NullPointerException ignored) {
 			
 		}

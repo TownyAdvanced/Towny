@@ -166,29 +166,24 @@ public class GroupManagerSource extends TownyPermissionSource {
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMUserEvent(GMUserEvent event) {
 
-			Resident resident = null;
-			Player player = null;
-
 			try {
-				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
-
-					try {
-						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getUserName());
-						player = BukkitTools.getPlayerExact(resident.getName());
-						if (player != null) {
-							//setup default modes for this player.
-							String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(player, modes, false);
-							plugin.resetCache(player);
-						}
-					} catch (NotRegisteredException ignored) {
-					}
-
-				}
+				PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name());
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
+				return;
 			}
 
+			Resident resident = TownyUniverse.getInstance().getResident(event.getUserName());
+			if (resident != null) {
+				Player player = BukkitTools.getPlayerExact(resident.getName());
+
+				if (player != null) {
+					//setup default modes for this player.
+					String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+					plugin.setPlayerMode(player, modes, false);
+					plugin.resetCache(player);
+				}
+			}
 		}
 
 		@EventHandler(priority = EventPriority.HIGH)

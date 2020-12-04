@@ -31,11 +31,7 @@ public class TownClaimEvent extends Event  {
     public TownClaimEvent(TownBlock townBlock, Player player) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = townBlock;
-		try {
-			this.resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
-		}
+        this.resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 	}
 
     /**

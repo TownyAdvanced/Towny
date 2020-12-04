@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
@@ -37,15 +38,23 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 				continue;
 
 			try {
-				if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-					continue;
+				WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
 				
-				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(WorldCoord.parseWorldCoord(player.getLocation())));
+				// Is wilderness
+				if (!TownyUniverse.getInstance().hasTownBlock(worldCoord))
+					return;
 				
-				if (townBlock != null && CombatUtil.isAlly(townBlock.getTown(), TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown()))
+				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(worldCoord);
+				
+				// Is wilderness
+				if (!townBlock.hasTown())
+					return;
+
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+				if (resident != null && resident.hasTown() && CombatUtil.isAlly(townBlock.getTown(), resident.getTown()))
 					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 						incHealth(player);
-			} catch (TownyException x) {
+			} catch (TownyException ignore) {
 			}
 		}
 

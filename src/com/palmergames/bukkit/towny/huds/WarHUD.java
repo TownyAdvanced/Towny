@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -85,25 +86,33 @@ public class WarHUD {
 	}
 
 	public static void updateHomeTown(Player p) {
+		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
 		String homeTown;
-		try {
-			homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
-		} catch (NotRegisteredException e) {
+		if (res == null || !res.hasTown())
 			homeTown = Translation.of("war_hud_townless");
+		else {
+			try {
+				homeTown = res.getTown().getName();
+			} catch (NotRegisteredException ignore) {
+				// Will never happen
+				homeTown = "";
+			}
 		}
+		
 		p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
 	}
 
 	public static void updateScore(Player p, War war) {
-		String score;
+		String score = "";
+		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
+		Hashtable<Town, Integer> scores = war.getTownScores();
 		try {
-			Town home = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-			Hashtable<Town, Integer> scores = war.getTownScores();
-			if (scores.containsKey(home))
-				score = scores.get(home) + "";
-			else
-				score = "";
-		} catch (NotRegisteredException e) {score = "";}
+			if (res != null && res.hasTown() && scores.containsKey(res.getTown())) {
+				score = String.valueOf(scores.get(res.getTown()));
+			}
+		} catch (NotRegisteredException ignore) {
+		}
+
 		p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score));
 	}
 

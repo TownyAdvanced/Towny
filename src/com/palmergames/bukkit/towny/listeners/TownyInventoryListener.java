@@ -27,10 +27,9 @@ public class TownyInventoryListener implements Listener {
 			return;
 
 		Player player = (Player) event.getWhoClicked();
-		Resident resident = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e1) {
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (resident == null) {
 			event.setCancelled(true);
 			return;
 		}

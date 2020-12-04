@@ -78,10 +78,9 @@ public class FlagWarCustomListener implements Listener {
 			playerName = "Greater Forces";
 		} else {
 			playerName = player.getName();
-			try {
-				playerName = universe.getDataSource().getResident(player.getName()).getFormattedName();
-			} catch (TownyException ignored) {
-			}
+			Resident playerRes = universe.getResident(player.getUniqueId());
+			if (playerRes != null)
+				playerName = playerRes.getFormattedName();
 		}
 
 		plugin.getServer().broadcastMessage(Translation.of("msg_enemy_war_area_defended", playerName, cell.getCellString()));
@@ -92,12 +91,14 @@ public class FlagWarCustomListener implements Listener {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
+				attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
+				
+				// Should never happen
+				if (attackingPlayer == null)
+					return;
+				
 				if (player != null) {
-					try {
-						defendingPlayer = universe.getDataSource().getResident(player.getName());
-					} catch (NotRegisteredException ignored) {
-					}
+					defendingPlayer = universe.getResident(player.getUniqueId());
 				}
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
@@ -119,7 +120,7 @@ public class FlagWarCustomListener implements Listener {
 						}
 					}
 				}
-			} catch (EconomyException | NotRegisteredException e) {
+			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
 		}
@@ -135,7 +136,12 @@ public class FlagWarCustomListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			Resident attackingResident = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
+			Resident attackingResident = universe.getResident(cell.getNameOfFlagOwner());
+			
+			// Shouldn't happen
+			if (attackingResident == null)
+				return;
+			
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
