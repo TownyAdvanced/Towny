@@ -2517,7 +2517,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_too_far"));
 
 			// If the town isn't free to make, send a confirmation.
-			if (!noCharge && TownySettings.isUsingEconomy()) { 
+			if (!noCharge && TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) { 
 				// Test if the resident can afford the town.
 				if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
 					throw new TownyException(Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
@@ -2595,7 +2595,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
 		}
-		if (TownySettings.isUsingEconomy()) {
+		if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
 			TownyMessaging.sendDebugMsg("Creating new Town account: " + TownySettings.getTownAccountPrefix() + name);
 			try {
 				town.getAccount().setBalance(0, "Setting 0 balance for Town");
