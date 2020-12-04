@@ -2851,12 +2851,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		for (Resident newMember : new ArrayList<>(invited)) {
 			try {
 
-				TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
-				Bukkit.getPluginManager().callEvent(preEvent);
-
-				if (preEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
-					return;
+				if (!admin) {
+					TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
+					Bukkit.getPluginManager().callEvent(preEvent);
+	
+					if (preEvent.isCancelled()) {
+						TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
+						return;
+					}
 				}
 				
 				// only add players with the right permissions.

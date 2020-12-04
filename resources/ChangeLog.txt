@@ -5458,3 +5458,4 @@ v0.92.0.11:
   - Fix being able to remove the homeblock.
     - Closes #4521.
   - Add onTownSetHomeBlock() to FlagWarCustomListener.
+  - Fire TownPreAddResidentEvent only when it is not being run by an admin or the console.
