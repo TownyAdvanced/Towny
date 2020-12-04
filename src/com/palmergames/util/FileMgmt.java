@@ -221,7 +221,7 @@ public final class FileMgmt {
 						writer.write(buffer, 0, n);
 					}
 				} catch (IOException e) {
-					System.out.println("Exception ");
+					e.printStackTrace();
 				} finally {
 					try {
 						is.close();
@@ -261,7 +261,7 @@ public final class FileMgmt {
 					}
 					reader.close();
 				} catch (IOException e) {
-					System.out.println("Exception ");
+					e.printStackTrace();
 				}
 				return writer.toString();
 			} else {
@@ -297,7 +297,7 @@ public final class FileMgmt {
 				bufferedWriter.write(source);
 
 			} catch (IOException e) {
-				System.out.println("Exception ");
+				e.printStackTrace();
 			}
 		} finally {
 			writeLock.unlock();
@@ -324,7 +324,7 @@ public final class FileMgmt {
 
 				return true;
 			} catch (IOException e) {
-				System.out.println("Exception ");
+				e.printStackTrace();
 				return false;
 			}
 		} finally {
