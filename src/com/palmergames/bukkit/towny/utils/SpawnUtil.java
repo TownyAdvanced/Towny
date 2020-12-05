@@ -65,7 +65,7 @@ public class SpawnUtil {
 
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
-		if (resident != null)
+		if (resident == null)
 			throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
 			
 		// Test if the resident is in a teleport cooldown.
