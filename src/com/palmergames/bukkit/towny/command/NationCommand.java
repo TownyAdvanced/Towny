@@ -18,11 +18,16 @@ import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
-import com.palmergames.bukkit.towny.event.nation.NationGenericToggleEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationPreToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationPreToggleOpenEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationPreTogglePublicEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleOpenEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationTogglePublicEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
@@ -2583,16 +2588,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-
-			/*
-			 * Throw up a cancellable /nation toggle {args} event.
-			 */
-			if (!admin) {
-				NationGenericToggleEvent preEvent = new NationGenericToggleEvent(player, nation, split);
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancelMessage());
-			}
 			
 			Optional<Boolean> choice = Optional.empty();
 			if (split.length == 2) {
@@ -2603,6 +2598,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				NationPreToggleNeutralEvent preEvent = new NationPreToggleNeutralEvent(player, nation);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancelMessage());
+				
 				
 				boolean value = choice.orElse(!nation.isNeutral());
 				double cost = TownySettings.getNationNeutralityCost();
@@ -2635,20 +2636,37 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
 						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
+				
+                Bukkit.getPluginManager().callEvent(new NationToggleNeutralEvent(player, nation));
+
 			} else if(split[0].equalsIgnoreCase("public")){
                 if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
                     throw new TownyException(Translation.of("msg_err_command_disable"));
 
+				NationPreTogglePublicEvent preEvent = new NationPreTogglePublicEvent(player, nation);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancelMessage());
+                
                 nation.setPublic(choice.orElse(!nation.isPublic()));
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
+                
+                Bukkit.getPluginManager().callEvent(new NationTogglePublicEvent(player, nation));
 
             } else if(split[0].equalsIgnoreCase("open")){
                 if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
                     throw new TownyException(Translation.of("msg_err_command_disable"));
 
+				NationPreToggleOpenEvent preEvent = new NationPreToggleOpenEvent(player, nation);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancelMessage());
+                
                 nation.setOpen(choice.orElse(!nation.isOpen()));
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 
+                Bukkit.getPluginManager().callEvent(new NationToggleOpenEvent(player, nation));
+                
             } else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "nation"));
 				return;

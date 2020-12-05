@@ -21,7 +21,20 @@ import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
-import com.palmergames.bukkit.towny.event.town.TownGenericToggleEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreToggleExplosionEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreToggleFireEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreToggleMobsEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreToggleOpenEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreTogglePVPEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreTogglePublicEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownPreToggleTaxPercentEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleMobsEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1448,7 +1461,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			sender.sendMessage(ChatTools.formatCommand("", "/town toggle", "jail [number] [resident]", ""));
 		} else {
 			Resident resident;
-
+			Player player = null;
+			if (sender instanceof Player)
+				player = (Player) sender;
+			
 			try {
 				
 				if (!admin) {
@@ -1465,16 +1481,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (!admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
-			/*
-			 * Throw up a cancellable /t toggle {args} event.
-			 */
-			if (!admin && sender instanceof Player) {
-				TownGenericToggleEvent preEvent = new TownGenericToggleEvent((Player) sender, town, split);
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
-			}
-			
 			Optional<Boolean> choice = Optional.empty();
 			if (split.length == 2 && !split[0].equalsIgnoreCase("jail")) { // Exclude jail command from on/off
 				choice = BaseCommand.parseToggleChoice(split[1]);
@@ -1482,12 +1488,29 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (split[0].equalsIgnoreCase("public")) {
 
+				if (!admin && player != null) {
+					TownPreTogglePublicEvent preEvent = new TownPreTogglePublicEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+
 				town.setPublic(choice.orElse(!town.isPublic()));
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_public", town.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_public", town.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownTogglePublicEvent(player, town));
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
+				
+				if (!admin && player != null) {
+					TownPreTogglePVPEvent preEvent = new TownPreTogglePVPEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+
 				// Make sure we are allowed to set these permissions.
 				if (!admin) {
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
@@ -1511,18 +1534,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 					}
 				}
-				if (!outsiderintown) {
-					town.setPVP(choice.orElse(!town.isPVP()));
-					// Add a cooldown to PVP toggling.
-					if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
-						CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translation.of("enabled") : Translation.of("disabled")));
-					if (admin)
-						TownyMessaging.sendMsg(sender, Translation.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translation.of("enabled") : Translation.of("disabled")));
-				} else if (outsiderintown) {
+				if (outsiderintown) 
 					throw new TownyException(Translation.of("msg_cant_toggle_pvp_outsider_in_town"));
-				}
+
+				town.setPVP(choice.orElse(!town.isPVP()));
+				// Add a cooldown to PVP toggling.
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
+					CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translation.of("enabled") : Translation.of("disabled")));
+				if (admin)
+					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownTogglePVPEvent(player, town));
+				
 			} else if (split[0].equalsIgnoreCase("explosion")) {
+				
+				if (!admin && player != null) {
+					TownPreToggleExplosionEvent preEvent = new TownPreToggleExplosionEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+				
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
@@ -1530,8 +1563,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_expl", town.getName(), town.isBANG() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_expl", town.getName(), town.isBANG() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownToggleExplosionEvent(player, town));
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
+				
+				if (!admin && player != null) {
+					TownPreToggleFireEvent preEvent = new TownPreToggleFireEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+				
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
@@ -1539,8 +1582,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_fire", town.getName(), town.isFire() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_fire", town.getName(), town.isFire() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownToggleFireEvent(player, town));
 
 			} else if (split[0].equalsIgnoreCase("mobs")) {
+				
+				if (!admin && player != null) {
+					TownPreToggleMobsEvent preEvent = new TownPreToggleMobsEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+
 				// Make sure we are allowed to set these permissions.
 				if (!admin)
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
@@ -1548,14 +1601,34 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownToggleMobsEvent(player, town));
 
 			} else if (split[0].equalsIgnoreCase("taxpercent")) {
+				
+				if (!admin && player != null) {
+					TownPreToggleTaxPercentEvent preEvent = new TownPreToggleTaxPercentEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+				
 				town.setTaxPercentage(choice.orElse(!town.isTaxPercentage()));
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
+				
+				Bukkit.getPluginManager().callEvent(new TownToggleTaxPercentEvent(player, town));
+				
 			} else if (split[0].equalsIgnoreCase("open")) {
 
+				if (!admin && player != null) {
+					TownPreToggleOpenEvent preEvent = new TownPreToggleOpenEvent(player, town);
+					Bukkit.getPluginManager().callEvent(preEvent);
+					if (preEvent.isCancelled())
+						throw new TownyException(preEvent.getCancellationMsg());
+				}
+				
 				if(town.isBankrupt())
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
@@ -1568,6 +1641,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// permissions).
 				if (town.isOpen())
 					throw new TownyException(Translation.of("msg_toggle_open_on_warning"));
+				
+				Bukkit.getPluginManager().callEvent(new TownToggleOpenEvent(player, town));
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
 				if (!town.hasJailSpawn())
