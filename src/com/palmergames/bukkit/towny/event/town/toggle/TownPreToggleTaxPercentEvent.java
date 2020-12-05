@@ -1,15 +1,14 @@
 package com.palmergames.bukkit.towny.event.town.toggle;
 
-import org.bukkit.entity.Player;
-
+import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class TownPreToggleTaxPercentEvent extends TownPreToggleEvent {
 
 	private final boolean state;
 	
-	public TownPreToggleTaxPercentEvent(Player player, Town town) {
-		super(player, town);
+	public TownPreToggleTaxPercentEvent(CommandSender sender, Town town, boolean admin) {
+		super(sender, town, admin);
 		state = town.isTaxPercentage();
 	}
 

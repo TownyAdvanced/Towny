@@ -1,15 +1,14 @@
 package com.palmergames.bukkit.towny.event.town.toggle;
 
-import org.bukkit.entity.Player;
-
+import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class TownPreToggleOpenEvent extends TownPreToggleEvent {
 
 	private final boolean state;
 	
-	public TownPreToggleOpenEvent(Player player, Town town) {
-		super(player, town);
+	public TownPreToggleOpenEvent(CommandSender sender, Town town, boolean admin) {
+		super(sender, town, admin);
 		state = town.isOpen();
 	}
 

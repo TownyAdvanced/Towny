@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event.town.toggle;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -16,8 +17,10 @@ import com.palmergames.bukkit.towny.object.Translation;
 public abstract class TownPreToggleEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private final Player player;
+	private Player player = null;
 	private final Town town;
+	private final CommandSender sender;
+	private final boolean isAdminAction;
 	private boolean isCancelled = false;
 	private String cancellationMsg = Translation.of("msg_err_command_disable");
 	
@@ -26,11 +29,15 @@ public abstract class TownPreToggleEvent extends Event implements Cancellable {
 	 * 
 	 * @param player Player who has run the command.
 	 * @param town Town which will have something cancelled.
+	 * @param admin Whether this was executed by an admin.
 	 */
-	public TownPreToggleEvent(Player player, Town town) {
+	public TownPreToggleEvent(CommandSender sender, Town town, boolean admin) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.player = player;
+		this.sender = sender;
+		if (sender instanceof Player)
+			this.player = (Player) sender;
 		this.town = town;
+		this.isAdminAction = admin;
 	}
 
 	@Override
@@ -60,12 +67,17 @@ public abstract class TownPreToggleEvent extends Event implements Cancellable {
 		return null;
 	}
 	
+	@Nullable
 	public Player getPlayer() {
 		return player;
 	}
 
 	public Town getTown() {
 		return town;
+	}
+	
+	public CommandSender getSender() {
+		return sender;
 	}
 
 	public String getCancellationMsg() {
@@ -74,5 +86,12 @@ public abstract class TownPreToggleEvent extends Event implements Cancellable {
 
 	public void setCancellationMsg(String cancellationMsg) {
 		this.cancellationMsg = cancellationMsg;
+	}
+
+	/**
+	 * @return true if this toggling is because of an admin or console.
+	 */
+	public boolean isAdminAction() {
+		return isAdminAction;
 	}
 }

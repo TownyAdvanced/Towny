@@ -2566,28 +2566,31 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void nationToggle(Player player, String[] split, boolean admin, Nation nation) throws TownyException {
+	public static void nationToggle(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful/neutral", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
+			sender.sendMessage(ChatTools.formatTitle("/nation toggle"));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful/neutral", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
 		} else {
 			Resident resident;
 
 			try {
 				if (!admin) {
-					resident = townyUniverse.getDataSource().getResident(player.getName());
+					resident = townyUniverse.getDataSource().getResident(((Player) sender ).getName());
 					nation = resident.getTown().getNation();
 				} else  // Treat any resident tests as though the king were doing it.
 					resident = nation.getKing();
 				
 			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				TownyMessaging.sendErrorMsg(sender, x.getMessage());
 				return;
 			}
+			
+			if (!admin && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE.getNode(split[0].toLowerCase())))
+				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
 			Optional<Boolean> choice = Optional.empty();
 			if (split.length == 2) {
@@ -2596,10 +2599,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				NationPreToggleNeutralEvent preEvent = new NationPreToggleNeutralEvent(player, nation);
+				NationPreToggleNeutralEvent preEvent = new NationPreToggleNeutralEvent(sender, nation, admin);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
@@ -2616,9 +2616,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
 					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 				} catch (EconomyException e) {
-					// This can literally never happen. But if it does, print to console, and send message to player.
+					// This can literally never happen. But if it does, print to console, and send message to sender.
 					e.printStackTrace();
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
+					TownyMessaging.sendErrorMsg(sender, e.getMessage());
 					return;
 				}
 
@@ -2629,21 +2629,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// send message depending on if using an economy and charging
 					// for peaceful
 					if (TownySettings.isUsingEconomy() && cost > 0)
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+						TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 					else
-						TownyMessaging.sendMsg(player, Translation.of("msg_nation_set_peace"));
+						TownyMessaging.sendMsg(sender, Translation.of("msg_nation_set_peace"));
 				}
 
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
 						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 				
-                Bukkit.getPluginManager().callEvent(new NationToggleNeutralEvent(player, nation));
+                Bukkit.getPluginManager().callEvent(new NationToggleNeutralEvent(sender, nation, admin));
 
 			} else if(split[0].equalsIgnoreCase("public")){
-                if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
-                    throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				NationPreTogglePublicEvent preEvent = new NationPreTogglePublicEvent(player, nation);
+				NationPreTogglePublicEvent preEvent = new NationPreTogglePublicEvent(sender, nation, admin);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
@@ -2651,13 +2649,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation.setPublic(choice.orElse(!nation.isPublic()));
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
                 
-                Bukkit.getPluginManager().callEvent(new NationTogglePublicEvent(player, nation));
+                Bukkit.getPluginManager().callEvent(new NationTogglePublicEvent(sender, nation, admin));
 
             } else if(split[0].equalsIgnoreCase("open")){
-                if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
-                    throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				NationPreToggleOpenEvent preEvent = new NationPreToggleOpenEvent(player, nation);
+				NationPreToggleOpenEvent preEvent = new NationPreToggleOpenEvent(sender, nation, admin);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
@@ -2665,10 +2661,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation.setOpen(choice.orElse(!nation.isOpen()));
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 
-                Bukkit.getPluginManager().callEvent(new NationToggleOpenEvent(player, nation));
+                Bukkit.getPluginManager().callEvent(new NationToggleOpenEvent(sender, nation, admin));
                 
             } else {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "nation"));
+				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_invalid_property", "nation"));
 				return;
 			}
 

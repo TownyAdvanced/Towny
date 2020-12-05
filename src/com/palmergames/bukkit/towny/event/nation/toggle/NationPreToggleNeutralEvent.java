@@ -1,15 +1,14 @@
 package com.palmergames.bukkit.towny.event.nation.toggle;
 
-import org.bukkit.entity.Player;
-
+import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Nation;
 
 public class NationPreToggleNeutralEvent extends NationPreToggleEvent {
 
 	private final boolean state;
 	
-	public NationPreToggleNeutralEvent(Player player, Nation nation) {
-		super(player, nation);
+	public NationPreToggleNeutralEvent(CommandSender sender, Nation nation, boolean admin) {
+		super(sender, nation, admin);
 		state = nation.isNeutral();
 	}
 	

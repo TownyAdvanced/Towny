@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event.nation.toggle;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -16,16 +17,21 @@ import com.palmergames.bukkit.towny.object.Translation;
 public abstract class NationPreToggleEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private final Player player;
+	private Player player = null;
+	private final CommandSender sender;
 	private final Nation nation;
+	private final boolean isAdminAction;
 	private boolean isCancelled = false;
 	private String cancelMessage = Translation.of("msg_err_command_disable");
 	
 	
-	public NationPreToggleEvent(Player player, Nation nation) {
+	public NationPreToggleEvent(CommandSender sender, Nation nation, boolean admin) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.player = player;
+		this.sender = sender;
+		if (sender instanceof Player)
+			this.player = (Player) sender;;
 		this.nation = nation;
+		this.isAdminAction = admin;
 	}
 
 	@Override
@@ -55,8 +61,13 @@ public abstract class NationPreToggleEvent extends Event implements Cancellable 
 		return null;
 	}
 	
+	@Nullable
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public CommandSender getSender() {
+		return sender;
 	}
 
 	public Nation getNation() {
@@ -70,5 +81,11 @@ public abstract class NationPreToggleEvent extends Event implements Cancellable 
 	public void setCancelMessage(String cancelMessage) {
 		this.cancelMessage = cancelMessage;
 	}
-	
+
+	/**
+	 * @return true if this toggling is because of an admin or console.
+	 */
+	public boolean isAdminAction() {
+		return isAdminAction;
+	}
 }
