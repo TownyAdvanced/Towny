@@ -1302,7 +1302,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if(split[1].equalsIgnoreCase("toggle")) {
 				
-				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
+				NationCommand.nationToggle(sender, StringMgmt.remArgs(split, 2), true, nation);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
 				if (!TownySettings.isUsingEconomy())

@@ -24,7 +24,7 @@ public class TownReclaimedEvent extends Event {
 		return handlers;
 	}
 
-	public HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

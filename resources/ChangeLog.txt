@@ -5453,3 +5453,32 @@ v0.92.0.11:
       - This property controls the maximum number of milliseconds the client will wait for a connection from the pool.
 0.96.5.4:
   - API: NationRankRemoveEvent and NationRankAddEvent, courtesy of ceeedric with PR #4519.
+  - API: added TownPreSetHomeBlockEvent.
+    - Closes #4512.
+  - Fix being able to remove the homeblock.
+    - Closes #4521.
+  - Add onTownSetHomeBlock() to FlagWarCustomListener.
+  - Fire TownPreAddResidentEvent only when it is not being run by an admin or the console.
+  - Fix NPC-run capital city's nations paying upkeep costs.
+  - API: Town and Nation toggle events:
+    - NationToggleEvent
+    - NationToggleNeutralEvent
+    - NationToggleOpenEvent
+    - NationTogglePublicEvent
+    - NationToggleUnknownEvent
+    - TownToggleEvent
+    - TownToggleExplosionEvent
+    - TownToggleFireEvent
+    - TownToggleMobsEvent
+    - TownToggleOpenEvent
+    - TownTogglePVPEvent
+    - TownTogglePublicEvent
+    - TownToggleTaxPercentEvent
+    - TownToggleUnknownEvent
+    - These events fire after all other Towny-side decisions are made on whether the action is allowed by the sender.
+    - Adds bonus TownToggleUnknownEvent & NationToggleUnknownEvent which is fired when a subcommand we dont recognize is used.
+      - Defaults to cancelled but is fired to allow another plugin to be able to see the args used in order to simulate their having a proper /t toggle command.
+    - Switches help menus over to using the newer HelpMenu object.
+  - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
+  - Test that the name is allowed before charging money to change a nation or town name.
+    - Closes #4530.
