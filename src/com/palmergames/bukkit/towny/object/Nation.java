@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -729,22 +728,12 @@ public class Nation extends Government {
 	}
 
 	/**
-	 * @deprecated As of 0.96.5.0, please use {@link #setNeutral()} instead.
+	 * @deprecated As of 0.96.5.0, please use {@link Government#setNeutral(boolean)} instead.
 	 * 
-	 * @param neutral
-	 * @throws TownyException
+	 * @param neutral The value which will be used to set Neutrality true or false.
 	 */
 	@Deprecated
-	public void toggleNeutral(boolean neutral) throws TownyException {
-
-		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(Translation.of("msg_err_fight_like_king"));
-		else {
-			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
-				for (Resident resident : getResidents())
-					FlagWar.removeAttackerFlags(resident.getName());
-			
-			setNeutral(neutral);
-		}
+	public void toggleNeutral(boolean neutral) {
+		setNeutral(neutral);
 	}
 }

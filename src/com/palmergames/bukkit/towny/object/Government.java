@@ -312,5 +312,4 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
-
 }
