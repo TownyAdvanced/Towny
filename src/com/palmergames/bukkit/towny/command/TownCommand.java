@@ -1402,7 +1402,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	public void townMayor(Player player, String[] split) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
-			showTownMayorHelp(player);
+			HelpMenu.TOWN_MAYOR_HELP.send(player);
 	}
 
 	/**
@@ -1416,26 +1416,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 				throw new TownyException(Translation.of("msg_not_claimed", Coord.parseCoord(player.getLocation())));
 
-			Town town = TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown();
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
+			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTown(player.getLocation())));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-	}
-
-	public void showTownMayorHelp(Player player) {
-
-		player.sendMessage(ChatTools.formatTitle("Town Mayor Help"));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "withdraw [$]", ""));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "claim", "'/town claim ?' " + Translation.of("res_5")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "unclaim", "'/town " + Translation.of("res_5")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "[add/kick] " + Translation.of("res_2") + " .. []", Translation.of("res_6")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "set [] .. []", "'/town set' " + Translation.of("res_5")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "buy [] .. []", "'/town buy' " + Translation.of("res_5")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "plots", ""));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "toggle", ""));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + Translation.of("res_5")));
-		player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town", "delete", ""));
 	}
 
 	public static void townToggle(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {

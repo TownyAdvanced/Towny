@@ -274,6 +274,23 @@ public enum HelpMenu {
 		}
 	},
 	
+	TOWN_MAYOR_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("Town Mayor Help", false)
+				.add(Translation.of("mayor_sing"), "/town", "withdraw [$]", "")
+				.add(Translation.of("mayor_sing"), "/town", "claim", "'/town claim ?' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "unclaim", "'/town " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "[add/kick] " + Translation.of("res_2") + " .. []", Translation.of("res_6"))
+				.add(Translation.of("mayor_sing"), "/town", "set [] .. []", "'/town set' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "buy [] .. []", "'/town buy' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "plots", "")
+				.add(Translation.of("mayor_sing"), "/town", "toggle", "")
+				.add(Translation.of("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "delete", "");
+		}
+	},
+	
 	TOWN_TOGGLE_HELP {
 		@Override
 		protected MenuBuilder load() {
