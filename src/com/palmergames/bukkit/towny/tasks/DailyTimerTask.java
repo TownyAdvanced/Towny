@@ -218,7 +218,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 */
 				if (universe.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (SiegeWarSettings.getWarSiegeEnabled()
-							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
+							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isNeutral()))
 						continue;
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.

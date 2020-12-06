@@ -40,7 +40,7 @@ public class PlunderTown {
 			if(!TownySettings.isUsingEconomy())
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_economy"));
 
-			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isPeaceful())
+			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isNeutral())
 				throw new TownyException(Translation.of("msg_war_siege_err_cannot_plunder_peaceful_town"));
 			
 			TownyUniverse universe = TownyUniverse.getInstance();

@@ -83,7 +83,7 @@ public class SiegeWarBattleSessionUtil {
 
 					//No punish if player in in a peaceful town
 					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
+					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isNeutral()) {
 						continue;
 					}
 
@@ -121,7 +121,7 @@ public class SiegeWarBattleSessionUtil {
 
 					//No session if player in in a peaceful town
 					TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isPeaceful()) {
+					if (townBlockAtPlayerLocation != null && townBlockAtPlayerLocation.getTown().isNeutral()) {
 						continue;
 					}
 

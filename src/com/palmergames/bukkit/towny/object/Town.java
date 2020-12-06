@@ -72,7 +72,6 @@ public class Town extends Government implements TownBlockOwner {
 	private long siegeImmunityEndTime;
 	private Siege siege;
 	private boolean occupied;
-	private boolean peaceful;
 	private boolean desiredPeacefulnessValue;
 	private int peacefulnessChangeConfirmationCounterDays;
 
@@ -83,7 +82,6 @@ public class Town extends Government implements TownBlockOwner {
 		siegeImmunityEndTime = 0;
 		siege = null;
 		occupied = false;
-		peaceful = false;
 		desiredPeacefulnessValue = false;
 		peacefulnessChangeConfirmationCounterDays = 0;
 		
@@ -1468,10 +1466,6 @@ public class Town extends Government implements TownBlockOwner {
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 	
-	public boolean isPeaceful() {
-		return peaceful;
-	}
-
 	public int getPeacefulnessChangeConfirmationCounterDays() {
 		return peacefulnessChangeConfirmationCounterDays;
 	}
@@ -1480,28 +1474,16 @@ public class Town extends Government implements TownBlockOwner {
 		peacefulnessChangeConfirmationCounterDays--;
 	}
 
-	public void flipPeaceful() {
-		peaceful = !peaceful;
-	}
-
-	public void flipDesiredPeacefulnessValue() {
-		desiredPeacefulnessValue = !desiredPeacefulnessValue;
-	}
-
 	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
 		peacefulnessChangeConfirmationCounterDays = counterValueDays;
-	}
-
-	public void setDesiredPeacefulnessValue(boolean value) {
-		desiredPeacefulnessValue = value;
 	}
 
 	public boolean getDesiredPeacefulnessValue() {
 		return desiredPeacefulnessValue;
 	}
-
-	public void setPeaceful(boolean value) {
-		peaceful = value;
+	
+	public void setDesiredPeacefulnessValue(boolean value) {
+		desiredPeacefulnessValue = value;
 	}
 
 	/**

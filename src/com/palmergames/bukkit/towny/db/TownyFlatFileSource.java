@@ -912,13 +912,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
-				line = keys.get("peaceful");
-				if (line != null)
-					try {
-						town.setPeaceful(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
 				line = keys.get("desiredPeacefulnessValue");
 				if (line != null)
 					try {
@@ -1905,7 +1898,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());
 		list.add("occupied=" + town.isOccupied());
-		list.add("peaceful=" + town.isPeaceful());
 		list.add("desiredPeacefulnessValue=" + town.getDesiredPeacefulnessValue());
 		list.add("peacefulnessChangeConfirmationCounterDays=" + town.getPeacefulnessChangeConfirmationCounterDays());
 

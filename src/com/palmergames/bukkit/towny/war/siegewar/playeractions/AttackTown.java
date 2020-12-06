@@ -60,7 +60,7 @@ public class AttackTown {
 			if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_join_siege"));
 
-			if (defendingTown.isPeaceful())
+			if (defendingTown.isNeutral())
 				throw new TownyException(Translation.of("msg_war_siege_err_cannot_attack_peaceful_town"));
 
 			if (defendingTown.isSiegeImmunityActive())

@@ -320,7 +320,7 @@ public class TownyFormatter {
 		String title = town.getFormattedName();
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
 		title += (town.isOpen() ? Translation.of("status_title_open") : "");
-		title += (SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful() ? Translation.of("status_town_title_peaceful") : "");
+		title += (SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isNeutral() ? Translation.of("status_town_title_peaceful") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby
@@ -440,7 +440,7 @@ public class TownyFormatter {
 			//Countdown To Peacefulness Status Change: 3 days
 			if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
-				&& town.isPeaceful() != town.getDesiredPeacefulnessValue()) {
+				&& town.isNeutral() != town.getDesiredPeacefulnessValue()) {
 				out.add(String.format(Translation.of("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
 			}
 

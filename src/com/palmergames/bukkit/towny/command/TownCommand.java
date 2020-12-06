@@ -70,21 +70,17 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -102,8 +98,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -2622,10 +2616,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 
-		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS));
-		town.setPeaceful(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-		town.setDesiredPeacefulnessValue(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
 		townyDataSource.saveTown(town);

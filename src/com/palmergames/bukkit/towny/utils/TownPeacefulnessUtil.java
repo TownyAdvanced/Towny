@@ -56,16 +56,16 @@ public class TownPeacefulnessUtil {
 			town.decrementPeacefulnessChangeConfirmationCounterDays();
 
 			if(town.getPeacefulnessChangeConfirmationCounterDays() < 1) {
-				town.flipPeaceful();
+				town.setNeutral(!town.isNeutral());
 
 				if(SiegeWarSettings.getWarSiegeEnabled()) {
-					if (town.isPeaceful()) {
+					if (town.isNeutral()) {
 						message = Translation.of("msg_war_siege_town_became_peaceful", town.getFormattedName());
 					} else {
 						message = Translation.of("msg_war_siege_town_became_non_peaceful", town.getFormattedName());
 					}
 				} else {
-					if (town.isPeaceful()) {
+					if (town.isNeutral()) {
 						message = Translation.of("msg_war_common_town_became_peaceful", town.getFormattedName());
 					} else {
 						message = Translation.of("msg_war_common_town_became_non_peaceful", town.getFormattedName());
@@ -103,13 +103,13 @@ public class TownPeacefulnessUtil {
 
 				//Don't apply to non-peaceful players
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if(!(resident.hasTown()&& resident.getTown().isPeaceful()))
+				if(!(resident.hasTown()&& resident.getTown().isNeutral()))
 					continue;
 
 				//Don't punish if the player is in a peaceful town
 				TownBlock townBlockAtPlayerLocation = TownyAPI.getInstance().getTownBlock(player.getLocation());
 				if(townBlockAtPlayerLocation != null
-					&& townBlockAtPlayerLocation.getTown().isPeaceful())
+					&& townBlockAtPlayerLocation.getTown().isNeutral())
 				{
 					continue;
 				}
@@ -168,7 +168,7 @@ public class TownPeacefulnessUtil {
 
 			try {
 				//Skip if town is non-peaceful
-				if (!peacefulTown.isPeaceful())
+				if (!peacefulTown.isNeutral())
 					continue;
 
 				//Find guardian towns
@@ -253,7 +253,7 @@ public class TownPeacefulnessUtil {
 			//Find valid guardian towns
 			List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 			for(Town candidateTown: candidateTowns) {
-				if(!candidateTown.isPeaceful()
+				if(!candidateTown.isNeutral()
 					&& !candidateTown.hasSiege()
 					&& candidateTown.hasNation()
 					&& candidateTown.getNation().isOpen()
