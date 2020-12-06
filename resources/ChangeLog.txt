@@ -5480,3 +5480,5 @@ v0.92.0.11:
       - Defaults to cancelled but is fired to allow another plugin to be able to see the args used in order to simulate their having a proper /t toggle command.
     - Switches help menus over to using the newer HelpMenu object.
   - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
+  - Test that the name is allowed before charging money to change a nation or town name.
+    - Closes #4530.

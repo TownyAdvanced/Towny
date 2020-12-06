@@ -2228,6 +2228,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						TownyMessaging.sendErrorMsg(player, "Eg: /town set name BillyBobTown");
 						return;
 					}
+					
+					if(!NameValidation.isBlacklistName(split[1]))
+						throw new TownyException(Translation.of("msg_invalid_name"));
 
                     if(TownySettings.isUsingEconomy() && TownySettings.getTownRenameCost() > 0) {
                 		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))							
@@ -2240,22 +2243,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 								finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
 							} catch (EconomyException ignored) {}
 
-							if (!NameValidation.isBlacklistName(name)) {
-								townRename(player, finalTown, name);
-							} else {
-								TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
-							}
+							townRename(player, finalTown, name);
 						})
-							.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
-							.build();
+						.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
+						.build();
                     	
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
                     	
                     } else {
-						if (!NameValidation.isBlacklistName(split[1]))
-							townRename(player, town, split[1]);
-						else
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
+                    	townRename(player, town, split[1]);
                     }
 				} else if (split[0].equalsIgnoreCase("tag")) {
 
