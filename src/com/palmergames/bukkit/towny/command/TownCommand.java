@@ -1649,55 +1649,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 
-			} else if (split[0].equalsIgnoreCase("peaceful")) {
-				
-				if(!SiegeWarSettings.getWarCommonPeacefulTownsEnabled())
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_NEUTRAL.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				if(admin) {
-					town.setDesiredPeacefulnessValue(!town.isPeaceful());
-					town.setPeacefulnessChangeConfirmationCounterDays(1);
-					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
-				} else {
-					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
-						
-						//Here, no countdown is in progress, and the town wishes to change peacefulness status
-						town.setDesiredPeacefulnessValue(!town.isPeaceful());
-						
-						int counterValue;
-						if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
-							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
-						} else {
-							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
-						}
-						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
-						
-						//Send message to town
-						if (town.getDesiredPeacefulnessValue())
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_peaceful"), counterValue));
-						else
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_non_peaceful"), counterValue));
-						
-						//Remove any military nation ranks of residents
-						for(Resident peacefulTownResident: town.getResidents()) {
-							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
-								if (SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(nationRank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
-									resident.removeNationRank(nationRank);
-								}
-							}
-						}
-						
-					} else {
-						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
-						town.setDesiredPeacefulnessValue(town.isPeaceful());
-						town.setPeacefulnessChangeConfirmationCounterDays(0);
-						//Send message to town
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));
-					}
-				}
 			} else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.

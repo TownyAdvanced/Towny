@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.listeners;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,10 +29,12 @@ import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
@@ -334,7 +337,68 @@ public class SiegeWarEventListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-
+	
+	/*
+	 * On toggle neutral, SW will evaluate a number of things.
+	 */
+	@EventHandler
+	public void onTownToggleNeutral(TownToggleNeutralEvent event) {
+		if (!SiegeWarSettings.getWarSiegeEnabled())
+			return;
+		
+		if(!SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
+			event.setCancellationMsg(Translation.of("msg_err_command_disable"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		Town town = event.getTown();
+		
+		if(event.isAdminAction()) {
+			town.setDesiredPeacefulnessValue(!town.isPeaceful());
+			town.setPeacefulnessChangeConfirmationCounterDays(1);
+			TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
+		} else {
+			if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
+				
+				//Here, no countdown is in progress, and the town wishes to change peacefulness status
+				town.setDesiredPeacefulnessValue(!town.isPeaceful());
+				
+				int counterValue;
+				if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
+					counterValue = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
+				} else {
+					counterValue = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+				}
+				town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
+				
+				//Send message to town
+				if (town.getDesiredPeacefulnessValue())
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_peaceful"), counterValue));
+				else
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_non_peaceful"), counterValue));
+				
+				//Remove any military nation ranks of residents
+				for(Resident peacefulTownResident: town.getResidents()) {
+					for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
+						if (SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(nationRank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
+							try {
+								peacefulTownResident.removeNationRank(nationRank);
+							} catch (NotRegisteredException ignored) {}
+						}
+					}
+				}
+				
+			} else {
+				//Here, a countdown is in progress, and the town wishes to cancel the countdown,
+				town.setDesiredPeacefulnessValue(town.isPeaceful());
+				town.setPeacefulnessChangeConfirmationCounterDays(0);
+				//Send message to town
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));
+			}
+		}
+	}
+	
 	/*
 	 * Update town peacefulness counters.
 	 */
