@@ -5491,3 +5491,7 @@ v0.92.0.11:
     - New permission node: towny.command.town.toggle.neutral.
     - No command to manipulate this setting as of yet.
   - API: Added NewHourEvent
+  - New Command: /t toggle neutral|peaceful
+    - Toggles a town's neutral status.
+    - Otherwise unused for now.
+  - API: Added TownToggleNeutralEvent.

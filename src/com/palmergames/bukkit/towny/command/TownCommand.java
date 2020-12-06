@@ -1606,7 +1606,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Send a warning when toggling on (a reminder about plot permissions).
 				if (town.isOpen())
 					TownyMessaging.sendMsg(sender, Translation.of("msg_toggle_open_on_warning"));
+				
+			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
+				
+				// Fire cancellable event directly before setting the toggle.
+				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancellationMsg());
 
+				// Set the toggle setting.
+				town.setNeutral(choice.orElse(!town.isNeutral()));
+
+				// Send message feedback.
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_peaceful", town.isNeutral() ? Translation.of("enabled") : Translation.of("disabled")));
+				if (admin)
+					TownyMessaging.sendMsg(sender, Translation.of("msg_changed_peaceful", town.isNeutral() ? Translation.of("enabled") : Translation.of("disabled")));
+				
 			} else if (split[0].equalsIgnoreCase("jail")) {
 				if (!town.hasJailSpawn())
 					throw new TownyException(Translation.of("msg_town_has_no_jails"));
