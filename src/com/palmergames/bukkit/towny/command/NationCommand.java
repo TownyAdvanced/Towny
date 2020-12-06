@@ -22,7 +22,7 @@ import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
-import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleCustomEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationTogglePublicEvent;
@@ -2664,7 +2664,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             	 * to be shown to the player, unless the user of the event does 
             	 * a) uncancel the event, or b) alters the cancellation message.
             	 */
-            	NationToggleCustomEvent event = new NationToggleCustomEvent(sender, nation, admin, split);
+            	NationToggleUnknownEvent event = new NationToggleUnknownEvent(sender, nation, admin, split);
             	Bukkit.getPluginManager().callEvent(event);
             	if (event.isCancelled()) {
             		TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());

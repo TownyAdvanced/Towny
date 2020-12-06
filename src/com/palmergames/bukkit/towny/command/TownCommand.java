@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleCustomEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleMobsEvent;
@@ -1707,7 +1707,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
             	 * to be shown to the player, unless the user of the event does 
             	 * a) uncancel the event, or b) alters the cancellation message.
             	 */
-				TownToggleCustomEvent event = new TownToggleCustomEvent(sender, town, admin, split);
+				TownToggleUnknownEvent event = new TownToggleUnknownEvent(sender, town, admin, split);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.isCancelled())
 					throw new TownyException(event.getCancellationMsg());

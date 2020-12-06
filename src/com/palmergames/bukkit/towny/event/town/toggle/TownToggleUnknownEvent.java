@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 
-public class TownToggleCustomEvent extends TownToggleEvent {
+public class TownToggleUnknownEvent extends TownToggleEvent {
 
 	private final String[] args;
 	
@@ -16,7 +16,7 @@ public class TownToggleCustomEvent extends TownToggleEvent {
 	 * @param args String[] Subcommands following the /nation toggle portion of the command. 
 	 * @param admin boolean whether this was sent by the console or someone with townyadmin priviledges
 	 */
-	public TownToggleCustomEvent(CommandSender sender, Town town, boolean admin, String[] args) {
+	public TownToggleUnknownEvent(CommandSender sender, Town town, boolean admin, String[] args) {
 		super(sender, town, admin);
 		this.args = args;
 		setCancelled(true);

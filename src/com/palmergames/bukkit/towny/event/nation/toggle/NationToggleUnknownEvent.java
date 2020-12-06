@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
 
-public class NationToggleCustomEvent extends NationToggleEvent {
+public class NationToggleUnknownEvent extends NationToggleEvent {
 
 	private final String[] args;
 	
@@ -16,7 +16,7 @@ public class NationToggleCustomEvent extends NationToggleEvent {
 	 * @param args String[] Subcommands following the /nation toggle portion of the command. 
 	 * @param admin boolean whether this was sent by the console or someone with townyadmin priviledges
 	 */
-	public NationToggleCustomEvent(CommandSender sender, Nation nation, boolean admin, String[] args) {
+	public NationToggleUnknownEvent(CommandSender sender, Nation nation, boolean admin, String[] args) {
 		super(sender, nation, admin);
 		setCancelled(true);
 		setCancelMessage(Translation.of("msg_err_invalid_property", "nation"));
