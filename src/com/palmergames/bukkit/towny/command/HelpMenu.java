@@ -272,6 +272,31 @@ public enum HelpMenu {
 				.add(TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2"))
 				.add("list", Translation.of("invite_help_3"));
 		}
+	},
+	
+	TOWN_TOGGLE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town toggle")
+				.add("", "/town toggle", "pvp", "")
+				.add("", "/town toggle", "public", "")
+				.add("", "/town toggle", "explosion", "")
+				.add("", "/town toggle", "fire", "")
+				.add("", "/town toggle", "mobs", "")
+				.add("", "/town toggle", "taxpercent", "")
+				.add("", "/town toggle", "open", "")
+				.add("", "/town toggle", "jail [number] [resident]", "");
+		}
+	},
+	
+	NATION_TOGGLE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation toggle")
+				.add("", "/nation toggle", "peaceful/neutral", "")
+				.add("", "/nation toggle", "public", "")
+				.add("", "/nation toggle", "open", "");
+		}
 	};
 
 
