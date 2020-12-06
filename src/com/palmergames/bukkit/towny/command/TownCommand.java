@@ -81,8 +81,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -1487,31 +1485,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				
-				// Make sure we are allowed to set these permissions.
+				// If we aren't dealing with an admin using /t toggle pvp:
 				if (!admin) {
+					// Make sure we are allowed to set these permissions.
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
 				
 					// Test to see if the pvp cooldown timer is active for the town.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !townyUniverse.getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))					 
 						throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
-				}
-				boolean outsiderintown = false;
-				if (TownySettings.getOutsidersPreventPVPToggle()) {
-					for (Player target : Bukkit.getOnlinePlayers()) {
-						Resident targetresident = townyUniverse.getDataSource().getResident(target.getName());
-						Block block = target.getLocation().getBlock().getRelative(BlockFace.DOWN);
-						if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
-							WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
-							for (TownBlock tb : town.getTownBlocks()) {
-								if (coord.equals(tb.getWorldCoord()) && ((!(targetresident.hasTown())) || (!(targetresident.getTown().equals(town))))) {
-									outsiderintown = true;
-								}
-							}
+
+					// Test to see if an outsider being inside of the Town would prevent toggling PVP.
+					if (TownySettings.getOutsidersPreventPVPToggle()) {
+						for (Player target : Bukkit.getOnlinePlayers()) {
+							if (!TownyAPI.getInstance().isWilderness(target.getLocation()) 
+									&& TownyAPI.getInstance().getTown(target.getLocation()).equals(town) 
+									&& !town.hasResident(target.getName()))
+								throw new TownyException(Translation.of("msg_cant_toggle_pvp_outsider_in_town"));
 						}
 					}
 				}
-				if (outsiderintown) 
-					throw new TownyException(Translation.of("msg_cant_toggle_pvp_outsider_in_town"));
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin);
@@ -1562,6 +1554,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
+
 				// Set the toggle setting.
 				town.setFire(choice.orElse(!town.isFire()));
 				
@@ -1616,6 +1609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
+
 				// Set the toggle setting.
 				town.setOpen(choice.orElse(!town.isOpen()));
 				
