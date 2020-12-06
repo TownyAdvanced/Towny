@@ -4,6 +4,9 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 
 public class TownRuinSettings {
+	private TownRuinSettings() {
+		// Privatize implied public constructor.
+	}
 
 	public static boolean getTownRuinsEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_ENABLED);

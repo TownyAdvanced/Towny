@@ -150,7 +150,7 @@ public class OnPlayerLogin implements Runnable {
 					warningMessage(resident, town, nation);
 				
 				// Send a message warning of ruined status and time until deletion.
-				if (town.isRuined())
+				if (town != null && town.isRuined())
 					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			}
 
