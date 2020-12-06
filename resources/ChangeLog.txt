@@ -5478,4 +5478,5 @@ v0.92.0.11:
     - These events fire after all other Towny-side decisions are made on whether the action is allowed by the sender.
     - Adds bonus TownToggleUnknownEvent & NationToggleUnknownEvent which is fired when a subcommand we dont recognize is used.
       - Defaults to cancelled but is fired to allow another plugin to be able to see the args used in order to simulate their having a proper /t toggle command.
-    - Switches help menus over to using the newer HelpMenu object.    
+    - Switches help menus over to using the newer HelpMenu object.
+  - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
