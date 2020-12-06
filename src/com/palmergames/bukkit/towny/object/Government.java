@@ -147,6 +147,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * Sets the neutrality/peacefulness of the object. 
 	 * 
+	 * @since 0.96.5.4
 	 * @param neutral whether the object will be neutral or peaceful.
 	 */
 	public final void setNeutral(boolean neutral) {
@@ -156,6 +157,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * Is the object Neutral or Peaceful?
 	 * 
+	 * @since 0.96.5.4
 	 * @return true if the object is Neutral or Peaceful.
 	 */
 	public final boolean isNeutral() {

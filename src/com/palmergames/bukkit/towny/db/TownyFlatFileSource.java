@@ -821,11 +821,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("neutral");
 				if (line != null)
-					try {
-						town.setNeutral(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
+					town.setNeutral(Boolean.parseBoolean(line));
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -935,10 +931,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("neutral");
 				if (line != null)
-					try {
-						nation.setNeutral(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
+					nation.setNeutral(Boolean.parseBoolean(line));
 				
 				line = keys.get("uuid");
 				if (line != null) {
