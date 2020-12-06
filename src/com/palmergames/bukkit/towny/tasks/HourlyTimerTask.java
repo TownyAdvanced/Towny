@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 
@@ -22,5 +25,10 @@ public class HourlyTimerTask extends TownyTimerTask {
 		if (TownRuinSettings.getTownRuinsEnabled()) {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
+		
+		/*
+		 * Fire an event other plugins can use.
+		 */
+		Bukkit.getPluginManager().callEvent(new NewHourEvent(System.currentTimeMillis()));
 	}
 }

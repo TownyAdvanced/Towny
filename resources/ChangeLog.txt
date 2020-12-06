@@ -5490,3 +5490,4 @@ v0.92.0.11:
   - Move neutral setting to Government, allowing Towns to become neutral.
     - New permission node: towny.command.town.toggle.neutral.
     - No command to manipulate this setting as of yet.
+  - API: Added NewHourEvent
