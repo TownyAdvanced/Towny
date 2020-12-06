@@ -818,6 +818,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ee) {
 						town.setRuinedTime(0);
 					}
+				
+				line = keys.get("neutral");
+				if (line != null)
+					town.setNeutral(Boolean.parseBoolean(line));
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -927,10 +931,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("neutral");
 				if (line != null)
-					try {
-						nation.setNeutral(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
+					nation.setNeutral(Boolean.parseBoolean(line));
 				
 				line = keys.get("uuid");
 				if (line != null) {
@@ -1689,6 +1690,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("ruined=" + town.isRuined());
 		list.add("ruinedTime=" + town.getRuinedTime());
+		// Peaceful
+		list.add("neutral=" + town.isNeutral());
 
 		/*
 		 *  Make sure we only save in async

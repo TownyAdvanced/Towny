@@ -2619,8 +2619,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 				} catch (EconomyException ignored) {}
 
-				// Set the toggle setting.
-				nation.toggleNeutral(value);
+				nation.setNeutral(value);
 				
 				// If they setting neutral status on send a message confirming they paid something, if they did.
 				if (value && TownySettings.isUsingEconomy() && cost > 0)

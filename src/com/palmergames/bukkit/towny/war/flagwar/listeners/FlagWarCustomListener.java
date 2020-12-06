@@ -302,19 +302,18 @@ public class FlagWarCustomListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onNationToggle(NationToggleNeutralEvent event) {
-//		if (FlagWarConfig.isAllowingAttacks()) {
-//			String arg = event.getArg();
-//			
-//			if (arg != null) {
-//				System.out.println("arg " + arg);
-//				if (event.getArg().equalsIgnoreCase("peaceful")) {
-//					event.setCancelled(true);
-//					event.setCancellationMsg(Translation.of("msg_err_fight_like_king"));
-//				}	
-//			}
-//		}
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
+		if (FlagWarConfig.isAllowingAttacks()) {
+			if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
+			} else {
+				if (event.getFutureState() && !FlagWar.getCellsUnderAttack().isEmpty())
+					for (Resident resident : event.getNation().getResidents())
+						FlagWar.removeAttackerFlags(resident.getName());
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
