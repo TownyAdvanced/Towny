@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
@@ -142,15 +141,6 @@ public class DailyTimerTask extends TownyTimerTask {
 				} else
 					towns.setConqueredDays(towns.getConqueredDays() - 1);				
 			}
-		}
-
-		/*
-		 * Update town peacefulness counters.
-		 */
-		if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
-			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
-			if(SiegeWarSettings.getWarSiegeEnabled())
-				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
 		}
 
 		/*

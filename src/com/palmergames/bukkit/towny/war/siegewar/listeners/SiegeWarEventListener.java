@@ -19,12 +19,17 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.NewDayEvent;
+import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -37,6 +42,7 @@ import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
+import com.palmergames.util.TimeMgmt;
 
 public class SiegeWarEventListener implements Listener {
 
@@ -271,5 +277,73 @@ public class SiegeWarEventListener implements Listener {
 			event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_recruit"));
 		}
 	}
-		
+
+	/*
+	 * Upon creation of a town, towns can be set to neutral.
+	 */
+	@EventHandler
+	public void onCreateNewTown(NewTownEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
+			Town town = event.getTown();
+			town.setNeutral(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
+			town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * TimeMgmt.ONE_HOUR_IN_MILLIS));
+			town.setDesiredPeacefulnessValue(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
+
+			TownyUniverse.getInstance().getDataSource().saveTown(town);
+		}
+	}
+	
+	/*
+	 * On toggle explosions, SW will stop a town toggling explosions.
+	 */
+	@EventHandler
+	public void onTownToggleExplosion(TownToggleExplosionEvent event) {
+		if(SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
+				&& event.getTown().hasSiege()
+				&& event.getTown().getSiege().getStatus().isActive())  {
+			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_explosions"));
+			event.setCancelled(true);
+		}
+	}
+	
+	/*
+	 * On toggle pvp, SW will stop a town toggling pvp.
+	 */
+	@EventHandler
+	public void onTownTogglePVP(TownTogglePVPEvent event) {
+		if(SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+				&& event.getTown().hasSiege()
+				&& event.getTown().getSiege().getStatus().isActive())  {
+			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_pvp"));
+			event.setCancelled(true);
+		}
+	}
+	
+	/*
+	 * On toggle open, SW will stop a town toggling open.
+	 */
+	@EventHandler
+	public void onTownToggleOpen(TownToggleOpenEvent event) {
+		if(SiegeWarSettings.getWarSiegeEnabled()
+				&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
+				&& event.getTown().hasSiege()
+				&& event.getTown().getSiege().getStatus().isActive()) {
+			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_open_off"));
+			event.setCancelled(true);
+		}
+	}
+
+	/*
+	 * Update town peacefulness counters.
+	 */
+	@EventHandler
+	public void onNewDay(NewDayEvent event) {
+		if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
+			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
+			if(SiegeWarSettings.getWarSiegeEnabled())
+				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
+		}
+	}
 }
