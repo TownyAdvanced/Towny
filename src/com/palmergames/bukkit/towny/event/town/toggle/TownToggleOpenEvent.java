@@ -13,10 +13,17 @@ public class TownToggleOpenEvent extends TownToggleEvent {
 	}
 
 	/**
-	 * @return the toggle's new state.
+	 * @return the current toggle's state.
 	 */
-	public boolean getNewState() {
+	public boolean getCurrentState() {
 		return state;
 	}
 	
+	/**
+	 * @return the future state of the toggle after the event.
+	 */
+	public boolean getFutureState() {
+		return !state;
+	}
+
 }

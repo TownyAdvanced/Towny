@@ -22,9 +22,7 @@ import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
-import com.palmergames.bukkit.towny.event.nation.toggle.NationPreToggleNeutralEvent;
-import com.palmergames.bukkit.towny.event.nation.toggle.NationPreToggleOpenEvent;
-import com.palmergames.bukkit.towny.event.nation.toggle.NationPreTogglePublicEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleCustomEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationTogglePublicEvent;
@@ -2569,11 +2567,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public static void nationToggle(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if (split.length == 0) {
-			sender.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful/neutral", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			HelpMenu.NATION_TOGGLE_HELP.send(sender);
 		} else {
 			Resident resident;
 
@@ -2599,73 +2594,83 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
-				NationPreToggleNeutralEvent preEvent = new NationPreToggleNeutralEvent(sender, nation, admin);
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancelMessage());
-				
-				
 				boolean value = choice.orElse(!nation.isNeutral());
 				double cost = TownySettings.getNationNeutralityCost();
 				
 				if (nation.isNeutral() && value) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
 				else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
+				// Check if they could pay.
 				try {
 					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(cost))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
-					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
-				} catch (EconomyException e) {
-					// This can literally never happen. But if it does, print to console, and send message to sender.
-					e.printStackTrace();
-					TownyMessaging.sendErrorMsg(sender, e.getMessage());
-					return;
-				}
+				} catch (EconomyException e1) {}
 
+				// Fire cancellable event directly before setting the toggle.
+				NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancelMessage());
+				
+				// Make them pay after we know the preEvent isn't cancelled.
+				try {
+					if (value && TownySettings.isUsingEconomy())
+						nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
+				} catch (EconomyException ignored) {}
+
+				// Set the toggle setting.
 				nation.toggleNeutral(value);
 				
-				// Only send status message if switching nation to peaceful.
-				if (value) {
-					// send message depending on if using an economy and charging
-					// for peaceful
-					if (TownySettings.isUsingEconomy() && cost > 0)
-						TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
-					else
-						TownyMessaging.sendMsg(sender, Translation.of("msg_nation_set_peace"));
-				}
+				// If they setting neutral status on send a message confirming they paid something, if they did.
+				if (value && TownySettings.isUsingEconomy() && cost > 0)
+					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 
+				// Send message feedback to the whole nation.
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
 						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
-				
-                Bukkit.getPluginManager().callEvent(new NationToggleNeutralEvent(sender, nation, admin));
 
 			} else if(split[0].equalsIgnoreCase("public")){
 
-				NationPreTogglePublicEvent preEvent = new NationPreTogglePublicEvent(sender, nation, admin);
+				// Fire cancellable event directly before setting the toggle.
+				NationTogglePublicEvent preEvent = new NationTogglePublicEvent(sender, nation, admin);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
                 
+				// Set the toggle setting.
                 nation.setPublic(choice.orElse(!nation.isPublic()));
-                TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
                 
-                Bukkit.getPluginManager().callEvent(new NationTogglePublicEvent(sender, nation, admin));
+				// Send message feedback.
+                TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
 
             } else if(split[0].equalsIgnoreCase("open")){
 
-				NationPreToggleOpenEvent preEvent = new NationPreToggleOpenEvent(sender, nation, admin);
+            	// Fire cancellable event directly before setting the toggle.
+				NationToggleOpenEvent preEvent = new NationToggleOpenEvent(sender, nation, admin);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
                 
+				// Set the toggle setting.
                 nation.setOpen(choice.orElse(!nation.isOpen()));
+                
+                // Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 
-                Bukkit.getPluginManager().callEvent(new NationToggleOpenEvent(sender, nation, admin));
-                
             } else {
-				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_invalid_property", "nation"));
-				return;
+            	/*
+            	 * Fire of an event if we don't recognize the command being used.
+            	 * The event is cancelled by default, leaving our standard error message 
+            	 * to be shown to the player, unless the user of the event does 
+            	 * a) uncancel the event, or b) alters the cancellation message.
+            	 */
+            	NationToggleCustomEvent event = new NationToggleCustomEvent(sender, nation, admin, split);
+            	Bukkit.getPluginManager().callEvent(event);
+            	if (event.isCancelled()) {
+            		TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
+            		return;
+            	}
+				
 			}
 
 			townyUniverse.getDataSource().saveNation(nation);

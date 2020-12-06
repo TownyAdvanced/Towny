@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event.town.toggle;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
@@ -11,19 +12,22 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 
-public abstract class TownToggleEvent extends Event {
+public abstract class TownToggleEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private Player player = null;
 	private final Town town;
 	private final CommandSender sender;
 	private final boolean isAdminAction;
+	private boolean isCancelled = false;
+	private String cancellationMsg = Translation.of("msg_err_command_disable");
 	
 	/**
 	 * A generic cancellable event thrown when a player uses the /town toggle {args} command.
 	 * 
-	 * @param player Player who has run the command.
+	 * @param sender CommandSender who has run the command.
 	 * @param town Town which will have something cancelled.
 	 * @param admin Whether this was executed by an admin.
 	 */
@@ -45,6 +49,16 @@ public abstract class TownToggleEvent extends Event {
 		return handlers;
 	}
 
+	@Override
+	public boolean isCancelled() {
+		return isCancelled;
+	}
+
+	@Override
+	public void setCancelled(boolean cancel) {
+		this.isCancelled = cancel;
+	}
+
 	@Nullable
 	public Resident getResident() {
 		try {
@@ -58,12 +72,20 @@ public abstract class TownToggleEvent extends Event {
 		return player;
 	}
 
+	public Town getTown() {
+		return town;
+	}
+	
 	public CommandSender getSender() {
 		return sender;
 	}
-	
-	public Town getTown() {
-		return town;
+
+	public String getCancellationMsg() {
+		return cancellationMsg;
+	}
+
+	public void setCancellationMsg(String cancellationMsg) {
+		this.cancellationMsg = cancellationMsg;
 	}
 
 	/**
@@ -72,5 +94,4 @@ public abstract class TownToggleEvent extends Event {
 	public boolean isAdminAction() {
 		return isAdminAction;
 	}
-	
 }

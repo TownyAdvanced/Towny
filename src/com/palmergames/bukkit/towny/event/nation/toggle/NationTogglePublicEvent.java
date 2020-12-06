@@ -9,14 +9,21 @@ public class NationTogglePublicEvent extends NationToggleEvent {
 	
 	public NationTogglePublicEvent(CommandSender sender, Nation nation, boolean admin) {
 		super(sender, nation, admin);
-		state = nation.isNeutral();
+		state = nation.isPublic();
 	}
 	
 	/**
-	 * @return the toggle's new state.
+	 * @return the current toggle's state.
 	 */
-	public boolean getNewState() {
+	public boolean getCurrentState() {
 		return state;
 	}
-
+	
+	/**
+	 * @return the future state of the toggle after the event.
+	 */
+	public boolean getFutureState() {
+		return !state;
+	}
+	
 }
