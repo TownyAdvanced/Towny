@@ -5482,3 +5482,6 @@ v0.92.0.11:
   - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
   - Test that the name is allowed before charging money to change a nation or town name.
     - Closes #4530.
+  - API: Added TownLeaveEvent
+    - A cancellable event fired directly before a player would accept/deny leaving their town.
+    - Closes #4513.
