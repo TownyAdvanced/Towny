@@ -196,8 +196,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return ignore;
 					}
 				case "add":
+						return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
-					return getTownyStartingWith(args[args.length - 1], "t");
+					try {
+						return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns()), args[args.length - 1]);
+					} catch (TownyException ignored) {}
 				case "ally":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);

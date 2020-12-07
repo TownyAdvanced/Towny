@@ -5496,3 +5496,6 @@ v0.92.0.11:
     - Otherwise unused for now.
   - API: Added TownToggleNeutralEvent.
   - Fix Sender cannot be null! message seen when outlaw add/remove is done on an offline player.
+  - Fix NewHourEvent async.
+  - Fix /n kick tab complete populated with non-nation towns.
+    - Closes #4542.

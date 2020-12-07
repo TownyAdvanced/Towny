@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.time;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -8,6 +9,7 @@ public class NewHourEvent extends Event {
 	
 	private long time;
 	public NewHourEvent(long time) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.time = time;
 	}
 
