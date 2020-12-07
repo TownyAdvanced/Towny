@@ -1728,7 +1728,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if(!SiegeWarSettings.getWarCommonPeacefulTownsEnabled())
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
-				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_PEACEFUL.getNode(split[0].toLowerCase())))
+				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_NEUTRAL.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				if(admin) {
