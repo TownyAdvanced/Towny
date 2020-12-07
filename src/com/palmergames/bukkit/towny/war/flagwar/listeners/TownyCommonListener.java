@@ -18,6 +18,7 @@ public class TownyCommonListener implements Listener {
     if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
       event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
       event.setCancelled(true);
+      return; // Return early, no reason to try sequential checks if a town is under attack.
     }
 
     if (System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
