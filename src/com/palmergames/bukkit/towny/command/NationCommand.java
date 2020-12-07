@@ -312,6 +312,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(NameUtil.getNames(nation.getResidents()), args[2]);
 				case "capital":
 					return NameUtil.filterByStart(NameUtil.getNames(nation.getTowns()), args[2]);
+				case "tag":
+					if (args.length == 3)
+						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
 			}
 		}
 		
@@ -2439,20 +2442,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set tag PLT");
+					throw new TownyException("Eg: /nation set tag PLT");
 				else if (split[1].equalsIgnoreCase("clear")) {
-					try {
-						nation.setTag(" ");
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-					}
-				} else
-					if (split[1].length() > 4)
-						throw new TownyException(Translation.of("msg_err_tag_too_long"));
+					nation.setTag(" ");
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
+				} else {
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
-
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
+				}
 			} else if (split[0].equalsIgnoreCase("title")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE.getNode()))

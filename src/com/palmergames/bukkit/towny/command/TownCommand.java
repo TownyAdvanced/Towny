@@ -2263,27 +2263,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("tag")) {
 
 					if (split.length < 2)
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set tag PLTC");
+						throw new TownyException("Eg: /town set tag PLTC");
 					else if (split[1].equalsIgnoreCase("clear")) {
-						try {
-							town.setTag(" ");
-							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-						}
-					} else
-						try {
-							if (split[1].length() > 4)
-								throw new TownyException(Translation.of("msg_err_tag_too_long"));
-							town.setTag(NameValidation.checkAndFilterName(split[1]));
-							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-						}
+						town.setTag(" ");
+						if (admin)
+							TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
+					} else {
+						town.setTag(NameValidation.checkAndFilterName(split[1]));
+						if (admin)
+							TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
+					}
 					
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
 
