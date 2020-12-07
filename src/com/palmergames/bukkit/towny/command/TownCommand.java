@@ -3036,13 +3036,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player = (Player) sender;
 
 		for (Resident member : new ArrayList<>(kicking)) {
+			if (!town.getResidents().contains(member)) {
+				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_resident_not_your_town"));
+				kicking.remove(member);
+				continue;
+			}
 			if (resident == member) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_yourself"));
-				kicking.remove(member);				
+				kicking.remove(member);
+				continue;
 			}
 			if (member.isMayor() || town.hasResidentWithRank(member, "assistant")) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_this_resident", member));
 				kicking.remove(member);
+				continue;
 			} else {
 				try {
 					townRemoveResident(town, member);

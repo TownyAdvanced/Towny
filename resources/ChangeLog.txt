@@ -5499,3 +5499,5 @@ v0.92.0.11:
   - Fix NewHourEvent async.
   - Fix /n kick tab complete populated with non-nation towns.
     - Closes #4542.
+  - Fix improper message being shown when trying to kick a mayor of another town from your town.
+    - Closes #4541.
