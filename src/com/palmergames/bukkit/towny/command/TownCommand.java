@@ -1797,6 +1797,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 
 			rank = split[2];
+			rank.toLowerCase();
 			/*
 			 * Match correct casing of rank, if that rank exists.
 			 */
