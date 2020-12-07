@@ -909,7 +909,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident resident, target;
 			Town town = null;
 			Town targetTown = null;
-			String rank;
+			String rank.toLowerCase();
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 			/*
