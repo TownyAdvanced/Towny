@@ -935,6 +935,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			rank = split[2];
+			rank.toLowerCase();
 			/*
 			 * Is this a known rank?
 			 */
