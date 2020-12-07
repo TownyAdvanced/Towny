@@ -5505,3 +5505,5 @@ v0.92.0.11:
   - Fix tag commands not giving correct feedback.
   - Fix /n set tag missing a tabcompleter.
     - Closes #4540.
+  - Fix nations and towns being able to send an invite to towns and residents which are already members.
+    - Closes #4539.

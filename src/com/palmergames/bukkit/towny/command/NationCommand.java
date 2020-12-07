@@ -1478,22 +1478,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
-		List<String> reslist = new ArrayList<>(Arrays.asList(names));
+		List<String> townlist = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
-		List<String> newreslist = new ArrayList<>();
+		List<String> newtownlist = new ArrayList<>();
 		// The list of valid invites is above, there are currently none
 		List<String> removeinvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String townname : reslist) {
+		for (String townname : townlist) {
 			if (townname.startsWith("-")) {
 				// Add to removing them, remove the "-"
 				removeinvites.add(townname.substring(1));
 			} else {
-				// add to adding them,
-				newreslist.add(townname);
+				if (!nation.hasTown(townname))
+					newtownlist.add(townname); // add to adding them,
+				else 
+					removeinvites.add(townname);
 			}
 		}
-		names = newreslist.toArray(new String[0]);
+		names = newtownlist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length >= 1) {
 			nationRevokeInviteTown(player,nation, townyUniverse.getDataSource().getTowns(namestoremove));

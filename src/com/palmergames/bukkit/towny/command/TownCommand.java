@@ -3262,13 +3262,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// The list of valid invites is above, there are currently none
 		List<String> removeinvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String residents : reslist) {
-			if (residents.startsWith("-")) {
-				removeinvites.add(residents.substring(1));
+		for (String resName : reslist) {
+			if (resName.startsWith("-")) {
+				removeinvites.add(resName.substring(1));
 				// Add to removing them, remove the "-"
 			} else {
-				newreslist.add(residents);
-				// add to adding them,
+				if (!town.hasResident(resName))
+					newreslist.add(resName);// add to adding them,
+				else 
+					removeinvites.add(resName);
 			}
 		}
 		names = newreslist.toArray(new String[0]);
