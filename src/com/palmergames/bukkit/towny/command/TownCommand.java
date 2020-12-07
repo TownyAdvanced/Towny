@@ -163,6 +163,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"explosion",
 		"fire",
 		"mobs",
+		"neutral",
+		"peaceful",
 		"public",
 		"pvp",
 		"taxpercent",
