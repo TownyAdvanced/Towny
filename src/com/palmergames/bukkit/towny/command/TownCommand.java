@@ -1776,7 +1776,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			Resident resident, target;
 			Town town = null;
-			String rank;
+			String rank.toLowerCase();
 
 			/*
 			 * Does the command have enough arguments?
