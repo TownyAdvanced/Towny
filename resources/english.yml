@@ -1214,3 +1214,4 @@ msg_reclaim_available: '&aReclaim available.'
 
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
+msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
