@@ -875,6 +875,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ee) {
 						town.setRuinedTime(0);
 					}
+				
+				line = keys.get("neutral");
+				if (line != null)
+					town.setNeutral(Boolean.parseBoolean(line));
 
 				//Siege War related
 				line = keys.get("revoltImmunityEndTime");
@@ -1037,10 +1041,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("neutral");
 				if (line != null)
-					try {
-						nation.setNeutral(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
+					nation.setNeutral(Boolean.parseBoolean(line));
 				
 				line = keys.get("uuid");
 				if (line != null) {
@@ -1898,6 +1899,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("ruined=" + town.isRuined());
 		list.add("ruinedTime=" + town.getRuinedTime());
+		// Peaceful
+		list.add("neutral=" + town.isNeutral());
 
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());

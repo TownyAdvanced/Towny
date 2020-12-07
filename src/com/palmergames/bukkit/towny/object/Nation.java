@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -41,7 +40,6 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private List<Siege> sieges = new ArrayList<>();
 	private Town capital;
-	private boolean neutral = false;
 	private String mapColorHexCode = "";
 	public UUID uuid;
 	private Location nationSpawn;
@@ -493,29 +491,6 @@ public class Nation extends Government {
 		return removedTowns;
 	}	
 
-	public void toggleNeutral(boolean neutral) throws TownyException {
-
-		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(Translation.of("msg_err_fight_like_king"));
-		else {
-			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
-				for (Resident resident : getResidents())
-					FlagWar.removeAttackerFlags(resident.getName());
-			
-			setNeutral(neutral);
-		}
-	}
-	
-	public void setNeutral(boolean neutral) {
-
-		this.neutral = neutral;
-	}
-
-	public boolean isNeutral() {
-
-		return neutral;
-	}
-
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
@@ -820,5 +795,15 @@ public class Nation extends Government {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
+	}
+
+	/**
+	 * @deprecated As of 0.96.5.0, please use {@link Government#setNeutral(boolean)} instead.
+	 * 
+	 * @param neutral The value which will be used to set Neutrality true or false.
+	 */
+	@Deprecated
+	public void toggleNeutral(boolean neutral) {
+		setNeutral(neutral);
 	}
 }

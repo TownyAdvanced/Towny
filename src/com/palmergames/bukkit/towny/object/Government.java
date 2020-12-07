@@ -38,6 +38,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private final transient List<Invite> sentInvites = new ArrayList<>();
 	private boolean isPublic = false;
 	private boolean isOpen = false;
+	private boolean isNeutral = false;
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
 	protected double taxes;
@@ -142,7 +143,27 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public final boolean isOpen() { 
 		return isOpen; 
 	}
+	
+	/**
+	 * Sets the neutrality/peacefulness of the object. 
+	 * 
+	 * @since 0.96.5.4
+	 * @param neutral whether the object will be neutral or peaceful.
+	 */
+	public final void setNeutral(boolean neutral) {
+		this.isNeutral = neutral;
+	}
 
+	/**
+	 * Is the object Neutral or Peaceful?
+	 * 
+	 * @since 0.96.5.4
+	 * @return true if the object is Neutral or Peaceful.
+	 */
+	public final boolean isNeutral() {
+		return isNeutral;
+	}
+	
 	/**
 	 * Sets the date when this was registered.
 	 * 

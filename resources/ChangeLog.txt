@@ -5482,3 +5482,17 @@ v0.92.0.11:
   - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
   - Test that the name is allowed before charging money to change a nation or town name.
     - Closes #4530.
+  - API: Added TownLeaveEvent
+    - A cancellable event fired directly before a player would accept/deny leaving their town.
+    - Closes #4513.
+  - Fix ruin hours not being shown properly in the town status screen.
+    - Closes #4534.
+  - Move neutral setting to Government, allowing Towns to become neutral.
+    - New permission node: towny.command.town.toggle.neutral.
+    - No command to manipulate this setting as of yet.
+  - API: Added NewHourEvent
+  - New Command: /t toggle neutral|peaceful
+    - Toggles a town's neutral status.
+    - Otherwise unused for now.
+  - API: Added TownToggleNeutralEvent.
+  - Fix Sender cannot be null! message seen when outlaw add/remove is done on an offline player.

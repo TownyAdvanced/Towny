@@ -126,7 +126,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void freeFromJail(int index, boolean escaped) {
 		if (!escaped) {
-			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
+			if (getPlayer().isOnline())
+				TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else {
 			try {
