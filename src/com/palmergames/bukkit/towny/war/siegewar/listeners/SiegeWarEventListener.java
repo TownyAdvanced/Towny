@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
+import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
@@ -39,6 +40,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTaskController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -406,6 +408,13 @@ public class SiegeWarEventListener implements Listener {
 			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
 			if(SiegeWarSettings.getWarSiegeEnabled())
 				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
+		}
+	}
+	
+	@EventHandler
+	public void onNewHour(NewHourEvent event) {
+		if(SiegeWarSettings.getWarSiegeEnabled()) {
+			SiegeWarTimerTaskController.updatePopulationBasedSiegePointModifiers();
 		}
 	}
 }
