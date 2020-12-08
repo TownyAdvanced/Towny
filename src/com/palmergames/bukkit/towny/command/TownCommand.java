@@ -1726,7 +1726,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 */
 			rank = TownyPerms.matchTownRank(split[2]);
 			if (rank == null)
-				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
 			/*
 			 * Only allow the player to assign ranks if they have the grant perm

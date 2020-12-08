@@ -1138,7 +1138,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		 */
 		String rank = TownyPerms.matchTownRank(split[2]);
 		if (rank == null)
-			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			try {
