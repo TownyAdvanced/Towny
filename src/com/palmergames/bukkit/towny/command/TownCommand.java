@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
@@ -1469,13 +1470,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (split[0].equalsIgnoreCase("public")) {
 
 				// Fire cancellable event directly before setting the toggle.
-				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin);
+				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setPublic(choice.orElse(!town.isPublic()));
+				town.setPublic(preEvent.getFutureState());
 				
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_public", town.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1505,13 +1506,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				// Fire cancellable event directly before setting the toggle.
-				TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin);
+				TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin, choice.orElse(!town.isPVP()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setPVP(choice.orElse(!town.isPVP()));
+				town.setPVP(preEvent.getFutureState());
 
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1529,13 +1530,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
 				
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin);
+				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isBANG()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setBANG(choice.orElse(!town.isBANG()));
+				town.setBANG(preEvent.getFutureState());
 
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_expl", town.getName(), town.isBANG() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1549,13 +1550,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
 				
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleFireEvent preEvent = new TownToggleFireEvent(sender, town, admin);
+				TownToggleFireEvent preEvent = new TownToggleFireEvent(sender, town, admin, choice.orElse(!town.isFire()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setFire(choice.orElse(!town.isFire()));
+				town.setFire(preEvent.getFutureState());
 				
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_fire", town.getName(), town.isFire() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1569,13 +1570,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
 
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleMobsEvent preEvent = new TownToggleMobsEvent(sender, town, admin);
+				TownToggleMobsEvent preEvent = new TownToggleMobsEvent(sender, town, admin, choice.orElse(!town.hasMobs()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setHasMobs(choice.orElse(!town.hasMobs()));
+				town.setHasMobs(preEvent.getFutureState());
 				
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1585,13 +1586,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("taxpercent")) {
 
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleTaxPercentEvent preEvent = new TownToggleTaxPercentEvent(sender, town, admin);
+				TownToggleTaxPercentEvent preEvent = new TownToggleTaxPercentEvent(sender, town, admin, choice.orElse(!town.isTaxPercentage()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setTaxPercentage(choice.orElse(!town.isTaxPercentage()));
+				town.setTaxPercentage(preEvent.getFutureState());
 				
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1612,13 +1613,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin);
+				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin, choice.orElse(!town.isOpen()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setOpen(choice.orElse(!town.isOpen()));
+				town.setOpen(preEvent.getFutureState());
 				
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_open", town.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1632,13 +1633,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
 				
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin);
+				TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setNeutral(choice.orElse(!town.isNeutral()));
+				town.setNeutral(preEvent.getFutureState());
 
 				// Send message feedback.
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_changed_peaceful", town.isNeutral() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -1875,19 +1876,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException(x.getMessage());
 			}
 
-			rank = split[2];
 			/*
-			 * Match correct casing of rank, if that rank exists.
+			 * Match casing to an existing rank, returns null if Town rank doesn't exist.
 			 */
-			for (String ranks : TownyPerms.getTownRanks()) {
-				if (ranks.equalsIgnoreCase(rank))
-					rank = ranks;
-			}			
-			/*
-			 * Is this a known rank?
-			 */			
-			if (!TownyPerms.getTownRanks().contains(rank))
-				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+			rank = TownyPerms.matchTownRank(split[2]);
+			if (rank == null)
+				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
 
 			/*
 			 * Only allow the player to assign ranks if they have the grant perm
@@ -2342,27 +2336,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("tag")) {
 
 					if (split.length < 2)
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set tag PLTC");
+						throw new TownyException("Eg: /town set tag PLTC");
 					else if (split[1].equalsIgnoreCase("clear")) {
-						try {
-							town.setTag(" ");
-							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-						}
-					} else
-						try {
-							if (split[1].length() > 4)
-								throw new TownyException(Translation.of("msg_err_tag_too_long"));
-							town.setTag(NameValidation.checkAndFilterName(split[1]));
-							if (admin)
-								TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-						}
+						town.setTag(" ");
+						if (admin)
+							TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
+					} else {
+						town.setTag(NameValidation.checkAndFilterName(split[1]));
+						if (admin)
+							TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
+					}
 					
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
 
@@ -3120,13 +3105,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			player = (Player) sender;
 
 		for (Resident member : new ArrayList<>(kicking)) {
+			if (!town.getResidents().contains(member)) {
+				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_resident_not_your_town"));
+				kicking.remove(member);
+				continue;
+			}
 			if (resident == member) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_yourself"));
-				kicking.remove(member);				
+				kicking.remove(member);
+				continue;
 			}
 			if (member.isMayor() || town.hasResidentWithRank(member, "assistant")) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_you_cannot_kick_this_resident", member));
 				kicking.remove(member);
+				continue;
 			} else {
 				try {
 					townRemoveResident(town, member);
@@ -3347,13 +3339,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// The list of valid invites is above, there are currently none
 		List<String> removeinvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String residents : reslist) {
-			if (residents.startsWith("-")) {
-				removeinvites.add(residents.substring(1));
+		for (String resName : reslist) {
+			if (resName.startsWith("-")) {
+				removeinvites.add(resName.substring(1));
 				// Add to removing them, remove the "-"
 			} else {
-				newreslist.add(residents);
-				// add to adding them,
+				if (!town.hasResident(resName))
+					newreslist.add(resName);// add to adding them,
+				else 
+					removeinvites.add(resName);
 			}
 		}
 		names = newreslist.toArray(new String[0]);

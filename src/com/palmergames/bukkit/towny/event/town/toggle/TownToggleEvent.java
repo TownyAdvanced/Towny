@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Translation;
 public abstract class TownToggleEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private Player player = null;
 	private final Town town;
 	private final CommandSender sender;
 	private final boolean isAdminAction;
@@ -34,8 +33,6 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 	public TownToggleEvent(CommandSender sender, Town town, boolean admin) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.sender = sender;
-		if (sender instanceof Player)
-			this.player = (Player) sender;
 		this.town = town;
 		this.isAdminAction = admin;
 	}
@@ -61,15 +58,20 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 
 	@Nullable
 	public Resident getResident() {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException ignored) {}
+		Player player = getPlayer();
+		
+		if (player != null) {
+			try {
+				return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			} catch (NotRegisteredException ignored) {}
+		}
+		
 		return null;
 	}
 	
 	@Nullable
 	public Player getPlayer() {
-		return player;
+		return sender instanceof Player ? (Player) sender : null;
 	}
 
 	public Town getTown() {

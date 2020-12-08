@@ -5496,3 +5496,16 @@ v0.92.0.11:
     - Otherwise unused for now.
   - API: Added TownToggleNeutralEvent.
   - Fix Sender cannot be null! message seen when outlaw add/remove is done on an offline player.
+  - Fix NewHourEvent async.
+  - Fix /n kick tab complete populated with non-nation towns.
+    - Closes #4542.
+  - Fix improper message being shown when trying to kick a mayor of another town from your town.
+    - Closes #4541.
+  - Fix/Improve Town Toggle Events, courtesy of silverwolfg11 with PR #4543.
+  - Fix tag commands not giving correct feedback.
+  - Fix /n set tag missing a tabcompleter.
+    - Closes #4540.
+  - Fix nations and towns being able to send an invite to towns and residents which are already members.
+    - Closes #4539.
+  - Fix nationrank add/remove commands failing when the command sender fails to use the proper casing.
+    - Closes #4538.

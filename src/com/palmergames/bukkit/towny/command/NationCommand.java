@@ -198,8 +198,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return ignore;
 					}
 				case "add":
+						return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
-					return getTownyStartingWith(args[args.length - 1], "t");
+					try {
+						return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation().getTowns()), args[args.length - 1]);
+					} catch (TownyException ignored) {}
 				case "ally":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
@@ -311,6 +314,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(NameUtil.getNames(nation.getResidents()), args[2]);
 				case "capital":
 					return NameUtil.filterByStart(NameUtil.getNames(nation.getTowns()), args[2]);
+				case "tag":
+					if (args.length == 3)
+						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
 			}
 		}
 		
@@ -915,7 +921,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3) {
-				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [resident] [rank]");
+				TownyMessaging.sendErrorMsg(player, "Eg: /nation rank add/remove [resident] [rank]");
 				return;
 			}
 
@@ -926,19 +932,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				targetTown = target.getTown();
 
 				if (town.getNation() != targetTown.getNation())
-					throw new TownyException("This resident is not a member of your Town!");
+					throw new TownyException("This resident is not a member of your Nation!");
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 
-			rank = split[2];
 			/*
-			 * Is this a known rank?
+			 * Match casing to an existing rank, returns null if Nation rank doesn't exist.
 			 */
-			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getNationRanks(), ",")));
+			rank = TownyPerms.matchNationRank(split[2]);
+			if (rank == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getNationRanks(), ",")));
 				return;
 			}
 			/*
@@ -1477,22 +1483,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
-		List<String> reslist = new ArrayList<>(Arrays.asList(names));
+		List<String> townlist = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
-		List<String> newreslist = new ArrayList<>();
+		List<String> newtownlist = new ArrayList<>();
 		// The list of valid invites is above, there are currently none
 		List<String> removeinvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String townname : reslist) {
+		for (String townname : townlist) {
 			if (townname.startsWith("-")) {
 				// Add to removing them, remove the "-"
 				removeinvites.add(townname.substring(1));
 			} else {
-				// add to adding them,
-				newreslist.add(townname);
+				if (!nation.hasTown(townname))
+					newtownlist.add(townname); // add to adding them,
+				else 
+					removeinvites.add(townname);
 			}
 		}
-		names = newreslist.toArray(new String[0]);
+		names = newtownlist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length >= 1) {
 			nationRevokeInviteTown(player,nation, townyUniverse.getDataSource().getTowns(namestoremove));
@@ -2441,20 +2449,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set tag PLT");
+					throw new TownyException("Eg: /nation set tag PLT");
 				else if (split[1].equalsIgnoreCase("clear")) {
-					try {
-						nation.setTag(" ");
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-					}
-				} else
-					if (split[1].length() > 4)
-						throw new TownyException(Translation.of("msg_err_tag_too_long"));
+					nation.setTag(" ");
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
+				} else {
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
-
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
+				}
 			} else if (split[0].equalsIgnoreCase("title")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE.getNode()))
