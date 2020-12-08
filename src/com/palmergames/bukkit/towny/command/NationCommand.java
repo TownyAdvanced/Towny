@@ -840,7 +840,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 */
 			rank = TownyPerms.matchNationRank(split[2]);
 			if (rank == null) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getNationRanks(), ",")));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getNationRanks(), ", ")));
 				return;
 			}
 			/*
