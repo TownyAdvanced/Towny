@@ -916,7 +916,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3) {
-				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [resident] [rank]");
+				TownyMessaging.sendErrorMsg(player, "Eg: /nation rank add/remove [resident] [rank]");
 				return;
 			}
 
@@ -927,19 +927,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				targetTown = target.getTown();
 
 				if (town.getNation() != targetTown.getNation())
-					throw new TownyException("This resident is not a member of your Town!");
+					throw new TownyException("This resident is not a member of your Nation!");
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 
-			rank = split[2];
 			/*
-			 * Is this a known rank?
+			 * Match casing to an existing rank, returns null if Nation rank doesn't exist.
 			 */
-			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getNationRanks(), ",")));
+			rank = TownyPerms.matchNationRank(split[2]);
+			if (rank == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getNationRanks(), ",")));
 				return;
 			}
 			/*

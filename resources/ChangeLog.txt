@@ -5507,3 +5507,5 @@ v0.92.0.11:
     - Closes #4540.
   - Fix nations and towns being able to send an invite to towns and residents which are already members.
     - Closes #4539.
+  - Fix nationrank add/remove commands failing when the command sender fails to use the proper casing.
+    - Closes #4538.

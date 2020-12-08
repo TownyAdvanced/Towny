@@ -628,12 +628,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 
 	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
-
-		if (this.hasTown() && TownyPerms.getTownRanks().contains(rank)) {
+		if (this.hasTown()) {
 			if (hasTownRank(rank))
 				throw new AlreadyRegisteredException();
 
-			rank = getTownRank(rank);
 			townRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -645,20 +643,21 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setTownRanks(List<String> ranks) {
-		for (String rank : ranks) 
-			if (!this.hasTownRank(rank)) {
-				rank = getTownRank(rank);
-				if (rank != null)
-					townRanks.add(rank);
-			}
+		for (String rank : ranks) {
+			rank = TownyPerms.matchTownRank(rank);
+			if (rank!= null && !this.hasTownRank(rank))
+				townRanks.add(rank);
+		}
 	}
 
 	// Sometimes databases might have mis-matched rank casing.
 	public boolean hasTownRank(String rank) {
-		for (String ownedRank : townRanks) {
-			if (ownedRank.equalsIgnoreCase(rank))
-				return true;
-		}
+		rank = TownyPerms.matchTownRank(rank);
+		if (rank != null)
+			for (String ownedRank : townRanks) {
+				if (ownedRank.equalsIgnoreCase(rank))
+					return true;
+			}
 		return false;
 	}
 
@@ -666,23 +665,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(townRanks);
 	}
 	
-	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change. 
-	private String getTownRank(String rank) {
-		for (String ownedRank : TownyPerms.getTownRanks()) {
-			if (ownedRank.equalsIgnoreCase(rank))
-				return ownedRank;
-		}
-		return null;
-	}
-
 	public boolean removeTownRank(String rank) throws NotRegisteredException {
 
 		if (hasTownRank(rank)) {
-			rank = getTownRank(rank);
 			townRanks.remove(rank);
-			if (BukkitTools.isOnline(this.getName())) {
+			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
-			}
+
 			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
@@ -692,11 +681,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
 
-		if (this.hasNation() && TownyPerms.getNationRanks().contains(rank)) {
+		if (this.hasNation()) {
 			if (hasNationRank(rank))
 				throw new AlreadyRegisteredException();
-
-			rank = getNationRank(rank);
+	
 			nationRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -707,20 +695,21 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setNationRanks(List<String> ranks) {
-		for (String rank : ranks)
-			if (!this.hasNationRank(rank)) {
-				rank = getNationRank(rank);
-				if (rank != null)
-					nationRanks.add(rank);
-			}
+		for (String rank : ranks) {
+			rank = TownyPerms.matchNationRank(rank);
+			if (rank != null && !this.hasNationRank(rank))
+				nationRanks.add(rank);
+		}
 	}
 
 	// Sometimes databases might have mis-matched rank casing.
 	public boolean hasNationRank(String rank) {
-		for (String ownedRank : nationRanks) {
-			if (ownedRank.equalsIgnoreCase(rank))
-				return true;
-		}
+		rank = TownyPerms.matchNationRank(rank);
+		if (rank != null)
+			for (String ownedRank : nationRanks) {
+				if (ownedRank.equalsIgnoreCase(rank))
+					return true;
+			}
 		return false;
 	}
 
@@ -728,19 +717,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(nationRanks);
 	}
 
-	// Required because we sometimes see the capitalizaton of ranks in the Townyperms change.
-	private String getNationRank(String rank) {
-		for (String ownedRank : TownyPerms.getNationRanks()) {
-			if (ownedRank.equalsIgnoreCase(rank))
-				return ownedRank;
-		}
-		return null;
-	}
-	
 	public boolean removeNationRank(String rank) throws NotRegisteredException {
 
 		if (hasNationRank(rank)) {
-			rank = getNationRank(rank);
 			nationRanks.remove(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);

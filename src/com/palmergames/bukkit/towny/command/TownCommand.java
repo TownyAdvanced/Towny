@@ -1796,19 +1796,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException(x.getMessage());
 			}
 
-			rank = split[2];
 			/*
-			 * Match correct casing of rank, if that rank exists.
+			 * Match casing to an existing rank, returns null if Town rank doesn't exist.
 			 */
-			for (String ranks : TownyPerms.getTownRanks()) {
-				if (ranks.equalsIgnoreCase(rank))
-					rank = ranks;
-			}			
-			/*
-			 * Is this a known rank?
-			 */			
-			if (!TownyPerms.getTownRanks().contains(rank))
-				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+			rank = TownyPerms.matchTownRank(split[2]);
+			if (rank == null)
+				throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
 
 			/*
 			 * Only allow the player to assign ranks if they have the grant perm

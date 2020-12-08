@@ -1133,12 +1133,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(x.getMessage());
 		}
 
-		String rank = split[2];
 		/*
-		 * Is this a known rank?
+		 * Match casing to an existing rank, returns null if Town rank doesn't exist.
 		 */
-		if (!TownyPerms.getTownRanks().contains(rank))
-			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+		String rank = TownyPerms.matchTownRank(split[2]);
+		if (rank == null)
+			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			try {
