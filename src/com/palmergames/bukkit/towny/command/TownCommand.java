@@ -18,8 +18,6 @@ import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
-import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
@@ -57,8 +55,6 @@ import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.Transaction;
-import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -69,6 +65,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -495,90 +492,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				townLeave(player);
 
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
-				
-				if (!TownySettings.isUsingEconomy())
-					throw new TownyException(Translation.of("msg_err_no_economy"));
-
-				if (TownRuinUtil.isPlayersTownRuined(player))
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
-				if (TownySettings.isBankActionLimitedToBankPlots()) {
-					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
-					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					Town tbTown = tb.getTown(); 
-					Town pTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-					if (tbTown != pTown)
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
-					boolean goodPlot = false;
-					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
-						goodPlot = true;
-					if (!goodPlot)
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));						
-				}
-				
-				if (TownySettings.isBankActionDisallowedOutsideTown()) {
-					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
-					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().getName().equals(TownyAPI.getInstance().getTownName(player.getLocation()))) 
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
-				}
-
-				if (split.length == 2)
-					try {
-						townWithdraw(player, Integer.parseInt(split[1].trim()));
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_error_must_be_int"));
-					}
-				else
-					throw new TownyException(Translation.of("msg_must_specify_amnt", "/town withdraw"));
+				townTransaction(player, split, true);
 
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
-				if (!TownySettings.isUsingEconomy())
-					throw new TownyException(Translation.of("msg_err_no_economy"));
-
-				if (TownRuinUtil.isPlayersTownRuined(player)) 
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				if (TownySettings.isBankActionLimitedToBankPlots()) {
-					if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
-					}
-					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					Town tbTown = tb.getTown(); 
-					Town pTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-					if (tbTown != pTown)
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
-					boolean goodPlot = false;
-					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
-						goodPlot = true;
-					if (!goodPlot)
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
-				}
-				
-				if (TownySettings.isBankActionDisallowedOutsideTown()) {
-					if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
-					}
-					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown()))
-						throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
-				}
 
-				if (split.length == 2)
-					try {
-						townDeposit(player, Integer.parseInt(split[1].trim()));
-					} catch (NumberFormatException e) {
-						throw new TownyException(Translation.of("msg_error_must_be_int"));
-					}
-				else
-					throw new TownyException(Translation.of("msg_must_specify_amnt", "/town deposit"));
+				townTransaction(player, split, false);
+				
 			} else if (split[0].equalsIgnoreCase("plots")) {
 
 				if (TownRuinUtil.isPlayersTownRuined(player))
@@ -3688,114 +3613,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		return false;
 	}
 
-	private void townWithdraw(Player player, int amount) {
-
-		Resident resident;
-		Town town;
-		try {
-			if (!TownySettings.getTownBankAllowWithdrawls())
-				throw new TownyException(Translation.of("msg_err_withdraw_disabled"));
-
-			if (amount < 0)
-				throw new TownyException(Translation.of("msg_err_negative_money"));
-
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			town = resident.getTown();
-			
-			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
-			
-			town.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("town_sing")));
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
-		} catch (TownyException | EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-
-	private void townDeposit(Player player, int amount) {
-
-		Resident resident;
-		Town town;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			town = resident.getTown();
-
-			double bankcap = TownySettings.getTownBankCap();
-			if (bankcap > 0) {
-				if (amount + town.getAccount().getHoldingBalance() > bankcap)
-					throw new TownyException(Translation.of("msg_err_deposit_capped", bankcap));
-			}
-
-			if (amount < 0)
-				throw new TownyException(Translation.of("msg_err_negative_money"));
-
-			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
-			
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
-			
-			// Deposit into town.
-			town.depositToBank(resident, amount);
-			
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
-		} catch (TownyException | EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-	
-	/**
-	 * Used to allow nation members to deposit to towns' banks in their nations.
-	 * 
-	 * @param player the player issuing the command
-	 * @param town town with bank the player wants to deposit to
-	 * @param amount amount the player wishes to deposit
-	 */
-	public static void townDeposit(Player player, Town town, int amount) {
-		try {
-			Resident resident = TownyAPI.getInstance().getDataSource().getResident(player.getName());			
-			
-			double bankcap = TownySettings.getTownBankCap();
-			if (bankcap > 0) {
-				if (amount + town.getAccount().getHoldingBalance() > bankcap)
-					throw new TownyException(Translation.of("msg_err_deposit_capped", bankcap));			
-			}
-			
-			if (amount < 0)
-				throw new TownyException(Translation.of("msg_err_negative_money"));
-
-			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
-
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
-			
-			if (!resident.getAccount().payTo(amount, town, "Town Deposit from Nation member"))
-				throw new TownyException(Translation.of("msg_insuf_funds"));
-
-			TownyMessaging.sendPrefixedNationMessage(resident.getTown().getNation(), Translation.of("msg_xx_deposited_xx", resident.getName(), amount, town + " town"));
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
-		} catch (EconomyException | TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-	
 	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> toRevoke = new ArrayList<>();
@@ -3811,6 +3628,40 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			
 		}
 		return toRevoke;		
+	}
+	
+	private static void townTransaction(Player player, String[] args, boolean withdraw) {
+		try {
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			if (!resident.hasTown())
+				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
+			
+			if (args.length == 2) {
+				int amount;
+				try {
+					amount = Integer.parseInt(args[1].trim());
+				} catch (NumberFormatException ex) {
+					throw new TownyException(Translation.of("msg_error_must_be_int"));
+				}
+
+				if (withdraw)
+					MoneyUtil.townWithdraw(player, resident, resident.getTown(), amount);
+				else
+					MoneyUtil.townDeposit(player, resident, resident.getTown(), null, amount);
+				
+			} else {
+				String command;
+				if (withdraw)
+					command = "/town withdraw";
+				else 
+					command = "/town deposit";
+				
+				throw new TownyException(Translation.of("msg_must_specify_amnt", command));
+			}
+			
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+		}
 	}
 
 }

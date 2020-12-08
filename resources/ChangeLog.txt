@@ -5509,3 +5509,4 @@ v0.92.0.11:
     - Closes #4539.
   - Fix nationrank add/remove commands failing when the command sender fails to use the proper casing.
     - Closes #4538.
+  - Rework town and nation withdraw/deposit to reduce redundancies.
