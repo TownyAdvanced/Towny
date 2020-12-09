@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentJailEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentUnJailEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -26,6 +28,7 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -108,10 +111,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailed(boolean isJailed) {
 		this.isJailed = isJailed;
 		
-		if (isJailed)
+		if (isJailed){
 			TownyUniverse.getInstance().getJailedResidentMap().add(this);
-		else 
+			Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this, this.jailTown));
+		} else {
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
+			Bukkit.getPluginManager().callEvent(new ResidentUnJailEvent(this));
+		}
+			
 	}
 	
 	public void sendToJail(int index, Town town) {
