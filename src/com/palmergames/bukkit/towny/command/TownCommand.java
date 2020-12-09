@@ -2554,7 +2554,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// This should never happen
 		if (town == null)
 			throw new TownyException(String.format("Error fetching new town from name '%s'", name));
-		
+
+		town.setRegistered(System.currentTimeMillis());
 		resident.setTown(town);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
@@ -2563,7 +2564,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
-		town.setRegistered(System.currentTimeMillis());
 
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);

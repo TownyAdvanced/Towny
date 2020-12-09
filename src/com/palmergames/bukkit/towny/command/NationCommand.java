@@ -1142,11 +1142,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
+		nation.setUuid(UUID.randomUUID());
+		nation.setRegistered(System.currentTimeMillis());
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
 		nation.setCapital(town);
-		nation.setUuid(UUID.randomUUID());
-		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				nation.getAccount().setBalance(0, "Deleting Nation");
