@@ -1235,6 +1235,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
+	
+	public static boolean getTownDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.TOWN_DEF_NEUTRAL); 
+	}
 
 	public static String getTownDefaultBoard() {
 

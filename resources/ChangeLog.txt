@@ -5512,3 +5512,6 @@ v0.92.0.11:
   - Rework town and nation withdraw/deposit to reduce redundancies.
   - Add space to ranks separator, courtesy of illumeleet with PR #4549 (First-Time Contributor!)
   - Fix onPlayerFishEvent double negative, courtesy of Warriorrrr with PR #4547 (First-Time Contributor!)
+  - New Config Option: town.default_neutral
+    - Default: false
+    - Default neutral status of the town (are new towns neutral by default?)
