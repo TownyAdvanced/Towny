@@ -5516,3 +5516,5 @@ v0.92.0.11:
     - Default: false
     - Default neutral status of the town (are new towns neutral by default?)
   - Do not shade in jetbrain annotations, courtesy of silverwolfg11 with PR #4528.
+0.96.5.5:
+  - API: ResidentJailEvent & ResidentUnjailEvent courtesy of Kovalskki with PR #4560 (First-Time Contributor!)
