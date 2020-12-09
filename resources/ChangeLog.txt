@@ -5519,3 +5519,5 @@ v0.92.0.11:
 0.96.5.5:
   - API: ResidentJailEvent & ResidentUnjailEvent courtesy of Kovalskki with PR #4560 (First-Time Contributor!)
   - Fix plot group's setting plot type showing message for each plot in the group (when there was no cost to set the type.)
+  - Fix cactus no longer hurting minecarts.
+    - Closes #4561.
