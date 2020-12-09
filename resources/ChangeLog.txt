@@ -5515,3 +5515,4 @@ v0.92.0.11:
   - New Config Option: town.default_neutral
     - Default: false
     - Default neutral status of the town (are new towns neutral by default?)
+  - Do not shade in jetbrain annotations, courtesy of silverwolfg11 with PR #4528.
