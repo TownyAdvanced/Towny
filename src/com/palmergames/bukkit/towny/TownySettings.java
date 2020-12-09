@@ -1235,6 +1235,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
+	
+	public static boolean getTownDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.TOWN_DEF_NEUTRAL); 
+	}
 
 	public static String getTownDefaultBoard() {
 
@@ -2554,7 +2559,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
-	public static boolean geNationBankAllowWithdrawls() {
+	public static boolean getNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}

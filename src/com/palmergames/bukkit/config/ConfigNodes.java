@@ -65,6 +65,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Default Open status of the town (are new towns open and joinable by anyone at creation?)"),
+	TOWN_DEF_NEUTRAL(
+			"town.default_neutral",
+			"false",
+			"",
+			"# Default neutral status of the town (are new towns neutral by default?)"),
 	TOWN_DEF_BOARD("town.default_board", 
 			"/town set board [msg]",
 			"",

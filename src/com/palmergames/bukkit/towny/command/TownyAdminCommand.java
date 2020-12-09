@@ -1144,7 +1144,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		 */
 		String rank = TownyPerms.matchTownRank(split[2]);
 		if (rank == null)
-			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			try {
@@ -1906,8 +1906,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
-				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.geNationBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.geNationBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
+				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}
