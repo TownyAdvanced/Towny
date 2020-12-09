@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
@@ -70,7 +71,6 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.common.events.WarPreUnclaimEvent;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -3547,7 +3547,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				WarPreUnclaimEvent event = new WarPreUnclaimEvent(town, resident, world);
+				TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
 				if (event.isCancelled())
 					throw new TownyException(event.getCancelMessage());
 				

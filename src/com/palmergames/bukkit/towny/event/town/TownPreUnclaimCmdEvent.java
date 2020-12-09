@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.common.events;
+package com.palmergames.bukkit.towny.event.town;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -10,10 +10,15 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An event fired when a '/town unclaim' command is issued. Useful for war systems wanting halt that
- * in it's tracks.
+ * An event fired when a '/town unclaim [args]' command is issued, prior to any other calculations.
+ * <p>
+ * Useful for plugins (like war systems) wanting halt the command in it's tracks.
+ * For an example, see FlagWar's TownyCommonListener. (Class name subject to change.)
+ * <p>
+ * Not to be confused with {@link TownPreUnclaimEvent}, which is handled within the
+ * {@link com.palmergames.bukkit.towny.db.TownyDatabaseHandler}.
  */
-public class WarPreUnclaimEvent extends Event implements Cancellable {
+public class TownPreUnclaimCmdEvent extends Event implements Cancellable {
 
   private static final HandlerList handlers = new HandlerList();
   private final Town town;
@@ -33,13 +38,13 @@ public class WarPreUnclaimEvent extends Event implements Cancellable {
   }
 
   /**
-   * Constructs the WarPreUnclaimEvent and stores data an external war plugin may use.
+   * Constructs the TownPreUnclaimCmdEvent and stores data an external war plugin may use.
    *
    * @param town The {@link Town} about to process un-claiming (a) plot(s).
    * @param resident The {@link Resident} who initiated the command.
    * @param world The {@link TownyWorld} in which the resident is in.
    */
-  public WarPreUnclaimEvent(Town town, Resident resident, TownyWorld world) {
+  public TownPreUnclaimCmdEvent(Town town, Resident resident, TownyWorld world) {
     this.town = town;
     this.resident = resident;
     this.townyWorld = world;
