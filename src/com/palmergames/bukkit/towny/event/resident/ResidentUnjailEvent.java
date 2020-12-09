@@ -5,12 +5,12 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class ResidentUnJailEvent extends Event {
+public class ResidentUnjailEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident resident;
 
-	public ResidentUnJailEvent(Resident resident){
+	public ResidentUnjailEvent(Resident resident){
 
 		this.resident = resident;
 	}
