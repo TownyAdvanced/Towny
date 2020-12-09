@@ -9,14 +9,10 @@ public class ResidentJailEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident resident;
-	private final String jailTown;
-	private int jailSpawn;
 	
-	public ResidentJailEvent(Resident resident, String jailTown, int jailSpawn){
+	public ResidentJailEvent(Resident resident){
 
 		this.resident = resident;
-		this.jailTown = jailTown;
-		this.jailSpawn = jailSpawn;
 	}
 	
 	@NotNull
@@ -31,13 +27,5 @@ public class ResidentJailEvent extends Event {
 
 	public Resident getResident() {
 		return resident;
-	}
-
-	public String getJailTown() {
-		return jailTown;
-	}
-
-	public int getJailSpawn() {
-		return jailSpawn;
 	}
 }

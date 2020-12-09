@@ -113,6 +113,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		
 		if (isJailed){
 			TownyUniverse.getInstance().getJailedResidentMap().add(this);
+			Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this));
 		} else {
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
 			Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(this));
@@ -126,7 +127,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.setJailTown(town.getName());
 		TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_sent_to_jail"));
 		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", this.getName(), index));
-		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this, this.jailTown, this.getJailSpawn()));
 
 	}
 	
