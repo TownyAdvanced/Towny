@@ -27,6 +27,9 @@ public class TownPreUnclaimCmdEvent extends Event implements Cancellable {
   private String cancelMessage = Translation.of("msg_err_town_unclaim_canceled");
   private boolean isCancelled = false;
 
+  /**
+   * @return the event's {@link HandlerList}
+   */
   @NotNull
   @Override
   public HandlerList getHandlers() {
@@ -50,32 +53,55 @@ public class TownPreUnclaimCmdEvent extends Event implements Cancellable {
     this.townyWorld = world;
   }
 
+  /**
+   * @return Tells the listener if the event has previously been caught and cancelled.
+   */
   @Override
   public boolean isCancelled() {
     return isCancelled;
   }
 
+  /**
+   * @param cancelled Sets the event as cancelled, or unsets a cancellation from a previous handler.
+   */
   @Override
   public void setCancelled(boolean cancelled) {
     this.isCancelled = cancelled;
   }
 
+  /**
+   * @return Gets the {@link Town} which would have it's TownBlocks unclaimed.
+   */
   public Town getTown() {
     return town;
   }
 
+  /**
+   * @return Gets the {@link Resident} that issued the '/t unclaim ...' command.
+   */
   public Resident getResident() {
     return resident;
   }
 
+  /**
+   * @return Gets the {@link TownyWorld} where the land is being unclaimed.
+   */
   public TownyWorld getTownyWorld() {
     return townyWorld;
   }
 
+  /**
+   * @return Gets the message for if the event were cancelled.
+   */
   public String getCancelMessage() {
     return cancelMessage;
   }
 
+  /**
+   * Overrides the cancellation message previously set by the event, or by an event handler up the stack.
+   *
+   * @param cancelMessage The message to send back to the server when the event is cancelled.
+   */
   public void setCancelMessage(String cancelMessage) {
     this.cancelMessage = cancelMessage;
   }
