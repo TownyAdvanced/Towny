@@ -2246,7 +2246,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");				
 				else {
 					
-					if(!NameValidation.isBlacklistName(split[1]))
+					if(NameValidation.isBlacklistName(split[1]))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 					
 				    if(TownySettings.isUsingEconomy() && TownySettings.getNationRenameCost() > 0) {

@@ -2154,7 +2154,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 					
-					if(!NameValidation.isBlacklistName(split[1]))
+					if(NameValidation.isBlacklistName(split[1]))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 
                     if(TownySettings.isUsingEconomy() && TownySettings.getTownRenameCost() > 0) {
