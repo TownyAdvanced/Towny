@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * An event fired when a '/town unclaim [args]' command is issued, prior to any other calculations.
  * <p>
  * Useful for plugins (like war systems) wanting halt the command in it's tracks.
- * For an example, see FlagWar's TownyCommonListener. (Class name subject to change.)
+ * For an example, see Flag War's FlagWarCustomListener.onWarPreUnclaim().
  * <p>
  * Not to be confused with {@link TownPreUnclaimEvent}, which is handled within the
  * {@link com.palmergames.bukkit.towny.db.TownyDatabaseHandler}.

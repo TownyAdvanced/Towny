@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -330,6 +331,20 @@ public class FlagWarCustomListener implements Listener {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 				return;
 			}
+		}
+	}
+
+	@EventHandler (priority= EventPriority.HIGH)
+	private void onWarPreUnclaim(TownPreUnclaimCmdEvent event) {
+		if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
+			event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
+			event.setCancelled(true);
+			return; // Return early, no reason to try sequential checks if a town is under attack.
+		}
+
+		if (System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
+			event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
+			event.setCancelled(true);
 		}
 	}
 }

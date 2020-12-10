@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyCommonListener;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -39,7 +38,6 @@ public class FlagWar {
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
 	private static Map<Town, Long> lastFlag;
-	private static final TownyCommonListener commonListener = new TownyCommonListener();
 
 	public static void onEnable() {
 
@@ -64,7 +62,7 @@ public class FlagWar {
 
 	public static void registerEvents() {
 		final PluginManager pluginManager = getServer().getPluginManager();
-		pluginManager.registerEvents(commonListener, pluginManager.getPlugin("Towny")); //TODO: Change to FlagWar post-split.
+		// TODO: Register Listeners Post-Split
 	}
 
 	public static void registerAttack(CellUnderAttack cell) throws TownyException {
