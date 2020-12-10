@@ -41,6 +41,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -70,7 +72,6 @@ import java.util.zip.ZipFile;
 
 /**
  * @author ElgarL
- * 
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
@@ -78,7 +79,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
-	
+
+	Logger logger = LogManager.getLogger(TownyDatabaseHandler.class);
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final BukkitTask task;
 	
@@ -630,15 +632,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			town = townBlock.getTown();
 		} catch (NotRegisteredException e) {
-			// TODO: Log why a TownBlock would not have a town.
-			// If there is not an associated town, it's probably not a valid TownBlock. Should we return?
+			// Log as error because TownBlocks *must* have a town.
+			logger.error(e.getMessage());
+			return;
 		}
 
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
 		BukkitTools.getPluginManager().callEvent(event);
 		
-		if (event.isCancelled() || town == null) {
-			System.out.println(event.getCancelMessage()); //TODO: Replace with a Log4J logger.
+		if (event.isCancelled()) {
+			// Log as Warn because the event has been processed
+			logger.warn(event.getCancelMessage());
 			return;
 		}
 
