@@ -8,6 +8,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class TownPreUnclaimEvent extends Event implements Cancellable {
@@ -68,6 +69,7 @@ public class TownPreUnclaimEvent extends Event implements Cancellable {
     /**
      * @return the {@link Town}.
      */
+    @Nullable
     public Town getTown() {
         return town;
     }
