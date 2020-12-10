@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
@@ -45,6 +46,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.util.TimeMgmt;
@@ -411,10 +413,52 @@ public class SiegeWarEventListener implements Listener {
 		}
 	}
 	
+	/*
+	 * On NewHours SW makes some calculations.
+	 */
 	@EventHandler
 	public void onNewHour(NewHourEvent event) {
 		if(SiegeWarSettings.getWarSiegeEnabled()) {
 			SiegeWarTimerTaskController.updatePopulationBasedSiegePointModifiers();
+		}
+	}
+	
+	/*
+	 * Upon attempting to claim land, SW will stop it under some conditions.
+	 */
+	@EventHandler
+	public void onTownClaim(TownPreClaimEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
+			//If the claimer's town is under siege, they cannot claim any land
+			if (SiegeWarSettings.getWarSiegeBesiegedTownClaimingDisabled()
+				&& event.getTown().hasSiege()
+				&& event.getTown().getSiege().getStatus().isActive()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_claim"));
+				return;
+			}
+
+			//If the land is too near any active siege zone, it cannot be claimed.
+			if(SiegeWarSettings.getWarSiegeClaimingDisabledNearSiegeZones()) {
+				for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+					try {
+						if (siege.getStatus().isActive()
+							&& SiegeWarDistanceUtil.isInSiegeZone(event.getPlayer(), siege)) {
+							event.setCancelled(true);
+							event.setCancelMessage(Translation.of("msg_err_siege_claim_too_near_siege_zone"));
+							break;
+						}
+					} catch (Exception e) {
+						//Problem with this particular siegezone. Ignore siegezone
+						try {
+							System.out.println("Problem with verifying claim against the following siege zone" + siege.getName() + ". Claim allowed.");
+						} catch (Exception e2) {
+							System.out.println("Problem with verifying claim against a siege zone (name could not be read). Claim allowed");
+						}
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 }

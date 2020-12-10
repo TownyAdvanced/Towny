@@ -75,7 +75,6 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1684,25 +1683,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (split.contains("explosion")) {
 			if (town.getHomeblockWorld().isForceExpl())
 				throw new TownyException(Translation.of("msg_world_expl"));
-			
-			if(SiegeWarSettings.getWarSiegeEnabled()
-				&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-				&& town.hasSiege()
-				&& town.getSiege().getStatus().isActive())  {
-				throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_toggle_explosions"));
-			}
 		}
 
 		if (split.contains("pvp")) {
 			if (town.getHomeblockWorld().isForcePVP())
 				throw new TownyException(Translation.of("msg_world_pvp"));
-
-			if(SiegeWarSettings.getWarSiegeEnabled()
-				&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-				&& town.hasSiege()
-				&& town.getSiege().getStatus().isActive())  {
-				throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_toggle_pvp"));
-			}
 		}
 	}
 
@@ -2607,7 +2592,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 			}
 		}
-
+		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
 		townyDataSource.saveTown(town);
@@ -3406,9 +3391,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
-
-				if(SiegeWarSettings.getWarSiegeEnabled())
-					SiegeWarClaimUtil.verifySiegeEffectsOnClaiming(player, town);
 
 				if (town.isBankrupt())
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
