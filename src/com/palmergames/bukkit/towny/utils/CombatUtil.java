@@ -6,7 +6,9 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.event.damage.WorldPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -22,6 +24,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -277,41 +280,40 @@ public class CombatUtil {
 	public static boolean preventPvP(TownyWorld world, TownBlock townBlock) {
 
 		if (townBlock != null) {
-			try {
 
-				/*
-				 * Check the attackers TownBlock and it's Town for their PvP
-				 * status. This will throw a NotRegisteredException right away 
-				 * if it is in the wilderness. 
-				 */
-				if (townBlock.getTown().isAdminDisabledPVP())
-					return true;
-
-				// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
-				if (!townBlock.getPermissions().pvp && !townBlock.getTown().isPVP() && !world.isForcePVP())
-					return true;
-				
-				if (townBlock.isHomeBlock() && world.isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
-					return true;
-
-			} catch (NotRegisteredException ex) {
-				/*
-				 * Failed to fetch the town data
-				 * so check world PvP
-				 */
-				if (!isWorldPvP(world))
-					return true;
-			}
+			/*
+			 * Check the attackers TownBlock and it's Town for their PvP status.
+			 */
+			TownBlockPVPTestEvent event = new TownBlockPVPTestEvent(townBlock, isPvP(townBlock));
+			Bukkit.getPluginManager().callEvent(event);
+			return !event.isPvp();
 
 		} else {
 
 			/*
 			 * Attacker isn't in a TownBlock so check the world PvP
 			 */
-			if (!isWorldPvP(world))
-				return true;
+			WorldPVPTestEvent event = new WorldPVPTestEvent(world, isWorldPvP(world));
+			Bukkit.getPluginManager().callEvent(event);
+			return !event.isPvp();
 		}
-		return false;
+	}
+	
+	private static boolean isPvP(TownBlock townBlock) {
+		
+		try {
+			if (townBlock.getTown().isAdminDisabledPVP())
+				return false;
+
+			// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
+			if (!townBlock.getPermissions().pvp && !townBlock.getTown().isPVP() && !townBlock.getWorld().isForcePVP()) 
+				return false;
+			
+			if (townBlock.isHomeBlock() && townBlock.getWorld().isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
+				return false;
+		} catch (NotRegisteredException ignored) {}
+		
+		return true;
 	}
 
 	/**
