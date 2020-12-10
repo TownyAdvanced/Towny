@@ -165,7 +165,7 @@ public class SpawnUtil {
 			//If town is peaceful and public, skip further t spawn checks
 			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& SiegeWarSettings.getWarCommonPeacefulTownsVisitorTSpawnOverride()
-				&& town.isPeaceful()
+				&& town.isNeutral()
 				&& town.isPublic()) {
 				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
 				break;
@@ -230,7 +230,7 @@ public class SpawnUtil {
 			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& SiegeWarSettings.getWarCommonPeacefulTownsTravellerNSpawnOverride()
 				&& resident.hasTown()
-				&& resident.getTown().isPeaceful()
+				&& resident.getTown().isNeutral()
 				&& nation.isPublic()) {
 				nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
 				break;
@@ -277,7 +277,7 @@ public class SpawnUtil {
 			&& !(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				 && SiegeWarSettings.getWarCommonPeacefulTownsDisallowedZonesOverride()
 			     && resident.hasTown()
-			     && resident.getTown().isPeaceful())) {
+			     && resident.getTown().isNeutral())) {
 
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
@@ -327,7 +327,7 @@ public class SpawnUtil {
 				if(!residentSpawningIntoOwnTown) {   //No block if this is a resident spawning into own town
 					Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
 
-					if(!townAtSpawnLocation.isPeaceful()) {  //No block if this is a peaceful town
+					if(!townAtSpawnLocation.isNeutral()) {  //No block if this is a peaceful town
 
 						//Block TP if the target town is besieged
 						if (townAtSpawnLocation.hasSiege()

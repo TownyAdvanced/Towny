@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
@@ -145,15 +144,6 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		/*
-		 * Update town peacefulness counters.
-		 */
-		if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
-			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
-			if(SiegeWarSettings.getWarSiegeEnabled())
-				TownPeacefulnessUtil.evaluatePeacefulTownNationAssignments();
-		}
-
-		/*
 		 * Run backup on a separate thread, to let the DailyTimerTask thread terminate as intended.
 		 */
 		if (TownySettings.isBackingUpDaily()) {			
@@ -228,7 +218,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 */
 				if (universe.getDataSource().hasTown(town.getName())) {
 					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (SiegeWarSettings.getWarSiegeEnabled()
-							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isPeaceful()))
+							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isNeutral()))
 						continue;
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.

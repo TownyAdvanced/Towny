@@ -70,21 +70,17 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarClaimUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -102,8 +98,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -1649,55 +1643,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 
-			} else if (split[0].equalsIgnoreCase("peaceful")) {
-				
-				if(!SiegeWarSettings.getWarCommonPeacefulTownsEnabled())
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				if (!townyUniverse.getPermissionSource().testPermission((Player)sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE_NEUTRAL.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
-				if(admin) {
-					town.setDesiredPeacefulnessValue(!town.isPeaceful());
-					town.setPeacefulnessChangeConfirmationCounterDays(1);
-					TownPeacefulnessUtil.updateTownPeacefulnessCounters(town);
-				} else {
-					if (town.getPeacefulnessChangeConfirmationCounterDays() == 0) {
-						
-						//Here, no countdown is in progress, and the town wishes to change peacefulness status
-						town.setDesiredPeacefulnessValue(!town.isPeaceful());
-						
-						int counterValue;
-						if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
-							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
-						} else {
-							counterValue = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
-						}
-						town.setPeacefulnessChangeConfirmationCounterDays(counterValue);
-						
-						//Send message to town
-						if (town.getDesiredPeacefulnessValue())
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_peaceful"), counterValue));
-						else
-							TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_declared_non_peaceful"), counterValue));
-						
-						//Remove any military nation ranks of residents
-						for(Resident peacefulTownResident: town.getResidents()) {
-							for (String nationRank : new ArrayList<>(peacefulTownResident.getNationRanks())) {
-								if (SiegeWarPermissionUtil.doesNationRankAllowPermissionNode(nationRank, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS)) {
-									resident.removeNationRank(nationRank);
-								}
-							}
-						}
-						
-					} else {
-						//Here, a countdown is in progress, and the town wishes to cancel the countdown,
-						town.setDesiredPeacefulnessValue(town.isPeaceful());
-						town.setPeacefulnessChangeConfirmationCounterDays(0);
-						//Send message to town
-						TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));
-					}
-				}
 			} else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.
@@ -2671,10 +2616,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 
-		town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS));
-		town.setPeaceful(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-		town.setDesiredPeacefulnessValue(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
 		townyDataSource.saveTown(town);

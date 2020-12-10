@@ -68,24 +68,16 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
-	private long revoltImmunityEndTime;
-	private long siegeImmunityEndTime;
-	private Siege siege;
-	private boolean occupied;
-	private boolean peaceful;
-	private boolean desiredPeacefulnessValue;
+	private long revoltImmunityEndTime = 0;
+	private long siegeImmunityEndTime = 0;
+	private Siege siege = null;
+	private boolean occupied = false;
+	private boolean desiredPeacefulnessValue = false;
 	private int peacefulnessChangeConfirmationCounterDays;
 
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
-		revoltImmunityEndTime = 0;
-		siegeImmunityEndTime = 0;
-		siege = null;
-		occupied = false;
-		peaceful = false;
-		desiredPeacefulnessValue = false;
-		peacefulnessChangeConfirmationCounterDays = 0;
 		
 		// Set defaults.
 		setTaxes(TownySettings.getTownDefaultTax());
@@ -383,7 +375,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (isAdminDisabledPVP()) 
 			return false;
 		
-		//Under siege
+		//Under siege TODO: Use townblock pvp event 
 		if(SiegeWarSettings.getWarSiegeEnabled()
 			&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
 			&& siege != null
@@ -1444,6 +1436,26 @@ public class Town extends Government implements TownBlockOwner {
 		return ruinedTime;
 	}
 
+	public int getPeacefulnessChangeConfirmationCounterDays() {
+		return peacefulnessChangeConfirmationCounterDays;
+	}
+
+	public void decrementPeacefulnessChangeConfirmationCounterDays() {
+		peacefulnessChangeConfirmationCounterDays--;
+	}
+
+	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
+		peacefulnessChangeConfirmationCounterDays = counterValueDays;
+	}
+
+	public boolean getDesiredPeacefulnessValue() {
+		return desiredPeacefulnessValue;
+	}
+	
+	public void setDesiredPeacefulnessValue(boolean value) {
+		desiredPeacefulnessValue = value;
+	}
+	
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
@@ -1468,42 +1480,6 @@ public class Town extends Government implements TownBlockOwner {
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 	
-	public boolean isPeaceful() {
-		return peaceful;
-	}
-
-	public int getPeacefulnessChangeConfirmationCounterDays() {
-		return peacefulnessChangeConfirmationCounterDays;
-	}
-
-	public void decrementPeacefulnessChangeConfirmationCounterDays() {
-		peacefulnessChangeConfirmationCounterDays--;
-	}
-
-	public void flipPeaceful() {
-		peaceful = !peaceful;
-	}
-
-	public void flipDesiredPeacefulnessValue() {
-		desiredPeacefulnessValue = !desiredPeacefulnessValue;
-	}
-
-	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
-		peacefulnessChangeConfirmationCounterDays = counterValueDays;
-	}
-
-	public void setDesiredPeacefulnessValue(boolean value) {
-		desiredPeacefulnessValue = value;
-	}
-
-	public boolean getDesiredPeacefulnessValue() {
-		return desiredPeacefulnessValue;
-	}
-
-	public void setPeaceful(boolean value) {
-		peaceful = value;
-	}
-
 	/**
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
 	 * 
