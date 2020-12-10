@@ -157,7 +157,7 @@ public abstract class TownyDataSource {
 
 		TownySettings.setUUIDCount(0);
 		
-		for (Resident resident : getResidents()) {
+		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				return false;
@@ -213,7 +213,7 @@ public abstract class TownyDataSource {
 	public boolean saveResidents() {
 
 		TownyMessaging.sendDebugMsg("Saving Residents");
-		for (Resident resident : getResidents())
+		for (Resident resident : universe.getResidents())
 			saveResident(resident);
 		return true;
 	}

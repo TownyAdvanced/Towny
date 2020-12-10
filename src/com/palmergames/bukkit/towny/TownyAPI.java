@@ -334,7 +334,7 @@ public class TownyAPI {
      */
     public List<Resident> getActiveResidents() {
         List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getDataSource().getResidents()) {
+        for (Resident resident : townyUniverse.getResidents()) {
             if (isActiveResident(resident)) {
                 activeResidents.add(resident);
             }

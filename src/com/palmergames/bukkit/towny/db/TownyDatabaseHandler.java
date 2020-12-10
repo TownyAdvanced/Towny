@@ -815,7 +815,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Town town : toSave) {
 
-			for (Resident res : getResidents()) {
+			for (Resident res : universe.getResidents()) {
 				if (res.hasTitle() || res.hasSurname()) {
 					res.setTitle("");
 					res.setSurname("");
@@ -936,7 +936,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//search and update all resident's jailTown with new name.
 
-            for (Resident toCheck : getResidents()){
+            for (Resident toCheck : universe.getResidents()){
                     if (toCheck.hasJailTown(oldName)) {
                         toCheck.setJailTown(newName);
                         
@@ -1142,7 +1142,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Resident oldResident = new Resident(oldName);
 			
 			// Search and update all friends lists
-			List<Resident> toSaveResident = new ArrayList<>(getResidents());
+			List<Resident> toSaveResident = new ArrayList<>(universe.getResidents());
 			for (Resident toCheck : toSaveResident){
 				if (toCheck.hasFriend(oldResident)) {
 					toCheck.removeFriend(oldResident);

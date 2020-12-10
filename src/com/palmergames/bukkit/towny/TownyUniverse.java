@@ -508,6 +508,13 @@ public class TownyUniverse {
 		return Collections.unmodifiableCollection(residentNameMap.values());
 	}
 
+	/**
+	 * @return number of residents that Towny has.
+	 */
+	public int getNumResidents() {
+		return residentNameMap.size();
+	}
+
 	public Trie getResidentsTrie() {
 		return residentsTrie;
 	}

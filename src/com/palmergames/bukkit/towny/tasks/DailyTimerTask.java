@@ -151,7 +151,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
-		TownyMessaging.sendDebugMsg("    Residents: " + universe.getDataSource().getResidents().size());
+		TownyMessaging.sendDebugMsg("    Residents: " + universe.getNumResidents());
 		TownyMessaging.sendDebugMsg("    Towns: " + universe.getDataSource().getTowns().size());
 		TownyMessaging.sendDebugMsg("    Nations: " + universe.getDataSource().getNations().size());
 		for (TownyWorld world : universe.getDataSource().getWorlds())
