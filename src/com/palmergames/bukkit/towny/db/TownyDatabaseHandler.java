@@ -634,7 +634,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} catch (NotRegisteredException e) {
 			// Log as error because TownBlocks *must* have a town.
 			logger.error(e.getMessage());
-			return;
 		}
 
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);

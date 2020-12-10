@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This event fires after a TownBlock has been unclaimed and stores the {@link WorldCoord}
@@ -36,6 +37,7 @@ public class TownUnclaimEvent extends Event {
   /**
    * @return {@link Town} which is unclaiming land.
    */
+  @Nullable
   public Town getTown() {
     return town;
   }
