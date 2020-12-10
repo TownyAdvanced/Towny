@@ -3644,8 +3644,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	
 	private static void townTransaction(Player player, String[] args, boolean withdraw) {
 		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			if (!resident.hasTown())
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident == null || !resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
 			
 			if (args.length == 2) {

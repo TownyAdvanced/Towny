@@ -55,10 +55,7 @@ public abstract class NationToggleEvent extends Event implements Cancellable {
 
 	@Nullable
 	public Resident getResident() {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException ignored) {}
-		return null;
+		return TownyUniverse.getInstance().getResident(player.getUniqueId());
 	}
 	
 	@Nullable

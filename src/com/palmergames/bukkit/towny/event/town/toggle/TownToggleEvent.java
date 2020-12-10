@@ -59,12 +59,8 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 	@Nullable
 	public Resident getResident() {
 		Player player = getPlayer();
-		
-		if (player != null) {
-			try {
-				return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (NotRegisteredException ignored) {}
-		}
+		if (player != null)
+			return TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		return null;
 	}
