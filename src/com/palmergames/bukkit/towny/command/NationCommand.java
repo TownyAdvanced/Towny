@@ -153,7 +153,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"list"
 	);
 
-    private static void nationTransaction(Player player, String[] args, boolean withdraw) {
+	private static void nationTransaction(Player player, String[] args, boolean withdraw) {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident == null || !resident.hasNation())
@@ -168,22 +168,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} catch (NumberFormatException ex) {
 				throw new TownyException(Translation.of("msg_error_must_be_int"));
 			}
-			
+
 			if (args.length == 2) {
 				if (withdraw)
 					MoneyUtil.nationWithdraw(player, resident, resident.getTown().getNation(), amount);
-				else 
+				else
 					MoneyUtil.nationDeposit(player, resident, resident.getTown().getNation(), amount);
 				return;
 			}
-			
+
 			if (withdraw)
 				throw new TownyException(Translation.of("msg_must_specify_amnt", "/nation withdraw"));
 
 			if (args.length == 3) {
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				
+
 				Town town = TownyUniverse.getInstance().getTown(args[2]);
 				if (town != null) {
 					if (!resident.getTown().getNation().hasTown(town))
@@ -198,7 +198,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-    }
+	}
 	
 	static List<String> nationSetTabComplete(Nation nation, String[] args) {
 		if (args.length == 2) {
@@ -2493,7 +2493,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			
+
 			switch (args[0].toLowerCase()) {
 				case "toggle":
 					if (args.length == 2)
@@ -2518,7 +2518,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "spawn":
 					if (args.length == 2) {
 						List<String> nationOrIgnore = getTownyStartingWith(args[1], "n");
-						nationOrIgnore.add("-ignore");						
+						nationOrIgnore.add("-ignore");
 						return NameUtil.filterByStart(nationOrIgnore, args[1]);
 					}
 					if (args.length == 3) {
@@ -2526,7 +2526,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return ignore;
 					}
 				case "add":
-						return getTownyStartingWith(args[args.length - 1], "t");
+					return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
 					try {
 						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
@@ -2568,10 +2568,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								// Return sent ally invites to accept or deny
 								try {
 									return NameUtil.filterByStart(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getReceivedInvites()
-									.stream()
-									.map(Invite::getSender)
-									.map(InviteSender::getName)
-									.collect(Collectors.toList()), args[args.length - 1]);
+										.stream()
+										.map(Invite::getSender)
+										.map(InviteSender::getName)
+										.collect(Collectors.toList()), args[args.length - 1]);
 								} catch (TownyException ignore) {}
 						}
 					}
@@ -2632,4 +2632,5 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		return Collections.emptyList();
 	}
+
 }
