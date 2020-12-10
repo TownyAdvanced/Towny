@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -100,7 +101,6 @@ public class InvadeTown {
     }
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
-		TownyUniverse universe = TownyUniverse.getInstance();
 		Nation nationOfDefendingTown = null;
 		boolean nationTown = false;
 		boolean nationDefeated = false;
@@ -112,17 +112,20 @@ public class InvadeTown {
                 nationOfDefendingTown = defendingTown.getNation();
             } catch (NotRegisteredException x) {}
 
-			//Remove town from nation (and nation itself if empty)
-			universe.getDataSource().removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
-            universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
-
-            if(nationOfDefendingTown.getTowns().size() == 0) {
+            // This will delete the Nation when it loses its last town, mark them defeated.
+            if(nationOfDefendingTown.getTowns().size() == 1) {
                	nationDefeated = true;
             }
-        } else {
-            universe.getDataSource().addTownToNation(plugin, defendingTown, attackingNation);
+            
+			//Remove town from nation (and nation itself if empty)
+            defendingTown.removeNation();
         }
-
+        
+        // Add town to nation.
+        try {
+			defendingTown.setNation(attackingNation);
+		} catch (AlreadyRegisteredException ignored) {}
+        
         //Set flags to indicate success
 		siege.setTownInvaded(true);
         defendingTown.setOccupied(true);

@@ -189,11 +189,8 @@ public class TownPeacefulnessUtil {
 				if (guardianTowns.size() == 0) {
 					//Guardian town list was empty. Peaceful town leaves nation
 					Nation previousNation = peacefulTown.getNation();
-					townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
+					peacefulTown.removeNation();
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_left_nation", peacefulTown.getFormattedName(), previousNation.getFormattedName()));
-					if(previousNation.getNumTowns() == 0) {
-						TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", previousNation.getName()));
-					}
 				} else {
 					//Find guardian nation (the one with the largest guardian town)
 					Town topGuardianTown = null;
@@ -208,17 +205,16 @@ public class TownPeacefulnessUtil {
 					if (peacefulTown.hasNation()) {
 						//Peaceful town moves from one nation to another
 						Nation previousNation = peacefulTown.getNation();
-						townyUniverse.getDataSource().removeTownFromNation(Towny.getPlugin(), peacefulTown, peacefulTown.getNation());
-						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
+						peacefulTown.removeNation();
+						peacefulTown.setNation(guardianNation);
 						TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_changed_nation", peacefulTown.getFormattedName(), previousNation.getFormattedName(), guardianNation.getFormattedName()));
-						if(previousNation.getNumTowns() == 0) {
-							TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", previousNation.getName()));
-						}
 					} else {
 						//Peaceful town joins nation
-						townyUniverse.getDataSource().addTownToNation(Towny.getPlugin(), peacefulTown, guardianNation);
+						peacefulTown.setNation(guardianNation);
 						TownyMessaging.sendGlobalMessage(Translation.of("msg_war_siege_peaceful_town_joined_nation", peacefulTown.getFormattedName(), guardianNation.getFormattedName()));
 					}
+					// .setNation() does not save the Town internally.
+					TownyUniverse.getInstance().getDataSource().saveTown(peacefulTown);
 				}
 			} catch (Exception e) {
 				try {
