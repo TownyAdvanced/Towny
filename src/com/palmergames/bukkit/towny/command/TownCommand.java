@@ -1721,12 +1721,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (split.length < 3)
 				throw new TownyException("Eg: /town rank add/remove [resident] [rank]");
 
-			resident = getResidentOrThrow(player.getUniqueId());
-			target = getResidentOrThrow(split[1]);
-			town = resident.getTown();
-
-			if (town != target.getTown())
-				throw new TownyException(Translation.of("msg_resident_not_your_town"));
+			try {
+				resident = getResidentOrThrow(player.getUniqueId());
+				target = getResidentOrThrow(split[1]);
+				town = resident.getTown();
+	
+				if (town != target.getTown())
+					throw new TownyException(Translation.of("msg_resident_not_your_town"));
 
 			} catch (TownyException x) {
 				throw new TownyException(x.getMessage());
