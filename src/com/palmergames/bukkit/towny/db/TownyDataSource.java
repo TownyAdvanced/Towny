@@ -417,8 +417,4 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
-
-	abstract public void removeTownFromNation(Towny plugin, Town town, Nation nation);
-
-	abstract public void addTownToNation(Towny plugin, Town town,Nation nation);
 }

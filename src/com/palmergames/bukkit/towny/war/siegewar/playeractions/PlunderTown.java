@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
@@ -84,38 +85,44 @@ public class PlunderTown {
     }
 
     private static void plunderTown(Siege siege, Town town, Nation nation, BlockPlaceEvent event) throws Exception {
-		double actualPlunderAmount;
 		boolean townNewlyBankrupted = false;
 		boolean townDestroyed = false;
 
-		double fullPlunderAmount =
+		double plunderAmount =
 				SiegeWarSettings.getWarSiegeAttackerPlunderAmountPerPlot()
 				* town.getTownBlocks().size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(town);
-
+		
 		//Redistribute money
-		if(town.getAccount().payTo(fullPlunderAmount, nation,"Plunder")) {
-			//Town can afford plunder
-			actualPlunderAmount = fullPlunderAmount;
+		if(town.getAccount().canPayFromHoldings(plunderAmount)) {
+			//Town can afford plunder			
+			town.getAccount().payTo(plunderAmount, nation, "Plunder");
 		} else {
 			//Town cannot afford plunder
+			
 			if (TownySettings.isTownBankruptcyEnabled()) {
-				//Take from town and pay to nation
-				if(town.isBankrupt()) {
-					actualPlunderAmount = town.increaseTownDebt(fullPlunderAmount, "Plunder by " + nation.getName());
-					nation.getAccount().deposit(actualPlunderAmount, "Plunder of " + town.getName());
-				} else {
-					double prePaymentTownBankBalance = town.getAccount().getHoldingBalance();
-					town.getAccount().setBalance(0, "Plunder by " + nation.getName());
-					double actualDebtIncrease = town.increaseTownDebt(fullPlunderAmount - prePaymentTownBankBalance, "Plunder by " + nation.getName());
-					actualPlunderAmount = prePaymentTownBankBalance + actualDebtIncrease;
-					nation.getAccount().deposit(actualPlunderAmount, "Plunder of " + town.getName());
-					townNewlyBankrupted = true;
-				}
+				// If able, they will go into bankrupcty.
+
+				// Set the Town's debtcap fresh.
+				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+
+				// Mark them as newly bankrupt for message later on.
+				townNewlyBankrupted = true;
+
+				// This will drop their actualPlunder amount to what the town's debt cap will allow. 
+				// Enabling a town to go only so far into debt to pay the plunder cost.
+				if (town.getAccount().getHoldingBalance() - plunderAmount < town.getAccount().getDebtCap() * -1)
+					plunderAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
+					
+				// Charge the town (using .withdraw() which will allow for going into bankruptcy.)
+				town.getAccount().withdraw(plunderAmount, "Plunder by " + nation.getName());
+				// And deposit it into the nation.
+				nation.getAccount().deposit(plunderAmount, "Plunder of " + town.getName());
+				
 			} else {
-				//Destroy town
-				actualPlunderAmount = town.getAccount().getHoldingBalance();
-				town.getAccount().payTo(actualPlunderAmount, nation, "Plunder");
+				// Not able to go bankrupt, they are destroyed, pay what they can.
+				plunderAmount = town.getAccount().getHoldingBalance();
+				town.getAccount().payTo(plunderAmount, nation, "Plunder");
 				townDestroyed = true;
 			}
 		}
@@ -135,14 +142,14 @@ public class PlunderTown {
 			TownyMessaging.sendGlobalMessage(String.format(
 				Translation.of("msg_siege_war_nation_town_plundered"),
 				town.getFormattedName(),
-				TownyEconomyHandler.getFormattedBalance(actualPlunderAmount),
+				TownyEconomyHandler.getFormattedBalance(plunderAmount),
 				nation.getFormattedName()
 			));
 		} else {
 			TownyMessaging.sendGlobalMessage(String.format(
 				Translation.of("msg_siege_war_neutral_town_plundered"),
 				town.getFormattedName(),
-				TownyEconomyHandler.getFormattedBalance(actualPlunderAmount),
+				TownyEconomyHandler.getFormattedBalance(plunderAmount),
 				nation.getFormattedName()
 			));
 		}

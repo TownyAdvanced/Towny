@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
@@ -1520,33 +1519,4 @@ public class Town extends Government implements TownBlockOwner {
 	public String getTownBoard() {
 		return getBoard();
 	}
-
-	/**
-	 * Increase Town Debt
-	 * 
-	 * Debt cannot increase beyond a certain threshold
-	 * (determined by the estimated value of the town)
-	 *
-	 * @param requestedDebtIncrease The debt increase
-	 * @param reason The reason for the debt
-	 * @return the actual debt increase
-	 */
-	public double increaseTownDebt(double requestedDebtIncrease, String reason) throws EconomyException {
-		double actualDebtIncrease;
-		double maximumDebtAmount = getEstimatedValueOfTown();
-
-		if(requestedDebtIncrease + getAccount().getHoldingBalance() > maximumDebtAmount) {
-			actualDebtIncrease = requestedDebtIncrease;
-		} else {
-			actualDebtIncrease = maximumDebtAmount - getAccount().getHoldingBalance();
-		}
-
-		getAccount().withdraw(actualDebtIncrease, reason);
-		return actualDebtIncrease;
-	}
-
-	private double getEstimatedValueOfTown() {
-		return MoneyUtil.getEstimatedValueOfTown(this);
-	}
-
 }
