@@ -5521,3 +5521,4 @@ v0.92.0.11:
   - Fix plot group's setting plot type showing message for each plot in the group (when there was no cost to set the type.)
   - Fix cactus no longer hurting minecarts.
     - Closes #4561.
+  - Fix null UUID on NationAddTownEvent, courtesy of silverwolfg11 with PR #4559.
