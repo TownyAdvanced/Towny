@@ -375,14 +375,6 @@ public class Town extends Government implements TownBlockOwner {
 		if (isAdminDisabledPVP()) 
 			return false;
 		
-		//Under siege TODO: Use townblock pvp event 
-		if(SiegeWarSettings.getWarSiegeEnabled()
-			&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-			&& siege != null
-			&& siege.getStatus().isActive()) {
-			return true;
-		}
-
 		return this.permissions.pvp;
 	}
 	
@@ -404,13 +396,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isBANG() {
-
-		if(SiegeWarSettings.getWarSiegeEnabled()
-			&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-			&& siege != null
-			&& siege.getStatus().isActive()) {
-			return true;
-		}
 
 		return this.permissions.explosion;
 	}

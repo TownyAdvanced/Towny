@@ -148,6 +148,9 @@ public class AttackTown {
 		defendingTown.setSiege(siege);
 		attackingNation.addSiege(siege);
 		
+		defendingTown.getPermissions().explosion = true;
+		defendingTown.getPermissions().pvp = true;
+		
 		//Pay into warchest
 		if (TownySettings.isUsingEconomy()) {
 			try {

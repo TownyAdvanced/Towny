@@ -1520,14 +1520,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				
 			} else if (split[0].equalsIgnoreCase("open")) {
 
-				if(SiegeWarSettings.getWarSiegeEnabled()
-					&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
-					&& town.hasSiege()
-					&& town.getSiege().getStatus().isActive())
-				{
-					throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_toggle_open_off"));
-				}
-
 				if(town.isBankrupt())
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_toggle_open"));
 
