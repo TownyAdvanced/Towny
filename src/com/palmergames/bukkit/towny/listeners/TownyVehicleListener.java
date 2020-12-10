@@ -1,13 +1,17 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -85,6 +89,28 @@ public class TownyVehicleListener implements Listener {
 		} else {
 			if (EntityTypeUtil.isExplosive(event.getAttacker().getType()) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getVehicle().getLocation(), event.getVehicle(), DamageCause.ENTITY_EXPLOSION))
 				event.setCancelled(true);
+		}
+	}
+	
+	/*
+	 * This is necessary because of the lacking API surrounding the Vehicle events.
+	 * 
+	 * Cactus return a null getAttacker() on a VehicleDamageEvent, a null getLastDamageCause() 
+	 * on a VehicleDestroyEvent, and because the VehicleDamageEvent fires before the EntityDamageByBlockEvent
+	 * it appears to be quite impossible to protect for the many null getAttacker()'s in the VehicleDamageEvent,
+	 * while still allowing players to have minecart stations that destroy unneeded carts.
+	 * 
+	 * To clarify: We have to protect against a whole bunch of Null damage-causing things, of which Cactus ends
+	 * up also getting caught up amongst.
+	 */
+	@EventHandler
+	public void onVehicleCollide(VehicleBlockCollisionEvent event) {
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
+			return;
+		
+		if (event.getBlock().getType() == Material.CACTUS && event.getVehicle() instanceof Minecart) {
+			event.getVehicle().remove();
+			Bukkit.getWorld(event.getBlock().getWorld().getName()).dropItemNaturally(event.getVehicle().getLocation(), new ItemStack(EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType())));
 		}
 	}
 

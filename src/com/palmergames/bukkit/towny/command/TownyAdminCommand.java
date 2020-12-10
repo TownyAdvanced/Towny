@@ -1141,17 +1141,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_townadmintownrank_wrong_town"));
 		}
 
-		String rank = split[2];
 		/*
-		 * Is this a known rank?
+		 * Match casing to an existing rank, returns null if Town rank doesn't exist.
 		 */
-		if (!TownyPerms.getTownRanks().contains(rank))
-			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", rank, StringMgmt.join(TownyPerms.getTownRanks(), ",")));
+		String rank = TownyPerms.matchTownRank(split[2]);
+		if (rank == null)
+			throw new TownyException(Translation.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			try {
 				if (target.addTownRank(rank)) {
-					TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
+					if (target.getPlayer().isOnline())
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
 					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Town", rank, target.getName()));
 				} else {
 					// Not in a town or Rank doesn't exist
@@ -1167,7 +1168,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			try {
 				if (target.removeTownRank(rank)) {
-					TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
+					if (target.getPlayer().isOnline())
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
 					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
 				}
 			} catch (NotRegisteredException e) {
@@ -1304,7 +1306,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if(split[1].equalsIgnoreCase("toggle")) {
 				
-				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
+				NationCommand.nationToggle(sender, StringMgmt.remArgs(split, 2), true, nation);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
 				if (!TownySettings.isUsingEconomy())
@@ -1658,7 +1660,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 */
 	public void reloadDatabase() {
-		
+		TownyUniverse.getInstance().getDataSource().finishTasks();
 		if (plugin.load()) {
 
 			// Register all child permissions for ranks
@@ -1859,8 +1861,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
-				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.geNationBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.geNationBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
+				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
+				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translation.of("enabled") : Colors.Red + Translation.of("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
 			}

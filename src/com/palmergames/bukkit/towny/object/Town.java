@@ -72,6 +72,7 @@ public class Town extends Government implements TownBlockOwner {
 		setTaxes(TownySettings.getTownDefaultTax());
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
+		setNeutral(TownySettings.getTownDefaultNeutral());
 	}
 	
 	public Town(String name, UUID uuid) {

@@ -903,6 +903,18 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_FLAGS);
 	}
 
+	public static int getMaxPoolSize() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE);
+	}
+
+	public static int getMaxLifetime() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_LIFETIME);
+	}
+
+	public static int getConnectionTimeout() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT);
+	}
+
 	public static int getMaxTownBlocks(Town town) {
 
 		int ratio = getTownBlockRatio();
@@ -1222,6 +1234,11 @@ public class TownySettings {
 	public static boolean getTownDefaultOpen() {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
+	}
+	
+	public static boolean getTownDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.TOWN_DEF_NEUTRAL); 
 	}
 
 	public static String getTownDefaultBoard() {
@@ -2542,7 +2559,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
-	public static boolean geNationBankAllowWithdrawls() {
+	public static boolean getNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}

@@ -8,6 +8,9 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -284,6 +287,55 @@ public class FlagWarCustomListener implements Listener {
 		if (FlagWarConfig.isAllowingAttacks() && System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 			event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onTownSetHomeBlock(TownPreSetHomeBlockEvent event) {
+		if (FlagWarConfig.isAllowingAttacks()) {
+			if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
+				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
+				event.setCancelled(true);
+				return;
+			}
+
+			if (System.currentTimeMillis()- FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
+				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
+				event.setCancelled(true);
+				return;
+			}
+
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
+		if (FlagWarConfig.isAllowingAttacks()) {
+			if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
+			} else {
+				if (event.getFutureState() && !FlagWar.getCellsUnderAttack().isEmpty())
+					for (Resident resident : event.getNation().getResidents())
+						FlagWar.removeAttackerFlags(resident.getName());
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onTownLeave(TownLeaveEvent event) {
+		if (FlagWarConfig.isAllowingAttacks()) {
+			if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
+				return;
+			}
+
+			if (System.currentTimeMillis()- FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
+				return;
+			}
 		}
 	}
 }

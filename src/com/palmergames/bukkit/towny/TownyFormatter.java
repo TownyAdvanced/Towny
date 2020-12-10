@@ -405,6 +405,8 @@ public class TownyFormatter {
 
 				out.add(bankString);
 			}
+			if (town.isNeutral())
+				out.add(Translation.of("status_nation_peaceful"));
 
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));

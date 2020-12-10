@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -458,6 +459,35 @@ public class TownyPerms {
 		List<String> permsList = getList("nations.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
+	
+	/**
+	 * Used to match a given rank to a case-sensitive Nation Rank.
+	 * @param rank String representing the rank the user typed in.
+	 * @return String of the NationRank which matches or null;
+	 */
+	@Nullable
+	public static String matchNationRank(String rank) {
+		for (String nationRank : getNationRanks()) {
+			if (nationRank.equalsIgnoreCase(rank))
+				return nationRank;
+		}
+		return null;
+	}
+	
+	/**
+	 * Used to match a given rank to a case-sensitive Town Rank.
+	 * @param rank String representing the rank the user typed in.
+	 * @return String of the TownRank which matches or null;
+	 */
+	@Nullable
+	public static String matchTownRank(String rank) {
+		for (String townRank : getTownRanks()) {
+			if (townRank.equalsIgnoreCase(rank))
+				return townRank;
+		}
+		return null;
+	}
+
 	
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).

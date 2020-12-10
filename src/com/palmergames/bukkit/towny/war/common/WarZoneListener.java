@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
@@ -229,6 +231,14 @@ public class WarZoneListener implements Listener {
 			} else {
 				event.setCancelled(true);
 			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
+		if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
+			event.setCancelled(true);
+			event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
 		}
 	}
 }

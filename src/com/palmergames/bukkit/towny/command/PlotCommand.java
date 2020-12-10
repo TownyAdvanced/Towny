@@ -1687,10 +1687,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// No cost or economy so no confirmation.
 				} else {
 
-					for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+					for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks())
 						tb.setType(type, resident);
-						TownyMessaging.sendMsg(player, Translation.of("msg_set_group_type_to_x", plotTypeName));
-					}
+					TownyMessaging.sendMsg(player, Translation.of("msg_set_group_type_to_x", plotTypeName));
 
 				}
 
