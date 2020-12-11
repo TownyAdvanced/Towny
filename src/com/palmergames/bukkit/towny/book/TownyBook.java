@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.book;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 
 public class TownyBook {
@@ -26,10 +27,20 @@ public class TownyBook {
 		/*
 		 * Enter various tax settings
 		 */
+		out.add("Daily tax on residents: " + TownySettings.getTownDefaultTax() + NEWLINE);
+		out.add("This tax is a percentage: " + TownySettings.getTownDefaultTaxPercentage() + NEWLINE);
+		out.add("Plot taxes: " + NEWLINE);
+		out.add("Normal plots: " + TownySettings.getTownDefaultPlotTax() + NEWLINE);
+		out.add("Shop plots: " + TownySettings.getTownDefaultShopTax() + NEWLINE);
+		out.add("Embassy plots: " + TownySettings.getTownDefaultEmbassyTax() + NEWLINE);
 		
-		/*
-		 * If statement to mention max bonus plots IF townlevels aren't being used.
-		 */
+		out.add(NEWPARAGRAPH);
+		out.add("Bonus plot info: " + NEWLINE);
+		if (!TownySettings.isBonusBlocksPerTownLevel())
+			out.add("Max bonus blocks purchasable: " + TownySettings.getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS) + NEWLINE);
+		else
+			out.add("Purchased bonus plots depend on town level.");
+
 		out.add("The maximum number of Towns allowed to exist on the server is " + TownySettings.getTownLimit() + ". ");  // While other sections can be written out in fairly good english.
 		out.add("The minimum distance tests " + (TownySettings.isMinDistanceIgnoringTownsInSameNation() ? "will be " : "won't be ") + "ignored for towns in the same nation.");
 		out.add("Minimum distance between any two towns' plots is " + TownySettings.getMinDistanceFromTownPlotblocks() + 
