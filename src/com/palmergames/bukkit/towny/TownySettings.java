@@ -2929,6 +2929,7 @@ public class TownySettings {
 	public static int getOutlawTeleportWarmup() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
 	}
+	
 	public static String getOutlawTeleportWorld() { 
 		return getString(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WORLD); 
 	}
