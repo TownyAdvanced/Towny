@@ -61,6 +61,7 @@ public class FlagWar {
 	}
 
 	public static void registerEvents() {
+		@SuppressWarnings("unused")
 		final PluginManager pluginManager = getServer().getPluginManager();
 		// TODO: Register Listeners Post-Split
 	}
