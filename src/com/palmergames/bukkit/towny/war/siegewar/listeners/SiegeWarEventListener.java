@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
@@ -43,6 +44,7 @@ import com.palmergames.bukkit.towny.utils.TownPeacefulnessUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTaskController;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
@@ -459,6 +461,32 @@ public class SiegeWarEventListener implements Listener {
 					}
 				}
 			}
+		}
+	}
+	
+	/*
+	 * Siege War will prevent unclaiming land in some situations.
+	 */
+	@EventHandler
+	public void onTownUnclaim(TownPreUnclaimCmdEvent event) {
+		if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && event.getTown().isOccupied()) {
+			event.setCancelled(true);
+			event.setCancelMessage(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
+			return;
+		}
+			
+		if(SiegeWarSettings.getWarSiegeEnabled()
+			&& SiegeWarSettings.getWarSiegeBesiegedTownUnClaimingDisabled()
+			&& event.getTown().hasSiege()
+			&& (
+				event.getTown().getSiege().getStatus().isActive()
+				|| event.getTown().getSiege().getStatus() == SiegeStatus.ATTACKER_WIN
+				|| event.getTown().getSiege().getStatus() == SiegeStatus.DEFENDER_SURRENDER
+				)
+			)
+		{
+			event.setCancelled(true);
+			event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_unclaim"));
 		}
 	}
 }

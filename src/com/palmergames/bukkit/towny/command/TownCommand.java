@@ -71,8 +71,6 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -3553,22 +3551,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (event.isCancelled())
 					throw new TownyException(event.getCancelMessage());
 				
-				if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
-					throw new TownyException(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
-
-				if(SiegeWarSettings.getWarSiegeEnabled()
-					&& SiegeWarSettings.getWarSiegeBesiegedTownUnClaimingDisabled()
-					&& town.hasSiege()
-					&& (
-						town.getSiege().getStatus().isActive()
-						|| town.getSiege().getStatus() == SiegeStatus.ATTACKER_WIN
-						|| town.getSiege().getStatus() == SiegeStatus.DEFENDER_SURRENDER
-						)
-					)
-				{
-					throw new TownyException(Translation.of("msg_err_siege_besieged_town_cannot_unclaim"));
-				}
-
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
