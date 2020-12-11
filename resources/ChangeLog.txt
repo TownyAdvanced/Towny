@@ -5523,3 +5523,4 @@ v0.92.0.11:
     - Closes #4561.
   - Fix null UUID on NationAddTownEvent, courtesy of silverwolfg11 with PR #4559.
   - Fix not being able to set town and nation names.
+    - Closes #4567.
