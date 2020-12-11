@@ -3548,6 +3548,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
+				Bukkit.getPluginManager().callEvent(event);
 				if (event.isCancelled())
 					throw new TownyException(event.getCancelMessage());
 				
