@@ -1220,7 +1220,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void nationLeave(Player player) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Town town = null;
 
 		try {
@@ -2586,7 +2585,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
     }
 
-	private static void nationTransaction(Player player, String[] args, boolean withdraw) {
+    private static void nationTransaction(Player player, String[] args, boolean withdraw) {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident == null || !resident.hasNation())
@@ -2601,22 +2600,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} catch (NumberFormatException ex) {
 				throw new TownyException(Translation.of("msg_error_must_be_int"));
 			}
-
+			
 			if (args.length == 2) {
 				if (withdraw)
 					MoneyUtil.nationWithdraw(player, resident, resident.getTown().getNation(), amount);
-				else
+				else 
 					MoneyUtil.nationDeposit(player, resident, resident.getTown().getNation(), amount);
 				return;
 			}
-
+			
 			if (withdraw)
 				throw new TownyException(Translation.of("msg_must_specify_amnt", "/nation withdraw"));
 
 			if (args.length == 3) {
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-
+				
 				Town town = TownyUniverse.getInstance().getTown(args[2]);
 				if (town != null) {
 					if (!resident.getTown().getNation().hasTown(town))
@@ -2631,6 +2630,5 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-	}
-
+    }
 }

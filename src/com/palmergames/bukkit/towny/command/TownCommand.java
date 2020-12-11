@@ -94,7 +94,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -2352,8 +2351,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		if (!TownySettings.isUsingEconomy()) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_economy"));
 		}
-
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		Resident resident;
 		Town town;

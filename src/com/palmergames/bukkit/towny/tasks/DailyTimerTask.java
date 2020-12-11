@@ -324,7 +324,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * still exists. We are running in an Async thread so MUST
 				 * verify all objects.
 				 */
-				if (universe.getDataSource().hasResident(resident.getName())) {
+				if (universe.hasResident(resident.getName())) {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
@@ -394,7 +394,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					 * still exists. We are running in an Async thread so MUST
 					 * verify all objects.
 					 */
-					if (universe.getDataSource().hasResident(resident.getName())) {
+					if (universe.hasResident(resident.getName())) {
 						if (resident.hasTown() && resident.getTown() == townBlock.getTown())
 							if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 								continue;

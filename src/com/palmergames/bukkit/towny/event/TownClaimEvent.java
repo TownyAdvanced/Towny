@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;

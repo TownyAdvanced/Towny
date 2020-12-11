@@ -330,7 +330,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 		List<Town> townsToSort = War.warringTowns;
 		List<Nation> nationsToSort = War.warringNations;

@@ -1587,7 +1587,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		int i = 0;
 		do {
 			name = TownySettings.getNPCPrefix() + ++i;
-			if (!TownyUniverse.getInstance().getDataSource().hasResident(name))
+			if (!TownyUniverse.getInstance().hasResident(name))
 				return name;
 			if (i > 100000)
 				throw new TownyException(Translation.of("msg_err_too_many_npc"));
