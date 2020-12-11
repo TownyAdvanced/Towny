@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreTownKickEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleUnknownEvent;
@@ -1513,29 +1514,28 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : kicking)
-			if (town.isCapital())
+			if (town.isCapital() || !nation.hasTown(town))
 				remove.add(town);
-			else if (!nation.getTowns().contains(town))
-				remove.add(town);
-			else 
+			else {
+				// Fire cancellable event.
+				NationPreTownKickEvent event = new NationPreTownKickEvent(nation, town);
+				Bukkit.getPluginManager().callEvent(event);
+				if (event.isCancelled()) {
+					TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
+					remove.add(town);
+					continue;
+				}
+				
+				// Actually remove the nation off the Town.
 				town.removeNation();
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_nation_kicked_by", sender.getName()));
+			}
 
 		for (Town town : remove)
 			kicking.remove(town);
 
 		if (kicking.size() > 0) {
-			StringBuilder msg = new StringBuilder();
-
-			for (Town town : kicking) {
-				msg.append(town.getName()).append(", ");
-
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_nation_kicked_by", sender.getName()));
-			}
-
-			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg = new StringBuilder(Translation.of("msg_nation_kicked", sender.getName(), msg.toString()));
-			TownyMessaging.sendPrefixedNationMessage(nation, msg.toString());
-
+			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_kicked", sender.getName(), StringMgmt.join(kicking, ", ")));
 			plugin.resetCache();
 		} else
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));

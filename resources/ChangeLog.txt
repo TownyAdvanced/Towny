@@ -5525,3 +5525,5 @@ v0.92.0.11:
   - Fix not being able to set town and nation names.
     - Closes #4567.
   - Create TownPreUnclaimCmdEvent, Relocate and extend Town(Pre)UnclaimEvents, courtesy of TheFlagCourier with PR #4537.
+  - API: Add NationPreTownKickEvent which extends the NationPreTownLeaveEvent.
+  - Clean up the nationKick method & use translatable message in more cancellable events.

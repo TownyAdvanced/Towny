@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.event.nation;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translation;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,7 +16,7 @@ public class NationRankRemoveEvent extends Event implements Cancellable {
 	private final Resident res;
 	private final String rank;
 	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled.";
+	private String cancelMessage = Translation.of("msg_err_command_disable");
 
 	public NationRankRemoveEvent(Nation nation, String rank, Resident res) {
 		this.nation = nation;
