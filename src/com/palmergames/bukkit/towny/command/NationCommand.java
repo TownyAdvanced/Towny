@@ -1147,11 +1147,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().newNation(name);
 		Nation nation = townyUniverse.getDataSource().getNation(name);
+		nation.setUuid(UUID.randomUUID());
+		nation.setRegistered(System.currentTimeMillis());
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
 		nation.setCapital(town);
-		nation.setUuid(UUID.randomUUID());
-		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				nation.getAccount().setBalance(0, "Deleting Nation");
@@ -2251,7 +2251,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");				
 				else {
 					
-					if(!NameValidation.isBlacklistName(split[1]))
+					if(NameValidation.isBlacklistName(split[1]))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 					
 				    if(TownySettings.isUsingEconomy() && TownySettings.getNationRenameCost() > 0) {

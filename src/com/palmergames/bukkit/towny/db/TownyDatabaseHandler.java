@@ -15,8 +15,8 @@ import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
-import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
-import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -45,6 +45,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -74,7 +76,6 @@ import java.util.zip.ZipFile;
 
 /**
  * @author ElgarL
- * 
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
@@ -82,11 +83,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
-	
+
+	Logger logger = LogManager.getLogger(TownyDatabaseHandler.class);
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final BukkitTask task;
 	
-	public TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
+	protected TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
 		this.rootFolderPath = universe.getRootFolder();
 		this.dataFolderPath = rootFolderPath + File.separator + "data";
@@ -630,32 +632,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
-
-		TownPreUnclaimEvent event = new TownPreUnclaimEvent(townBlock);
-		BukkitTools.getPluginManager().callEvent(event);
-		
-		if (event.isCancelled())
-			return;
-		
 		Town town = null;
-//		Resident resident = null;                   - Removed in 0.95.2.5
-//		try {
-//			resident = townBlock.getResident();
-//		} catch (NotRegisteredException ignored) {
-//		}
 		try {
 			town = townBlock.getTown();
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
+			// Log as error because TownBlocks *must* have a town.
+			logger.error(e.getMessage());
+		}
+
+		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
+		BukkitTools.getPluginManager().callEvent(event);
+		
+		if (event.isCancelled()) {
+			// Log as Warn because the event has been processed
+			logger.warn(event.getCancelMessage());
+			return;
 		}
 
 		TownyUniverse.getInstance().removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
-//		if (resident != null)           - Removed in 0.95.2.5, residents don't store townblocks in them.
-//			saveResident(resident);
-
-//		if (town != null)         		- Removed in 0.91.1.2, possibly fixing SQL database corruption 
-//		    saveTown(town);				  occuring when towns are deleted. 
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());

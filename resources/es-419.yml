@@ -1,5 +1,5 @@
 name: Towny
-version: 0.92
+version: 0.93
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1207,3 +1207,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined 
 msg_time_remaining_before_full_removal: '&cTime remaining before full removal: %d hours.'
 msg_time_until_reclaim_available: '&cTime until reclaim available: %d hours.'
 msg_reclaim_available: '&aReclaim available.'
+
+#Added in 0.93
+msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
+msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'

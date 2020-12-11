@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.war.flagwar;
 
+import static org.bukkit.Bukkit.getServer;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -20,7 +23,6 @@ import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.plugin.PluginManager;
 
 public class FlagWar {
 
@@ -41,6 +44,9 @@ public class FlagWar {
 		cellsUnderAttack = new HashMap<>();
 		cellsUnderAttackByPlayer = new HashMap<>();
 		lastFlag = new HashMap<>();
+
+		//Register Listeners
+		registerEvents();
 	}
 
 	public static void onDisable() {
@@ -54,20 +60,26 @@ public class FlagWar {
 		}
 	}
 
-	public static void registerAttack(CellUnderAttack cell) throws Exception {
+	public static void registerEvents() {
+		@SuppressWarnings("unused")
+		final PluginManager pluginManager = getServer().getPluginManager();
+		// TODO: Register Listeners Post-Split
+	}
+
+	public static void registerAttack(CellUnderAttack cell) throws TownyException {
 
 		CellUnderAttack currentData = cellsUnderAttack.get(cell);
 
 		// Check if area is already under attack.
 		if (currentData != null)
-			throw new Exception(Translation.of("msg_err_enemy_war_cell_already_under_attack", currentData.getNameOfFlagOwner()));
+			throw new AlreadyRegisteredException(Translation.of("msg_err_enemy_war_cell_already_under_attack", currentData.getNameOfFlagOwner()));
 
 		String playerName = cell.getNameOfFlagOwner();
 
 		// Check that the user is under his limit of active warflags.
 		int futureActiveFlagCount = getNumActiveFlags(playerName) + 1;
 		if (futureActiveFlagCount > FlagWarConfig.getMaxActiveFlagsPerPerson())
-			throw new Exception(Translation.of("msg_err_enemy_war_reached_max_active_flags", FlagWarConfig.getMaxActiveFlagsPerPerson()));
+			throw new TownyException(Translation.of("msg_err_enemy_war_reached_max_active_flags", FlagWarConfig.getMaxActiveFlagsPerPerson()));
 
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
@@ -155,7 +167,7 @@ public class FlagWar {
 	public static void attackWon(CellUnderAttack cell) {
 
 		CellWonEvent cellWonEvent = new CellWonEvent(cell);
-		Bukkit.getServer().getPluginManager().callEvent(cellWonEvent);
+		getServer().getPluginManager().callEvent(cellWonEvent);
 		cell.cancel();
 		removeCellUnderAttack(cell);
 	}
@@ -163,7 +175,7 @@ public class FlagWar {
 	public static void attackDefended(Player player, CellUnderAttack cell) {
 
 		CellDefendedEvent cellDefendedEvent = new CellDefendedEvent(player, cell);
-		Bukkit.getServer().getPluginManager().callEvent(cellDefendedEvent);
+		getServer().getPluginManager().callEvent(cellDefendedEvent);
 		cell.cancel();
 		removeCellUnderAttack(cell);
 	}
@@ -171,7 +183,7 @@ public class FlagWar {
 	public static void attackCanceled(CellUnderAttack cell) {
 
 		CellAttackCanceledEvent cellAttackCanceledEvent = new CellAttackCanceledEvent(cell);
-		Bukkit.getServer().getPluginManager().callEvent(cellAttackCanceledEvent);
+		getServer().getPluginManager().callEvent(cellAttackCanceledEvent);
 		cell.cancel();
 		removeCellUnderAttack(cell);
 	}

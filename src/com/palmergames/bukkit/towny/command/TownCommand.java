@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
@@ -74,7 +75,6 @@ import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -2156,7 +2156,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 					
-					if(!NameValidation.isBlacklistName(split[1]))
+					if(NameValidation.isBlacklistName(split[1]))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 
                     if(TownySettings.isUsingEconomy() && TownySettings.getTownRenameCost() > 0) {
@@ -2556,7 +2556,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// This should never happen
 		if (town == null)
 			throw new TownyException(String.format("Error fetching new town from name '%s'", name));
-		
+
+		town.setRegistered(System.currentTimeMillis());
 		resident.setTown(town);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
@@ -2565,7 +2566,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
-		town.setRegistered(System.currentTimeMillis());
 
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
@@ -3549,11 +3549,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				if (FlagWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown())
-					throw new TownyException(Translation.of("msg_war_flag_deny_town_under_attack"));
-
-				if (System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
-					throw new TownyException(Translation.of("msg_war_flag_deny_recently_attacked"));
+				TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
+				if (event.isCancelled())
+					throw new TownyException(event.getCancelMessage());
 				
 				if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && town.isOccupied())
 					throw new TownyException(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
