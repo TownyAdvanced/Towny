@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -88,6 +89,11 @@ public class GatherResidentUUIDTask implements Runnable {
 
 	private void applyUUID(Resident resident, UUID uuid, String source) {
 		resident.setUUID(uuid);
+		try {
+			TownyUniverse.getInstance().registerResidentUUID(resident);
+		} catch (AlreadyRegisteredException e) {
+			TownyMessaging.sendErrorMsg(String.format("Error registering resident UUID. Resident '%s' already has a UUID registered!", resident.getName()));
+		}
 		TownyUniverse.getInstance().getDataSource().saveResident(resident);
 		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.chat.types;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import net.tnemc.tnc.core.common.chat.ChatType;
 import org.bukkit.entity.Player;
 
@@ -19,28 +20,31 @@ public class AllyType extends ChatType {
 
 	@Override
 	public boolean canChat(Player player) {
-		try {
-			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).hasTown() && TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().hasNation();
-		} catch(NotRegisteredException ignore) {
-
-		}
-		return false;
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		return res != null && res.hasNation();
 	}
 
 	@Override
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident res = townyUniverse.getResident(player.getUniqueId());
+		
+		if (res == null)
+			return recipients;
+		
 		try {
-			final Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+			final Nation nation = res.getTown().getNation();
 
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
-				if (!townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUuid().equals(nation.getUuid())
-						&& !townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().hasAlly(nation)) {
-					continue;
+				Resident playerRes = townyUniverse.getResident(p.getUniqueId());
+				
+				if (playerRes != null && playerRes.hasNation()) {
+					Nation playerNation = playerRes.getTown().getNation();
+					if (playerNation.getUuid().equals(nation.getUuid()) || playerNation.hasAlly(nation))
+						newRecipients.add(p);
 				}
-				newRecipients.add(p);
 			}
 			return newRecipients;
 		} catch(NotRegisteredException ignore) {

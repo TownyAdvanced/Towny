@@ -110,12 +110,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		if (player == null) {
 			return "";
 		}
-		Resident resident;
-		try {
-			resident = TownyAPI.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e) {
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (resident == null)
 			return null;
-		}
+
 		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		String town = "";
 		String nation = "";

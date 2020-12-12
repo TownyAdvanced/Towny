@@ -472,7 +472,8 @@ public class War {
 		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
 		TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), healString);
 		for (Player p : wzd.getDefenders()) {
-			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown() != townBlock.getTown())
+			Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
+			if (res != null && res.hasTown() && res.getTown().equals(townBlock.getTown()))
 				TownyMessaging.sendMessage(p, healString);
 		}
 		launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
@@ -491,7 +492,11 @@ public class War {
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 
 		Player attackerPlayer = wzd.getRandomAttacker();
-		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(attackerPlayer.getName());
+		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(attackerPlayer.getUniqueId());
+		
+		if (attackerResident == null)
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", attackerPlayer.getName()));
+		
 		Town attacker = attackerResident.getTown();
 
 		//Health, messaging, fireworks..
@@ -552,7 +557,8 @@ public class War {
 				Hashtable<Town, Integer> attackerCount = new Hashtable<Town, Integer>();
 				for (Town town : wzd.getAttackerTowns()) {
 					for (Player player : wzd.getAttackers()) {
-						if (town.hasResident(TownyAPI.getInstance().getDataSource().getResident(player.getName())))
+						Resident playerRes = TownyUniverse.getInstance().getResident(player.getUniqueId());
+						if (playerRes != null && playerRes.hasTown() && town.hasResident(playerRes))
 							attackerCount.put(town, attackerCount.get(town) + 1);
 					}
 				}

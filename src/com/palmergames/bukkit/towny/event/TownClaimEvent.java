@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
@@ -31,11 +30,7 @@ public class TownClaimEvent extends Event  {
     public TownClaimEvent(TownBlock townBlock, Player player) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = townBlock;
-		try {
-			this.resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
-		}
+        this.resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 	}
 
     /**

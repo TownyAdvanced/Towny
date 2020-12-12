@@ -18,12 +18,14 @@ public class WarUtil {
 	public static boolean isPlayerNeutral(Player player) {
 		if (TownyAPI.getInstance().isWarTime()) {
 			try {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if (resident.isJailed())
-					return true;
-				if (resident.hasTown())
-					if (!War.isWarringTown(resident.getTown()))
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+				if (resident != null) {
+					if (resident.isJailed())
 						return true;
+					if (resident.hasTown())
+						if (!War.isWarringTown(resident.getTown()))
+							return true;
+				}
 			} catch (NotRegisteredException e) {
 			}			
 		}		

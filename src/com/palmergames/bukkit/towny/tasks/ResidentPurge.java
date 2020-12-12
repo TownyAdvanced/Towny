@@ -43,7 +43,7 @@ public class ResidentPurge extends Thread {
 
 		message("Scanning for old residents...");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		for (Resident resident : new ArrayList<>(townyUniverse.getDataSource().getResidents())) {
+		for (Resident resident : new ArrayList<>(townyUniverse.getResidents())) {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
 				if (townless && resident.hasTown()) {
 					continue;

@@ -9,7 +9,6 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -59,12 +58,8 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 	@Nullable
 	public Resident getResident() {
 		Player player = getPlayer();
-		
-		if (player != null) {
-			try {
-				return TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (NotRegisteredException ignored) {}
-		}
+		if (player != null)
+			return TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		return null;
 	}

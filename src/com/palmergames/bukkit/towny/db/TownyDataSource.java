@@ -157,7 +157,7 @@ public abstract class TownyDataSource {
 
 		TownySettings.setUUIDCount(0);
 		
-		for (Resident resident : getResidents()) {
+		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				return false;
@@ -213,7 +213,7 @@ public abstract class TownyDataSource {
 	public boolean saveResidents() {
 
 		TownyMessaging.sendDebugMsg("Saving Residents");
-		for (Resident resident : getResidents())
+		for (Resident resident : universe.getResidents())
 			saveResident(resident);
 		return true;
 	}
@@ -267,10 +267,12 @@ public abstract class TownyDataSource {
 
 	abstract public List<Resident> getResidents(String[] names);
 
+	@Deprecated
 	abstract public Resident getResident(String name) throws NotRegisteredException;
 
 	abstract public void removeNation(Nation nation);
 
+	@Deprecated
 	abstract public boolean hasResident(String name);
 
 	abstract public boolean hasTown(String name);
@@ -328,6 +330,8 @@ public abstract class TownyDataSource {
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
+	
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
