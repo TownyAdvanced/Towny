@@ -5536,3 +5536,7 @@ v0.92.0.11:
     - Displays either the townname at the location or the wilderness name.
   - Placeholder: %townyadvanced_player_location_formattedtown_or_wildname%
     - Displays either the formatted townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_town_prefix%
+    - Displays the town's prefix or blank.
+  - Placeholder: %townyadvanced_player_location_town_postfix%
+    - Displays the town's postfix or blank.
