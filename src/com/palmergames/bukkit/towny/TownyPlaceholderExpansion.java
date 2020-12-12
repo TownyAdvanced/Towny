@@ -548,6 +548,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			return townblock != null ? townblock.getType().toString() : "";
 		case "player_plot_owner": // %townyadvanced_player_plot_owner%
 			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
+			
+		case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
+			try {
+				return townblock != null ? townblock.getTown().getName() : TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			} catch (NotRegisteredException ignored) {}
+		case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
+			try {
+				return townblock != null ? townblock.getTown().getFormattedName() : TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			} catch (NotRegisteredException ignored) {}
 		default:
 			return null;
 		}

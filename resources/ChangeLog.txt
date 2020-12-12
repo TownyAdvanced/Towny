@@ -5532,3 +5532,7 @@ v0.92.0.11:
   - Backend Resident UUID Implementation, courtesy of silverwolfg11 with PR #4510.
     - Creates methods to get Resident objects via a player UUID.
 	- Create register / unregister methods for residents.
+  - Placeholder: %townyadvanced_player_location_town_or_wildname%
+    - Displays either the townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_formattedtown_or_wildname%
+    - Displays either the formatted townname at the location or the wilderness name.
