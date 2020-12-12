@@ -5527,3 +5527,8 @@ v0.92.0.11:
   - Create TownPreUnclaimCmdEvent, Relocate and extend Town(Pre)UnclaimEvents, courtesy of TheFlagCourier with PR #4537.
   - API: Add NationPreTownKickEvent which extends the NationPreTownLeaveEvent.
   - Clean up the nationKick method & use translatable message in more cancellable events.
+  - Deprecate getMaxPurchedBlocks and replace with getMaxPurchasedBlocks, courtesy of Momshroom with PR #4572.
+  - Update es-419.yml to 0.93, courtesy of EuGNosii with PR #4573.
+  - Backend Resident UUID Implementation, courtesy of silverwolfg11 with PR #4510.
+    - Creates methods to get Resident objects via a player UUID.
+	- Create register / unregister methods for residents.
