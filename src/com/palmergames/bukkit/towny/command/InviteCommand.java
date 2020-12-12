@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
@@ -50,14 +51,20 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			case 2:
 				switch (args[0].toLowerCase()) {
 					case "accept":
-					case "deny":
-						try {
-							return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()).getReceivedInvites()
-								.stream()
-								.map(Invite::getSender)
-								.map(InviteSender::getName)
-								.collect(Collectors.toList()), args[1]);
-						} catch (TownyException ignored) {}
+					case "deny": {
+						if (sender instanceof Player) {
+							Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
+							if (res != null) {
+								return NameUtil.filterByStart(
+									res.getReceivedInvites()
+									.stream()
+									.map(Invite::getSender)
+									.map(InviteSender::getName)
+									.collect(Collectors.toList()),
+									args[1]);
+							}
+						}
+					}
 				}
 		}
 		
@@ -100,13 +107,15 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	private static void parseInviteList(Player player, String[] split) {
 		// Now we check the size of the player invites, if there is more than 10 invites (not possible), We only displayed the first 10.
 		// /invite args[0] args[1}
-		Resident resident;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(player.getUniqueId());
+		
+		if (!resOpt.isPresent()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
 			return;
 		}
+		
+		Resident resident = resOpt.get();
+
 		String received = Translation.of("player_received_invites")
 				.replace("%a", Integer.toString(resident.getReceivedInvites().size())
 				)
@@ -135,21 +144,24 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void parseDeny(Player player, String[] args) {
-		Resident resident;
-		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		Optional<Resident> resOpt = townyUniverse.getResidentOpt(player.getUniqueId());
+		
+		if (!resOpt.isPresent()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
 			return;
 		}
+		
+		Resident resident = resOpt.get();
 		List<Invite> invites = resident.getReceivedInvites();
 
 		if (invites.size() == 0) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
 			return;
 		}
+		
+		Town town;
+		
 		if (args.length >= 1) {
 			// We cut the first argument out of it so /invite *accept* args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
@@ -190,20 +202,22 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void parseAccept(Player player, String[] args) {
-		Resident resident;
-		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		Optional<Resident> resOpt = townyUniverse.getResidentOpt(player.getUniqueId());
+
+		if (!resOpt.isPresent()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
 			return;
 		}
+
+		Resident resident = resOpt.get();
 		List<Invite> invites = resident.getReceivedInvites();
 		if (invites.size() == 0) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
 			return;
 		}
+
+		Town town;
 		if (args.length >= 1) {
 			town = townyUniverse.getTown(args[0]);
 			

@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
@@ -61,8 +62,8 @@ public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
     
-    private final Map<UUID, String> residentUUIDNameMap = new ConcurrentHashMap<>();
-    private final Map<String, Resident> residents = new ConcurrentHashMap<>();
+    private final Map<UUID, Resident> residentUUIDMap = new ConcurrentHashMap<>();
+    private final Map<String, Resident> residentNameMap = new ConcurrentHashMap<>();
     private final Trie residentsTrie = new Trie();
     
     private final Map<String, Town> townNameMap = new ConcurrentHashMap<>();
@@ -187,8 +188,8 @@ public class TownyUniverse {
         nations.clear();
         townNameMap.clear();
         townUUIDMap.clear();
-        residents.clear();
-        residentUUIDNameMap.clear();
+        residentNameMap.clear();
+        residentUUIDMap.clear();
         townBlocks.clear();
         sieges.clear();
     }
@@ -332,25 +333,193 @@ public class TownyUniverse {
      * Maps and Tries
      */
 
-    public Map<String, Nation> getNationsMap() {
-        return nations;
-    }
-    
-    public Map<String, Siege> getSiegesMap() {
-        return sieges;
-    }
-    
-    public Trie getNationsTrie() {
-    	return nationsTrie;
+	// =========== Resident Methods ===========
+
+	/**
+	 * Check if a resident exists with the passed in name.
+	 * Will return true for fake residents and registered NPCs.
+	 * 
+	 * @param residentName Resident name to check for.
+	 * @return whether Towny has a resident matching that name.
+	 */
+	public boolean hasResident(@NotNull String residentName) {
+		Validate.notNull(residentName, "Resident name cannot be null!");
+		
+		if (residentName.isEmpty())
+			return false;
+		
+		if (TownySettings.isFakeResident(residentName))
+			return true;
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return false;
+		}
+		
+		return residentNameMap.containsKey(filteredName);
+	}
+
+	/**
+	 * Check if a resident exists matching the passed in UUID.
+	 * 
+	 * @param residentUUID UUID of the resident to check.
+	 * @return whether the resident matching the UUID exists.
+	 */
+	public boolean hasResident(@NotNull UUID residentUUID) {
+		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
+		
+		return residentUUIDMap.containsKey(residentUUID);
+	}
+
+	/**
+	 * Get the resident matching the passed in name.
+	 * 
+	 * Any fake residents (not registered NPCs) will return a new instance of a resident on method call.
+	 * 
+	 * @param residentName Name of the resident to fetch.
+	 * @return the resident matching the given name or {@code null} if no resident is found.
+	 */
+	@Nullable
+	public Resident getResident(@NotNull String residentName) {
+		Validate.notNull(residentName, "Resident name cannot be null!");
+
+		if (residentName.isEmpty())
+			return null;
+
+		String filteredName = residentName;
+		try {
+			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+		}
+		
+		Resident res = residentNameMap.get(filteredName);
+
+		if (res == null && TownySettings.isFakeResident(residentName)) {
+			Resident npc = new Resident(residentName);
+			npc.setNPC(true);
+			return npc;
+		}
+		
+		return res;
+	}
+
+	/**
+	 * Get an optional instance of the resident matching the passed in name.
+	 * 
+	 * @param residentName Name of the resident to fetch.
+	 * @return Optional object that may contain the resident matching the given name.
+	 */
+	@NotNull
+	public Optional<Resident> getResidentOpt(@NotNull String residentName) {
+		return Optional.ofNullable(getResident(residentName));
+	}
+
+	/**
+	 * Get the resident with the passed-in UUID.
+	 *
+	 * @param residentUUID UUID of the resident to get.
+	 * @return the resident with the passed-in UUID or {@code null} if no resident is found.
+	 */
+	@Nullable
+	public Resident getResident(@NotNull UUID residentUUID) {
+		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
+		
+		return residentUUIDMap.get(residentUUID);
 	}
 	
-    public Map<UUID, String> getResidentUUIDNameMap() {
-    	return residentUUIDNameMap;
+	/**
+	 * Get an optional object that may contain the resident with the passed-in UUID.
+	 *
+	 * @param residentUUID UUID of the resident to get.
+	 * @return an optional object that may contain the resident with the passed-in UUID. 
+	 */
+	@NotNull
+	public Optional<Resident> getResidentOpt(@NotNull UUID residentUUID) {
+		return Optional.ofNullable(getResident(residentUUID));
+	}
+	
+	// Internal Use Only
+	public void registerResidentUUID(@NotNull Resident resident) throws AlreadyRegisteredException {
+		Validate.notNull(resident, "Resident cannot be null!");
+		
+		if (resident.getUUID() != null) {
+			if (residentUUIDMap.putIfAbsent(resident.getUUID(), resident) != null) {
+				throw new AlreadyRegisteredException(
+					String.format("UUID '%s' was already registered for resident '%s'!", resident.getUUID().toString(), resident.getName())
+				);
+			}
+		}
+	}
+
+	/**
+	 * Register a resident into the internal structures.
+	 * This will allow the resident to be fetched by name and UUID, as well as autocomplete the resident name.
+	 * 
+	 * If a resident's name or UUID change, the resident must be re-registered into the maps. 
+	 * 
+	 * This does not modify the resident internally, nor saves the resident in the database.
+	 * 
+	 * @param resident Resident to register.
+	 * @throws AlreadyRegisteredException if another resident has been registered with the same name or UUID.
+	 */
+	public void registerResident(@NotNull Resident resident) throws AlreadyRegisteredException {
+		Validate.notNull(resident, "Resident cannot be null!");
+
+		if (residentNameMap.putIfAbsent(resident.getName().toLowerCase(), resident) != null) {
+			throw new AlreadyRegisteredException(String.format("The resident with name '%s' is already registered!", resident.getName()));
+		}
+
+		residentsTrie.addKey(resident.getName());
+		registerResidentUUID(resident);
+	}
+
+	/**
+	 * Unregister a resident from the internal structures.
+	 * This does not modify the resident internally, nor performs any database operations using the resident.
+	 * 
+	 * @param resident Resident to unregister
+	 * @throws NotRegisteredException if the resident's name or UUID was not registered.
+	 */
+	public void unregisterResident(@NotNull Resident resident) throws NotRegisteredException {
+		Validate.notNull(resident, "Resident cannot be null!");
+
+		if (residentNameMap.remove(resident.getName().toLowerCase()) == null) {
+			throw new NotRegisteredException(String.format("The resident with the name '%s' is not registered!", resident.getName()));
+		}
+
+		residentsTrie.removeKey(resident.getName());
+
+		if (resident.getUUID() != null) {
+			if (residentUUIDMap.remove(resident.getUUID()) == null) {
+				throw new NotRegisteredException(String.format("The resident with the UUID '%s' is not registered!", resident.getUUID().toString()));
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @return map of string -> resident.
+	 * 
+	 * @deprecated Towny does not recommend directly accessing internal structures.
+	 */
+	@Deprecated
+    public Map<String, Resident> getResidentMap() {
+        return residentNameMap;
     }
     
-    public Map<String, Resident> getResidentMap() {
-        return residents;
-    }
+    @Unmodifiable
+    public Collection<Resident> getResidents() {
+		return Collections.unmodifiableCollection(residentNameMap.values());
+	}
+
+	/**
+	 * @return number of residents that Towny has.
+	 */
+	public int getNumResidents() {
+		return residentNameMap.size();
+	}
 
 	public Trie getResidentsTrie() {
 		return residentsTrie;
@@ -509,6 +678,14 @@ public class TownyUniverse {
 				throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
 			}
 		}
+	}
+
+	public Map<String, Nation> getNationsMap() {
+		return nations;
+	}
+
+	public Trie getNationsTrie() {
+		return nationsTrie;
 	}
 	
     public Map<String, TownyWorld> getWorldMap() {
@@ -785,6 +962,10 @@ public class TownyUniverse {
 		return result;
 	}
 
+    public Map<String, Siege> getSiegesMap() {
+        return sieges;
+    }
+	
 	/*
 	 * War Stuff
 	 */

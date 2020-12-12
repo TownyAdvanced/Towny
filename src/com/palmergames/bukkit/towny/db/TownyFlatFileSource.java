@@ -451,8 +451,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
 				
 				line = keys.get("uuid");
-				if (line != null)
+				if (line != null) {
 					resident.setUUID(UUID.fromString(line));
+					universe.registerResidentUUID(resident);
+				}
 				
 				line = keys.get("registered");
 				if (line != null)
@@ -559,9 +561,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("mayor");
 				if (line != null)
 					try {
-						town.forceSetMayor(getResident(line));
+						Resident res = universe.getResident(line);
+						if (res == null)
+							throw new TownyException();
+						
+						town.forceSetMayor(res);
 					} catch (TownyException e1) {
-						e1.getMessage();
 						if (town.getResidents().size() == 0)
 							deleteTown(town);
 						else 
@@ -576,11 +581,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
-							try {
-								Resident outlaw = getResident(token);
-								if (outlaw != null)
+							Resident outlaw = universe.getResident(token);
+							if (outlaw != null) {
+								try { 
 									town.addOutlaw(outlaw);
-							} catch (NotRegisteredException e) {
+								} catch (AlreadyRegisteredException ex) {
+									TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " is duplicated! Skipping adding duplicate...");
+								}
+							}
+							else {
 								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, removing from list...");
 							}
 						}
@@ -1599,12 +1608,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 
 					line = keys.get("resident");
-					if (line != null && !line.isEmpty())
-						try {
-							Resident res = getResident(line.trim());
+					if (line != null && !line.isEmpty()) {
+						Resident res = universe.getResident(line.trim());
+						if (res != null) {
 							townBlock.setResident(res);
-						} catch (Exception ignored) {
 						}
+						else {
+							TownyMessaging.sendErrorMsg("Invalid resident for townblock " + townBlock.toString() + ". Skipped setting resident for townblock...");
+						}
+					}
 					
 					line = keys.get("type");
 					if (line != null)

@@ -96,13 +96,12 @@ public class TownyPerms {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (resident == null) {
-			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-			} catch (NotRegisteredException e) {
-				// failed to get resident
-				e.printStackTrace();
+			if (player != null)
+				resident = townyUniverse.getResident(player.getUniqueId());
+
+			// failed to get resident
+			if (resident == null)
 				return;
-			}
 		} else {
 			player = BukkitTools.getPlayer(resident.getName());
 		}

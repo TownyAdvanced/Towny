@@ -287,17 +287,16 @@ public class PlayerCacheUtil {
 		/*
 		 * Find the resident data for this player.
 		 */
-		Resident resident = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (TownyException e) {
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (resident == null) {
 			// Check if entity is a Citizens NPC
 			if (plugin.isCitizens2()) {
 				if (CitizensAPI.getNPCRegistry().isNPC(player))
 					return TownBlockStatus.NOT_REGISTERED;
 			} else {
 				// If not an NPC then there is likely some sort of problem that should be logged.
-				System.out.print("Failed to fetch resident: " + player.getName());
+				System.out.print("[Towny] Failed to fetch resident: " + player.getName());
 				return TownBlockStatus.NOT_REGISTERED;
 			}
 		}
@@ -423,8 +422,10 @@ public class PlayerCacheUtil {
 
 		Town playersTown = null;
 		try {
-			playersTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (NotRegisteredException e) {
+			Resident res = townyUniverse.getResident(player.getUniqueId());
+			if (res != null && res.hasTown())
+				playersTown = res.getTown();
+		} catch (NotRegisteredException ignore) {
 		}
 
 		try {
