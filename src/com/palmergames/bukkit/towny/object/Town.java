@@ -472,8 +472,8 @@ public class Town extends Government implements TownBlockOwner {
 
 		int current = getPurchasedBlocks();
 		int n;
-		if (current + inputN > TownySettings.getMaxPurchedBlocks(this)) {
-			n = TownySettings.getMaxPurchedBlocks(this) - current;
+		if (current + inputN > TownySettings.getMaxPurchasedBlocks(this)) {
+			n = TownySettings.getMaxPurchasedBlocks(this) - current;
 		} else {
 			n = inputN;
 		}

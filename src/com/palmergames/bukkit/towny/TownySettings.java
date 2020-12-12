@@ -1291,11 +1291,25 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_LIMIT);
 	}
 
-	public static int getMaxPurchedBlocks(Town town) {
+	public static int getMaxPurchasedBlocks(Town town) {
 
 		if (isBonusBlocksPerTownLevel())
 			return getMaxBonusBlocks(town);
-		else			
+		else
+			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+	}
+	
+	/**
+	 * @deprecated use {@link #getMaxPurchasedBlocks(Town town)}
+	 */
+	@Deprecated
+	public static int getMaxPurchedBlocks(Town town) {
+		
+		return getMaxPurchasedBlocks(town);
+	}
+	
+	public static int getMaxPurchasedBlocksNode() {
+		
 			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
 	}
 	
@@ -1306,7 +1320,7 @@ public class TownySettings {
 
 	public static boolean isSellingBonusBlocks(Town town) {
 
-		return getMaxPurchedBlocks(town) != 0;
+		return getMaxPurchasedBlocks(town) != 0;
 	}
 	
 	public static boolean isBonusBlocksPerTownLevel() { 
