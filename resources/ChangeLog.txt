@@ -5542,3 +5542,4 @@ v0.92.0.11:
     - Displays the town's postfix or blank.
   - Placeholder: %townyadvanced_player_location_pvp%
     - Displays (PVP) or blank, depending on pvp status of the location.
+  - Fix plot group which are for sale not being purchase-able.
