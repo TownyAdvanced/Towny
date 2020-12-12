@@ -565,6 +565,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			try {
 				return townblock != null ? townblock.getTown().getPostfix(): "";
 			} catch (NotRegisteredException ignored) {}
+		case "player_location_pvp": // %townyadvanced_player_location_pvp%
+			try {
+				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
+			} catch (NotRegisteredException ignored) {}
 		default:
 			return null;
 		}

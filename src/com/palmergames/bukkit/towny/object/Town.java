@@ -1299,14 +1299,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public String getPrefix() {
-		if (this.isCapital())
-			return TownySettings.getCapitalPrefix(this);
 		return TownySettings.getTownPrefix(this);
 	}
 	
 	public String getPostfix() {
-		if (this.isCapital())
-			return TownySettings.getCapitalPostfix(this);
 		return TownySettings.getTownPostfix(this);
 	}
 
