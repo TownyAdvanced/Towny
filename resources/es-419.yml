@@ -1209,5 +1209,5 @@ msg_time_until_reclaim_available: '&cTiempo hasta que se pueda volver a reclamar
 msg_reclaim_available: '&aReclamo disponible.'
 
 #Added in 0.93
-msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
-msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
+msg_changed_peaceful: '&cLa neutralidad de la ciudad ahora está %s.'
+msg_err_town_unclaim_canceled: '&cAbandono cancelado. No puedes realizar esta operación ahora mismo.'
