@@ -2776,7 +2776,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				return;
 			}
 
-			TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_TOWN", town.getName()));
 			townyUniverse.getDataSource().removeTown(town);
 		}
 
