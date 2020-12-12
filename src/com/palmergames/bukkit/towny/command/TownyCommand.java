@@ -461,12 +461,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
 			plugins++;
 		}
-		
-		Plugin townyNU = Bukkit.getServer().getPluginManager().getPlugin("TownyNameUpdater");
-		if (townyNU != null){
-			townyPlugins += Colors.Yellow + "TownyNameUpdater " + Colors.Green + townyNU.getDescription().getVersion();
-			plugins++;
-		}
 
 		if (plugins > 0)
 			output.add(townyPlugins + Colors.Gold + "]");

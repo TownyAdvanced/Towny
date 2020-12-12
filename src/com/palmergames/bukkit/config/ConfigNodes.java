@@ -65,6 +65,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Default Open status of the town (are new towns open and joinable by anyone at creation?)"),
+	TOWN_DEF_NEUTRAL(
+			"town.default_neutral",
+			"false",
+			"",
+			"# Default neutral status of the town (are new towns neutral by default?)"),
 	TOWN_DEF_BOARD("town.default_board", 
 			"/town set board [msg]",
 			"",
@@ -832,7 +837,7 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"",
-			"# Valid load and save types are: flatfile, mysql, h2."),
+			"# Valid load and save types are: flatfile and mysql."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
 	
@@ -854,6 +859,17 @@ public enum ConfigNodes {
 	PLUGIN_DATABASE_USERNAME("plugin.database.sql.username", "root"),
 	PLUGIN_DATABASE_PASSWORD("plugin.database.sql.password", ""),
 	PLUGIN_DATABASE_FLAGS("plugin.database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
+
+	PLUGIN_DATABASE_POOLING_HEADER(
+		"plugin.database.sql.pooling",
+		"",
+		"",
+		"# Modifiable settings to control the connection pooling.",
+		"# Unless you actually know what you're doing and how Towny uses its mysql connection,",
+		"# it is strongly recommended you do not change these settings."),
+	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "10"),
+	PLUGIN_DATABASE_POOLING_MAX_LIFETIME("plugin.database.sql.pooling.max_lifetime", "180000"),
+	PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT("plugin.database.sql.pooling.connection_timeout", "5000"),
 
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",

@@ -5420,3 +5420,110 @@ v0.92.0.11:
       - If this is true, then after a town has been ruined for the minimum configured time,",
       - it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)
   - Bump language files to 0.92.
+0.96.5.2:
+  - Make TownRuin ruin-deletion recognize an improperly set ruinTime. 
+  - Fix for console TownyWorld discretes, courtesy of FrankHeijden with PR #4484.
+  - Ensure Objects are properly assigned, closed, and compared to improve safety and accuracy, courtesy of TheFlagCourier with PR #4496.
+  - Fix TARGET spam for servers not running MC 1.16+.
+  - Internal player name change handling.
+    - Players who have their names changed will have their Resident updated by Towny directly.
+    - TownyNameUpdater will no longer be required, will disable itself if present.
+  - Fix '/ta reload config' not also reloading the town and nation levels in the config.  
+  - Fix cases where we weren't removing the underscores out of town and nation names.
+    - Works towards completing #4489.
+0.96.5.3:
+  - Replace name in resident UUID map when renaming the player.
+  - Fix nation message formatting. 
+  - Fix some of the spawn cost settings leaking in while a server has using_economy: false.
+  - Implemented MySQL Connection Pooling, courtesy of Glare with PR #4499 (First-Time Contributor!)
+    - Mysql servers will probably see a fairly good increase in initial database speeds.
+    - Since Towny doesn't operate directly off of the database (only writing when told to save,) the only other nice benefit will be caching of mysql statements (which is probably nothing to scoff at!)
+  - New Config Options:
+    - plugin.database.sql.pooling.max_pool_size
+      - default: "10"
+      - This property controls the maximum size that the pool is allowed to reach, including both idle and in-use connections. 
+      - Basically this value will determine the maximum number of actual connections to the database backend.
+    - plugin.database.sql.pooling.max_lifetime
+      - "180000"
+      - This property controls the maximum lifetime of a connection in the pool. 
+      - An in-use connection will never be retired, only when it is closed will it then be removed. 
+      - On a connection-by-connection basis, minor negative attenuation is applied to avoid mass-extinction in the pool.
+    - plugin.database.sql.pooling.connection_timeout
+      - "5000"
+      - This property controls the maximum number of milliseconds the client will wait for a connection from the pool.
+0.96.5.4:
+  - API: NationRankRemoveEvent and NationRankAddEvent, courtesy of ceeedric with PR #4519.
+  - API: added TownPreSetHomeBlockEvent.
+    - Closes #4512.
+  - Fix being able to remove the homeblock.
+    - Closes #4521.
+  - Add onTownSetHomeBlock() to FlagWarCustomListener.
+  - Fire TownPreAddResidentEvent only when it is not being run by an admin or the console.
+  - Fix NPC-run capital city's nations paying upkeep costs.
+  - API: Town and Nation toggle events:
+    - NationToggleEvent
+    - NationToggleNeutralEvent
+    - NationToggleOpenEvent
+    - NationTogglePublicEvent
+    - NationToggleUnknownEvent
+    - TownToggleEvent
+    - TownToggleExplosionEvent
+    - TownToggleFireEvent
+    - TownToggleMobsEvent
+    - TownToggleOpenEvent
+    - TownTogglePVPEvent
+    - TownTogglePublicEvent
+    - TownToggleTaxPercentEvent
+    - TownToggleUnknownEvent
+    - These events fire after all other Towny-side decisions are made on whether the action is allowed by the sender.
+    - Adds bonus TownToggleUnknownEvent & NationToggleUnknownEvent which is fired when a subcommand we dont recognize is used.
+      - Defaults to cancelled but is fired to allow another plugin to be able to see the args used in order to simulate their having a proper /t toggle command.
+    - Switches help menus over to using the newer HelpMenu object.
+  - Cleanup Town Ruin code - Javadoc and other changes, courtesy of TheFlagCourier with PR #4518.
+  - Test that the name is allowed before charging money to change a nation or town name.
+    - Closes #4530.
+  - API: Added TownLeaveEvent
+    - A cancellable event fired directly before a player would accept/deny leaving their town.
+    - Closes #4513.
+  - Fix ruin hours not being shown properly in the town status screen.
+    - Closes #4534.
+  - Move neutral setting to Government, allowing Towns to become neutral.
+    - New permission node: towny.command.town.toggle.neutral.
+    - No command to manipulate this setting as of yet.
+  - API: Added NewHourEvent
+  - New Command: /t toggle neutral|peaceful
+    - Toggles a town's neutral status.
+    - Otherwise unused for now.
+  - API: Added TownToggleNeutralEvent.
+  - Fix Sender cannot be null! message seen when outlaw add/remove is done on an offline player.
+  - Fix NewHourEvent async.
+  - Fix /n kick tab complete populated with non-nation towns.
+    - Closes #4542.
+  - Fix improper message being shown when trying to kick a mayor of another town from your town.
+    - Closes #4541.
+  - Fix/Improve Town Toggle Events, courtesy of silverwolfg11 with PR #4543.
+  - Fix tag commands not giving correct feedback.
+  - Fix /n set tag missing a tabcompleter.
+    - Closes #4540.
+  - Fix nations and towns being able to send an invite to towns and residents which are already members.
+    - Closes #4539.
+  - Fix nationrank add/remove commands failing when the command sender fails to use the proper casing.
+    - Closes #4538.
+  - Rework town and nation withdraw/deposit to reduce redundancies.
+  - Add space to ranks separator, courtesy of illumeleet with PR #4549 (First-Time Contributor!)
+  - Fix onPlayerFishEvent double negative, courtesy of Warriorrrr with PR #4547 (First-Time Contributor!)
+  - New Config Option: town.default_neutral
+    - Default: false
+    - Default neutral status of the town (are new towns neutral by default?)
+  - Do not shade in jetbrain annotations, courtesy of silverwolfg11 with PR #4528.
+0.96.5.5:
+  - API: ResidentJailEvent & ResidentUnjailEvent courtesy of Kovalskki with PR #4560 (First-Time Contributor!)
+  - Fix plot group's setting plot type showing message for each plot in the group (when there was no cost to set the type.)
+  - Fix cactus no longer hurting minecarts.
+    - Closes #4561.
+  - Fix null UUID on NationAddTownEvent, courtesy of silverwolfg11 with PR #4559.
+  - Fix not being able to set town and nation names.
+    - Closes #4567.
+  - Create TownPreUnclaimCmdEvent, Relocate and extend Town(Pre)UnclaimEvents, courtesy of TheFlagCourier with PR #4537.
+  - API: Add NationPreTownKickEvent which extends the NationPreTownLeaveEvent.
+  - Clean up the nationKick method & use translatable message in more cancellable events.

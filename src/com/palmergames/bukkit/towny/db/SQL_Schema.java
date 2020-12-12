@@ -154,6 +154,7 @@ public class SQL_Schema {
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
 		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
+		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 

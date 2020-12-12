@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -39,7 +38,6 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
-	private boolean neutral = false;
 	private String mapColorHexCode = "";
 	public UUID uuid;
 	private Location nationSpawn;
@@ -421,7 +419,7 @@ public class Nation extends Government {
 						continue;
 					}
 
-					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
 						TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
@@ -453,7 +451,7 @@ public class Nation extends Government {
 					if (!newCapital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
 						continue;
 					}
-					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						removedTowns.add(town);
 					}
@@ -462,29 +460,6 @@ public class Nation extends Government {
 		}
 		return removedTowns;
 	}	
-
-	public void toggleNeutral(boolean neutral) throws TownyException {
-
-		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException(Translation.of("msg_err_fight_like_king"));
-		else {
-			if (neutral && !FlagWar.getCellsUnderAttack().isEmpty())
-				for (Resident resident : getResidents())
-					FlagWar.removeAttackerFlags(resident.getName());
-			
-			setNeutral(neutral);
-		}
-	}
-	
-	public void setNeutral(boolean neutral) {
-
-		this.neutral = neutral;
-	}
-
-	public boolean isNeutral() {
-
-		return neutral;
-	}
 
 	public void setKing(Resident king) throws TownyException {
 
@@ -750,5 +725,15 @@ public class Nation extends Government {
 	@Deprecated
 	public String getNationBoard() {
 		return getBoard();
+	}
+
+	/**
+	 * @deprecated As of 0.96.5.0, please use {@link Government#setNeutral(boolean)} instead.
+	 * 
+	 * @param neutral The value which will be used to set Neutrality true or false.
+	 */
+	@Deprecated
+	public void toggleNeutral(boolean neutral) {
+		setNeutral(neutral);
 	}
 }

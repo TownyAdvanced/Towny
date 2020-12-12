@@ -491,18 +491,19 @@ public class TownySettings {
 			if (root.getComments().length > 0)
 				addComment(root.getRoot(), root.getComments());
 
-			if (root.getRoot() == ConfigNodes.LEVELS.getRoot()) {
+			if (root.getRoot().equals(ConfigNodes.LEVELS.getRoot())) {
 				
 				setDefaultLevels();
 				
-			} else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+			} else if ( (root.getRoot().equals(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()))
+				|| (root.getRoot().equals(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) ){
 				
 				// Do nothing here as setDefaultLevels configured town and
 				// nation levels.
 				
-			} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()) {
+			} else if (root.getRoot().equals(ConfigNodes.VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), version);
-			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
+			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			} else
 				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
@@ -902,6 +903,18 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_FLAGS);
 	}
 
+	public static int getMaxPoolSize() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE);
+	}
+
+	public static int getMaxLifetime() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_MAX_LIFETIME);
+	}
+
+	public static int getConnectionTimeout() {
+		return getInt(ConfigNodes.PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT);
+	}
+
 	public static int getMaxTownBlocks(Town town) {
 
 		int ratio = getTownBlockRatio();
@@ -1221,6 +1234,11 @@ public class TownySettings {
 	public static boolean getTownDefaultOpen() {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
+	}
+	
+	public static boolean getTownDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.TOWN_DEF_NEUTRAL); 
 	}
 
 	public static String getTownDefaultBoard() {
@@ -2541,7 +2559,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
-	public static boolean geNationBankAllowWithdrawls() {
+	public static boolean getNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}

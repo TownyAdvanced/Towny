@@ -8,7 +8,12 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-
+/**
+ * This event is no longer fired by Towny and is marked for future removal.
+ *
+ * @deprecated As of 0.96.5.5, please use {@link com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent}.
+ */
+@Deprecated
 public class TownPreUnclaimEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

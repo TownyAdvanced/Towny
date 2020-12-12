@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.96.5.1</version>
+    <version>0.96.5.5</version>
 
     <licenses>
         <license>
@@ -90,6 +90,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
             <version>0.1.5.0</version>
@@ -148,6 +154,7 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -195,7 +202,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.4</version>
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
@@ -204,14 +211,22 @@
                             <shadedPattern>com.palmergames.paperlib</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>org.apache.commons.compress</pattern>
                             <shadedPattern>com.palmergames.compress</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>org.jetbrains.annotations</pattern>
-                            <shadedPattern>com.palmergames.annotations</shadedPattern>
-                        </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>

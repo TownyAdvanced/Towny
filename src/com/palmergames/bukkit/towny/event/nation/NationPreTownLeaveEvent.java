@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.event.nation;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,7 +17,7 @@ public class NationPreTownLeaveEvent extends Event implements Cancellable {
 	private final String nationName;
 	private final Nation nation;
 	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled";
+	private String cancelMessage = Translation.of("msg_err_command_disable");
 
 	@Override
 	public HandlerList getHandlers() {

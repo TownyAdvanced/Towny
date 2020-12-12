@@ -72,6 +72,7 @@ public class Town extends Government implements TownBlockOwner {
 		setTaxes(TownySettings.getTownDefaultTax());
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
+		setNeutral(TownySettings.getTownDefaultNeutral());
 	}
 	
 	public Town(String name, UUID uuid) {
@@ -450,7 +451,7 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getMaxClaimPrice() != -1;
 		double maxprice = TownySettings.getMaxClaimPrice();
 		while (i < inputN){
-			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size()+i) * TownySettings.getClaimPrice());
+			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size() + (double)i) * TownySettings.getClaimPrice());
 			
 			if(hasmaxprice && nextprice > maxprice) {
 				cost += maxprice * ( inputN - i);
@@ -486,7 +487,7 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
 		while (i < n){
-			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+i) * TownySettings.getPurchasedBonusBlocksCost());			
+			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+(double)i) * TownySettings.getPurchasedBonusBlocksCost());			
 			
 			if (hasmaxprice && nextprice > maxprice) {
 				cost += maxprice * (inputN - i);
@@ -564,7 +565,7 @@ public class Town extends Government implements TownBlockOwner {
 					removeNation();
 				}
 				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
 					removeNation();

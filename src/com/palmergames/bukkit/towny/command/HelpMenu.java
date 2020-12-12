@@ -272,6 +272,48 @@ public enum HelpMenu {
 				.add(TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2"))
 				.add("list", Translation.of("invite_help_3"));
 		}
+	},
+	
+	TOWN_MAYOR_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("Town Mayor Help", false)
+				.add(Translation.of("mayor_sing"), "/town", "withdraw [$]", "")
+				.add(Translation.of("mayor_sing"), "/town", "claim", "'/town claim ?' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "unclaim", "'/town " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "[add/kick] " + Translation.of("res_2") + " .. []", Translation.of("res_6"))
+				.add(Translation.of("mayor_sing"), "/town", "set [] .. []", "'/town set' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "buy [] .. []", "'/town buy' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "plots", "")
+				.add(Translation.of("mayor_sing"), "/town", "toggle", "")
+				.add(Translation.of("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + Translation.of("res_5"))
+				.add(Translation.of("mayor_sing"), "/town", "delete", "");
+		}
+	},
+	
+	TOWN_TOGGLE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town toggle")
+				.add("", "/town toggle", "pvp", "")
+				.add("", "/town toggle", "public", "")
+				.add("", "/town toggle", "explosion", "")
+				.add("", "/town toggle", "fire", "")
+				.add("", "/town toggle", "mobs", "")
+				.add("", "/town toggle", "taxpercent", "")
+				.add("", "/town toggle", "open", "")
+				.add("", "/town toggle", "jail [number] [resident]", "");
+		}
+	},
+	
+	NATION_TOGGLE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation toggle")
+				.add("", "/nation toggle", "peaceful/neutral", "")
+				.add("", "/nation toggle", "public", "")
+				.add("", "/nation toggle", "open", "");
+		}
 	};
 
 

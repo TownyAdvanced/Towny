@@ -26,6 +26,8 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -62,11 +64,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private final String tb_prefix;
 
 	private Connection cntx = null;
-	private final String type;
 
-	public TownySQLSource(Towny plugin, TownyUniverse universe, String type) {
+	private final HikariConfig config;
+	private final HikariDataSource hikariDataSource;
+
+	public TownySQLSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
-		this.type = type;
 		if (!FileMgmt.checkOrCreateFolders(rootFolderPath, dataFolderPath,
 				dataFolderPath + File.separator + "plot-block-data")
 				|| !FileMgmt.checkOrCreateFiles(dataFolderPath + File.separator + "regen.txt",
@@ -77,41 +80,44 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		String hostname = TownySettings.getSQLHostName();
-		String port = TownySettings.getSQLPort();
-		String flags = TownySettings.getSQLFlags();
 		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 		
-		String driver1;
-		if (this.type.equals("h2")) {
+		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + db_name + TownySettings.getSQLFlags());
+		this.config = new HikariConfig();
+		
+		config.setPoolName("Towny MySQL");
+		config.setJdbcUrl(this.dsn);
 
-			driver1 = "org.h2.Driver";
-			this.dsn = ("jdbc:h2:" + dataFolderPath + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
-			username = "sa";
-			password = "sa";
+		username = TownySettings.getSQLUsername();
+		password = TownySettings.getSQLPassword();
 
-		} else if (this.type.equals("mysql")) {
+		config.setUsername(username);
+		config.setPassword(password);
 
-			driver1 = "com.mysql.jdbc.Driver";
-			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + flags);
-			username = TownySettings.getSQLUsername();
-			password = TownySettings.getSQLPassword();
+		config.addDataSourceProperty("cachePrepStmts", "true");
+		config.addDataSourceProperty("prepStmtCacheSize", "250");
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		config.addDataSourceProperty("useServerPrepStmts", "true");
+		config.addDataSourceProperty("useLocalSessionState", "true");
+		config.addDataSourceProperty("rewriteBatchedStatements", "true");
+		config.addDataSourceProperty("cacheResultSetMetadata", "true");
+		config.addDataSourceProperty("cacheServerConfiguration", "true");
+		config.addDataSourceProperty("elideSetAutoCommits", "true");
+		config.addDataSourceProperty("maintainTimeStats", "false");
+		config.addDataSourceProperty("cacheCallableStmts", "true");
 
-		} else {
+		config.setMaximumPoolSize(TownySettings.getMaxPoolSize());
+		config.setMaxLifetime(TownySettings.getMaxLifetime());
+		config.setConnectionTimeout(TownySettings.getConnectionTimeout());
 
-			driver1 = "org.sqlite.JDBC";
-			this.dsn = ("jdbc:sqlite:" + dataFolderPath + File.separator + db_name + ".sqldb");
-			username = "";
-			password = "";
-
-		}
+		this.hikariDataSource = new HikariDataSource(config);
 
 		/*
 		 * Register the driver (if possible)
 		 */
 		try {
-			Driver driver = (Driver) Class.forName(driver1).newInstance();
+			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
 			System.out.println("[Towny] Driver error: " + e);
@@ -171,6 +177,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
 			}
 		}
+		// Close the database sources on shutdown to get GC
+		hikariDataSource.close();
 	}
 
 	/**
@@ -181,7 +189,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean getContext() {
 
 		try {
-			if (cntx == null || cntx.isClosed() || (!this.type.equals("sqlite") && !cntx.isValid(1))) {
+			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
 
 				if (cntx != null && !cntx.isClosed()) {
 
@@ -198,14 +206,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					cntx = null;
 				}
 
-				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
-
-					cntx = DriverManager.getConnection(this.dsn);
-
-				} else {
-
-					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
-				}
+				cntx = hikariDataSource.getConnection();
 
 				return cntx != null && !cntx.isClosed();
 			}
@@ -425,9 +426,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				wherecode.append(i.hasNext() ? " AND " : "");
 			}
-			Statement s = cntx.createStatement();
-			int rs = s.executeUpdate(wherecode.toString());
-			s.close();
+			int rs;
+			try (Statement statement = cntx.createStatement()) {
+				rs = statement.executeUpdate(wherecode.toString());
+			}
 			if (rs == 0) {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
 			}
@@ -462,25 +464,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs;
+				int total = 0;
+				rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
+				while (rs.next()) {
 
-			int total = 0;
-			while (rs.next()) {
+					TownyWorld world = getWorld(rs.getString("world"));
+					int x = Integer.parseInt(rs.getString("x"));
+					int z = Integer.parseInt(rs.getString("z"));
 
-				TownyWorld world = getWorld(rs.getString("world"));
-				int x = Integer.parseInt(rs.getString("x"));
-				int z = Integer.parseInt(rs.getString("z"));
+					TownBlock townBlock = new TownBlock(x, z, world);
+					TownyUniverse.getInstance().addTownBlock(townBlock);
+					total++;
 
-				TownBlock townBlock = new TownBlock(x, z, world);
-				TownyUniverse.getInstance().addTownBlock(townBlock);
-				total++;
+				}
+				TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
 
 			}
-			TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
-
-			s.close();
-
+			
 			return true;
 
 		} catch (Exception e) {
@@ -497,16 +499,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
 
-			while (rs.next()) {
-				try {
-					newResident(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+				while (rs.next()) {
+					try {
+						newResident(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -521,16 +523,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
 
-			while (rs.next()) {
-				try {
-					TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+				while (rs.next()) {
+					try {
+						TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: town list sql error : " + e.getMessage());
@@ -548,15 +550,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
-			while (rs.next()) {
-				try {
-					newNation(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
+				while (rs.next()) {
+					try {
+						newNation(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: nation list sql error : " + e.getMessage());
@@ -575,15 +577,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
-			while (rs.next()) {
-				try {
-					newWorld(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
+				while (rs.next()) {
+					try {
+						newWorld(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {
+					}
 				}
 			}
-			s.close();
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: world list sql error : " + e.getMessage());
 		} catch (Exception e) {
@@ -607,27 +609,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT groupID,town,groupName FROM " + tb_prefix + "PLOTGROUPS");
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT groupID,town,groupName FROM " + tb_prefix + "PLOTGROUPS");
 
-			while (rs.next()) {
+				while (rs.next()) {
 
-				UUID id = UUID.fromString(rs.getString("groupID"));
-				String groupName = rs.getString("groupName");
-				Town town = universe.getTown(rs.getString("town"));;
-				
-				if (town == null)
-					continue;
+					UUID id = UUID.fromString(rs.getString("groupID"));
+					String groupName = rs.getString("groupName");
+					Town town = universe.getTown(rs.getString("town"));
 
-				try {
-					TownyUniverse.getInstance().newGroup(town, groupName, id);
-				} catch (AlreadyRegisteredException ignored) {
+					if (town == null)
+						continue;
+
+					try {
+						TownyUniverse.getInstance().newGroup(town, groupName, id);
+					} catch (AlreadyRegisteredException ignored) {
+					}
+
 				}
-
 			}
-
-			s.close();
-
+			
 			return true;
 
 		} catch (Exception e) {
@@ -1078,6 +1079,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
+			town.setNeutral(rs.getBoolean("neutral"));
 
 			return true;
 		} catch (SQLException e) {
@@ -1722,44 +1724,43 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		for (PlotGroup plotGroup : getAllPlotGroups()) {
 			try {
-				Statement s = cntx.createStatement();
-				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='"
-						+ plotGroup.getID().toString() + "'");
+				try (Statement s = cntx.createStatement()) {
+					rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS" + " WHERE groupID='"
+							+ plotGroup.getID().toString() + "'");
 
-				while (rs.next()) {
-					line = rs.getString("groupName");
-					if (line != null)
-						try {
-							plotGroup.setName(line.trim());
-						} catch (Exception ignored) {
+					while (rs.next()) {
+						line = rs.getString("groupName");
+						if (line != null)
+							try {
+								plotGroup.setName(line.trim());
+							} catch (Exception ignored) {
+							}
+
+						line = rs.getString("groupID");
+						if (line != null) {
+							try {
+								plotGroup.setID(UUID.fromString(line.trim()));
+							} catch (Exception ignored) {
+							}
 						}
 
-					line = rs.getString("groupID");
-					if (line != null) {
-						try {
-							plotGroup.setID(UUID.fromString(line.trim()));
-						} catch (Exception ignored) {
+						line = rs.getString("town");
+						if (line != null) {
+							Town town = universe.getTown(line.trim());
+							if (town != null) {
+								plotGroup.setTown(town);
+							}
 						}
-					}
 
-					line = rs.getString("town");
-					if (line != null) {
-						Town town = universe.getTown(line.trim());
-						if (town != null) {
-							plotGroup.setTown(town);
-						}
-					}
-
-					line = rs.getString("groupPrice");
-					if (line != null) {
-						try {
-							plotGroup.setPrice(Float.parseFloat(line.trim()));
-						} catch (Exception ignored) {
+						line = rs.getString("groupPrice");
+						if (line != null) {
+							try {
+								plotGroup.setPrice(Float.parseFloat(line.trim()));
+							} catch (Exception ignored) {
+							}
 						}
 					}
 				}
-
-				s.close();
 			} catch (SQLException e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + plotGroup.getName()
 						+ " at line: " + line + " in the sql database");
@@ -1886,6 +1887,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinedTime", town.getRuinedTime());
+			twn_hm.put("neutral", town.isNeutral());
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
@@ -2175,4 +2177,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
+	public HikariDataSource getHikariDataSource() {
+		return hikariDataSource;
+	}
 }
