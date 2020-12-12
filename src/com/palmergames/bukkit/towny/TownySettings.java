@@ -1301,6 +1301,8 @@ public class TownySettings {
 	
 	/**
 	 * @deprecated use {@link #getMaxPurchasedBlocks(Town town)}
+	 * @param town Town to get the maximum number of blocks they can buy.
+	 * @return {@link #getMaxPurchasedBlocks(Town)}
 	 */
 	@Deprecated
 	public static int getMaxPurchedBlocks(Town town) {

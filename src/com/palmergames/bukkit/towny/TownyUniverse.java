@@ -494,7 +494,7 @@ public class TownyUniverse {
 
 	/**
 	 *
-	 * @return map of string -> resident.
+	 * @return map of string -&gt; resident.
 	 * 
 	 * @deprecated Towny does not recommend directly accessing internal structures.
 	 */
