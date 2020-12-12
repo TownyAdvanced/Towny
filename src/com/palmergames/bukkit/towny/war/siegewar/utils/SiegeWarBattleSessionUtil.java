@@ -88,8 +88,8 @@ public class SiegeWarBattleSessionUtil {
 					}
 
 					//No punish if player is in their own town
-					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-					if (resident.hasTown()
+					Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+					if (resident == null || resident.hasTown()
 						&& townBlockAtPlayerLocation != null
 						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
 						continue;
@@ -126,8 +126,8 @@ public class SiegeWarBattleSessionUtil {
 					}
 
 					//No session if player is in their own town
-					Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-					if (resident.hasTown()
+					Resident resident = TownyUniverse.getInstance().getResident(player.getName());
+					if (resident == null || resident.hasTown()
 						&& townBlockAtPlayerLocation != null
 						&& resident.getTown() == townBlockAtPlayerLocation.getTown()) {
 						continue;

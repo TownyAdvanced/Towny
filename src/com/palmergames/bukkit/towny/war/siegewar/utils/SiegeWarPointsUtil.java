@@ -147,9 +147,12 @@ public class SiegeWarPointsUtil {
 							if (friendlyLeaderNearby && hostileLeaderNearby)
 								break;
 
+							otherResident = universe.getResident(otherPlayer.getUniqueId());
+							if (otherResident == null)
+								continue;
+							
 							//Look for friendly military leader 
 							if (!friendlyLeaderNearby) {
-								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
 								if (otherResident.hasTown()
 									&& otherResident.hasNation()
 									&& universe.getPermissionSource().testPermission(otherResident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())
@@ -162,8 +165,6 @@ public class SiegeWarPointsUtil {
 
 							//As attacker, look for hostile military leader
 							if (!hostileLeaderNearby && residentIsAttacker) {
-								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
-
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
 									&& siege.getDefendingTown().hasNation()
@@ -177,8 +178,6 @@ public class SiegeWarPointsUtil {
 
 							//As defender, look for hostile military leader
 							if (!hostileLeaderNearby && !residentIsAttacker) {
-								otherResident = universe.getDataSource().getResident(otherPlayer.getName());
-
 								if (otherResident.hasTown()
 									&& otherResident.getTown().hasNation()
 									&& universe.getPermissionSource().testPermission(otherResident.getPlayer(), SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_LEADERSHIP.getNode())

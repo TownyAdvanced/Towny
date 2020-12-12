@@ -98,8 +98,10 @@ public class SiegeWarMoneyUtil {
 		}
 
 		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
-		Resident formerKing = townyDataSource.getResident(player.getName());
-
+		Resident formerKing = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (formerKing == null)
+        	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+		
 		if(formerKing.getNationRefundAmount() != 0) {
 			int refundAmount = formerKing.getNationRefundAmount();
 			formerKing.getAccount().deposit(refundAmount, "Nation Refund");

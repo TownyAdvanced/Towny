@@ -45,7 +45,10 @@ public class PlunderTown {
 				throw new TownyException(Translation.of("msg_war_siege_err_cannot_plunder_peaceful_town"));
 			
 			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident resident = universe.getDataSource().getResident(player.getName());
+			Resident resident = universe.getResident(player.getUniqueId());
+            if (resident == null)
+            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+            
 			if(!resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 

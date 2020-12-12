@@ -137,13 +137,10 @@ public class SiegeWarPlaceBlockController {
 			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))
 				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
 			
-			Resident resident = null;
-			try {
-				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-			} catch (NotRegisteredException ignored) {}
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			
-			// Fail early if this Resident has no Town.
-			if(!resident.hasTown())
+			// Fail early if this Resident has no Town or is null.
+			if(resident == null || !resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 	
 			// Fail early if this Resident's Town has no Nation.

@@ -41,7 +41,9 @@ public class InvadeTown {
                                                 BlockPlaceEvent event) {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident resident = universe.getDataSource().getResident(player.getName());
+			Resident resident = universe.getResident(player.getUniqueId());
+            if (resident == null)
+            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
 			Town townOfInvadingResident = resident.getTown();
 
 			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))

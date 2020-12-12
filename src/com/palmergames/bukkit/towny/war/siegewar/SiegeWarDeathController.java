@@ -46,9 +46,9 @@ public class SiegeWarDeathController {
 	public static void evaluateSiegePlayerDeath(Player deadPlayer, PlayerDeathEvent playerDeathEvent)  {
 		try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident deadResident = universe.getDataSource().getResident(deadPlayer.getName());
+			Resident deadResident = universe.getResident(deadPlayer.getUniqueId());
 
-			if (!deadResident.hasTown())
+			if (deadResident == null || !deadResident.hasTown())
 				return;
 
 			Town deadResidentTown = deadResident.getTown();

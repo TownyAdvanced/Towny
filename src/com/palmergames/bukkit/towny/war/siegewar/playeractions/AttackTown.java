@@ -48,7 +48,10 @@ public class AttackTown {
 
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-            Resident attackingResident = universe.getDataSource().getResident(player.getName());
+            Resident attackingResident = universe.getResident(player.getUniqueId());
+            if (attackingResident == null)
+            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+            
             Town townOfAttackingPlayer = attackingResident.getTown();
 
 			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))

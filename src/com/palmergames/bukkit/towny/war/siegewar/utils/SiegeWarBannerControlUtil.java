@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -57,7 +58,10 @@ public class SiegeWarBannerControlUtil {
 
 			for(Player player: Bukkit.getOnlinePlayers()) {
 
-				resident = universe.getDataSource().getResident(player.getName());
+				resident = universe.getResident(player.getUniqueId());
+	            if (resident == null)
+	            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+	            
 				if(!doesPlayerMeetBasicSessionRequirements(siege, player, resident))
 					continue;
 

@@ -36,8 +36,8 @@ public class AbandonAttack {
 												  BlockPlaceEvent event)  {
         try {
 			TownyUniverse universe = TownyUniverse.getInstance();
-            Resident resident = universe.getDataSource().getResident(player.getName());
-            if(!resident.hasTown())
+            Resident resident = universe.getResident(player.getUniqueId());
+            if(resident == null || !resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 
             Town townOfResident = resident.getTown();

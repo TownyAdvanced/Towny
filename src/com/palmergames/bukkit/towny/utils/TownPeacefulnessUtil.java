@@ -102,8 +102,8 @@ public class TownPeacefulnessUtil {
 					continue;
 
 				//Don't apply to non-peaceful players
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if(!(resident.hasTown()&& resident.getTown().isNeutral()))
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+				if(resident == null || !(resident.hasTown()&& resident.getTown().isNeutral()))
 					continue;
 
 				//Don't punish if the player is in a peaceful town
