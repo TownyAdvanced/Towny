@@ -954,15 +954,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, ResidentUtil.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-				if (!isConsole) {
+
+				Confirmation.runOnAccept(() -> {
 					TownyMessaging.sendMessage(sender, Translation.of("town_deleted_by_admin", town.getName()));
-					townyUniverse.getDataSource().removeTown(town);
-				} else { //isConsole
-					Confirmation.runOnAccept(() -> {
-						TownyUniverse.getInstance().getDataSource().removeTown(town);
-					})
-						.sendTo(sender);
-				}
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				}).sendTo(sender);
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 				

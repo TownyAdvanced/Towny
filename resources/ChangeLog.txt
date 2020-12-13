@@ -5545,3 +5545,5 @@ v0.92.0.11:
   - Fix plot group which are for sale not being purchase-able.
 0.96.5.6:
   - Fix loading residents on mysql.
+    - Closes #4578.
+  - Add confirmation of admin town deleting to in-game run commands (and not just when run from the console.
