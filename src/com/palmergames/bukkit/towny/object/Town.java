@@ -472,8 +472,8 @@ public class Town extends Government implements TownBlockOwner {
 
 		int current = getPurchasedBlocks();
 		int n;
-		if (current + inputN > TownySettings.getMaxPurchedBlocks(this)) {
-			n = TownySettings.getMaxPurchedBlocks(this) - current;
+		if (current + inputN > TownySettings.getMaxPurchasedBlocks(this)) {
+			n = TownySettings.getMaxPurchasedBlocks(this) - current;
 		} else {
 			n = inputN;
 		}
@@ -1296,6 +1296,14 @@ public class Town extends Government implements TownBlockOwner {
 		}
 		
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
+	}
+	
+	public String getPrefix() {
+		return TownySettings.getTownPrefix(this);
+	}
+	
+	public String getPostfix() {
+		return TownySettings.getTownPostfix(this);
 	}
 
 	public double getMaxPercentTaxAmount() {

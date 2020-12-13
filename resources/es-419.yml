@@ -1195,23 +1195,23 @@ msg_universe_contributors: ' y colaboradores como tu.'
 msg_universe_heart: '<3'
 townblock_plu: 'Terrenos de Ciudades'
 
-#Added in 0.92
-#Town Ruins
-admin_panel_4: 'Run the new hour code'
-msg_newhour_success: 'newhour command executed successfully'
-town_help_12: 'Reclaim your town from a ruined state.'
-msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. After this time full deletion will occur. In the ruined state, all perms are enabled and the town can be griefed."
-msg_warning_town_ruined_if_deleted2: "The town can be reclaimed by any town resident by using ''/t reclaim'' after %d hours."
-msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
-msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
-msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
-msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
-msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
-msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
-msg_time_remaining_before_full_removal: '&cTime remaining before full removal: %d hours.'
-msg_time_until_reclaim_available: '&cTime until reclaim available: %d hours.'
-msg_reclaim_available: '&aReclaim available.'
+# Añadido en la versión 0.92
+# Ruinas 
+admin_panel_4: 'Ejecutar el código de un nuevo día'
+msg_newhour_success: 'Se ha ejecutado el comando newhour correctamente.'
+town_help_12: 'Reclamar tu ciudad desde un estado de ruinas.'
+msg_warning_town_ruined_if_deleted: "¡ADVERTENCIA!: Si borras la ciudad, entrará en un periodo de gracia por %d horas. Despues de esto será eliminada completamente. Durante este periodo de gracia, la ciudad puede ser grifeada debido a que tiene todos los permisos habilitados, pero todavía puede ser salvada."
+msg_warning_town_ruined_if_deleted2: "Cualquier ciudadano que quiera salvar su patria puede usar ''/t reclaim'' despues de %d horas."
+msg_err_cannot_reclaim_town_unless_ruined: '&cNo puedes reclamar tu ciudad porque no está en la ruina.'
+msg_err_cannot_reclaim_town_yet: '&cNo puedes reclamar tu ciudad por %d horas.'
+msg_town_reclaimed: '&b%s ha reclamado la ciudad de %s.'
+msg_err_cannot_attack_ruined_town: '&6[Guerra]&c No puedes atacar una ciudad que ha caído en la ruina.'
+msg_err_cannot_use_command_because_town_ruined: "&cNo puedes usar este comando si tu ciudad está en la ruina. Para seguir usando normalmente los comandos reclama la ciudad con ''/town reclaim'', o abandonala con ''/town leave''."
+msg_warning_your_town_is_ruined_for_x_more_hours: '&cTu ciudad será considerada como "en ruina" por %d horas más. Puedes salvarla usando ''/town reclaim'' y convertirte en el alcalde.'
+msg_time_remaining_before_full_removal: '&cTiempo hasta que sea eliminado completamente: %d horas.'
+msg_time_until_reclaim_available: '&cTiempo hasta que se pueda volver a reclamar: %d horas.'
+msg_reclaim_available: '&aReclamo disponible.'
 
-#Added in 0.93
-msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
-msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
+# Añadido en la versión 0.93
+msg_changed_peaceful: '&cLa neutralidad de la ciudad ahora está %s.'
+msg_err_town_unclaim_canceled: '&cAbandono cancelado. No puedes realizar esta operación ahora mismo.'

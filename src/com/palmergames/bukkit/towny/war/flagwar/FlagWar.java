@@ -255,12 +255,17 @@ public class FlagWar {
 		Nation landOwnerNation, attackingNation;
 		TownBlock townBlock;
 
+		attackingResident = townyUniverse.getResident(player.getUniqueId());
+		
+		if (attackingResident == null || !attackingResident.hasNation())
+			throw new TownyException(Translation.of("msg_err_dont_belong_nation"));
+		
 		try {
-			attackingResident = townyUniverse.getDataSource().getResident(player.getName());
 			attackingTown = attackingResident.getTown();
 			attackingNation = attackingTown.getNation();
-		} catch (NotRegisteredException e) {
-			throw new TownyException(Translation.of("msg_err_dont_belong_nation"));
+		} catch (NotRegisteredException ignore) {
+			// Can never happen
+			return false;
 		}
 		
 		if (attackingTown.getTownBlocks().size() < 1)

@@ -5527,3 +5527,24 @@ v0.92.0.11:
   - Create TownPreUnclaimCmdEvent, Relocate and extend Town(Pre)UnclaimEvents, courtesy of TheFlagCourier with PR #4537.
   - API: Add NationPreTownKickEvent which extends the NationPreTownLeaveEvent.
   - Clean up the nationKick method & use translatable message in more cancellable events.
+  - Deprecate getMaxPurchedBlocks and replace with getMaxPurchasedBlocks, courtesy of Momshroom with PR #4572.
+  - Update es-419.yml to 0.93, courtesy of EuGNosii with PR #4573.
+  - Backend Resident UUID Implementation, courtesy of silverwolfg11 with PR #4510.
+    - Creates methods to get Resident objects via a player UUID.
+	- Create register / unregister methods for residents.
+  - Placeholder: %townyadvanced_player_location_town_or_wildname%
+    - Displays either the townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_formattedtown_or_wildname%
+    - Displays either the formatted townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_town_prefix%
+    - Displays the town's prefix or blank.
+  - Placeholder: %townyadvanced_player_location_town_postfix%
+    - Displays the town's postfix or blank.
+  - Placeholder: %townyadvanced_player_location_pvp%
+    - Displays (PVP) or blank, depending on pvp status of the location.
+  - Fix plot group which are for sale not being purchase-able.
+0.96.5.6:
+  - Fix loading residents on mysql.
+    - Closes #4578.
+  - Add confirmation of admin town deleting to in-game run commands (and not just when run from the console.
+  - Allow admins to force delete a town if it's already ruined, courtesy of Glare with PR #4579.

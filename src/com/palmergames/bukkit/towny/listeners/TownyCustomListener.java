@@ -72,11 +72,13 @@ public class TownyCustomListener implements Listener {
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 				String msg = null;
 				try {
-					msg = chunkNotifier.getNotificationString(resident);
+					if (resident != null) {
+						ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+						msg = chunkNotifier.getNotificationString(resident);
+					}
 				} catch (NullPointerException e) {
 					System.out.println("Chunk Notifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
 					System.out.println("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
