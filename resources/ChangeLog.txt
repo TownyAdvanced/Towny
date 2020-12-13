@@ -5543,3 +5543,5 @@ v0.92.0.11:
   - Placeholder: %townyadvanced_player_location_pvp%
     - Displays (PVP) or blank, depending on pvp status of the location.
   - Fix plot group which are for sale not being purchase-able.
+0.96.5.6:
+  - Fix loading residents on mysql.
