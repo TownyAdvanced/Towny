@@ -694,7 +694,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		 * If Town Ruining is enabled set the town into a ruined state
 		 * rather than deleting.
 		 */
-		removeTown(town, TownRuinSettings.getTownRuinsEnabled());
+		removeTown(town, TownRuinSettings.getTownRuinsEnabled() && !town.isRuined());
 	}
 
 	@Override
