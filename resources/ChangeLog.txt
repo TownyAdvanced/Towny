@@ -5547,3 +5547,4 @@ v0.92.0.11:
   - Fix loading residents on mysql.
     - Closes #4578.
   - Add confirmation of admin town deleting to in-game run commands (and not just when run from the console.
+  - Allow admins to force delete a town if it's already ruined, courtesy of Glare with PR #4579.
