@@ -694,7 +694,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		 * If Town Ruining is enabled set the town into a ruined state
 		 * rather than deleting.
 		 */
-		removeTown(town, TownRuinSettings.getTownRuinsEnabled());
+		removeTown(town, TownRuinSettings.getTownRuinsEnabled() && !town.isRuined());
 	}
 
 	@Override
@@ -702,7 +702,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town", town.getName()));
 		
-		if (delayFullRemoval && !town.isRuined()) {
+		if (delayFullRemoval) {
 			/*
 			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
 			 */
