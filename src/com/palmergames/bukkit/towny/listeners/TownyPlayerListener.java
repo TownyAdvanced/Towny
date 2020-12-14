@@ -387,7 +387,7 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (Tag.BEDS.isTagged(block.getType())) {
+			if (Tag.BEDS.isTagged(block.getType()) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if (!TownySettings.getBedUse())
 					return;
 

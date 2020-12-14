@@ -5548,3 +5548,6 @@ v0.92.0.11:
     - Closes #4578.
   - Add confirmation of admin town deleting to in-game run commands (and not just when run from the console.
   - Allow admins to force delete a town if it's already ruined, courtesy of Glare with PR #4579.
+0.96.5.7:
+  - Fix invinci-beds when deny_bed_use was set to true and beds weren't on inn or personally-owned plots.
+    - Closes https://github.com/EarthMC/Issue-Tracker/issues/1279
