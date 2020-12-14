@@ -568,7 +568,7 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 
 		if (plugin.isError()) {
@@ -587,9 +587,10 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 		Location to = event.getTo();
 		Location from;
+		
 		PlayerCache cache = plugin.getCache(player);
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
-		
+
 		if (resident != null
 				&& TownyTimerHandler.isTeleportWarmupRunning()				 
 				&& TownySettings.getTeleportWarmupTime() > 0 
@@ -605,6 +606,23 @@ public class TownyPlayerListener implements Listener {
 		} catch (NullPointerException e) {
 			from = event.getFrom();
 		}
+
+		if (TownySettings.cancelOutlawMovementIntoTowns()) {
+			try {
+
+				TownBlock townBlock = WorldCoord.parseWorldCoord(event.getTo()).getTownBlock();
+				Town town = townBlock.getTown();
+
+				if (town.hasOutlaw(resident)) {
+					event.setCancelled(true);
+
+					// Send a message indicating the issue.
+					TownyMessaging.sendErrorMsg(player, "You are outlawed and not allowed to enter the town!");
+					return;
+				}
+			} catch (NotRegisteredException ignored) {}
+		}
+		
 		
 		if (WorldCoord.cellChanged(from, to)) {
 			try {

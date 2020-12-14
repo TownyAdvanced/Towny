@@ -2917,6 +2917,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
 	}
 	
+	public static boolean cancelOutlawMovementIntoTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN_MOVEMENT);
+	}
+	
 	public static int getOutlawTeleportWarmup() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
 	}
