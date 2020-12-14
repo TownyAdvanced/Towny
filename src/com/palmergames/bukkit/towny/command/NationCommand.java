@@ -2449,7 +2449,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} catch (EconomyException e1) {}
 
 				// Fire cancellable event directly before setting the toggle.
-				NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin);
+				NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin, value);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
@@ -2473,13 +2473,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[0].equalsIgnoreCase("public")){
 
 				// Fire cancellable event directly before setting the toggle.
-				NationTogglePublicEvent preEvent = new NationTogglePublicEvent(sender, nation, admin);
+				NationTogglePublicEvent preEvent = new NationTogglePublicEvent(sender, nation, admin, choice.orElse(!nation.isPublic()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
                 
 				// Set the toggle setting.
-                nation.setPublic(choice.orElse(!nation.isPublic()));
+                nation.setPublic(preEvent.getFutureState());
                 
 				// Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_public", nation.isPublic() ? Translation.of("enabled") : Translation.of("disabled")));
@@ -2487,13 +2487,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             } else if(split[0].equalsIgnoreCase("open")){
 
             	// Fire cancellable event directly before setting the toggle.
-				NationToggleOpenEvent preEvent = new NationToggleOpenEvent(sender, nation, admin);
+				NationToggleOpenEvent preEvent = new NationToggleOpenEvent(sender, nation, admin, choice.orElse(!nation.isOpen()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
                 
 				// Set the toggle setting.
-                nation.setOpen(choice.orElse(!nation.isOpen()));
+                nation.setOpen(preEvent.getFutureState());
                 
                 // Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
