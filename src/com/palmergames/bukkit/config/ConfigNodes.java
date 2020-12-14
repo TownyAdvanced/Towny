@@ -559,6 +559,12 @@ public enum ConfigNodes {
 			"# Can outlaws roam freely on the towns they are outlawed in?",
 			"# If false, outlaws will be teleported away if they spend too long in the towns they are outlawed in.",
 			"# The time is set below in the outlaw_teleport_warmup."),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN_MOVEMENT(
+		"global_town_settings.allow_outlaws_to_enter_town_movement",
+		"true",
+		"# Prevents movement of outlaws into a town." +
+			       "# This should not be used with other config node that outlaws"
+	),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
 			"false",
