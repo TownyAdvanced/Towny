@@ -5552,3 +5552,8 @@ v0.92.0.11:
   - Fix invinci-beds when deny_bed_use was set to true and beds weren't on inn or personally-owned plots.
     - Closes https://github.com/EarthMC/Issue-Tracker/issues/1279
   - Fix TownyMessaging.sendMsg(Resident, Message) being able to result in the console logging "Sender cannot be null."
+  - Town command cleanup
+    - Moves a number of town subcommands around, bringing them ahead of the ruin test.
+    - Enables ruined town members to still be able to do /t {othertown}.
+  - es-419.yml fixes, courtesy of EuGNosii with PR #4583.
+  - Make NationToggleEvents more abstract, courtesy of silverwolfg11 with PR #4580.
