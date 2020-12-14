@@ -165,11 +165,7 @@ public class TownyFormatter {
 			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
 		else 
 			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
-
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.isActive())
-				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
-
+		
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 		// if (resident.getTownBlocks().size() > 0) {
@@ -182,6 +178,11 @@ public class TownyFormatter {
 			Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on") : Translation.of("status_off")));
 		// }
 		
+		if (TownySettings.isUsingEconomy())
+			if (TownyEconomyHandler.isActive())
+				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
+
+			
 		// Town: Camelot
 		String line = Translation.of("status_town");
 		if (!resident.hasTown())
