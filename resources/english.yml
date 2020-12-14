@@ -1217,3 +1217,4 @@ msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
 
 msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
+npc_created: '&2Created: &a%s'

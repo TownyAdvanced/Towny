@@ -158,25 +158,32 @@ public class TownyFormatter {
 		// Registered: Sept 3 2009 | Last Online: March 7 2009
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(resident.getLastOnline());
-		int currentYear = cal.get(Calendar.YEAR);
-		cal.setTimeInMillis(System.currentTimeMillis());
-		int lastOnlineYear = cal.get(Calendar.YEAR);
-		if (currentYear == lastOnlineYear)
-			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
-		else 
-			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+		if (!resident.isNPC()) {
+			int currentYear = cal.get(Calendar.YEAR);
+			cal.setTimeInMillis(System.currentTimeMillis());
+			int lastOnlineYear = cal.get(Calendar.YEAR);
+			if (currentYear == lastOnlineYear)
+				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+			else
+				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+		} 
 		
-		// Owner of: 4 plots
-		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
-		// if (resident.getTownBlocks().size() > 0) {
-		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
-		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
-		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
-		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on") : Translation.of("status_off")) +
-			Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on") : Translation.of("status_off")) +
-			Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on") : Translation.of("status_off")) +
-			Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on") : Translation.of("status_off")));
-		// }
+		if (resident.isNPC()) 
+			out.add(Translation.of("npc_created", registeredFormat.format(resident.getRegistered())));
+		
+		if (!resident.isNPC()) {
+			// Owner of: 4 plots
+			// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
+			// if (resident.getTownBlocks().size() > 0) {
+			out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
+			out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
+			out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
+			out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on") : Translation.of("status_off")) +
+				Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on") : Translation.of("status_off")) +
+				Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on") : Translation.of("status_off")) +
+				Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on") : Translation.of("status_off")));
+			// }
+		}
 		
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
@@ -241,6 +248,7 @@ public class TownyFormatter {
 		
 		if (resident.isNPC())
 			out.add(Translation.of("msg_status_npc", resident.getName()));
+		
 		out.addAll(getExtraFields(resident));
 		
 		out = formatStatusScreens(out);
