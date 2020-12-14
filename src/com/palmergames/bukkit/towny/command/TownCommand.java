@@ -1045,8 +1045,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						if (targetTown == town){
 							townRemoveResident(town, target);
 							String outlawer = (admin ? Translation.of("admin_sing") : sender.getName());
-							if (target.getPlayer().isOnline())
-								TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
+							TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
 							TownyMessaging.sendPrefixedTownMessage(town,Translation.of("msg_kicked", outlawer, target.getName()));
 						}
 					town.addOutlaw(target);

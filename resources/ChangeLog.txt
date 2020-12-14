@@ -5551,3 +5551,4 @@ v0.92.0.11:
 0.96.5.7:
   - Fix invinci-beds when deny_bed_use was set to true and beds weren't on inn or personally-owned plots.
     - Closes https://github.com/EarthMC/Issue-Tracker/issues/1279
+  - Fix TownyMessaging.sendMsg(Resident, Message) being able to result in the console logging "Sender cannot be null."

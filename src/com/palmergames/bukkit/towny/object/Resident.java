@@ -132,8 +132,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void freeFromJail(int index, boolean escaped) {
 		if (!escaped) {
-			if (getPlayer().isOnline())
-				TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else {
 			try {
@@ -156,10 +155,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (this.isJailed) {
 			try {
-				Location loc = this.getTown().getSpawn();				
+				Location loc = this.getTown().getSpawn();
+				TownyMessaging.sendMsg(this, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 				if (BukkitTools.isOnline(this.getName())) {
-					// Use teleport warmup
-					TownyMessaging.sendMsg(this, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+					// Use teleport warmup					
 					TownyAPI.getInstance().jailTeleport(getPlayer(), loc);
 				}
 				freeFromJail(index, false);
