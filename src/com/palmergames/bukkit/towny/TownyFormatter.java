@@ -196,7 +196,7 @@ public class TownyFormatter {
 			} catch (TownyException e) {
 				line += "Error: " + e.getMessage();
 			}
-		out.add(line)
+		out.add(line);
 			
 		if (resident.isNPC()) {
 			out.add(Translation.of("msg_status_npc", resident.getName()));
