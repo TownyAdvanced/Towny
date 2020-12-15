@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
@@ -59,7 +61,12 @@ public class SiegeWarPlaceBlockController {
 		Material mat = block.getType();
 		//Banner placement
 		if (Tag.BANNERS.isTagged(mat))
-			return evaluatePlaceBanner(player, block, event, plugin);
+			try {
+				return evaluatePlaceBanner(player, block, event, plugin);
+			} catch (TownyException e) {
+				event.setCancelled(true);
+//				event.setCancelMessage(e.getMessage()); TODO: replace with TownyBuildEvent
+			}
 
 		//Chest placement
 		if (mat == Material.CHEST || mat == Material.TRAPPED_CHEST)
@@ -81,50 +88,95 @@ public class SiegeWarPlaceBlockController {
 	}
 
 	/**
- 	 * Evaluates a banner placement request.
-     * Determines which type of banner this is, and where it is being placed.
-	 * Then calls an appropriate private method.
- 	*/
-	private static boolean evaluatePlaceBanner(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
+	 * Evaluates a banner placement request. Determines which type of banner this
+	 * is, and where it is being placed. Then calls an appropriate private method.
+	 * 
+	 * @throws TownyException thrown when the banner is not allowed to be placed.
+	 */
+	private static boolean evaluatePlaceBanner(Player player, Block block, BlockPlaceEvent event, Towny plugin)
+			throws TownyException {
 
-		if(TownyAPI.getInstance().isWilderness(block)) {
-			//Wilderness found
+		// All outcomes require a town.
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (resident == null || !resident.hasTown())
+			throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
+
+		/*
+		 * The banner is being placed in the wilderness as either a Nation abandoning a
+		 * siege, or beginning a siege.
+		 * 
+		 * All wilderness outcomes require a nation.
+		 */
+		if (TownyAPI.getInstance().isWilderness(block)) {
+
+			// Fail early if this Resident's Town has no Nation.
+			if (!resident.hasNation())
+				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
+
+			Nation nation = null;
+			try {
+				nation = resident.getTown().getNation();
+			} catch (NotRegisteredException ignored) {
+			}
+
 			if (isSurrenderBanner(block)) {
-				return evaluatePlaceWhiteBannerInWilderness(block, player, event);
+				// Nation abandoning the siege.
+
+				if (!SiegeWarSettings.getWarSiegeAbandonEnabled())
+					return false;
+
+				// Fail early if the nation has no sieges.
+				if (nation.getSieges().isEmpty())
+					throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
+
+				// If player has no permission to abandon,send error
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ABANDON.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+
+				//Find the nearest siege to the player, owned by the nation.
+				Siege nearestSiege = SiegeWarDistanceUtil.findNearestSiegeForNation(block, nation);
+				
+				//If there are no nearby siege zones,then regular block request
+				if(nearestSiege == null)
+					return false;
+				
+		        //If the siege is not in progress, send error
+				if (nearestSiege.getStatus() != SiegeStatus.IN_PROGRESS)
+					throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_siege_over"));
+				
+				// Start abandoning the siege.
+				AbandonAttack.attackerAbandon(nearestSiege);
+
 			} else {
+				// Nation starting a siege.
 				return evaluatePlaceColouredBannerInWilderness(block, player, event, plugin);
 			}
+
+			
+		/*
+		 * The banner is being placed in a town, which means it is a Town
+		 * trying to surrender their siege. 
+		 */
 		} else {
 			Town town = TownyAPI.getInstance().getTown(block.getLocation());
-			//Town block found 
-			if (town.hasSiege() && isSurrenderBanner(block)) {
-				return evaluatePlaceWhiteBannerInTown(player, town, event);
-			} else {
-				return false;
+			// Town found
+			if (town != null 
+					&& SiegeWarSettings.getWarSiegeSurrenderEnabled() 
+					&& town.hasSiege() 
+					&& isSurrenderBanner(block)) {
+				if (!town.hasResident(resident))
+		            throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_not_your_town"));
+
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
+	                throw new TownyException(Translation.of("msg_err_command_disable"));
+
+				if(town.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+					throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_siege_finished"));
+				
+				SurrenderTown.defenderSurrender(town.getSiege());
 			}
 		}
-	}
-	
-	/**
-	 * Evaluates placing a white banner in the wilderness.
-	 * Determines if the event will be considered as an abandon request.
-	 */
-	private static boolean evaluatePlaceWhiteBannerInWilderness(Block block, Player player, BlockPlaceEvent event) {
-		if (!SiegeWarSettings.getWarSiegeAbandonEnabled())
-			return false;
-
-		//Find the nearest siege zone to the player
-		Siege nearestSiege = SiegeWarDistanceUtil.findNearestSiege(block);
-		
-		//If there are no nearby siege zones,then regular block request
-		if(nearestSiege == null)
-			return false;
-		
-		AbandonAttack.processAbandonSiegeRequest(player,
-			nearestSiege,
-			event);
-
-		return true;
+		return false;
 	}
 
 	/**
@@ -138,14 +190,8 @@ public class SiegeWarPlaceBlockController {
 				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
 			
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			
-			// Fail early if this Resident has no Town or is null.
-			if(resident == null || !resident.hasTown())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 	
-			// Fail early if this Resident's Town has no Nation.
-			if(!resident.getTown().hasNation())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
+
 			
 			List<TownBlock> nearbyCardinalTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 	
@@ -228,25 +274,6 @@ public class SiegeWarPlaceBlockController {
 		return true;
 	}
 
-	/**
-	 * Evaluates placing a white banner inside a town.
-	 * Determines if the event will be considered as a surrender request.
-	 */
-    private static boolean evaluatePlaceWhiteBannerInTown(Player player, Town town, BlockPlaceEvent event) {
-		if (!SiegeWarSettings.getWarSiegeSurrenderEnabled())
-			return false;
-
-		//If there is no siege, do normal block placement
-		if (!town.hasSiege())
-			return false;
-		
-		SurrenderTown.processTownSurrenderRequest(
-			player,
-			town,
-			event);
-		return true;
-	}
-	
 	/**
 	 * Evaluates placing a chest.
 	 * Determines if the event will be considered as a plunder request.

@@ -2,18 +2,12 @@ package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.util.TimeMgmt;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * This class is responsible for processing requests to surrender towns
@@ -22,49 +16,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
  */
 public class SurrenderTown {
 
-	/**
-	 * Process a surrender town request
-	 * 
-	 * This method does some final checks and if they pass, the surrender is executed.
-	 * 
-	 * @param player the player who placed the surrender banner
-	 * @param townWhereBlockWasPlaced the town where the banner was placed
-	 * @param event the place block event
-	 */
-    public static void processTownSurrenderRequest(Player player,
-                                                   Town townWhereBlockWasPlaced,
-                                                   BlockPlaceEvent event) {
-        try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident resident = universe.getResident(player.getUniqueId());
-            if (resident == null)
-            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
-            
-            if(!resident.hasTown())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
-
-			Town townOfAttackingResident = resident.getTown();
-			if(townOfAttackingResident != townWhereBlockWasPlaced)
-                throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_not_your_town"));
-			
-			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
-                throw new TownyException(Translation.of("msg_err_command_disable"));
-
-            Siege siege = townWhereBlockWasPlaced.getSiege();
-            if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_siege_finished"));
-
-            //Surrender
-            defenderSurrender(siege);
-
-        } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-			event.setBuild(false);
-			event.setCancelled(true);
-        }
-    }
-
-    private static void defenderSurrender(Siege siege) {
+    public static void defenderSurrender(Siege siege) {
 
 		long timeUntilSurrenderConfirmation = siege.getTimeUntilSurrenderConfirmationMillis();
 
