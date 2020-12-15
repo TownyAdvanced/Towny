@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1049,8 +1051,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 				if (!resident.hasTown() || (resident.hasTown() && townBlock.getTown() != resident.getTown()))
 					TownyMessaging.sendMessage(resident, Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
+				Bukkit.getPluginManager().callEvent(new PlotSetForSaleEvent(resident, forSale, townBlock));
 			} else {
 				TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_to_nfs"));
+				Bukkit.getPluginManager().callEvent(new PlotNotForSaleEvent(resident, townBlock));
 			}
 
 			// Save this townblock so the for sale status is remembered.
