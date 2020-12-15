@@ -1,16 +1,15 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.plot;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlotPreClearEvent extends Event implements Cancellable {
+
+public class PlotClearEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private boolean isCancelled = false;
-	private final String cancelMessage = "Sorry this event was cancelled";
+
 	private final TownBlock townBlock;
 
 	@Override
@@ -24,7 +23,7 @@ public class PlotPreClearEvent extends Event implements Cancellable {
 		return handlers;
 	}
 
-	public PlotPreClearEvent(TownBlock _townBlock) {
+	public PlotClearEvent(TownBlock _townBlock) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.townBlock = _townBlock;
 	}
@@ -36,17 +35,4 @@ public class PlotPreClearEvent extends Event implements Cancellable {
 		return townBlock;
 	}
 
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		isCancelled = cancelled;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
 }
