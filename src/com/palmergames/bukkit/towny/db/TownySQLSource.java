@@ -698,7 +698,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				
 				Resident resident = universe.getResident(residentName);
 				
-				if (residentName == null) {
+				if (resident == null) {
 					System.out.println(String.format("[Towny] Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
 					continue;
 				}
@@ -748,8 +748,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			String search;
 
 			try {
-				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
+				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty()) {
 					resident.setUUID(UUID.fromString(rs.getString("uuid")));
+					universe.registerResidentUUID(resident);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

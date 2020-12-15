@@ -446,6 +446,13 @@ public class AreaSelectionUtil {
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
+				// Plot Groups do not set a townblock's individual plot price. 
+				if (worldCoord.getTownBlock().hasPlotObjectGroup() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
+					out.clear();             // Remove any other plots from the selection. 
+					out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+					return out;              // Return the one plot-group-having townblock.
+				}
+
 				if (worldCoord.getTownBlock().isForSale())
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {

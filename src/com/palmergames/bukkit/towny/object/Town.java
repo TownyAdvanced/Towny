@@ -1378,6 +1378,14 @@ public class Town extends Government implements TownBlockOwner {
 		
 		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
 	}
+	
+	public String getPrefix() {
+		return TownySettings.getTownPrefix(this);
+	}
+	
+	public String getPostfix() {
+		return TownySettings.getTownPostfix(this);
+	}
 
 	public double getMaxPercentTaxAmount() {
 		return maxPercentTaxAmount;

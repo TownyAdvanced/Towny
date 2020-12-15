@@ -5532,3 +5532,29 @@ v0.92.0.11:
   - Backend Resident UUID Implementation, courtesy of silverwolfg11 with PR #4510.
     - Creates methods to get Resident objects via a player UUID.
 	- Create register / unregister methods for residents.
+  - Placeholder: %townyadvanced_player_location_town_or_wildname%
+    - Displays either the townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_formattedtown_or_wildname%
+    - Displays either the formatted townname at the location or the wilderness name.
+  - Placeholder: %townyadvanced_player_location_town_prefix%
+    - Displays the town's prefix or blank.
+  - Placeholder: %townyadvanced_player_location_town_postfix%
+    - Displays the town's postfix or blank.
+  - Placeholder: %townyadvanced_player_location_pvp%
+    - Displays (PVP) or blank, depending on pvp status of the location.
+  - Fix plot group which are for sale not being purchase-able.
+0.96.5.6:
+  - Fix loading residents on mysql.
+    - Closes #4578.
+  - Add confirmation of admin town deleting to in-game run commands (and not just when run from the console.
+  - Allow admins to force delete a town if it's already ruined, courtesy of Glare with PR #4579.
+0.96.5.7:
+  - Fix invinci-beds when deny_bed_use was set to true and beds weren't on inn or personally-owned plots.
+    - Closes https://github.com/EarthMC/Issue-Tracker/issues/1279
+  - Fix TownyMessaging.sendMsg(Resident, Message) being able to result in the console logging "Sender cannot be null."
+  - Town command cleanup
+    - Moves a number of town subcommands around, bringing them ahead of the ruin test.
+    - Enables ruined town members to still be able to do /t {othertown}.
+  - es-419.yml fixes, courtesy of EuGNosii with PR #4583.
+  - Make NationToggleEvents more abstract, courtesy of silverwolfg11 with PR #4580.
+  - Change default mysql pool size, courtesy of Glare with PR #4589.

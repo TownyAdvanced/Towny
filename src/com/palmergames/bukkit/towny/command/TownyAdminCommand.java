@@ -960,15 +960,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, ResidentUtil.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-				if (!isConsole) {
+
+				Confirmation.runOnAccept(() -> {
 					TownyMessaging.sendMessage(sender, Translation.of("town_deleted_by_admin", town.getName()));
-					townyUniverse.getDataSource().removeTown(town);
-				} else { //isConsole
-					Confirmation.runOnAccept(() -> {
-						TownyUniverse.getInstance().getDataSource().removeTown(town);
-					})
-						.sendTo(sender);
-				}
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				}).sendTo(sender);
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 				
@@ -1157,8 +1153,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split[0].equalsIgnoreCase("add")) {
 			try {
 				if (target.addTownRank(rank)) {
-					if (target.getPlayer().isOnline())
-						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
+					TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
 					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Town", rank, target.getName()));
 				} else {
 					// Not in a town or Rank doesn't exist
@@ -1174,8 +1169,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			try {
 				if (target.removeTownRank(rank)) {
-					if (target.getPlayer().isOnline())
-						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
+					TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
 					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
 				}
 			} catch (NotRegisteredException e) {
