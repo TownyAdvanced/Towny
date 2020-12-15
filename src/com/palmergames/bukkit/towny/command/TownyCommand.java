@@ -18,9 +18,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -38,18 +38,25 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
+	
+	private final Map<Town, Long> townBankCache = new HashMap<>();
+	private final Map<Nation, Long> nationBankCache = new HashMap<>();
 
 	private static List<String> towny_top = new ArrayList<>();
 	private static List<String> towny_war = new ArrayList<>();
@@ -90,10 +97,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> townyTopTabCompletes = Arrays.asList(
 		"residents",
-		"land"
+		"land",
+		"balance"
 	);
 	
-	private static final List<String> townyTopResidentsTabComplete = Arrays.asList(
+	private static final List<String> townyTopTownAndNationTabComplete = Arrays.asList(
 		"all",
 		"town",
 		"nation"
@@ -108,6 +116,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	public TownyCommand(Towny instance) {
 
 		plugin = instance;
+		
+		instance.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+			if (TownySettings.isUsingEconomy()) {
+				final long time = System.currentTimeMillis();
+				updateTownBanks(time);
+				updateNationBanks(time);
+			}
+		}, 200L, 12000L);
 	}
 
 	@Override
@@ -169,9 +185,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						switch (args[1].toLowerCase()) {
 							case "residents":
-								return NameUtil.filterByStart(townyTopResidentsTabComplete, args[2]);
+								return NameUtil.filterByStart(townyTopTownAndNationTabComplete, args[2]);
 							case "land":
 								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
+							case "balance":
+								return NameUtil.filterByStart(townyTopTownAndNationTabComplete, args[2]);
 						}
 				}
 				break;
@@ -398,6 +416,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
+			towny_top.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
@@ -426,6 +445,36 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
+		else if (args[0].equalsIgnoreCase("balance")) {
+			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
+				List<BankAccount> list = new ArrayList<>();
+				townBankCache.keySet().forEach(town -> list.add(town.getAccount()));
+				nationBankCache.keySet().forEach(nation -> list.add(nation.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else if (args[1].equalsIgnoreCase("town")) {
+				List<BankAccount> list = new ArrayList<>();
+				townBankCache.keySet().forEach(town -> list.add(town.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else if (args[1].equalsIgnoreCase("nation")) {
+				List<BankAccount> list = new ArrayList<>();
+				nationBankCache.keySet().forEach(nation -> list.add(nation.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else {
+				sendErrorMsg(player, "Invalid sub command.");
+			}
+		}
 		else
 			sendErrorMsg(player, "Invalid sub command.");
 
@@ -538,11 +587,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getTopBankBalance(List<EconomyAccount> list, int maxListing) throws EconomyException {
+	public List<String> getTopBankBalance(List<BankAccount> list, int maxListing) throws EconomyException {
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<Account, Double> kvTable = new KeyValueTable<>();
-		for (EconomyAccount obj : list) {
+		for (BankAccount obj : list) {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
@@ -620,5 +669,37 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage("[Towny] ConsoleError: " + msg);
 
 		return false;
+	}
+	
+	private void updateTownBanks(final long time) {
+		for (final Town town : TownyUniverse.getInstance().getTowns()) {
+			if (townBankCache.containsKey(town)) {
+				if (time > townBankCache.get(town)) {
+					updateTownBank(town);	
+				}
+			} else {
+				updateTownBank(town);
+			}
+		}
+	}
+
+	private void updateNationBanks(final long time) {
+		for (final Nation nation : TownyUniverse.getInstance().getNationsMap().values()) {
+			if (nationBankCache.containsKey(nation)) {
+				if (time > nationBankCache.get(nation)) {
+					updateNationBank(nation);
+				}
+			} else {
+				updateNationBank(nation);
+			}
+		}
+	}
+	
+	private void updateTownBank(@NotNull final Town town) {
+		townBankCache.put(town, System.currentTimeMillis() + ThreadLocalRandom.current().nextLong(5000, 8000));
+	}
+	
+	private void updateNationBank(@NotNull final Nation nation) {
+		nationBankCache.put(nation, System.currentTimeMillis() + ThreadLocalRandom.current().nextLong(5000, 8000));
 	}
 }
