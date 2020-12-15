@@ -196,6 +196,8 @@ public class TownyFormatter {
 			} catch (TownyException e) {
 				line += "Error: " + e.getMessage();
 			}
+		out.add(line)
+			
 		if (resident.isNPC()) {
 			out.add(Translation.of("msg_status_npc", resident.getName()));
 			out.addAll(getExtraFields(resident));
@@ -206,46 +208,34 @@ public class TownyFormatter {
 		// Embassies in: Camelot, London, Tokyo
 		List<Town> townEmbassies = new ArrayList<>();
 		try {
-
 			String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
-
 			for(TownBlock tB : resident.getTownBlocks()) {
 				if(!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
-
 					townEmbassies.add(tB.getTown());
-
 				}
-
 			}
 		} catch (NotRegisteredException ignored) {}
-
 		if (townEmbassies.size() > 0) {
 			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
 		}
-
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
 				out.add(Translation.of("status_town_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getTownRanks(), ", ")));
 		}
-
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
 				out.add(Translation.of("status_nation_ranks") + StringMgmt.capitalize(StringMgmt.join(resident.getNationRanks(), ", ")));
 		}
-
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
 			out.add(Translation.of("jailed_in_town", resident.getJailTown()) + ( resident.hasJailDays() ? Translation.of("msg_jailed_for_x_days", resident.getJailDays()) :  ""));
 		}
-
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
 		out.addAll(getFormattedResidents(Translation.of("status_friends"), friends));
-
 		out.addAll(getExtraFields(resident));
-
 		out = formatStatusScreens(out);
 		return out;
 	}
