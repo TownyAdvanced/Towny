@@ -5558,3 +5558,4 @@ v0.92.0.11:
   - es-419.yml fixes, courtesy of EuGNosii with PR #4583.
   - Make NationToggleEvents more abstract, courtesy of silverwolfg11 with PR #4580.
   - Change default mysql pool size, courtesy of Glare with PR #4589.
+  - API: Added PlotSetForSaleEvent & PlotNotForSaleEvent, courtesy of Glare with PR #4590.
