@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event.plot;
+package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
