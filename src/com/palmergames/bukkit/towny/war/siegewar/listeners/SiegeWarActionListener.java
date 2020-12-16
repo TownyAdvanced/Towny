@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+import com.palmergames.bukkit.towny.war.siegewar.playeractions.PlaceBlock;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 
@@ -25,6 +26,13 @@ public class SiegeWarActionListener implements Listener {
 	public SiegeWarActionListener(Towny instance) {
 
 		plugin = instance;
+	}
+	
+	@EventHandler
+	public void onBlockBuild(TownyBuildEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled())
+			PlaceBlock.evaluateSiegeWarPlaceBlockRequest(event.getPlayer(), event.getBlock(), event);
+
 	}
 	
 	/*

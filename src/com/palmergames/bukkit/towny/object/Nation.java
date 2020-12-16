@@ -630,12 +630,6 @@ public class Nation extends Government {
 		return result;
 	}
 
-	public boolean isNationAttackingTown(Town town) {
-		return town.hasSiege()
-				&& town.getSiege().getStatus().isActive()
-				&& town.getSiege().getAttackingNation() == this;
-	}
-
 	public List<Siege> getSieges() {
 		return sieges;
 	}
