@@ -17,9 +17,11 @@ import org.bukkit.World;
  */
 public class BankAccount extends Account {
 	
+	private static final long CACHE_TIMEOUT = 60000l;
 	private double balanceCap;
 	private final Account debtAccount;
 	private double debtCap;
+	private CachedBalance cachedBalance = null; 
 
 	/**
 	 * Because of limitations in Economy API's, debt isn't
@@ -54,6 +56,9 @@ public class BankAccount extends Account {
 		else 
 			this.debtAccount = null;
 		this.debtCap = 0;
+		try {
+			this.cachedBalance = new CachedBalance(getHoldingBalance());
+		} catch (EconomyException e) {}
 	}
 
 	/**
@@ -226,5 +231,39 @@ public class BankAccount extends Account {
 		if (debtAccount != null)
 			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
+	}
+
+	private class CachedBalance {
+		private double balance;
+		private long time;
+		
+		private CachedBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+		
+		double getBalance() {
+			return balance;
+		}
+		private long getTime() {
+			return time;
+		}
+		
+		void setBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+	}
+	
+	public double getCachedBalance() {
+		try {
+			if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {
+				System.out.println("Setting new cache");
+				cachedBalance.setBalance(getHoldingBalance());				
+			}
+		} catch (EconomyException e) {
+			e.printStackTrace();
+		}
+		return cachedBalance.getBalance();
 	}
 }
