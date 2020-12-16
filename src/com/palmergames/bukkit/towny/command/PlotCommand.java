@@ -1101,21 +1101,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (split[0].equalsIgnoreCase("pvp")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
-					
+
 					if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 						// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
 						if (CooldownTimerTask.hasCooldown(townBlock.getTown().getName(), CooldownType.PVP))
 							throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(townBlock.getTown().getName(), CooldownType.PVP)));
-	
+
 						// Test to see if the pvp cooldown timer is active for this plot.
 						if (CooldownTimerTask.hasCooldown(townBlock.getWorldCoord().toString(), CooldownType.PVP))
 							throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(townBlock.getWorldCoord().toString(), CooldownType.PVP)));
 					}
-					
+
 					// Prevent plot pvp from being enabled if admin pvp is disabled
 					if (townBlock.getTown().isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminDisabledPVP", "on"));
-					
+
 					// Prevent plot pvp from being disabled if admin pvp is enabled
 					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
@@ -1165,7 +1165,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
-					
+
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else {
@@ -1182,7 +1182,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
-			
+
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
 		}
 	}
