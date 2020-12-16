@@ -15,6 +15,10 @@ import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1115,7 +1119,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Prevent plot pvp from being disabled if admin pvp is enabled
 					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
-
+					// Fire cancellable event directly before setting the toggle.
+					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().pvp));
+					Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
+					if (plotTogglePvpEvent.isCancelled()){
+						return;
+					}
 					townBlock.getPermissions().pvp = choice.orElse(!townBlock.getPermissions().pvp);
 					// Add a cooldown timer for this plot.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
@@ -1125,18 +1134,36 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
+					// Fire cancellable event directly before setting the toggle.
+					PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().explosion));
+					Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
+					if (plotToggleExplosionEvent.isCancelled()){
+						return;
+					}
 					townBlock.getPermissions().explosion = choice.orElse(!townBlock.getPermissions().explosion);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
+					// Fire cancellable event directly before setting the toggle.
+					PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().fire));
+					Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
+					if (plotToggleFireEvent.isCancelled()){
+						return;
+					}
 					townBlock.getPermissions().fire = choice.orElse(!townBlock.getPermissions().fire);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
+					// Fire cancellable event directly before setting the toggle.
+					PlotToggleMobsEvent plotToggleMobsEvent= new PlotToggleMobsEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().mobs));
+					Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
+					if (plotToggleMobsEvent.isCancelled()){
+						return;
+					}
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
