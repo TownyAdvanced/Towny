@@ -58,33 +58,31 @@ public class SiegeWarPlaceBlockController {
 	 */
 	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block, BlockPlaceEvent event, Towny plugin) {
 		
-		Material mat = block.getType();
-		//Banner placement
-		if (Tag.BANNERS.isTagged(mat))
-			try {
+		try {
+			Material mat = block.getType();
+			//Banner placement
+			if (Tag.BANNERS.isTagged(mat))
 				return evaluatePlaceBanner(player, block, event, plugin);
-			} catch (TownyException e) {
-				event.setCancelled(true);
-//				event.setCancelMessage(e.getMessage()); TODO: replace with TownyBuildEvent
+	
+			//Chest placement
+			if (mat == Material.CHEST || mat == Material.TRAPPED_CHEST)
+				return evaluatePlaceChest(player, block, event);
+	
+			//Check for forbidden block placement
+			if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) {
+				if(SiegeWarSettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat)) {
+					event.setCancelled(true);
+					event.setBuild(false);
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
+					return true;
+				}
 			}
-
-		//Chest placement
-		if (mat == Material.CHEST || mat == Material.TRAPPED_CHEST)
-			return evaluatePlaceChest(player, block, event);
-
-		//Check for forbidden block placement
-		if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())) {
-			if(SiegeWarSettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat)) {
-				event.setCancelled(true);
-				event.setBuild(false);
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_war_siege_zone_block_placement_forbidden"));
-				return true;
-			}
+		} catch (TownyException e) {
+			event.setCancelled(true);
+//			event.setCancelMessage(e.getMessage()); TODO: replace with TownyBuildEvent
 		}
-
-		//Block placement unaffected
 		return false;
-
+		
 	}
 
 	/**
@@ -113,9 +111,11 @@ public class SiegeWarPlaceBlockController {
 			if (!resident.hasNation())
 				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
 
+			Town town = null;
 			Nation nation = null;
 			try {
-				nation = resident.getTown().getNation();
+				town = resident.getTown();
+				nation = town.getNation();
 			} catch (NotRegisteredException ignored) {
 			}
 
@@ -149,7 +149,7 @@ public class SiegeWarPlaceBlockController {
 
 			} else {
 				// Nation starting a siege.
-				return evaluatePlaceColouredBannerInWilderness(block, player, event, plugin);
+				return evaluatePlaceColouredBannerInWilderness(block, player, resident, town, nation, event, plugin);
 			}
 
 			
@@ -183,14 +183,11 @@ public class SiegeWarPlaceBlockController {
 	 * Evaluates placing a coloured banner in the wilderness.
 	 * Determines if the event will be considered as an attack or invade request.
 	 */
-	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event, Towny plugin) {
+	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, Resident resident, Town attackingTown, Nation nation, BlockPlaceEvent event, Towny plugin) {
 		try {
 			// Fail early if this is not a siege-enabled world.
 			if(!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(block.getWorld()))
 				throw new TownyException(Translation.of("msg_err_siege_war_not_enabled_in_world"));
-			
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-	
 
 			
 			List<TownBlock> nearbyCardinalTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
@@ -232,15 +229,21 @@ public class SiegeWarPlaceBlockController {
 
 			//If the town has a siege where the player's nation is already attacking, 
 			//attempt invasion, otherwise attempt attack
-			Nation nationOfResident = resident.getTown().getNation();
-			if(town.hasSiege() && town.getSiege().getAttackingNation() == nationOfResident) {
+			if(town.hasSiege() && town.getSiege().getAttackingNation() == nation) {
 
 				if (!SiegeWarSettings.getWarSiegeInvadeEnabled())
 					return false;
 
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+
+				if(attackingTown == town)
+					throw new TownyException(Translation.of("msg_err_siege_war_cannot_invade_own_town"));
+
+				
 				InvadeTown.processInvadeTownRequest(
 					plugin,
-					player,
+					attackingTown,
 					town,
 					event);
 
@@ -249,6 +252,13 @@ public class SiegeWarPlaceBlockController {
 				if (!SiegeWarSettings.getWarSiegeAttackEnabled())
 					return false;
 
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				if (attackingTown== town)
+	                throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_own_town"));
+
+				
 				if(SiegeWarBlockUtil.isSupportBlockUnstable(block)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_siege_war_banner_support_block_not_stable"));
 					event.setBuild(false);

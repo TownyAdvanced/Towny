@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
@@ -54,11 +53,8 @@ public class AttackTown {
             
             Town townOfAttackingPlayer = attackingResident.getTown();
 
-			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ATTACK.getNode()))
-				throw new TownyException(Translation.of("msg_err_command_disable"));
 
-			if (townOfAttackingPlayer == defendingTown)
-                throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_own_town"));
+
 
 			if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_join_siege"));

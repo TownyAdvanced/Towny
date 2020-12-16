@@ -9,13 +9,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
@@ -36,21 +33,10 @@ public class InvadeTown {
 	 * @param event the place block event
 	 */
     public static void processInvadeTownRequest(Towny plugin,
-                                                Player player,
+                                                Town townOfInvadingResident,
                                                 Town townToBeInvaded,
                                                 BlockPlaceEvent event) {
         try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident resident = universe.getResident(player.getUniqueId());
-            if (resident == null)
-            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
-			Town townOfInvadingResident = resident.getTown();
-
-			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
-				throw new TownyException(Translation.of("msg_err_command_disable"));
-
-			if(townOfInvadingResident == townToBeInvaded)
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_invade_own_town"));
 
 			Siege siege = townToBeInvaded.getSiege();
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
@@ -92,7 +78,7 @@ public class InvadeTown {
         } catch (TownyException x) {
 			event.setBuild(false);
 			event.setCancelled(true);
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
+//            TownyMessaging.sendErrorMsg(player, x.getMessage());
         } catch (Exception e) {
 			event.setBuild(false);
 			event.setCancelled(true);
