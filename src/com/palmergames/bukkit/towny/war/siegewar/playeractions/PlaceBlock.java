@@ -66,9 +66,12 @@ public class PlaceBlock {
 				evaluatePlaceChest(player, block);
 	
 			//Check for forbidden block placement
-			if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() && TownyAPI.getInstance().isWilderness(block) && SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation()))
-				if(SiegeWarSettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat))
+			if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() 
+					&& TownyAPI.getInstance().isWilderness(block) 
+					&& SiegeWarDistanceUtil.isLocationInActiveSiegeZone(block.getLocation())
+					&& SiegeWarSettings.getWarSiegeZoneBlockPlacementRestrictionsMaterials().contains(mat))
 					throw new TownyException(Translation.of("msg_war_siege_zone_block_placement_forbidden"));
+			
 		} catch (TownyException e) {
 			event.setCancelled(true);
 			event.setMessage(e.getMessage());
@@ -116,27 +119,16 @@ public class PlaceBlock {
 				if (!SiegeWarSettings.getWarSiegeAbandonEnabled())
 					return;
 
+				// If player has no permission to abandon,send error
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ABANDON.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
 				// Fail early if the nation has no sieges.
 				if (nation.getSieges().isEmpty())
 					throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
-				// If player has no permission to abandon,send error
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_ABANDON.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-
-				//Find the nearest siege to the player, owned by the nation.
-				Siege nearestSiege = SiegeWarDistanceUtil.findNearestSiegeForNation(block, nation);
-				
-				//If there are no nearby siege zones,then regular block request
-				if(nearestSiege == null)
-					return;
-				
-		        //If the siege is not in progress, send error
-				if (nearestSiege.getStatus() != SiegeStatus.IN_PROGRESS)
-					throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_siege_over"));
-				
 				// Start abandoning the siege.
-				AbandonAttack.attackerAbandon(nearestSiege);
+				AbandonAttack.processAbandonSiegeRequest(block, nation);
 
 			} else {
 				// Nation starting a siege or invading a town.
@@ -167,7 +159,6 @@ public class PlaceBlock {
 				SurrenderTown.defenderSurrender(town.getSiege());
 			}
 		}
-		return;
 	}
 
 	/**
@@ -227,9 +218,8 @@ public class PlaceBlock {
 			
 			if(attackingTown == town)
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_invade_own_town"));
-
 			
-			InvadeTown.processInvadeTownRequest(nation,town);
+			InvadeTown.processInvadeTownRequest(nation, town, siege);
 
 		} else {
 

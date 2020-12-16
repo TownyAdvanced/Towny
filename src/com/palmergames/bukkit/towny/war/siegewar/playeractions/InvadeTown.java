@@ -26,13 +26,14 @@ public class InvadeTown {
 	 *
 	 * @param nationOfInvadingResident the nation who the invading resident belongs to.
 	 * @param townToBeInvaded the town to be invaded
+	 * @param siege the siege of the town.
 	 * @throws TownyException when the invasion wont be allowed.
 	 */
     public static void processInvadeTownRequest(Nation nationOfInvadingResident,
-                                                Town townToBeInvaded) throws TownyException {
-		Siege siege = townToBeInvaded.getSiege();
+                                                Town townToBeInvaded,
+                                                Siege siege) throws TownyException {
 
-		Nation attackerWinner = siege.getAttackingNation();
+    	Nation attackerWinner = siege.getAttackingNation();
 		
 		if (nationOfInvadingResident != attackerWinner)
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_invade_without_victory"));
