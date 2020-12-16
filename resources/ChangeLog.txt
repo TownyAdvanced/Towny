@@ -5566,3 +5566,4 @@ v0.92.0.11:
     - PlotToggleExplosionEvent,
     - PlotToggleFireEvent,
     - PlotToggleMobsEvent. 
+  - Fix jail events firing too earl, courtesy of Kovalskki.
