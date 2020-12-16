@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -314,4 +315,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
+
+	public abstract Collection<TownBlock> getTownBlocks();
 }

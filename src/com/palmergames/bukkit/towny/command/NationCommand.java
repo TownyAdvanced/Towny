@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.comparators.NationComparators;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
@@ -963,6 +964,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		boolean pageSet = false;
 		boolean comparatorSet = false;
 		Comparator<? extends Government> comparator = GovernmentComparators.BY_NUM_RESIDENTS;
+		ComparatorType type = ComparatorType.RESIDENTS;
 		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) {
@@ -981,22 +983,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_BALANCE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_BANK_BALANCE;
+						type = ComparatorType.BALANCE;
 					} else if (split[i].equalsIgnoreCase("towns")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = NationComparators.BY_NUM_TOWNS;
+						type = ComparatorType.TOWNS;
 					} else if (split[i].equalsIgnoreCase("name")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_NAME.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = GovernmentComparators.BY_NAME;						
+						comparator = GovernmentComparators.BY_NAME;
+						type = ComparatorType.NAME;
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNBLOCKS.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						comparator = NationComparators.BY_TOWNBLOCKS_CLAIMED;
+						comparator = GovernmentComparators.BY_TOWNBLOCKS_CLAIMED;
+						type = ComparatorType.TOWNBLOCKS;
 					} else if (split[i].equalsIgnoreCase("online")) {
 						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_ONLINE.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_NUM_ONLINE;
+						type = ComparatorType.ONLINE;
 					} else {
 						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_nation"));
 						return;
@@ -1037,11 +1044,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	    final List<Nation> nations = nationsToSort;
 	    final Comparator<Nation> comp = (Comparator<Nation>) comparator;
+	    final ComparatorType finalType = type;
 	    final int pageNumber = page;
 		try {
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 				nations.sort(comp);
-				sendList(sender, nations, pageNumber, total);
+				sendList(sender, nations, finalType, pageNumber, total);
 			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
@@ -1049,10 +1057,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 	
-	public void sendList(CommandSender sender, List<Nation> nations, int page, int total) {
+	public void sendList(CommandSender sender, List<Nation> nations, ComparatorType type, int page, int total) {
 		
 		if (Towny.isSpigot  && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotNationList(sender, nations, page, total);
+			TownySpigotMessaging.sendSpigotNationList(sender, nations, type, page, total);
 			return;
 		}
 
@@ -1061,13 +1069,28 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nations.get(i);
-			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+			String slug = null;
+			switch (type) {
+			case BALANCE:
+				slug = nation.getAccount().getHoldingFormattedBalance();
+				break;
+			case ONLINE:
+				slug = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size() + "";
+				break;
+			case TOWNS:
+				slug = nation.getTowns().size() + "";
+				break;
+			default:
+				slug = nation.getResidents().size() + "";
+				break;			
+			}
+			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
 			nationsordered.add(output);
 		}
 		sender.sendMessage(
 				ChatTools.formatList(
 						Translation.of("nation_plu"),
-						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_towns"),
+						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + type.getName(),
 						nationsordered,
 						Translation.of("LIST_PAGE", page, total)
 				));		

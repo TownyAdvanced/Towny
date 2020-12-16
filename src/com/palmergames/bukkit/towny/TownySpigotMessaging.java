@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -116,7 +117,7 @@ public class TownySpigotMessaging {
 			.create());
 	}
 	
-	public static void sendSpigotTownList(CommandSender sender, List<Town> towns, int page, int total) {
+	public static void sendSpigotTownList(CommandSender sender, List<Town> towns, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, towns.size());
 
 		BaseComponent[] townsformatted;
@@ -136,9 +137,20 @@ public class TownySpigotMessaging {
 			if (!TownySettings.isTownListRandom()) {
 				TextComponent nextComponent = new TextComponent(" - ");
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
-				TextComponent resCount = new TextComponent(town.getResidents().size() + "");
-				resCount.setColor(net.md_5.bungee.api.ChatColor.AQUA);
-				nextComponent.addExtra(resCount);
+				TextComponent count = null;
+				switch (compType) {
+				case BALANCE:
+					count = new TextComponent(town.getAccount().getHoldingFormattedBalance());
+					break;
+				case TOWNBLOCKS:
+					count = new TextComponent(town.getTownBlocks().size() + "");
+					break;
+				default:
+					count = new TextComponent(town.getResidents().size() + "");
+					break;
+				}
+				count.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+				nextComponent.addExtra(count);
 				townName.addExtra(nextComponent);
 			}
 			
@@ -165,6 +177,7 @@ public class TownySpigotMessaging {
 		}
 		
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
+		sender.sendMessage(Colors.Blue + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + compType.getName()));
 		for (BaseComponent baseComponent : townsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}
@@ -223,7 +236,7 @@ public class TownySpigotMessaging {
 		return pageFooter;
 	}
 	
-	public static void sendSpigotNationList(CommandSender sender, List<Nation> nations, int page, int total) {
+	public static void sendSpigotNationList(CommandSender sender, List<Nation> nations, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, nations.size());
 
 		BaseComponent[] nationsformatted;
@@ -243,7 +256,24 @@ public class TownySpigotMessaging {
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
 				TextComponent resCount = new TextComponent(nation.getResidents().size() + "");
 				resCount.setColor(net.md_5.bungee.api.ChatColor.AQUA);
-				TextComponent townCount = new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")");
+				
+				String slug = null;
+				switch (compType) {
+				case BALANCE:
+					slug = nation.getAccount().getHoldingFormattedBalance();
+					break;
+				case TOWNBLOCKS:
+					slug = nation.getTownBlocks().size() + "";
+					break;
+				case TOWNS:
+					slug = nation.getTowns().size() + "";
+					break;
+				default:
+					slug = nation.getResidents().size() + "";
+					break;
+				}
+				
+				TextComponent townCount = new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")");
 				nextComponent.addExtra(resCount);
 				nextComponent.addExtra(townCount);
 				nationName.addExtra(nextComponent);
@@ -272,6 +302,9 @@ public class TownySpigotMessaging {
 		}
 
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
+		sender.sendMessage(Colors.Blue + Translation.of("nation_name") 
+						+ Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") 
+						+ Colors.Gray + " - " + Colors.LightBlue + compType.getName());
 		for (BaseComponent baseComponent : nationsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}

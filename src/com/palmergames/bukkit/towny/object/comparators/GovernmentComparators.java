@@ -21,6 +21,7 @@ public class GovernmentComparators {
 		}
 	};
 	public static final Comparator<Government> BY_NUM_ONLINE = (g1, g2) -> TownyAPI.getInstance().getOnlinePlayers(g2).size() - TownyAPI.getInstance().getOnlinePlayers(g1).size();
+	public static final Comparator<Government> BY_TOWNBLOCKS_CLAIMED = (g1, g2) -> Double.compare(g2.getTownBlocks().size(), g1.getTownBlocks().size());
 	public static final Comparator<Government> BY_OPEN = (t1, t2) -> {
 
 		// Both are open, fallback to population comparison.
