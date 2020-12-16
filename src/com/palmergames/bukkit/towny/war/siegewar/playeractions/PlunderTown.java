@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -12,11 +13,9 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * This class is responsible for processing requests to plunder towns
@@ -32,62 +31,45 @@ public class PlunderTown {
 	 *
 	 * @param player the player who placed the plunder chest
 	 * @param townToBePlundered the town to be plundered
-	 * @param event the place block event
+	 * @throws TownyException when a plunder is not allowed.
 	 */
     public static void processPlunderTownRequest(Player player,
-												 Town townToBePlundered,
-												 BlockPlaceEvent event) {
-        try {
-			if(!TownySettings.isUsingEconomy())
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_economy"));
+												 Town townToBePlundered) throws TownyException {
 
-			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isNeutral())
-				throw new TownyException(Translation.of("msg_war_siege_err_cannot_plunder_peaceful_town"));
-			
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident resident = universe.getResident(player.getUniqueId());
-            if (resident == null)
-            	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
-            
-			if(!resident.hasTown())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
+		if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && townToBePlundered.isNeutral())
+			throw new TownyException(Translation.of("msg_war_siege_err_cannot_plunder_peaceful_town"));
+		
+		TownyUniverse universe = TownyUniverse.getInstance();
+		Resident resident = universe.getResident(player.getUniqueId());
+        if (resident == null)
+        	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+        
+		if(!resident.hasTown())
+			throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_town_member"));
 
-			Town townOfPlunderingResident = resident.getTown();
-			if(!townOfPlunderingResident.hasNation())
-				throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
-			
-			if (!universe.getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_PLUNDER.getNode()))
-                throw new TownyException(Translation.of("msg_err_command_disable"));
+		Town townOfPlunderingResident = resident.getTown();
+		if(!townOfPlunderingResident.hasNation())
+			throw new TownyException(Translation.of("msg_err_siege_war_action_not_a_nation_member"));
 
-			if(townOfPlunderingResident == townToBePlundered)
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_own_town"));
 
-			Siege siege = townToBePlundered.getSiege();
-			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_victory"));
-			
-			if(townOfPlunderingResident.getNation() != siege.getAttackingNation())
-				throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_victory"));
-			
-            if(siege.isTownPlundered())
-                throw new TownyException(String.format(Translation.of("msg_err_siege_war_town_already_plundered"), townToBePlundered.getName()));
+		if(townOfPlunderingResident == townToBePlundered)
+			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_own_town"));
 
-            plunderTown(siege, townToBePlundered, siege.getAttackingNation(), event);
-            
-        } catch (TownyException e) {
-            event.setBuild(false);
-        	event.setCancelled(true);
-            TownyMessaging.sendErrorMsg(player, e.getMessage());
-        } catch (Exception e) {
-			event.setBuild(false);
-			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg("Problem plundering town. Contact server support team.");
-			System.out.println("Unexpected problem plundering town");
-			e.printStackTrace();
-		}
+		Siege siege = townToBePlundered.getSiege();
+		if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
+			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_victory"));
+		
+		if(townOfPlunderingResident.getNation() != siege.getAttackingNation())
+			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_victory"));
+		
+        if(siege.isTownPlundered())
+            throw new TownyException(String.format(Translation.of("msg_err_siege_war_town_already_plundered"), townToBePlundered.getName()));
+
+        plunderTown(siege, townToBePlundered, siege.getAttackingNation());
+
     }
 
-    private static void plunderTown(Siege siege, Town town, Nation nation, BlockPlaceEvent event) throws Exception {
+    private static void plunderTown(Siege siege, Town town, Nation nation) {
 		boolean townNewlyBankrupted = false;
 		boolean townDestroyed = false;
 
@@ -96,38 +78,42 @@ public class PlunderTown {
 				* town.getTownBlocks().size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(town);
 		
-		//Redistribute money
-		if(town.getAccount().canPayFromHoldings(plunderAmount)) {
-			//Town can afford plunder			
-			town.getAccount().payTo(plunderAmount, nation, "Plunder");
-		} else {
-			//Town cannot afford plunder
-			
-			if (TownySettings.isTownBankruptcyEnabled()) {
-				// If able, they will go into bankrupcty.
-
-				// Set the Town's debtcap fresh.
-				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-
-				// Mark them as newly bankrupt for message later on.
-				townNewlyBankrupted = true;
-
-				// This will drop their actualPlunder amount to what the town's debt cap will allow. 
-				// Enabling a town to go only so far into debt to pay the plunder cost.
-				if (town.getAccount().getHoldingBalance() - plunderAmount < town.getAccount().getDebtCap() * -1)
-					plunderAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
-					
-				// Charge the town (using .withdraw() which will allow for going into bankruptcy.)
-				town.getAccount().withdraw(plunderAmount, "Plunder by " + nation.getName());
-				// And deposit it into the nation.
-				nation.getAccount().deposit(plunderAmount, "Plunder of " + town.getName());
-				
-			} else {
-				// Not able to go bankrupt, they are destroyed, pay what they can.
-				plunderAmount = town.getAccount().getHoldingBalance();
+		try {
+			//Redistribute money
+			if(town.getAccount().canPayFromHoldings(plunderAmount)) {
+				//Town can afford plunder			
 				town.getAccount().payTo(plunderAmount, nation, "Plunder");
-				townDestroyed = true;
+			} else {
+				//Town cannot afford plunder
+				
+				if (TownySettings.isTownBankruptcyEnabled()) {
+					// If able, they will go into bankrupcty.
+
+					// Set the Town's debtcap fresh.
+					town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+
+					// Mark them as newly bankrupt for message later on.
+					townNewlyBankrupted = true;
+
+					// This will drop their actualPlunder amount to what the town's debt cap will allow. 
+					// Enabling a town to go only so far into debt to pay the plunder cost.
+					if (town.getAccount().getHoldingBalance() - plunderAmount < town.getAccount().getDebtCap() * -1)
+						plunderAmount = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
+						
+					// Charge the town (using .withdraw() which will allow for going into bankruptcy.)
+					town.getAccount().withdraw(plunderAmount, "Plunder by " + nation.getName());
+					// And deposit it into the nation.
+					nation.getAccount().deposit(plunderAmount, "Plunder of " + town.getName());
+					
+				} else {
+					// Not able to go bankrupt, they are destroyed, pay what they can.
+					plunderAmount = town.getAccount().getHoldingBalance();
+					town.getAccount().payTo(plunderAmount, nation, "Plunder");
+					townDestroyed = true;
+				}
 			}
+		} catch (EconomyException e) {
+			e.printStackTrace();
 		}
 
 		//Set siege plundered flag

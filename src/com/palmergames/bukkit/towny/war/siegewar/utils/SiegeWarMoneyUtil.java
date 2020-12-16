@@ -90,7 +90,8 @@ public class SiegeWarMoneyUtil {
 	/**
 	 * If the player is due a nation refund, pays the refund to the player
 	 *
-	 * @param player
+	 * @param player claiming the nation refund.
+	 * @throws Exception when payment cannot be made for various reasons.
 	 */
 	public static void claimNationRefund(Player player) throws Exception {
 		if(!(SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarSiegeRefundInitialNationCostOnDelete())) {

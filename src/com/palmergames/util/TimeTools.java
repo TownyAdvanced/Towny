@@ -79,6 +79,7 @@ public class TimeTools {
 	 * 
 	 * Rounds half up
 	 *
+	 * @param timeSeconds number of seconds to convert.
 	 * @return ticks
 	 */
 	public static int convertToShortTicks(double timeSeconds) {

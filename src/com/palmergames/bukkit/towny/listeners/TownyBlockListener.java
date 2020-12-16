@@ -8,9 +8,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -70,17 +67,6 @@ public class TownyBlockListener implements Listener {
 		 */
 		if (block.getType() == Material.FIRE && block.getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
 			return;
-
-		/*
-		 * TODO: Get this using the Action event.
-		 */
-		//Siege War
-		if (SiegeWarSettings.getWarSiegeEnabled()) {
-			boolean skipPermChecks = SiegeWarPlaceBlockController.evaluateSiegeWarPlaceBlockRequest(event.getPlayer(), block,event, plugin);
-			if(skipPermChecks) {
-				return;
-			}
-		}
 
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {

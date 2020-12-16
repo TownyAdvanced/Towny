@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -69,18 +70,20 @@ public class SiegeWarDistanceUtil {
 		return blockElevation - averageTownElevation;
 	}
 
+
 	/**
-	 * This method finds the nearest siege to the given block, 
+	 * This method finds the nearest siege to the given block, controlled by the given nation. 
 	 *
 	 * @param block the given block
+	 * @param nation the given nation
 	 * @return a SiegeZoneDistance object containing both the siege and distance. Null if not found.
 	 */
 	@Nullable
-	public static Siege findNearestSiege(Block block) {
-		//Find the nearest siege zone to the given block within the given radius.
+	public static Siege findNearestSiegeForNation(Block block, Nation nation) {
+		//Find the nearest siege zone to the given block within the given radius belonging to the given nation.
 		Siege nearestSiege = null;
 		double distanceToNearestSiegeZone = -1;
-		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+		for(Siege siege: nation.getSieges()) {
 
 			if(!block.getLocation().getWorld().getName().equalsIgnoreCase(siege.getFlagLocation().getWorld().getName())) {
 				continue;
