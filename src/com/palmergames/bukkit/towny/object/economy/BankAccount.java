@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -8,6 +9,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 /**
@@ -255,14 +257,22 @@ public class BankAccount extends Account {
 		}
 	}
 	
+	/**
+	 * Returns a cached balance of a town or nation bank account,
+	 * the value of which can be brand new or up to 10 minutes old
+	 * based on whether the cache has been checked recently.
+	 * 
+	 * @return a cached balance of a town or nation bank account.
+	 */
 	public double getCachedBalance() {
-		try {
-			if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {
-				System.out.println("Setting new cache");
-				cachedBalance.setBalance(getHoldingBalance());				
-			}
-		} catch (EconomyException e) {
-			e.printStackTrace();
+		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {
+			Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
+				try {
+					cachedBalance.setBalance(getHoldingBalance());
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
+			});				
 		}
 		return cachedBalance.getBalance();
 	}
