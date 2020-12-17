@@ -1181,6 +1181,10 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_USE_ASYNC);
 	}
+	
+	public static long getCachedBankTimeout() {
+		return getSeconds(ConfigNodes.ECO_BANK_CACHE_TIMEOUT) * 1000;
+	}
 
 	public static boolean isRemovingVillagerBabiesWorld() {
 
