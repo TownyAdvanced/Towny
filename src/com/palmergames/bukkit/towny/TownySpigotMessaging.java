@@ -254,8 +254,6 @@ public class TownySpigotMessaging {
 			if (!TownySettings.isTownListRandom()) {
 				TextComponent nextComponent = new TextComponent(" - ");
 				nextComponent.setColor(net.md_5.bungee.api.ChatColor.DARK_GRAY);
-				TextComponent resCount = new TextComponent(nation.getResidents().size() + "");
-				resCount.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 				
 				String slug = null;
 				switch (compType) {
@@ -273,8 +271,7 @@ public class TownySpigotMessaging {
 					break;
 				}
 				
-				TextComponent townCount = new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")");
-				nextComponent.addExtra(resCount);
+				TextComponent townCount = new TextComponent(Colors.LightBlue + "(" + slug + ")");
 				nextComponent.addExtra(townCount);
 				nationName.addExtra(nextComponent);
 			}
@@ -302,9 +299,7 @@ public class TownySpigotMessaging {
 		}
 
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("nation_name") 
-						+ Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") 
-						+ Colors.Gray + " - " + Colors.LightBlue + compType.getName());
+		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + compType.getName());
 		for (BaseComponent baseComponent : nationsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}

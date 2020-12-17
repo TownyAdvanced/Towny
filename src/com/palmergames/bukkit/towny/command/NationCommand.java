@@ -1004,6 +1004,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						comparator = GovernmentComparators.BY_NUM_ONLINE;
 						type = ComparatorType.ONLINE;
+					} else if (split[i].equalsIgnoreCase("open")) {
+						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_OPEN.getNode()))
+							throw new TownyException(Translation.of("msg_err_command_disable"));
+						comparator = GovernmentComparators.BY_OPEN;
+						type = ComparatorType.OPEN;
 					} else {
 						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_nation"));
 						return;
@@ -1084,13 +1089,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				slug = nation.getResidents().size() + "";
 				break;			
 			}
-			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
+			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
 			nationsordered.add(output);
 		}
 		sender.sendMessage(
 				ChatTools.formatList(
 						Translation.of("nation_plu"),
-						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + type.getName(),
+						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + type.getName(),
 						nationsordered,
 						Translation.of("LIST_PAGE", page, total)
 				));		
