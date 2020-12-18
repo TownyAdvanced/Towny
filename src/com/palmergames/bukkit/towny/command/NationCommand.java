@@ -124,6 +124,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"mapcolor"
 	);
 	
+	private static final List<String> nationListTabCompletes = Arrays.asList(
+		"residents",
+		"balance",
+		"name",		
+		"online",
+		"open",
+		"townblocks",
+		"towns"
+	);
+	
 	static final List<String> nationToggleTabCompletes = Arrays.asList(
 		"neutral",
 		"peaceful",
@@ -280,6 +290,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return nationSetTabComplete(getResidentOrThrow(player.getUniqueId()).getTown().getNation(), args);
 					} catch (NotRegisteredException e) {
 						return Collections.emptyList();
+					}
+				case "list":
+					switch (args.length) {
+						case 2:
+							return Collections.singletonList("by");
+						case 3:
+							return NameUtil.filterByStart(nationListTabCompletes, args[2]);
 					}
 				default:
 					if (args.length == 1) {
@@ -978,7 +995,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(split[i])))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
-					if (!ComparatorType.NATION_TYPES.contains(split[i].toUpperCase()))
+					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translation.of("msg_error_invalid_comparator_nation"));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase());
@@ -1064,7 +1081,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		sender.sendMessage(
 				ChatTools.formatList(
 						Translation.of("nation_plu"),
-						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + type.getName(),
+						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName()),
 						nationsordered,
 						Translation.of("LIST_PAGE", page, total)
 				));		

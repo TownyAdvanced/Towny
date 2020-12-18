@@ -177,7 +177,7 @@ public class TownySpigotMessaging {
 		}
 		
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + compType.getName()));
+		sender.sendMessage(Colors.Blue + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName())));
 		for (BaseComponent baseComponent : townsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}
@@ -299,7 +299,7 @@ public class TownySpigotMessaging {
 		}
 
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + compType.getName());
+		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName()));
 		for (BaseComponent baseComponent : nationsformatted) {
 			sender.spigot().sendMessage(baseComponent);
 		}

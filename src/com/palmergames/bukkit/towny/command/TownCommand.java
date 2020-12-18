@@ -156,7 +156,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"surname",
 		"taxpercentcap"
 	);
-
+	private static final List<String> townListTabCompletes = Arrays.asList(
+		"residents",
+		"balance",
+		"name",		
+		"online",
+		"open",
+		"townblocks"
+	);
 	static final List<String> townToggleTabCompletes = Arrays.asList(
 		"explosion",
 		"fire",
@@ -367,6 +374,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							break;
 						case 4:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
+					}
+				case "list":
+					switch (args.length) {
+						case 2:
+							return Collections.singletonList("by");
+						case 3:
+							return NameUtil.filterByStart(townListTabCompletes, args[2]);
 					}
 				default:
 					if (args.length == 1)
@@ -1143,7 +1157,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(split[i])))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
-					if (!ComparatorType.TOWN_TYPES.contains(split[i].toUpperCase()))
+					if (!townListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translation.of("msg_error_invalid_comparator_town"));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase());
@@ -1240,7 +1254,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		String[] messages = ChatTools.formatList(Translation.of("town_plu"),
 			Colors.Blue + Translation.of("town_name") +
-				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + type.getName()),
+				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName())),
 			townsformatted, Translation.of("LIST_PAGE", page, total)
 		);
 		
