@@ -175,10 +175,7 @@ public class TownyFormatter {
 		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
-		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on"): Translation.of("status_off")) +
-			Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) +
-			Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) +
-			Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
+		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
 		// }
 
 		// Bank: 534 coins
