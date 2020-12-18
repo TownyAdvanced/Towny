@@ -125,7 +125,8 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(Resident resident, String msg) {
-		sendMsg(resident.getPlayer(), msg);
+		if (BukkitTools.isOnline(resident.getName()))
+			sendMsg(resident.getPlayer(), msg);
 	}
 
 	// todo: these two can probably be consolidated

@@ -11,7 +11,7 @@ public enum PermissionNodes {
 	/*
 	 * Nation command permissions
 	 */
-	TOWNY_COMMAND_NATION_LIST("towny.command.nation.list"),
+	TOWNY_COMMAND_NATION_LIST("towny.command.nation.list.*"),
 	    TOWNY_COMMAND_NATION_LIST_RESIDENTS("towny.command.nation.list.residents"),
 	    TOWNY_COMMAND_NATION_LIST_TOWNS("towny.command.nation.list.towns"),
 	    TOWNY_COMMAND_NATION_LIST_OPEN("towny.command.nation.list.open"),
@@ -91,7 +91,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN("towny.command.town.*"),
 		TOWNY_COMMAND_TOWN_OTHERTOWN("towny.command.town.othertown"),
 		TOWNY_COMMAND_TOWN_HERE("towny.command.town.here"),
-		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list"),
+		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list.*"),
 		    TOWNY_COMMAND_TOWN_LIST_RESIDENTS("towny.command.town.list.residents"),
 		    TOWNY_COMMAND_TOWN_LIST_OPEN("towny.command.town.list.open"),
 		    TOWNY_COMMAND_TOWN_LIST_BALANCE("towny.command.town.list.balance"),

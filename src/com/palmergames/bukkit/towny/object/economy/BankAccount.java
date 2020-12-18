@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -8,6 +9,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 /**
@@ -17,9 +19,11 @@ import org.bukkit.World;
  */
 public class BankAccount extends Account {
 	
+	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private double balanceCap;
 	private final Account debtAccount;
 	private double debtCap;
+	private CachedBalance cachedBalance = null; 
 
 	/**
 	 * Because of limitations in Economy API's, debt isn't
@@ -54,6 +58,9 @@ public class BankAccount extends Account {
 		else 
 			this.debtAccount = null;
 		this.debtCap = 0;
+		try {
+			this.cachedBalance = new CachedBalance(getHoldingBalance());
+		} catch (EconomyException e) {}
 	}
 
 	/**
@@ -226,5 +233,55 @@ public class BankAccount extends Account {
 		if (debtAccount != null)
 			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
+	}
+
+	private class CachedBalance {
+		private double balance;
+		private long time;
+		
+		private CachedBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+		
+		double getBalance() {
+			return balance;
+		}
+		private long getTime() {
+			return time;
+		}
+		
+		void setBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+	}
+	
+	/**
+	 * Returns a cached balance of a town or nation bank account,
+	 * the value of which can be brand new or up to 10 minutes old 
+	 * (time configurable in the config,) based on whether the 
+	 * cache has been checked recently.
+	 * 
+	 * @return a cached balance of a town or nation bank account.
+	 */
+	public double getCachedBalance() {
+		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {			
+			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, 
+				try {                            // luckily we have a config option for this such case.
+					cachedBalance.setBalance(getHoldingBalance());
+				} catch (EconomyException e1) {
+					e1.printStackTrace();
+				}
+			else 
+				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
+					try {
+						cachedBalance.setBalance(getHoldingBalance());
+					} catch (EconomyException e) {
+						e.printStackTrace();
+					}
+				});				
+		}
+		return cachedBalance.getBalance();
 	}
 }

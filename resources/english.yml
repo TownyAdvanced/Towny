@@ -1,5 +1,5 @@
 name: Towny
-version: 0.93
+version: 0.94
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -885,8 +885,8 @@ msg_bankrupt_nation2: '&b%s couldn''t afford to remain a nation.'
 status_embassy_town: '&2Embassies in'
 
 # Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try resident, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try resident, balance, name, townblocks, online, open.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try residents, balance, towns, name, townblocks, online.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try residents, balance, name, townblocks, online, open.'
 msg_err_merging_for_kings_only: '&bMerging can only be done by a King.'
 msg_err_king_of_that_nation_is_not_online: '&bThe King of %s, %s, is not online. Merge failed.'
 nation1_has_merged_with_nation2: '&6The nation %s has agreed to merge together with the prevailing nation of %s.'
@@ -1216,5 +1216,13 @@ msg_reclaim_available: '&aReclaim available.'
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
 
+#Added in 0.94
+msg_comptype_residents: 'Number of Residents'
+msg_comptype_townblocks: 'Number of Claimed Townblocks'
+msg_comptype_balance: 'Bank Balance'
+msg_comptype_online: 'Online Players'
+msg_comptype_towns: 'Number of Towns'
+msg_comptype_name: 'Alphabetical Order'
+msg_comptype_open: 'Open Status'
 msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
 npc_created: '&2Created: &a%s'

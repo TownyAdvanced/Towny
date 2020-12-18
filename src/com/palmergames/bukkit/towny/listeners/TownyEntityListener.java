@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -179,16 +180,24 @@ public class TownyEntityListener implements Listener {
 					return;
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
+				Resident attackerResident = universe.getResident(attacker.getUniqueId());
+				Resident defenderResident = universe.getResident(defender.getUniqueId());
+				// Unlikely to ever happen unless one of them is an NPC
+				if (attackerResident == null || defenderResident == null) {
+					return;
+				}
+				
+				
 				TownyWorld world = universe.getDataSource().getWorld(attacker.getLocation().getWorld().toString());
 				//Cancel because one of two players has no town and should not be interfering during war.
-				if (!universe.getDataSource().getResident(attacker.getName()).hasTown() || !universe.getDataSource().getResident(defender.getName()).hasTown()){
+				if (!attackerResident.hasTown() || !defenderResident.hasTown()){
 					TownyMessaging.sendMessage(attacker, Translation.of("msg_war_a_player_has_no_town"));
 					event.setCancelled(true);
 					return;
 				}
 				try {
-					Town attackerTown = universe.getDataSource().getResident(attacker.getName()).getTown();
-					Town defenderTown = universe.getDataSource().getResident(defender.getName()).getTown();
+					Town attackerTown = attackerResident.getTown();
+					Town defenderTown = defenderResident.getTown();
 	
 					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {

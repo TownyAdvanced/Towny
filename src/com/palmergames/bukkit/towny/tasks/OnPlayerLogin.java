@@ -56,56 +56,53 @@ public class OnPlayerLogin implements Runnable {
 			GatherResidentUUIDTask.markOfflineMode();
 
 		
-		if (!universe.getResidentUUIDNameMap().containsKey(player.getUniqueId())) {
+		if (!universe.hasResident(player.getUniqueId())) {
 			/*
 			 * No record of this resident's UUID.
 			 */
-			try {
-				// If the universe has a resident and the resident has no UUID, log them in with their current name.
-				if (universe.getDataSource().hasResident(player.getName()) && !universe.getDataSource().getResident(player.getName()).hasUUID()) {
-					loginExistingResident(universe.getDataSource().getResident(player.getName()));
+			resident = universe.getResident(player.getName());
+
+			// If the universe has a resident and the resident has no UUID, log them in with their current name.
+			if (resident != null && !resident.hasUUID()) {
+				loginExistingResident(resident);
+				
+			// Else we're dealing with a new resident, because there's no resident by that UUID or resident by that Name without a UUID.
+			} else {
+
+				/*
+				 * Make a brand new Resident.
+				 */
+				try {
+					universe.getDataSource().newResident(player.getName(), player.getUniqueId());
+					TownySettings.incrementUUIDCount();
 					
-				// Else we're dealing with a new resident, because there's no resident by that UUID or resident by that Name without a UUID.
-				} else {
-
-					/*
-					 * Make a brand new Resident.
-					 */
-					try {
-						universe.getDataSource().newResident(player.getName());
-						resident = universe.getDataSource().getResident(player.getName());
-						
-						if (TownySettings.isShowingRegistrationMessage())				
-							TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
-						resident.setRegistered(System.currentTimeMillis());
-						resident.setLastOnline(System.currentTimeMillis());
-						resident.setUUID(player.getUniqueId());
-						TownySettings.incrementUUIDCount();
-						if (!TownySettings.getDefaultTownName().equals("")) {
-							Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
-							if (town != null) {
-								try {
-									resident.setTown(town);
-									universe.getDataSource().saveTown(town);
-								} catch (AlreadyRegisteredException ignore) {}
-							}
+					resident = universe.getResident(player.getUniqueId());
+					
+					if (TownySettings.isShowingRegistrationMessage())				
+						TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
+					resident.setRegistered(System.currentTimeMillis());
+					resident.setLastOnline(System.currentTimeMillis());
+					if (!TownySettings.getDefaultTownName().equals("")) {
+						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
+						if (town != null) {
+							try {
+								resident.setTown(town);
+								universe.getDataSource().saveTown(town);
+							} catch (AlreadyRegisteredException ignore) {}
 						}
-						
-						universe.getDataSource().saveResident(resident);
-						
-					} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
+					}
+					
+					universe.getDataSource().saveResident(resident);
+					
+				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
-				}
-			} catch (NotRegisteredException ignored) {}
-			
+			}
+
 		} else {
 			/*
 			 * We do have record of this UUID being used before, log in the resident after checking for a name change.
 			 */
-			String oldname = universe.getResidentUUIDNameMap().get(player.getUniqueId());
-			try {
-				resident = universe.getDataSource().getResident(oldname);
-			} catch (NotRegisteredException ignored) {}
+			resident = universe.getResident(player.getUniqueId());
 			
 			// Name change test.
 			if (!resident.getName().equals(player.getName())) {
@@ -120,11 +117,8 @@ public class OnPlayerLogin implements Runnable {
 			/*
 			 * This resident is known so fetch the data and update it.
 			 */
-			try {
-				resident = universe.getDataSource().getResident(player.getName());
-				loginExistingResident(resident);
-				
-			} catch (NotRegisteredException ignored) {}
+			resident = universe.getResident(player.getUniqueId());
+			loginExistingResident(resident);
 		}
 
 		if (resident != null) {
@@ -181,6 +175,11 @@ public class OnPlayerLogin implements Runnable {
 		}
 		if (!resident.hasUUID()) {
 			resident.setUUID(player.getUniqueId());
+			try {
+				TownyUniverse.getInstance().registerResidentUUID(resident);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
 			TownySettings.incrementUUIDCount();
 		}
 		universe.getDataSource().saveResident(resident);

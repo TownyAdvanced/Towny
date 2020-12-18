@@ -151,7 +151,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
-		TownyMessaging.sendDebugMsg("    Residents: " + universe.getDataSource().getResidents().size());
+		TownyMessaging.sendDebugMsg("    Residents: " + universe.getNumResidents());
 		TownyMessaging.sendDebugMsg("    Towns: " + universe.getDataSource().getTowns().size());
 		TownyMessaging.sendDebugMsg("    Nations: " + universe.getDataSource().getNations().size());
 		for (TownyWorld world : universe.getDataSource().getWorlds())
@@ -324,7 +324,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * still exists. We are running in an Async thread so MUST
 				 * verify all objects.
 				 */
-				if (universe.getDataSource().hasResident(resident.getName())) {
+				if (universe.hasResident(resident.getName())) {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
@@ -394,7 +394,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					 * still exists. We are running in an Async thread so MUST
 					 * verify all objects.
 					 */
-					if (universe.getDataSource().hasResident(resident.getName())) {
+					if (universe.hasResident(resident.getName())) {
 						if (resident.hasTown() && resident.getTown() == townBlock.getTown())
 							if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 								continue;

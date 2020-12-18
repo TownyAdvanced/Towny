@@ -662,13 +662,9 @@ public class Towny extends JavaPlugin {
 		if (player == null)
 			return;
 
-		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
+		if (resident != null)
 			resident.setModes(modes, notify);
-
-		} catch (NotRegisteredException e) {
-			// Resident doesn't exist
-		}
 	}
 
 	/**
@@ -678,14 +674,9 @@ public class Towny extends JavaPlugin {
 	 */
 	public void removePlayerMode(Player player) {
 
-		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
+		if (resident != null)
 			resident.clearModes();
-
-		} catch (NotRegisteredException e) {
-			// Resident doesn't exist
-		}
-
 	}
 
 	/**
@@ -701,14 +692,8 @@ public class Towny extends JavaPlugin {
 
 	public List<String> getPlayerMode(String name) {
 
-		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
-			return resident.getModes();
-
-		} catch (NotRegisteredException e) {
-			// Resident doesn't exist
-			return null;
-		}
+		Resident resident = TownyUniverse.getInstance().getResident(name);
+		return resident != null ? resident.getModes() : null;
 	}
 
 	/**
@@ -724,15 +709,9 @@ public class Towny extends JavaPlugin {
 	}
 
 	public boolean hasPlayerMode(String name, String mode) {
-
-		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
-			return resident.hasMode(mode);
-
-		} catch (NotRegisteredException e) {
-			// Resident doesn't exist
-			return false;
-		}
+		
+		Resident resident = TownyUniverse.getInstance().getResident(name);
+		return resident != null && resident.hasMode(mode);
 	}
 
 	public String getConfigPath() {

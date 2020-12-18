@@ -1181,6 +1181,10 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_USE_ASYNC);
 	}
+	
+	public static long getCachedBankTimeout() {
+		return getSeconds(ConfigNodes.ECO_BANK_CACHE_TIMEOUT) * 1000;
+	}
 
 	public static boolean isRemovingVillagerBabiesWorld() {
 
@@ -1291,11 +1295,27 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_LIMIT);
 	}
 
-	public static int getMaxPurchedBlocks(Town town) {
+	public static int getMaxPurchasedBlocks(Town town) {
 
 		if (isBonusBlocksPerTownLevel())
 			return getMaxBonusBlocks(town);
-		else			
+		else
+			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+	}
+	
+	/**
+	 * @deprecated use {@link #getMaxPurchasedBlocks(Town town)}
+	 * @param town Town to get the maximum number of blocks they can buy.
+	 * @return {@link #getMaxPurchasedBlocks(Town)}
+	 */
+	@Deprecated
+	public static int getMaxPurchedBlocks(Town town) {
+		
+		return getMaxPurchasedBlocks(town);
+	}
+	
+	public static int getMaxPurchasedBlocksNode() {
+		
 			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
 	}
 	
@@ -1306,7 +1326,7 @@ public class TownySettings {
 
 	public static boolean isSellingBonusBlocks(Town town) {
 
-		return getMaxPurchedBlocks(town) != 0;
+		return getMaxPurchasedBlocks(town) != 0;
 	}
 	
 	public static boolean isBonusBlocksPerTownLevel() { 
@@ -2839,7 +2859,7 @@ public class TownySettings {
 	}
 
 	public static String getUUIDPercent() {
-		double fraction = Double.valueOf(uuidCount) / TownyUniverse.getInstance().getDataSource().getResidents().size();
+		double fraction = (double) uuidCount / TownyUniverse.getInstance().getNumResidents();
 		
 		if (fraction == 1.00)
 			return "100%";

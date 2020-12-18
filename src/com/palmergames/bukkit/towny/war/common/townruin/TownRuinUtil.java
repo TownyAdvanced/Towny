@@ -45,9 +45,9 @@ public class TownRuinUtil {
 	 */
 	public static boolean isPlayersTownRuined(Player player) {
 		try {
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-			if(resident.hasTown() && resident.getTown().isRuined())
+			if(resident != null && resident.hasTown() && resident.getTown().isRuined())
 				return true;
 
 		} catch (NotRegisteredException ignored) {
@@ -115,9 +115,9 @@ public class TownRuinUtil {
 		Town town;
 		try {
 			TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
-			Resident resident = tds.getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-			if (!resident.hasTown())
+			if (resident == null || !resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined

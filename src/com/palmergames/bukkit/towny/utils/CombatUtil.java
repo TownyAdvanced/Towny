@@ -408,14 +408,21 @@ public class CombatUtil {
 	 */
 	public static boolean isAlly(String attackingResident, String defendingResident) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		Resident residentA = townyUniverse.getResident(attackingResident);
+		Resident residentB = townyUniverse.getResident(defendingResident);
+		
+		// Fast-fail
+		if (residentA == null || residentB == null || !residentA.hasTown() || !residentB.hasTown())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(attackingResident);
-			Resident residentB = townyUniverse.getDataSource().getResident(defendingResident);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return true;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return true;
+			
 			if (residentA.getTown().getNation().hasAlly(residentB.getTown().getNation()))
 				return true;
 		} catch (NotRegisteredException ignored) {}
@@ -531,13 +538,17 @@ public class CombatUtil {
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident residentA = townyUniverse.getResident(a);
+		Resident residentB = townyUniverse.getResident(b);
+		
+		// Fast-fail
+		if (residentA == null || residentB == null || !residentA.hasTown() || !residentB.hasTown())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(a);
-			Resident residentB = townyUniverse.getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return false;
 			Nation nationA = residentA.getTown().getNation();
 			Nation nationB = residentB.getTown().getNation();
@@ -576,13 +587,16 @@ public class CombatUtil {
 	 */
 	public static boolean isEnemy(String a, String b) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident residentA = townyUniverse.getResident(a);
+		Resident residentB = townyUniverse.getResident(b);
+		
+		if (residentA == null || residentB == null || !residentA.hasNation() || !residentB.hasNation())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(a);
-			Resident residentB = townyUniverse.getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return false;
 			if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
 				return true;
@@ -618,9 +632,10 @@ public class CombatUtil {
 	 * @return true if it is an enemy plot.
 	 */
 	public static boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
-
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		try {
-			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
+			if (resident != null && resident.hasTown())
+				return CombatUtil.isEnemy(resident.getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
