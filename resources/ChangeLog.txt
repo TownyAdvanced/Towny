@@ -5566,4 +5566,14 @@ v0.92.0.11:
     - PlotToggleExplosionEvent,
     - PlotToggleFireEvent,
     - PlotToggleMobsEvent. 
-  - Fix jail events firing too earl, courtesy of Kovalskki.
+  - Fix jail events firing too early, courtesy of Kovalskki.
+  - API: BankAccount#getCachedBalance().
+    - stores town and nation bank balances for 10 minutes (configurable.)
+  - New Config Option: economy.bank_account_cache_timeout
+    - default: 600s
+    - The time that the town and nation bank accounts' balances are cached for, in seconds.
+    - Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.
+    - Cached balances are used for PlaceholderAPI placeholders, town and nation lists.
+  - /t list and /n list fix-up.
+    - actually displays the thing you used to sort the list now.
+    - uses the new cached bank balances.
