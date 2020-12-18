@@ -161,12 +161,12 @@ public class TownyFormatter {
 		int currentYear = cal.get(Calendar.YEAR);
 		cal.setTimeInMillis(System.currentTimeMillis());
 		int lastOnlineYear = cal.get(Calendar.YEAR);
-		if (!resident.isNPC()) 
+		if (!resident.isNPC()) // Not an NPC: show more detailed info.
 			if (currentYear == lastOnlineYear) 
 				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
 			else 
 				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
-		else 	
+		else // An NPC: show their created date.
 			out.add(Translation.of("npc_created", registeredFormat.format(resident.getRegistered())));
 		
 		// Owner of: 4 plots
@@ -175,7 +175,10 @@ public class TownyFormatter {
 		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString().replace("n", "t"));
 		out.add(Translation.of("status_perm") + resident.getPermissions().getColourString2().replace("n", "t"));
-		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) + Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
+		out.add(Translation.of("status_pvp") + ((resident.getPermissions().pvp) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("explosions") + ((resident.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("firespread") + ((resident.getPermissions().fire) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("mobspawns") + ((resident.getPermissions().mobs) ? Translation.of("status_on"): Translation.of("status_off")));
 		// }
 
 		// Bank: 534 coins
@@ -248,7 +251,6 @@ public class TownyFormatter {
 		out = formatStatusScreens(out);
 		return out;
 	}
-
 
 	/**
 	 * Returns a Chat Formatted List of all town residents who hold a rank.
