@@ -18,9 +18,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -90,10 +90,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> townyTopTabCompletes = Arrays.asList(
 		"residents",
-		"land"
+		"land",
+		"balance"
 	);
 	
-	private static final List<String> townyTopResidentsTabComplete = Arrays.asList(
+	private static final List<String> townyTopTownNationCompletes = Arrays.asList(
 		"all",
 		"town",
 		"nation"
@@ -169,9 +170,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						switch (args[1].toLowerCase()) {
 							case "residents":
-								return NameUtil.filterByStart(townyTopResidentsTabComplete, args[2]);
+								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
 							case "land":
 								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
+							case "balance":
+								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
 						}
 				}
 				break;
@@ -398,6 +401,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
+			towny_top.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
@@ -426,6 +430,36 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
+		else if (args[0].equalsIgnoreCase("balance")) {
+			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
+				List<BankAccount> list = new ArrayList<>();
+				universe.getTowns().forEach(town -> list.add(town.getAccount()));
+				universe.getNationsMap().values().forEach(nation -> list.add(nation.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else if (args[1].equalsIgnoreCase("town")) {
+				List<BankAccount> list = new ArrayList<>();
+				universe.getTowns().forEach(town -> list.add(town.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else if (args[1].equalsIgnoreCase("nation")) {
+				List<BankAccount> list = new ArrayList<>();
+				universe.getNationsMap().values().forEach(nation -> list.add(nation.getAccount()));
+				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
+				try {
+					towny_top.addAll(getTopBankBalance(list, 10));
+				} catch (EconomyException ignored) {
+				}
+			} else {
+				sendErrorMsg(player, "Invalid sub command.");
+			}
+		}
 		else
 			sendErrorMsg(player, "Invalid sub command.");
 
@@ -538,12 +572,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getTopBankBalance(List<EconomyAccount> list, int maxListing) throws EconomyException {
+	public List<String> getTopBankBalance(List<BankAccount> list, int maxListing) throws EconomyException {
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<Account, Double> kvTable = new KeyValueTable<>();
-		for (EconomyAccount obj : list) {
-			kvTable.put(obj, obj.getHoldingBalance());
+		for (BankAccount obj : list) {
+			kvTable.put(obj, obj.getCachedBalance());
 		}
 		kvTable.sortByValue();
 		kvTable.reverse();
