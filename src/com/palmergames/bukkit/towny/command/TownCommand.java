@@ -41,7 +41,6 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -1113,6 +1112,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
 	 */
+	@SuppressWarnings("unchecked")
 	public void listTowns(CommandSender sender, String[] split) throws TownyException {
 
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -1200,8 +1200,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		final List<Town> towns = townsToSort;
-		@SuppressWarnings("unchecked")
-		final Comparator<Government> comparator = (Comparator<Government>) type.getComparator();
+		final Comparator comparator = type.getComparator();
 		final int pageNumber = page;
 		final int totalNumber = total; 
 		final ComparatorType finalType = type;
@@ -3610,7 +3609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 					
-					List<String> outputs = new ArrayList();
+					List<String> outputs = new ArrayList<String>();
 					for (int i = (page - 1) * 10; i < iMax; i++) {
 						Location outpost = outposts.get(i);
 						String output;

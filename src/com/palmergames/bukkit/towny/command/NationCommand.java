@@ -64,7 +64,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -948,7 +947,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param split  - Current command arguments.
 	 * @throws TownyException - Thrown when player does not have permission node.
 	 */
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings("unchecked")
 	public void listNations(CommandSender sender, String[] split) throws TownyException {
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -1033,7 +1032,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	    }
 
 	    final List<Nation> nations = nationsToSort;
-	    final Comparator<Nation> comparator = (Comparator<Nation>) type.getComparator();
+		final Comparator comparator = type.getComparator();
 	    final ComparatorType finalType = type;
 	    final int pageNumber = page;
 		try {
