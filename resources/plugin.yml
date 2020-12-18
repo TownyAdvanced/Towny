@@ -170,7 +170,7 @@ permissions:
             towny.command.nation.kick: true
             towny.command.nation.king: true
             towny.command.nation.leave: true
-            towny.command.nation.list: true
+            towny.command.nation.list.*: true
             towny.command.nation.new: true
             towny.command.nation.online: true
             towny.command.nation.othernation: true
@@ -185,7 +185,7 @@ permissions:
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
 
-    towny.command.nation.list:
+    towny.command.nation.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
         children:
@@ -306,7 +306,7 @@ permissions:
             towny.command.town.join: true
             towny.command.town.kick: true
             towny.command.town.leave: true
-            towny.command.town.list: true
+            towny.command.town.list.*: true
             towny.command.town.mayor: true
             towny.command.town.new: true
             towny.command.town.online: true
@@ -322,7 +322,7 @@ permissions:
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
 
-    towny.command.town.list:
+    towny.command.town.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
         children:

@@ -64,6 +64,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -971,38 +972,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				i++;
 				if (i < split.length) {
 					comparatorSet = true;
-					if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.RESIDENTS;
-					} else if (split[i].equalsIgnoreCase("balance")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_BALANCE.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.BALANCE;
-					} else if (split[i].equalsIgnoreCase("towns")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNS.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.TOWNS;
-					} else if (split[i].equalsIgnoreCase("name")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_NAME.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.NAME;
-					} else if (split[i].equalsIgnoreCase("townblocks")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_TOWNBLOCKS.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.TOWNBLOCKS;
-					} else if (split[i].equalsIgnoreCase("online")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_ONLINE.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.ONLINE;
-					} else if (split[i].equalsIgnoreCase("open")) {
-						if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_OPEN.getNode()))
-							throw new TownyException(Translation.of("msg_err_command_disable"));
-						type = ComparatorType.OPEN;
-					} else {
-						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_nation"));
-						return;
-					}
+					if (split[i].equalsIgnoreCase("resident")) 
+						split[i] = "residents";
+					
+					if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(split[i])))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					if (!ComparatorType.NATION_TYPES.contains(split[i].toUpperCase()))
+						throw new TownyException(Translation.of("msg_error_invalid_comparator_nation"));
+
+					type = ComparatorType.valueOf(split[i].toUpperCase());
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_missing_comparator"));
 					return;

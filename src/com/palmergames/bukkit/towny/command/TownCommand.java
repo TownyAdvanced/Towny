@@ -426,7 +426,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		} else if (split[0].equalsIgnoreCase("list")) {
 
-			listTowns(sender, split);
+			try {
+				listTowns(sender, split);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			}
 
 		} else {
 			Town town = TownyUniverse.getInstance().getTown(split[0]);
@@ -1095,7 +1099,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
 	 */
-	public void listTowns(CommandSender sender, String[] split) {
+	public void listTowns(CommandSender sender, String[] split) throws TownyException {
 
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		boolean console = true;
@@ -1132,40 +1136,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				i++;
 				if (i < split.length) {
+					comparatorSet = true;
+					if (split[i].equalsIgnoreCase("resident")) 
+						split[i] = "residents";
+					
+					if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(split[i])))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					if (!ComparatorType.TOWN_TYPES.contains(split[i].toUpperCase()))
+						throw new TownyException(Translation.of("msg_error_invalid_comparator_town"));
 
-					try {
-						if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_RESIDENTS.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.RESIDENTS;
-						} else if (split[i].equalsIgnoreCase("balance")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_BALANCE.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.BALANCE;
-						} else if (split[i].equalsIgnoreCase("name")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_NAME.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.NAME;
-						} else if (split[i].equalsIgnoreCase("townblocks")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_TOWNBLOCKS.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.TOWNBLOCKS;
-						} else if (split[i].equalsIgnoreCase("online")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_ONLINE.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.ONLINE;
-						} else if (split[i].equalsIgnoreCase("open")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_OPEN.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							type = ComparatorType.OPEN;
-						} else {
-							TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_town"));
-							return;
-						}
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(sender, e.getMessage());
-						return;
-					}
+					type = ComparatorType.valueOf(split[i].toUpperCase());
+
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_missing_comparator"));
 					return;
@@ -1204,6 +1186,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		final List<Town> towns = townsToSort;
+		@SuppressWarnings("unchecked")
 		final Comparator<Government> comparator = (Comparator<Government>) type.getComparator();
 		final int pageNumber = page;
 		final int totalNumber = total; 
