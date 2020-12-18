@@ -867,7 +867,7 @@ public enum ConfigNodes {
 		"# Modifiable settings to control the connection pooling.",
 		"# Unless you actually know what you're doing and how Towny uses its mysql connection,",
 		"# it is strongly recommended you do not change these settings."),
-	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "10"),
+	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "5"),
 	PLUGIN_DATABASE_POOLING_MAX_LIFETIME("plugin.database.sql.pooling.max_lifetime", "180000"),
 	PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT("plugin.database.sql.pooling.connection_timeout", "5000"),
 
@@ -1560,6 +1560,13 @@ public enum ConfigNodes {
 			"",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
+	ECO_BANK_CACHE_TIMEOUT(
+			"economy.bank_account_cache_timeout",
+			"600s",
+			"",
+			"# The time that the town and nation bank accounts' balances are cached for, in seconds.",
+			"# Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.",
+			"# Cached balances are used for PlaceholderAPI placeholders, town and nation lists."),
 	ECO_TOWN_PREFIX(
 			"economy.town_prefix",
 			"town-",

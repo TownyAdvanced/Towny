@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -25,26 +26,24 @@ public class TownyLoginListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (player.getName().startsWith(npcPrefix)) {
-			if (townyUniverse.getDataSource().hasResident(player.getName()))
-			    if (townyUniverse.getDataSource().getResident(player.getName()).isMayor()){
-			    	// Deny because this is an NPC account which is a mayor of a town.
-			    	event.disallow(null, "Towny is preventing you from logging in using this account name.");
-			    	disallowed = true;
-			    }
-				
+			Resident npcRes = townyUniverse.getResident(player.getName());
+			if (npcRes != null && npcRes.isMayor()) {
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
+				disallowed = true;
+			}
 		} else if (player.getName().equals(warChest) || player.getName().equals(warChest.replace("-", "_"))){
 			// Deny because this is the warChest account.
-			event.disallow(null, "Towny is preventing you from logging in using this account name.");
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		} else if (player.getName().equals(serverAccount) || player.getName().equals(serverAccount.replace("-", "_"))){
 			// Deny because this is the warChest account.
-			event.disallow(null, "Towny is preventing you from logging in using this account name.");
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		} else if (player.getName().startsWith(TownySettings.getTownAccountPrefix()) || 
 				   player.getName().startsWith(TownySettings.getTownAccountPrefix().replace("-","_")) ||
 				   player.getName().startsWith(TownySettings.getNationAccountPrefix()) || 
 				   player.getName().startsWith(TownySettings.getNationAccountPrefix().replace("-","_")) ) {
-			event.disallow(null, "Towny is preventing you from logging in using this account name.");
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		}
 		

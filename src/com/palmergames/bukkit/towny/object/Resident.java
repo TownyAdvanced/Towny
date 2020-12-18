@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -94,14 +94,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return isNPC;
 	}
 	
+	@Override
 	public UUID getUUID() {
 		return uuid;		
 	}
 	
+	@Override
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
-		if (!TownyUniverse.getInstance().getResidentUUIDNameMap().containsKey(uuid)) 
-			TownyUniverse.getInstance().getResidentUUIDNameMap().put(uuid, this.getName());
 	}
 	
 	public boolean hasUUID() {
@@ -111,29 +111,24 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailed(boolean isJailed) {
 		this.isJailed = isJailed;
 		
-		if (isJailed){
+		if (isJailed)
 			TownyUniverse.getInstance().getJailedResidentMap().add(this);
-			Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this));
-		} else {
+		else
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
-			Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(this));
-		}
-			
 	}
 	
 	public void sendToJail(int index, Town town) {
 		this.setJailed(true);
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
+		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this));
 		TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_sent_to_jail"));
 		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", this.getName(), index));
-
 	}
 	
 	public void freeFromJail(int index, boolean escaped) {
 		if (!escaped) {
-			if (getPlayer().isOnline())
-				TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else {
 			try {
@@ -149,17 +144,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 		this.setJailed(false);
 		this.removeJailSpawn();
-		this.setJailTown(" ");		
+		this.setJailTown(" ");	
+		Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(this));
 	}
 
 	public void setJailedByMayor(int index, Town town, Integer days) {
 
 		if (this.isJailed) {
 			try {
-				Location loc = this.getTown().getSpawn();				
+				Location loc = this.getTown().getSpawn();
+				TownyMessaging.sendMsg(this, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 				if (BukkitTools.isOnline(this.getName())) {
-					// Use teleport warmup
-					TownyMessaging.sendMsg(this, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+					// Use teleport warmup					
 					TownyAPI.getInstance().jailTeleport(getPlayer(), loc);
 				}
 				freeFromJail(index, false);

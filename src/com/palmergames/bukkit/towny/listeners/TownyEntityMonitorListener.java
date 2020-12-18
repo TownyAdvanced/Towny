@@ -68,11 +68,8 @@ public class TownyEntityMonitorListener implements Listener {
 				|| (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getEntity())))
 			return;
 
-		Resident resident = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getEntity().getName());
-		} catch (NotRegisteredException e) {
-		}
+		Resident resident = TownyUniverse.getInstance().getResident(event.getEntity().getUniqueId());
+
 		if (resident != null && resident.getTeleportRequestTime() > 0) {
 			TeleportWarmupTimerTask.abortTeleportRequest(resident);
 			TownyMessaging.sendMsg(resident, ChatColor.RED + Translation.of("msg_err_teleport_cancelled_damage"));
@@ -94,10 +91,9 @@ public class TownyEntityMonitorListener implements Listener {
 			return;
 
 		Player defenderPlayer = event.getEntity();
-		Resident defenderResident;
-		try {
-			defenderResident = townyUniverse.getDataSource().getResident(defenderPlayer.getName());
-		} catch (NotRegisteredException e1) {
+		Resident defenderResident = TownyUniverse.getInstance().getResident(defenderPlayer.getUniqueId());
+		
+		if (defenderResident == null) {
 			// Usually an NPC or a Bot of some kind.
 			return;
 		}
@@ -115,12 +111,7 @@ public class TownyEntityMonitorListener implements Listener {
 				Projectile projectile = (Projectile) attackerEntity;
 				if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
 					attackerPlayer = (Player) projectile.getShooter();
-					try {
-						attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
-					} catch (NotRegisteredException e) {
-						// Usually an NPC or a Bot of some kind.
-						attackerPlayer = null;
-					}
+					attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
 				} else { // Something else shot a projectile.
 					try {
 						attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
@@ -131,12 +122,7 @@ public class TownyEntityMonitorListener implements Listener {
 			} else if (attackerEntity instanceof Player) {
 				// This was a player kill
 				attackerPlayer = (Player) attackerEntity;
-				try {
-					attackerResident = townyUniverse.getDataSource().getResident(attackerPlayer.getName());
-				} catch (NotRegisteredException e) {
-					// Usually an NPC or a Bot of some kind.
-					attackerPlayer = null;
-				}
+				attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
 			}
 
 			/*

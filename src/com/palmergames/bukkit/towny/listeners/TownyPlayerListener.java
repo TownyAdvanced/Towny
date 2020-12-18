@@ -133,20 +133,16 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
-		try {
-			Resident resident = dataSource.getResident(event.getPlayer().getName());
+		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		
+		if (resident != null) {
 			resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
 			dataSource.saveResident(resident);
-		} catch (NotRegisteredException ignored) {
-		}
 
-		// Remove from teleport queue (if exists)
-		try {
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
-				TownyAPI.getInstance().abortTeleportRequest(dataSource.getResident(event.getPlayer().getName().toLowerCase()));
+				TownyAPI.getInstance().abortTeleportRequest(resident);
 			}
-		} catch (NotRegisteredException ignored) {
 		}
 
 		plugin.deleteCache(event.getPlayer());
@@ -202,9 +198,9 @@ public class TownyPlayerListener implements Listener {
 	
 		try {
 			Location respawn = null;			
-			Resident resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
+			Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
 			// If player is jailed send them to their jailspawn.
-			if (resident.isJailed()) {
+			if (resident != null && resident.isJailed()) {
 				Town respawnTown = townyUniverse.getTown(resident.getJailTown());
 				if (respawnTown != null) {
 					respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
@@ -391,7 +387,7 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (Tag.BEDS.isTagged(block.getType())) {
+			if (Tag.BEDS.isTagged(block.getType()) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if (!TownySettings.getBedUse())
 					return;
 
@@ -401,14 +397,14 @@ public class TownyPlayerListener implements Listener {
 				if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
 					
 					TownBlock townblock = TownyAPI.getInstance().getTownBlock(block.getLocation());
-					Resident resident = null;
+					Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 					Town town = null;
 					try {
-						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
 						town = townblock.getTown();
 					} catch (NotRegisteredException ignored) {}
-					assert resident != null;
-					assert town != null;
+					
+					if (resident == null || town == null)
+						return;
 					
 					isOwner = townblock.isOwner(resident);
 					isInnPlot = townblock.getType() == TownBlockType.INN;
@@ -592,11 +588,7 @@ public class TownyPlayerListener implements Listener {
 		Location to = event.getTo();
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
-		Resident resident = null;
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException ignored) {
-		}
+		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
 		if (resident != null
 				&& TownyTimerHandler.isTeleportWarmupRunning()				 
@@ -644,23 +636,20 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		// Cancel teleport if Jailed by Towny.
-		try {
-			if (TownyUniverse.getInstance().getDataSource().getResident(player.getName()).isJailed()) {
-				if ((event.getCause() == TeleportCause.COMMAND)) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
-					event.setCancelled(true);
-					return;
-				}
-				if (event.getCause() == TeleportCause.PLUGIN) 
-					return;
-				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
-					event.setCancelled(true);
-				}
+		if (resident != null && resident.isJailed()) {
+			if ((event.getCause() == TeleportCause.COMMAND)) {
+				TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
+				event.setCancelled(true);
+				return;
 			}
-		} catch (NotRegisteredException ignored) {
-			// Not a valid resident, probably an NPC from Citizens.
+			if (event.getCause() == TeleportCause.PLUGIN)
+				return;
+			if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
+				TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
+				event.setCancelled(true);
+			}
 		}
 		
 
@@ -753,10 +742,12 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();		
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (resident == null)
+			return;
+		
 		try {
-			@SuppressWarnings("unused")
-			// Required so we don't fire events on NPCs from plugins like citizens.
-			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			try {
 				to.getTownBlock();
 				if (to.getTownBlock().hasTown()) { 
@@ -780,7 +771,7 @@ public class TownyPlayerListener implements Listener {
 			}
 
 		} catch (NotRegisteredException e) {
-			// If not registered, it is most likely an NPC			
+			// If not registered, both to and from locations are wilderness.	
 		}		
 	}
 	
@@ -789,9 +780,13 @@ public class TownyPlayerListener implements Listener {
 	 * - Handles outlaws entering a town they are outlawed in.
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onOutlawEnterTown(PlayerEnterTownEvent event) throws NotRegisteredException {
+	public void onOutlawEnterTown(PlayerEnterTownEvent event) {
 
-		Resident outlaw = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
+		Resident outlaw = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		
+		if (outlaw == null)
+			return;
+		
 		Town town = event.getEnteredtown();
 		
 		if (town.hasOutlaw(outlaw)) {
@@ -843,10 +838,6 @@ public class TownyPlayerListener implements Listener {
 		boolean keepInventory = event.getKeepInventory();
 		boolean keepLevel = event.getKeepLevel();
 		Player player = event.getEntity();
-		Resident resident = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException ignored) {}
 		Location deathloc = player.getLocation();
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
 		if (tb != null && tb.hasTown()) {
@@ -861,6 +852,7 @@ public class TownyPlayerListener implements Listener {
 				keepInventory = true;
 			}
 
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident != null && resident.hasTown() && !keepInventory) {
 				Town town = null;
 				Town tbTown = null;
@@ -898,18 +890,10 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerEnterTown(PlayerEnterTownEvent event) {
 		
-		WorldCoord to = event.getTo();
-		Resident resident = null;
-		Town town = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(event.getPlayer().getName());
-			town = to.getTownBlock().getTown();
-		} catch (NotRegisteredException e) {
-			// Likely a Citizens NPC
-			return;
-		}
+		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		Town town = event.getEnteredtown();
 		
-		if (TownySettings.isNotificationUsingTitles() && resident != null && town != null) {
+		if (resident != null && town != null && TownySettings.isNotificationUsingTitles()) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
@@ -939,15 +923,17 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		Resident resident;
-		String worldName;
+		Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
+		String worldName = null;
 		try {
-			resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
 			worldName = townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName();
-		} catch (NotRegisteredException e1) {
-			// Likely a Citizens NPC.
-			return;
+		} catch (NotRegisteredException ignore) {
 		}
+
+		// Likely a Citizens NPC.
+		if (resident == null || worldName == null)
+			return;
+		
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
 			try {
@@ -1000,12 +986,9 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-		Resident resident = null;
-		try {
-			resident = TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName());
-		} catch (NotRegisteredException e) {
-			// More than likely another plugin using a fake player to run a command. 
-		} 
+		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+
+		// More than likely another plugin using a fake player to run a command. 
 		if (resident == null || !resident.isJailed())
 			return;
 				

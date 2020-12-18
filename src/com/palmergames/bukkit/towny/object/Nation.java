@@ -570,12 +570,16 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(sentAllyInvites);
 	}
 	
+	public Collection<TownBlock> getTownBlocks() {
+		List<TownBlock> townBlocks = new ArrayList<>();
+		for (Town town : this.getTowns())
+			townBlocks.addAll(town.getTownBlocks());
+		
+		return Collections.unmodifiableCollection(townBlocks);
+	}
+	
 	public int getNumTownblocks() {
-		int townBlocksClaimed = 0;
-		for (Town towns : this.getTowns()) {
-			townBlocksClaimed = townBlocksClaimed + towns.getTownBlocks().size();
-		}
-		return townBlocksClaimed;
+		return getTownBlocks().size();
 	}
 	
 	public Resident getKing() {

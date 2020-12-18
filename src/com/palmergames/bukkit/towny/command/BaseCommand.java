@@ -2,18 +2,22 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -154,11 +158,16 @@ public class BaseCommand implements TabCompleter{
 	 * @return the resident names that match str
 	 */
 	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
 		try {
-			return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getResidents()), str);
-		} catch (NotRegisteredException e) {
-			return Collections.emptyList();
+			if (res != null && !res.hasTown()) {
+				return NameUtil.filterByStart(NameUtil.getNames(res.getTown().getResidents()), str);
+			}
+		} catch (NotRegisteredException ignore) {
 		}
+
+		return Collections.emptyList();
 	}
 
 	/**
@@ -188,5 +197,27 @@ public class BaseCommand implements TabCompleter{
 		if (str.equalsIgnoreCase("on")) return Optional.of(true);
 		else if (str.equalsIgnoreCase("off")) return Optional.of(false);
 		else return Optional.empty();
+	}
+
+	@NotNull
+	protected static Resident getResidentOrThrow(UUID playerUUID) throws NotRegisteredException {
+		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
+
+		if (res == null) {
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered"));
+		}
+
+		return res;
+	}
+
+	@NotNull
+	protected static Resident getResidentOrThrow(String residentName) throws NotRegisteredException {
+		Resident res = TownyUniverse.getInstance().getResident(residentName);
+
+		if (res == null) {
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", residentName));
+		}
+
+		return res;
 	}
 }
