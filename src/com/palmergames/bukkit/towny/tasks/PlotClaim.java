@@ -83,9 +83,12 @@ public class PlotClaim extends Thread {
 						/*
 						 *  Handle paying for the plot here so it is not payed for per-townblock in the group.
 						 */
-						if (worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
+						if (TownySettings.isUsingEconomy() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
 							try {
-								if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getResident(), "Plot Group - Buy From Seller")) {
+								if (!resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getResident(), "Plot Group - Buy From Seller")) {
+									/*
+									 * Should not be possible, as the resident has already been tested to see if they have enough to pay.
+									 */
 									TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_money_purchase_plot"));
 									break;
 								}
@@ -94,12 +97,15 @@ public class PlotClaim extends Thread {
 								 *  worldCoord.getTownBlock().getPlotObjectGroup().getResident() will return NotRegisteredException if the plots are town-owned.								
 								 */
 								double bankcap = TownySettings.getTownBankCap();
-								if (TownySettings.isUsingEconomy() && bankcap > 0) {
+								if (bankcap > 0) {
 									if (worldCoord.getTownBlock().getPlotObjectGroup().getPrice() + worldCoord.getTownBlock().getPlotObjectGroup().getTown().getAccount().getHoldingBalance() > bankcap)
 										throw new TownyException(Translation.of("msg_err_deposit_capped", bankcap));
 								}
 								
-								if (TownySettings.isUsingEconomy() && !resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getTown(), "Plot Group - Buy From Town")) {
+								if (!resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getTown(), "Plot Group - Buy From Town")) {
+									/*
+									 * Should not be possible, as the resident has already been tested to see if they have enough to pay.
+									 */
 									TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_money_purchase_plot"));
 									break;
 								}

@@ -5579,3 +5579,5 @@ v0.92.0.11:
     - uses the new cached bank balances.
   - Make bank placeholders use the new getCachedBalance().
   - Improved NPC Status Screens, courtesy of EuGNosii with PR #4592.
+  - Fix incorrect message shown when you do not have enough money to use /plot claim.
+    - Closes #4604.

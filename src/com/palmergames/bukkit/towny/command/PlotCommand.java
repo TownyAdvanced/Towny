@@ -273,6 +273,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								if (townBlock.hasPlotObjectGroup()) {
 									// This block is part of a group, special tasks need to be done.
 									PlotGroup group = townBlock.getPlotObjectGroup();
+									
+									if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
+										throw new TownyException(Translation.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 
 									// Add the confirmation for claiming a plot group.
 									Confirmation.runOnAccept(() -> {
@@ -314,7 +317,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(Translation.of("msg_max_plot_own", maxPlots));
 
 						if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(cost)))
-							throw new TownyException(Translation.of("msg_no_funds_claim", selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
+							throw new TownyException(Translation.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
 
 						if (cost != 0) {
 							String title = Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost));
