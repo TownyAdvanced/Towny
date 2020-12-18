@@ -5578,3 +5578,4 @@ v0.92.0.11:
     - actually displays the thing you used to sort the list now.
     - uses the new cached bank balances.
   - Make bank placeholders use the new getCachedBalance().
+  - Improved NPC Status Screens, courtesy of EuGNosii with PR #4592.
