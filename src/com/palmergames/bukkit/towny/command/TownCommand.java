@@ -1235,7 +1235,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String slug = null;
 			switch (type) {
 			case BALANCE:
-				slug = town.getAccount().getHoldingFormattedBalance();
+				slug = TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance());
 				break;
 			case TOWNBLOCKS:
 				slug = town.getTownBlocks().size() + "";

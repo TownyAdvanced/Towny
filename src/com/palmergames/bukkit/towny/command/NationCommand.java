@@ -357,17 +357,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else
-			try {
-				parseNationCommandForConsole(sender, args);
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(sender, e.getMessage());
-			}
+			parseNationCommandForConsole(sender, args);
 
 		return true;
 	}
 
-	@SuppressWarnings("static-access")
-	private void parseNationCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
+	private void parseNationCommandForConsole(final CommandSender sender, String[] split) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
@@ -375,15 +370,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("list")) {
 
-			listNations(sender, split);
+			try {
+				listNations(sender, split);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			}
 
 		} else {
 			try {
 				final Nation nation = TownyUniverse.getInstance().getDataSource().getNation(split[0]);
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(nation)));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(nation)));
 
 			} catch (NotRegisteredException x) {
-				throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
+				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_not_registered_1", split[0]));
 			}
 		}
 
@@ -1063,7 +1062,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String slug = null;
 			switch (type) {
 			case BALANCE:
-				slug = nation.getAccount().getHoldingFormattedBalance();
+				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
 				break;
 			case ONLINE:
 				slug = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size() + "";

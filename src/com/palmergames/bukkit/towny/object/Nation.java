@@ -578,7 +578,6 @@ public class Nation extends Government {
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 	
-	@Deprecated
 	public int getNumTownblocks() {
 		return getTownBlocks().size();
 	}
