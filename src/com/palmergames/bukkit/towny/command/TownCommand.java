@@ -41,8 +41,7 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Government;
-import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -50,7 +49,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.comparators.TownComparators;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -157,7 +155,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"surname",
 		"taxpercentcap"
 	);
-
+	private static final List<String> townListTabCompletes = Arrays.asList(
+		"residents",
+		"balance",
+		"name",		
+		"online",
+		"open",
+		"townblocks"
+	);
 	static final List<String> townToggleTabCompletes = Arrays.asList(
 		"explosion",
 		"fire",
@@ -369,6 +374,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						case 4:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
 					}
+				case "list":
+					switch (args.length) {
+						case 2:
+							return Collections.singletonList("by");
+						case 3:
+							return NameUtil.filterByStart(townListTabCompletes, args[2]);
+					}
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
@@ -427,7 +439,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		} else if (split[0].equalsIgnoreCase("list")) {
 
-			listTowns(sender, split);
+			try {
+				listTowns(sender, split);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			}
 
 		} else {
 			Town town = TownyUniverse.getInstance().getTown(split[0]);
@@ -1095,11 +1111,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 *
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
-	 * @throws TownyException - Thrown when player does not have permission nodes.
 	 */
 	@SuppressWarnings("unchecked")
-	public void listTowns(CommandSender sender, String[] split) {
-		
+	public void listTowns(CommandSender sender, String[] split) throws TownyException {
+
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		boolean console = true;
 		Player player = null;
@@ -1125,7 +1140,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
-		Comparator<? extends Government> comparator = GovernmentComparators.BY_NUM_RESIDENTS;
+		ComparatorType type = ComparatorType.RESIDENTS;
 		int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) {
@@ -1135,40 +1150,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				i++;
 				if (i < split.length) {
+					comparatorSet = true;
+					if (split[i].equalsIgnoreCase("resident")) 
+						split[i] = "residents";
+					
+					if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(split[i])))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					if (!townListTabCompletes.contains(split[i].toLowerCase()))
+						throw new TownyException(Translation.of("msg_error_invalid_comparator_town"));
 
-					try {
-						if (split[i].equalsIgnoreCase("residents") || split[i].equalsIgnoreCase("resident")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_RESIDENTS.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = GovernmentComparators.BY_NUM_RESIDENTS;
-						} else if (split[i].equalsIgnoreCase("balance")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_BALANCE.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = GovernmentComparators.BY_BANK_BALANCE;
-						} else if (split[i].equalsIgnoreCase("name")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_NAME.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = GovernmentComparators.BY_NAME;
-						} else if (split[i].equalsIgnoreCase("townblocks")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_TOWNBLOCKS.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = TownComparators.BY_TOWNBLOCKS_CLAIMED;
-						} else if (split[i].equalsIgnoreCase("online")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_ONLINE.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = GovernmentComparators.BY_NUM_ONLINE;
-						} else if (split[i].equalsIgnoreCase("open")) {
-							if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_OPEN.getNode()))
-								throw new TownyException(Translation.of("msg_err_command_disable"));
-							comparator = GovernmentComparators.BY_OPEN;
-						} else {
-							TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_invalid_comparator_town"));
-							return;
-						}
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(sender, e.getMessage());
-						return;
-					}
+					type = ComparatorType.valueOf(split[i].toUpperCase());
+
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_missing_comparator"));
 					return;
@@ -1207,28 +1200,29 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		final List<Town> towns = townsToSort;
-		final Comparator<Town> comp = (Comparator<Town>) comparator;
+		final Comparator comparator = type.getComparator();
 		final int pageNumber = page;
 		final int totalNumber = total; 
+		final ComparatorType finalType = type;
 		try {
 			if (!TownySettings.isTownListRandom()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-					towns.sort(comp);
-					sendList(sender, towns, pageNumber, totalNumber);
+					towns.sort(comparator);
+					sendList(sender, towns, finalType, pageNumber, totalNumber);
 				});
 			} else { 
 				Collections.shuffle(towns);
-				sendList(sender, towns, pageNumber, totalNumber);
+				sendList(sender, towns, finalType, pageNumber, totalNumber);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
 		}
 	}
 	
-	public void sendList(CommandSender sender, List<Town> towns, int page, int total) {
+	public void sendList(CommandSender sender, List<Town> towns, ComparatorType type, int page, int total) {
 		
 		if (Towny.isSpigot && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotTownList(sender, towns, page, total);
+			TownySpigotMessaging.sendSpigotTownList(sender, towns, type, page, total);
 			return;
 		}
 
@@ -1237,8 +1231,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = towns.get(i);
+			String slug = null;
+			switch (type) {
+			case BALANCE:
+				slug = TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance());
+				break;
+			case TOWNBLOCKS:
+				slug = town.getTownBlocks().size() + "";
+				break;
+			default:
+				slug = town.getResidents().size() + "";
+				break;
+			}
+			
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
-					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
+					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")");
 			if (town.isOpen())
 				output += Translation.of("status_title_open");
 			townsformatted.add(output);
@@ -1246,7 +1253,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		String[] messages = ChatTools.formatList(Translation.of("town_plu"),
 			Colors.Blue + Translation.of("town_name") +
-				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of("number_of_residents")),
+				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName())),
 			townsformatted, Translation.of("LIST_PAGE", page, total)
 		);
 		
@@ -3602,7 +3609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						return;
 					}
 					
-					List<String> outputs = new ArrayList();
+					List<String> outputs = new ArrayList<String>();
 					for (int i = (page - 1) * 10; i < iMax; i++) {
 						Location outpost = outposts.get(i);
 						String output;
