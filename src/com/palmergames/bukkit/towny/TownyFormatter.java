@@ -161,11 +161,14 @@ public class TownyFormatter {
 		int currentYear = cal.get(Calendar.YEAR);
 		cal.setTimeInMillis(System.currentTimeMillis());
 		int lastOnlineYear = cal.get(Calendar.YEAR);
-		if (currentYear == lastOnlineYear)
-			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
-		else 
-			out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
-
+		if (!resident.isNPC()) // Not an NPC: show more detailed info.
+			if (currentYear == lastOnlineYear) 
+				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+			else 
+				out.add(Translation.of("registered_last_online", registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+		else // An NPC: show their created date.
+			out.add(Translation.of("npc_created", registeredFormat.format(resident.getRegistered())));
+		
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 		// if (resident.getTownBlocks().size() > 0) {
@@ -194,6 +197,13 @@ public class TownyFormatter {
 				line += "Error: " + e.getMessage();
 			}
 		out.add(line);
+
+		if (resident.isNPC()) {
+			out.add(Translation.of("msg_status_npc", resident.getName()));
+			out.addAll(getExtraFields(resident));
+			out = formatStatusScreens(out);
+			return out;
+		}
 		
 		// Embassies in: Camelot, London, Tokyo
 		List<Town> townEmbassies = new ArrayList<>();
