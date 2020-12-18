@@ -112,23 +112,19 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailed(boolean isJailed) {
 		this.isJailed = isJailed;
 		
-		if (isJailed){
+		if (isJailed)
 			TownyUniverse.getInstance().getJailedResidentMap().add(this);
-			Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this));
-		} else {
+		else
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
-			Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(this));
-		}
-			
 	}
 	
 	public void sendToJail(int index, Town town) {
 		this.setJailed(true);
 		this.setJailSpawn(index);
 		this.setJailTown(town.getName());
+		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(this));
 		TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_sent_to_jail"));
 		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_sent_to_jail_number", this.getName(), index));
-
 	}
 	
 	public void freeFromJail(int index, boolean escaped) {
@@ -149,7 +145,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 		this.setJailed(false);
 		this.removeJailSpawn();
-		this.setJailTown(" ");		
+		this.setJailTown(" ");	
+		Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(this));
 	}
 
 	public void setJailedByMayor(int index, Town town, Integer days) {

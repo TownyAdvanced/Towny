@@ -1560,6 +1560,13 @@ public enum ConfigNodes {
 			"",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
+	ECO_BANK_CACHE_TIMEOUT(
+			"economy.bank_account_cache_timeout",
+			"600s",
+			"",
+			"# The time that the town and nation bank accounts' balances are cached for, in seconds.",
+			"# Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.",
+			"# Cached balances are used for PlaceholderAPI placeholders, town and nation lists."),
 	ECO_TOWN_PREFIX(
 			"economy.town_prefix",
 			"town-",

@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
+import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
@@ -423,6 +424,21 @@ public class SiegeWarEventListener implements Listener {
 		if(SiegeWarSettings.getWarSiegeEnabled()) {
 			SiegeWarTimerTaskController.updatePopulationBasedSiegePointModifiers();
 		}
+	}
+
+	/*
+	 * On each ShortTime period, SW makes some calcuations.
+	 */
+	@EventHandler
+	public void onShortTime(NewShortTimeEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
+			SiegeWarTimerTaskController.punishPeacefulPlayersInActiveSiegeZones();
+			SiegeWarTimerTaskController.evaluateBattleSessions();
+			SiegeWarTimerTaskController.evaluateBannerControl();
+			SiegeWarTimerTaskController.evaluateTacticalVisibility();
+			SiegeWarTimerTaskController.evaluateTimedSiegeOutcomes();
+		}
+
 	}
 	
 	/*

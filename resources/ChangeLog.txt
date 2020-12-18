@@ -5558,3 +5558,28 @@ v0.92.0.11:
   - es-419.yml fixes, courtesy of EuGNosii with PR #4583.
   - Make NationToggleEvents more abstract, courtesy of silverwolfg11 with PR #4580.
   - Change default mysql pool size, courtesy of Glare with PR #4589.
+  - API: Added PlotSetForSaleEvent & PlotNotForSaleEvent, courtesy of Glare with PR #4590.
+  - Plot toggle events, courtesy of Kovalskki with PR #4600.
+  - API: Added:
+    - PlotToggleEvent,
+    - PlotTogglePVPEvent,
+    - PlotToggleExplosionEvent,
+    - PlotToggleFireEvent,
+    - PlotToggleMobsEvent. 
+  - Fix jail events firing too early, courtesy of Kovalskki.
+  - API: BankAccount#getCachedBalance().
+    - stores town and nation bank balances for 10 minutes (configurable.)
+  - New Config Option: economy.bank_account_cache_timeout
+    - default: 600s
+    - The time that the town and nation bank accounts' balances are cached for, in seconds.
+    - Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.
+    - Cached balances are used for PlaceholderAPI placeholders, town and nation lists.
+  - /t list and /n list fix-up.
+    - actually displays the thing you used to sort the list now.
+    - uses the new cached bank balances.
+  - Make bank placeholders use the new getCachedBalance().
+  - Improved NPC Status Screens, courtesy of EuGNosii with PR #4592.
+  - Fix incorrect message shown when you do not have enough money to use /plot claim.
+    - Closes #4604.
+  - API: Added NewShortTimeEvent.
+    - Fires an event every 20s (configurable in the config.)

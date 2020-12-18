@@ -1,8 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTaskController;
+import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
 
 /**
  * This class represents the short timer task
@@ -20,12 +21,10 @@ public class ShortTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		if (SiegeWarSettings.getWarSiegeEnabled()) {
-			SiegeWarTimerTaskController.punishPeacefulPlayersInActiveSiegeZones();
-			SiegeWarTimerTaskController.evaluateBattleSessions();
-			SiegeWarTimerTaskController.evaluateBannerControl();
-			SiegeWarTimerTaskController.evaluateTacticalVisibility();
-			SiegeWarTimerTaskController.evaluateTimedSiegeOutcomes();
-		}
+		
+		/*
+		 * Fire an event other plugins can use.
+		 */
+		Bukkit.getPluginManager().callEvent(new NewShortTimeEvent(System.currentTimeMillis()));
 	}
 }
