@@ -5577,3 +5577,4 @@ v0.92.0.11:
   - /t list and /n list fix-up.
     - actually displays the thing you used to sort the list now.
     - uses the new cached bank balances.
+  - Make bank placeholders use the new getCachedBalance().
