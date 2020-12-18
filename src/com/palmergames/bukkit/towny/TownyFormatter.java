@@ -197,6 +197,13 @@ public class TownyFormatter {
 				line += "Error: " + e.getMessage();
 			}
 		out.add(line);
+
+		if (resident.isNPC()) {
+			out.add(Translation.of("msg_status_npc", resident.getName()));
+			out.addAll(getExtraFields(resident));
+			out = formatStatusScreens(out);
+			return out;
+		}
 		
 		// Embassies in: Camelot, London, Tokyo
 		List<Town> townEmbassies = new ArrayList<>();
