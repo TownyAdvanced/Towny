@@ -39,7 +39,6 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private String mapColorHexCode = "";
-	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
 	@SuppressWarnings("unused")
@@ -554,12 +553,27 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(out);
 	}
 
+	/**
+	 * Gets the nation's UUID.
+	 * @return nation UUID
+	 * 
+	 * @deprecated Use {@link Government#getUUID()} instead.
+	 */
+	@Deprecated
 	public UUID getUuid() {
-		return uuid;
+		return getUUID();
 	}
 
+	/**
+	 * Set the nation's UUID. This should only be used internally! 
+	 * 
+	 * @param uuid UUID to set.
+	 *             
+	 * @deprecated Use {@link Government#setUUID(UUID)} instead.
+	 */
+	@Deprecated
 	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
+		setUUID(uuid);
 	}
 
 	public boolean hasValidUUID() {

@@ -23,7 +23,7 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
     private final UUID kingUUID;
     
     public DeleteNationEvent(Nation nation, UUID uuid) {
-        super(nation.getName(), nation.getUuid(), nation.getRegistered());
+        super(nation.getName(), nation.getUUID(), nation.getRegistered());
         kingUUID = uuid;
     }
 

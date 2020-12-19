@@ -1085,12 +1085,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("nation");
 				if (line != null && !line.isEmpty()) {
-					Nation nation = null;
-					try {
-						nation = getNation(line);
-					} catch (NotRegisteredException ignored) {
-						// Town tried to load a nation that doesn't exist, do not set nation.
-					}
+					Nation nation = universe.getNation(line);
+					// Only set nation if it exists
 					if (nation != null)
 						town.setNation(nation);
 				}
@@ -1157,7 +1153,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String search;
 		String name = null;
 		try {
-			Nation nation = getNation(rs.getString("name"));
+			Nation nation = universe.getNation(rs.getString("name"));
+			
+			// Could not find nation in universe maps
+			if (nation == null) {
+				System.out.println(String.format("[Towny] Error: The nation with the name '%s' was not registered and cannot be loaded!"));
+				return false;
+			}
+			
 			name = nation.getName();
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
@@ -1215,10 +1218,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
 			try {
-				nation.setUuid(UUID.fromString(rs.getString("uuid")));
+				nation.setUUID(UUID.fromString(rs.getString("uuid")));
 			} catch (IllegalArgumentException | NullPointerException ee) {
-				nation.setUuid(UUID.randomUUID());
+				nation.setUUID(UUID.randomUUID());
 			}
+			universe.registerNationUUID(nation);
 
 			line = rs.getString("nationSpawn");
 			if (line != null) {
@@ -1966,7 +1970,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 									+ nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw()
 							: "");
 			if (nation.hasValidUUID()) {
-				nat_hm.put("uuid", nation.getUuid());
+				nat_hm.put("uuid", nation.getUUID());
 			} else {
 				nat_hm.put("uuid", UUID.randomUUID());
 			}

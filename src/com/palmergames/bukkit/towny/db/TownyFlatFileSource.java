@@ -802,12 +802,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
-					Nation nation = null;
-					try {
-						nation = getNation(line);
-					} catch (NotRegisteredException ignored) {
-						// Town tried to load a nation that doesn't exist, do not set nation.
-					}
+					Nation nation = universe.getNation(line);;
+					// Only set the nation if it exists
 					if (nation != null)
 						town.setNation(nation);
 				}
@@ -945,10 +941,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("uuid");
 				if (line != null) {
 					try {
-						nation.setUuid(UUID.fromString(line));
+						nation.setUUID(UUID.fromString(line));
 					} catch (IllegalArgumentException ee) {
-						nation.setUuid(UUID.randomUUID());
+						nation.setUUID(UUID.randomUUID());
 					}
+					universe.registerNationUUID(nation);
 				}
 				line = keys.get("registered");
 				if (line != null) {
@@ -1763,7 +1760,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
 		if (nation.hasValidUUID()){
-			list.add("uuid=" + nation.getUuid());
+			list.add("uuid=" + nation.getUUID());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}
