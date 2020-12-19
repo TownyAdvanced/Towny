@@ -212,7 +212,6 @@ public class SQL_Schema {
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
-		columns.add("`nationRefundAmount` int(11) DEFAULT 0");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`uuid` mediumtext");
 		return columns;

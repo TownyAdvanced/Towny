@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -12,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+import com.palmergames.bukkit.towny.war.siegewar.metadata.ResidentMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import org.bukkit.entity.Player;
 
@@ -98,16 +98,14 @@ public class SiegeWarMoneyUtil {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 		}
 
-		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
 		Resident formerKing = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (formerKing == null)
         	throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
 		
-		if(formerKing.getNationRefundAmount() != 0) {
-			int refundAmount = formerKing.getNationRefundAmount();
+		if(ResidentMetaDataController.getNationRefundAmount(formerKing) != 0) {
+			int refundAmount = ResidentMetaDataController.getNationRefundAmount(formerKing);
 			formerKing.getAccount().deposit(refundAmount, "Nation Refund");
-			formerKing.setNationRefundAmount(0);
-			townyDataSource.saveResident(formerKing);
+			ResidentMetaDataController.setNationRefundAmount(formerKing, 0);
 			TownyMessaging.sendMsg(player, Translation.of("msg_siege_war_nation_refund_claimed", TownyEconomyHandler.getFormattedBalance(refundAmount)));
 		} else {
 			throw new TownyException(Translation.of("msg_err_siege_war_nation_refund_unavailable"));
@@ -123,8 +121,7 @@ public class SiegeWarMoneyUtil {
 			//Make the nation refund available
 			//The player can later do "/n claim refund" to receive the money
 			int amountToRefund = (int)(TownySettings.getNewNationPrice() * 0.01 * SiegeWarSettings.getWarSiegeNationCostRefundPercentageOnDelete());
-			king.addToNationRefundAmount(amountToRefund);
-			TownyUniverse.getInstance().getDataSource().saveResident(king);
+			ResidentMetaDataController.setNationRefundAmount(king, amountToRefund);
 
 			TownyMessaging.sendMsg(
 				king,

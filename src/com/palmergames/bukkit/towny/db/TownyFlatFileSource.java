@@ -494,10 +494,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setPermissions(line);
 
-				line = keys.get("nationRefundAmount");
-				if (line != null)
-					resident.setNationRefundAmount(Integer.parseInt(line));
-
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					resident.setMetadata(line.trim());
@@ -1783,9 +1779,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
-
-		//Nation refund amount
-		list.add("nationRefundAmount=" + resident.getNationRefundAmount());
 
 		// Metadata
 		list.add("metadata=" + serializeMetadata(resident));

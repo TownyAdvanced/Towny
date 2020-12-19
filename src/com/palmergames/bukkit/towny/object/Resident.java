@@ -62,7 +62,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account = new EconomyAccount(getName());
-	private int nationRefundAmount = 0;
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
@@ -911,18 +910,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void setConfirmation(Confirmation confirmation) {
 		this.confirmation = confirmation;
-	}
-
-	public int getNationRefundAmount() {
-		return nationRefundAmount;
-	}
-
-	public void setNationRefundAmount(int nationRefundAmount) {
-		this.nationRefundAmount = nationRefundAmount;
-	}
-
-	public void addToNationRefundAmount(int amountToRefund) {
-		this.nationRefundAmount += amountToRefund;
 	}
 	
 	public TownyInventory getGUIInventory() {

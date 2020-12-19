@@ -812,12 +812,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 
 			try {
-				resident.setNationRefundAmount(rs.getInt("nationRefundAmount"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
 					resident.setMetadata(line);
@@ -1138,7 +1132,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
-			
 			town.setNeutral(rs.getBoolean("neutral"));
 			
 			town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
@@ -1965,7 +1958,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
 			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-			res_hm.put("nationRefundAmount", resident.getNationRefundAmount());
 
 			if (resident.hasMeta())
 				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField<?>>(resident.getMetadata()), ";"));
