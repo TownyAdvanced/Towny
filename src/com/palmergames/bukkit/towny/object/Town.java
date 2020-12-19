@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -67,8 +66,6 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
-	private long revoltImmunityEndTime = 0;
-	private long siegeImmunityEndTime = 0;
 	private Siege siege = null;
 	private boolean occupied = false;
 
@@ -1210,44 +1207,8 @@ public class Town extends Government implements TownBlockOwner {
 		this.siege = siege;
 	}
 
-	public boolean isSiegeImmunityActive() {
-		if(hasSiege() && siege.getStatus().isActive())
-			return false; //Cooldown always off until the siege has finished
-
-		if(System.currentTimeMillis() < siegeImmunityEndTime) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isRevoltImmunityActive() {
-		return System.currentTimeMillis() < revoltImmunityEndTime;
-	}
-
-	public void setSiegeImmunityEndTime(long endTimeMillis) {
-		this.siegeImmunityEndTime = endTimeMillis;
-	}
-
-	public void setRevoltImmunityEndTime(long timeMillis) {
-		this.revoltImmunityEndTime = timeMillis;
-	}
-
 	public boolean hasSiege() {
 		return siege != null;
-	}
-
-	public long getSiegeImmunityEndTime() {
-		return siegeImmunityEndTime;
-	}
-
-	public long getRevoltImmunityEndTime() {
-		return revoltImmunityEndTime;
-	}
-
-	public String getFormattedHoursUntilRevoltCooldownEnds() {
-		double hoursRemainingMillis = revoltImmunityEndTime - System.currentTimeMillis();
-		return TimeMgmt.getFormattedTimeValue(hoursRemainingMillis);
 	}
 
 	public double getSiegeCost() {
@@ -1256,11 +1217,6 @@ public class Town extends Government implements TownBlockOwner {
 				* townBlocks.size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
 		return cost;
-	}
-
-	public String getFormattedHoursUntilSiegeImmunityEnds() {
-		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
-		return TimeMgmt.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 
 	public void setOccupied(boolean occupied) {

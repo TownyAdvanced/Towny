@@ -42,6 +42,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
+import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1537,8 +1538,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				//1 town
 				Town town = townyUniverse.getDataSource().getTown(split[2]);
 				long durationMillis = (long)(Long.parseLong(split[3]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
-				town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
-				townyUniverse.getDataSource().saveTown(town);
+				TownMetaDataController.setSiegeImmunityEndTime(town, System.currentTimeMillis() + durationMillis);
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_set_siege_immunities_town", split[2], split[3]));
 
 			} else if (split.length == 7
@@ -1550,8 +1550,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				Nation nation = townyUniverse.getDataSource().getNation(split[5]);
 				long durationMillis = (long)(Long.parseLong(split[6]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
 				for(Town town: nation.getTowns()) {
-					town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
-					townyUniverse.getDataSource().saveTown(town);
+					TownMetaDataController.setSiegeImmunityEndTime(town, System.currentTimeMillis() + durationMillis);
 				}
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_set_siege_immunities_nation", split[5], split[6]));
 
@@ -1561,8 +1560,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				//All towns 
 				long durationMillis = (long)(Long.parseLong(split[3]) * TimeMgmt.ONE_HOUR_IN_MILLIS);
 				for(Town town: new ArrayList<>(townyUniverse.getDataSource().getTowns()))  {
-					town.setSiegeImmunityEndTime(System.currentTimeMillis() + durationMillis);
-					townyUniverse.getDataSource().saveTown(town);
+					TownMetaDataController.setSiegeImmunityEndTime(town, System.currentTimeMillis() + durationMillis);
 				}
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_set_siege_immunities_all", split[3]));
 			} else {

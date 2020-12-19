@@ -1134,8 +1134,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			town.setNeutral(rs.getBoolean("neutral"));
 			
-			town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
-            town.setSiegeImmunityEndTime(rs.getLong("siegeCooldownEndTime"));
 			town.setOccupied(rs.getBoolean("occupied"));
 
 			return true;
@@ -2047,8 +2045,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
 			
-			twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
-			twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 			twn_hm.put("occupied", town.isOccupied());
 
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));

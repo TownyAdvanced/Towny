@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
+import com.palmergames.bukkit.towny.object.metadata.LongDataField;
 
 public class TownMetaDataController {
 
@@ -13,6 +14,8 @@ public class TownMetaDataController {
 	private Towny plugin;
 	private static IntegerDataField peacefulnessChangeConfirmationCounterDays = new IntegerDataField("siegewar_peacefuldays", 0, "Days To Peacefulness Status Change");
 	private static BooleanDataField desiredPeacefulness = new BooleanDataField("siegewar_desiredPeaceSetting", false);
+	private static LongDataField revoltImmunityEndTime = new LongDataField("siegewar_revoltImmunityEndTime", 0l);
+	private static LongDataField siegeImmunityEndTime = new LongDataField("siegewar_siegeImmunityEndTime", 0l);
 	
 	public TownMetaDataController(Towny plugin) {
 		this.plugin = plugin;
@@ -73,6 +76,65 @@ public class TownMetaDataController {
 		} else {
 			town.addMetaData(new BooleanDataField("siegewar_desiredPeaceSetting", bool));
 		}
-		
+	}
+	
+	public static long getRevoltImmunityEndTime(Town town) {
+		LongDataField ldf = (LongDataField) revoltImmunityEndTime.clone();
+		if (town.hasMeta(ldf.getKey())) {
+			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
+			if (cdf instanceof LongDataField) {
+				LongDataField value = (LongDataField) ldf;
+				return value.getValue();
+			}
+		}
+		return 0l;
+	}
+	
+	public static void setRevoltImmunityEndTime(Town town, long time) {
+		LongDataField ldf = (LongDataField) revoltImmunityEndTime.clone();
+		if (time == 0) {
+			town.removeMetaData(ldf);
+			return;
+		}
+		if (town.hasMeta(ldf.getKey())) {
+			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
+			if (cdf instanceof LongDataField) {
+				LongDataField value = (LongDataField) ldf;
+				value.setValue(time);
+				TownyUniverse.getInstance().getDataSource().saveTown(town);
+			}
+		} else {
+			town.addMetaData(new LongDataField("siegewar_revoltImmunityEndTime", time));
+		}
+	}
+	
+	public static long getSiegeImmunityEndTime(Town town) {
+		LongDataField ldf = (LongDataField) siegeImmunityEndTime.clone();
+		if (town.hasMeta(ldf.getKey())) {
+			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
+			if (cdf instanceof LongDataField) {
+				LongDataField value = (LongDataField) ldf;
+				return value.getValue();
+			}
+		}
+		return 0l;
+	}
+	
+	public static void setSiegeImmunityEndTime(Town town, long time) {
+		LongDataField ldf = (LongDataField) siegeImmunityEndTime.clone();
+		if (time == 0) {
+			town.removeMetaData(ldf);
+			return;
+		}
+		if (town.hasMeta(ldf.getKey())) {
+			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
+			if (cdf instanceof LongDataField) {
+				LongDataField value = (LongDataField) ldf;
+				value.setValue(time);
+				TownyUniverse.getInstance().getDataSource().saveTown(town);
+			}
+		} else {
+			town.addMetaData(new LongDataField("siegewar_siegeImmunityEndTime", time));
+		}
 	}
 }

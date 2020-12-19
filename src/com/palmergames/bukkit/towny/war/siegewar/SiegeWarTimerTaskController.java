@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
@@ -71,7 +72,7 @@ public class SiegeWarTimerTaskController {
 			default:
 				//Siege is inactive
 				//Wait for siege immunity timer to end then delete siege
-				if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
+				if (System.currentTimeMillis() > TownMetaDataController.getSiegeImmunityEndTime(siege.getDefendingTown())) {
 					universe.getDataSource().removeSiege(siege, SiegeSide.NOBODY);
 				}
 		}

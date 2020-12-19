@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import java.io.BufferedReader;
@@ -884,31 +883,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("neutral");
 				if (line != null)
 					town.setNeutral(Boolean.parseBoolean(line));
-
-				//Siege War related
-				line = keys.get("revoltImmunityEndTime");
-				if (line != null) {
-					try {
-						town.setRevoltImmunityEndTime(Long.parseLong(line));
-					} catch (Exception e) {
-						town.setRevoltImmunityEndTime(0);
-					}
-				} else {
-					town.setRevoltImmunityEndTime(0);
-				}
-
-				line = keys.get("siegeImmunityEndTime");
-				if (line != null) {
-					try {
-						town.setSiegeImmunityEndTime(Long.parseLong(line));
-					} catch (Exception e) {
-						town.setSiegeImmunityEndTime(0);
-					}
-				} else {
-					 //On first load of system, give each existing town 0-60 minutes
-					long siegeImmunityEndTime = System.currentTimeMillis() + (long)(Math.random() * TimeMgmt.ONE_HOUR_IN_MILLIS);
-					town.setSiegeImmunityEndTime(siegeImmunityEndTime);
-				}
 
 				line = keys.get("occupied");
 				if (line != null)
@@ -1886,8 +1860,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Peaceful
 		list.add("neutral=" + town.isNeutral());
 
-		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
-		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());
 		list.add("occupied=" + town.isOccupied());
 
 		/*

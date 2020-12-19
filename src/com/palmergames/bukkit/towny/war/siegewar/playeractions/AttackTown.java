@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
@@ -50,7 +51,8 @@ public class AttackTown {
 		if (defendingTown.isNeutral())
 			throw new TownyException(Translation.of("msg_war_siege_err_cannot_attack_peaceful_town"));
 
-		if (defendingTown.isSiegeImmunityActive())
+		if (!(defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
+            	&& System.currentTimeMillis() < TownMetaDataController.getSiegeImmunityEndTime(defendingTown))
             throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_siege_immunity"));
 
 		if (defendingTown.isRuined())

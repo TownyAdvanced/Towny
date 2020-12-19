@@ -239,7 +239,7 @@ public class SiegeWarEventListener implements Listener {
 					event.setCancelMessage(Translation.of("msg_err_siege_war_town_voluntary_leave_impossible"));
 					event.setCancelled(true);
 				}
-				if (town.isRevoltImmunityActive()) {
+				if (System.currentTimeMillis() < TownMetaDataController.getRevoltImmunityEndTime(town)) {
 					event.setCancelMessage(Translation.of("msg_err_siege_war_revolt_immunity_active"));
 					event.setCancelled(true);
 				}
@@ -297,9 +297,8 @@ public class SiegeWarEventListener implements Listener {
 		if (SiegeWarSettings.getWarSiegeEnabled()) {
 			Town town = event.getTown();
 			town.setNeutral(SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-			town.setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * TimeMgmt.ONE_HOUR_IN_MILLIS));
+			TownMetaDataController.setSiegeImmunityEndTime(town, System.currentTimeMillis() + (long)(SiegeWarSettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * TimeMgmt.ONE_HOUR_IN_MILLIS));
 			TownMetaDataController.setDesiredPeacefullnessSetting(town, SiegeWarSettings.getWarCommonNewTownPeacefulnessEnabled());
-
 			TownyUniverse.getInstance().getDataSource().saveTown(town);
 		}
 	}
