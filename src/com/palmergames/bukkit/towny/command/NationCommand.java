@@ -2566,6 +2566,56 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	/**
+	 * Wrapper for the nationSpawn() method. All calls should be through here
+	 * unless bypassing for admins.
+	 *
+	 * @param player - Player.
+	 * @param split  - Current command arguments.
+	 * @param ignoreWarning - Whether to ignore the cost
+	 * @throws TownyException - Exception.
+	 */
+	public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		try {
+
+			Resident resident = getResidentOrThrow(player.getUniqueId());
+			Nation nation;
+			String notAffordMSG;
+
+			// Set target nation and affiliated messages.
+			if (split.length == 0) {
+
+				if (!resident.hasTown()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_dont_belong_nation"));
+					return;
+				}
+
+				if (!resident.getTown().hasNation()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_dont_belong_nation"));
+					return;
+				}
+
+				nation = resident.getTown().getNation();
+				notAffordMSG = Translation.of("msg_err_cant_afford_tp");
+
+			} else {
+				// split.length > 1
+				nation = getNationOrThrow(split[0]);
+				notAffordMSG = Translation.of("msg_err_cant_afford_tp_nation", nation.getName());
+
+			}
+
+			SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, ignoreWarning, SpawnType.NATION);
+		} catch (NotRegisteredException e) {
+
+			throw new TownyException(Translation.of("msg_err_not_registered_1", split[0]));
+
+		}
+
+	}
+
     private static void nationTransaction(Player player, String[] args, boolean withdraw) {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
