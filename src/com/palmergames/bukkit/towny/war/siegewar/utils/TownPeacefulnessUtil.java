@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.utils;
+package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 
 import com.palmergames.bukkit.towny.Towny;
@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
+import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 import org.bukkit.entity.Player;
@@ -52,30 +52,29 @@ public class TownPeacefulnessUtil {
 	public static void updateTownPeacefulnessCounters(Town town) {
 		String message;
 
-		if(town.getPeacefulnessChangeConfirmationCounterDays() != 0) {
-			town.decrementPeacefulnessChangeConfirmationCounterDays();
-
-			if(town.getPeacefulnessChangeConfirmationCounterDays() < 1) {
-				town.setNeutral(!town.isNeutral());
-
-				if(SiegeWarSettings.getWarSiegeEnabled()) {
-					if (town.isNeutral()) {
-						message = Translation.of("msg_war_siege_town_became_peaceful", town.getFormattedName());
-					} else {
-						message = Translation.of("msg_war_siege_town_became_non_peaceful", town.getFormattedName());
-					}
-				} else {
-					if (town.isNeutral()) {
-						message = Translation.of("msg_war_common_town_became_peaceful", town.getFormattedName());
-					} else {
-						message = Translation.of("msg_war_common_town_became_non_peaceful", town.getFormattedName());
-					}
-				}
-				TownyMessaging.sendGlobalMessage(message);
-			}
-
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+		int days = TownMetaDataController.getPeacefulnessChangeConfirmationCounterDays(town); 
+		if (days > 1) {
+			TownMetaDataController.setPeacefulnessChangeDays(town, days--);
+			return;
 		}
+		TownMetaDataController.setPeacefulnessChangeDays(town, 0);
+		town.setNeutral(!town.isNeutral());
+
+		if(SiegeWarSettings.getWarSiegeEnabled()) {
+			if (town.isNeutral()) {
+				message = Translation.of("msg_war_siege_town_became_peaceful", town.getFormattedName());
+			} else {
+				message = Translation.of("msg_war_siege_town_became_non_peaceful", town.getFormattedName());
+			}
+		} else {
+			if (town.isNeutral()) {
+				message = Translation.of("msg_war_common_town_became_peaceful", town.getFormattedName());
+			} else {
+				message = Translation.of("msg_war_common_town_became_non_peaceful", town.getFormattedName());
+			}
+		}
+		TownyMessaging.sendGlobalMessage(message);
+		TownyUniverse.getInstance().getDataSource().saveTown(town);
 	}
 
 	/**

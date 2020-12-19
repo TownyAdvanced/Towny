@@ -917,20 +917,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
-				line = keys.get("desiredPeacefulnessValue");
-				if (line != null)
-					try {
-						town.setDesiredPeacefulnessValue(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = keys.get("peacefulnessChangeConfirmationCounterDays");
-				if (line != null)
-					try {
-						town.setPeacefulnessChangeConfirmationCounterDays(Integer.parseInt(line));
-					} catch (Exception ignored) {
-					}
-
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				e.printStackTrace();
@@ -1903,8 +1889,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("revoltImmunityEndTime=" + town.getRevoltImmunityEndTime());
 		list.add("siegeImmunityEndTime=" + town.getSiegeImmunityEndTime());
 		list.add("occupied=" + town.isOccupied());
-		list.add("desiredPeacefulnessValue=" + town.getDesiredPeacefulnessValue());
-		list.add("peacefulnessChangeConfirmationCounterDays=" + town.getPeacefulnessChangeConfirmationCounterDays());
 
 		/*
 		 *  Make sure we only save in async

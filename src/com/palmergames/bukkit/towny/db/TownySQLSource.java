@@ -1137,8 +1137,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
             town.setSiegeImmunityEndTime(rs.getLong("siegeCooldownEndTime"));
 			town.setOccupied(rs.getBoolean("occupied"));
-			town.setDesiredPeacefulnessValue(rs.getBoolean("desiredPeacefulnessValue"));
-			town.setPeacefulnessChangeConfirmationCounterDays(rs.getInt("peacefulnessChangeConfirmationCounterDays"));
 
 			return true;
 		} catch (SQLException e) {
@@ -2052,8 +2050,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
 			twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 			twn_hm.put("occupied", town.isOccupied());
-			twn_hm.put("desiredPeacefulnessValue", town.getDesiredPeacefulnessValue());
-			twn_hm.put("peacefulnessChangeConfirmationCounterDays", town.getPeacefulnessChangeConfirmationCounterDays());
 
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;

@@ -446,13 +446,6 @@ public class TownyFormatter {
 			}
 			out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));
 
-			//Countdown To Peacefulness Status Change: 3 days
-			if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
-				&& town.getPeacefulnessChangeConfirmationCounterDays() > 0
-				&& town.isNeutral() != town.getDesiredPeacefulnessValue()) {
-				out.add(String.format(Translation.of("status_town_peacefulness_status_change_timer"), town.getPeacefulnessChangeConfirmationCounterDays()));
-			}
-
 			//Siege  Info
 			if (SiegeWarSettings.getWarSiegeEnabled())
 				out.addAll(SiegeWarFormatter.getStatus(town));

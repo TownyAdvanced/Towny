@@ -71,8 +71,6 @@ public class Town extends Government implements TownBlockOwner {
 	private long siegeImmunityEndTime = 0;
 	private Siege siege = null;
 	private boolean occupied = false;
-	private boolean desiredPeacefulnessValue = false;
-	private int peacefulnessChangeConfirmationCounterDays;
 
 	public Town(String name) {
 		super(name);
@@ -1428,26 +1426,6 @@ public class Town extends Government implements TownBlockOwner {
 		return ruinedTime;
 	}
 
-	public int getPeacefulnessChangeConfirmationCounterDays() {
-		return peacefulnessChangeConfirmationCounterDays;
-	}
-
-	public void decrementPeacefulnessChangeConfirmationCounterDays() {
-		peacefulnessChangeConfirmationCounterDays--;
-	}
-
-	public void setPeacefulnessChangeConfirmationCounterDays(int counterValueDays) {
-		peacefulnessChangeConfirmationCounterDays = counterValueDays;
-	}
-
-	public boolean getDesiredPeacefulnessValue() {
-		return desiredPeacefulnessValue;
-	}
-	
-	public void setDesiredPeacefulnessValue(boolean value) {
-		desiredPeacefulnessValue = value;
-	}
-	
 	/**
 	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
