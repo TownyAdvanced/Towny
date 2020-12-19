@@ -2106,7 +2106,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			for (Nation nation : TownyUniverse.getInstance().getNationsMap().values()) {
+			for (Nation nation : TownyUniverse.getInstance().getNations()) {
 				try {
 					nation.getAccount().deposit(amount, reason);
 				} catch (EconomyException e) {

@@ -329,17 +329,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
-	 * Gets the keys of TownyUniverse's Nations Map
+	 * Gets the names of all nations.
 	 * 
-	 * @return Returns {@link Map#keySet()} of {@link TownyUniverse#getNationsMap()}
+	 * @return Returns a set of all nation names from all registered nations.
 	 * 
-	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised.
+	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised. Also this method is inefficient.
 	 */
 	@Override
 	@Deprecated
 	public Set<String> getNationsKeys() {
 
-		return universe.getNationsMap().keySet();
+		return universe.getNations().stream().map(TownyObject::getName).collect(Collectors.toSet());
 	}
 	
 	/*
@@ -811,7 +811,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
-		for (Nation toCheck : new ArrayList<>(universe.getNationsMap().values()))
+		for (Nation toCheck : new ArrayList<>(universe.getNations()))
 			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
 				try {
 					if (toCheck.hasAlly(nation))
