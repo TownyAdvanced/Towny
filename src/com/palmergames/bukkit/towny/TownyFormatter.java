@@ -752,27 +752,23 @@ public class TownyFormatter {
 		if (!to.hasMeta())
 			return new ArrayList<>();
 		
-		List<String> extraFields = new ArrayList<>();
-		
 		String field = "";
-		
+		List<String> extraFields = new ArrayList<>();
 		for (CustomDataField<?> cdf : to.getMetadata()) {
+			String newAdd = "";
 			if (!cdf.hasLabel())
 				continue;
 			
-			if (extraFields.contains(field))
-				field = Colors.Green + cdf.getLabel() + ": ";
-			else
-				field += Colors.Green + cdf.getLabel() + ": ";
-			
-			field += cdf.displayFormattedValue();
-			
-			field += "  ";
-			
-			if (field.length() > 40)
+			newAdd = Colors.Green + cdf.getLabel() + ": ";
+			newAdd += cdf.displayFormattedValue();
+			newAdd += "  ";
+			if ((field + newAdd).length() > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH) {
 				extraFields.add(field);
+				field = newAdd;
+			} else {
+				field += newAdd;
+			}
 		}
-		
 		if (!field.isEmpty())
 			extraFields.add(field);
 		
