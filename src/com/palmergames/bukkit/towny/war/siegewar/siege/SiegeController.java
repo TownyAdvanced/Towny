@@ -95,7 +95,7 @@ public class SiegeController {
 	public static void saveSiege(Siege siege) {
 		Town town = siege.getDefendingTown();
 		SiegeMetaDataController.setSiegeName(town, siege.getName());
-		SiegeMetaDataController.setNationUUID(town, siege.getAttackingNation().getUUID().toString());
+		SiegeMetaDataController.setNationUUID(town, siege.getAttackingNation().getUuid().toString());
 		SiegeMetaDataController.setTownUUID(town, siege.getDefendingTown().getUUID().toString());
 		SiegeMetaDataController.setFlagLocation(town, siege.getFlagLocation().getWorld().getName()
 			+ "!" + siege.getFlagLocation().getX()
@@ -136,15 +136,15 @@ public class SiegeController {
 
 		Nation nation = null;
 		try {
-			nation = TownyUniverse.getInstance().getDataSource().getNation(UUID.fromString(SiegeMetaDataController.getNationName(town)));
+			nation = TownyUniverse.getInstance().getDataSource().getNation(UUID.fromString(SiegeMetaDataController.getNationUUID(town)));
 		} catch (NotRegisteredException ignored) {}
 		if (nation == null)
 			return false;
 		siege.setAttackingNation(nation);
 		nation.addSiege(siege);
-
+		
 		if (SiegeMetaDataController.getFlagLocation(town).isEmpty())
-			return false;		
+			return false;
 		String[] location = SiegeMetaDataController.getFlagLocation(town).split("!");
 		World world = Bukkit.getWorld(location[0]);
 		double x = Double.parseDouble(location[1]);
@@ -161,7 +161,7 @@ public class SiegeController {
 		siege.setWarChestAmount(SiegeMetaDataController.getWarChestAmount(town));
 		siege.setTownPlundered(SiegeMetaDataController.townPlundered(town));
 		siege.setTownInvaded(SiegeMetaDataController.townInvaded(town));
-		
+
 		if (SiegeMetaDataController.getStartTime(town) == 0l)
 			return false;
 		siege.setStartTime(SiegeMetaDataController.getStartTime(town));
@@ -169,11 +169,8 @@ public class SiegeController {
 		if (SiegeMetaDataController.getEndTime(town) == 0l)
 			return false;
 		siege.setScheduledEndTime(SiegeMetaDataController.getEndTime(town));
-		
-		if (SiegeMetaDataController.getActualEndTime(town) == 0l)
-			return false;
+
 		siege.setActualEndTime(SiegeMetaDataController.getActualEndTime(town));
-		
 		return true;
 	}
 

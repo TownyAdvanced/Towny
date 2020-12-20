@@ -17,36 +17,37 @@ class MetaDataUtil {
 
 	static String getString(Town town, StringDataField sdf) {
 		CustomDataField<?> cdf = town.getMetadata(sdf.getKey());
-		if (cdf instanceof StringDataField)
-			return ((StringDataField) sdf).getValue();
+		if (cdf instanceof StringDataField) {
+			return ((StringDataField) cdf).getValue();
+		}
 		return "";
 	}
 
 	static boolean getBoolean(Town town, BooleanDataField bdf) {
 		CustomDataField<?> cdf = town.getMetadata(bdf.getKey());
 		if (cdf instanceof BooleanDataField)
-			return ((BooleanDataField) bdf).getValue();
+			return ((BooleanDataField) cdf).getValue();
 		return false;
 	}
 
 	static long getLong(Town town, LongDataField ldf) {
 		CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
 		if (cdf instanceof LongDataField)
-			return ((LongDataField) ldf).getValue();
+			return ((LongDataField) cdf).getValue();
 		return 0l;
 	}
 	
 	static int getInt(Town town, IntegerDataField idf) {
 		CustomDataField<?> cdf = town.getMetadata(idf.getKey());
 		if (cdf instanceof IntegerDataField) 
-			return ((IntegerDataField) idf).getValue();
+			return ((IntegerDataField) cdf).getValue();
 		return 0;				
 	}
 	
 	static double getDouble(Town town, DecimalDataField ddf) {
 		CustomDataField<?> cdf = town.getMetadata(ddf.getKey());
 		if (cdf instanceof DecimalDataField)
-			return ((DecimalDataField) ddf).getValue();
+			return ((DecimalDataField) cdf).getValue();
 		return 0.0;
 	}
 

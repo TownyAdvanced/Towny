@@ -24,8 +24,8 @@ public class SiegeMetaDataController {
 	private static SiegeMetaDataController siegeMetaDataController;
 	private static BooleanDataField hasSiege = new BooleanDataField("siegewar_hasSiege", false);
 	private static StringDataField siegeName = new StringDataField("siegewar_name", "");
-	private static StringDataField siegeNationName = new StringDataField("siegewar_nationName", "");
-	private static StringDataField siegeTownName = new StringDataField("siegewar_townName", "");
+	private static StringDataField siegeNationUUID = new StringDataField("siegewar_nationName", "");
+	private static StringDataField siegeTownUUID = new StringDataField("siegewar_townName", "");
 	private static StringDataField siegeFlagLocation = new StringDataField("siegewar_flagLocation", "");
 	private static StringDataField siegeStatus = new StringDataField("siegewar_status", "");
 	private static IntegerDataField siegePoints = new IntegerDataField("siegewar_points", 0);
@@ -78,15 +78,15 @@ public class SiegeMetaDataController {
 	}
 	
 	@Nullable
-	public static String getNationName(Town town) {
-		StringDataField sdf = (StringDataField) siegeNationName.clone();
+	public static String getNationUUID(Town town) {
+		StringDataField sdf = (StringDataField) siegeNationUUID.clone();
 		if (town.hasMeta(sdf.getKey()))
 			return MetaDataUtil.getString(town, sdf);
 		return null;
 	}
 	
 	public static void setNationUUID(Town town, String name) {
-		StringDataField sdf = (StringDataField) siegeNationName.clone();
+		StringDataField sdf = (StringDataField) siegeNationUUID.clone();
 		if (town.hasMeta(sdf.getKey()))
 			MetaDataUtil.setString(town, sdf, name);
 		else
@@ -95,14 +95,14 @@ public class SiegeMetaDataController {
 	
 	@Nullable
 	public static String getTownName(Town town) {
-		StringDataField sdf = (StringDataField) siegeTownName.clone();
+		StringDataField sdf = (StringDataField) siegeTownUUID.clone();
 		if (town.hasMeta(sdf.getKey()))
 			return MetaDataUtil.getString(town, sdf);
 		return null;
 	}
 	
 	public static void setTownUUID(Town town, String name) {
-		StringDataField sdf = (StringDataField) siegeTownName.clone();
+		StringDataField sdf = (StringDataField) siegeTownUUID.clone();
 		if (town.hasMeta(sdf.getKey()))
 			MetaDataUtil.setString(town, sdf, name);
 		else
@@ -215,7 +215,7 @@ public class SiegeMetaDataController {
 		if (town.hasMeta(ldf.getKey()))
 			MetaDataUtil.setLong(town, ldf, num);
 		else
-			town.addMetaData(new LongDataField("siegewar_startTime", 0l));
+			town.addMetaData(new LongDataField("siegewar_startTime", num));
 	}
 	
 	public static long getEndTime(Town town) {
@@ -230,7 +230,7 @@ public class SiegeMetaDataController {
 		if (town.hasMeta(ldf.getKey()))
 			MetaDataUtil.setLong(town, ldf, num);
 		else
-			town.addMetaData(new LongDataField("siegewar_endTime", 0l));
+			town.addMetaData(new LongDataField("siegewar_endTime", num));
 	}
 	
 	public static long getActualEndTime(Town town) {
@@ -245,6 +245,6 @@ public class SiegeMetaDataController {
 		if (town.hasMeta(ldf.getKey()))
 			MetaDataUtil.setLong(town, ldf, num);
 		else
-			town.addMetaData(new LongDataField("siegewar_actualEndTime", 0l));
+			town.addMetaData(new LongDataField("siegewar_actualEndTime", num));
 	}
 }
