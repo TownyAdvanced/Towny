@@ -969,12 +969,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 
 			saveTown(town);
-			//Save siege data
-			if(town.hasSiege()) {
-				SiegeController.saveSiege(town.getSiege());
-				saveNation(town.getSiege().getAttackingNation());
-			}
-			saveSiegeList();
 			savePlotGroupList();
 			saveWorld(town.getHomeblockWorld());
 
@@ -1060,12 +1054,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Town town : toSave) {
 				saveTown(town);
 			}
-
-			// renames the sieges
-			for(Siege siege: nation.getSieges()) {
-				SiegeController.saveSiege(siege);
-			}
-			saveSiegeList();
 
 			saveNation(nation);
 

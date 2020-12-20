@@ -23,6 +23,8 @@ import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
+import com.palmergames.bukkit.towny.event.RenameNationEvent;
+import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -504,6 +506,30 @@ public class SiegeWarEventListener implements Listener {
 		{
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_unclaim"));
+		}
+	}
+	
+	/*
+	 * Simply saving the siege will set the name of the siege.
+	 */
+	@EventHandler
+	public void onTownRename(RenameTownEvent event) {
+		if (SiegeController.hasSiege(event.getTown())) {
+			SiegeController.saveSiege(event.getTown().getSiege());
+			SiegeController.saveSiegeList();
+		}
+	}
+
+	/*
+	 * Simply saving the siege will set the name of the siege.
+	 */
+	@EventHandler
+	public void onNationRename(RenameNationEvent event) {
+		if (!event.getNation().getSieges().isEmpty()) {
+			for (Siege siege : event.getNation().getSieges())
+				SiegeController.saveSiege(siege);
+			
+			SiegeController.saveSiegeList();
 		}
 	}
 }

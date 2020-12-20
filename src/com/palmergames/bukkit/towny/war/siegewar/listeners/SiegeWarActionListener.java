@@ -2,16 +2,25 @@ package com.palmergames.bukkit.towny.war.siegewar.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.PlaceBlock;
@@ -30,18 +39,46 @@ public class SiegeWarActionListener implements Listener {
 	
 	@EventHandler
 	public void onBlockBuild(TownyBuildEvent event) {
-		if (SiegeWarSettings.getWarSiegeEnabled())
+		if (SiegeWarSettings.getWarSiegeEnabled()) {
 			PlaceBlock.evaluateSiegeWarPlaceBlockRequest(event.getPlayer(), event.getBlock(), event);
 
+//			if (!event.isCancelled() && TownyAPI.getInstance().isNationZone(event.getLocation())) {
+//				evaluateNationZone(event.getPlayer(), event.getLocation(), event);
+//			}
+		}
 	}
-	
+
+
 	/*
 	 * SW will prevent an block break from altering an area around a banner.
 	 */
 	@EventHandler
 	public void onBlockBreak(TownyDestroyEvent event) {
-		if (SiegeWarSettings.getWarSiegeEnabled() && SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(event.getBlock())) {
-			event.setMessage(Translation.of("msg_err_siege_war_cannot_destroy_siege_banner"));
+		if (SiegeWarSettings.getWarSiegeEnabled()) { 
+			if (SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(event.getBlock())) {
+				event.setMessage(Translation.of("msg_err_siege_war_cannot_destroy_siege_banner"));
+				event.setCancelled(true);
+			}
+			
+//			if (!event.isCancelled() && TownyAPI.getInstance().isNationZone(event.getLocation())) {
+//				evaluateNationZone(event.getPlayer(), event.getLocation(), event);
+//			}
+		}
+	}
+
+	private void evaluateNationZone(Player player, Location location, TownyActionEvent event) {
+		WorldCoord pos = WorldCoord.parseWorldCoord(event.getLocation());
+		TownyWorld world = null;
+		Town nearestTown = null;
+		Nation nation = null;
+		try {
+			world = pos.getTownyWorld();
+			nearestTown = world.getClosestTownWithNationFromCoord(pos.getCoord(), null);
+			nation = nearestTown.getNation();
+		} catch (NotRegisteredException ignored) {}
+		
+		if(nearestTown.hasSiege() && nearestTown.getSiege().getStatus().isActive()) {
+			event.setMessage(Translation.of("msg_err_siege_war_nation_zone_this_area_protected_but_besieged", world.getUnclaimedZoneName(), nation.getName()));
 			event.setCancelled(true);
 		}
 	}
