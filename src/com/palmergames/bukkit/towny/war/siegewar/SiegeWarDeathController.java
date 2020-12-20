@@ -55,7 +55,7 @@ public class SiegeWarDeathController {
 			Town deadResidentTown = deadResident.getTown();
 
 			//Residents of occupied towns do not give siege points if killed
-			if (deadResidentTown.isOccupied())
+			if (deadResidentTown.isConquered())
 				return;
 
 			//Declare local variables

@@ -832,13 +832,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setNeutral(Boolean.parseBoolean(line));
 
-				line = keys.get("occupied");
-				if (line != null)
-					try {
-						town.setOccupied(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				e.printStackTrace();
@@ -1711,8 +1704,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("ruinedTime=" + town.getRuinedTime());
 		// Peaceful
 		list.add("neutral=" + town.isNeutral());
-
-		list.add("occupied=" + town.isOccupied());
 
 		/*
 		 *  Make sure we only save in async

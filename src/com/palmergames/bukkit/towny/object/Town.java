@@ -67,7 +67,6 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean ruined = false;
 	private long ruinedTime;
 	private Siege siege = null;
-	private boolean occupied = false;
 
 	public Town(String name) {
 		super(name);
@@ -202,8 +201,6 @@ public class Town extends Government implements TownBlockOwner {
 		} catch (AlreadyRegisteredException ignored) {
 			// Cannot occur when setting null;
 		}
-		
-		setOccupied(false);
 		
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
@@ -1217,14 +1214,6 @@ public class Town extends Government implements TownBlockOwner {
 				* townBlocks.size()
 				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
 		return cost;
-	}
-
-	public void setOccupied(boolean occupied) {
-		this.occupied = occupied;
-	}
-
-	public boolean isOccupied() {
-		return this.occupied;
 	}
 	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {

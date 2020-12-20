@@ -486,7 +486,7 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onTownUnclaim(TownPreUnclaimCmdEvent event) {
-		if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && event.getTown().isOccupied()) {
+		if (SiegeWarSettings.getWarCommonOccupiedTownUnClaimingDisabled() && event.getTown().isConquered()) {
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_err_war_common_occupied_town_cannot_unclaim"));
 			return;

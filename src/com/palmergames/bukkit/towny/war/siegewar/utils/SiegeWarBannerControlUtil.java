@@ -171,7 +171,7 @@ public class SiegeWarBannerControlUtil {
 		if (!resident.hasTown())
 			return false; //Player is a nomad
 
-		if(resident.getTown().isOccupied())
+		if(resident.getTown().isConquered())
 			return false; // Player is from occupied town
 
 		if(player.isDead())

@@ -431,7 +431,7 @@ public class TownyFormatter {
 
 			// Nation: Azur Empire
 			try {
-				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : "") + (town.isOccupied() ? " " + Translation.of("msg_occupier") : ""));
+				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : ""));
 			} catch (TownyException ignored) {
 			}
 

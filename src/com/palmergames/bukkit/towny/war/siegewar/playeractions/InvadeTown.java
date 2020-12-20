@@ -96,7 +96,7 @@ public class InvadeTown {
         
         //Set flags to indicate success
 		siege.setTownInvaded(true);
-        defendingTown.setOccupied(true);
+        defendingTown.setConquered(true);
 
 		//Save to db
         SiegeController.saveSiege(siege);

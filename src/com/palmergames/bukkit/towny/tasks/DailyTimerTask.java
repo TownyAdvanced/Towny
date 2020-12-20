@@ -232,7 +232,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							 * TODO: RECHECK THIS IS WORKING. 
 							 */
 							//If town is occupied, destroy it, otherwise remove from nation
-							if (SiegeWarSettings.getWarSiegeEnabled() && town.isOccupied()) {
+							if (SiegeWarSettings.getWarSiegeEnabled() && town.isConquered()) {
 								universe.getDataSource().removeTown(town);
 								localTownsDestroyed.add(town.getName());
 							}
