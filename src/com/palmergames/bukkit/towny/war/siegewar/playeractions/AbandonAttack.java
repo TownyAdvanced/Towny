@@ -3,11 +3,11 @@ package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -57,7 +57,7 @@ public class AbandonAttack {
 		if(timeUntilOfficialAbandon > 0) {
 			//Pending abandon
 			siege.setStatus(SiegeStatus.PENDING_ATTACKER_ABANDON);
-			TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+			SiegeController.saveSiege(siege);
 			TownyMessaging.sendGlobalMessage(
 				String.format(Translation.of("msg_siege_war_pending_attacker_abandon"),
 					siege.getAttackingNation().getFormattedName(),

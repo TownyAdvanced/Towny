@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.util.TimeMgmt;
 
 /**
@@ -23,7 +23,7 @@ public class SurrenderTown {
 		if(timeUntilSurrenderConfirmation > 0) {
 			//Pending surrender
 			siege.setStatus(SiegeStatus.PENDING_DEFENDER_SURRENDER);
-			TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+			SiegeController.saveSiege(siege);
 			TownyMessaging.sendGlobalMessage(String.format(
 				Translation.of("msg_siege_war_pending_town_surrender"),
 				siege.getDefendingTown().getFormattedName(),

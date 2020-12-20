@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
 
@@ -90,7 +91,7 @@ public class SiegeWarPointsUtil {
 			siege.adjustSiegePoints(siegePoints);
 		}
 
-		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+		SiegeController.saveSiege(siege);
 
 		//Send messages to siege participants
 		String residentInformationString;
@@ -211,7 +212,7 @@ public class SiegeWarPointsUtil {
 
 	public static void updatePopulationBasedSiegePointModifiers() {
 		Map<Nation,Integer> nationSidePopulationsCache = new HashMap<>();
-		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+		for (Siege siege : SiegeController.getSieges()) {
 			updateSiegePointPopulationModifier(siege, nationSidePopulationsCache);
 		}
 	}

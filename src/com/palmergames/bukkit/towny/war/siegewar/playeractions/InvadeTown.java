@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 
 /**
  * This class is responsible for processing requests to invade towns
@@ -98,7 +99,7 @@ public class InvadeTown {
         defendingTown.setOccupied(true);
 
 		//Save to db
-		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+        SiegeController.saveSiege(siege);
 		TownyUniverse.getInstance().getDataSource().saveTown(defendingTown);
 		TownyUniverse.getInstance().getDataSource().saveNation(attackingNation);
 		if(nationTown && !nationDefeated) {

@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.utils.*;
@@ -26,7 +27,7 @@ public class SiegeWarTimerTaskController {
 	 * e.g. who wins if siege victory timer runs out ?
 	 */
 	public static void evaluateTimedSiegeOutcomes() {
-		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+		for (Siege siege : SiegeController.getSieges()) {
 			evaluateTimedSiegeOutcome(siege);
 		}
 	}
@@ -73,7 +74,7 @@ public class SiegeWarTimerTaskController {
 				//Siege is inactive
 				//Wait for siege immunity timer to end then delete siege
 				if (System.currentTimeMillis() > TownMetaDataController.getSiegeImmunityEndTime(siege.getDefendingTown())) {
-					universe.getDataSource().removeSiege(siege, SiegeSide.NOBODY);
+					SiegeController.removeSiege(siege, SiegeSide.NOBODY);
 				}
 		}
 	}
@@ -92,7 +93,7 @@ public class SiegeWarTimerTaskController {
 	 * Evaluate banner control for all sieges
 	 */
 	public static void evaluateBannerControl() {
-		for (Siege siege : TownyUniverse.getInstance().getDataSource().getSieges()) {
+		for (Siege siege : SiegeController.getSieges()) {
 			SiegeWarBannerControlUtil.evaluateBannerControl(siege);
 		}
 	}

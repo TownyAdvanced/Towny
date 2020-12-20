@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -340,7 +341,7 @@ public class SpawnUtil {
 						}
 
 						//Block TP if the target spawn point is in a siege zone
-						for (Siege siege : townyUniverse.getDataSource().getSieges()) {
+						for (Siege siege : SiegeController.getSieges()) {
 							if (siege.getStatus().isActive()
 								&& SiegeWarDistanceUtil.isInSiegeZone(spawnLoc, siege)) {
 								throw new TownyException(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));

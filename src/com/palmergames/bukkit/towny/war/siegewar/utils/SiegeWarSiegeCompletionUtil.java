@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.siegewar.utils;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 
 /**
  * This class contains utility functions related to completing sieges
@@ -28,7 +29,7 @@ public class SiegeWarSiegeCompletionUtil {
 		}
 
 		//Save to db
-		TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+		SiegeController.saveSiege(siege);
 		TownyUniverse.getInstance().getDataSource().saveTown(siege.getDefendingTown());
 	}
 }

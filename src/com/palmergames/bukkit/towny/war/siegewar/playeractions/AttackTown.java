@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.block.Block;
@@ -99,8 +100,8 @@ public class AttackTown {
 		//Create Siege
 		String siegeName = attackingNation.getName() + "#vs#" + defendingTown.getName();
 		TownyUniverse universe = TownyUniverse.getInstance();
-		universe.getDataSource().newSiege(siegeName);
-		Siege siege = universe.getDataSource().getSiege(siegeName);
+		SiegeController.newSiege(siegeName);
+		Siege siege = SiegeController.getSiege(siegeName);
 		
 		//Set values in siege object
 		siege.setAttackingNation(attackingNation);
@@ -143,7 +144,7 @@ public class AttackTown {
 		}
 
 		//Save to DB
-		universe.getDataSource().saveSiege(siege);
+		SiegeController.saveSiege(siege);
 		universe.getDataSource().saveNation(attackingNation);
 		universe.getDataSource().saveTown(defendingTown);
 		universe.getDataSource().saveSiegeList();

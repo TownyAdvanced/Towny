@@ -39,8 +39,8 @@ import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -102,6 +102,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				dataFolderPath,
 				dataFolderPath + File.separator + "plot-block-data"
 			) || !FileMgmt.checkOrCreateFiles(
+				dataFolderPath + File.separator + "sieges.txt",
 				dataFolderPath + File.separator + "regen.txt",
 				dataFolderPath + File.separator + "snapshot_queue.txt"
 			)) {
@@ -723,7 +724,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		removeTownBlocks(town);
 
 		if (town.hasSiege())
-			removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
+			SiegeController.removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();
@@ -811,7 +812,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		//Remove all sieges
 		for (Siege siege : new ArrayList<>(nation.getSieges()))
-			removeSiege(siege, SiegeSide.DEFENDERS);
+			SiegeController.removeSiege(siege, SiegeSide.DEFENDERS);
 
 		//Delete nation and save towns
 		deleteNation(nation);
@@ -914,9 +915,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * and the file move command may fail.
 			 */
 			deleteTown(town);
-			if(town.hasSiege()) {
-				deleteSiege(town.getSiege());
-			}
 
 			/*
 			 * Remove the old town from the townsMap
@@ -936,8 +934,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//Update siege
 				siege.setName(newSiegeName);
 				//Update universe
-				universe.getSiegesMap().remove(oldSiegeName.toLowerCase());
-				universe.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
+				SiegeController.getSiegesMap().remove(oldSiegeName.toLowerCase());
+				SiegeController.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
 			}
 
 			// If this was a nation capitol
@@ -985,7 +983,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveTown(town);
 			//Save siege data
 			if(town.hasSiege()) {
-				saveSiege(town.getSiege());
+				SiegeController.saveSiege(town.getSiege());
 				saveNation(town.getSiege().getAttackingNation());
 			}
 			saveSiegeList();
@@ -1047,9 +1045,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//Tidy up old files
 			deleteNation(nation);
-			for(Siege siege: new ArrayList<>(nation.getSieges())) {
-				deleteSiege(siege);
-			}
 
 			/*
 			 * Remove the old nation from the nationsMap
@@ -1061,19 +1056,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			nation.setName(filteredName);
 			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
 			universe.getNationsTrie().addKey(filteredName);
-
-			//Move/rename sieges
-			String oldSiegeName;
-			String newSiegeName;
-			for(Siege siege: nation.getSieges()) {
-				oldSiegeName = siege.getName();
-				newSiegeName = siege.getAttackingNation().getName() + "#vs#" + siege.getDefendingTown().getName();
-				//Update siege
-				siege.setName(newSiegeName);
-				//Update universe
-				universe.getSiegesMap().remove(oldSiegeName.toLowerCase());
-				universe.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
-			}
 
 			if (TownyEconomyHandler.isActive()) {
 				try {
@@ -1091,13 +1073,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTown(town);
 			}
 
-			saveNation(nation);
-
-			//Save sieges
+			// renames the sieges
 			for(Siege siege: nation.getSieges()) {
-				saveSiege(siege);
-				saveTown(siege.getDefendingTown());
+				SiegeController.saveSiege(siege);
 			}
+			
+			saveNation(nation);
 
 			saveSiegeList();
 
@@ -1581,72 +1562,57 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		lock.unlock();
 	}
 
-	@Override
-	public List<Siege> getSieges() {
-		return new ArrayList<>(universe.getSiegesMap().values());
-	}
-
-	@Override
-	public void newSiege(String siegeName) throws AlreadyRegisteredException {
-
-		lock.lock();
+    @Override
+	public boolean loadSiegeList() {
+		TownyMessaging.sendDebugMsg("Loading Siege List");
+		String siegeName = null;
+		BufferedReader fin;
 
 		try {
-			if(universe.getSiegesMap().containsKey(siegeName.toLowerCase()))
-				throw new AlreadyRegisteredException("Siege is already registered");
+			fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "sieges.txt"),StandardCharsets.UTF_8));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
 
-			Siege siege = new Siege(siegeName);
+		try {
+			while ((siegeName = fin.readLine()) != null) {
+				if (!siegeName.equals("")) {
+					SiegeController.newSiege(siegeName);
+				}
+			}
+			return true;
 
-			universe.getSiegesMap().put(siegeName.toLowerCase(), siege);
+		} catch (AlreadyRegisteredException e) {
+			e.printStackTrace();
+			return false;
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Siege list at " + siegeName + ", in towny\\data\\sieges.txt");
+			e.printStackTrace();
+			return false;
 
 		} finally {
-			lock.unlock();
+			try {
+				fin.close();
+			} catch (IOException ignore) {
+			}
 		}
 	}
-
+    
 	@Override
-	public Siege getSiege(String siegeName) throws NotRegisteredException {
-		if(!universe.getSiegesMap().containsKey(siegeName.toLowerCase())) {
-			throw new NotRegisteredException("Siege not found");
-		}
-		return universe.getSiegesMap().get(siegeName.toLowerCase());
-	}
+	public boolean saveSiegeList() {
+		List<String> list = new ArrayList<>();
 
-	//Remove a particular siege, and all associated data
-	@Override
-	public void removeSiege(Siege siege, SiegeSide refundSideIfSiegeIsActive) {
-		//If siege is active, initiate siege immunity for town, and return war chest
-		if(siege.getStatus().isActive()) {
-			siege.setActualEndTime(System.currentTimeMillis());
-			SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
-
-			if(refundSideIfSiegeIsActive == SiegeSide.ATTACKERS)
-				SiegeWarMoneyUtil.giveWarChestToAttackingNation(siege);
-			else if (refundSideIfSiegeIsActive == SiegeSide.DEFENDERS)
-				SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
+		for (Siege siege : SiegeController.getSieges()) {
+			list.add(siege.getName());
 		}
 
-		//Remove siege from town
-		siege.getDefendingTown().setSiege(null);
-		//Remove siege from nation
-		siege.getAttackingNation().removeSiege(siege);
-		//Remove siege from universe
-		universe.getSiegesMap().remove(siege.getName().toLowerCase());
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "sieges.txt"));
 
-		//Save town
-		saveTown(siege.getDefendingTown());
-		//Save attacking nation
-		saveNation(siege.getAttackingNation());
-		//Delete siege file
-		deleteSiege(siege);
-		//Save siege list
-		saveSiegeList();
+		return true;
 	}
-
-	@Override
-	public Set<String> getSiegeKeys() {
-
-		return universe.getSiegesMap().keySet();
-	}
-
 }

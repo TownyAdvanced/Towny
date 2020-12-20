@@ -48,6 +48,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
@@ -78,7 +79,7 @@ public class SiegeWarEventListener implements Listener {
 			try {
 				//Prevent milk bucket usage while attempting to gain banner control
 				if(event.getItem().getType() == Material.MILK_BUCKET) {
-					for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+					for(Siege siege: SiegeController.getSieges()) {
 						if(siege.getBannerControlSessions().containsKey(event.getPlayer())) {
 							event.setCancelled(true);
 							TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_war_siege_zone_milk_bucket_forbidden_while_attempting_banner_control"));
@@ -259,7 +260,7 @@ public class SiegeWarEventListener implements Listener {
 	@EventHandler
 	public void onTownGoesToRuin(TownRuinedEvent event) {
 		if (event.getTown().hasSiege())
-			TownyUniverse.getInstance().getDataSource().removeSiege(event.getTown().getSiege(), SiegeSide.ATTACKERS);
+			SiegeController.removeSiege(event.getTown().getSiege(), SiegeSide.ATTACKERS);
 	}
 	
 	@EventHandler
@@ -458,7 +459,7 @@ public class SiegeWarEventListener implements Listener {
 
 			//If the land is too near any active siege zone, it cannot be claimed.
 			if(SiegeWarSettings.getWarSiegeClaimingDisabledNearSiegeZones()) {
-				for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+				for(Siege siege: SiegeController.getSieges()) {
 					try {
 						if (siege.getStatus().isActive()
 							&& SiegeWarDistanceUtil.isInSiegeZone(event.getPlayer(), siege)) {

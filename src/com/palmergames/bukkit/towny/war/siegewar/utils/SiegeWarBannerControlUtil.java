@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.BannerControlSession;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
@@ -248,7 +249,7 @@ public class SiegeWarBannerControlUtil {
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(true, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
 				//Save siege zone
-				TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+				SiegeController.saveSiege(siege);
 			break;
 			case DEFENDERS:
 				//Adjust siege points
@@ -256,7 +257,7 @@ public class SiegeWarBannerControlUtil {
 				siegePoints = SiegeWarPointsUtil.adjustSiegePointsForPopulationQuotient(false, siegePoints, siege);
 				siege.adjustSiegePoints(siegePoints);
 				//Save siege zone
-				TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+				SiegeController.saveSiege(siege);
 			break;
 			default:
 			return;
