@@ -1100,7 +1100,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			town.setNeutral(rs.getBoolean("neutral"));
-			
 			town.setOccupied(rs.getBoolean("occupied"));
 
 			return true;
@@ -1915,9 +1914,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
-			
 			twn_hm.put("occupied", town.isOccupied());
-
+			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 

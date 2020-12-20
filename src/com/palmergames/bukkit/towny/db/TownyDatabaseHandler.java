@@ -926,18 +926,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.registerTown(town);
 			world.addTown(town);
 
-			//Move/rename siege
-			if(town.hasSiege()) {
-				Siege siege = town.getSiege();
-				String oldSiegeName = siege.getName();
-				String newSiegeName = siege.getAttackingNation().getName() + "#vs#" + town.getName();
-				//Update siege
-				siege.setName(newSiegeName);
-				//Update universe
-				SiegeController.getSiegesMap().remove(oldSiegeName.toLowerCase());
-				SiegeController.getSiegesMap().put(newSiegeName.toLowerCase(), siege);
-			}
-
 			// If this was a nation capitol
 			if (isCapital) {
 				nation.setCapital(town);
@@ -1077,10 +1065,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for(Siege siege: nation.getSieges()) {
 				SiegeController.saveSiege(siege);
 			}
-			
-			saveNation(nation);
-
 			saveSiegeList();
+
+			saveNation(nation);
 
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);

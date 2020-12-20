@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -91,11 +90,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public String getNationFilename(Nation nation) {
 
 		return dataFolderPath + File.separator + "nations" + File.separator + nation.getName() + ".txt";
-	}
-
-	public String getSiegeFilename(Siege siege) {
-
-		return dataFolderPath + File.separator + "sieges" + File.separator + siege.getName() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
