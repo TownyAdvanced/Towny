@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import org.bukkit.entity.Player;
 
@@ -123,7 +124,7 @@ public class PlunderTown {
 		if(townDestroyed) {
 			TownyUniverse.getInstance().getDataSource().removeTown(town);
 		} else {
-			TownyUniverse.getInstance().getDataSource().saveSiege(siege);
+			SiegeController.saveSiege(siege);
 		}
 
 		//Send plunder success messages

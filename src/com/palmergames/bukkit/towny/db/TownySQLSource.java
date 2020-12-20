@@ -19,8 +19,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
@@ -571,37 +569,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return false;
 	}
 
-    @Override
-    public boolean loadSiegeList() {
-
-        String name;
-        
-        TownyMessaging.sendDebugMsg("Loading Siege zones List");
-        if (!getContext())
-            return false;
-        try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "SIEGES");
-
-            while (rs.next()) {
-                try {
-                    name = rs.getString("name").toLowerCase();
-                    newSiege(name);
-                } catch (AlreadyRegisteredException e) {
-                    e.printStackTrace();
-                }
-            }
-            s.close();
-            return true;
-        } catch (SQLException e) {
-            TownyMessaging.sendErrorMsg("SQL: siege zone list sql error : " + e.getMessage());
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: siege zone list unknown error : ");
-            e.printStackTrace();
-        }
-        return false;
-    }
-
 	@Override
 	public boolean loadWorldList() {
 
@@ -1133,7 +1100,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			town.setNeutral(rs.getBoolean("neutral"));
-			
 			town.setOccupied(rs.getBoolean("occupied"));
 
 			return true;
@@ -1246,18 +1212,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					nation.addEnemy(enemy);
 			}
 
-			line = rs.getString("sieges");
-            if (line != null) {
-                tokens = line.split(",");
-                for (String token : tokens) {
-                    if (!token.isEmpty()) {
-                        Siege siege = getSiege(token);
-                        if (siege != null)
-                            nation.addSiege(siege);
-                    }
-                }
-            }
-            
 			nation.setTaxes(rs.getDouble("taxes"));
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
@@ -1322,90 +1276,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return false;
 	}
-
-	@Override 
-	public boolean loadSieges() {
-		if (!getContext())
-			return false;
-
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES")) {
-			while (rs.next()) {
-				if (!loadNation(rs)) {
-					System.out.println("[Towny] Loading Error: Could not properly read siege data.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Siege sql error " + e.getMessage());
-			return false;
-		}
-		return true;
-	}
-	
-    @Override
-	public boolean loadSiege(Siege siege) {
-		if (!getContext())
-			return false;
-
-		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "SIEGES WHERE name=?")) {
-			ps.setString(1, siege.getName());
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return loadSiege(rs);
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
-		}
-		return false;
-	}
-	
-	public boolean loadSiege(ResultSet rs) {
-
-		String line;
-		String[] listEntries;
-		World flagLocationWorld;
-		double flagLocationX;
-		double flagLocationY;
-		double flagLocationZ;
-
-		try {
-			Siege siege = getSiege(rs.getString("name"));
-
-			TownyMessaging.sendDebugMsg("Loading siege " + siege.getName());
-
-			siege.setAttackingNation(getNation(rs.getString("attackingNation")));
-			siege.setDefendingTown(universe.getTown(rs.getString("defendingTown")));
-
-			line = rs.getString("flagLocation");
-			listEntries = line.split(",");
-			flagLocationWorld = BukkitTools.getWorld(listEntries[0]);
-			flagLocationX = Double.parseDouble(listEntries[1]);
-			flagLocationY = Double.parseDouble(listEntries[2]);
-			flagLocationZ = Double.parseDouble(listEntries[3]);
-			Location flagLocation = new Location(flagLocationWorld, flagLocationX, flagLocationY, flagLocationZ);
-			siege.setFlagLocation(flagLocation);
-
-			siege.setStatus(SiegeStatus.parseString(rs.getString("siegeStatus")));
-			siege.setSiegePoints(rs.getInt("siegePoints"));
-			siege.setWarChestAmount(rs.getDouble("warChestAmount"));
-			siege.setTownPlundered(rs.getBoolean("townPlundered"));
-			siege.setTownInvaded(rs.getBoolean("townInvaded"));
-			siege.setStartTime(rs.getLong("actualStartTime"));
-			siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
-			siege.setActualEndTime(rs.getLong("actualEndTime"));
-			return true;
-
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load siege sql error " + e.getMessage());
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load siege unknown error - ");
-			e.printStackTrace();
-		}
-		return false;
-    }
 
 	@Override
 	public boolean loadWorlds() {
@@ -2044,9 +1914,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
-			
 			twn_hm.put("occupied", town.isOccupied());
-
+			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 
@@ -2120,40 +1989,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		return false;
 	}
-
-    @Override
-	public synchronized boolean saveSiege(Siege siege) {
-
-        TownyMessaging.sendDebugMsg(
-                "Saving siege " +siege.getName());
-
-        try {
-            HashMap<String, Object> sg_hm = new HashMap<>();
-
-            sg_hm.put("name", siege.getName());
-			sg_hm.put("attackingNation", siege.getAttackingNation().getName());
-			sg_hm.put("defendingTown", siege.getDefendingTown().getName());
-			sg_hm.put("flagLocation", siege.getFlagLocation().getWorld().getName()
-                    + "," + siege.getFlagLocation().getX()
-                    + "," + siege.getFlagLocation().getY()
-                    + "," + siege.getFlagLocation().getZ());
-			sg_hm.put("siegeStatus", siege.getStatus().toString());
-			sg_hm.put("siegePoints", siege.getSiegePoints());
-			sg_hm.put("warChestAmount", siege.getWarChestAmount());
-			sg_hm.put("townPlundered", false);
-			sg_hm.put("townInvaded", false);
-			sg_hm.put("actualStartTime", 0);
-			sg_hm.put("scheduledEndTime", 0);
-			sg_hm.put("actualEndTime", 0);
-
-			UpdateDB("SIEGES", sg_hm, Collections.singletonList("name"));
-
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Save siege unknown error");
-            e.printStackTrace();
-        }
-        return false;
-    }
 
 	@Override
 	public synchronized boolean saveWorld(TownyWorld world) {
@@ -2337,13 +2172,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-    @Override
-    public void deleteSiege(Siege siege) {
-        HashMap<String, Object> sieges_hm = new HashMap<>();
-		sieges_hm.put("name", siege.getName());
-        DeleteDB("SIEGES", sieges_hm);
-    }
-	
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
 		HashMap<String, Object> twn_hm = new HashMap<>();
@@ -2367,12 +2195,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean savePlotGroupList() {
-		return true;
-	}
-
-    @Override
-	public boolean saveSiegeList() {
-
 		return true;
 	}
 

@@ -110,30 +110,6 @@ public class SQL_Schema {
 		return columns;
 	}
 
-	private static String getSieges() {
-
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "SIEGES ("
-			+ "`name` VARCHAR(32) NOT NULL,"
-			+ "PRIMARY KEY (`name`)"
-			+ ")";
-	}
-	
-	private static List<String> getSiegeColumns(){
-		List<String> columns = new ArrayList<>();
-		columns.add("`attackingNation` mediumtext NOT NULL");
-		columns.add("`defendingTown` mediumtext NOT NULL");
-		columns.add("`flagLocation` mediumtext NOT NULL");
-		columns.add("`siegeStatus` mediumtext NOT NULL");
-		columns.add("`siegePoints` mediumtext NOT NULL");
-		columns.add("`warChestAmount` float NOT NULL");
-		columns.add("`townPlundered` bool NOT NULL DEFAULT '0'");
-		columns.add("`townInvaded` bool NOT NULL DEFAULT '0'");
-		columns.add("`actualStartTime` BIGINT");
-		columns.add("`scheduledEndTime` BIGINT");
-		columns.add("`actualEndTime` BIGINT");
-		return columns;
-	}
-	
     private static String getTOWNS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
@@ -318,44 +294,6 @@ public class SQL_Schema {
 			}
 		}
 		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
-
-		/*
-		 *  Fetch SIEGES Table schema.
-		 */
-		String sieges_create = SQL_Schema.getSieges();
-
-		try {
-
-			Statement s = cntx.createStatement();
-			s.executeUpdate(sieges_create);
-			TownyMessaging.sendDebugMsg("Table SIEGES is ok!");
-
-		} catch (SQLException ee) {
-
-			TownyMessaging.sendErrorMsg("Error Creating table SIEGES : " + ee.getMessage());
-
-		}
-		/*
-		 * Add columns to sieges (if not already there)
-		 */
-		String siege_update;
-		List<String> siegeColumns = getSiegeColumns();
-		for (String column : siegeColumns) {
-			try {
-				siege_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "SIEGES` "
-					+ "ADD COLUMN " + column;
-
-				PreparedStatement ps = cntx.prepareStatement(siege_update);
-				ps.executeUpdate();
-
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table SIEGES :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table SIEGES is updated!");
-
-		
 
 		/*
          *  Fetch TOWNS Table schema.

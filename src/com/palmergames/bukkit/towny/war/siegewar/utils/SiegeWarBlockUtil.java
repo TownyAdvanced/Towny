@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 
 import org.bukkit.Location;
 import org.bukkit.block.Banner;
@@ -94,8 +95,7 @@ public class SiegeWarBlockUtil {
 			Location locationOfBlock = block.getLocation();
 			Location locationOfBlockAbove = block.getRelative(BlockFace.UP).getLocation();
 			Location locationOfSiegeBanner;
-			TownyUniverse universe = TownyUniverse.getInstance();
-			for (Siege siege : universe.getDataSource().getSieges()) {
+			for (Siege siege : SiegeController.getSieges()) {
 
 				if (!siege.getStatus().isActive()) {
 					continue;

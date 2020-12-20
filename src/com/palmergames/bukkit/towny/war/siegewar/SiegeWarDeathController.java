@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class SiegeWarDeathController {
 			SiegeSide candidateSiegePlayerSide;
 
 			//Find nearest eligible siege
-			for (Siege candidateSiege : universe.getDataSource().getSieges()) {
+			for (Siege candidateSiege : SiegeController.getSieges()) {
 
 				//Skip if player is not is siege-zone
 				if(!SiegeWarDistanceUtil.isInSiegeZone(deadPlayer, candidateSiege))

@@ -25,13 +25,12 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,8 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -71,7 +68,6 @@ public class TownyUniverse {
     private final Trie townsTrie = new Trie();
     
     private final Map<String, Nation> nations = new ConcurrentHashMap<>();
-    private final Map<String, Siege> sieges = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
@@ -191,7 +187,7 @@ public class TownyUniverse {
         residentNameMap.clear();
         residentUUIDMap.clear();
         townBlocks.clear();
-        sieges.clear();
+        SiegeController.clearSieges();
     }
     
     /**
@@ -950,22 +946,6 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-	/*
-	 * Siege War Stuff
-	 */
-	
-	public Set<Player> getPlayersInBannerControlSessions() {
-		Set<Player> result = new HashSet<>();
-		for (Siege siege : sieges.values()) {
-			result.addAll(siege.getBannerControlSessions().keySet());
-		}
-		return result;
-	}
-
-    public Map<String, Siege> getSiegesMap() {
-        return sieges;
-    }
-	
 	/*
 	 * War Stuff
 	 */

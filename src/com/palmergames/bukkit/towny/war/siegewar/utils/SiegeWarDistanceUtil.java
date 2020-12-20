@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -11,6 +10,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -114,7 +115,7 @@ public class SiegeWarDistanceUtil {
 	 * @return true is location is in an active siegezone
 	 */
 	public static boolean isLocationInActiveSiegeZone(Location location) {
-		for(Siege siege: TownyUniverse.getInstance().getDataSource().getSieges()) {
+		for(Siege siege: SiegeController.getSieges()) {
 			if(siege.getStatus().isActive()
 				&& SiegeWarDistanceUtil.isInSiegeZone(location, siege)) {
 				return true;

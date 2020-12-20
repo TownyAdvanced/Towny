@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.objects.HeldItemsCombination;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -28,7 +28,6 @@ public class SiegeWarDynmapUtil {
 	 * Players in banner control sessions cannot be tactically invisible
 	 */
 	public static void evaluatePlayerTacticalInvisibility() {
-		TownyUniverse universe = TownyUniverse.getInstance();
 		boolean invisibleOnDynmap;
 
 		for(Player player: BukkitTools.getOnlinePlayers()) {
@@ -37,7 +36,7 @@ public class SiegeWarDynmapUtil {
 				invisibleOnDynmap = false;
 
 				//Check if player is invisible
-				if (!universe.getPlayersInBannerControlSessions().contains(player)) {
+				if (!SiegeController.getPlayersInBannerControlSessions().contains(player)) {
 
 					//Check item combinations
 					for(HeldItemsCombination heldItemsCombination: SiegeWarSettings.getWarSiegeTacticalVisibilityItems()) {

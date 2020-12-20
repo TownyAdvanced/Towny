@@ -22,16 +22,11 @@ public class TownMetaDataController {
 	}
 	
 	public static int getPeacefulnessChangeConfirmationCounterDays(Town town) {
-		int days = 0;
 		IntegerDataField idf = (IntegerDataField) peacefulnessChangeConfirmationCounterDays.clone();
 		if (town.hasMeta(idf.getKey())) {
-			CustomDataField<?> cdf = town.getMetadata(idf.getKey());
-			if (cdf instanceof IntegerDataField) {
-				IntegerDataField amount = (IntegerDataField) cdf; 
-				days = amount.getValue();
-			}
+			return MetaDataUtil.getInt(town, idf);
 		}
-		return days;
+		return 0;
 	}
 
 	public static void setPeacefulnessChangeDays(Town town, int days) {
@@ -55,11 +50,7 @@ public class TownMetaDataController {
 	public static boolean getDesiredPeacefulnessSetting(Town town) {
 		BooleanDataField bdf = (BooleanDataField) desiredPeacefulness.clone();
 		if (town.hasMeta(bdf.getKey())) {
-			CustomDataField<?> cdf = town.getMetadata(bdf.getKey());
-			if (cdf instanceof BooleanDataField) {
-				BooleanDataField bool = (BooleanDataField) bdf;
-				return bool.getValue();
-			}
+			return MetaDataUtil.getBoolean(town, bdf);
 		}
 		return false;
 	}
@@ -81,11 +72,7 @@ public class TownMetaDataController {
 	public static long getRevoltImmunityEndTime(Town town) {
 		LongDataField ldf = (LongDataField) revoltImmunityEndTime.clone();
 		if (town.hasMeta(ldf.getKey())) {
-			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
-			if (cdf instanceof LongDataField) {
-				LongDataField value = (LongDataField) ldf;
-				return value.getValue();
-			}
+			return MetaDataUtil.getLong(town, ldf);
 		}
 		return 0l;
 	}
@@ -111,11 +98,7 @@ public class TownMetaDataController {
 	public static long getSiegeImmunityEndTime(Town town) {
 		LongDataField ldf = (LongDataField) siegeImmunityEndTime.clone();
 		if (town.hasMeta(ldf.getKey())) {
-			CustomDataField<?> cdf = town.getMetadata(ldf.getKey());
-			if (cdf instanceof LongDataField) {
-				LongDataField value = (LongDataField) ldf;
-				return value.getValue();
-			}
+			return MetaDataUtil.getLong(town, ldf);
 		}
 		return 0l;
 	}
