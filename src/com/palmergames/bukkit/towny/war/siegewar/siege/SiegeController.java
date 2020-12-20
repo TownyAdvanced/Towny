@@ -35,34 +35,6 @@ public class SiegeController {
 	public SiegeController() {
 		towny = Towny.getPlugin();
 	}
-	
-	public static void clearSieges() {
-		sieges.clear();
-	}
-	
-    public static Map<String, Siege> getSiegesMap() {
-        return sieges;
-    }
-
-	public static Set<Player> getPlayersInBannerControlSessions() {
-		Set<Player> result = new HashSet<>();
-		for (Siege siege : sieges.values()) {
-			result.addAll(siege.getBannerControlSessions().keySet());
-		}
-		return result;
-	}
-    
-	public static boolean hasSiege(Town town) {
-		return SiegeMetaDataController.hasSiege(town);
-	}
-	
-	public static void setSiege(Town town, boolean bool) {
-		SiegeMetaDataController.setSiege(town, bool);
-	}
-	
-	public static List<Siege> getSieges() {
-		return new ArrayList<>(getSiegesMap().values());
-	}
 
 	public static void newSiege(String siegeName) throws AlreadyRegisteredException {
 
@@ -73,12 +45,24 @@ public class SiegeController {
 
 		getSiegesMap().put(siegeName.toLowerCase(), siege);
 	}
+	
+    public static Map<String, Siege> getSiegesMap() {
+        return sieges;
+    }
+
+	public static List<Siege> getSieges() {
+		return new ArrayList<>(getSiegesMap().values());
+	}
 
 	public static Siege getSiege(String siegeName) throws NotRegisteredException {
 		if(!getSiegesMap().containsKey(siegeName.toLowerCase())) {
 			throw new NotRegisteredException("Siege not found");
 		}
 		return getSiegesMap().get(siegeName.toLowerCase());
+	}
+
+	public static void clearSieges() {
+		sieges.clear();
 	}
 	
 	public static boolean saveSiegeList() {
@@ -202,8 +186,20 @@ public class SiegeController {
 		saveSiegeList();
 	}
 
-	public Set<String> getSiegeKeys() {
-
-		return getSiegesMap().keySet();
+	public static boolean hasSiege(Town town) {
+		return SiegeMetaDataController.hasSiege(town);
 	}
+	
+	public static void setSiege(Town town, boolean bool) {
+		SiegeMetaDataController.setSiege(town, bool);
+	}
+
+	public static Set<Player> getPlayersInBannerControlSessions() {
+		Set<Player> result = new HashSet<>();
+		for (Siege siege : sieges.values()) {
+			result.addAll(siege.getBannerControlSessions().keySet());
+		}
+		return result;
+	}
+    
 }
