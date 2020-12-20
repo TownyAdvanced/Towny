@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -43,7 +45,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -432,30 +436,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("balance")) {
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<BankAccount> list = new ArrayList<>();
-				universe.getTowns().forEach(town -> list.add(town.getAccount()));
-				universe.getNationsMap().values().forEach(nation -> list.add(nation.getAccount()));
+				List<Government> list = new ArrayList<>();
+				list.addAll(universe.getTowns());
+				list.addAll(universe.getNationsMap().values());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
-				try {
-					towny_top.addAll(getTopBankBalance(list, 10));
-				} catch (EconomyException ignored) {
-				}
+				towny_top.addAll(getTopBankBalance(list, 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
-				List<BankAccount> list = new ArrayList<>();
-				universe.getTowns().forEach(town -> list.add(town.getAccount()));
+				List<Government> list = new ArrayList<>(universe.getTowns());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-				try {
-					towny_top.addAll(getTopBankBalance(list, 10));
-				} catch (EconomyException ignored) {
-				}
+				towny_top.addAll(getTopBankBalance(list, 10));
 			} else if (args[1].equalsIgnoreCase("nation")) {
-				List<BankAccount> list = new ArrayList<>();
-				universe.getNationsMap().values().forEach(nation -> list.add(nation.getAccount()));
+				List<Government> list = new ArrayList<>(universe.getNationsMap().values());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-				try {
-					towny_top.addAll(getTopBankBalance(list, 10));
-				} catch (EconomyException ignored) {
-				}
+				towny_top.addAll(getTopBankBalance(list, 10));
 			} else {
 				sendErrorMsg(player, "Invalid sub command.");
 			}
@@ -571,23 +564,27 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		}
 		return output;
 	}
+	
+	public List<String> getTopBankBalance(final List<Government> governments, final int maxListing) {
+		final List<String> output = new ArrayList<>();
+		final Map<Government, Double> data = new HashMap<>();
 
-	public List<String> getTopBankBalance(List<BankAccount> list, int maxListing) throws EconomyException {
-
-		List<String> output = new ArrayList<>();
-		KeyValueTable<Account, Double> kvTable = new KeyValueTable<>();
-		for (BankAccount obj : list) {
-			kvTable.put(obj, obj.getCachedBalance());
+		// Sort by their bank balance first
+		governments.sort(GovernmentComparators.BY_BANK_BALANCE);
+		// Reverse it to show top down
+		Collections.reverse(governments);
+		// Loop through each one (already sorted) and add to the map
+		for (final Government gov : governments) {
+			data.put(gov, gov.getAccount().getCachedBalance());
 		}
-		kvTable.sortByValue();
-		kvTable.reverse();
-		int n = 0;
-		for (KeyValue<Account, Double> kv : kvTable.getKeyValues()) {
-			n++;
-			if (maxListing != -1 && n > maxListing)
+		int index = 0;
+		for (Map.Entry<Government, Double> entry : data.entrySet()) {
+			index++;
+			if (maxListing != -1 && index > maxListing) {
 				break;
-			Account town = kv.key;
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", town.getFormattedName(), TownyEconomyHandler.getFormattedBalance(kv.value)));
+			}
+			final Government government = entry.getKey();
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", government.getFormattedName(), TownyEconomyHandler.getFormattedBalance(entry.getValue())));
 		}
 		return output;
 	}
