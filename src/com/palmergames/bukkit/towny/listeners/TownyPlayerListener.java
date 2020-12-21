@@ -314,34 +314,32 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * No Item used.
 		 */
-		if (!event.useItemInHand().equals(Event.Result.DENY)) {
-			if (clickedBlock != null) {
-				Material clickedMat = clickedBlock.getType(); 
-				/*
-				 * Test switch use.
-				 */
-				if (TownySettings.isSwitchMaterial(clickedMat.name()) || event.getAction() == Action.PHYSICAL) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
-					return;
-				}
-				/*
-				 * Test potted plants, redstone interactables, other blocks which 
-				 * cause an interaction that could be considered destructive, or 
-				 * something which wouldn't be given out like a normal 
-				 * door/inventory permission. 
-				 * 
-				 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
-				 */
-				if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
-					ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
-					clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
-					clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
-					
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
-					return;
-				}
+		if (clickedBlock != null) {
+			Material clickedMat = clickedBlock.getType(); 
+			/*
+			 * Test switch use.
+			 */
+			if (TownySettings.isSwitchMaterial(clickedMat.name()) || event.getAction() == Action.PHYSICAL) {
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
+				return;
+			}
+			/*
+			 * Test potted plants, redstone interactables, other blocks which 
+			 * cause an interaction that could be considered destructive, or 
+			 * something which wouldn't be given out like a normal 
+			 * door/inventory permission. 
+			 * 
+			 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
+			 */
+			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
+				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
+				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
+				clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
+				
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
+				return;
 			}
 		}
 	}

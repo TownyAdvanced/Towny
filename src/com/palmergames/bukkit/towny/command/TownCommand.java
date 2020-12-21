@@ -1111,6 +1111,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 *
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
+	 * @throws TownyException when a player lacks the permission node.
 	 */
 	@SuppressWarnings("unchecked")
 	public void listTowns(CommandSender sender, String[] split) throws TownyException {
@@ -1247,7 +1248,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
 					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")");
 			if (town.isOpen())
-				output += Translation.of("status_title_open");
+				output += " " + Translation.of("status_title_open");
 			townsformatted.add(output);
 		}
 		

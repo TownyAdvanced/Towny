@@ -148,7 +148,7 @@ public class TownySpigotMessaging {
 			townName.addExtra(new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
 			
 			if (town.isOpen())
-				townName.addExtra(new TextComponent(Colors.LightBlue + Translation.of("status_title_open")));
+				townName.addExtra(new TextComponent(" " + Colors.LightBlue + Translation.of("status_title_open")));
 			
 			String spawnCost = "Free";
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())
@@ -253,7 +253,7 @@ public class TownySpigotMessaging {
 			nationName.addExtra(new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
 
 			if (nation.isOpen())
-				nationName.addExtra(new TextComponent(Colors.LightBlue + Translation.of("status_title_open")));
+				nationName.addExtra(new TextComponent(" " + Colors.LightBlue + Translation.of("status_title_open")));
 
 			String spawnCost = "Free";
 			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive())

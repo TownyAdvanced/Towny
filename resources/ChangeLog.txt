@@ -5583,3 +5583,13 @@ v0.92.0.11:
     - Closes #4604.
   - API: Added NewShortTimeEvent.
     - Fires an event every 20s (configurable in the config.)
+  - Fix metadata display issue on the status screens which could lead to metadata being displayed twice.
+  - Make the town status screen prettier, with a new line for PVP, open and peaceful statuses.
+  - Fix /n list and /t list permission nodes.
+  - Fix slimefun unresearched items being able to bypass switch protections.
+    - Re-closes #4065.
+    - Closes https://github.com/Slimefun/Slimefun4/issues/2641
+  - Modified the GatherResidentUUID task to no longer deleted residents which Mojang says do not have accounts.
+    - The MojangAPI is apparently sending the incorrect response for many accounts which have not really been deleted.
+  - New Towny Top Command, courtesy of Glare with PR #4605.
+    - Reactivates the long-removed /towny top balance using the new cached bank balances.
