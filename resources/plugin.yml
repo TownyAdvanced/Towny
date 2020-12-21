@@ -189,7 +189,7 @@ permissions:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
         children:
-            towny.command.nation.list.*
+            towny.command.nation.list.*: true
 
     towny.command.nation.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
@@ -332,7 +332,7 @@ permissions:
         description: Users are able to use all the various methods of sorting the town list.
         default: false
         children:
-            towny.command.town.list.*
+            towny.command.town.list.*: true
 
     towny.command.town.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
