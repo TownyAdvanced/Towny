@@ -5593,3 +5593,8 @@ v0.92.0.11:
     - The MojangAPI is apparently sending the incorrect response for many accounts which have not really been deleted.
   - New Towny Top Command, courtesy of Glare with PR #4605.
     - Reactivates the long-removed /towny top balance using the new cached bank balances.
+  - Implemented configurable towny top size output, courtesy of Glare with PR #4614.
+  - New Config Option: plugin.towny_top_size
+    - default: 10
+    - Sets the default size that /towny top commands display.
+  

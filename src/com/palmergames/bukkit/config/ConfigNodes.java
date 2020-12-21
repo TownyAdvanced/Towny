@@ -971,7 +971,8 @@ public enum ConfigNodes {
 	PLUGIN_TOWNY_TOP_SIZE(
 		"plugin.towny_top_size",
 		"10",
-		"# Sets the default size that /towny top commands display"
+		"",
+		"# Sets the default size that /towny top commands display."
 	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
