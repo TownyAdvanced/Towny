@@ -411,13 +411,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
 				list.addAll(universe.getDataSource().getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
-				towny_top.addAll(getMostResidents(list, 10));
+				towny_top.addAll(getMostResidents(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns())));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getNations()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getNations())));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("land"))
@@ -425,13 +425,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
 				list.addAll(universe.getDataSource().getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
-				towny_top.addAll(getMostLand(list, 10));
+				towny_top.addAll(getMostLand(list));
 			} else if (args[1].equalsIgnoreCase("resident")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getResidents()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns())));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("balance")) {
@@ -440,15 +440,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				list.addAll(universe.getTowns());
 				list.addAll(universe.getNationsMap().values());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				List<Government> list = new ArrayList<>(universe.getTowns());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				List<Government> list = new ArrayList<>(universe.getNationsMap().values());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else {
 				sendErrorMsg(player, "Invalid sub command.");
 			}
@@ -565,7 +565,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 	
-	public List<String> getTopBankBalance(final List<Government> governments, final int maxListing) {
+	public List<String> getTopBankBalance(final List<Government> governments) {
+		final int maxListing = TownySettings.getTownyTopSize();
 		final List<String> output = new ArrayList<>();
 		final Map<Government, Double> data = new HashMap<>();
 
@@ -589,7 +590,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentList> list, int maxListing) {
+	public List<String> getMostResidents(List<ResidentList> list) {
+		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<ResidentList, Integer> kvTable = new KeyValueTable<>();
@@ -608,7 +610,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostLand(List<TownBlockOwner> list, int maxListing) {
+	public List<String> getMostLand(List<TownBlockOwner> list) {
+		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<TownBlockOwner, Integer> kvTable = new KeyValueTable<>();

@@ -968,6 +968,11 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If true this will cause the log to be wiped at every startup."),
+	PLUGIN_TOWNY_TOP_SIZE(
+		"plugin.towny_top_size",
+		"10",
+		"# Sets the default size that /towny top commands display"
+	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
