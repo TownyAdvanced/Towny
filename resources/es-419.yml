@@ -273,7 +273,7 @@ msg_plot_regen_wrong_size: '&cLa regeneración solo puede ocurrir cuando se est�
 
 msg_reloaded: '&2Las opciones de Towny fueron recargadas.'
 msg_undo_complete: '&2Se retrocedieron los cambios.'
-msg_give_total: '&bSe otorgaron %s bonus. (Total: %s)'
+msg_give_total: '&bSe le ha otorgado un bonus de %2$2s terrenos a %1$2s.'
 mag_backup_success: '&2Respaldo exitoso.'
 msg_xx_withdrew_xx: '&b%s retiró %s del banco de %s.'
 msg_xx_deposited_xx: '&b%s depositó %s en el banco de %s.'
