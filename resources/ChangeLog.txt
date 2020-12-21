@@ -5589,3 +5589,5 @@ v0.92.0.11:
   - Fix slimefun unresearched items being able to bypass switch protections.
     - Re-closes #4065.
     - Closes https://github.com/Slimefun/Slimefun4/issues/2641
+  - Modified the GatherResidentUUID task to no longer deleted residents which Mojang says do not have accounts.
+    - The MojangAPI is apparently sending the incorrect response for many accounts which have not really been deleted.
