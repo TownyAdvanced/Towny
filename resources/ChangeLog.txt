@@ -5585,3 +5585,4 @@ v0.92.0.11:
     - Fires an event every 20s (configurable in the config.)
   - Fix metadata display issue on the status screens which could lead to metadata being displayed twice.
   - Make the town status screen prettier, with a new line for PVP, open and peaceful statuses.
+  - Fix /n list and /t list permission nodes.
