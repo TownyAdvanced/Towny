@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarDeathController;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.PlaceBlock;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 
@@ -66,6 +67,7 @@ public class SiegeWarActionListener implements Listener {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void evaluateNationZone(Player player, Location location, TownyActionEvent event) {
 		WorldCoord pos = WorldCoord.parseWorldCoord(event.getLocation());
 		TownyWorld world = null;
@@ -77,7 +79,7 @@ public class SiegeWarActionListener implements Listener {
 			nation = nearestTown.getNation();
 		} catch (NotRegisteredException ignored) {}
 		
-		if(nearestTown.hasSiege() && nearestTown.getSiege().getStatus().isActive()) {
+		if(SiegeController.hasActiveSiege(nearestTown)) {
 			event.setMessage(Translation.of("msg_err_siege_war_nation_zone_this_area_protected_but_besieged", world.getUnclaimedZoneName(), nation.getName()));
 			event.setCancelled(true);
 		}

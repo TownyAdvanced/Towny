@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 
 import org.bukkit.entity.Player;
@@ -56,12 +55,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && SiegeController.loadSiegeList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && SiegeController.loadSieges() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && savePlotGroupList() && SiegeController.saveSiegeList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && SiegeController.saveSieges() && saveTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -84,8 +83,6 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadNationList();
 
-	abstract public boolean loadSiegeList();
-
 	abstract public boolean loadWorldList();
 
 	abstract public boolean loadRegenList();
@@ -107,8 +104,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadPlotGroups();
 
 	abstract public boolean savePlotGroupList();
-
-	abstract public boolean saveSiegeList();
 
 	abstract public boolean saveWorldList();
 

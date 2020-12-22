@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
@@ -261,8 +262,8 @@ public class SiegeWarEventListener implements Listener {
 	
 	@EventHandler
 	public void onTownGoesToRuin(TownRuinedEvent event) {
-		if (event.getTown().hasSiege())
-			SiegeController.removeSiege(event.getTown().getSiege(), SiegeSide.ATTACKERS);
+		if (SiegeController.hasSiege(event.getTown()))
+			SiegeController.removeSiege(SiegeController.getSiege(event.getTown()), SiegeSide.ATTACKERS);
 	}
 	
 	@EventHandler
@@ -285,8 +286,7 @@ public class SiegeWarEventListener implements Listener {
 	public void onTownAddResident(TownPreAddResidentEvent event) {
 		if (SiegeWarSettings.getWarSiegeEnabled()
 				&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
-				&& event.getTown().hasSiege()
-				&& event.getTown().getSiege().getStatus().isActive()) {
+				&& SiegeController.hasActiveSiege(event.getTown())) {
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_recruit"));
 		}
@@ -313,8 +313,7 @@ public class SiegeWarEventListener implements Listener {
 	public void onTownToggleExplosion(TownToggleExplosionEvent event) {
 		if(SiegeWarSettings.getWarSiegeEnabled()
 				&& SiegeWarSettings.getWarSiegeExplosionsAlwaysOnInBesiegedTowns()
-				&& event.getTown().hasSiege()
-				&& event.getTown().getSiege().getStatus().isActive())  {
+				&& SiegeController.hasActiveSiege(event.getTown()))  {
 			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_explosions"));
 			event.setCancelled(true);
 		}
@@ -327,8 +326,7 @@ public class SiegeWarEventListener implements Listener {
 	public void onTownTogglePVP(TownTogglePVPEvent event) {
 		if(SiegeWarSettings.getWarSiegeEnabled()
 				&& SiegeWarSettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
-				&& event.getTown().hasSiege()
-				&& event.getTown().getSiege().getStatus().isActive())  {
+				&& SiegeController.hasActiveSiege(event.getTown()))  {
 			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_pvp"));
 			event.setCancelled(true);
 		}
@@ -341,8 +339,7 @@ public class SiegeWarEventListener implements Listener {
 	public void onTownToggleOpen(TownToggleOpenEvent event) {
 		if(SiegeWarSettings.getWarSiegeEnabled()
 				&& SiegeWarSettings.getWarSiegeBesiegedTownRecruitmentDisabled()
-				&& event.getTown().hasSiege()
-				&& event.getTown().getSiege().getStatus().isActive()) {
+				&& SiegeController.hasActiveSiege(event.getTown())) {
 			event.setCancellationMsg(Translation.of("msg_err_siege_besieged_town_cannot_toggle_open_off"));
 			event.setCancelled(true);
 		}
@@ -408,6 +405,18 @@ public class SiegeWarEventListener implements Listener {
 	}
 	
 	/*
+	 * Siegewar has to be conscious of when Towny has loaded the Towny database.
+	 */
+	@EventHandler
+	public void onTownyDatabaseLoad() {
+		System.out.println("SiegeWar: onDatabaseLoad() caught");
+		SiegeController.clearSieges();
+		SiegeController.loadSiegeList();
+		SiegeController.loadSieges();
+		System.out.println("SiegeWar: " + SiegeController.getSieges().size() + " siege(s) loaded.");
+	}
+	
+	/*
 	 * Update town peacefulness counters.
 	 */
 	@EventHandler
@@ -452,8 +461,7 @@ public class SiegeWarEventListener implements Listener {
 		if (SiegeWarSettings.getWarSiegeEnabled()) {
 			//If the claimer's town is under siege, they cannot claim any land
 			if (SiegeWarSettings.getWarSiegeBesiegedTownClaimingDisabled()
-				&& event.getTown().hasSiege()
-				&& event.getTown().getSiege().getStatus().isActive()) {
+				&& SiegeController.hasActiveSiege(event.getTown())) {
 				event.setCancelled(true);
 				event.setCancelMessage(Translation.of("msg_err_siege_besieged_town_cannot_claim"));
 				return;
@@ -496,11 +504,11 @@ public class SiegeWarEventListener implements Listener {
 			
 		if(SiegeWarSettings.getWarSiegeEnabled()
 			&& SiegeWarSettings.getWarSiegeBesiegedTownUnClaimingDisabled()
-			&& event.getTown().hasSiege()
+			&& SiegeController.hasSiege(event.getTown())
 			&& (
-				event.getTown().getSiege().getStatus().isActive()
-				|| event.getTown().getSiege().getStatus() == SiegeStatus.ATTACKER_WIN
-				|| event.getTown().getSiege().getStatus() == SiegeStatus.DEFENDER_SURRENDER
+				SiegeController.getSiege(event.getTown()).getStatus().isActive()
+				|| SiegeController.getSiege(event.getTown()).getStatus() == SiegeStatus.ATTACKER_WIN
+				|| SiegeController.getSiege(event.getTown()).getStatus() == SiegeStatus.DEFENDER_SURRENDER
 				)
 			)
 		{
@@ -515,8 +523,7 @@ public class SiegeWarEventListener implements Listener {
 	@EventHandler
 	public void onTownRename(RenameTownEvent event) {
 		if (SiegeController.hasSiege(event.getTown())) {
-			SiegeController.saveSiege(event.getTown().getSiege());
-			SiegeController.saveSiegeList();
+			SiegeController.saveSiege(SiegeController.getSiege(event.getTown()));
 		}
 	}
 
@@ -528,8 +535,16 @@ public class SiegeWarEventListener implements Listener {
 		if (!event.getNation().getSieges().isEmpty()) {
 			for (Siege siege : event.getNation().getSieges())
 				SiegeController.saveSiege(siege);
-			
-			SiegeController.saveSiegeList();
 		}
 	}
+
+	/*
+	 * A town being deleted with a siege means the siege ends.
+	 */
+	@EventHandler
+	public void onDeleteTown (DeleteTownEvent event) {
+		if (SiegeController.hasSiege(event.getTownUUID()))
+			SiegeController.removeSiege(SiegeController.getSiege(event.getTownUUID()), SiegeSide.ATTACKERS);
+	}
+	
 }

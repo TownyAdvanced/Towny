@@ -56,7 +56,7 @@ public class PlunderTown {
 		if(townOfPlunderingResident == townToBePlundered)
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_own_town"));
 
-		Siege siege = townToBePlundered.getSiege();
+		Siege siege = SiegeController.getSiege(townToBePlundered);
 		if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_victory"));
 		

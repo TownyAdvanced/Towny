@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -613,10 +614,8 @@ public class Nation extends Government {
 	public List<Town> getTownsUnderSiegeDefence() {
 		List<Town> result = new ArrayList<Town>();
 		for(Town town: towns) {
-			if(town.hasSiege() 
-				&& town.getSiege().getStatus().isActive()) {
+			if(SiegeController.hasActiveSiege(town))
 				result.add(town);
-			}
 		}
 		return result;
 	}

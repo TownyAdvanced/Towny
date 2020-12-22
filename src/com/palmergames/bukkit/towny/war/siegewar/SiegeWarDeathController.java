@@ -73,9 +73,8 @@ public class SiegeWarDeathController {
 					continue;
 
 				//Is player eligible ?
-				if (deadResidentTown.hasSiege()
-					&& deadResidentTown.getSiege().getStatus().isActive()
-					&& deadResidentTown.getSiege() == candidateSiege
+				if (SiegeController.hasActiveSiege(deadResidentTown)
+					&& SiegeController.getSiege(deadResidentTown) == candidateSiege
 					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
 						|| hasTownMilitaryRank(deadResident))
 				) {

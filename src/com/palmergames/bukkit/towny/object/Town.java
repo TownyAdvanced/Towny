@@ -15,9 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -66,7 +63,6 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
-	private Siege siege = null;
 
 	public Town(String name) {
 		super(name);
@@ -1194,26 +1190,6 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public int getConqueredDays() {
 		return this.conqueredDays;
-	}
-
-	public Siege getSiege() {
-		return siege;
-	}
-
-	public void setSiege(Siege siege) {
-		this.siege = siege;
-	}
-
-	public boolean hasSiege() {
-		return siege != null;
-	}
-
-	public double getSiegeCost() {
-		double cost = 
-				SiegeWarSettings.getWarSiegeAttackerCostUpFrontPerPlot() 
-				* townBlocks.size()
-				* SiegeWarMoneyUtil.getMoneyMultiplier(this);
-		return cost;
 	}
 	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {

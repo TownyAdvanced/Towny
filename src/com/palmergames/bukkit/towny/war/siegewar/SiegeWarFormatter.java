@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.util.TimeMgmt;
 
@@ -26,8 +27,8 @@ public class SiegeWarFormatter {
             out.add(Translation.of("status_town_revolt_immunity_timer", time));
         }
 
-        if (town.hasSiege()) {
-            Siege siege = town.getSiege();
+        if (SiegeController.hasSiege(town)) {
+            Siege siege = SiegeController.getSiege(town);
             String time = TimeMgmt.getFormattedTimeValue(TownMetaDataController.getRevoltImmunityEndTime(town)- System.currentTimeMillis());
             switch (siege.getStatus()) {
                 case IN_PROGRESS:
@@ -97,7 +98,7 @@ public class SiegeWarFormatter {
             }
         } else {
             if (SiegeWarSettings.getWarSiegeAttackEnabled() 
-            	&& !(town.hasSiege() && town.getSiege().getStatus().isActive())
+            	&& !(SiegeController.hasActiveSiege(town))
             	&& System.currentTimeMillis() < TownMetaDataController.getSiegeImmunityEndTime(town)) {
                 //Siege:
                 // > Immunity Timer: 40.8 hours

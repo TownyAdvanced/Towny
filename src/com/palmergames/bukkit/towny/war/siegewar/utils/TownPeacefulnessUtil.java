@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 import org.bukkit.entity.Player;
@@ -249,7 +250,7 @@ public class TownPeacefulnessUtil {
 			List<Town> candidateTowns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
 			for(Town candidateTown: candidateTowns) {
 				if(!candidateTown.isNeutral()
-					&& !candidateTown.hasSiege()
+					&& !SiegeController.hasSiege(candidateTown)
 					&& candidateTown.hasNation()
 					&& candidateTown.getNation().isOpen()
 					&& candidateTown.getTownBlocks().size() >= guardianTownPlotsRequirement

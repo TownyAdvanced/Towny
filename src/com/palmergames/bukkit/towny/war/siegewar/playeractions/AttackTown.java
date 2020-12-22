@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.war.siegewar.metadata.TownMetaDataController
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.block.Block;
 
@@ -46,13 +47,13 @@ public class AttackTown {
                                                 TownBlock townBlock,
                                                 Town defendingTown) throws TownyException {
 
-		if (defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
+		if (SiegeController.hasActiveSiege(defendingTown))
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_join_siege"));
 
 		if (defendingTown.isNeutral())
 			throw new TownyException(Translation.of("msg_war_siege_err_cannot_attack_peaceful_town"));
 
-		if (!(defendingTown.hasSiege() && defendingTown.getSiege().getStatus().isActive())
+		if (!(SiegeController.hasActiveSiege(defendingTown))
             	&& System.currentTimeMillis() < TownMetaDataController.getSiegeImmunityEndTime(defendingTown))
             throw new TownyException(Translation.of("msg_err_siege_war_cannot_attack_siege_immunity"));
 
@@ -115,10 +116,10 @@ public class AttackTown {
 				((long) (SiegeWarSettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
 		siege.setActualEndTime(0);
 		siege.setFlagLocation(block.getLocation());
-		siege.setWarChestAmount(defendingTown.getSiegeCost());
+		siege.setWarChestAmount(SiegeWarMoneyUtil.getSiegeCost(defendingTown));
 		
+		SiegeController.setSiege(defendingTown, true);
 		//Set values in town and nation objects
-		defendingTown.setSiege(siege);
 		attackingNation.addSiege(siege);
 		
 		defendingTown.getPermissions().explosion = true;
@@ -147,7 +148,6 @@ public class AttackTown {
 		SiegeController.saveSiege(siege);
 		universe.getDataSource().saveNation(attackingNation);
 		universe.getDataSource().saveTown(defendingTown);
-		universe.getDataSource().saveSiegeList();
 
 		//Send global message;
 		if (siege.getDefendingTown().hasNation()) {

@@ -12,10 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -31,42 +31,32 @@ public class SiegeController {
 	@SuppressWarnings("unused")
 	private final Towny towny;
 	private final static Map<String, Siege> sieges = new ConcurrentHashMap<>();
+	private static Map<UUID, Siege> townSiegeMap = new ConcurrentHashMap<>();
 
 	public SiegeController() {
 		towny = Towny.getPlugin();
 	}
 
-	public static void newSiege(String siegeName) throws AlreadyRegisteredException {
+	public static void newSiege(String siegeName) {
+		Siege siege = new Siege(siegeName);		
 
-		if(getSiegesMap().containsKey(siegeName.toLowerCase()))
-			throw new AlreadyRegisteredException("Siege is already registered");
-
-		Siege siege = new Siege(siegeName);
-
-		getSiegesMap().put(siegeName.toLowerCase(), siege);
+		sieges.put(siegeName.toLowerCase(), siege);
 	}
-	
-    public static Map<String, Siege> getSiegesMap() {
-        return sieges;
-    }
 
 	public static List<Siege> getSieges() {
-		return new ArrayList<>(getSiegesMap().values());
+		return new ArrayList<>(sieges.values());
 	}
 
 	public static Siege getSiege(String siegeName) throws NotRegisteredException {
-		if(!getSiegesMap().containsKey(siegeName.toLowerCase())) {
+		if(!sieges.containsKey(siegeName.toLowerCase())) {
 			throw new NotRegisteredException("Siege not found");
 		}
-		return getSiegesMap().get(siegeName.toLowerCase());
+		return sieges.get(siegeName.toLowerCase());
 	}
 
 	public static void clearSieges() {
 		sieges.clear();
-	}
-	
-	public static boolean saveSiegeList() {
-		return TownyUniverse.getInstance().getDataSource().saveSiegeList();
+		townSiegeMap.clear();
 	}
 	
 	public static boolean saveSieges() {
@@ -96,8 +86,16 @@ public class SiegeController {
 		SiegeMetaDataController.setSiegeName(town, siege.getAttackingNation().getName() + "#vs#" + siege.getDefendingTown().getName());
 	}
 
-	public static boolean loadSiegeList() {
-		return TownyUniverse.getInstance().getDataSource().loadSiegeList();
+	public static void loadSiegeList() {
+		for (Town town : TownyUniverse.getInstance().getTowns())
+			if (hasSiege(town)) {
+				String name = getSiegeName(town);
+				if (name != null) {
+					newSiege(name);
+					setSiege(town, true);
+					townSiegeMap.put(town.getUUID(), getSiege(town));
+				}
+			}
 	}
 
 	public static boolean loadSieges() {
@@ -116,7 +114,6 @@ public class SiegeController {
 		if (town == null)
 			return false;
 		siege.setDefendingTown(town);
-		town.setSiege(siege);
 
 		Nation nation = null;
 		try {
@@ -171,23 +168,52 @@ public class SiegeController {
 				SiegeWarMoneyUtil.giveWarChestToDefendingTown(siege);
 		}
 
+		Town town = siege.getDefendingTown();
 		//Remove siege from town
-		siege.getDefendingTown().setSiege(null);
+		setSiege(town, false);
+		SiegeMetaDataController.removeSiegeMeta(town);
 		//Remove siege from nation
 		siege.getAttackingNation().removeSiege(siege);
 		//Remove siege from universe
-		getSiegesMap().remove(siege.getName().toLowerCase());
+		sieges.remove(siege.getName().toLowerCase());
+		townSiegeMap.remove(town.getUUID());
 
 		//Save town
-		TownyUniverse.getInstance().getDataSource().saveTown(siege.getDefendingTown());
+		TownyUniverse.getInstance().getDataSource().saveTown(town);
 		//Save attacking nation
 		TownyUniverse.getInstance().getDataSource().saveNation(siege.getAttackingNation());
-		//Save siege list
-		saveSiegeList();
+		siege = null;
 	}
 
 	public static boolean hasSiege(Town town) {
-		return SiegeMetaDataController.hasSiege(town);
+		return townSiegeMap.containsKey(town.getUUID());
+	}
+	
+	public static boolean hasSiege(UUID uuid) {
+		return townSiegeMap.containsKey(uuid);
+	}
+	
+	public static boolean hasActiveSiege(Town town) {
+		return hasSiege(town) && getSiege(town).getStatus().isActive(); 
+	}
+	
+	@Nullable
+	public static Siege getSiege(Town town) {
+		if (townSiegeMap.containsKey(town.getUUID()))
+			return townSiegeMap.get(town.getUUID());
+		return null;
+	}
+	
+	@Nullable
+	public static Siege getSiege(UUID uuid) {
+		if (townSiegeMap.containsKey(uuid))
+			return townSiegeMap.get(uuid);
+		return null;
+	}
+	
+	@Nullable
+	public static String getSiegeName(Town town) {
+		return SiegeMetaDataController.getSiegeName(town);
 	}
 	
 	public static void setSiege(Town town, boolean bool) {

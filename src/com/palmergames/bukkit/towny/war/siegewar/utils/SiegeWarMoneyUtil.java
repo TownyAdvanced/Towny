@@ -130,4 +130,12 @@ public class SiegeWarMoneyUtil {
 					TownyEconomyHandler.getFormattedBalance(amountToRefund)));
 		}
 	}
+	
+	public static double getSiegeCost(Town town) {
+		double cost = 
+				SiegeWarSettings.getWarSiegeAttackerCostUpFrontPerPlot() 
+				* town.getTownBlocks().size()
+				* getMoneyMultiplier(town);
+		return cost;
+	} 
 }

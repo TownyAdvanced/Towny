@@ -16,8 +16,11 @@ import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
+
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Banner;
@@ -145,7 +148,7 @@ public class PlaceBlock {
 			// Town found
 			if (town != null 
 					&& SiegeWarSettings.getWarSiegeSurrenderEnabled() 
-					&& town.hasSiege() 
+					&& SiegeController.hasSiege(town) 
 					&& isSurrenderBanner(block)) {
 				if (!town.hasResident(resident))
 		            throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_not_your_town"));
@@ -153,10 +156,10 @@ public class PlaceBlock {
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_SURRENDER.getNode()))
 	                throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				if(town.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+				if (SiegeController.getSiege(town).getStatus() != SiegeStatus.IN_PROGRESS)
 					throw new TownyException(Translation.of("msg_err_siege_war_cannot_surrender_siege_finished"));
 				
-				SurrenderTown.defenderSurrender(town.getSiege());
+				SurrenderTown.defenderSurrender(SiegeController.getSiege(town));
 			}
 		}
 	}
@@ -204,7 +207,7 @@ public class PlaceBlock {
 
 		//If the town has a siege where the player's nation is already attacking, 
 		//attempt invasion, otherwise attempt attack
-		if(town.hasSiege() && town.getSiege().getAttackingNation() == nation) {
+		if(SiegeController.hasSiege(town) && SiegeController.getSiege(town).getAttackingNation() == nation) {
 
 			if (!SiegeWarSettings.getWarSiegeInvadeEnabled())
 				return;
@@ -212,7 +215,7 @@ public class PlaceBlock {
 			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
-			Siege siege = town.getSiege();
+			Siege siege = SiegeController.getSiege(town);
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 				throw new TownyException(Translation.of("msg_err_siege_war_cannot_invade_without_victory"));
 			
@@ -230,7 +233,7 @@ public class PlaceBlock {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
 	        try {
-				if (TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(town.getSiegeCost()))
+				if (TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(SiegeWarMoneyUtil.getSiegeCost(town)))
 					throw new TownyException(Translation.of("msg_err_no_money"));
 			} catch (EconomyException ignored) {}
 	        
@@ -283,7 +286,7 @@ public class PlaceBlock {
 		} catch (NotRegisteredException ignored) {}
 
 		//If there is no siege, do normal block placement
-		if(!town.hasSiege())
+		if(!SiegeController.hasSiege(town))
 			return false;
 
 		//Attempt plunder.

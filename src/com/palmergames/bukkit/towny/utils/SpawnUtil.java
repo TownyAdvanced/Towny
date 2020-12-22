@@ -335,10 +335,8 @@ public class SpawnUtil {
 					if(!townAtSpawnLocation.isNeutral()) {  //No block if this is a peaceful town
 
 						//Block TP if the target town is besieged
-						if (townAtSpawnLocation.hasSiege()
-							&& townAtSpawnLocation.getSiege().getStatus().isActive()) {
+						if (SiegeController.hasActiveSiege(townAtSpawnLocation))
 							throw new TownyException(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
-						}
 
 						//Block TP if the target spawn point is in a siege zone
 						for (Siege siege : SiegeController.getSieges()) {

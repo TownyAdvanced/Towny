@@ -173,9 +173,8 @@ public class SiegeMetaDataController {
 	
 	public static boolean townPlundered(Town town) {
 		BooleanDataField bdf = (BooleanDataField) townPlundered.clone();
-		if (town.hasMeta(bdf.getKey())) {
+		if (town.hasMeta(bdf.getKey()))
 			return MetaDataUtil.getBoolean(town, bdf);
-		}
 		return false;
 	}
 	
@@ -189,9 +188,8 @@ public class SiegeMetaDataController {
 	
 	public static boolean townInvaded(Town town) {
 		BooleanDataField bdf = (BooleanDataField) townInvaded.clone();
-		if (town.hasMeta(bdf.getKey())) {
+		if (town.hasMeta(bdf.getKey()))
 			return MetaDataUtil.getBoolean(town, bdf);
-		}
 		return false;
 	}
 	
@@ -246,5 +244,48 @@ public class SiegeMetaDataController {
 			MetaDataUtil.setLong(town, ldf, num);
 		else
 			town.addMetaData(new LongDataField("siegewar_actualEndTime", num));
+	}
+
+	public static void removeSiegeMeta (Town town) {
+		StringDataField sdf = (StringDataField) siegeName.clone();
+		if (town.hasMeta(sdf.getKey()))
+			town.removeMetaData(sdf);
+		sdf = (StringDataField) siegeNationUUID.clone();
+		if (town.hasMeta(sdf.getKey()))
+			town.removeMetaData(sdf);
+		sdf = (StringDataField) siegeTownUUID.clone();
+		if (town.hasMeta(sdf.getKey()))
+			town.removeMetaData(sdf);
+		sdf = (StringDataField) siegeFlagLocation.clone();
+		if (town.hasMeta(sdf.getKey()))
+			town.removeMetaData(sdf);
+		sdf = (StringDataField) siegeStatus.clone();
+		if (town.hasMeta(sdf.getKey()))
+			town.removeMetaData(sdf);
+		
+		IntegerDataField idf = (IntegerDataField) siegePoints.clone();
+		if (town.hasMeta(idf.getKey()))
+			town.removeMetaData(idf);
+		
+		DecimalDataField ddf = (DecimalDataField) siegeWarChestAmount.clone();
+		if (town.hasMeta(ddf.getKey()))
+			town.removeMetaData(ddf);
+		
+		BooleanDataField bdf = (BooleanDataField) townPlundered.clone();
+		if (town.hasMeta(bdf.getKey()))
+			town.removeMetaData(bdf);
+		bdf = (BooleanDataField) townInvaded.clone();
+		if (town.hasMeta(bdf.getKey()))
+			town.removeMetaData(bdf);
+		
+		LongDataField ldf = (LongDataField) startTime.clone();
+		if (town.hasMeta(ldf.getKey()))
+			town.removeMetaData(ldf);
+		ldf = (LongDataField) endTime.clone();
+		if (town.hasMeta(ldf.getKey()))
+			town.removeMetaData(ldf);
+		ldf = (LongDataField) actualEndTime.clone();
+		if (town.hasMeta(ldf.getKey()))
+			town.removeMetaData(ldf);
 	}
 }

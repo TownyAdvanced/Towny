@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
+import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import org.bukkit.Bukkit;
@@ -495,8 +496,7 @@ public class TownyAPI {
 			//If nearest town has an in-progress siege, and war disables config is true, nationzone is disabled.
 			if(SiegeWarSettings.getWarSiegeEnabled()
 				&& TownySettings.getNationZonesWarDisables()
-				&& nearestTown.hasSiege()
-				&& nearestTown.getSiege().getStatus().isActive())	{
+				&& SiegeController.hasActiveSiege(nearestTown))	{
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			}
 			// Safety validation, both these cases should never occur.

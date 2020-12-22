@@ -102,7 +102,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				dataFolderPath,
 				dataFolderPath + File.separator + "plot-block-data"
 			) || !FileMgmt.checkOrCreateFiles(
-				dataFolderPath + File.separator + "sieges.txt",
 				dataFolderPath + File.separator + "regen.txt",
 				dataFolderPath + File.separator + "snapshot_queue.txt"
 			)) {
@@ -722,9 +721,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return;
 		
 		removeTownBlocks(town);
-
-		if (town.hasSiege())
-			SiegeController.removeSiege(town.getSiege(), SiegeSide.ATTACKERS);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getHomeblockWorld();
@@ -1535,59 +1531,5 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			towns.remove();
 		}
 		lock.unlock();
-	}
-
-    @Override
-	public boolean loadSiegeList() {
-		TownyMessaging.sendDebugMsg("Loading Siege List");
-		String siegeName = null;
-		BufferedReader fin;
-
-		try {
-			fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "sieges.txt"),StandardCharsets.UTF_8));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		try {
-			while ((siegeName = fin.readLine()) != null) {
-				if (!siegeName.equals("")) {
-					SiegeController.newSiege(siegeName);
-				}
-			}
-			return true;
-
-		} catch (AlreadyRegisteredException e) {
-			e.printStackTrace();
-			return false;
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Error Loading Siege list at " + siegeName + ", in towny\\data\\sieges.txt");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-			try {
-				fin.close();
-			} catch (IOException ignore) {
-			}
-		}
-	}
-    
-	@Override
-	public boolean saveSiegeList() {
-		List<String> list = new ArrayList<>();
-
-		for (Siege siege : SiegeController.getSieges()) {
-			list.add(siege.getName());
-		}
-
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "sieges.txt"));
-
-		return true;
 	}
 }
