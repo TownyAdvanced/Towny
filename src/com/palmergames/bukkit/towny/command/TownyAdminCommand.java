@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
+import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
@@ -589,13 +590,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (split[0].equalsIgnoreCase("save")) {
-			TownyUniverse.getInstance().getDataSource().saveAll();
-			TownyMessaging.sendMsg(getSender(), Translation.of("msg_save_success"));
+			if (TownyUniverse.getInstance().getDataSource().saveAll())
+				TownyMessaging.sendMsg(getSender(), Translation.of("msg_save_success"));
 	
 		} else if (split[0].equalsIgnoreCase("load")) {
 			TownyUniverse.getInstance().clearAllObjects();			
-			TownyUniverse.getInstance().getDataSource().loadAll();
-			TownyMessaging.sendMsg(getSender(), Translation.of("msg_load_success"));			
+			if (TownyUniverse.getInstance().getDataSource().loadAll()) {
+				TownyMessaging.sendMsg(getSender(), Translation.of("msg_load_success"));
+				Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
+			}
 		}
 	}
 

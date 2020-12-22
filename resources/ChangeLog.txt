@@ -5600,3 +5600,5 @@ v0.92.0.11:
 0.96.5.8:
   - Add (Public) to Town status screen upper bar.
   - Add (Conquered) to Town status screen upper bar.
+  - API: Added TownyLoadedDatabaseEvent.
+    - Called when has successfully loaded the database on startup as well as /ta database load and /ta reload db|all.
