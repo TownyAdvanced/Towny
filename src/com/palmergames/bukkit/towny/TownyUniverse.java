@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
@@ -189,7 +188,6 @@ public class TownyUniverse {
         residentNameMap.clear();
         residentUUIDMap.clear();
         townBlocks.clear();
-        SiegeController.clearSieges();
     }
     
     /**
