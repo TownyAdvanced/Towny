@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.MojangException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -14,14 +15,13 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.bukkit.Bukkit;
-
 /**
- * @author ElgarL
+ * @author LlmDl
  * 
  */
 public class GatherResidentUUIDTask implements Runnable {
 
+	@SuppressWarnings("unused")
 	private Towny plugin;
 	private final static Queue<Resident> queue = new ConcurrentLinkedQueue<>();
 	private static boolean offlineModeDetected = false;
@@ -63,13 +63,13 @@ public class GatherResidentUUIDTask implements Runnable {
 		} else if (!offlineModeDetected) { // If the server is in true offline mode the following test would result always return 204, wiping the database.
 			try {
 				uuid = BukkitTools.getUUIDFromResident(resident); // This will call mojang for the player's UUID.
-			} catch (IOException e) {
+			} catch (MojangException e) {
 				// 204 is thrown when the player account no longer exists, they will not be logging in again so they can be deleted.
-				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " no longer has an account. Removing this resident from the database.");
-				Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin,
-					() -> TownyUniverse.getInstance().getDataSource().removeResident(resident),
-					20);
+				TownyMessaging.sendErrorMsg("HTTP Response Code 204 - Mojang says " + resident.getName() + " no longer has an account, this could be in error. Unable to gather UUID.");
 				return;	
+			} catch (IOException e) {
+				TownyMessaging.sendErrorMsg("Resident: " + resident.getName() + " caused an IOException in the GatheringResidentUUID task. Unable to gather UUID.");
+				return;
 			}
 			if (uuid != null)
 				applyUUID(resident, uuid, "Mojang");

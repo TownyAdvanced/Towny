@@ -1,5 +1,5 @@
 name: Towny
-version: 0.94
+version: 0.95
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -732,8 +732,8 @@ jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
 status_friends: 'Friends'
 rank_list_title: ' &3Rank List'
 rank_list_mayor: '&2Mayor: &a%s'
-status_title_pvp: ' &4(PVP)'
-status_title_open: ' &b(Open)'
+status_title_pvp: '&4(PVP)'
+status_title_open: '&b(Open)'
 status_town_board: '&2Board: &a%s'
 status_founded: '&2Founded: &7%s'
 status_town_size_part_1: '&2Town Size: &a%s / %s'
@@ -1407,3 +1407,7 @@ msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
 npc_created: '&2Created: &a%s'
 msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
 msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
+status_town_title_peaceful: '&b(Peacful)'
+
+#Added in 0.95
+status_public: '&b(Public)'

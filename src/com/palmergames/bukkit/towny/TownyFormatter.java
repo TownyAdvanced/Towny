@@ -326,11 +326,15 @@ public class TownyFormatter {
 			world = TownyUniverse.getInstance().getDataSource().getWorlds().get(0);
 		}
 
-		// ___[ Raccoon City (PvP) (Open) ]___
-		String title = town.getFormattedName();
-		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
-		title += (town.isOpen() ? Translation.of("status_title_open") : "");
-		out.add(ChatTools.formatTitle(title));
+		// ___[ Raccoon City ]___
+		// (PvP) (Open) (Peaceful)
+		out.add(ChatTools.formatTitle(town.getFormattedName()));
+		String subtitle = ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
+		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isOpen() ? Translation.of("status_title_open") : "");
+		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isPublic() ? Translation.of("status_public") : "");
+		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isNeutral() ? Translation.of("status_town_title_peaceful") : "");
+		if (!subtitle.isEmpty())
+			out.add(ChatTools.formatSubTitle(subtitle));
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
@@ -417,8 +421,6 @@ public class TownyFormatter {
 
 				out.add(bankString);
 			}
-			if (town.isNeutral())
-				out.add(Translation.of("status_nation_peaceful"));
 
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));

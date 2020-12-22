@@ -2499,6 +2499,10 @@ public class TownySettings {
 
 		return !getBoolean(ConfigNodes.PLUGIN_RESET_LOG_ON_BOOT);
 	}
+	
+	public static int getTownyTopSize() {
+		return getInt(ConfigNodes.PLUGIN_TOWNY_TOP_SIZE);
+	}
 
 	public static String getNameFilterRegex() {
 

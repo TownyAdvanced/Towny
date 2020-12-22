@@ -1,5 +1,5 @@
 name: Towny
-version: 0.93
+version: 0.94
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious
 website: 'http://townyadvanced.github.io/'
@@ -1216,3 +1216,17 @@ msg_reclaim_available: '&aReclaim available.'
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
+
+#Added in 0.94
+msg_comptype_residents: 'Number of Residents'
+msg_comptype_townblocks: 'Number of Claimed Townblocks'
+msg_comptype_balance: 'Bank Balance'
+msg_comptype_online: 'Online Players'
+msg_comptype_towns: 'Number of Towns'
+msg_comptype_name: 'Alphabetical Order'
+msg_comptype_open: 'Open Status'
+msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
+npc_created: '&2Created: &a%s'
+msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
+msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
+status_town_title_peaceful: '&b(Peacful)'

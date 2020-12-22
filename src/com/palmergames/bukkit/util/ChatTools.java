@@ -48,9 +48,19 @@ public class ChatTools {
 
 	public static String formatTitle(String title) {
 
-		String line = ".oOo.__________________________________________________.oOo.";
+		String line = ".oOo._____________________________________________________.oOo.";
 		int pivot = line.length() / 2;
 		String center = ".[ " + Colors.Yellow + title + Colors.Gold + " ].";
+		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		out += center + line.substring(pivot + center.length() / 2);
+		return out;
+	}
+	
+	public static String formatSubTitle(String title) {
+
+		String line = " .]|[.                                                                       .]|[.";
+		int pivot = (line.length()) / 2;
+		String center = title + Colors.Gold;
 		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
 		out += center + line.substring(pivot + center.length() / 2);
 		return out;

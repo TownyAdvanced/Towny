@@ -3,6 +3,7 @@ package com.palmergames.bukkit.util;
 import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.MojangException;
 import com.palmergames.bukkit.towny.object.Resident;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -94,9 +95,10 @@ public class BukkitTools {
 	 * 
 	 * @param resident - who to return a UUID for. 
 	 * @return uuid - UUID of resident using the name at last login or null.
-	 * @throws IOException when Mojang returns HTTP Code 204.
+	 * @throws IOException when reader could not parse response.
+	 * @throws MojangException when Mojang returns HTTP Code 204.
 	 */
-	public static UUID getUUIDFromResident(Resident resident) throws IOException {
+	public static UUID getUUIDFromResident(Resident resident) throws IOException, MojangException {
 
 		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
 		
