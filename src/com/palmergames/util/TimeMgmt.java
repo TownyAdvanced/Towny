@@ -1,11 +1,17 @@
 package com.palmergames.util;
 
+import java.text.NumberFormat;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimeMgmt {
+
+	public final static double ONE_SECOND_IN_MILLIS = 1000;
+	public final static double ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
+	public final static double ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
+	public final static double ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
 	public final static long[][] defaultCountdownDelays = new long[][] {
 			{ 10, 1 }, // <= 10s, Warn every 1s
@@ -65,4 +71,41 @@ public class TimeMgmt {
 			out += (out.length() > 0 ? ", " : "") + l + Translation.of("msg_seconds");
 		return out;
 	}
+
+	public static String getFormattedTimeValue(double timeMillis) {
+        String timeUnit;
+        double timeUtilCompletion;
+
+        if(timeMillis> 0) {
+
+            NumberFormat numberFormat = NumberFormat.getInstance();
+
+            if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = Translation.of("msg_days");
+                timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
+
+            } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = Translation.of("msg_hours");
+                timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
+
+            } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = Translation.of("msg_minutes");
+                timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
+
+            } else {
+                numberFormat.setMaximumFractionDigits(0);
+                timeUnit = Translation.of("msg_seconds");
+                timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
+            }
+
+            double timeRoundedUp = Math.ceil(timeUtilCompletion * 10) / 10;
+            return numberFormat.format(timeRoundedUp) + timeUnit;
+
+        } else {
+            return "0" + Translation.of("msg_seconds");
+        }
+    }
 }
