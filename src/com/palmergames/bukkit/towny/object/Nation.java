@@ -88,6 +88,11 @@ public class Nation extends Government {
 		return getAllies().contains(nation);
 	}
 
+	public boolean hasMutualAlly(Nation nation) {
+		
+		return getAllies().contains(nation) && nation.getAllies().contains(this);
+	}
+
 	public boolean IsAlliedWith(Nation nation) {
 
 		return getAllies().contains(nation);
@@ -339,6 +344,15 @@ public class Nation extends Government {
 		return allies;
 	}
 
+	public List<Nation> getMutualAllies() {
+		List<Nation> result = new ArrayList<>();
+		for(Nation ally: getAllies()) {
+			if(ally.hasAlly(this))
+				result.add(ally);
+		}
+		return result;
+	}
+
 	public int getNumTowns() {
 
 		return towns.size();
@@ -372,8 +386,6 @@ public class Nation extends Government {
 		}
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
-	
-
 
 	private void remove(Town town) {
 
@@ -658,7 +670,6 @@ public class Nation extends Government {
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
-	
 	
 	/**
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.

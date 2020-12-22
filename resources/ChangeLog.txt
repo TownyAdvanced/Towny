@@ -5602,3 +5602,4 @@ v0.92.0.11:
   - Add (Conquered) to Town status screen upper bar.
   - API: Added TownyLoadedDatabaseEvent.
     - Called when has successfully loaded the database on startup as well as /ta database load and /ta reload db|all.
+  - Add Nation#getMutualAllies() and Nation#hasMutualAlly() from SiegeWar.
