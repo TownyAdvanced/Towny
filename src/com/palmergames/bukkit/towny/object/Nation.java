@@ -89,7 +89,7 @@ public class Nation extends Government {
 	}
 
 	public boolean hasMutualAlly(Nation nation) {
-	
+		
 		return getAllies().contains(nation) && nation.getAllies().contains(this);
 	}
 
