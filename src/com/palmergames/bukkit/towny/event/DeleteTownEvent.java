@@ -21,8 +21,11 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 		return handlers;
 	}
 
-    public DeleteTownEvent(Town town) {
+    private final UUID mayorUUID;
+    
+    public DeleteTownEvent(Town town, UUID uuid) {
     	super(town.getName(), town.getUUID(), town.getRegistered());
+    	mayorUUID = uuid;
     }
 
     /**
@@ -47,6 +50,13 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	 */
 	public long getTownCreated() {
     	return registered;
+	}
+
+	/**
+	 * @return the deleted town's mayor's UUID.
+	 */
+	public UUID getMayorUUID() {
+		return mayorUUID;
 	}
     
 }
