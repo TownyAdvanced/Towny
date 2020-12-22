@@ -331,6 +331,7 @@ public class TownyFormatter {
 		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isOpen() ? Translation.of("status_title_open") : "");
 		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isPublic() ? Translation.of("status_public") : "");
 		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isNeutral() ? Translation.of("status_town_title_peaceful") : "");
+		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isConquered() ? Translation.of("msg_conquered") : "");
 		if (!subtitle.isEmpty())
 			out.add(ChatTools.formatSubTitle(subtitle));
 
@@ -431,7 +432,7 @@ public class TownyFormatter {
 
 			// Nation: Azur Empire
 			try {
-				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : ""));
+				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()));
 			} catch (TownyException ignored) {
 			}
 
