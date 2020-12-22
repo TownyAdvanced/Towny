@@ -329,6 +329,7 @@ public class TownyFormatter {
 		out.add(ChatTools.formatTitle(town.getFormattedName()));
 		String subtitle = ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
 		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isOpen() ? Translation.of("status_title_open") : "");
+		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isPublic() ? Translation.of("status_public") : "");
 		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isNeutral() ? Translation.of("status_town_title_peaceful") : "");
 		if (!subtitle.isEmpty())
 			out.add(ChatTools.formatSubTitle(subtitle));

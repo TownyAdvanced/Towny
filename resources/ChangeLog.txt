@@ -5597,4 +5597,5 @@ v0.92.0.11:
   - New Config Option: plugin.towny_top_size
     - default: 10
     - Sets the default size that /towny top commands display.
-  
+0.96.5.8:
+  - Add (Public) to Town status screen upper bar.
