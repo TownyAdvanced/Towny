@@ -37,7 +37,6 @@ import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -717,6 +716,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 		
+		Resident mayor = town.getMayor();
+		
 		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
@@ -762,7 +763,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		deleteTown(town);
 		
-		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town));
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town, mayor.getUUID()));
 	}
 
 	@Override
@@ -771,11 +772,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation);
 		BukkitTools.getPluginManager().callEvent(preEvent);
 		
-		Resident king = nation.getKing();
-
 		if (preEvent.isCancelled())
 			return;
 
+		Resident king = nation.getKing();
+		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
 		for (Nation toCheck : new ArrayList<>(universe.getNationsMap().values()))
@@ -832,9 +833,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 
-		SiegeWarMoneyUtil.makeNationRefundAvailable(king);
-
-		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation));
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, king.getUUID()));
 	}
 
 	@Override

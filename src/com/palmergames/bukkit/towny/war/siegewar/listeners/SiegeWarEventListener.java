@@ -55,6 +55,7 @@ import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPermissionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.TownPeacefulnessUtil;
@@ -553,6 +554,10 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onDeleteNation(DeleteNationEvent event) {
+		Resident king = TownyUniverse.getInstance().getResident(event.getNationKing());
+		if (king != null)
+			SiegeWarMoneyUtil.makeNationRefundAvailable(king);
+		
 		for (Siege siege : SiegeController.getSiegesByNationUUID(event.getNationUUID())) {
 			SiegeController.removeSiege(siege, SiegeSide.DEFENDERS);
 		}
