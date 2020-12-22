@@ -32,7 +32,7 @@ public class AbandonAttack {
 	 */
     public static void processAbandonSiegeRequest(Block block, Nation nation) throws TownyException {
 		// Fail early if the nation has no sieges.
-		if (nation.getSieges().isEmpty())
+		if (!SiegeController.hasSieges(nation))
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
 		//Find the nearest siege to the player, owned by the nation.

@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
@@ -532,8 +533,8 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onNationRename(RenameNationEvent event) {
-		if (!event.getNation().getSieges().isEmpty()) {
-			for (Siege siege : event.getNation().getSieges())
+		if (SiegeController.hasSieges(event.getNation())) {
+			for (Siege siege : SiegeController.getSieges(event.getNation()))
 				SiegeController.saveSiege(siege);
 		}
 	}
@@ -542,9 +543,18 @@ public class SiegeWarEventListener implements Listener {
 	 * A town being deleted with a siege means the siege ends.
 	 */
 	@EventHandler
-	public void onDeleteTown (DeleteTownEvent event) {
+	public void onDeleteTown(DeleteTownEvent event) {
 		if (SiegeController.hasSiege(event.getTownUUID()))
 			SiegeController.removeSiege(SiegeController.getSiege(event.getTownUUID()), SiegeSide.ATTACKERS);
 	}
-	
+
+	/*
+	 * A nation being deleted with a siege means the siege ends.
+	 */
+	@EventHandler
+	public void onDeleteNation(DeleteNationEvent event) {
+		for (Siege siege : SiegeController.getSiegesByNationUUID(event.getNationUUID())) {
+			SiegeController.removeSiege(siege, SiegeSide.DEFENDERS);
+		}
+	}
 }

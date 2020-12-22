@@ -127,7 +127,7 @@ public class PlaceBlock {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				// Fail early if the nation has no sieges.
-				if (nation.getSieges().isEmpty())
+				if (!SiegeController.hasSieges(nation))
 					throw new TownyException(Translation.of("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
 				// Start abandoning the siege.
@@ -237,7 +237,7 @@ public class PlaceBlock {
 					throw new TownyException(Translation.of("msg_err_no_money"));
 			} catch (EconomyException ignored) {}
 	        
-	        if(nation.getNumActiveAttackSieges() >= SiegeWarSettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
+	        if(getNumActiveAttackSieges(nation) >= SiegeWarSettings.getWarSiegeMaxActiveSiegeAttacksPerNation())
 				throw new TownyException(Translation.of("msg_err_siege_war_nation_has_too_many_active_siege_attacks"));
 			
 			if (attackingTown == town)
@@ -297,6 +297,15 @@ public class PlaceBlock {
 	
 	private static boolean isSurrenderBanner(Block block) {
 		return block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0;
+	}
+	
+	private static int getNumActiveAttackSieges(Nation nation) {
+		int result = 0;
+		for(Siege siege: SiegeController.getSieges()) {
+			if(siege.getAttackingNation() == nation && siege.getStatus().isActive())
+				result++;
+		}
+		return result;
 	}
 }
 

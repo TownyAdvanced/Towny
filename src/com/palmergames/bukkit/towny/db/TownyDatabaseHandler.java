@@ -37,9 +37,6 @@ import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -805,10 +802,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				nation.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
-
-		//Remove all sieges
-		for (Siege siege : new ArrayList<>(nation.getSieges()))
-			SiegeController.removeSiege(siege, SiegeSide.DEFENDERS);
 
 		//Delete nation and save towns
 		deleteNation(nation);

@@ -122,7 +122,6 @@ public class SiegeController {
 		if (nation == null)
 			return false;
 		siege.setAttackingNation(nation);
-		nation.addSiege(siege);
 		
 		if (SiegeMetaDataController.getFlagLocation(town).isEmpty())
 			return false;
@@ -172,9 +171,7 @@ public class SiegeController {
 		//Remove siege from town
 		setSiege(town, false);
 		SiegeMetaDataController.removeSiegeMeta(town);
-		//Remove siege from nation
-		siege.getAttackingNation().removeSiege(siege);
-		//Remove siege from universe
+		//Remove siege from maps
 		sieges.remove(siege.getName().toLowerCase());
 		townSiegeMap.remove(town.getUUID());
 
@@ -197,6 +194,20 @@ public class SiegeController {
 		return hasSiege(town) && getSiege(town).getStatus().isActive(); 
 	}
 	
+	public static boolean hasSieges(Nation nation) {
+		return !getSieges(nation).isEmpty();
+	}
+	
+	@Nullable
+	public static List<Siege> getSieges(Nation nation) {
+		List<Siege> siegeList = new ArrayList<>();
+		for (Siege siege : sieges.values()) {
+			if (siege.getAttackingNation().equals(nation))
+				siegeList.add(siege);			
+		}
+		return siegeList;
+	}
+	
 	@Nullable
 	public static Siege getSiege(Town town) {
 		if (townSiegeMap.containsKey(town.getUUID()))
@@ -209,6 +220,17 @@ public class SiegeController {
 		if (townSiegeMap.containsKey(uuid))
 			return townSiegeMap.get(uuid);
 		return null;
+	}
+	
+	@Nullable
+	public static List<Siege> getSiegesByNationUUID(UUID uuid) {
+		List<Siege> siegeList = new ArrayList<>();
+		for (Siege siege : sieges.values()) {
+			Town town = siege.getDefendingTown();
+			if (UUID.fromString(SiegeMetaDataController.getNationUUID(town)).equals(uuid))
+				siegeList.add(siege);
+		}
+		return siegeList;
 	}
 	
 	@Nullable

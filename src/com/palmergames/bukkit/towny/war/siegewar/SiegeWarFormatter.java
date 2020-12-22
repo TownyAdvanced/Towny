@@ -121,12 +121,12 @@ public class SiegeWarFormatter {
     public static List<String> getStatus(@NotNull Nation nation) {
 
         // Siege Attacks [3]: TownA, TownB, TownC
-        List<Town> siegeAttacks = nation.getTownsUnderSiegeAttack();
+        List<Town> siegeAttacks = getTownsUnderSiegeAttack(nation);
         String[] formattedSiegeAttacks = TownyFormatter.getFormattedNames(siegeAttacks.toArray(new Town[0]));
         List<String> out = new ArrayList<>(ChatTools.listArr(formattedSiegeAttacks, Translation.of("status_nation_siege_attacks", siegeAttacks.size())));
 
         // Siege Defences [3]: TownX, TownY, TownZ
-        List<Town> siegeDefences = nation.getTownsUnderSiegeDefence();
+        List<Town> siegeDefences = getTownsUnderSiegeDefence(nation);
         String[] formattedSiegeDefences = TownyFormatter.getFormattedNames(siegeDefences.toArray(new Town[0]));
         out.addAll(ChatTools.listArr(formattedSiegeDefences, Translation.of("status_nation_siege_defences", siegeDefences.size())));
 
@@ -153,4 +153,23 @@ public class SiegeWarFormatter {
                 return "???";
         }
     }
+    
+	public static List<Town> getTownsUnderSiegeAttack(Nation nation) {
+		List<Town> result = new ArrayList<>();
+		for(Siege siege : SiegeController.getSieges()) {
+			if(siege.getAttackingNation().equals(nation)) {				
+				result.add(siege.getDefendingTown());
+			}
+		}
+		return result;
+	}
+
+	public static List<Town> getTownsUnderSiegeDefence(Nation nation) {
+		List<Town> result = new ArrayList<Town>();
+		for(Town town: nation.getTowns()) {
+			if(SiegeController.hasActiveSiege(town))
+				result.add(town);
+		}
+		return result;
+	}
 }

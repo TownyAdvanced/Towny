@@ -119,9 +119,8 @@ public class AttackTown {
 		siege.setWarChestAmount(SiegeWarMoneyUtil.getSiegeCost(defendingTown));
 		
 		SiegeController.setSiege(defendingTown, true);
-		//Set values in town and nation objects
-		attackingNation.addSiege(siege);
-		
+
+		//Set town pvp and explosions to true.
 		defendingTown.getPermissions().explosion = true;
 		defendingTown.getPermissions().pvp = true;
 		

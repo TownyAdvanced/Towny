@@ -17,8 +17,6 @@ import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -39,7 +37,6 @@ public class Nation extends Government {
 	private final List<Town> towns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
-	private List<Siege> sieges = new ArrayList<>();
 	private Town capital;
 	private String mapColorHexCode = "";
 	public UUID uuid;
@@ -355,7 +352,6 @@ public class Nation extends Government {
 		return result;
 	}
 
-
 	public int getNumTowns() {
 
 		return towns.size();
@@ -397,22 +393,9 @@ public class Nation extends Government {
 		towns.remove(town);
 	}
 
-	public void addSiege(Siege siege) {
-		sieges.add(siege);
-	}
-	
-	public void removeSiege(Siege siege) {
-		sieges.remove(siege);
-	}
-
 	private void removeAllTowns() {
 
 		towns.clear();
-	}
-
-	private void removeAllSieges() {
-
-		sieges.clear();
 	}
 
 	public void setTaxes(double taxes) {
@@ -425,7 +408,6 @@ public class Nation extends Government {
 		removeAllAllies();
 		removeAllEnemies();
 		removeAllTowns();
-		removeAllSieges();
 		capital = null;
 	}
 
@@ -601,38 +583,6 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(sentAllyInvites);
 	}
 	
-	public List<Town> getTownsUnderSiegeAttack() {
-		List<Town> result = new ArrayList<>();
-		for(Siege siege: sieges) {
-			if(siege.getStatus().isActive()) {
-				result.add(siege.getDefendingTown());
-			}
-		}
-		return result;
-	}
-
-	public List<Town> getTownsUnderSiegeDefence() {
-		List<Town> result = new ArrayList<Town>();
-		for(Town town: towns) {
-			if(SiegeController.hasActiveSiege(town))
-				result.add(town);
-		}
-		return result;
-	}
-
-	public int getNumActiveAttackSieges() {
-		int result = 0;
-		for(Siege siege: sieges) {
-			if(siege.getStatus().isActive()) 
-				result++;
-		}
-		return result;
-	}
-
-	public List<Siege> getSieges() {
-		return sieges;
-	}
-
 	public Collection<TownBlock> getTownBlocks() {
 		List<TownBlock> townBlocks = new ArrayList<>();
 		for (Town town : this.getTowns())

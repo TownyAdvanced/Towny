@@ -84,7 +84,7 @@ public class SiegeWarDistanceUtil {
 		//Find the nearest siege zone to the given block within the given radius belonging to the given nation.
 		Siege nearestSiege = null;
 		double distanceToNearestSiegeZone = -1;
-		for(Siege siege: nation.getSieges()) {
+		for(Siege siege: SiegeController.getSieges(nation)) {
 
 			if(!block.getLocation().getWorld().getName().equalsIgnoreCase(siege.getFlagLocation().getWorld().getName())) {
 				continue;
