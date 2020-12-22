@@ -9,6 +9,8 @@ import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
+
 import net.milkbowl.vault.economy.Economy;
 import net.tnemc.core.Reserve;
 
@@ -289,10 +291,10 @@ public class TownyEconomyHandler {
 
 		String formattedBalance = economy.getFormattedBalance(balance);
 		if (formattedBalance != null) {
-			return formattedBalance;
+			return Colors.translateColorCodes(formattedBalance);
 		}
 
-		return String.format("%.2f", balance);
+		return Colors.translateColorCodes(String.format("%.2f", balance));
 
 	}
 
