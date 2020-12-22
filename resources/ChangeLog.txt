@@ -5606,3 +5606,4 @@ v0.92.0.11:
   - API: add king and mayor UUIDs to the DeleteNationEvent & DeleteTownEvent.
   - Add some Time methods from SiegeWar.
   - Format for colour codes when retrieving TownyEconomyHandler#getFormattedBalance().
+    - Closes #4619.
