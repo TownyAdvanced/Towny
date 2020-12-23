@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
+import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
@@ -1248,6 +1249,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
 			Confirmation.runOnAccept(() -> {
+				Bukkit.getPluginManager().callEvent(new NationTownLeaveEvent(nation, finalTown));
 				finalTown.removeNation();
 
 				plugin.resetCache();
