@@ -1248,7 +1248,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
-						endingMessage = Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
+						endingMessage = Translation.of("msg_changed_expl", "the Plot Group", groupBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.

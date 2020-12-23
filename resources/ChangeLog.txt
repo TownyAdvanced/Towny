@@ -5605,3 +5605,9 @@ v0.92.0.11:
   - Add Nation#getMutualAllies() and Nation#hasMutualAlly() from SiegeWar.
   - API: add king and mayor UUIDs to the DeleteNationEvent & DeleteTownEvent.
   - Add some Time methods from SiegeWar.
+  - Format for colour codes when retrieving TownyEconomyHandler#getFormattedBalance().
+    - Closes #4619.
+  - Fix for NPE which could be thrown via the PlayerInteractEvent when an item was used without clicking a block.
+  - Fix /plot group toggle explosion showing the feedback message for fire.
+  - API: Add NationTownLeaveEvent.
+  - API Change: NationPreTownKickEvent no longer extends NationPreTownLeaveEvent.
