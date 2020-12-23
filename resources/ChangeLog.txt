@@ -5607,3 +5607,5 @@ v0.92.0.11:
   - Add some Time methods from SiegeWar.
   - Format for colour codes when retrieving TownyEconomyHandler#getFormattedBalance().
     - Closes #4619.
+  - Fix for NPE which could be thrown via the PlayerInteractEvent when an item was used without clicking a block.
+  - Fix /plot group toggle explosion showing the feedback message for fire.

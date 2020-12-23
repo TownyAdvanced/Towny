@@ -266,11 +266,15 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			Material item =  event.getItem().getType();
+			
+			Location loc = clickedBlock.getLocation();
+			if (loc == null)
+				loc = player.getLocation();
 			/*
 			 * Test item_use. 
 			 */
 			if (TownySettings.isItemUseMaterial(item.name()))
-				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), item));
+				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
 
 			/*
 			 * Test other Items using non-ItemUse test.
@@ -293,14 +297,14 @@ public class TownyPlayerListener implements Listener {
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
+					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
 
 				/*
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
 				if (item == Material.BONE_MEAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getLocation(), item));
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
