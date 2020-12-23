@@ -5611,3 +5611,5 @@ v0.92.0.11:
   - Fix /plot group toggle explosion showing the feedback message for fire.
   - API: Add NationTownLeaveEvent.
   - API Change: NationPreTownKickEvent no longer extends NationPreTownLeaveEvent.
+  - Alter the explosion damage protection to only stop damage to the config's protection.mob_types.
+    - Players will once again take explosion damage as they used to. 
