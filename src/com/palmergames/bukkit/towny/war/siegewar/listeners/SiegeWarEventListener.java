@@ -22,9 +22,9 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
-import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
+import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
@@ -380,17 +380,17 @@ public class SiegeWarEventListener implements Listener {
 		if (event.isAdminAction()) {
 			town.setNeutral(!town.isNeutral());
 		} else {
+			int days;
+			if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
+				days = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
+			} else {
+				days = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
+			}
+			
 			if (TownMetaDataController.getPeacefulnessChangeConfirmationCounterDays(town) == 0) {
 				
 				//Here, no countdown is in progress, and the town wishes to change peacefulness status
 				TownMetaDataController.setDesiredPeacefullnessSetting(town, !town.isNeutral());
-				
-				int days;
-				if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
-					days = SiegeWarSettings.getWarCommonPeacefulTownsNewTownConfirmationRequirementDays();
-				} else {
-					days = SiegeWarSettings.getWarCommonPeacefulTownsConfirmationRequirementDays();
-				}
 				TownMetaDataController.setPeacefulnessChangeDays(town, days);
 				
 				//Send message to town
@@ -417,6 +417,9 @@ public class SiegeWarEventListener implements Listener {
 				//Send message to town
 				TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));
 			}
+			
+			event.setCancellationMsg(Translation.of("status_town_peacefulness_status_change_timer", days));
+			event.setCancelled(true);
 		}
 	}
 	
@@ -436,7 +439,7 @@ public class SiegeWarEventListener implements Listener {
 	 * Update town peacefulness counters.
 	 */
 	@EventHandler
-	public void onNewDay(NewDayEvent event) {
+	public void onNewDay(PreNewDayEvent event) {
 		if (SiegeWarSettings.getWarCommonPeacefulTownsEnabled()) {
 			TownPeacefulnessUtil.updateTownPeacefulnessCounters();
 			if(SiegeWarSettings.getWarSiegeEnabled())
