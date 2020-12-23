@@ -151,17 +151,13 @@ public class SiegeWarDistanceUtil {
 	 * @return true if siegewar is enabled in the given world
 	 */
 	public static boolean isSiegeWarEnabledInWorld(World worldToCheck) {
-		try {
-			if (worldsWithSiegeWarEnabled == null) {
-				worldsWithSiegeWarEnabled = new ArrayList<>();
-				String[] worldNamesAsArray = SiegeWarSettings.getWarSiegeWorlds().split(",");
-				for (String worldName : worldNamesAsArray) {
+		if (worldsWithSiegeWarEnabled == null) {
+			worldsWithSiegeWarEnabled = new ArrayList<>();
+			String[] worldNamesAsArray = SiegeWarSettings.getWarSiegeWorlds().split(",");
+			for (String worldName : worldNamesAsArray) {
+				if (Bukkit.getServer().getWorld(worldName.trim()) != null)
 					worldsWithSiegeWarEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
-				}
 			}
-		} catch (Exception e) {
-			System.out.println("Error checking if siege war is enabled in world. Check your config file.");
-			return false;
 		}
 		return worldsWithSiegeWarEnabled.contains(worldToCheck.getName());
 	}
@@ -173,17 +169,13 @@ public class SiegeWarDistanceUtil {
 	 * @return true if underground banner control is enabled in the given world
 	 */
 	public static boolean isUndergroundBannerControlEnabledInWorld(World worldToCheck) {
-		try {
-			if (worldsWithUndergroundBannerControlEnabled == null) {
-				worldsWithUndergroundBannerControlEnabled = new ArrayList<>();
-				String[] worldNamesAsArray = SiegeWarSettings.getWarWorldsWithUndergroundBannerControl().split(",");
-				for (String worldName : worldNamesAsArray) {
+		if (worldsWithUndergroundBannerControlEnabled == null) {
+			worldsWithUndergroundBannerControlEnabled = new ArrayList<>();
+			String[] worldNamesAsArray = SiegeWarSettings.getWarWorldsWithUndergroundBannerControl().split(",");
+			for (String worldName : worldNamesAsArray) {
+				if (Bukkit.getServer().getWorld(worldName.trim()) != null)
 					worldsWithUndergroundBannerControlEnabled.add(Bukkit.getServer().getWorld(worldName.trim()).getName());
-				}
 			}
-		} catch (Exception e) {
-			System.out.println("Error checking if world has underground banner control enabled. Check your config file.");
-			return false;
 		}
 		return worldsWithUndergroundBannerControlEnabled.contains(worldToCheck.getName());
 	}

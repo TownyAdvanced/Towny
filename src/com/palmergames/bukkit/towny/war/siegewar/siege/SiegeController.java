@@ -182,8 +182,12 @@ public class SiegeController {
 		siege = null;
 	}
 
+	public static void putTownInSiegeMap(Town town, Siege siege) {
+		townSiegeMap.put(town.getUUID(), siege);
+	}
+	
 	public static boolean hasSiege(Town town) {
-		return townSiegeMap.containsKey(town.getUUID());
+		return hasSiege(town.getUUID());
 	}
 	
 	public static boolean hasSiege(UUID uuid) {
@@ -210,14 +214,14 @@ public class SiegeController {
 	
 	@Nullable
 	public static Siege getSiege(Town town) {
-		if (townSiegeMap.containsKey(town.getUUID()))
+		if (hasSiege(town.getUUID()))
 			return townSiegeMap.get(town.getUUID());
 		return null;
 	}
 	
 	@Nullable
 	public static Siege getSiege(UUID uuid) {
-		if (townSiegeMap.containsKey(uuid))
+		if (hasSiege(uuid))
 			return townSiegeMap.get(uuid);
 		return null;
 	}

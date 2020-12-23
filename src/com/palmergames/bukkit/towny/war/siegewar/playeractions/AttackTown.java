@@ -119,6 +119,7 @@ public class AttackTown {
 		siege.setWarChestAmount(SiegeWarMoneyUtil.getSiegeCost(defendingTown));
 		
 		SiegeController.setSiege(defendingTown, true);
+		SiegeController.putTownInSiegeMap(defendingTown, siege);
 
 		//Set town pvp and explosions to true.
 		defendingTown.getPermissions().explosion = true;
