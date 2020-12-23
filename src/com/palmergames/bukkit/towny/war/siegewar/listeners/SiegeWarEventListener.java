@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
+import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
@@ -219,7 +220,7 @@ public class SiegeWarEventListener implements Listener {
 	 * SW will prevent towns leaving their nations.
 	 */
 	@EventHandler
-	public void onTownLeaveNation(NationPreTownLeaveEvent event) {
+	public void onTownTriesToLeaveNation(NationPreTownLeaveEvent event) {
 		if (SiegeWarSettings.getWarSiegeEnabled()) {
 
 			Town town = event.getTown();
@@ -245,21 +246,34 @@ public class SiegeWarEventListener implements Listener {
 					event.setCancelMessage(Translation.of("msg_err_siege_war_town_voluntary_leave_impossible"));
 					event.setCancelled(true);
 				}
-				if (System.currentTimeMillis() < TownMetaDataController.getRevoltImmunityEndTime(town)) {
+				if (town.isConquered() && System.currentTimeMillis() < TownMetaDataController.getRevoltImmunityEndTime(town)) {
 					event.setCancelMessage(Translation.of("msg_err_siege_war_revolt_immunity_active"));
 					event.setCancelled(true);
+				} else {
+					// Towny will cancel the leaving on lowest priority if the town is conquered.
+					// We want to un-cancel it.
+					if (event.isCancelled())
+						event.setCancelled(false);
 				}
-
-				//Activate revolt immunity
-				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
-
-				TownyMessaging.sendGlobalMessage(
-					String.format(Translation.of("msg_siege_war_revolt"),
-						town.getFormattedName(),
-						town.getMayor().getFormattedName(),
-						event.getNation().getFormattedName()));
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onTownLeavesNation(NationTownLeaveEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled() && event.getTown().isConquered()) {
+			//Activate revolt immunity
+			SiegeWarTimeUtil.activateRevoltImmunityTimer(event.getTown());
+			event.getTown().setConquered(false);
+			event.getTown().setConqueredDays(0);
+			TownyUniverse.getInstance().getDataSource().saveTown(event.getTown());
+
+			TownyMessaging.sendGlobalMessage(
+				String.format(Translation.of("msg_siege_war_revolt"),
+					event.getTown().getFormattedName(),
+					event.getTown().getMayor().getFormattedName(),
+					event.getNation().getFormattedName()));
+		}	
 	}
 	
 	@EventHandler

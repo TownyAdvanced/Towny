@@ -2453,7 +2453,7 @@ public enum ConfigNodes {
 			"war.siege.switches.revolt_enabled",
 			"true",
 			"#. If true, then a town can 'revolt' against the nation and leave",
-			 "# Usually enabled in combination with WAR_SIEGE_TOWN_LEAVE_DISABLED"),
+			"# Usually enabled in combination with WAR_SIEGE_TOWN_LEAVE_DISABLED"),
 	WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS(
 			"war.siege.switches.pvp_always_on_in_besieged_towns",
 			"true",
