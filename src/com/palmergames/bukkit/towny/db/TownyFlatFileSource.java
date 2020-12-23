@@ -386,7 +386,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadResident(Resident resident) {
-		
+		boolean save = true;
 		String line = null;
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
@@ -399,7 +399,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("uuid");
 				if (line != null) {
-					resident.setUUID(UUID.fromString(line));
+					UUID uuid = UUID.fromString(line);
+					if (TownyUniverse.getInstance().hasResident(uuid)) {
+						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+						System.out.println("resident last online: " + resident.getLastOnline());
+						System.out.println("olderRes last online: " + olderRes.getLastOnline());
+						if (resident.getLastOnline() > olderRes.getLastOnline()) {
+							System.out.println("Deleting olderRes : " + olderRes.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(olderRes);
+							} catch (NotRegisteredException ignored) {}
+							TownyUniverse.getInstance().getDataSource().removeResident(resident);							
+						} else {
+							System.out.println("Deleting resident : " + resident.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(resident);
+							} catch (NotRegisteredException ignored) {}
+							TownyUniverse.getInstance().getDataSource().removeResident(resident);
+							save = false;
+							return true;
+						}
+					}					
+					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
 				
@@ -481,7 +502,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				e.printStackTrace();
 				return false;
 			} finally {
-				saveResident(resident);
+				if (save) saveResident(resident);
 			}
 			return true;
 		} else {
