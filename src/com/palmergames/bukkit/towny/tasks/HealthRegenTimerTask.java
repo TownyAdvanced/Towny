@@ -36,52 +36,39 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		for (Player player : server.getOnlinePlayers()) {
 			if (player.getHealth() <= 0)
 				continue;
-
+			
+			// Is wilderness
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+				continue;
+			
 			try {
-				WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
-				
-				// Is wilderness
-				if (!TownyUniverse.getInstance().hasTownBlock(worldCoord))
-					return;
-				
-				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(worldCoord);
-				
-				// Is wilderness
-				if (!townBlock.hasTown())
-					return;
-
+				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(player.getLocation()));
 				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-				if (resident != null && resident.hasTown() && CombatUtil.isAlly(townBlock.getTown(), resident.getTown()))
-					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
-						incHealth(player);
+
+				if (resident != null 
+					&& resident.hasTown() 
+					&& CombatUtil.isAlly(townBlock.getTown(), resident.getTown())
+					&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
+					incHealth(player);
 			} catch (TownyException ignore) {
 			}
 		}
-
-		//if (TownySettings.getDebug())
-		//	System.out.println("[Towny] Debug: Health Regen");
 	}
 
 	public void incHealth(Player player) {
 
 		// Keep saturation above zero while in town.
-		float currentSat = player.getSaturation();
-		if (currentSat == 0) {
-			
+		if (player.getSaturation() == 0)			
 			player.setSaturation(1F);
-		}
 		
 		// Heal while in town.
 		double currentHP = player.getHealth();
-		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), ++currentHP));
+		double maxHP = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if (currentHP < maxHP) {
+			player.setHealth(Math.min(maxHP, currentHP++));
 
 			// Raise an event so other plugins can keep in sync.
-			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);
-			Bukkit.getServer().getPluginManager().callEvent(event);
-
+			Bukkit.getServer().getPluginManager().callEvent(new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN));
 		}
-		
 	}
-
 }
