@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
+import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
@@ -427,7 +428,7 @@ public class SiegeWarEventListener implements Listener {
 	 * Siegewar has to be conscious of when Towny has loaded the Towny database.
 	 */
 	@EventHandler
-	public void onTownyDatabaseLoad() {
+	public void onTownyDatabaseLoad(TownyLoadedDatabaseEvent event) {
 		System.out.println("SiegeWar: onDatabaseLoad() caught");
 		SiegeController.clearSieges();
 		SiegeController.loadSiegeList();
