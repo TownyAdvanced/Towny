@@ -5613,3 +5613,5 @@ v0.92.0.11:
   - API Change: NationPreTownKickEvent no longer extends NationPreTownLeaveEvent.
   - Alter the explosion damage protection to only stop damage to the config's protection.mob_types.
     - Players will once again take explosion damage as they used to. 
+  - Add protection for double chests being created when straddling plot boundaries.
+    - Closes #4610.
