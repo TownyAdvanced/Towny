@@ -340,10 +340,10 @@ public class SiegeWarSettings {
 		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE);
 	}
 
-	public static boolean getWarCommonNewTownPeacefulnessEnabled() {
-		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED);
-	}
-
+//	public static boolean getWarCommonNewTownPeacefulnessEnabled() {
+//		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED);
+//	}
+//
 	public static int getWarCommonPeacefulTownsNewTownConfirmationRequirementDays() {
 		return TownySettings.getInt(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS);
 	}

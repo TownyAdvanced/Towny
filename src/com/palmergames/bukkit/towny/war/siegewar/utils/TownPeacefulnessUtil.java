@@ -45,7 +45,9 @@ public class TownPeacefulnessUtil {
 			 * Only adjust counter for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()) && !town.isRuined())
+			if (townyUniverse.getDataSource().hasTown(town.getName()) 
+				&& !town.isRuined()
+				&& town.isNeutral() != TownMetaDataController.getDesiredPeacefulnessSetting(town))					
 				updateTownPeacefulnessCounters(town);
 		}
 	}
