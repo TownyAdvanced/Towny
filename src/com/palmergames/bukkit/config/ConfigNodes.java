@@ -2903,10 +2903,10 @@ public enum ConfigNodes {
 			"war.common.peaceful_towns.traveller_disallowed_zones_override",
 			"true",
 			"# If this value is true, then residents of peaceful towns are not affected by disallowed zones when spawning."),
-//	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_PEACEFULNESS_ENABLED(
-//			"war.common.peaceful_towns.new_town_peacefulness_enabled",
-//			"false",
-//			"# If this setting is true, then new towns start peaceful"),
+	WAR_COMMON_PEACEFUL_TOWNS_ALLOWED_TO_MAKE_NATION(
+			"war.common.peaceful_towns.allowed_to_make_nation",
+			"false",
+			"# If this setting is true, then peaceful towns can found nations."),
 	WAR_COMMON_PEACEFUL_TOWNS_NEW_TOWN_CONFIRMATION_REQUIREMENT_DAYS(
 			"war.common.peaceful_towns.new_town_confirmation_requirement_days",
 			"2",

@@ -1304,6 +1304,7 @@ msg_war_siege_peaceful_town_changed_nation: "&b%s has peacefully changed hands, 
 msg_war_siege_peaceful_town_joined_nation: "&b%s has peacefully joined %s."
 msg_war_siege_peaceful_town_left_nation: "&b%s has peacefully left %s."
 msg_war_siege_warning_peaceful_town_should_not_create_nation: '&cYou are about to make a peaceful town into a nation capital. This is usually a bad idea, because the nation could fall without a fight.'
+msg_war_siege_peaceful_towns_cannot_make_nations: '&cPeaceful towns cannot found nations!'
 
 #Siege immunities
 msg_set_siege_immunities_town: 'Siege immunity for town %s set to %s hours.'

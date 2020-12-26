@@ -127,8 +127,11 @@ public class SiegeWarEventListener implements Listener {
 	public void onNewNationEvent(PreNewNationEvent event) {
 		if (SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
 				&& event.getTown().isNeutral()) {
-			TownyMessaging.sendMsg(event.getTown().getMayor(),
-					Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
+			if (!SiegeWarSettings.getWarCommonPeacefulTownsAllowedToMakeNation()) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_war_siege_peaceful_towns_cannot_make_nations"));
+			} else 
+				TownyMessaging.sendMsg(event.getTown().getMayor(), Translation.of("msg_war_siege_warning_peaceful_town_should_not_create_nation"));
 		}
 	}
 	
