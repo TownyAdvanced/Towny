@@ -5615,3 +5615,10 @@ v0.92.0.11:
     - Players will once again take explosion damage as they used to. 
   - Add protection for double chests being created when straddling plot boundaries.
     - Closes #4610.
+  - Add /n list by public & /t list by public
+    - Closes #4628.
+  - New permission nodes:
+    - towny.command.town.list.public
+      - child node of towny.command.town.list.*
+    - towny.command.nation.list.public
+      - child node of towny.command.nation.list.*

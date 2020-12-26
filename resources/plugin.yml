@@ -198,6 +198,7 @@ permissions:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
+            towny.command.nation.list.public: true
             towny.command.nation.list.balance: true
             towny.command.nation.list.name: true
             towny.command.nation.list.townblocks: true
@@ -340,6 +341,7 @@ permissions:
         children:
             towny.command.town.list.residents: true
             towny.command.town.list.open: true
+            towny.command.town.list.public: true
             towny.command.town.list.balance: true
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true

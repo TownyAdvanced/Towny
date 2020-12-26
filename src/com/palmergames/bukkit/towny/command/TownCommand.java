@@ -161,6 +161,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"name",		
 		"online",
 		"open",
+		"public",
 		"townblocks"
 	);
 	static final List<String> townToggleTabCompletes = Arrays.asList(
