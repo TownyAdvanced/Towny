@@ -1437,5 +1437,4 @@ public class Town extends Government implements TownBlockOwner {
 	public String getTownBoard() {
 		return getBoard();
 	}
-
 }

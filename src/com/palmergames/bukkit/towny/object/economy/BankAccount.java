@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +29,11 @@ public class BankAccount extends Account {
 		try {
 			this.cachedBalance = new CachedBalance(getHoldingBalance());
 		} catch (EconomyException e) {}
+
+		if (isTownAccount())
+			tryLegacyDebtAccount();
 	}
+
 
 	/**
 	 * Sets the max amount of money allowed in this account.
@@ -147,9 +150,8 @@ public class BankAccount extends Account {
 	 * Whether the account is in debt or not.
 	 * 
 	 * @return true if in debt, false otherwise.
-	 * @throws EconomyException On an economy error.
 	 */
-	public boolean isBankrupt() throws EconomyException {
+	public boolean isBankrupt() {
 		if (isTownAccount())
 			return getTown().isBankrupt();
 		return false;
@@ -294,4 +296,23 @@ public class BankAccount extends Account {
 		TownyUniverse.getInstance().getDataSource().saveTown(getTown());
 	}
 
+	/**
+	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
+	 */
+	private void tryLegacyDebtAccount() {
+		String name = this.getName().replace(TownySettings.getTownAccountPrefix(), "[DEBT]-");
+		if (getTown() != null)
+			if (!TownySettings.isEconomyAsync())
+				if (TownyEconomyHandler.hasAccount(name)) {
+					setTownDebt(TownyEconomyHandler.getBalance(name, getTown().getWorld()));
+					TownyEconomyHandler.setBalance(name, 0.0, world);
+				}
+			else
+				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
+					if (TownyEconomyHandler.hasAccount(name)) {
+						setTownDebt(TownyEconomyHandler.getBalance(name, getTown().getWorld()));
+						TownyEconomyHandler.setBalance(name, 0.0, world);
+					}
+				});
+	}
 }
