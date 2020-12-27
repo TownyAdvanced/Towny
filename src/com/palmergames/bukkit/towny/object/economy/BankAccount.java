@@ -6,11 +6,11 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Town;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A variant of an account that implements
@@ -21,43 +21,12 @@ public class BankAccount extends Account {
 	
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private double balanceCap;
-	private final Account debtAccount;
 	private double debtCap;
 	private CachedBalance cachedBalance = null; 
 
-	/**
-	 * Because of limitations in Economy API's, debt isn't
-	 * supported reliably in them so we need use another account
-	 * as a workaround for this problem.
-	 */
-	static class DebtAccount extends EconomyAccount {
-		
-		public static final String DEBT_PREFIX = TownySettings.getDebtAccountPrefix();
-
-		public DebtAccount(Account account) {
-			// TNE doesn't play nice with "town-" on debt accounts.
-			super(DEBT_PREFIX + account.getName().replace(TownySettings.getTownAccountPrefix(),""), account.getBukkitWorld());
-			
-			// Check if the account already exists, if not make sure the balance is set to 0
-			// as some eco configurations put a default amount in every new account.
-			if (!TownyEconomyHandler.hasAccount(getName())) {
-				try {
-					setBalance(0, "Initial Balance");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
-		if (name.startsWith(TownySettings.getTownAccountPrefix()))
-			this.debtAccount = new DebtAccount(this);
-		else 
-			this.debtAccount = null;
-		this.debtCap = 0;
 		try {
 			this.cachedBalance = new CachedBalance(getHoldingBalance());
 		} catch (EconomyException e) {}
@@ -92,7 +61,7 @@ public class BankAccount extends Account {
 	public double getDebtCap() {
 		if (TownySettings.isDebtCapDeterminedByTownLevel()) { // town_level debtCapModifier * debt_cap.override.
 			String townName = this.getName().replace(TownySettings.getTownAccountPrefix(), "");
-			Town town = TownyUniverse.getInstance().getTown(townName);
+			Town town = getTown();
 			
 			// For whatever reason, this just errors and continues
 			if (town == null) {
@@ -123,7 +92,7 @@ public class BankAccount extends Account {
 	@Override
 	protected boolean subtractMoney(double amount) {
 		try {
-			if (isBankrupt() && (debtAccount.getHoldingBalance() + amount > getDebtCap())) {
+			if (isBankrupt() && (getTownDebt() + amount > getDebtCap())) {
 				return false;  //subtraction not allowed as it would exceed the debt cap
 			}
 
@@ -181,24 +150,40 @@ public class BankAccount extends Account {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean isBankrupt() throws EconomyException {
-		return debtAccount != null && debtAccount.getHoldingBalance() > 0;
+		if (isTownAccount())
+			return getTown().isBankrupt();
+		return false;
 	}
 	
+	/**
+	 * Adds debt to a Town debtBalance
+	 * @param amount the amount to add to the debtBalance.
+	 * @return true if the BankAccount is a town bank account.
+	 */
 	private boolean addDebt(double amount) throws EconomyException {
-		return debtAccount.deposit(amount, null);
+		if (isTownAccount()) {
+			setTownDebt(getTownDebt() + amount);
+			return true;
+		}
+		return false;
 	}
 	
+	/**
+	 * @param amount the amount to remove from the debtBalance.
+	 * @return true always.
+	 */
 	private boolean removeDebt(double amount) throws EconomyException {
-		if (!debtAccount.canPayFromHoldings(amount)) {
+		if (getTownDebt() < amount) {
 			// Calculate money to go into regular account.
-			double netMoney = amount - debtAccount.getHoldingBalance();
+			double netMoney = amount - getTownDebt();
 			//Clear debt account
-			TownyEconomyHandler.setBalance(debtAccount.getName(), 0, world);
+			setTownDebt(0.0);
 			//Set positive balance in regular account
 			TownyEconomyHandler.setBalance(getName(), netMoney, world);
 			return true;
 		} else {
-			return TownyEconomyHandler.subtract(debtAccount.getName(), amount,world);
+			setTownDebt(getTownDebt() - amount);
+			return true;
 		}
 	}
 
@@ -206,7 +191,7 @@ public class BankAccount extends Account {
 	public double getHoldingBalance() throws EconomyException {
 		try {
 			if (isBankrupt()) {
-				return TownyEconomyHandler.getBalance(debtAccount.getName(), getBukkitWorld()) * -1;
+				return getTownDebt() * -1;
 			}
 			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 		} catch (NoClassDefFoundError e) {
@@ -219,7 +204,7 @@ public class BankAccount extends Account {
 	public String getHoldingFormattedBalance() {
 		try {
 			if (isBankrupt()) {
-				return "-" + debtAccount.getHoldingFormattedBalance();
+				return "-" + TownyEconomyHandler.getFormattedBalance(getTownDebt());
 			}
 			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 		} catch (EconomyException e) {
@@ -229,9 +214,6 @@ public class BankAccount extends Account {
 
 	@Override
 	public void removeAccount() {
-		// Make sure to remove debt account
-		if (debtAccount != null)
-			TownyEconomyHandler.removeAccount(debtAccount.getName());
 		TownyEconomyHandler.removeAccount(getName());
 	}
 
@@ -284,4 +266,32 @@ public class BankAccount extends Account {
 		}
 		return cachedBalance.getBalance();
 	}
+
+	/**
+	 * return true if this BankAcount is one belonging to a Town.
+	 */
+	private boolean isTownAccount() {
+		return this.getName().startsWith(TownySettings.getTownAccountPrefix());
+	}
+	
+	/**
+	 * @return town or null, if this BankAccount does not belong to a town.
+	 */
+	@Nullable
+	private Town getTown() {
+		Town town = null;
+		if (isTownAccount()) 
+			town = TownyUniverse.getInstance().getTown(this.getName().replace(TownySettings.getTownAccountPrefix(), ""));
+		return town;
+	}
+	
+	private double getTownDebt() {
+		return getTown().getDebtBalance();
+	}
+	
+	private void setTownDebt(double amount) {
+		getTown().setDebtBalance(amount);
+		TownyUniverse.getInstance().getDataSource().saveTown(getTown());
+	}
+
 }
