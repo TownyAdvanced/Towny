@@ -103,7 +103,7 @@ public class SiegeWarFormatter {
                 //Siege:
                 // > Immunity Timer: 40.8 hours
                 out.add(Translation.of("status_town_siege_status", ""));
-                String time = TimeMgmt.getFormattedTimeValue(TownMetaDataController.getRevoltImmunityEndTime(town)- System.currentTimeMillis()); 
+                String time = TimeMgmt.getFormattedTimeValue(TownMetaDataController.getSiegeImmunityEndTime(town)- System.currentTimeMillis()); 
                 out.add(Translation.of("status_town_siege_immunity_timer", time));
             }
         }
