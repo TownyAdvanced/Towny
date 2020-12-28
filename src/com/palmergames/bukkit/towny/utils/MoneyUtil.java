@@ -1,8 +1,12 @@
 package com.palmergames.bukkit.towny.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
@@ -206,5 +210,25 @@ public class MoneyUtil {
 	
 	private static boolean isNotInOwnTown(Town town, Location loc) {
 		return TownyAPI.getInstance().isWilderness(loc) || !town.equals(TownyAPI.getInstance().getTown(loc));
+	}
+	
+	/**
+	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
+	 * @param town to have their old debts converted to new debt value.
+	 */
+	public static void convertLegacyDebtAccount(Town town) {
+		String name = "[DEBT]-" + town.getName();
+		if (!TownySettings.isEconomyAsync())
+			if (TownyEconomyHandler.hasAccount(name)) {
+				town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
+				TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
+			}
+		else
+			Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
+				if (TownyEconomyHandler.hasAccount(name)) {
+					town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
+					TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
+				}
+			});
 	}
 }

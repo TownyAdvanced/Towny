@@ -29,9 +29,6 @@ public class BankAccount extends Account {
 		try {
 			this.cachedBalance = new CachedBalance(getHoldingBalance());
 		} catch (EconomyException e) {}
-
-		if (isTownAccount())
-			tryLegacyDebtAccount();
 	}
 
 
@@ -294,25 +291,5 @@ public class BankAccount extends Account {
 	private void setTownDebt(double amount) {
 		getTown().setDebtBalance(amount);
 		TownyUniverse.getInstance().getDataSource().saveTown(getTown());
-	}
-
-	/**
-	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
-	 */
-	private void tryLegacyDebtAccount() {
-		String name = this.getName().replace(TownySettings.getTownAccountPrefix(), "[DEBT]-");
-		if (getTown() != null)
-			if (!TownySettings.isEconomyAsync())
-				if (TownyEconomyHandler.hasAccount(name)) {
-					setTownDebt(TownyEconomyHandler.getBalance(name, getTown().getWorld()));
-					TownyEconomyHandler.setBalance(name, 0.0, world);
-				}
-			else
-				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
-					if (TownyEconomyHandler.hasAccount(name)) {
-						setTownDebt(TownyEconomyHandler.getBalance(name, getTown().getWorld()));
-						TownyEconomyHandler.setBalance(name, 0.0, world);
-					}
-				});
 	}
 }
