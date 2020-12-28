@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarMoneyUtil;
@@ -66,6 +67,9 @@ public class PlunderTown {
         if(siege.isTownPlundered())
             throw new TownyException(String.format(Translation.of("msg_err_siege_war_town_already_plundered"), townToBePlundered.getName()));
 
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_PLUNDER.getNode()))
+            throw new TownyException(Translation.of("msg_err_command_disable"));
+        
         plunderTown(siege, townToBePlundered, siege.getAttackingNation());
 
     }

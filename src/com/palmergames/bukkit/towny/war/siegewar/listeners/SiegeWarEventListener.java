@@ -381,7 +381,7 @@ public class SiegeWarEventListener implements Listener {
 		Town town = event.getTown();
 		
 		if (event.isAdminAction()) {
-			town.setNeutral(!town.isNeutral());
+			return;
 		} else {
 			int days;
 			if(System.currentTimeMillis() < (town.getRegistered() + (TimeMgmt.ONE_DAY_IN_MILLIS * 7))) {
@@ -412,17 +412,18 @@ public class SiegeWarEventListener implements Listener {
 						}
 					}
 				}
+				event.setCancellationMsg(Translation.of("status_town_peacefulness_status_change_timer", days));
+				event.setCancelled(true);
 				
 			} else {
 				//Here, a countdown is in progress, and the town wishes to cancel the countdown,
 				TownMetaDataController.setDesiredPeacefullnessSetting(town, town.isNeutral());
 				TownMetaDataController.setPeacefulnessChangeDays(town, 0);
 				//Send message to town
-				TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));
+				TownyMessaging.sendPrefixedTownMessage(town, String.format(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled")));				
+				event.setCancellationMsg(Translation.of("msg_war_common_town_peacefulness_countdown_cancelled"));
+				event.setCancelled(true);
 			}
-			
-			event.setCancellationMsg(Translation.of("status_town_peacefulness_status_change_timer", days));
-			event.setCancelled(true);
 		}
 	}
 	

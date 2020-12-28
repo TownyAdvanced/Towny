@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
@@ -66,7 +67,12 @@ public class PlaceBlock {
 	
 			//Chest placement
 			if (mat == Material.CHEST || mat == Material.TRAPPED_CHEST)
-				evaluatePlaceChest(player, block);
+				try {
+					evaluatePlaceChest(player, block);
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+					return;
+				}
 	
 			//Check for forbidden block placement
 			if(SiegeWarSettings.isWarSiegeZoneBlockPlacementRestrictionsEnabled() 
@@ -261,20 +267,16 @@ public class PlaceBlock {
 	 * Determines if the event will be considered as a plunder request.
 	 * @throws TownyException when the chest is not allowed to be placed.
 	 */
-	private static boolean evaluatePlaceChest(Player player, Block block) throws TownyException {
+	private static void evaluatePlaceChest(Player player, Block block) throws TownyException {
 		if (!SiegeWarSettings.getWarSiegePlunderEnabled() || !TownyAPI.getInstance().isWilderness(block))
-			return false;
+			return;
 		
 		if(!TownySettings.isUsingEconomy())
 			throw new TownyException(Translation.of("msg_err_siege_war_cannot_plunder_without_economy"));
 		
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_PLUNDER.getNode()))
-            throw new TownyException(Translation.of("msg_err_command_disable"));
-		
-
 		List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getCardinalAdjacentTownBlocks(player, block);
 		if (nearbyTownBlocks.size() == 0)
-			return false;   //No town blocks are nearby. Normal block placement
+			return;   //No town blocks are nearby. Normal block placement
 
 		if (nearbyTownBlocks.size() > 1) //More than one town block nearby. Error
 			throw new TownyException(Translation.of("msg_err_siege_war_too_many_town_blocks_nearby"));
@@ -287,12 +289,10 @@ public class PlaceBlock {
 
 		//If there is no siege, do normal block placement
 		if(!SiegeController.hasSiege(town))
-			return false;
+			return;
 
 		//Attempt plunder.
 		PlunderTown.processPlunderTownRequest(player, town);
-		return true;
-
 	}
 	
 	private static boolean isSurrenderBanner(Block block) {

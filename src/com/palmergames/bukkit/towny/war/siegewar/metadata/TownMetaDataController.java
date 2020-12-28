@@ -36,12 +36,7 @@ public class TownMetaDataController {
 				town.removeMetaData(idf);
 				return;
 			}
-			CustomDataField<?> cdf = town.getMetadata(idf.getKey());
-			if (cdf instanceof IntegerDataField) {
-				IntegerDataField amount = (IntegerDataField) cdf;
-				amount.setValue(days);
-				TownyUniverse.getInstance().getDataSource().saveTown(town);
-			}
+			MetaDataUtil.setInt(town, idf, days);
 		} else {
 			town.addMetaData(new IntegerDataField("siegewar_peacefuldays", days, "Days To Peacefulness Status Change"));			
 		}
@@ -58,12 +53,7 @@ public class TownMetaDataController {
 	public static void setDesiredPeacefullnessSetting(Town town, boolean bool) {
 		BooleanDataField bdf = (BooleanDataField) desiredPeacefulness.clone();
 		if (town.hasMeta(bdf.getKey())) {
-			CustomDataField<?> cdf = town.getMetadata(bdf.getKey());
-			if (cdf instanceof BooleanDataField) {
-				BooleanDataField value = (BooleanDataField) bdf;
-				value.setValue(bool);
-				TownyUniverse.getInstance().getDataSource().saveTown(town);
-			}
+			MetaDataUtil.setBoolean(town, bdf, bool);
 		} else {
 			town.addMetaData(new BooleanDataField("siegewar_desiredPeaceSetting", bool));
 		}

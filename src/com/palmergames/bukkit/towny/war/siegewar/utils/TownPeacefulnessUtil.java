@@ -47,7 +47,7 @@ public class TownPeacefulnessUtil {
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName()) 
 				&& !town.isRuined()
-				&& town.isNeutral() != TownMetaDataController.getDesiredPeacefulnessSetting(town))					
+				&& town.isNeutral() != TownMetaDataController.getDesiredPeacefulnessSetting(town))
 				updateTownPeacefulnessCounters(town);
 		}
 	}
@@ -57,7 +57,7 @@ public class TownPeacefulnessUtil {
 
 		int days = TownMetaDataController.getPeacefulnessChangeConfirmationCounterDays(town); 
 		if (days > 1) {
-			TownMetaDataController.setPeacefulnessChangeDays(town, days--);
+			TownMetaDataController.setPeacefulnessChangeDays(town, --days);
 			return;
 		}
 		TownMetaDataController.setPeacefulnessChangeDays(town, 0);
