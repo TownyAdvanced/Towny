@@ -497,15 +497,11 @@ public class TownyEntityMonitorListener implements Listener {
 				
 				if (attackerTown.hasOutlaw(defenderResident)) {
 
-					if (TownyAPI.getInstance().getTownBlock(loc) == null)
+					if (TownyAPI.getInstance().isWilderness(loc))
 						return;
 
-					try {
-						if (!TownyAPI.getInstance().getTownBlock(loc).getTown().getName().equals(attackerResident.getTown().getName()))
-							return;
-					} catch (NotRegisteredException e1) {
-						e1.printStackTrace();
-					}
+					if (!TownyAPI.getInstance().getTown(loc).hasResident(attackerResident))
+						return;
 
 					if (!attackerTown.hasJailSpawn()) 
 						return;
@@ -514,6 +510,7 @@ public class TownyEntityMonitorListener implements Listener {
 						if (!townyUniverse.getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 							return;
 						defenderResident.setJailed(1, attackerTown);
+						defenderResident.setJailDays(TownySettings.getJailedOutlawJailDays());
 						return;
 						
 					} else {

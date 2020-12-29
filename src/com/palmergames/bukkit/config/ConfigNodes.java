@@ -1980,6 +1980,11 @@ public enum ConfigNodes {
 			"",
 			"#If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
 			"#Requires town_respawn to be true in order to work."),
+	JAIL_OUTLAW_JAIL_DAYS(
+			"jail.outlaw_jail_days",
+			"1",
+			"",
+			"#How many days an attacking outlaw will be jailed for."),
 	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
 			"jail.jail_allows_ender_pearls",
 			"false",

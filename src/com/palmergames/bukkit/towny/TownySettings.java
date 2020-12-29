@@ -1685,6 +1685,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
+	
+	public static int getJailedOutlawJailDays() {
+		
+		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_DAYS);
+	}
 
 	public static boolean JailAllowsEnderPearls() {
 		

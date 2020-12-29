@@ -5629,3 +5629,6 @@ v0.92.0.11:
     - Closes #4638.
   - Fix Tab Completion Issues, courtesy of silverwolfg11 with PR #4634.
   - Partial translation of /towny prices.
+  - New Config Option: jail.outlaw_jail_days
+    - Default: 1
+    - How many days an attacking outlaw will be jailed for.
