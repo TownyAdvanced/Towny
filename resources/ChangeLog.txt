@@ -5623,3 +5623,5 @@ v0.92.0.11:
     - towny.command.nation.list.public
       - child node of towny.command.nation.list.*
   - Fix the title bar being a bit too wide for the chat line.
+  - Move the Nation line on the town status screen up and out of the town ranks/resident list.
+    - Closes #4640.

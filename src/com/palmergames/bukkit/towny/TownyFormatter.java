@@ -427,23 +427,22 @@ public class TownyFormatter {
 				out.add(bankString);
 			}
 
+			// Nation: Azur Empire
+			if (town.hasNation())
+				try {
+					out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()));
+				} catch (TownyException ignored) {
+				}
+			
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
 
 			// Assistants [2]: Sammy, Ginger
 			List<String> ranklist = new ArrayList<>();
 			getRanks(town, ranklist);
-
 			out.addAll(ranklist);
 
-			// Nation: Azur Empire
-			try {
-				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()));
-			} catch (TownyException ignored) {
-			}
-
 			// Residents [12]: James, Carry, Mason
-
 			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 			if (residents.length > 34) {
 				String[] entire = residents;
