@@ -78,40 +78,62 @@ public class Trie {
 	 * @param key key to remove
 	 */
 	public void removeKey(String key) {
-		// Current trieNode to crawl through
-		TrieNode trieNode = root;
+		
+		// Fast-fail if empty / null
+		if (key == null || key.isEmpty())
+			return;
+		
 		Queue<TrieNode> found = Collections.asLifoQueue(new LinkedList<>());
 
-		// Loop through each character of key
+		// Build a stack of nodes matching the key
+		TrieNode lastNode = root;
 		for (int i = 0; i < key.length(); i++) {
-			char index = key.charAt(i);
-			TrieNode lastNode = trieNode;
-			TrieNode node = null;
-			for (TrieNode nodeLoop : lastNode.children) {
-				if (nodeLoop.character == index) {
-					node = nodeLoop;
+			char currChar = key.charAt(i);
+			// Search for the node matching the character
+			TrieNode charNode = null;
+			for (TrieNode loopNode : lastNode.children) {
+				if (loopNode.character == currChar) {
+					charNode = loopNode;
+					// There should only be one so we can fast-exit.
+					break;
 				}
 			}
-
-			if (node != null) {
-				trieNode = node;
-				found.add(trieNode);
-				if (i == key.length()-1) { // Check if this is the last character of the key, indicating a word ending
-					foundLoop:
-					for (TrieNode trieNode1 : found) {
-						Iterator<TrieNode> iterator = trieNode1.children.iterator();
-						while (iterator.hasNext()) {
-							TrieNode child = iterator.next();
-							if (found.contains(child) && child.children.size() < 2) { // Only remove if in found and there are one or no children
-								iterator.remove();
-							} else {
-								break foundLoop;
-							}
-						}
+			if (charNode != null) {
+				found.add(charNode);
+				lastNode = charNode;
+			}
+			else
+				break;
+		}
+		
+		// Something clearly went wrong if this is the case.
+		if (found.isEmpty() ||
+			(found.peek().character != key.charAt(key.length() - 1)))
+			return;
+		
+		// Removal Part
+		
+		// Get the node matching the last character of the key.
+		TrieNode lastCharNode = found.poll();
+		// Set end of word to false
+		lastCharNode.endOfWord = false;
+		// Only remove the previous nodes if there are no children
+		if (lastCharNode.children.isEmpty()) {
+			char lastChar = lastCharNode.character;
+			while (!found.isEmpty()) {
+				lastCharNode = found.poll();
+				Iterator<TrieNode> nodeIterator = lastCharNode.children.iterator();
+				while (nodeIterator.hasNext()) {
+					if (nodeIterator.next().character == lastChar) {
+						nodeIterator.remove();
+						break;
 					}
 				}
-			} else {
-				break; // This shouldn't happen
+
+				if (lastCharNode.endOfWord || !lastCharNode.children.isEmpty())
+					break;
+				
+				lastChar = lastCharNode.character;
 			}
 		}
 	}
@@ -168,23 +190,27 @@ public class Trie {
 	 * @return strings of all children found, with this TrieNode's character in front of each string
 	 */
 	private static List<String> getChildrenStrings(TrieNode find, List<String> found) {
-
+		
+		List<String> childrenStrings = new ArrayList<>(); // Create re-usable list to prevent object allocation
 		for (TrieNode trieNode : find.children) { // Loop through each child
 
 			if (found.size() + 1 > MAX_RETURNS) {
 				return found;
 			}
-
-			if (!trieNode.endOfWord) { // Not the end of the word, so loop through all children
-				for (String string : getChildrenStrings(trieNode, new ArrayList<>())) {
+			
+			if (trieNode.endOfWord) // End of the word, so explicitly add this character.
+				found.add(String.valueOf(trieNode.character));
+			
+			// Only get children if the node has children.
+			if (!trieNode.children.isEmpty()) {
+				childrenStrings.clear();
+				for (String string : getChildrenStrings(trieNode, childrenStrings)) {
 					if (found.size() + 1 > MAX_RETURNS) {
 						return found;
 					} else {
 						found.add(trieNode.character + string);
 					}
 				}
-			} else { // End of word, so just add this TrieNode's character
-				found.add(String.valueOf(trieNode.character));
 			}
 		}
 
