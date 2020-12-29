@@ -407,9 +407,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
 							System.out.println("Deleting olderRes : " + olderRes.getName());
 							try {
-								TownyUniverse.getInstance().unregisterResident(olderRes);
+								TownyUniverse.getInstance().unregisterResidentUUID(olderRes);
 							} catch (NotRegisteredException ignored) {}
-							TownyUniverse.getInstance().getDataSource().removeResident(resident);							
+							TownyUniverse.getInstance().getDataSource().removeResident(olderRes);							
 						} else {
 							System.out.println("Deleting resident : " + resident.getName());
 							try {
