@@ -511,6 +511,7 @@ public class TownyEntityMonitorListener implements Listener {
 							return;
 						defenderResident.setJailed(1, attackerTown);
 						defenderResident.setJailDays(TownySettings.getJailedOutlawJailDays());
+						TownyUniverse.getInstance().getDataSource().saveResident(defenderResident);
 						return;
 						
 					} else {
