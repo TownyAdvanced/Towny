@@ -5632,3 +5632,4 @@ v0.92.0.11:
   - New Config Option: jail.outlaw_jail_days
     - Default: 1
     - How many days an attacking outlaw will be jailed for.
+  - Improve some messages in es-419.yml, courtesy of EuGNosii with PR #4607.
