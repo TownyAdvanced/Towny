@@ -5627,3 +5627,4 @@ v0.92.0.11:
     - Closes #4640.
   - Add [Not For Sale] chunk notification for when players move from a plot which is for sale, to one that is not.
     - Closes #4638.
+  - Fix Tab Completion Issues, courtesy of silverwolfg11 with PR #4634.
