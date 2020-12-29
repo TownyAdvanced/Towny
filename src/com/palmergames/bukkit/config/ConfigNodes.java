@@ -1255,6 +1255,7 @@ public enum ConfigNodes {
 			"notification.plot.outpostblock",
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_TOWN_NAMES_ARE_VERBOSE(
 			"notification.town_names_are_verbose",
