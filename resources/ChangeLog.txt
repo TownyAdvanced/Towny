@@ -5633,3 +5633,5 @@ v0.92.0.11:
     - Default: 1
     - How many days an attacking outlaw will be jailed for.
   - Improve some messages in es-419.yml, courtesy of EuGNosii with PR #4607.
+  - Removed config option: economy.debt_prefix
+  - Towny will now internally track debt balances of bankrupt towns.
