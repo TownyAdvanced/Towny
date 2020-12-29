@@ -831,6 +831,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("neutral");
 				if (line != null)
 					town.setNeutral(Boolean.parseBoolean(line));
+				
+				line = keys.get("debtBalance");
+				if (line != null)
+					try {
+						town.setDebtBalance(Double.parseDouble(line));
+					} catch (Exception e) {
+						town.setDebtBalance(0.0);
+					}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1704,6 +1712,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("ruinedTime=" + town.getRuinedTime());
 		// Peaceful
 		list.add("neutral=" + town.isNeutral());
+		
+		// Debt balance
+		list.add("debtBalance=" + town.getDebtBalance());
 
 		/*
 		 *  Make sure we only save in async

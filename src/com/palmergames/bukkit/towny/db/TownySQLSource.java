@@ -1101,6 +1101,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			town.setNeutral(rs.getBoolean("neutral"));
 
+			town.setDebtBalance(rs.getFloat("debtBalance"));
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -1914,6 +1916,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
 			
+			twn_hm.put("debtBalance", town.getDebtBalance());
+
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 

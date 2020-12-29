@@ -50,6 +50,7 @@ public class Town extends Government implements TownBlockOwner {
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
+	private double debtBalance = 0.0;
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
@@ -1321,11 +1322,21 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return true if bankrupt.
 	 */
 	public boolean isBankrupt() { 
-		try {
-			return TownySettings.isUsingEconomy() && getAccount().isBankrupt();
-		} catch (EconomyException ignored) {}
+		return TownySettings.isUsingEconomy() && debtBalance > 0;
+	}
 
-		return false;
+	/**
+	 * @return the amount of debt held by the Town.
+	 */
+	public double getDebtBalance() {
+		return debtBalance;
+	}
+
+	/**
+	 * @param balance the amount to set the debtBalance of the town to.
+	 */
+	public void setDebtBalance(double balance) {
+		this.debtBalance = balance;
 	}
 
 	public boolean isRuined() {
