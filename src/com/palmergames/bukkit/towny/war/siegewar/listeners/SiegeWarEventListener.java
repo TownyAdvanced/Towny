@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -432,11 +433,22 @@ public class SiegeWarEventListener implements Listener {
 	 */
 	@EventHandler
 	public void onTownyDatabaseLoad(TownyLoadedDatabaseEvent event) {
-		System.out.println("SiegeWar: onDatabaseLoad() caught");
+		loadSieges();
+	}
+	
+	@EventHandler
+	public void onTownyEnable(PluginEnableEvent event) {
+		if (event.getPlugin().getName().equals("Towny")) {
+			loadSieges();
+		}
+	}
+	
+	private void loadSieges() {
 		SiegeController.clearSieges();
 		SiegeController.loadSiegeList();
 		SiegeController.loadSieges();
 		System.out.println("SiegeWar: " + SiegeController.getSieges().size() + " siege(s) loaded.");
+		
 	}
 	
 	/*

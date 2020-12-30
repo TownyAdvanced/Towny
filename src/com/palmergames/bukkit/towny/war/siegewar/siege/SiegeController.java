@@ -87,13 +87,16 @@ public class SiegeController {
 	}
 
 	public static void loadSiegeList() {
+		System.out.println("SiegeWar: loading SiegeList...");
 		for (Town town : TownyUniverse.getInstance().getTowns())
-			if (hasSiege(town)) {
+			if (SiegeMetaDataController.hasSiege(town)) {
+				System.out.println("SiegeWar: Found siege in Town " + town.getName());
 				String name = getSiegeName(town);
 				if (name != null) {
+					System.out.println("SiegeWar: loading siege " + name.replace("#", " "));
 					newSiege(name);
 					setSiege(town, true);
-					townSiegeMap.put(town.getUUID(), getSiege(town));
+					townSiegeMap.put(town.getUUID(), sieges.get(name.toLowerCase()));
 				}
 			}
 	}

@@ -101,7 +101,7 @@ public class SiegeWarActionListener implements Listener {
 	@EventHandler
 	public void onBlockExplode(TownyExplodingBlocksEvent event) {
 		if (SiegeWarSettings.getWarSiegeEnabled()) {
-			List<Block> blockList = event.getBlockList();
+			List<Block> blockList = event.getTownyFilteredBlockList();
 			List<Block> filteredList = new ArrayList<>();
 			for (Block block : blockList) {
 				if (!SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
