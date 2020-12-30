@@ -5641,3 +5641,5 @@ v0.92.0.11:
     - Fixes possible safemode caused by old resident files which did not delete correctly.
 0.96.5.9:
   - Trident Lightning Strike On PVP Disabled Plots, courtesy of Kovalskki with PR #4648.
+  - Backend Nation UUID Implementation, courtesy of silverwolfg11 with PR #4608.
+    - Continues the progress of changing the Towny objects over to maps based on UUIDs rather than names.

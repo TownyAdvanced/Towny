@@ -702,7 +702,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			nationName = args[0];
 			
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			resident = getResidentOrThrow(player.getUniqueId());
 			town = resident.getTown();
 			nation = getNationOrThrow(nationName);
@@ -1251,7 +1250,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	
 	public void nationLeave(Player player) {
 		Town town = null;
-
 		try {
 			Resident resident = getResidentOrThrow(player.getUniqueId());
 			town = resident.getTown();
@@ -1265,6 +1263,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
 			Confirmation.runOnAccept(() -> {
+				Bukkit.getPluginManager().callEvent(new NationTownLeaveEvent(nation, finalTown));
 				finalTown.removeNation();
 
 				plugin.resetCache();
@@ -2576,7 +2575,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
      * @throws TownyException - Exception.
      */
     public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
         try {
 

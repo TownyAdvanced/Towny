@@ -435,7 +435,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<Government> list = new ArrayList<>();
 				list.addAll(universe.getTowns());
-				list.addAll(universe.getNationsMap().values());
+				list.addAll(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
 				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
@@ -443,7 +443,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
 				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("nation")) {
-				List<Government> list = new ArrayList<>(universe.getNationsMap().values());
+				List<Government> list = new ArrayList<>(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
 				towny_top.addAll(getTopBankBalance(list));
 			} else {
