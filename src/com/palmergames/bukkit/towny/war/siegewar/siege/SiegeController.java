@@ -69,7 +69,7 @@ public class SiegeController {
 	public static void saveSiege(Siege siege) {
 		Town town = siege.getDefendingTown();
 		SiegeMetaDataController.setSiegeName(town, siege.getName());
-		SiegeMetaDataController.setNationUUID(town, siege.getAttackingNation().getUuid().toString());
+		SiegeMetaDataController.setNationUUID(town, siege.getAttackingNation().getUUID().toString());
 		SiegeMetaDataController.setTownUUID(town, siege.getDefendingTown().getUUID().toString());
 		SiegeMetaDataController.setFlagLocation(town, siege.getFlagLocation().getWorld().getName()
 			+ "!" + siege.getFlagLocation().getX()
