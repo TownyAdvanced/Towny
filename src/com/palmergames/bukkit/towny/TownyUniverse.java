@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -141,12 +140,6 @@ public class TownyUniverse {
             towny.saveResource("outpostschecked.txt", false);                                        // file. Sometimes still useful on servers who've manually
         }                                                                                            // altered data manually and want to re-check.
 
-        f = new File(rootFolder, "debtAccountsConverted.txt");                                       // For a short time Towny stored debt accounts in
-        if (!f.exists()) {                                                                           // the server's economy plugin. This practice had 
-        	for (Town town : dataSource.getTowns()) MoneyUtil.convertLegacyDebtAccount(town);        // to end, being replaced with the debtBalance 
-        	towny.saveResource("debtAccountsConverted.txt", false);                                  // which is stored in the Town object. 
-        }
-        
 		// Run both the cleanup and backup async.
 		performCleanupAndBackup();
 

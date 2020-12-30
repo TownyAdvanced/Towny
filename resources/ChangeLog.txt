@@ -5628,10 +5628,12 @@ v0.92.0.11:
   - Add [Not For Sale] chunk notification for when players move from a plot which is for sale, to one that is not.
     - Closes #4638.
   - Fix Tab Completion Issues, courtesy of silverwolfg11 with PR #4634.
-  - Partial translation of /towny prices.
   - New Config Option: jail.outlaw_jail_days
     - Default: 1
     - How many days an attacking outlaw will be jailed for.
   - Improve some messages in es-419.yml, courtesy of EuGNosii with PR #4607.
   - Removed config option: economy.debt_prefix
   - Towny will now internally track debt balances of bankrupt towns.
+  - Towny prices now fully translatable.
+    - Closes #4639.
+  - Bump language files to 0.95.

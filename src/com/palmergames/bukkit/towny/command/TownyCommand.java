@@ -521,42 +521,42 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasNation())
 				try {
 					nation = town.getNation();
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				} catch (NotRegisteredException ignored) {}
 
 		output.add(ChatTools.formatTitle(Translation.of("towny_prices_title")));
 		output.add(Translation.of("towny_prices_town_nation", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
 		output.add(Translation.of("towny_prices_reclaim", TownyEconomyHandler.getFormattedBalance(TownRuinSettings.getEcoPriceReclaimTown())));
 		if (town != null) {
 			output.add(Translation.of("towny_prices_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation))));
+			output.add(Translation.of("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? Translation.of("towny_prices_upkeep_num_plots") : Translation.of("towny_prices_upkeep_town_level"))));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
 				output.add(Translation.of("towny_prices_overclaimed_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town))));
+			if (TownySettings.getUpkeepPenalty() > 0 )
+				output.add(Translation.of("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? Translation.of("towny_prices_overclaimed_num_plots") : Translation.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
+
 			output.add(Translation.of("towny_prices_claiming_townblock", TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) +  
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : Translation.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
 			output.add(Translation.of("towny_prices_claiming_outposts", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
 		}
 		if (town == null)
 			output.add(Translation.of("towny_prices_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeep()), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeep())));
-		output.add(Translation.of("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? Translation.of("towny_prices_upkeep_num_plots") : Translation.of("towny_prices_upkeep_town_level"))));
-		if (TownySettings.getUpkeepPenalty() > 0 )
-			output.add(Translation.of("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? Translation.of("towny_prices_overclaimed_num_plots") : Translation.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
 
 		if (town != null) {
-			output.add(Colors.Yellow + "Town [" + town.getFormattedName() + "]");
-			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-			output.add(Colors.Rose + "             " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice()));
+			output.add(Translation.of("towny_prices_townname", town.getFormattedName()));
+			output.add(Translation.of("towny_prices_price_plot", TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()),TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
+			output.add(Translation.of("towny_prices_price_shop", TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()), TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice())));
 
-			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + (town.isTaxPercentage()? town.getTaxes() + "%" : TownyEconomyHandler.getFormattedBalance(town.getTaxes())) + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotTax()));
-			output.add(Colors.Rose + "              " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotTax()));
+			output.add(Translation.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : TownyEconomyHandler.getFormattedBalance(town.getTaxes())), TownyEconomyHandler.getFormattedBalance(town.getPlotTax())));
+			output.add(Translation.of("towny_prices_taxes_shop", TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotTax()), TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotTax())));
 
-			output.add(Colors.Rose + "    [Setting Plots] " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetCommercialCost()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetEmbassyCost()) + Colors.Gray + " | "  + Colors.Green + "Wilds: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetWildsCost()));
-			output.add(Colors.Rose + "                      " + Colors.Green + "Inn: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetInnCost()) + Colors.Gray + " | " + Colors.Green + "Jail: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetJailCost()) + Colors.Gray + " | " + Colors.Green + "Farm: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetFarmCost()));
-			output.add(Colors.Rose + "                      " + Colors.Green + "Bank: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost()));
+			output.add(Translation.of("towny_prices_plots_shop", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetCommercialCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetEmbassyCost())));
+			output.add(Translation.of("towny_prices_plots_wilds", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetWildsCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetInnCost())));
+			output.add(Translation.of("towny_prices_plots_jail", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetJailCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetFarmCost())));
+			output.add(Translation.of("towny_prices_plots_bank", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost())));
 			
 			if (nation != null) {
-				output.add(Colors.Yellow + "Nation [" + nation.getFormattedName() + "]");
-				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + nation.getTaxes() + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Translation.of("towny_prices_nationname", nation.getFormattedName()));
+				output.add(Translation.of("towny_prices_nation_tax", nation.getTaxes(), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost())));
 			}
 		}
 		return output;
