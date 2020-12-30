@@ -5637,3 +5637,5 @@ v0.92.0.11:
   - Towny prices now fully translatable.
     - Closes #4639.
   - Bump language files to 0.95.
+  - Fix for duped residents, courtesy of silverwolfg11 and LlmDl with PR #4649.
+    - Fixes possible safemode caused by old resident files which did not delete correctly.
