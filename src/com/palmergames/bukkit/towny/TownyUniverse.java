@@ -488,16 +488,12 @@ public class TownyUniverse {
 		}
 
 		residentsTrie.removeKey(resident.getName());
-		
-		unregisterResidentUUID(resident);
-	}
-	
-	public void unregisterResidentUUID(@NotNull Resident resident) throws NotRegisteredException {
+
 		if (resident.getUUID() != null) {
 			if (residentUUIDMap.remove(resident.getUUID()) == null) {
 				throw new NotRegisteredException(String.format("The resident with the UUID '%s' is not registered!", resident.getUUID().toString()));
 			}
-		}		
+		}
 	}
 
 	/**

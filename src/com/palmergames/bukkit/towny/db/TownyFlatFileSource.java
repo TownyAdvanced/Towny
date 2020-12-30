@@ -402,20 +402,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					UUID uuid = UUID.fromString(line);
 					if (TownyUniverse.getInstance().hasResident(uuid)) {
 						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
-						System.out.println("resident last online: " + resident.getLastOnline());
-						System.out.println("olderRes last online: " + olderRes.getLastOnline());
+						System.out.println("resident last online: " + resident.getLastOnline()); // FIXME DEBUG
+						System.out.println("olderRes last online: " + olderRes.getLastOnline()); // FIXME DEBUG
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
-							System.out.println("Deleting olderRes : " + olderRes.getName());
+							System.out.println("Deleting olderRes : " + olderRes.getName()); // FIXME DEBUG
 							try {
-								TownyUniverse.getInstance().unregisterResidentUUID(olderRes);
+								TownyUniverse.getInstance().unregisterResident(olderRes);
 							} catch (NotRegisteredException ignored) {}
-							TownyUniverse.getInstance().getDataSource().removeResident(olderRes);							
+							// Check if the older resident is a part of a town
+							if (olderRes.hasTown()) {
+								try {
+									// Resident#removeTown saves the resident, so we can't use it.
+									olderRes.getTown().removeResident(olderRes);
+								} catch (NotRegisteredException nre) {}
+							}
+							deleteResident(olderRes);					
 						} else {
-							System.out.println("Deleting resident : " + resident.getName());
+							System.out.println("Deleting resident : " + resident.getName()); // FIXME DEBUG
 							try {
 								TownyUniverse.getInstance().unregisterResident(resident);
 							} catch (NotRegisteredException ignored) {}
-							TownyUniverse.getInstance().getDataSource().removeResident(resident);
+							deleteResident(resident);
 							save = false;
 							return true;
 						}
