@@ -386,7 +386,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadResident(Resident resident) {
-		
+		boolean save = true;
 		String line = null;
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
@@ -399,7 +399,33 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("uuid");
 				if (line != null) {
-					resident.setUUID(UUID.fromString(line));
+					UUID uuid = UUID.fromString(line);
+					if (TownyUniverse.getInstance().hasResident(uuid)) {
+						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+						if (resident.getLastOnline() > olderRes.getLastOnline()) {
+							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(olderRes);
+							} catch (NotRegisteredException ignored) {}
+							// Check if the older resident is a part of a town
+							if (olderRes.hasTown()) {
+								try {
+									// Resident#removeTown saves the resident, so we can't use it.
+									olderRes.getTown().removeResident(olderRes);
+								} catch (NotRegisteredException nre) {}
+							}
+							deleteResident(olderRes);					
+						} else {
+							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(resident);
+							} catch (NotRegisteredException ignored) {}
+							deleteResident(resident);
+							save = false;
+							return true;
+						}
+					}					
+					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
 				
@@ -481,7 +507,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				e.printStackTrace();
 				return false;
 			} finally {
-				saveResident(resident);
+				if (save) saveResident(resident);
 			}
 			return true;
 		} else {
