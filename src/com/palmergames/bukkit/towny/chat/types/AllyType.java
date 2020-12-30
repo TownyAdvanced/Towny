@@ -42,7 +42,7 @@ public class AllyType extends ChatType {
 				
 				if (playerRes != null && playerRes.hasNation()) {
 					Nation playerNation = playerRes.getTown().getNation();
-					if (playerNation.getUuid().equals(nation.getUuid()) || playerNation.hasAlly(nation))
+					if (playerNation.getUUID().equals(nation.getUUID()) || playerNation.hasAlly(nation))
 						newRecipients.add(p);
 				}
 			}

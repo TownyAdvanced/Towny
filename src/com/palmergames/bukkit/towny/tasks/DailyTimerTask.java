@@ -153,7 +153,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("Universe Stats:");
 		TownyMessaging.sendDebugMsg("    Residents: " + universe.getNumResidents());
 		TownyMessaging.sendDebugMsg("    Towns: " + universe.getDataSource().getTowns().size());
-		TownyMessaging.sendDebugMsg("    Nations: " + universe.getDataSource().getNations().size());
+		TownyMessaging.sendDebugMsg("    Nations: " + universe.getNumNations());
 		for (TownyWorld world : universe.getDataSource().getWorlds())
 			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + universe.getTownBlocks().size());
 
@@ -171,7 +171,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException - EconomyException
 	 */
 	public void collectNationTaxes() throws EconomyException {
-		List<Nation> nations = new ArrayList<>(universe.getDataSource().getNations());
+		List<Nation> nations = new ArrayList<>(universe.getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 
@@ -181,7 +181,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect tax for this nation if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.getDataSource().hasNation(nation.getName()))
+			if (universe.hasNation(nation.getName()))
 				collectNationTaxes(nation);
 		}
 	}
@@ -553,7 +553,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException if there is an error with Economy handling
 	 */
 	public void collectNationCosts() throws EconomyException {
-		List<Nation> nations = new ArrayList<>(universe.getDataSource().getNations());
+		List<Nation> nations = new ArrayList<>(universe.getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 
@@ -565,7 +565,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * and its capital town also pays upkeep costs.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.getDataSource().hasNation(nation.getName()) && nation.getCapital().hasUpkeep()) {
+			if (universe.hasNation(nation.getUUID()) && nation.getCapital().hasUpkeep()) {
 
 				double upkeep = TownySettings.getNationUpkeepCost(nation);
 

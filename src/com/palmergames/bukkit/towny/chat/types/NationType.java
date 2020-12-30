@@ -39,13 +39,13 @@ public class NationType extends ChatType {
 			return recipients;
 		
 		try {
-			final UUID nation = resident.getTown().getNation().getUuid();
+			final UUID nation = resident.getTown().getNation().getUUID();
 
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
 				Resident playerRes = townyUniverse.getResident(p.getUniqueId());
-				if(playerRes != null && playerRes.getTown().getNation().getUuid().equals(nation)) {
+				if(playerRes != null && playerRes.getTown().getNation().getUUID().equals(nation)) {
 					newRecipients.add(p);
 				}
 			}
