@@ -402,10 +402,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					UUID uuid = UUID.fromString(line);
 					if (TownyUniverse.getInstance().hasResident(uuid)) {
 						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
-						System.out.println("resident last online: " + resident.getLastOnline()); // FIXME DEBUG
-						System.out.println("olderRes last online: " + olderRes.getLastOnline()); // FIXME DEBUG
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
-							System.out.println("Deleting olderRes : " + olderRes.getName()); // FIXME DEBUG
+							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
 							try {
 								TownyUniverse.getInstance().unregisterResident(olderRes);
 							} catch (NotRegisteredException ignored) {}
@@ -418,7 +416,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 							deleteResident(olderRes);					
 						} else {
-							System.out.println("Deleting resident : " + resident.getName()); // FIXME DEBUG
+							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
 							try {
 								TownyUniverse.getInstance().unregisterResident(resident);
 							} catch (NotRegisteredException ignored) {}

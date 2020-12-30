@@ -716,7 +716,33 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			try {
 				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty()) {
-					resident.setUUID(UUID.fromString(rs.getString("uuid")));
+					
+					UUID uuid = UUID.fromString(rs.getString("uuid"));
+					if (TownyUniverse.getInstance().hasResident(uuid)) {
+						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+						if (resident.getLastOnline() > olderRes.getLastOnline()) {
+							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(olderRes);
+							} catch (NotRegisteredException ignored) {}
+							// Check if the older resident is a part of a town
+							if (olderRes.hasTown()) {
+								try {
+									// Resident#removeTown saves the resident, so we can't use it.
+									olderRes.getTown().removeResident(olderRes);
+								} catch (NotRegisteredException nre) {}
+							}
+							deleteResident(olderRes);					
+						} else {
+							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(resident);
+							} catch (NotRegisteredException ignored) {}
+							deleteResident(resident);
+							return true;
+						}
+					}	
+					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
 			} catch (Exception e) {
