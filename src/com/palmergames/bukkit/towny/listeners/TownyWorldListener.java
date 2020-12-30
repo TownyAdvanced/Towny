@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.weather.LightningStrikeEvent;
 
 public class TownyWorldListener implements Listener {
 	
@@ -203,20 +201,6 @@ public class TownyWorldListener implements Listener {
 				TownyMessaging.sendErrorMsg(event.getEntity(), Translation.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
 				event.setCancelled(true);
 				break;
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onLightningStrike(LightningStrikeEvent event){
-		if (!TownyAPI.getInstance().isWilderness(event.getLightning().getLocation())){
-			Location location = event.getLightning().getLocation();
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
-			TownyPermission blockPerm = townBlock.getPermissions();
-			if (!blockPerm.pvp
-				&& !townBlock.isWarZone()
-				&& event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)){
-				event.setCancelled(true);
 			}
 		}
 	}
