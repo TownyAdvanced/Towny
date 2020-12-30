@@ -850,7 +850,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Town town : toSave) {
 
-			for (Resident res : universe.getResidents()) {
+			for (Resident res : town.getResidents()) {
 				if (res.hasTitle() || res.hasSurname()) {
 					res.setTitle("");
 					res.setSurname("");
