@@ -1685,6 +1685,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
+	
+	public static int getJailedOutlawJailDays() {
+		
+		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_DAYS);
+	}
 
 	public static boolean JailAllowsEnderPearls() {
 		
@@ -2552,10 +2557,6 @@ public class TownySettings {
 	public static String getTownAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
-	}
-	
-	public static String getDebtAccountPrefix() {
-		return getString(ConfigNodes.ECO_DEBT_PREFIX);
 	}
 
 	public static String getNationAccountPrefix() {

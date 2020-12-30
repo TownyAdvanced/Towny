@@ -1,5 +1,5 @@
 name: Towny
-version: 0.94
+version: 0.95
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1229,3 +1229,33 @@ npc_created: '&2Created: &a%s'
 msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
 msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
 status_town_title_peaceful: '&b(Peacful)'
+
+#Added in 0.95
+status_public: '&b(Public)'
+msg_days: ' days'
+msg_comptype_public: 'Public Status'
+towny_prices_title: 'Prices'
+towny_prices_town_nation: '&e[New] &2Town: &a%s &8| &2Nation: &a%s'
+towny_prices_reclaim: '&e[Reclaim] &2Town: &a%s'
+towny_prices_upkeep: '&e[Upkeep] &2Town: &a%s &8| &2Nation: &a%s'
+towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep] &2Town: &a%s'
+towny_prices_claiming_townblock: '&e[Claiming] &2TownBlock: &a%s'
+towny_prices_claiming_townblock_increase: ' &8| &2Increase per TownBlock: &a+%s'
+towny_prices_claiming_outposts: '&e[Claiming] &2Outposts: &a%s'
+towny_prices_upkeep_based_on: '&7Town upkeep is based on &athe %s'
+towny_prices_upkeep_num_plots: 'number of plots.'
+towny_prices_upkeep_town_level: 'town level (num residents.)'
+towny_prices_overclaimed_based_on: '&8Overclaimed upkeep is based on &a %s %s'
+towny_prices_overclaimed_num_plots: 'the number of plots overclaimed *'
+towny_prices_overclaimed_flat_cost: 'a flat cost of'
+towny_prices_townname: '&cTown: &b%s'
+towny_prices_price_plot: '&c    [Price] &2Plot: &a%s &8| &2Outpost: &a%s'
+towny_prices_price_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_taxes_plot: '&c    [Taxes]    &2Resident: &a%s &8| &2Plot: &a%s'
+towny_prices_taxes_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_plots_shop: '&c    [Setting Plots] &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_plots_wilds: '&c                       &2Wilds: &a%s &8| &2Inn: &a%s'
+towny_prices_plots_jail: '&c                        &2Jail: &a%s &8| &2Farm: &a%s'
+towny_prices_plots_bank: '&c                        &2Bank: &a%s'
+towny_prices_nationname: '&cNation: &6%s'
+towny_prices_nation_tax: '&c    [Taxes] &2Town: &a%s &8| &2Peace: &a%s'

@@ -30,4 +30,19 @@ public class GovernmentComparators {
 			return -1;
 		}
 	};
+	public static final Comparator<Government> BY_PUBLIC = (t1, t2) -> {
+
+		// Both are open, fallback to population comparison.
+		if (t1.isPublic() && t2.isPublic()) {
+			return t2.getResidents().size() - t1.getResidents().size();
+		}
+
+		// Less than.
+		if (t2.isPublic()) {
+			return 1;
+		} else {
+			// Greater than.
+			return -1;
+		}
+	};
 }

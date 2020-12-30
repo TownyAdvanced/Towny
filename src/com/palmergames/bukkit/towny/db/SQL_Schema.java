@@ -155,6 +155,7 @@ public class SQL_Schema {
 		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
 		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
+		columns.add("`debtBalance` float NOT NULL");
 		return columns;
 	}
 

@@ -988,7 +988,7 @@ public class TownyUniverse {
     public void setWarEvent(War warEvent) {
         this.warEvent = warEvent;
     }
-
+    
 	/**
 	 * Retrieves the configuration's output database type.
 	 * 

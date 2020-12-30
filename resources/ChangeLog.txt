@@ -5611,3 +5611,31 @@ v0.92.0.11:
   - Fix /plot group toggle explosion showing the feedback message for fire.
   - API: Add NationTownLeaveEvent.
   - API Change: NationPreTownKickEvent no longer extends NationPreTownLeaveEvent.
+  - Alter the explosion damage protection to only stop damage to the config's protection.mob_types.
+    - Players will once again take explosion damage as they used to. 
+  - Add protection for double chests being created when straddling plot boundaries.
+    - Closes #4610.
+  - Add /n list by public & /t list by public
+    - Closes #4628.
+  - New permission nodes:
+    - towny.command.town.list.public
+      - child node of towny.command.town.list.*
+    - towny.command.nation.list.public
+      - child node of towny.command.nation.list.*
+  - Fix the title bar being a bit too wide for the chat line.
+  - Move the Nation line on the town status screen up and out of the town ranks/resident list.
+    - Closes #4640.
+  - Add [Not For Sale] chunk notification for when players move from a plot which is for sale, to one that is not.
+    - Closes #4638.
+  - Fix Tab Completion Issues, courtesy of silverwolfg11 with PR #4634.
+  - New Config Option: jail.outlaw_jail_days
+    - Default: 1
+    - How many days an attacking outlaw will be jailed for.
+  - Improve some messages in es-419.yml, courtesy of EuGNosii with PR #4607.
+  - Removed config option: economy.debt_prefix
+  - Towny will now internally track debt balances of bankrupt towns.
+  - Towny prices now fully translatable.
+    - Closes #4639.
+  - Bump language files to 0.95.
+  - Fix for duped residents, courtesy of silverwolfg11 and LlmDl with PR #4649.
+    - Fixes possible safemode caused by old resident files which did not delete correctly.

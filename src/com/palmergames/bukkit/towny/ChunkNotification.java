@@ -41,6 +41,7 @@ public class ChunkNotification {
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
+	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
 	public static String groupNotificationFormat = Colors.White + "[%s]";
 
@@ -68,7 +69,7 @@ public class ChunkNotification {
 	}
 
 	WorldCoord from, to;
-	boolean fromWild = false, toWild = false, toForSale = false,
+	boolean fromWild = false, toWild = false, toForSale = false, fromForSale = false,
 			toHomeBlock = false, toOutpostBlock = false, toPlotGroupBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
@@ -94,6 +95,8 @@ public class ChunkNotification {
 				fromResident = fromTownBlock.getResident();
 			} catch (NotRegisteredException e) {
 			}
+			fromForSale = fromTownBlock.getPlotPrice() != -1;
+			
 		} catch (NotRegisteredException e) {
 			fromWild = true;
 		}
@@ -334,6 +337,10 @@ public class ChunkNotification {
 		
 		if (toForSale && !toPlotGroupBlock)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
+		
+		if (!toForSale && fromForSale)
+			return notForSaleNotificationFormat;
+		
 		return null;
 	}
 	

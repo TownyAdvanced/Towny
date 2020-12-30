@@ -1255,6 +1255,7 @@ public enum ConfigNodes {
 			"notification.plot.outpostblock",
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_TOWN_NAMES_ARE_VERBOSE(
 			"notification.town_names_are_verbose",
@@ -1593,12 +1594,6 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# The cost of renaming a nation."),
-	ECO_DEBT_PREFIX(
-		"economy.debt_prefix",
-		"[DEBT]-",
-		"",
-		"# The debt prefix for the debt eco account"
-	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
@@ -1979,6 +1974,11 @@ public enum ConfigNodes {
 			"",
 			"#If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
 			"#Requires town_respawn to be true in order to work."),
+	JAIL_OUTLAW_JAIL_DAYS(
+			"jail.outlaw_jail_days",
+			"1",
+			"",
+			"#How many days an attacking outlaw will be jailed for."),
 	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
 			"jail.jail_allows_ender_pearls",
 			"false",

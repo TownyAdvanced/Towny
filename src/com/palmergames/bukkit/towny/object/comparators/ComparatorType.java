@@ -10,7 +10,8 @@ public enum ComparatorType {
 	ONLINE("msg_comptype_online", GovernmentComparators.BY_NUM_ONLINE),
 	TOWNS("msg_comptype_towns", NationComparators.BY_NUM_TOWNS),
 	NAME("msg_comptype_name", GovernmentComparators.BY_NAME),
-	OPEN("msg_comptype_open", GovernmentComparators.BY_OPEN);
+	OPEN("msg_comptype_open", GovernmentComparators.BY_OPEN),
+	PUBLIC("msg_comptype_public", GovernmentComparators.BY_PUBLIC);
 
 	private final String name;
 	private final Comparator<? extends Government> comparator;

@@ -132,6 +132,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"name",		
 		"online",
 		"open",
+		"public",
 		"townblocks",
 		"towns"
 	);
