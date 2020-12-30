@@ -399,12 +399,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(NationCommand.nationToggleTabCompletes, args[3]);
 							else if (args.length == 5)
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
-						case "set":
-							try {
-								return NationCommand.nationSetTabComplete(TownyUniverse.getInstance().getDataSource().getNation(args[1]), StringMgmt.remArgs(args, 2));
-							} catch (NotRegisteredException e) {
+						case "set": {
+							Nation nation = TownyUniverse.getInstance().getNation(args[1]);
+							if (nation != null) {
+								return NationCommand.nationSetTabComplete(nation, StringMgmt.remArgs(args, 2));
+							}
+							else {
 								return Collections.emptyList();
 							}
+						}
 						case "merge":
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "n");
@@ -1237,7 +1240,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			Nation nation = townyUniverse.getDataSource().getNation(split[0]);
+			Nation nation = townyUniverse.getNation(split[0]);
+			
+			if (nation == null) {
+				throw new NotRegisteredException(Translation.of("msg_err_no_nation_with_that_name", split[0]));
+			}
+			
 			if (split.length == 1) {
 				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(nation));
 				return;
@@ -1293,13 +1301,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("merge")) {
 				
-				Nation remainingNation = null;
-				try {
-					remainingNation = townyUniverse.getDataSource().getNation(split[2]);
-				} catch (NotRegisteredException e) {
-					throw new TownyException(Translation.of("msg_err_invalid_name", split[2]));
-				}
-				if (remainingNation.equals(nation))
+				Nation remainingNation = townyUniverse.getNation(split[2]);
+				
+				if (remainingNation == null || remainingNation.equals(nation))
 					throw new TownyException(Translation.of("msg_err_invalid_name", split[2]));
 				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
 				TownyMessaging.sendGlobalMessage(Translation.of("nation1_has_merged_with_nation2", nation, remainingNation));
@@ -2153,7 +2157,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			for (Nation nation : TownyUniverse.getInstance().getNationsMap().values()) {
+			for (Nation nation : TownyUniverse.getInstance().getNations()) {
 				try {
 					nation.getAccount().deposit(amount, reason);
 				} catch (EconomyException e) {

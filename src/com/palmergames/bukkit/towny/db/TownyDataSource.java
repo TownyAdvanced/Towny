@@ -185,7 +185,7 @@ public abstract class TownyDataSource {
 	public boolean loadNations() {
 
 		TownyMessaging.sendDebugMsg("Loading Nations");
-		for (Nation nation : getNations())
+		for (Nation nation : universe.getNations())
 			if (!loadNation(nation)) {
 				System.out.println("[Towny] Loading Error: Could not read nation data '" + nation.getName() + "'.");
 				return false;
@@ -236,7 +236,7 @@ public abstract class TownyDataSource {
 	public boolean saveNations() {
 
 		TownyMessaging.sendDebugMsg("Saving Nations");
-		for (Nation nation : getNations())
+		for (Nation nation : universe.getNations())
 			saveNation(nation);
 		return true;
 	}
@@ -335,6 +335,8 @@ public abstract class TownyDataSource {
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
+	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 

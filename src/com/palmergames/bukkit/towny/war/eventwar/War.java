@@ -202,7 +202,7 @@ public class War {
 			}
 
 		//Gather all nations at war
-		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
+		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNations()) {
 			if (!nation.isNeutral()) {
 				add(nation);
 				if (warringNations.contains(nation))

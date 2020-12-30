@@ -46,6 +46,7 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -219,6 +220,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+		newNation(name, null);
+	}
+
+	@Override
+	public void newNation(String name, @Nullable UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterName(name);
@@ -226,11 +232,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			throw new NotRegisteredException(e.getMessage());
 		}
 
-		if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
+		if (universe.hasNation(filteredName))
 			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
-		universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
-		universe.getNationsTrie().addKey(filteredName);
+		Nation nation = new Nation(filteredName);
+		
+		if (uuid != null)
+			nation.setUUID(uuid);
+		
+		universe.registerNation(nation);
 	}
 
 	@Override
@@ -276,10 +286,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.hasTown(name);
 	}
 
+	/**
+	 * Check if a nation with the given name exists.
+	 * 
+	 * @param name Name of the nation to check.
+	 * @return whether the nation with the given name exists.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#hasNation(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public boolean hasNation(String name) {
-
-		return universe.getNationsMap().containsKey(name.toLowerCase());
+		return universe.hasNation(name);
 	}
 
 	/**
@@ -311,17 +329,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
-	 * Gets the keys of TownyUniverse's Nations Map
+	 * Gets the names of all nations.
 	 * 
-	 * @return Returns {@link Map#keySet()} of {@link TownyUniverse#getNationsMap()}
+	 * @return Returns a set of all nation names from all registered nations.
 	 * 
-	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised.
+	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised. Also this method is inefficient.
 	 */
 	@Override
 	@Deprecated
 	public Set<String> getNationsKeys() {
 
-		return universe.getNationsMap().keySet();
+		return universe.getNations().stream().map(TownyObject::getName).collect(Collectors.toSet());
 	}
 	
 	/*
@@ -488,53 +506,67 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Nation> getNations(String[] names) {
 
 		List<Nation> matches = new ArrayList<>();
-		for (String name : names)
-			try {
-				matches.add(getNation(name));
-			} catch (NotRegisteredException ignored) {
-			}
+		for (String name : names) {
+			Nation nation = universe.getNation(name);
+			
+			if (nation != null)
+				matches.add(nation);
+		}
 		return matches;
 	}
 
+	/**
+	 * Get all nations.
+	 * 
+	 * @return all nations.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getNations()} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Nation> getNations() {
 
-		return new ArrayList<>(universe.getNationsMap().values());
+		return new ArrayList<>(universe.getNations());
 	}
 
+	/**
+	 * Get the nation matching the passed-in name.
+	 * 
+	 * @param name Name of the nation to get.
+	 * @return the nation that matches the name
+	 * @throws NotRegisteredException if no nation is found matching the given name.
+	 *
+	 * @deprecated Please use {@link TownyUniverse#getNation(String)} instead.
+	 */
+	@Deprecated
 	@Override
 	public Nation getNation(String name) throws NotRegisteredException {
+		Nation nation = universe.getNation(name);
 
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
-
-		if (!hasNation(name))
+		if (nation == null)
 			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
 
-		return universe.getNationsMap().get(name.toLowerCase());
+		return nation;
 	}
 
+	/**
+	 * Get the nation matching the given UUID.
+	 * 
+	 * @param uuid UUID of nation to get.
+	 * @return the nation matching the given UUID.
+	 * @throws NotRegisteredException if no nation is found matching the given UUID.
+	 * 
+	 * @deprecated Use {@link TownyUniverse#getNation(UUID)} instead.
+	 */
+	@Deprecated
 	@Override
 	public Nation getNation(UUID uuid) throws NotRegisteredException {
-		String name = null;
-		for (Nation nation : this.getNations()) {
-			if (uuid.equals(nation.getUuid())) {
-				name = nation.getName();
-			}
-		}
-
-		if (name == null) {
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		}
+		Nation nation = universe.getNation(uuid);
 		
-		try {
-			name = NameValidation.checkAndFilterName(name).toLowerCase();
-		} catch (InvalidNameException ignored) {
-		}
+		if (nation == null)
+			throw new NotRegisteredException(String.format("The nation with uuid '%s' is not registered.", uuid.toString()));
 		
-		return universe.getNationsMap().get(name);
+		return nation;
 	}
 
 	/*
@@ -779,7 +811,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
-		for (Nation toCheck : new ArrayList<>(universe.getNationsMap().values()))
+		for (Nation toCheck : new ArrayList<>(universe.getNations()))
 			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
 				try {
 					if (toCheck.hasAlly(nation))
@@ -809,8 +841,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
 		nation.clear();
 
-		universe.getNationsTrie().removeKey(nation.getName().toLowerCase());
-		universe.getNationsMap().remove(nation.getName().toLowerCase());
+		try {
+			universe.unregisterNation(nation);
+		} catch (NotRegisteredException e) {
+			// Just print out the exception. Very unlikely to happen.
+			e.printStackTrace();
+		}
 
 		for (Town town : toSave) {
 
@@ -989,7 +1025,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				throw new NotRegisteredException(e.getMessage());
 			}
 
-			if (hasNation(filteredName))
+			if (universe.hasNation(filteredName))
 				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
 			// TODO: Delete/rename any invites.
@@ -1010,9 +1046,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (EconomyException ignored) {
 				}
 
-			UUID oldUUID = nation.getUuid();
-			long oldregistration = nation.getRegistered();
-
 			//Tidy up old files
 			deleteNation(nation);
 
@@ -1021,11 +1054,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * and rename to the new name
 			 */
 			oldName = nation.getName();
-			universe.getNationsMap().remove(oldName.toLowerCase());
-			universe.getNationsTrie().removeKey(oldName);
+			universe.unregisterNation(nation);
 			nation.setName(filteredName);
-			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
-			universe.getNationsTrie().addKey(filteredName);
+			universe.registerNation(nation);
 
 			if (TownyEconomyHandler.isActive()) {
 				try {
@@ -1036,9 +1067,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 			}
 
-			nation.setUuid(oldUUID);
-			nation.setRegistered(oldregistration);
-
 			for (Town town : toSave) {
 				saveTown(town);
 			}
@@ -1047,7 +1075,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
-			List<Nation> toSaveNation = new ArrayList<>(getNations());
+			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
 			for (Nation toCheck : toSaveNation)
 				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
 					try {
