@@ -2650,7 +2650,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!resident.getTown().getNation().hasTown(town))
 						throw new TownyException(Translation.of("msg_err_not_same_nation", town.getName()));
 
-					MoneyUtil.townDeposit(player, resident, resident.getTown(), resident.getTown().getNation(), amount);
+					MoneyUtil.townDeposit(player, resident, town, resident.getTown().getNation(), amount);
 
 				} else {
 					throw new NotRegisteredException();
