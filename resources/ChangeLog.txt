@@ -5649,3 +5649,5 @@ v0.92.0.11:
     - Should help out Tuinity and PurPur servers who have seen warmups stacking.
     - Closes #4624.
   - Fix debt account conversion on servers that use TheNewEconomy.
+  - Fix /n deposit [amount] [town] going into the specified town bank rather than the town bank of the depositor, courtesy of Momshroom with PR #4651.
+  - Fix towns being able to go over the maximum residents, courtesy of Warriorrrr with PR #4650.
