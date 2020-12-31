@@ -231,5 +231,6 @@ public class MoneyUtil {
 				}
 			}
 		}
+		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
 	}
 }
