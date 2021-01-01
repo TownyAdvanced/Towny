@@ -5661,3 +5661,6 @@ v0.92.0.11:
   - New Config Option: economy.bankruptcy.nation_tax.does_nation_tax_delete_conquered_towns_that_cannot_pay
     - Default: false
     - Does a conquered town which cannot pay the nation tax get deleted?
+  - API: Added PreTownPaysNationTaxEvent
+    - A cancellable event that precedes a town paying the nation tax.
+    - Also allows you to alter the amount a town would pay in tax.
